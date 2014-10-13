@@ -28,6 +28,7 @@
 		84B1D57A19DEFC19004C3A89 /* test.h in Sources */ = {isa = PBXBuildFile; fileRef = 84B1D57919DEFC19004C3A89 /* test.h */; };
 		84B1D57F19DF42EE004C3A89 /* job.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84B1D57D19DF42EE004C3A89 /* job.cpp */; };
 		84B8FC3419EC7469003D6DF6 /* diagram_IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84B8FC3319EC7469003D6DF6 /* diagram_IO.cpp */; };
+		84B8FC3C19EC97B2003D6DF6 /* observable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84B8FC3A19EC97B2003D6DF6 /* observable.cpp */; };
 		84FDE07419DDFC2F0092B441 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84FDE07319DDFC2F0092B441 /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -83,6 +84,8 @@
 		84B1D57D19DF42EE004C3A89 /* job.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = job.cpp; sourceTree = "<group>"; };
 		84B1D57E19DF42EE004C3A89 /* job.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = job.h; sourceTree = "<group>"; };
 		84B8FC3319EC7469003D6DF6 /* diagram_IO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = diagram_IO.cpp; path = diagram/diagram_IO.cpp; sourceTree = "<group>"; };
+		84B8FC3A19EC97B2003D6DF6 /* observable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = observable.cpp; path = observable/observable.cpp; sourceTree = "<group>"; };
+		84B8FC3B19EC97B2003D6DF6 /* observable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = observable.h; path = observable/observable.h; sourceTree = "<group>"; };
 		84FDE07019DDFC2F0092B441 /* Feynman_Simulator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Feynman_Simulator; sourceTree = BUILT_PRODUCTS_DIR; };
 		84FDE07319DDFC2F0092B441 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -141,6 +144,22 @@
 			name = diagram;
 			sourceTree = "<group>";
 		};
+		84B8FC3819EC9753003D6DF6 /* observable */ = {
+			isa = PBXGroup;
+			children = (
+				84B8FC3B19EC97B2003D6DF6 /* observable.h */,
+				84B8FC3A19EC97B2003D6DF6 /* observable.cpp */,
+			);
+			name = observable;
+			sourceTree = "<group>";
+		};
+		84B8FC3919EC9763003D6DF6 /* markov */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = markov;
+			sourceTree = "<group>";
+		};
 		84FDE06719DDFC2F0092B441 = {
 			isa = PBXGroup;
 			children = (
@@ -171,6 +190,8 @@
 				8426668E19E475DF00CF7B59 /* definition_global.cpp */,
 				8426667F19E36F4100CF7B59 /* lattice.h */,
 				8426667E19E36F4100CF7B59 /* lattice.cpp */,
+				84B8FC3819EC9753003D6DF6 /* observable */,
+				84B8FC3919EC9763003D6DF6 /* markov */,
 				8426668419E445F000CF7B59 /* diagram */,
 				612661D40BB91FC506C3E572 /* utility */,
 			);
@@ -240,6 +261,7 @@
 				84B1D57A19DEFC19004C3A89 /* test.h in Sources */,
 				84A17D2E19E5E3CF004BBDF6 /* pystring.cpp in Sources */,
 				84B1D57F19DF42EE004C3A89 /* job.cpp in Sources */,
+				84B8FC3C19EC97B2003D6DF6 /* observable.cpp in Sources */,
 				841D511319EB6DD900FDB7FF /* logger.cpp in Sources */,
 				841D905C19E054900066116A /* test.cpp in Sources */,
 				841D905819DF833E0066116A /* initialization.cpp in Sources */,
