@@ -12,8 +12,3 @@
 
 template class Vec<int>;
 template class Vec<real>;
-
-int a(){
-    std::cout << D;
-    return 1;
-};
