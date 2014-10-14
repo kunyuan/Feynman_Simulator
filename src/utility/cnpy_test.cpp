@@ -1,9 +1,10 @@
 #include"cnpy.h"
-#include<complex>
+#include "complex.h"
 #include<cstdlib>
 #include<iostream>
 #include<map>
 #include<string>
+#include "rng.h"
 
 const int Nx = 128;
 const int Ny = 64;
@@ -11,9 +12,10 @@ const int Nz = 32;
 
 void Testcnpy()
 {
+    RandomFactory RNG;
     //create random data
-    std::complex<double>* data = new std::complex<double>[Nx*Ny*Nz];
-    for(int i = 0;i < Nx*Ny*Nz;i++) data[i] = std::complex<double>(rand(),rand());
+    Complex* data = new Complex[Nx*Ny*Nz];
+    for(int i = 0;i < Nx*Ny*Nz;i++) data[i] = Complex(RNG.urn(),RNG.urn());
 
     //save it to file
     const unsigned int shape[] = {Nz,Ny,Nx};
@@ -21,13 +23,12 @@ void Testcnpy()
 
     //load it into a new array
     cnpy::NpyArray arr = cnpy::npy_load("arr1.npy");
-    std::complex<double>* loaded_data = reinterpret_cast<std::complex<double>*>(arr.data);
+    Complex* loaded_data = reinterpret_cast<Complex*>(arr.data);
     
     //make sure the loaded data matches the saved data
-    assert(arr.word_size == sizeof(std::complex<double>));
+    assert(arr.word_size == sizeof(Complex));
     assert(arr.shape.size() == 3 && arr.shape[0] == Nz && arr.shape[1] == Ny && arr.shape[2] == Nx);
-    for(int i = 0; i < Nx*Ny*Nz;i++) assert(data[i] == loaded_data[i]);
-
+    for(int i = 0; i < Nx*Ny*Nz;i++) assert(Equal(data[i],loaded_data[i]));
     //append the same data to file
     //npy array on file now has shape (Nz+Nz,Ny,Nx)
     cnpy::npy_save("arr1.npy",data,shape,3,"a");
@@ -55,7 +56,8 @@ void Testcnpy()
 
     //cleanup: note that we are responsible for deleting all loaded data
     delete[] data;
-    delete[] loaded_data;
+    //Better to use the destruct in NpyArray
+    arr.destruct();
     arr2.destruct();
     my_npz.destruct();
 }

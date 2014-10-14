@@ -3,11 +3,11 @@
 //license available in LICENSE file, or at http://www.opensource.org/licenses/mit-license.php
 
 #include"cnpy.h"
-#include<complex>
 #include<cstdlib>
 #include<algorithm>
 #include<cstring>
 #include<iomanip>
+#include "complex.h"
 
 char cnpy::BigEndianTest() {
     unsigned char x[] = {1,0};
@@ -35,9 +35,7 @@ char cnpy::map_type(const std::type_info& t)
 
     if(t == typeid(bool) ) return 'b';
 
-    if(t == typeid(std::complex<float>) ) return 'c';
-    if(t == typeid(std::complex<double>) ) return 'c';
-    if(t == typeid(std::complex<long double>) ) return 'c';
+    if(t == typeid(Complex) ) return 'c';
 
     else return '?';
 }
