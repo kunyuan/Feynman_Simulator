@@ -13,12 +13,7 @@
 #include "complex.h"
 #include "utility.h"
 #include "logger.h"
-
-enum spin { DOWN,
-            UP };
-//Spin DOWN: 0,  Spin UP:1
-const int IN = 0;
-const int OUT = 1;
+#include "convention.h"
 
 class GLine {
     friend std::ostream &operator<<(std::ostream &os, GLine &r);

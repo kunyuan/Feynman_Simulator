@@ -29,6 +29,8 @@
 		84B1D57F19DF42EE004C3A89 /* job.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84B1D57D19DF42EE004C3A89 /* job.cpp */; };
 		84B8FC3419EC7469003D6DF6 /* diagram_IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84B8FC3319EC7469003D6DF6 /* diagram_IO.cpp */; };
 		84B8FC3C19EC97B2003D6DF6 /* observable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84B8FC3A19EC97B2003D6DF6 /* observable.cpp */; };
+		84B8FC4019ECB624003D6DF6 /* observable_IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84B8FC3F19ECB624003D6DF6 /* observable_IO.cpp */; };
+		84B8FC4219ECBE1E003D6DF6 /* observable_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84B8FC4119ECBE1E003D6DF6 /* observable_test.cpp */; };
 		84FDE07419DDFC2F0092B441 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84FDE07319DDFC2F0092B441 /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -86,6 +88,9 @@
 		84B8FC3319EC7469003D6DF6 /* diagram_IO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = diagram_IO.cpp; path = diagram/diagram_IO.cpp; sourceTree = "<group>"; };
 		84B8FC3A19EC97B2003D6DF6 /* observable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = observable.cpp; path = observable/observable.cpp; sourceTree = "<group>"; };
 		84B8FC3B19EC97B2003D6DF6 /* observable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = observable.h; path = observable/observable.h; sourceTree = "<group>"; };
+		84B8FC3E19ECA449003D6DF6 /* convention.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = convention.h; sourceTree = "<group>"; };
+		84B8FC3F19ECB624003D6DF6 /* observable_IO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = observable_IO.cpp; path = observable/observable_IO.cpp; sourceTree = "<group>"; };
+		84B8FC4119ECBE1E003D6DF6 /* observable_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = observable_test.cpp; path = observable/observable_test.cpp; sourceTree = "<group>"; };
 		84FDE07019DDFC2F0092B441 /* Feynman_Simulator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Feynman_Simulator; sourceTree = BUILT_PRODUCTS_DIR; };
 		84FDE07319DDFC2F0092B441 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -104,12 +109,13 @@
 		612661D40BB91FC506C3E572 /* utility */ = {
 			isa = PBXGroup;
 			children = (
+				84B8FC3E19ECA449003D6DF6 /* convention.h */,
 				841D511219EB6DD900FDB7FF /* logger.h */,
 				841D511119EB6DD900FDB7FF /* logger.cpp */,
 				84A17D2D19E5E3CF004BBDF6 /* pystring.h */,
 				84A17D2C19E5E3CF004BBDF6 /* pystring.cpp */,
-				84A17D2F19E5E59C004BBDF6 /* pystring_test.cpp */,
 				84A17D3119E5E6CC004BBDF6 /* pystring_unittest.h */,
+				84A17D2F19E5E59C004BBDF6 /* pystring_test.cpp */,
 				8426667D19E2E6B800CF7B59 /* sput.h */,
 				612664CF0EF6FC3F36675242 /* sput_tutorial.txt */,
 				612665F3FD7F1A73D9E774F8 /* rng.h */,
@@ -149,6 +155,8 @@
 			children = (
 				84B8FC3B19EC97B2003D6DF6 /* observable.h */,
 				84B8FC3A19EC97B2003D6DF6 /* observable.cpp */,
+				84B8FC3F19ECB624003D6DF6 /* observable_IO.cpp */,
+				84B8FC4119ECBE1E003D6DF6 /* observable_test.cpp */,
 			);
 			name = observable;
 			sourceTree = "<group>";
@@ -276,7 +284,9 @@
 				61266E5CDE0355C1306E9EBD /* rng_test.cpp in Sources */,
 				6126638BECC823E2FECDBE1A /* utility.cpp in Sources */,
 				61266A9275E9B7A6FCF57FEA /* timer_test.cpp in Sources */,
+				84B8FC4219ECBE1E003D6DF6 /* observable_test.cpp in Sources */,
 				8426668F19E475DF00CF7B59 /* definition_global.cpp in Sources */,
+				84B8FC4019ECB624003D6DF6 /* observable_IO.cpp in Sources */,
 				841D50F419E9EE8C00FDB7FF /* component.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

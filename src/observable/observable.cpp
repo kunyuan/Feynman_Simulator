@@ -7,3 +7,16 @@
 //
 
 #include "observable.h"
+
+Estimator::Estimator():Mean(),Error(){}
+
+/**
+*  Estimator constructor
+*
+*  @param mean __reference__ of a Complex number as the mean value
+*  @param error __reference__ of a Complex number as the error
+*
+*/
+Estimator::Estimator(Complex& mean, Complex& error):Mean(mean),Error(error){}
+
+

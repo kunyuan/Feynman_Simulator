@@ -69,13 +69,13 @@ void Test_Diagram_IO()
     NewG.Spin[IN] = UP;
     NewG.Spin[OUT] = DOWN;
     NewG.Weight = Complex(1.0, 3.0e9);
-    LOGGER(INFO, NewG);
+    LOG_INFO(NewG);
     strtemp << NewG;
 
     WLine NewW;
     NewW.Vertex[IN] = 2;
     NewW.Vertex[OUT] = 3;
-    LOGGER(INFO, NewW);
+    LOG_INFO(NewW);
     strtemp << NewW;
 
     Vertex NewV;
@@ -83,7 +83,7 @@ void Test_Diagram_IO()
     NewV.Sublattice = 2;
     NewV.r = 12;
     NewV.tau = 0.51;
-    LOGGER(INFO, NewV);
+    LOG_INFO(NewV);
     strtemp << NewV;
 
     strtemp >> NewG;
