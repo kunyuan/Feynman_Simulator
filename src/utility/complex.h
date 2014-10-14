@@ -77,7 +77,7 @@ bool IsZero(const Complex &c);
 
 Complex exp(const Complex &c);
 
-std::string str(Complex c);
+std::string ToString(Complex c);
 // More complex functions ...
 
 #endif
