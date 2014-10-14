@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1CA5CF3819ED6F1B00212E20 /* lattice_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CA5CF3719ED6F1B00212E20 /* lattice_test.cpp */; };
 		1CA5CF3A19ED6F3F00212E20 /* lattice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CA5CF3919ED6F3F00212E20 /* lattice.cpp */; };
+		1CA5CF3F19ED6FD100212E20 /* vector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CA5CF3D19ED6FD100212E20 /* vector.cpp */; };
 		6126638BECC823E2FECDBE1A /* utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 612660FB5825D574D3D39D34 /* utility.cpp */; };
 		6126664567718CEF01AA47EA /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61266E544CE6B7D4D4077492 /* timer.cpp */; };
 		61266A9275E9B7A6FCF57FEA /* timer_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61266699848E3D36323A2CE1 /* timer_test.cpp */; };
@@ -51,6 +52,8 @@
 		1CA5CF3719ED6F1B00212E20 /* lattice_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lattice_test.cpp; path = lattice/lattice_test.cpp; sourceTree = "<group>"; };
 		1CA5CF3919ED6F3F00212E20 /* lattice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lattice.cpp; path = lattice/lattice.cpp; sourceTree = "<group>"; };
 		1CA5CF3B19ED6F4900212E20 /* lattice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lattice.h; path = lattice/lattice.h; sourceTree = "<group>"; };
+		1CA5CF3D19ED6FD100212E20 /* vector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = vector.cpp; path = lattice/vector.cpp; sourceTree = "<group>"; };
+		1CA5CF3E19ED6FD100212E20 /* vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vector.h; path = ../lattice/vector.h; sourceTree = "<group>"; };
 		612660FB5825D574D3D39D34 /* utility.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = utility.cpp; sourceTree = "<group>"; };
 		612664649705E4B837D2C92F /* complex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = complex.cpp; sourceTree = "<group>"; };
 		612664CF0EF6FC3F36675242 /* sput_tutorial.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sput_tutorial.txt; sourceTree = "<group>"; };
@@ -114,6 +117,7 @@
 				1CA5CF3B19ED6F4900212E20 /* lattice.h */,
 				1CA5CF3919ED6F3F00212E20 /* lattice.cpp */,
 				1CA5CF3719ED6F1B00212E20 /* lattice_test.cpp */,
+				1CA5CF3D19ED6FD100212E20 /* vector.cpp */,
 			);
 			name = lattice;
 			sourceTree = "<group>";
@@ -121,6 +125,7 @@
 		612661D40BB91FC506C3E572 /* utility */ = {
 			isa = PBXGroup;
 			children = (
+				1CA5CF3E19ED6FD100212E20 /* vector.h */,
 				84B8FC3E19ECA449003D6DF6 /* convention.h */,
 				841D511219EB6DD900FDB7FF /* logger.h */,
 				841D511119EB6DD900FDB7FF /* logger.cpp */,
@@ -288,6 +293,7 @@
 				84B8FC3419EC7469003D6DF6 /* diagram_IO.cpp in Sources */,
 				61266D7AEDBA61CFA3C84C6B /* rng.cpp in Sources */,
 				841D50EF19E885D700FDB7FF /* diagram_check.cpp in Sources */,
+				1CA5CF3F19ED6FD100212E20 /* vector.cpp in Sources */,
 				84A17D3019E5E59C004BBDF6 /* pystring_test.cpp in Sources */,
 				6126664567718CEF01AA47EA /* timer.cpp in Sources */,
 				61266ABC56203779077E715B /* complex.cpp in Sources */,

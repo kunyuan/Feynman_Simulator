@@ -9,29 +9,9 @@
 #ifndef __Fermion_Simulator__lattice__
 #define __Fermion_Simulator__lattice__
 
-const int NSublattice=2;
-const int L[3]={4,4,1};
-const int Vol=L[0]*L[1]*L[2];
-const int D=2;
+#include "vector.h"
 
-int a();
 
-template <typename T>
-class Vec{
-private:
-    T _Arrary[D];
-public:
-    Vec(T t)
-    {
-        for(int i=0; i<D; i++)
-            _Arrary[i]=t;
-    }
-    
-    T& operator[](int index)
-    {
-        return _Arrary[index];
-    }
-};
 
 //class Lattice{
 //};
