@@ -13,7 +13,7 @@ int TestAll()
 {
 
     //    TestTimer();  //Test the timer
-    //    TestRNG();
+//        TestRNG();
     //    TestPystring();
 //    TestDiagram();
     Testcnpy();

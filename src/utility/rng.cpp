@@ -10,6 +10,8 @@
 
 using namespace std;
 
+mt19937 RandomFactory::_eng{};
+
 RandomFactory::RandomFactory()
 {
     random_device dev;
@@ -32,22 +34,6 @@ void RandomFactory::Reset(int seed)
     _eng.seed(seed);
 }
 
-real RandomFactory::urn()
-{
-    static uniform_real_distribution<real> d(0.0, 1.0);
-    return d(_eng);
-}
-
-int RandomFactory::irn(int from, int thru)
-{
-    static std::uniform_int_distribution<> d{};
-    return d(_eng, decltype(d)::param_type{from, thru});
-}
-
-int RandomFactory::irn1(int from, int thru)
-{
-    return _eng() % (thru - from + 1) + from;
-}
 
 // double pick_a_number(double from, double upto)
 //{

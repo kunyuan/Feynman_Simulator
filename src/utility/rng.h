@@ -14,24 +14,32 @@
 #define real double
 #endif
 
-using namespace std;
-
 class RandomFactory {
     friend std::ostream &operator<<(std::ostream &os, RandomFactory &r);
     friend std::istream &operator>>(std::istream &is, RandomFactory &r);
 
   private:
-    mt19937 _eng;
+    static std::mt19937 _eng;
 
   public:
     RandomFactory();
-
     RandomFactory(int);
     void Reset();
     void Reset(int);
-    real urn();
-    int irn(int, int);
-    int irn1(int, int);
+    real urn()
+    {
+        static std::uniform_real_distribution<real> d(0.0, 1.0);
+        return d(_eng);
+    }
+    int irn(int from, int thru)
+    {
+        static std::uniform_int_distribution<> d{};
+        return d(_eng, decltype(d)::param_type{from, thru});
+    }
+    int irn1(int from, int thru)
+    {
+        return _eng() % (thru - from + 1) + from;
+    }
 };
 
 int TestRNG();
