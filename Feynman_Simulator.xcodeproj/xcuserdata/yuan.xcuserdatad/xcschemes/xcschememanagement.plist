@@ -4,17 +4,7 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>Copy of Copy of Fermion_Simulator.xcscheme</key>
-		<dict>
-			<key>orderHint</key>
-			<integer>3</integer>
-		</dict>
-		<key>Copy of Fermion_Simulator.xcscheme</key>
-		<dict>
-			<key>orderHint</key>
-			<integer>1</integer>
-		</dict>
-		<key>Fermion_Simulator.xcscheme</key>
+		<key>Feynman.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>2</integer>

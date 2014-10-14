@@ -58,10 +58,25 @@ public:
         return v;
     }
     
+    Vec operator-(const Vec& v2) const
+    {
+        Vec v;
+        for(int j=0; j<D; j++)
+            v[j]=_Arrary[j]-v2._Arrary[j];
+        return v;
+    }
+    
     Vec& operator+=(const Vec& v2)
     {
         for(int j=0; j<D; j++)
             _Arrary[j]+=v2._Arrary[j];
+        return *this;
+    }
+    
+    Vec& operator-=(const Vec& v2)
+    {
+        for(int j=0; j<D; j++)
+            _Arrary[j]-=v2._Arrary[j];
         return *this;
     }
     
