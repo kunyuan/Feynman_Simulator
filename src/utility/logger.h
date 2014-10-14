@@ -11,13 +11,14 @@
 #define LOGGER_MULTITHREAD
 
 // log level
-enum LogLevel { INFO,
+enum LogLevel { MYDEBUG,
+                INFO,
                 WARNING,
                 ERROR,
 };
 
 // log info header
-const std::string LOGSTR[3] = {"[INFO]", "[WARNING]", "[ERROR]"};
+const std::string LOGSTR[4] = {"[DEBUG]", "[INFO]", "[WARNING]", "[ERROR]"};
 
 #ifdef LOGGER_MULTITHREAD
 #include <pthread.h>
@@ -36,7 +37,10 @@ const std::string LOGSTR[3] = {"[INFO]", "[WARNING]", "[ERROR]"};
 /**
  * \brief Macro to print log messages.
  * Example of usage of the Logger:
- *	    LOGGER(LOG_DEBUG, "hello " << "world");
+ *	    LOG_DEBUG("hello " << "world");
+ *	    LOG_INFO("hello " << "world");
+ *	    LOG_WARNING("hello " << "world");
+ *	    LOG_ERROR("hello " << "world");
  */
 #define LOGGER(priority, msg)                                                              \
     {                                                                                      \
@@ -44,6 +48,11 @@ const std::string LOGSTR[3] = {"[INFO]", "[WARNING]", "[ERROR]"};
         __debug_stream__ << msg;                                                           \
         Logger::getInstance().print(priority, __FILE__, __LINE__, __debug_stream__.str()); \
     }
+
+#define LOG_DEBUG(msg) LOGGER(MYDEBUG, msg)
+#define LOG_INFO(msg) LOGGER(INFO, msg)
+#define LOG_WARNING(msg) LOGGER(WARNING, msg)
+#define LOG_ERROR(msg) LOGGER(ERROR, msg)
 
 /**
  * \brief Simple logger to log messages on file and console.

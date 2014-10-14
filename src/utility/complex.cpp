@@ -123,10 +123,8 @@ ostream &operator<<(ostream &s, const Complex &c)
 
 // Reads a complex number c into the input stream s.
 // Format: (a,b)
-// spaces can be used between the elements, but not inside an element ("- 7+2j"
+// spaces can be used between the elements, but not inside an element ("(- 7,2)"
 // is incorrect)
-// Valid:  1.2+5j ; 1e2-.5J (= 100-0.5j) ; -4 + -8 j (= -4-8j); 2.0+5.0e4j
-// Invalid: - 7+5j (space inside the first number) ; 7j-4 (order); 2.0+5.0e4i (i stick to Im)
 // If bad input is encountered, s.setstate(ios::failbit) is called.
 istream &operator>>(istream &s, Complex &c)
 {
@@ -208,7 +206,7 @@ Complex Csqrt(Complex z)
     return result;
 };
 
-string str(Complex c)
+string ToString(Complex c)
 {
     string s = ToString(c.Re);
     if (c.Im > 0.0)

@@ -11,7 +11,7 @@
 
 #define ABORT(msg)          \
     {                       \
-        LOGGER(ERROR, msg); \
+        LOG_ERROR(msg); \
         throw(-1);          \
     }
 
