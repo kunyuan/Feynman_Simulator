@@ -9,6 +9,10 @@
 #ifndef Feynman_Simulator_convention_h
 #define Feynman_Simulator_convention_h
 
+#ifndef real
+#define real double
+#endif
+
 enum spin { DOWN,
             UP };
 //Spin DOWN: 0,  Spin UP:1
