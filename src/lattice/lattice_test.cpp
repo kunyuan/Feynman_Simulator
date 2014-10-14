@@ -21,12 +21,19 @@ int TestLattice()
     sput_enter_suite("Test Definition of Class Site");
     sput_run_test(Test_Site);
     sput_finish_testing();
-    a();
     return sput_get_return_value();
 }
 
 void Test_Site()
 {
-//    Site s;
+    Site s;
+    Vec<real> vec;
+    vec[0]=5.5;
+    vec[1]=7.5;
+    s.Coordinate[0]=5;
+    s.Coordinate[1]=7;
+    s.SubLattice=1;
+    sput_fail_unless(s.GetName()==235, "name of site(A, 5, 5) on 16*16");
+    sput_fail_unless(s.GetVec()==vec, "name of site(A, 5, 5) on 16*16");
 }
 

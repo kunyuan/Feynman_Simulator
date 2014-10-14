@@ -19,25 +19,26 @@ public:
     int SubLattice;
     Vec<int> Coordinate;
     
-    Site();
-    int GetName() const;
-    Vec<real> GetVec() const;
+    Site(){}
+    int GetName();
+    Vec<real> GetVec();
 };
 
 /**
  *  class Distance defines Site1-Site2 using the vector: Dr and sublattice of Site1 and Site2: SubLattice[0] and SubLattice[1].
  */
-class Distance{
-public:
-    int SubLattice[2];
-    Vec<int> Dr;
-    
-    Distance();
-    Distance(const Site&, const Site&);
-    Vec<real> GetVec() const;
-    Distance Mirror() const;
-};
-
+//class Distance{
+//public:
+//    int SubLattice[2];
+//    Vec<int> Dr;
+//    
+//    Distance(){}
+//    Distance(const Site&, const Site&);
+//    Vec<real> GetVec() const;
+//    Distance Mirror() const;
+//};
+//
+//Distance operator-(Site S1, Site S2);
 
 /**
  *  class Lattice includes three set of vectors: 1) LatticeVec (unit cell lattice vector); 2)ReLatticeVec (reciprocal lattice vector for k); 3) SubLatticeVec (vectors between different sublattices in the same unit cell).
@@ -46,12 +47,16 @@ class Lattice{
 public:
     Vec<real> LatticeVec[D];
     Vec<real> ReLatticeVec[D];
-    Vec<real> SubLatticeVec[NSublattice][D];
+    Vec<real> SubLatticeVec[NSublattice];
     
+    Lattice() {Initialize();}
     Site GetNN(const Site&, const int&) const;
     Site GetNNN(const Site&, const int&) const;
     void PlotLattice() const;
+    void Initialize();
 };
+
+extern Lattice lattice;
 
 int Mirror(const int&, const int&);
 int TestLattice();

@@ -16,5 +16,7 @@ int TestAll()
     //    TestRNG();
     //    TestPystring();
     TestDiagram();
+    TestVector();
+    TestLattice();
     return 0;
 }
