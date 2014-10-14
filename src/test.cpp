@@ -15,6 +15,7 @@ int TestAll()
     //    TestTimer();  //Test the timer
     //    TestRNG();
     //    TestPystring();
-    TestDiagram();
+//    TestDiagram();
+    Testcnpy();
     return 0;
 }
