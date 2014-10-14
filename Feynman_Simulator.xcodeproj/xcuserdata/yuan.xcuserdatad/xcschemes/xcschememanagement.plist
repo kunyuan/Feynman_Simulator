@@ -17,7 +17,7 @@
 		<key>Fermion_Simulator.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>0</integer>
+			<integer>2</integer>
 		</dict>
 		<key>Feynman_Simulator.xcscheme</key>
 		<dict>
@@ -27,6 +27,11 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>1CB4127A19EDD43600F0540E</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>84FDE06F19DDFC2F0092B441</key>
 		<dict>
 			<key>primary</key>
