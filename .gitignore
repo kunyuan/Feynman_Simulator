@@ -35,6 +35,8 @@
 *.eps
 *.pdf
 
+*.npy
+*.npz
 *.xccheckout
 *.xcuserstate
 doc
