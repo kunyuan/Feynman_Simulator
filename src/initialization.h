@@ -20,6 +20,7 @@
 #include "component_bundle.h"
 #include "lattice.h"
 #include "vector.h"
+#include "cnpy.h"
 
 void Initilization();
 // define all objects to start the simulation here

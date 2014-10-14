@@ -18,5 +18,6 @@ int TestAll()
     TestDiagram();
     TestVector();
     TestLattice();
+    Testcnpy();
     return 0;
 }
