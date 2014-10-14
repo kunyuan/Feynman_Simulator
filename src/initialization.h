@@ -18,6 +18,8 @@
 #include "test.h"
 #include "component.h"
 #include "component_bundle.h"
+#include "lattice.h"
+#include "vector.h"
 
 void Initilization();
 // define all objects to start the simulation here
