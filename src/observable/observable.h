@@ -11,23 +11,13 @@
 
 #include "complex.h"
 #include "convention.h"
+#include "estimate.h"
 #include <iostream>
 
 const int MAX_BIN=128;
 /**
-*  Estimator gives a estimation of certain quantity with it's error bar'
+*  Estimate gives a estimation of certain quantity with it's error bar'
 */
-class Estimator
-{
-public:
-    Estimator();
-    Estimator(Complex &m, Complex &e);
-    Complex Mean;
-    Complex Error;
-    friend std::ostream& operator<<(std::ostream &, Estimator &);
-    void Write2Binary(std::ostream &);
-    bool ReadFromBinary(std::istream &);
-};
 
 //TODO: Add fitting function here
 
@@ -41,7 +31,7 @@ public:
     WeightG();
     static Complex& WeightOfBareG(int dr, real dt, spin spin_in, spin spin_out);
     Complex& Weight(int dr, real dt, spin spin_in, spin spin_out);
-    Estimator& WeightWithError(int dr, real dt, spin spin_in, spin spin_out);
+    Estimate<Complex>& WeightWithError(int dr, real dt, spin spin_in, spin spin_out);
     Complex& operator()(int dr, real dt, spin spin_in, spin spin_out);
     void AddStatistics(Complex &weight, real norm);
     void Write2Binary(std::ostream &);
