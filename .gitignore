@@ -40,4 +40,5 @@
 *.xccheckout
 *.xcuserstate
 doc
+data
 
