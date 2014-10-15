@@ -88,6 +88,13 @@ Vec<real> Site::GetVec()
     return vec;
 }
 
+/**
+ *  get the corresponding site of a name [0, Vol)
+ *
+ *  @param i name of a site [0, Vol)
+ *
+ *  @return a site struct
+ */
 Site GetSite(const int& i)
 {
     int name, layer;
@@ -165,6 +172,9 @@ Distance operator-(const Site& i, const Site& j)
     return dis;
 }
 
+/**
+ *  save all the coordinates of the sites on lattice to a plotable python file
+ */
 void Lattice::PlotLattice()
 {
     const unsigned int N=Vol;
@@ -177,7 +187,6 @@ void Lattice::PlotLattice()
         s=GetSite(i);
         for(int j=0; j<D; j++)
             data[i*D+j]=s.GetVec()[j];
-        std::cout<< data[i*D]<<' '<<data[i*D+1]<<std::endl;
     }
     cnpy::npy_save("sq.npy",data,shape,2,"w");
 }
