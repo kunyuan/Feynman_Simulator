@@ -26,12 +26,9 @@ int TestVector()
 
 void Test_Vector()
 {
-    Vec<int> v(3), v2;
-    cout << v[0] << v[1] <<endl;
+    Vec<int> v, v2;
     v[0]=2;
     v[1]=1;
-    cout << v[0] << v[1] <<endl;
-    cout << (v*3+v)[0] << (v*3+v)[1] <<endl;
     v2[0]=8;
     v2[1]=4;
     sput_fail_unless((v*3+v)==v2, "test the operators for vectors");

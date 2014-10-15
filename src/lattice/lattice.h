@@ -19,7 +19,7 @@ public:
     int SubLattice;
     Vec<int> Coordinate;
     
-    Site(){}
+    Site():SubLattice(0){}
     int GetName();
     Vec<real> GetVec();
 };
