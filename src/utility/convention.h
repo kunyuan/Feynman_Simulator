@@ -23,7 +23,7 @@ const int OUT = 1;
 const int D=2;
 const int NSublattice=2;
 const int L[D]={16,32};
-const int Vol=L[0]*L[1];
+const int Vol=NSublattice*L[0]*L[1];
 
 const real Pi=3.14159265359;
 
