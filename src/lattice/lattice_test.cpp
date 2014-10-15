@@ -34,7 +34,7 @@ void Test_Site()
     s.Coordinate[0]=5;
     s.Coordinate[1]=7;
     s.SubLattice=1;
-    sput_fail_unless(s.GetName()==235, "name of site(B, 5, 5) on 16*16");
-    sput_fail_unless(s.GetVec()==vec, "vector of site(B, 5, 5) on 16*16");
+    sput_fail_unless(s.GetName()==235, "name of site(B, 5, 5) on 16*32");
+    sput_fail_unless(s.GetVec()==vec, "vector of site(B, 5, 5) on 16*32");
 }
 
