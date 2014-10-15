@@ -16,6 +16,7 @@ int TestAll()
 //        TestRNG();
     //    TestPystring();
 //    TestDiagram();
-    Testcnpy();
+//    Testcnpy();
+    TestObservable();
     return 0;
 }
