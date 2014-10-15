@@ -43,6 +43,7 @@ void Test_Site()
     sput_fail_unless(s.GetName()==235, "name of site(B, 5, 5) on 16*32");
     sput_fail_unless(s.GetVec()==vec, "vector of site(B, 5, 5) on 16*32");
     sput_fail_unless(s==GetSite(235), "Site of name 235");
+    sput_fail_if(s!=GetSite(235), "Site of name 235");
 }
 
 void Test_Distance()
