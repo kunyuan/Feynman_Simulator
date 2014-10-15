@@ -7,3 +7,34 @@
 //
 
 #include "observable.h"
+#include "sput.h"
+using namespace std;
+
+void TestObservableIO();
+
+int TestObservable()
+{
+    sput_start_testing();
+    sput_enter_suite("Test Observable...");
+    sput_run_test(TestObservableIO);
+    sput_finish_testing();
+    return sput_get_return_value();
+}
+
+void TestObservableIO()
+{
+    EstimateKeeper<Complex> quan("TestQuan");
+    Complex a[10];
+    for(int i=0;i<10;i++)
+    {
+        a[i]=Complex(i+1,10-i);
+        quan.AddStatistics(a[i]);
+    }
+    Estimate<Complex> ExpectedResult(Complex(5.0, 5.0),Complex(1.5, 0.9));
+    //!!!This two value only works if you set _norm=1.0 and ThrowRatio=1.0/3
+    sput_fail_unless(Equal(quan.Estimate().Mean, ExpectedResult.Mean),
+                     "check the Mean value.");
+    sput_fail_unless(Equal(quan.Estimate().Error, ExpectedResult.Error),
+                     "check the Error value.");
+    quan.WriteToFile("TestObservable", "w");
+}

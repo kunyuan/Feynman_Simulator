@@ -170,9 +170,9 @@
 				84B8FC3B19EC97B2003D6DF6 /* observable.h */,
 				84B8FC3A19EC97B2003D6DF6 /* observable.cpp */,
 				84B8FC3F19ECB624003D6DF6 /* observable_IO.cpp */,
-				84B8FC4119ECBE1E003D6DF6 /* observable_test.cpp */,
 				84B8FC4519ED6F15003D6DF6 /* estimate.h */,
 				84B8FC4419ED6F15003D6DF6 /* estimate.cpp */,
+				84B8FC4119ECBE1E003D6DF6 /* observable_test.cpp */,
 			);
 			name = observable;
 			sourceTree = "<group>";

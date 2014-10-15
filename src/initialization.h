@@ -19,6 +19,7 @@
 #include "component.h"
 #include "component_bundle.h"
 #include "cnpy.h"
+#include "observable.h"
 
 void Initilization();
 // define all objects to start the simulation here
