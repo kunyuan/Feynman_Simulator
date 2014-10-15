@@ -86,6 +86,12 @@ public:
             if(_Arrary[j]!=v2._Arrary[j]) return false;
         return true;
     }
+    
+    bool operator!=(const Vec& v2) const
+    {
+        if(*this==v2) return false;
+        return true;
+    }
 };
 
 int TestVector();
