@@ -9,6 +9,7 @@
 #include "estimate.h"
 #include "utility.h"
 #include "cnpy.h"
+#include "abort.h"
 
 using namespace std;
 
@@ -53,11 +54,16 @@ template<typename T>
 EstimateKeeper<T>::EstimateKeeper(string Name)
 {
     _name=Name;
+    Clear();
+}
+
+template<typename T>
+void EstimateKeeper<T>::Clear()
+{
     _history.clear();
     _ratio=1.0;
     _norm=1.0;
 }
-
 /**
 *  \brief Using statistics from ThrowRatio*100% to 100% to estimate the error bar
 */
@@ -149,13 +155,18 @@ real EstimateKeeper<T>::Ratio()
 }
 
 template <typename T>
-bool ReadFromFile(cnpy::npz_t )
+bool EstimateKeeper<T>::ReadFromFile(cnpy::npz_t NpzMap)
 {
-//    cnpy::npz_t my_npz = cnpy::npz_load("out.npz");
-//    
-//    //check that the loaded myVar1 matches myVar1
-//    cnpy::NpyArray arr_mv1 = my_npz["myVar1"];
-    
+    cnpy::NpyArray history=NpzMap[_name];
+    T* start = reinterpret_cast<T*>(history.data);
+    if(start==NULL) ABORT("Can't find estimator "<<_name<<" in .npz data file!"<<endl);
+    Clear();
+    size_t size=history.shape[0];
+    _history.assign(start, start+size);
+    _norm=real(size+1);
+    _accumulator=_history[size-1]*_norm;
+    _update();
+    return true;
 }
 
 template <typename T>
