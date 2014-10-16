@@ -38,7 +38,7 @@ void Testcnpy()
     double myVar1 = 1.2;
     char myVar2 = 'a';
     unsigned int shape2[] = {1};
-    cnpy::npz_save("out.npz","myVar1",&myVar1,shape2,1,"a"); //"w" overwrites any existing file
+    cnpy::npz_save("out.npz","myVar1",&myVar1,shape2,1,"w"); //"w" overwrites any existing file
     cnpy::npz_save("out.npz","myVar2",&myVar2,shape2,1,"a"); //"a" appends to the file we created above
     cnpy::npz_save("out.npz","arr1",data,shape,3,"a"); //"a" appends to the file we created above
 
