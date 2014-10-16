@@ -34,10 +34,10 @@ public:
     Estimate<Complex>& WeightWithError(int dr, real dt, spin spin_in, spin spin_out);
     Complex& operator()(int dr, real dt, spin spin_in, spin spin_out);
     void AddStatistics(Complex &weight, real norm);
-    void Write2Binary(std::ostream &);
-    void Write2Readable(std::ostream &);
-    bool ReadFromReadable(std::istream &);
-    bool ReadFromBinary(std::istream &);
+    std::string PrettyString();
+    void WriteToFile(std::ostream &);
+    bool ReadFromFile(std::istream &);
 };
 
+int TestObservable();
 #endif /* defined(__Feynman_Simulator__observable__) */
