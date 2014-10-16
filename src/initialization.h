@@ -18,6 +18,8 @@
 #include "test.h"
 #include "component.h"
 #include "component_bundle.h"
+#include "lattice.h"
+#include "vector.h"
 #include "cnpy.h"
 #include "observable.h"
 

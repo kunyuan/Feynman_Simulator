@@ -15,7 +15,9 @@ int TestAll()
     //    TestTimer();  //Test the timer
 //        TestRNG();
     //    TestPystring();
-//    TestDiagram();
+    TestDiagram();
+    TestVector();
+    TestLattice();
     Testcnpy();
     TestObservable();
     return 0;

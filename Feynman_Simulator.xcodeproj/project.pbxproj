@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1CA5CF3819ED6F1B00212E20 /* lattice_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CA5CF3719ED6F1B00212E20 /* lattice_test.cpp */; };
+		1CA5CF3A19ED6F3F00212E20 /* lattice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CA5CF3919ED6F3F00212E20 /* lattice.cpp */; };
+		1CB4127719EDBB6500F0540E /* vector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CB4127619EDBB6500F0540E /* vector.cpp */; };
+		1CB4127919EDCAD800F0540E /* vector_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CB4127819EDCAD800F0540E /* vector_test.cpp */; };
 		6126638BECC823E2FECDBE1A /* utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 612660FB5825D574D3D39D34 /* utility.cpp */; };
 		6126664567718CEF01AA47EA /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61266E544CE6B7D4D4077492 /* timer.cpp */; };
 		61266A9275E9B7A6FCF57FEA /* timer_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61266699848E3D36323A2CE1 /* timer_test.cpp */; };
@@ -20,7 +24,6 @@
 		841D511319EB6DD900FDB7FF /* logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 841D511119EB6DD900FDB7FF /* logger.cpp */; };
 		841D905819DF833E0066116A /* initialization.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 841D905619DF833E0066116A /* initialization.cpp */; };
 		841D905C19E054900066116A /* test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 841D905B19E054900066116A /* test.cpp */; };
-		8426668019E36F4100CF7B59 /* lattice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8426667E19E36F4100CF7B59 /* lattice.cpp */; };
 		8426668D19E4482100CF7B59 /* component_bundle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8426668B19E4482100CF7B59 /* component_bundle.cpp */; };
 		8426668F19E475DF00CF7B59 /* definition_global.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8426668E19E475DF00CF7B59 /* definition_global.cpp */; };
 		84A17D2E19E5E3CF004BBDF6 /* pystring.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84A17D2C19E5E3CF004BBDF6 /* pystring.cpp */; };
@@ -50,6 +53,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1CA5CF3719ED6F1B00212E20 /* lattice_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lattice_test.cpp; path = lattice/lattice_test.cpp; sourceTree = "<group>"; };
+		1CA5CF3919ED6F3F00212E20 /* lattice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lattice.cpp; path = lattice/lattice.cpp; sourceTree = "<group>"; };
+		1CA5CF3B19ED6F4900212E20 /* lattice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lattice.h; path = lattice/lattice.h; sourceTree = "<group>"; };
+		1CA5CF3E19ED6FD100212E20 /* vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vector.h; path = ../lattice/vector.h; sourceTree = "<group>"; };
+		1CB4127619EDBB6500F0540E /* vector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vector.cpp; sourceTree = "<group>"; };
+		1CB4127819EDCAD800F0540E /* vector_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vector_test.cpp; sourceTree = "<group>"; };
 		612660FB5825D574D3D39D34 /* utility.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = utility.cpp; sourceTree = "<group>"; };
 		612664649705E4B837D2C92F /* complex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = complex.cpp; sourceTree = "<group>"; };
 		612664CF0EF6FC3F36675242 /* sput_tutorial.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sput_tutorial.txt; sourceTree = "<group>"; };
@@ -74,8 +83,6 @@
 		841D905719DF833E0066116A /* initialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = initialization.h; sourceTree = "<group>"; };
 		841D905B19E054900066116A /* test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = test.cpp; sourceTree = "<group>"; };
 		8426667D19E2E6B800CF7B59 /* sput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sput.h; sourceTree = "<group>"; };
-		8426667E19E36F4100CF7B59 /* lattice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lattice.cpp; sourceTree = "<group>"; };
-		8426667F19E36F4100CF7B59 /* lattice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lattice.h; sourceTree = "<group>"; };
 		8426668919E4469B00CF7B59 /* component.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = component.h; path = diagram/component.h; sourceTree = "<group>"; };
 		8426668B19E4482100CF7B59 /* component_bundle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = component_bundle.cpp; path = diagram/component_bundle.cpp; sourceTree = "<group>"; };
 		8426668C19E4482100CF7B59 /* component_bundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = component_bundle.h; path = diagram/component_bundle.h; sourceTree = "<group>"; };
@@ -115,9 +122,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1CA5CF3C19ED6F5400212E20 /* lattice */ = {
+			isa = PBXGroup;
+			children = (
+				1CA5CF3B19ED6F4900212E20 /* lattice.h */,
+				1CA5CF3919ED6F3F00212E20 /* lattice.cpp */,
+				1CA5CF3719ED6F1B00212E20 /* lattice_test.cpp */,
+			);
+			name = lattice;
+			sourceTree = "<group>";
+		};
 		612661D40BB91FC506C3E572 /* utility */ = {
 			isa = PBXGroup;
 			children = (
+				1CA5CF3E19ED6FD100212E20 /* vector.h */,
+				1CB4127619EDBB6500F0540E /* vector.cpp */,
+				1CB4127819EDCAD800F0540E /* vector_test.cpp */,
 				84B8FC4719EDA348003D6DF6 /* cnpy_test.cpp */,
 				84B8FC4819EDA348003D6DF6 /* cnpy.cpp */,
 				84B8FC4919EDA348003D6DF6 /* cnpy.h */,
@@ -210,8 +230,7 @@
 				841D905B19E054900066116A /* test.cpp */,
 				84B1D57C19DF4215004C3A89 /* definition_global.h */,
 				8426668E19E475DF00CF7B59 /* definition_global.cpp */,
-				8426667F19E36F4100CF7B59 /* lattice.h */,
-				8426667E19E36F4100CF7B59 /* lattice.cpp */,
+				1CA5CF3C19ED6F5400212E20 /* lattice */,
 				84B8FC3819EC9753003D6DF6 /* observable */,
 				84B8FC3919EC9763003D6DF6 /* markov */,
 				8426668419E445F000CF7B59 /* diagram */,
@@ -286,22 +305,25 @@
 				84B8FC4619ED6F15003D6DF6 /* estimate.cpp in Sources */,
 				84B8FC3C19EC97B2003D6DF6 /* observable.cpp in Sources */,
 				841D511319EB6DD900FDB7FF /* logger.cpp in Sources */,
+				1CA5CF3A19ED6F3F00212E20 /* lattice.cpp in Sources */,
 				84B8FC4A19EDA348003D6DF6 /* cnpy_test.cpp in Sources */,
 				841D905C19E054900066116A /* test.cpp in Sources */,
 				841D905819DF833E0066116A /* initialization.cpp in Sources */,
 				84B8FC3419EC7469003D6DF6 /* diagram_IO.cpp in Sources */,
 				61266D7AEDBA61CFA3C84C6B /* rng.cpp in Sources */,
 				841D50EF19E885D700FDB7FF /* diagram_check.cpp in Sources */,
+				1CB4127919EDCAD800F0540E /* vector_test.cpp in Sources */,
+				1CB4127719EDBB6500F0540E /* vector.cpp in Sources */,
 				84A17D3019E5E59C004BBDF6 /* pystring_test.cpp in Sources */,
 				6126664567718CEF01AA47EA /* timer.cpp in Sources */,
 				61266ABC56203779077E715B /* complex.cpp in Sources */,
-				8426668019E36F4100CF7B59 /* lattice.cpp in Sources */,
 				8426668D19E4482100CF7B59 /* component_bundle.cpp in Sources */,
 				61266E5CDE0355C1306E9EBD /* rng_test.cpp in Sources */,
 				6126638BECC823E2FECDBE1A /* utility.cpp in Sources */,
 				61266A9275E9B7A6FCF57FEA /* timer_test.cpp in Sources */,
 				84B8FC4B19EDA348003D6DF6 /* cnpy.cpp in Sources */,
 				84B8FC4219ECBE1E003D6DF6 /* observable_test.cpp in Sources */,
+				1CA5CF3819ED6F1B00212E20 /* lattice_test.cpp in Sources */,
 				8426668F19E475DF00CF7B59 /* definition_global.cpp in Sources */,
 				841D50F419E9EE8C00FDB7FF /* component.cpp in Sources */,
 			);

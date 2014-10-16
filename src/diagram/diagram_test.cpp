@@ -94,7 +94,7 @@ void Test_Diagram_IO()
     sput_fail_unless(Equal(NewV.tau, 0.51), "Check Vertex reading");
 
     Diagram Diag;
-    Diag.ReadDiagram("./src/diagram/diagram_template.config");
+    Diag.ReadDiagram("../src/diagram/diagram_template.config");
     sput_fail_unless(Diag.CheckDiagram(), "Check diagram reading");
     //    WriteDiagram(cout);
     //    WriteDiagram2gv("./test.gv");
