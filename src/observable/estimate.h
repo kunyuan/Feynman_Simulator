@@ -36,15 +36,15 @@ template <typename T>
 class Estimator
 {
 private:
-    std::vector<T> _history;
-    std::string _name;
     T _accumulator;
     real _norm;
     real _ratio;
     Estimate<T> _value;
     void _update();
 public:
+    std::vector<T> _history;
     Estimator(std::string);
+    std::string Name;
     void Measure(const T&);
     void AddStatistics();
     Estimate<T> Estimate();
@@ -59,22 +59,20 @@ public:
 */
 
 template <typename T>
-class EstimatorVector: public std::vector<Estimator<T>>
+class EstimatorBundle
 {
+private:
+    typedef Estimator<T> EstimatorT;
+    std::vector<EstimatorT> _EstimatorVector;
+    std::unordered_map<std::string, EstimatorT *> _EstimatorMap;
 public:
     void AddEstimator(const std::string);
+    void AddEstimator(const EstimatorT&);
+    void RemoveEstimator(const std::string);
     bool ReadState(const std::string FileName);
     void SaveState(const std::string FileName, const std::string Mode="a");
-    void ClearStatistics();
-};
-
-template <typename T>
-class EstimatorMap: public std::unordered_map<std::string, Estimator<T>>
-{
-public:
-    void AddEstimator(const std::string);
-    bool ReadState(const std::string FileName);
-    void SaveState(const std::string FileName, const std::string Mode="a");
+    EstimatorT &operator[](int);
+    EstimatorT &operator[](std::string);
     void ClearStatistics();
 };
 
