@@ -19,5 +19,12 @@ enum spin { DOWN,
 const int IN = 0;
 const int OUT = 1;
 
+//lattice information
+const int D=2;
+const int NSublattice=2;
+const int L[D]={16,32};
+const int Vol=NSublattice*L[0]*L[1];
+
+const real Pi=3.14159265359;
 
 #endif
