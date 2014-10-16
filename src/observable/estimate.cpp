@@ -88,7 +88,7 @@ void Estimator<real>::_update()
             MaxIndex=i;
         }
     }
-    _value.Error=abs(Max-Min)/2.0;
+    _value.Error=fabs(Max-Min)/2.0;
     _value.Mean=_accumulator/_norm;
     _ratio=(MaxIndex-MinIndex)/(real)size*(1.0-ThrowRatio);
 }
@@ -125,8 +125,8 @@ void Estimator<Complex>::_update()
         }
     }
     _value.Mean=_accumulator/_norm;
-    _value.Error.Re=abs(Max.Re-Min.Re)/2.0;
-    _value.Error.Im=abs(Max.Im-Min.Im)/2.0;
+    _value.Error.Re=fabs(Max.Re-Min.Re)/2.0;
+    _value.Error.Im=fabs(Max.Im-Min.Im)/2.0;
     if(MaxIndexRe-MinIndexRe<MaxIndexIm-MinIndexIm)
         _ratio=(MaxIndexIm-MinIndexIm)/(real)size*(1.0-ThrowRatio);
     else
@@ -134,10 +134,15 @@ void Estimator<Complex>::_update()
 }
 
 template <typename T>
-void Estimator<T>::AddStatistics(const T& t)
+void Estimator<T>::Measure(const T& t)
 {
     _accumulator+=t;
     _norm+=1.0;
+}
+
+template <typename T>
+void Estimator<T>::AddStatistics()
+{
     _history.push_back(_accumulator/_norm);
 }
 
@@ -161,10 +166,16 @@ bool Estimator<T>::ReadState(cnpy::npz_t NpzMap)
     T* start = reinterpret_cast<T*>(history.data);
     if(start==NULL) ABORT("Can't find estimator "<<_name<<" in .npz data file!"<<endl);
     ClearStatistics();
-    size_t size=history.shape[0];
-    _history.assign(start, start+size);
-    _norm=real(size+1);
-    _accumulator=_history[size-1]*_norm;
+    _history.assign(start,start+history.shape[0]);
+    //read normalization factor
+    cnpy::NpyArray norm=NpzMap[_name+"_Norm"];
+    real* start_Norm = reinterpret_cast<real*>(norm.data);
+    if(start_Norm==NULL) ABORT("Can't find estimator "<<_name<<"_Norm in .npz data file!"<<endl);
+    _norm=*start_Norm;
+    cnpy::NpyArray accu=NpzMap[_name+"_Accu"];
+    T* start_accu = reinterpret_cast<T*>(accu.data);
+    if(start_accu==NULL) ABORT("Can't find estimator "<<_name<<"_Accu in .npz data file!"<<endl);
+    _accumulator=*start_accu;
     _update();
     return true;
 }
@@ -174,12 +185,20 @@ void Estimator<T>::SaveState(const string FileName, string Mode)
 {
     unsigned int shape[1];
     shape[0]=(unsigned int)_history.size();
-    //!!!Assume _norm==_history.size()+1 here, so don't have to store _norm
     cnpy::npz_save(cnpy::npz_name(FileName),_name,_history.data(),shape,1,Mode);
+    shape[0]=1;
+    cnpy::npz_save(cnpy::npz_name(FileName),_name+"_Norm",&_norm,shape,1,"a");
+    cnpy::npz_save(cnpy::npz_name(FileName),_name+"_Accu",&_accumulator,shape,1,"a");
 }
 
 template class Estimator<real>;
 template class Estimator<Complex>;
+
+template <typename T>
+void EstimatorVector<T>::AddEstimator(string name)
+{
+    vector<Estimator<T>>::push_back(Estimator<T>(name));
+}
 
 template <typename T>
 bool EstimatorVector<T>::ReadState(const string FileName)
@@ -218,3 +237,35 @@ void EstimatorVector<T>::ClearStatistics()
 
 template class EstimatorVector<Complex>;
 template class EstimatorVector<real>;
+
+/**
+*  \brief This insertion is perferred than other ways provided by unorder_map class, because it
+*   takes care of Estimator<T>._name automatically.
+*  @param name The name of the estimator
+*/
+template <typename T>
+void EstimatorMap<T>::AddEstimator(string name)
+{
+//    Estimator<T> NewEstimator(name);
+//    unordered_map<string, Estimator<T>>::insert(make_pair(name, NewEstimator));
+}
+
+template <>
+void EstimatorMap<Complex>::AddEstimator(string name)
+{
+    Estimator<Complex> NewEstimator(name);
+    unordered_map<string, Estimator<Complex>>::insert(make_pair(name, NewEstimator));
+}
+template <typename T>
+bool EstimatorMap<T>::ReadState(const string FileName)
+{
+    cnpy::npz_t NpzMap=cnpy::npz_load(cnpy::npz_name(FileName));
+    auto end=unordered_map<string,Estimator<T>>::end();
+    for(auto it=unordered_map<string,Estimator<T>>::begin();it!=end;it++)
+    {
+        it->second.ReadState(NpzMap);
+    }
+    return true;
+}
+template class EstimatorMap<Complex>;
+template class EstimatorMap<real>;
