@@ -51,9 +51,9 @@ template class Estimate<real>;
 *
 */
 template<typename T>
-Estimator<T>::Estimator(string Name)
+Estimator<T>::Estimator(string name)
 {
-    _name=Name;
+    Name=name;
     ClearStatistics();
 }
 
@@ -88,7 +88,7 @@ void Estimator<real>::_update()
             MaxIndex=i;
         }
     }
-    _value.Error=abs(Max-Min)/2.0;
+    _value.Error=fabs(Max-Min)/2.0;
     _value.Mean=_accumulator/_norm;
     _ratio=(MaxIndex-MinIndex)/(real)size*(1.0-ThrowRatio);
 }
@@ -125,8 +125,8 @@ void Estimator<Complex>::_update()
         }
     }
     _value.Mean=_accumulator/_norm;
-    _value.Error.Re=abs(Max.Re-Min.Re)/2.0;
-    _value.Error.Im=abs(Max.Im-Min.Im)/2.0;
+    _value.Error.Re=fabs(Max.Re-Min.Re)/2.0;
+    _value.Error.Im=fabs(Max.Im-Min.Im)/2.0;
     if(MaxIndexRe-MinIndexRe<MaxIndexIm-MinIndexIm)
         _ratio=(MaxIndexIm-MinIndexIm)/(real)size*(1.0-ThrowRatio);
     else
@@ -134,10 +134,15 @@ void Estimator<Complex>::_update()
 }
 
 template <typename T>
-void Estimator<T>::AddStatistics(const T& t)
+void Estimator<T>::Measure(const T& t)
 {
     _accumulator+=t;
     _norm+=1.0;
+}
+
+template <typename T>
+void Estimator<T>::AddStatistics()
+{
     _history.push_back(_accumulator/_norm);
 }
 
@@ -157,14 +162,20 @@ real Estimator<T>::Ratio()
 template <typename T>
 bool Estimator<T>::ReadState(cnpy::npz_t NpzMap)
 {
-    cnpy::NpyArray history=NpzMap[_name];
+    cnpy::NpyArray history=NpzMap[Name];
     T* start = reinterpret_cast<T*>(history.data);
-    if(start==NULL) ABORT("Can't find estimator "<<_name<<" in .npz data file!"<<endl);
+    if(start==NULL) ABORT("Can't find estimator "<<Name<<" in .npz data file!"<<endl);
     ClearStatistics();
-    size_t size=history.shape[0];
-    _history.assign(start, start+size);
-    _norm=real(size+1);
-    _accumulator=_history[size-1]*_norm;
+    _history.assign(start,start+history.shape[0]);
+    //read normalization factor
+    cnpy::NpyArray norm=NpzMap[Name+"_Norm"];
+    real* start_Norm = reinterpret_cast<real*>(norm.data);
+    if(start_Norm==NULL) ABORT("Can't find estimator "<<Name<<"_Norm in .npz data file!"<<endl);
+    _norm=*start_Norm;
+    cnpy::NpyArray accu=NpzMap[Name+"_Accu"];
+    T* start_accu = reinterpret_cast<T*>(accu.data);
+    if(start_accu==NULL) ABORT("Can't find estimator "<<Name<<"_Accu in .npz data file!"<<endl);
+    _accumulator=*start_accu;
     _update();
     return true;
 }
@@ -174,47 +185,80 @@ void Estimator<T>::SaveState(const string FileName, string Mode)
 {
     unsigned int shape[1];
     shape[0]=(unsigned int)_history.size();
-    //!!!Assume _norm==_history.size()+1 here, so don't have to store _norm
-    cnpy::npz_save(cnpy::npz_name(FileName),_name,_history.data(),shape,1,Mode);
+    cnpy::npz_save(cnpy::npz_name(FileName),Name,_history.data(),shape,1,Mode);
+    shape[0]=1;
+    cnpy::npz_save(cnpy::npz_name(FileName),Name+"_Norm",&_norm,shape,1,"a");
+    cnpy::npz_save(cnpy::npz_name(FileName),Name+"_Accu",&_accumulator,shape,1,"a");
 }
 
 template class Estimator<real>;
 template class Estimator<Complex>;
 
 template <typename T>
-bool EstimatorVector<T>::ReadState(const string FileName)
+void EstimatorBundle<T>::AddEstimator(string name)
+{
+    _EstimatorVector.push_back(EstimatorT(name));
+    _EstimatorMap[name]=_EstimatorVector.data()+_EstimatorVector.size()-1;
+}
+
+/**
+*  \brief this function will give you a new copy of Estimator<T>, including a __new__ Estimator<T>._history
+*/
+template <typename T>
+void EstimatorBundle<T>::AddEstimator(const Estimator<T>& est)
+{
+    _EstimatorVector.push_back(est);
+    _EstimatorMap[est.Name]=_EstimatorVector.data()+_EstimatorVector.size()-1;
+}
+
+template <typename T>
+bool EstimatorBundle<T>::ReadState(const string FileName)
 {
     cnpy::npz_t NpzMap=cnpy::npz_load(cnpy::npz_name(FileName));
-    for(unsigned int i=0;i<vector<Estimator<T>>::size();i++)
+    for(unsigned int i=0;i<_EstimatorVector.size();i++)
     {
-        vector<Estimator<T>>::at(i).ReadState(NpzMap);
+        _EstimatorVector[i].ReadState(NpzMap);
     }
     return true;
 }
 
 template <typename T>
-void EstimatorVector<T>::SaveState(const string FileName, string Mode)
+void EstimatorBundle<T>::SaveState(const string FileName, string Mode)
 {
     string Mod=Mode;
-    for(unsigned int i=0;i<vector<Estimator<T>>::size();i++)
+    for(unsigned int i=0;i<_EstimatorVector.size();i++)
     {
-        vector<Estimator<T>>::at(i).SaveState(FileName, Mod);
+        _EstimatorVector[i].SaveState(FileName, Mod);
         if(i==0&&Mod=="w") Mod="a"; //the second and the rest elements will be wrote as appended
     }
 }
+
+template <typename T>
+Estimator<T>& EstimatorBundle<T>::operator[](int index)
+{
+    return _EstimatorVector[index];
+}
+
+template <typename T>
+Estimator<T>& EstimatorBundle<T>::operator[](string name)
+{
+    return *_EstimatorMap[name];
+}
+
+
 /**
-*  \brief clear all statistics of the elements in the EstimatorVector.
+*  \brief clear all statistics of the elements in the EstimatorBundle.
 *   __memory__ of the vector will not be freed!
 *
 */
 template <typename T>
-void EstimatorVector<T>::ClearStatistics()
+void EstimatorBundle<T>::ClearStatistics()
 {
-    for(unsigned int i=0;i<vector<Estimator<T>>::size();i++)
+    for(unsigned int i=0;i<_EstimatorVector.size();i++)
     {
-        vector<Estimator<T>>::at(i).ClearStatistics();
+        _EstimatorVector[i].ClearStatistics();
     }
 }
 
-template class EstimatorVector<Complex>;
-template class EstimatorVector<real>;
+template class EstimatorBundle<Complex>;
+template class EstimatorBundle<real>;
