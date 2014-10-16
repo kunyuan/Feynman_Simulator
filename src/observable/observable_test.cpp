@@ -7,6 +7,7 @@
 //
 
 #include "observable.h"
+#include "cnpy.h"
 #include "sput.h"
 using namespace std;
 
@@ -36,5 +37,14 @@ void TestObservableIO()
                      "check the Mean value.");
     sput_fail_unless(Equal(quan.Estimate().Error, ExpectedResult.Error),
                      "check the Error value.");
+    
+    //EstimateKeeper IO operation
     quan.WriteToFile("TestObservable", "w");
+    cnpy::npz_t test=cnpy::npz_load("TestObservable.npz");
+    EstimateKeeper<Complex> quan_another("TestQuan");
+    quan_another.ReadFromFile(test);
+    sput_fail_unless(Equal(quan_another.Estimate().Mean, ExpectedResult.Mean),
+                     "check the Mean value.");
+    sput_fail_unless(Equal(quan_another.Estimate().Error, ExpectedResult.Error),
+                     "check the Error value.");
 }
