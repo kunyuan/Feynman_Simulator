@@ -21,6 +21,9 @@
 */
 namespace cnpy {
 
+    std::string npz_name(std::string file);
+    std::string npy_name(std::string file);
+
     struct NpyArray {
         char* data;
         std::vector<unsigned int> shape;
@@ -37,7 +40,7 @@ namespace cnpy {
             for(; it != this->end(); ++it) (*it).second.destruct();
         }
     };
-
+    
     char BigEndianTest();
     char map_type(const std::type_info& t);
     template<typename T> std::vector<char> create_npy_header(const T* data, const unsigned int* shape, const unsigned int ndims);
