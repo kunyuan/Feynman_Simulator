@@ -11,18 +11,22 @@
 #include "sput.h"
 using namespace std;
 
-void TestObservableIO();
+void TestObservableComplex();
+void TestObservableReal();
 
 int TestObservable()
 {
     sput_start_testing();
     sput_enter_suite("Test Observable...");
-    sput_run_test(TestObservableIO);
+    //complex and real Estimator have to be tested separatelly,
+    //since Estimator._update() is different for those two types
+    sput_run_test(TestObservableComplex);
+    sput_run_test(TestObservableReal);
     sput_finish_testing();
     return sput_get_return_value();
 }
 
-void TestObservableIO()
+void TestObservableComplex()
 {
     Estimator<Complex> quan1("1");
     Estimator<Complex> quan2("2");
@@ -51,5 +55,23 @@ void TestObservableIO()
     sput_fail_unless(Equal(QuanVector[1].Estimate().Mean, -ExpectedResult.Mean),
                      "check the Mean value.");
     sput_fail_unless(Equal(QuanVector[1].Estimate().Error, ExpectedResult.Error),
+                     "check the Error value.");
+}
+
+void TestObservableReal()
+{
+    Estimator<real> quan1("1");
+    Estimator<real> quan2("2");
+    real a[10];
+    for(int i=0;i<10;i++)
+    {
+        a[i]=i+1;
+        quan1.AddStatistics(a[i]);
+    }
+    Estimate<Complex> ExpectedResult(5.0,1.5);
+    //!!!This two value only works if you set _norm=1.0 and ThrowRatio=1.0/3
+    sput_fail_unless(Equal(quan1.Estimate().Mean, ExpectedResult.Mean),
+                     "check the Mean value.");
+    sput_fail_unless(Equal(quan1.Estimate().Error, ExpectedResult.Error),
                      "check the Error value.");
 }
