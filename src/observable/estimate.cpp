@@ -51,9 +51,9 @@ template class Estimate<real>;
 *
 */
 template<typename T>
-Estimator<T>::Estimator(string Name)
+Estimator<T>::Estimator(string name)
 {
-    _name=Name;
+    Name=name;
     ClearStatistics();
 }
 
@@ -162,19 +162,19 @@ real Estimator<T>::Ratio()
 template <typename T>
 bool Estimator<T>::ReadState(cnpy::npz_t NpzMap)
 {
-    cnpy::NpyArray history=NpzMap[_name];
+    cnpy::NpyArray history=NpzMap[Name];
     T* start = reinterpret_cast<T*>(history.data);
-    if(start==NULL) ABORT("Can't find estimator "<<_name<<" in .npz data file!"<<endl);
+    if(start==NULL) ABORT("Can't find estimator "<<Name<<" in .npz data file!"<<endl);
     ClearStatistics();
     _history.assign(start,start+history.shape[0]);
     //read normalization factor
-    cnpy::NpyArray norm=NpzMap[_name+"_Norm"];
+    cnpy::NpyArray norm=NpzMap[Name+"_Norm"];
     real* start_Norm = reinterpret_cast<real*>(norm.data);
-    if(start_Norm==NULL) ABORT("Can't find estimator "<<_name<<"_Norm in .npz data file!"<<endl);
+    if(start_Norm==NULL) ABORT("Can't find estimator "<<Name<<"_Norm in .npz data file!"<<endl);
     _norm=*start_Norm;
-    cnpy::NpyArray accu=NpzMap[_name+"_Accu"];
+    cnpy::NpyArray accu=NpzMap[Name+"_Accu"];
     T* start_accu = reinterpret_cast<T*>(accu.data);
-    if(start_accu==NULL) ABORT("Can't find estimator "<<_name<<"_Accu in .npz data file!"<<endl);
+    if(start_accu==NULL) ABORT("Can't find estimator "<<Name<<"_Accu in .npz data file!"<<endl);
     _accumulator=*start_accu;
     _update();
     return true;
@@ -185,87 +185,80 @@ void Estimator<T>::SaveState(const string FileName, string Mode)
 {
     unsigned int shape[1];
     shape[0]=(unsigned int)_history.size();
-    cnpy::npz_save(cnpy::npz_name(FileName),_name,_history.data(),shape,1,Mode);
+    cnpy::npz_save(cnpy::npz_name(FileName),Name,_history.data(),shape,1,Mode);
     shape[0]=1;
-    cnpy::npz_save(cnpy::npz_name(FileName),_name+"_Norm",&_norm,shape,1,"a");
-    cnpy::npz_save(cnpy::npz_name(FileName),_name+"_Accu",&_accumulator,shape,1,"a");
+    cnpy::npz_save(cnpy::npz_name(FileName),Name+"_Norm",&_norm,shape,1,"a");
+    cnpy::npz_save(cnpy::npz_name(FileName),Name+"_Accu",&_accumulator,shape,1,"a");
 }
 
 template class Estimator<real>;
 template class Estimator<Complex>;
 
 template <typename T>
-void EstimatorVector<T>::AddEstimator(string name)
+void EstimatorBundle<T>::AddEstimator(string name)
 {
-    vector<Estimator<T>>::push_back(Estimator<T>(name));
+    _EstimatorVector.push_back(EstimatorT(name));
+    _EstimatorMap[name]=_EstimatorVector.data()+_EstimatorVector.size()-1;
+}
+
+/**
+*  \brief this function will give you a new copy of Estimator<T>, including a __new__ Estimator<T>._history
+*/
+template <typename T>
+void EstimatorBundle<T>::AddEstimator(const Estimator<T>& est)
+{
+    _EstimatorVector.push_back(est);
+    _EstimatorMap[est.Name]=_EstimatorVector.data()+_EstimatorVector.size()-1;
 }
 
 template <typename T>
-bool EstimatorVector<T>::ReadState(const string FileName)
+bool EstimatorBundle<T>::ReadState(const string FileName)
 {
     cnpy::npz_t NpzMap=cnpy::npz_load(cnpy::npz_name(FileName));
-    for(unsigned int i=0;i<vector<Estimator<T>>::size();i++)
+    for(unsigned int i=0;i<_EstimatorVector.size();i++)
     {
-        vector<Estimator<T>>::at(i).ReadState(NpzMap);
+        _EstimatorVector[i].ReadState(NpzMap);
     }
     return true;
 }
 
 template <typename T>
-void EstimatorVector<T>::SaveState(const string FileName, string Mode)
+void EstimatorBundle<T>::SaveState(const string FileName, string Mode)
 {
     string Mod=Mode;
-    for(unsigned int i=0;i<vector<Estimator<T>>::size();i++)
+    for(unsigned int i=0;i<_EstimatorVector.size();i++)
     {
-        vector<Estimator<T>>::at(i).SaveState(FileName, Mod);
+        _EstimatorVector[i].SaveState(FileName, Mod);
         if(i==0&&Mod=="w") Mod="a"; //the second and the rest elements will be wrote as appended
     }
 }
+
+template <typename T>
+Estimator<T>& EstimatorBundle<T>::operator[](int index)
+{
+    return _EstimatorVector[index];
+}
+
+template <typename T>
+Estimator<T>& EstimatorBundle<T>::operator[](string name)
+{
+    return *_EstimatorMap[name];
+}
+
+
 /**
-*  \brief clear all statistics of the elements in the EstimatorVector.
+*  \brief clear all statistics of the elements in the EstimatorBundle.
 *   __memory__ of the vector will not be freed!
 *
 */
 template <typename T>
-void EstimatorVector<T>::ClearStatistics()
+void EstimatorBundle<T>::ClearStatistics()
 {
-    for(unsigned int i=0;i<vector<Estimator<T>>::size();i++)
+    for(unsigned int i=0;i<_EstimatorVector.size();i++)
     {
-        vector<Estimator<T>>::at(i).ClearStatistics();
+        _EstimatorVector[i].ClearStatistics();
     }
 }
 
-template class EstimatorVector<Complex>;
-template class EstimatorVector<real>;
-
-/**
-*  \brief This insertion is perferred than other ways provided by unorder_map class, because it
-*   takes care of Estimator<T>._name automatically.
-*  @param name The name of the estimator
-*/
-template <typename T>
-void EstimatorMap<T>::AddEstimator(string name)
-{
-//    Estimator<T> NewEstimator(name);
-//    unordered_map<string, Estimator<T>>::insert(make_pair(name, NewEstimator));
-}
-
-template <>
-void EstimatorMap<Complex>::AddEstimator(string name)
-{
-    Estimator<Complex> NewEstimator(name);
-    unordered_map<string, Estimator<Complex>>::insert(make_pair(name, NewEstimator));
-}
-template <typename T>
-bool EstimatorMap<T>::ReadState(const string FileName)
-{
-    cnpy::npz_t NpzMap=cnpy::npz_load(cnpy::npz_name(FileName));
-    auto end=unordered_map<string,Estimator<T>>::end();
-    for(auto it=unordered_map<string,Estimator<T>>::begin();it!=end;it++)
-    {
-        it->second.ReadState(NpzMap);
-    }
-    return true;
-}
-template class EstimatorMap<Complex>;
-template class EstimatorMap<real>;
+template class EstimatorBundle<Complex>;
+template class EstimatorBundle<real>;

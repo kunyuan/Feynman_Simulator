@@ -48,11 +48,11 @@ void TestObservableComplex()
     
     //Estimator IO operation
     
-    EstimatorVector<Complex> QuanVector;
-    QuanVector.push_back(quan1);
-    QuanVector.push_back(quan2);
+    EstimatorBundle<Complex> QuanVector;
+    QuanVector.AddEstimator(quan1);
+    QuanVector.AddEstimator(quan2);
     QuanVector.SaveState("TestObservable", "w");
-    EstimatorVector<Complex> QuanVector2;
+    EstimatorBundle<Complex> QuanVector2;
     QuanVector2.AddEstimator("1");
     QuanVector2.AddEstimator("2");
     QuanVector2.ReadState("TestObservable");
@@ -60,14 +60,10 @@ void TestObservableComplex()
                      "EstimatorVector:check the Mean value.");
     sput_fail_unless(Equal(QuanVector2[1].Estimate().Error, ExpectedResult.Error),
                      "EstimatorVector:check the Error value.");
-    EstimatorMap<Complex> QuanMap;
-    QuanMap.AddEstimator("1");
-    QuanMap.AddEstimator("2");
-    QuanMap.ReadState("TestObservable");
-    sput_fail_unless(Equal(QuanMap["2"].Estimate().Mean, -ExpectedResult.Mean),
-                     "EstimatorMap:check the Mean value.");
-    sput_fail_unless(Equal(QuanMap["2"].Estimate().Error, ExpectedResult.Error),
-                     "EstimatorMap:check the Error value.");
+    sput_fail_unless(Equal(QuanVector2["2"].Estimate().Mean, -ExpectedResult.Mean),
+                     "EstimatorVector:check the Mean value.");
+    sput_fail_unless(Equal(QuanVector2["2"].Estimate().Error, ExpectedResult.Error),
+                     "EstimatorVector:check the Error value.");
 }
 
 void TestObservableReal()
