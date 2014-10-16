@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include <vector>
+#include <unordered_map>
 #include "component.h"
 #include "cnpy.h"
 /**
@@ -35,16 +36,17 @@ template <typename T>
 class Estimator
 {
 private:
-    std::vector<T> _history;
-    std::string _name;
     T _accumulator;
     real _norm;
     real _ratio;
     Estimate<T> _value;
     void _update();
 public:
+    std::vector<T> _history;
     Estimator(std::string);
-    void AddStatistics(const T&);
+    std::string Name;
+    void Measure(const T&);
+    void AddStatistics();
     Estimate<T> Estimate();
     double Ratio();
     bool ReadState(cnpy::npz_t);
@@ -57,11 +59,20 @@ public:
 */
 
 template <typename T>
-class EstimatorVector: public std::vector<Estimator<T>>
+class EstimatorBundle
 {
+private:
+    typedef Estimator<T> EstimatorT;
+    std::vector<EstimatorT> _EstimatorVector;
+    std::unordered_map<std::string, EstimatorT *> _EstimatorMap;
 public:
+    void AddEstimator(const std::string);
+    void AddEstimator(const EstimatorT&);
+    void RemoveEstimator(const std::string);
     bool ReadState(const std::string FileName);
     void SaveState(const std::string FileName, const std::string Mode="a");
+    EstimatorT &operator[](int);
+    EstimatorT &operator[](std::string);
     void ClearStatistics();
 };
 

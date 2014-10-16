@@ -34,8 +34,10 @@ void TestObservableComplex()
     for(int i=0;i<10;i++)
     {
         a[i]=Complex(i+1,10-i);
-        quan1.AddStatistics(a[i]);
-        quan2.AddStatistics(-a[i]);
+        quan1.Measure(a[i]);
+        quan1.AddStatistics();
+        quan2.Measure(-a[i]);
+        quan2.AddStatistics();
     }
     Estimate<Complex> ExpectedResult(Complex(5.0, 5.0),Complex(1.5, 0.9));
     //!!!This two value only works if you set _norm=1.0 and ThrowRatio=1.0/3
@@ -46,16 +48,22 @@ void TestObservableComplex()
     
     //Estimator IO operation
     
-    EstimatorVector<Complex> QuanVector;
-    QuanVector.push_back(quan1);
-    QuanVector.push_back(quan2);
+    EstimatorBundle<Complex> QuanVector;
+    QuanVector.AddEstimator(quan1);
+    QuanVector.AddEstimator(quan2);
     QuanVector.SaveState("TestObservable", "w");
-    QuanVector.ClearStatistics();
-    QuanVector.ReadState("TestObservable");
-    sput_fail_unless(Equal(QuanVector[1].Estimate().Mean, -ExpectedResult.Mean),
-                     "check the Mean value.");
-    sput_fail_unless(Equal(QuanVector[1].Estimate().Error, ExpectedResult.Error),
-                     "check the Error value.");
+    EstimatorBundle<Complex> QuanVector2;
+    QuanVector2.AddEstimator("1");
+    QuanVector2.AddEstimator("2");
+    QuanVector2.ReadState("TestObservable");
+    sput_fail_unless(Equal(QuanVector2[1].Estimate().Mean, -ExpectedResult.Mean),
+                     "EstimatorVector:check the Mean value.");
+    sput_fail_unless(Equal(QuanVector2[1].Estimate().Error, ExpectedResult.Error),
+                     "EstimatorVector:check the Error value.");
+    sput_fail_unless(Equal(QuanVector2["2"].Estimate().Mean, -ExpectedResult.Mean),
+                     "EstimatorVector:check the Mean value.");
+    sput_fail_unless(Equal(QuanVector2["2"].Estimate().Error, ExpectedResult.Error),
+                     "EstimatorVector:check the Error value.");
 }
 
 void TestObservableReal()
@@ -66,7 +74,8 @@ void TestObservableReal()
     for(int i=0;i<10;i++)
     {
         a[i]=i+1;
-        quan1.AddStatistics(a[i]);
+        quan1.Measure(a[i]);
+        quan1.AddStatistics();
     }
     Estimate<Complex> ExpectedResult(5.0,1.5);
     //!!!This two value only works if you set _norm=1.0 and ThrowRatio=1.0/3
