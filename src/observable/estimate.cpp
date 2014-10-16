@@ -47,18 +47,18 @@ template class Estimate<Complex>;
 template class Estimate<real>;
 
 /**
-*  Normalization factor is initialized as 1.0 when EstimateKeeper is constructed.
+*  Normalization factor is initialized as 1.0 when Estimator is constructed.
 *
 */
 template<typename T>
-EstimateKeeper<T>::EstimateKeeper(string Name)
+Estimator<T>::Estimator(string Name)
 {
     _name=Name;
-    Clear();
+    ClearStatistics();
 }
 
 template<typename T>
-void EstimateKeeper<T>::Clear()
+void Estimator<T>::ClearStatistics()
 {
     _history.clear();
     _ratio=1.0;
@@ -69,7 +69,7 @@ void EstimateKeeper<T>::Clear()
 */
 const real ThrowRatio=1.0/3;
 template<>
-void EstimateKeeper<real>::_update()
+void Estimator<real>::_update()
 {
     int size=(int)_history.size();
     if(size==0) return;
@@ -88,13 +88,13 @@ void EstimateKeeper<real>::_update()
             MaxIndex=i;
         }
     }
-    _value.Error=(Max-Min)/2.0;
+    _value.Error=abs(Max-Min)/2.0;
     _value.Mean=_accumulator/_norm;
     _ratio=(MaxIndex-MinIndex)/(real)size*(1.0-ThrowRatio);
 }
 
 template<>
-void EstimateKeeper<Complex>::_update()
+void Estimator<Complex>::_update()
 {
     int size=(int)_history.size();
     if(size==0) return;
@@ -125,8 +125,8 @@ void EstimateKeeper<Complex>::_update()
         }
     }
     _value.Mean=_accumulator/_norm;
-    _value.Error.Re=(Max.Re-Min.Re)/2.0;
-    _value.Error.Im=(Max.Im-Min.Im)/2.0;
+    _value.Error.Re=abs(Max.Re-Min.Re)/2.0;
+    _value.Error.Im=abs(Max.Im-Min.Im)/2.0;
     if(MaxIndexRe-MinIndexRe<MaxIndexIm-MinIndexIm)
         _ratio=(MaxIndexIm-MinIndexIm)/(real)size*(1.0-ThrowRatio);
     else
@@ -134,7 +134,7 @@ void EstimateKeeper<Complex>::_update()
 }
 
 template <typename T>
-void EstimateKeeper<T>::AddStatistics(const T& t)
+void Estimator<T>::AddStatistics(const T& t)
 {
     _accumulator+=t;
     _norm+=1.0;
@@ -142,25 +142,25 @@ void EstimateKeeper<T>::AddStatistics(const T& t)
 }
 
 template <typename T>
-Estimate<T> EstimateKeeper<T>::Estimate()
+Estimate<T> Estimator<T>::Estimate()
 {
     _update();
     return _value;
 }
 
 template <typename T>
-real EstimateKeeper<T>::Ratio()
+real Estimator<T>::Ratio()
 {
     return _ratio;
 }
 
 template <typename T>
-bool EstimateKeeper<T>::ReadFromFile(cnpy::npz_t NpzMap)
+bool Estimator<T>::ReadState(cnpy::npz_t NpzMap)
 {
     cnpy::NpyArray history=NpzMap[_name];
     T* start = reinterpret_cast<T*>(history.data);
     if(start==NULL) ABORT("Can't find estimator "<<_name<<" in .npz data file!"<<endl);
-    Clear();
+    ClearStatistics();
     size_t size=history.shape[0];
     _history.assign(start, start+size);
     _norm=real(size+1);
@@ -170,7 +170,7 @@ bool EstimateKeeper<T>::ReadFromFile(cnpy::npz_t NpzMap)
 }
 
 template <typename T>
-void EstimateKeeper<T>::WriteToFile(const string FileName, string Mode)
+void Estimator<T>::SaveState(const string FileName, string Mode)
 {
     unsigned int shape[1];
     shape[0]=(unsigned int)_history.size();
@@ -178,5 +178,43 @@ void EstimateKeeper<T>::WriteToFile(const string FileName, string Mode)
     cnpy::npz_save(cnpy::npz_name(FileName),_name,_history.data(),shape,1,Mode);
 }
 
-template class EstimateKeeper<real>;
-template class EstimateKeeper<Complex>;
+template class Estimator<real>;
+template class Estimator<Complex>;
+
+template <typename T>
+bool EstimatorVector<T>::ReadState(const string FileName)
+{
+    cnpy::npz_t NpzMap=cnpy::npz_load(cnpy::npz_name(FileName));
+    for(unsigned int i=0;i<vector<Estimator<T>>::size();i++)
+    {
+        vector<Estimator<T>>::at(i).ReadState(NpzMap);
+    }
+    return true;
+}
+
+template <typename T>
+void EstimatorVector<T>::SaveState(const string FileName, string Mode)
+{
+    string Mod=Mode;
+    for(unsigned int i=0;i<vector<Estimator<T>>::size();i++)
+    {
+        vector<Estimator<T>>::at(i).SaveState(FileName, Mod);
+        if(i==0&&Mod=="w") Mod="a"; //the second and the rest elements will be wrote as appended
+    }
+}
+/**
+*  \brief clear all statistics of the elements in the EstimatorVector.
+*   __memory__ of the vector will not be freed!
+*
+*/
+template <typename T>
+void EstimatorVector<T>::ClearStatistics()
+{
+    for(unsigned int i=0;i<vector<Estimator<T>>::size();i++)
+    {
+        vector<Estimator<T>>::at(i).ClearStatistics();
+    }
+}
+
+template class EstimatorVector<Complex>;
+template class EstimatorVector<real>;
