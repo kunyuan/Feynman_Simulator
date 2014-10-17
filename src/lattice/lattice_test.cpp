@@ -32,7 +32,7 @@ int TestLattice()
 
 void Test_Site()
 {
-    Site s;
+    Site s, s1(235);
     Vec<real> vec;
     vec[0]=5.5;
     vec[1]=7.5;
@@ -42,7 +42,7 @@ void Test_Site()
     s.SubLattice=1;
     sput_fail_unless(s.GetName()==235, "name of site(B, 5, 5) on 16*32");
     sput_fail_unless(s.GetVec()==vec, "vector of site(B, 5, 5) on 16*32");
-    sput_fail_unless(s==GetSite(235), "Site of name 235");
+    sput_fail_unless(s==s1, "Site of name 235");
 }
 
 void Test_Distance()
@@ -60,6 +60,6 @@ void Test_Distance()
     sput_fail_unless(dis.GetVec()==s2.GetVec()-s1.GetVec(), "distance=site1-site2, vecotr");
     sput_fail_unless(dis.SubLattice[0]==s1.SubLattice, "distance=site1-site2, sublattices");
     sput_fail_unless(dis.SubLattice[1]==s2.SubLattice, "distance=site1-site2, sublattices");
-    sput_fail_unless(dis.Mirror().Dr[0]==2 && dis.Mirror().Dr[1]==2, "mirror(distance)");
+    sput_fail_unless(dis.Mirror().dCoordinate[0]==2 && dis.Mirror().dCoordinate[1]==2, "mirror(distance)");
 }
 
