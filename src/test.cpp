@@ -13,11 +13,12 @@ int TestAll()
 {
 
     //    TestTimer();  //Test the timer
-    //    TestRNG();
+//        TestRNG();
     //    TestPystring();
     TestDiagram();
     TestVector();
     TestLattice();
     Testcnpy();
+    TestObservable();
     return 0;
 }

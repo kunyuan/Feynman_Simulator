@@ -32,7 +32,6 @@
 		84B1D57F19DF42EE004C3A89 /* job.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84B1D57D19DF42EE004C3A89 /* job.cpp */; };
 		84B8FC3419EC7469003D6DF6 /* diagram_IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84B8FC3319EC7469003D6DF6 /* diagram_IO.cpp */; };
 		84B8FC3C19EC97B2003D6DF6 /* observable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84B8FC3A19EC97B2003D6DF6 /* observable.cpp */; };
-		84B8FC4019ECB624003D6DF6 /* observable_IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84B8FC3F19ECB624003D6DF6 /* observable_IO.cpp */; };
 		84B8FC4219ECBE1E003D6DF6 /* observable_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84B8FC4119ECBE1E003D6DF6 /* observable_test.cpp */; };
 		84B8FC4619ED6F15003D6DF6 /* estimate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84B8FC4419ED6F15003D6DF6 /* estimate.cpp */; };
 		84B8FC4A19EDA348003D6DF6 /* cnpy_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84B8FC4719EDA348003D6DF6 /* cnpy_test.cpp */; };
@@ -100,7 +99,6 @@
 		84B8FC3A19EC97B2003D6DF6 /* observable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = observable.cpp; path = observable/observable.cpp; sourceTree = "<group>"; };
 		84B8FC3B19EC97B2003D6DF6 /* observable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = observable.h; path = observable/observable.h; sourceTree = "<group>"; };
 		84B8FC3E19ECA449003D6DF6 /* convention.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = convention.h; sourceTree = "<group>"; };
-		84B8FC3F19ECB624003D6DF6 /* observable_IO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = observable_IO.cpp; path = observable/observable_IO.cpp; sourceTree = "<group>"; };
 		84B8FC4119ECBE1E003D6DF6 /* observable_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = observable_test.cpp; path = observable/observable_test.cpp; sourceTree = "<group>"; };
 		84B8FC4419ED6F15003D6DF6 /* estimate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = estimate.cpp; path = observable/estimate.cpp; sourceTree = "<group>"; };
 		84B8FC4519ED6F15003D6DF6 /* estimate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = estimate.h; path = observable/estimate.h; sourceTree = "<group>"; };
@@ -189,10 +187,9 @@
 			children = (
 				84B8FC3B19EC97B2003D6DF6 /* observable.h */,
 				84B8FC3A19EC97B2003D6DF6 /* observable.cpp */,
-				84B8FC3F19ECB624003D6DF6 /* observable_IO.cpp */,
-				84B8FC4119ECBE1E003D6DF6 /* observable_test.cpp */,
 				84B8FC4519ED6F15003D6DF6 /* estimate.h */,
 				84B8FC4419ED6F15003D6DF6 /* estimate.cpp */,
+				84B8FC4119ECBE1E003D6DF6 /* observable_test.cpp */,
 			);
 			name = observable;
 			sourceTree = "<group>";
@@ -328,7 +325,6 @@
 				84B8FC4219ECBE1E003D6DF6 /* observable_test.cpp in Sources */,
 				1CA5CF3819ED6F1B00212E20 /* lattice_test.cpp in Sources */,
 				8426668F19E475DF00CF7B59 /* definition_global.cpp in Sources */,
-				84B8FC4019ECB624003D6DF6 /* observable_IO.cpp in Sources */,
 				841D50F419E9EE8C00FDB7FF /* component.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
