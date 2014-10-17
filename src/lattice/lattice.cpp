@@ -10,6 +10,7 @@
 #include "math.h"
 #include "convention.h"
 #include "cnpy.h"
+#include "abort.h"
 #include <iostream>
 
 Lattice lattice;
@@ -31,10 +32,10 @@ void Lattice::Initialize()
     ReciprocalLatticeVec[1][0]=0.0;
     ReciprocalLatticeVec[1][1]=2.0*Pi;
     
-    SubLatticeVec[0][0]=0.0;
-    SubLatticeVec[0][1]=0.0;
-    SubLatticeVec[1][0]=0.5;
-    SubLatticeVec[1][1]=0.5;
+    SublatticeVec[0][0]=0.0;
+    SublatticeVec[0][1]=0.0;
+    SublatticeVec[1][0]=0.5;
+    SublatticeVec[1][1]=0.5;
     
     //Lattice Honeycomb
 //    LatticeVec[0][0]=0.0;
@@ -48,17 +49,17 @@ void Lattice::Initialize()
 //    ReciprocalLatticeVec[1][0]=4.0*Pi/sqrt(3.0);
 //    ReciprocalLatticeVec[1][1]=0.0;
 //    
-//    SubLatticeVec[0][0]=0.0;
-//    SubLatticeVec[0][1]=0.0;
-//    SubLatticeVec[1][0]=1.0/2.0/sqrt(3.0);
-//    SubLatticeVec[1][1]=0.5;
+//    SublatticeVec[0][0]=0.0;
+//    SublatticeVec[0][1]=0.0;
+//    SublatticeVec[1][0]=1.0/2.0/sqrt(3.0);
+//    SublatticeVec[1][1]=0.5;
     
 }
 
 /**
  *  get the name for a site on the lattice
  *
- *  @return Name for the Site in [0, NSubLattice*Vol)
+ *  @return Name for the Site in [0, NSublattice*Vol)
  */
 int Site::GetName()
 {
@@ -71,7 +72,7 @@ int Site::GetName()
             layer = layer*L[j];
         cell = cell + layer;
     }
-    return cell*NSublattice+SubLattice;
+    return cell*NSublattice+Sublattice;
 }
 
 /**
@@ -84,14 +85,14 @@ Vec<real> Site::GetVec()
     Vec<real> vec(0.0);
     for(int i=0; i<D; i++)
         vec += lattice.LatticeVec[i]*Coordinate[i];
-    vec += lattice.SubLatticeVec[SubLattice];
+    vec += lattice.SublatticeVec[Sublattice];
     return vec;
 }
 
 /**
  *  get the corresponding site of a name [0, Vol)
  *
- *  @param i name of a site [0, NSubLattice*Vol)
+ *  @param i name of a site [0, NSublattice*Vol)
  *
  *  @return a site struct
  */
@@ -100,7 +101,7 @@ Site::Site(const int name)
     int i, layer;
     Site s;
     i = name/2;
-    s.SubLattice = name-i*2;
+    s.Sublattice = name-i*2;
     
     for(int j=D-1; j>=0; j--)
     {
@@ -113,6 +114,29 @@ Site::Site(const int name)
 }
 
 /**
+ *  get the sublattice index from j to i
+ *
+ *  @para i the outgoing sublattice j the incoming sublattice
+ *
+ *  @return [0, NSublattice**2-1]
+ */
+int GetSublatticeIndex(const int& i, const int& j)
+{
+    if(i<0 || i>=NSublattice) ABORT("Wrong sublattice number!");
+    if(j<0 || j>=NSublattice) ABORT("Wrong sublattice number!");
+    return i*NSublattice+j;
+}
+
+int Distance::GetSublattice(const int& dir)
+{
+    if(dSublattice<0 || dSublattice>=NSublattice2) ABORT("Wrong sublattice index number!");
+    if(dir==IN)
+        return dSublattice-dSublattice/NSublattice*NSublattice;
+    else
+        return dSublattice/NSublattice;
+}
+
+/**
  *  get the real vector for the distance between two sites
  *
  *  @return a real vector $\vec{r_2}-\vec{r_1}$
@@ -122,7 +146,7 @@ Vec<real> Distance::GetVec()
     Vec<real> vec(0.0);
     for(int i=0; i<D; i++)
         vec += lattice.LatticeVec[i]*dCoordinate[i];
-    vec += lattice.SubLatticeVec[SubLattice[1]]-lattice.SubLatticeVec[SubLattice[0]];
+    vec += lattice.SublatticeVec[GetSublattice(OUT)]-lattice.SublatticeVec[GetSublattice(IN)];
     return vec;
 }
 
@@ -166,8 +190,7 @@ Distance operator-(const Site& i, const Site& j)
 {
     Distance dis;
     dis.dCoordinate=i.Coordinate-j.Coordinate;
-    dis.SubLattice[1] = i.SubLattice;
-    dis.SubLattice[0] = j.SubLattice;
+    dis.dSublattice = GetSublatticeIndex(i.Sublattice, j.Sublattice);
     return dis;
 }
 
