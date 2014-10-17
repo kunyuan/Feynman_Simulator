@@ -9,6 +9,7 @@
 using namespace std;
 
 //---------------------------------------------------------------------------
+int Counter=0;
 
 // FORTRAN abs
 real abs(real x)

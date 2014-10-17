@@ -12,7 +12,7 @@
 #define ABORT(msg)          \
     {                       \
         LOG_ERROR(msg); \
-        throw(-1);          \
+        throw(-1); \
     }
 
 #endif /* defined(__Fermion_Simulator__error_handler__) */

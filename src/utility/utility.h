@@ -17,10 +17,15 @@
 
 //---------------------------------------------------------------------------
 
+extern int Counter;
+
 const real eps0 = 1.0e-9;
 
 // Macheps + 1.0 > 1.0
 const real Macheps = 2.22044604925031E-16; // for double
+
+const real MaxReal = 1.0e30;
+const real MinReal = -1.0e30;
 
 // FORTRAN abs
 real abs(real x); // { return ( (x >= 0.0) ? x : -x); }
@@ -51,5 +56,7 @@ std::string ToString(const T &value)
     oss << value;
     return oss.str();
 }
+
+
 
 #endif

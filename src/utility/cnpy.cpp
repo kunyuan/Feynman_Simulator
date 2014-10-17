@@ -9,6 +9,9 @@
 #include<iomanip>
 #include "complex.h"
 
+std::string cnpy::npz_name(std::string file){return file+".npz";}
+std::string cnpy::npy_name(std::string file){return file+".npy";}
+
 char cnpy::BigEndianTest() {
     unsigned char x[] = {1,0};
     short y = *(short*) x;
@@ -39,6 +42,7 @@ char cnpy::map_type(const std::type_info& t)
 
     else return '?';
 }
+
 
 template<> std::vector<char>& cnpy::operator+=(std::vector<char>& lhs, const std::string rhs) {
     lhs.insert(lhs.end(),rhs.begin(),rhs.end());
