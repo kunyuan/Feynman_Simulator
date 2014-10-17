@@ -807,7 +807,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "25"
             endingLineNumber = "25"
-            landmarkName = "TestObservableReal()"
+            landmarkName = "TestObservable()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1009,7 +1009,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "54"
             endingLineNumber = "54"
-            landmarkName = "TestObservableReal()"
+            landmarkName = "TestObservableComplex()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -9,6 +9,8 @@
 #ifndef __Fermion_Simulator__error_handler__
 #define __Fermion_Simulator__error_handler__
 
+#include "logger.h"
+
 #define ABORT(msg)          \
     {                       \
         LOG_ERROR(msg); \

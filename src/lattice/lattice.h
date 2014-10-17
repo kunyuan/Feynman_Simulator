@@ -12,58 +12,59 @@
 #include "vector.h"
 
 /**
- *  class Site defines all the vertexes on the lattice using a vector of the unit cell: Coordinate and the sublattice number: SubLattice
+ *  class Site defines all the vertexes on the lattice using a vector of the unit cell: Coordinate and the sublattice number: Sublattice
  */
 class Site{
 public:
-    int SubLattice;
+    int Sublattice;
     Vec<int> Coordinate;
     
-    Site():SubLattice(0){}
+    Site():Sublattice(0){}
     Site(const int name);
     int GetName();
     Vec<real> GetVec();
     
     bool operator==(const Site& v2)
     {
-        if(SubLattice!=v2.SubLattice) return false;
+        if(Sublattice!=v2.Sublattice) return false;
         if(!(Coordinate==v2.Coordinate)) return false;
         return true;
     }
 };
+int GetSublatticeIndex(const int&, const int&);
 
 /**
- *  class Distance defines Site1-Site2 using the vector: Dr and sublattice of Site1 and Site2: SubLattice[0] and SubLattice[1].
+ *  class Distance defines Site1-Site2 using the vector: Dr and sublattice of Site1 and Site2: Sublattice[0] and Sublattice[1].
  */
 
 class Distance{
 public:
-    int SubLattice[2];
+    int dSublattice;
     Vec<int> dCoordinate;
     
     Distance(){}
     Distance(const Site& i, const Site& j)
     {
         dCoordinate=j.Coordinate-i.Coordinate;
-        SubLattice[0]=i.SubLattice;
-        SubLattice[1]=j.SubLattice;
+        dSublattice=GetSublatticeIndex(i.Sublattice, j.Sublattice);
     }
     
     Vec<real> GetVec();
     Distance Mirror();
+    int GetSublattice(const int&);
 };
 
 Distance operator-(const Site& S1, const Site& S2);
 
 
 /**
- *  class Lattice includes three set of vectors: 1) LatticeVec (unit cell lattice vector); 2)ReLatticeVec (reciprocal lattice vector for k); 3) SubLatticeVec (vectors between different sublattices in the same unit cell).
+ *  class Lattice includes three set of vectors: 1) LatticeVec (unit cell lattice vector); 2)ReLatticeVec (reciprocal lattice vector for k); 3) SublatticeVec (vectors between different sublattices in the same unit cell).
  */
 class Lattice{
 public:
     Vec<real> LatticeVec[D];
     Vec<real> ReciprocalLatticeVec[D];
-    Vec<real> SubLatticeVec[NSublattice];
+    Vec<real> SublatticeVec[NSublattice];
     
     Lattice() {Initialize();}
     void PlotLattice();
