@@ -20,7 +20,7 @@ public:
     Vec<int> Coordinate;
     
     Site():SubLattice(0){}
-    Site(const int& i):SubLattice(i){}
+    Site(const int name);
     int GetName();
     Vec<real> GetVec();
     
@@ -32,8 +32,6 @@ public:
     }
 };
 
-Site GetSite(const int&);
-
 /**
  *  class Distance defines Site1-Site2 using the vector: Dr and sublattice of Site1 and Site2: SubLattice[0] and SubLattice[1].
  */
@@ -41,12 +39,12 @@ Site GetSite(const int&);
 class Distance{
 public:
     int SubLattice[2];
-    Vec<int> Dr;
+    Vec<int> dCoordinate;
     
     Distance(){}
     Distance(const Site& i, const Site& j)
     {
-        Dr=j.Coordinate-i.Coordinate;
+        dCoordinate=j.Coordinate-i.Coordinate;
         SubLattice[0]=i.SubLattice;
         SubLattice[1]=j.SubLattice;
     }
@@ -64,7 +62,7 @@ Distance operator-(const Site& S1, const Site& S2);
 class Lattice{
 public:
     Vec<real> LatticeVec[D];
-    Vec<real> ReLatticeVec[D];
+    Vec<real> ReciprocalLatticeVec[D];
     Vec<real> SubLatticeVec[NSublattice];
     
     Lattice() {Initialize();}

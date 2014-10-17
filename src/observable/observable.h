@@ -12,6 +12,7 @@
 #include "complex.h"
 #include "convention.h"
 #include "estimate.h"
+#include "lattice.h"
 #include <iostream>
 
 const int MAX_BIN=128;
@@ -20,23 +21,22 @@ const int MAX_BIN=128;
 */
 
 //TODO: Add fitting function here
-
-class WeightG
+//TODO: Add reweighting
+class SigmaWeight
 {
 private:
     real _Norm;
-    Complex _Matrix[MAX_BIN];
-    Complex _ErrorMatrix[MAX_BIN];
+    Complex _Weight[SPIN2][NSublattice2][Vol][MAX_BIN];
+    Complex _WeightAccu[SPIN2][NSublattice2][Vol][MAX_BIN];
+    Complex _ErrorSquare[SPIN2][NSublattice2][Vol][MAX_BIN];
 public:
-    WeightG();
-    static Complex& WeightOfBareG(int dr, real dt, spin spin_in, spin spin_out);
-    Complex& Weight(int dr, real dt, spin spin_in, spin spin_out);
-    Estimate<Complex>& WeightWithError(int dr, real dt, spin spin_in, spin spin_out);
-    Complex& operator()(int dr, real dt, spin spin_in, spin spin_out);
+    void Update();
+    Complex Weight(Distance dR, real dtau,spin,spin);
+    Estimate<Complex> WeightWithError(Distance dR, real dtau, spin, spin);
     void AddStatistics(Complex &weight, real norm);
-    std::string PrettyString();
-    void WriteToFile(std::ostream &);
-    bool ReadFromFile(std::istream &);
+//    std::string PrettyString();
+    void SaveState(std::string);
+    bool ReadState(std::string);
 };
 
 int TestObservable();

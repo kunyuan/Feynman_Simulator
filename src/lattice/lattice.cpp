@@ -26,10 +26,10 @@ void Lattice::Initialize()
     LatticeVec[1][0]=0.0;
     LatticeVec[1][1]=1.0;
     
-    ReLatticeVec[0][0]=2.0*Pi;
-    ReLatticeVec[0][1]=0.0;
-    ReLatticeVec[1][0]=0.0;
-    ReLatticeVec[1][1]=2.0*Pi;
+    ReciprocalLatticeVec[0][0]=2.0*Pi;
+    ReciprocalLatticeVec[0][1]=0.0;
+    ReciprocalLatticeVec[1][0]=0.0;
+    ReciprocalLatticeVec[1][1]=2.0*Pi;
     
     SubLatticeVec[0][0]=0.0;
     SubLatticeVec[0][1]=0.0;
@@ -43,10 +43,10 @@ void Lattice::Initialize()
 //    LatticeVec[1][0]=sqrt(3.0)/2.0;
 //    LatticeVec[1][1]=-0.5;
 //    
-//    ReLatticeVec[0][0]=2.0*Pi/sqrt(3.0);
-//    ReLatticeVec[0][1]=2.0*Pi;
-//    ReLatticeVec[1][0]=4.0*Pi/sqrt(3.0);
-//    ReLatticeVec[1][1]=0.0;
+//    ReciprocalLatticeVec[0][0]=2.0*Pi/sqrt(3.0);
+//    ReciprocalLatticeVec[0][1]=2.0*Pi;
+//    ReciprocalLatticeVec[1][0]=4.0*Pi/sqrt(3.0);
+//    ReciprocalLatticeVec[1][1]=0.0;
 //    
 //    SubLatticeVec[0][0]=0.0;
 //    SubLatticeVec[0][1]=0.0;
@@ -58,7 +58,7 @@ void Lattice::Initialize()
 /**
  *  get the name for a site on the lattice
  *
- *  @return Name for the Site in [0, Vol)
+ *  @return Name for the Site in [0, NSubLattice*Vol)
  */
 int Site::GetName()
 {
@@ -91,26 +91,25 @@ Vec<real> Site::GetVec()
 /**
  *  get the corresponding site of a name [0, Vol)
  *
- *  @param i name of a site [0, Vol)
+ *  @param i name of a site [0, NSubLattice*Vol)
  *
  *  @return a site struct
  */
-Site GetSite(const int& i)
+Site::Site(const int name)
 {
-    int name, layer;
+    int i, layer;
     Site s;
-    name = i/2;
-    s.SubLattice = i-name*2;
+    i = name/2;
+    s.SubLattice = name-i*2;
     
     for(int j=D-1; j>=0; j--)
     {
         layer = 1;
         for(int k=j-1; k>=0; k--)
             layer = layer*L[k];
-        s.Coordinate[j] = name/layer;
-        name = name - s.Coordinate[j]*layer;
+        s.Coordinate[j] = i/layer;
+        i = i - s.Coordinate[j]*layer;
     }
-    return s;
 }
 
 /**
@@ -122,7 +121,7 @@ Vec<real> Distance::GetVec()
 {
     Vec<real> vec(0.0);
     for(int i=0; i<D; i++)
-        vec += lattice.LatticeVec[i]*Dr[i];
+        vec += lattice.LatticeVec[i]*dCoordinate[i];
     vec += lattice.SubLatticeVec[SubLattice[1]]-lattice.SubLatticeVec[SubLattice[0]];
     return vec;
 }
@@ -137,7 +136,7 @@ Distance Distance::Mirror()
     Distance dis;
     dis=*this;
     for(int i=0; i<D; i++)
-        dis.Dr[i] = ::Mirror(Dr[i], L[i]);
+        dis.dCoordinate[i] = ::Mirror(dCoordinate[i], L[i]);
     return dis;
 }
 /**
@@ -166,7 +165,7 @@ int Mirror(int i, const int& L)
 Distance operator-(const Site& i, const Site& j)
 {
     Distance dis;
-    dis.Dr=i.Coordinate-j.Coordinate;
+    dis.dCoordinate=i.Coordinate-j.Coordinate;
     dis.SubLattice[1] = i.SubLattice;
     dis.SubLattice[0] = j.SubLattice;
     return dis;
@@ -177,14 +176,13 @@ Distance operator-(const Site& i, const Site& j)
  */
 void Lattice::PlotLattice()
 {
-    const unsigned int N=Vol;
+    const unsigned int N=NSublattice*Vol;
     //save it to file
     const unsigned int shape[] = {N, (unsigned int)D};
     real data[N*D];
-    Site s;
     for(int i; i<N; i++)
     {
-        s=GetSite(i);
+        Site s(i);
         for(int j=0; j<D; j++)
             data[i*D+j]=s.GetVec()[j];
     }
