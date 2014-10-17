@@ -127,3 +127,4 @@ bool Bundle<T>::Exist(T &target)
 template class Bundle<GLine>;
 template class Bundle<WLine>;
 template class Bundle<Vertex>;
+
