@@ -41,4 +41,5 @@
 *.xcuserstate
 doc
 data
+*.DS_Store
 
