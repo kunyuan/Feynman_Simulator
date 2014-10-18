@@ -20,7 +20,7 @@
 #include "lattice.h"
 #include "job.h"
 #include "diagram.h"
-#include "observable.h"
+#include "diagram_object.h"
 
 void InitGlobalUtility();
 

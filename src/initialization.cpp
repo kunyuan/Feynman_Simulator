@@ -11,12 +11,6 @@ using namespace std;
 
 void InitGlobalUtility()
 {
-    //initialize LOGGER
-    LOGGER_CONF("", "MC", Logger::file_on | Logger::screen_on, INFO, INFO);
-    //initialize Counter
-    Counter=0;
-    //Randomize
-    RNG.Reset();
 }
 
 void InitEveryOneNeedsIt()

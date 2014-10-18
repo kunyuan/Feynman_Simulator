@@ -19,30 +19,29 @@ class RandomFactory {
     friend std::istream &operator>>(std::istream &is, RandomFactory &r);
 
   private:
-    static std::mt19937 _eng;
+    std::mt19937 _eng;
 
   public:
     RandomFactory();
     RandomFactory(int);
     void Reset();
     void Reset(int);
-    real urn()
+    inline real urn()
     {
         static std::uniform_real_distribution<real> d(0.0, 1.0);
         return d(_eng);
     }
-    int irn(int from, int thru)
+    inline int irn(int from, int thru)
     {
         static std::uniform_int_distribution<> d{};
         return d(_eng, decltype(d)::param_type{from, thru});
     }
-    int irn1(int from, int thru)
+    inline int irn1(int from, int thru)
     {
         return _eng() % (thru - from + 1) + from;
     }
 };
 
-extern RandomFactory RNG;
 
 int TestRNG();
 #endif
