@@ -79,7 +79,7 @@ void Test_Diagram_IO()
 
     Vertex NewV;
     NewV.Name = 0;
-    NewV.R.SubLattice = 1;
+    NewV.R.Sublattice = 1;
     NewV.R.Coordinate[0] = 12;
     NewV.R.Coordinate[1] = 2;
     NewV.tau = 0.51;
