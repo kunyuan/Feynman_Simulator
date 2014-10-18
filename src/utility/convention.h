@@ -15,9 +15,12 @@
 
 enum spin { DOWN,
             UP };
+#define FlipSpin(x) (1-x)
 //Spin DOWN: 0,  Spin UP:1
+
 const int IN = 0;
 const int OUT = 1;
+#define FlipDir(x) (1-x)
 
 //lattice information
 const int D=2;

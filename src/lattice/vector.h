@@ -10,7 +10,9 @@
 #define __Feynman_Simulator__vector__
 
 #include <stdio.h>
+#include <iostream>
 #include "convention.h"
+using namespace std;
 
 template <typename T>
 class Vec{
@@ -86,6 +88,19 @@ public:
             if(_Arrary[j]!=v2._Arrary[j]) return false;
         return true;
     }
+    
+    bool operator!=(const Vec& v2) const
+    {
+        if(*this==v2) return false;
+        return true;
+    }
+    
+    string PrettyString();
+    
+    template <typename TT>
+    friend std::ostream& operator<<(std::ostream &os, Vec<TT> &);
+    template <typename TT>
+    friend std::istream& operator>>(std::istream &is, Vec<TT> &);
 };
 
 int TestVector();
