@@ -33,7 +33,7 @@ public:
     void Update();
     Complex Weight(Distance dR, real dtau,spin,spin);
     Estimate<Complex> WeightWithError(Distance dR, real dtau, spin, spin);
-    void AddStatistics(Complex &weight, real norm);
+    void Measure(Complex &weight, real norm);
 //    std::string PrettyString();
     void SaveState(std::string);
     bool ReadState(std::string);

@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Kun Chen. All rights reserved.
 //
 
-#include "observable.h"
+#include "diagram_object.h"
 #include "cnpy.h"
 #include "sput.h"
 using namespace std;

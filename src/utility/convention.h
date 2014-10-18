@@ -13,6 +13,8 @@
 #define real double
 #endif
 
+const real Pi=3.14159265359;
+
 enum spin { DOWN,
             UP };
 #define FlipSpin(x) (1-x)
@@ -35,6 +37,8 @@ const int Ly=32;
 const int L[D]={Lx,Ly};
 const int Vol=Lx*Ly;
 
-const real Pi=3.14159265359;
+const int MAX_ORDER=10;
+
+
 
 #endif
