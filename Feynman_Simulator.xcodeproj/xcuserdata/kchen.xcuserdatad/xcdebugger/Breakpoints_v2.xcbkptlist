@@ -666,7 +666,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "43"
-            endingLineNumber = "43">
+            endingLineNumber = "43"
+            landmarkName = "operator&lt;&lt;(ostream &amp;os, Estimate&lt;real&gt; &amp; e)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -822,7 +824,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "103"
-            endingLineNumber = "103">
+            endingLineNumber = "103"
+            landmarkName = "_update()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1019,7 +1023,7 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "src/observable/observable.h"
+            filePath = "src/observable/diagram_object.h"
             timestampString = "435205092.821724"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"

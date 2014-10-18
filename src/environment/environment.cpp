@@ -12,11 +12,8 @@ Environment::Environment(Jobs &Job)
 {
 }
 
-EnvMoneCarlo::EnvMoneCarlo(Jobs &Job):Environment(Job)
-{
-}
-
-EnvDyson::EnvDyson(Jobs &Job):Environment(Job)
+void Environment::SaveState()
 {
     
 }
+

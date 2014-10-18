@@ -69,6 +69,8 @@ public:
     void AddEstimator(const std::string);
     void AddEstimator(const EstimatorT&);
     void RemoveEstimator(const std::string);
+    void AddStatistics();
+    int HowMany();
     bool ReadState(const std::string FileName);
     void SaveState(const std::string FileName, const std::string Mode="a");
     EstimatorT &operator[](int);

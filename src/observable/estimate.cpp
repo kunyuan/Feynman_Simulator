@@ -212,6 +212,21 @@ void EstimatorBundle<T>::AddEstimator(const Estimator<T>& est)
 }
 
 template <typename T>
+void EstimatorBundle<T>::AddStatistics()
+{
+    typename vector<EstimatorT>::iterator begin=_EstimatorVector.begin();
+    typename vector<EstimatorT>::iterator end=_EstimatorVector.end();
+    for(auto it=begin;it!=end;it++)
+        it->AddStatistics();
+}
+
+template <typename T>
+int EstimatorBundle<T>::HowMany()
+{
+    return (int)_EstimatorVector.size();
+}
+
+template <typename T>
 bool EstimatorBundle<T>::ReadState(const string FileName)
 {
     cnpy::npz_t NpzMap=cnpy::npz_load(cnpy::npz_name(FileName));

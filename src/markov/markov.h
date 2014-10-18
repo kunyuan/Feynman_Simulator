@@ -9,9 +9,20 @@
 #ifndef __Feynman_Simulator__markov__
 #define __Feynman_Simulator__markov__
 
+#include "environment.h"
+
 class Markov
 {
+private:
+    EnvMoneCarlo *_Env;
+    Diagram *_Diag;
+    RandomFactory *_RNG;
     
+public:
+    Markov(EnvMoneCarlo *);
+    void Hop(const int&);
+    void CreateWorm();
+    void DeleteWorm();
 };
 
 #endif /* defined(__Feynman_Simulator__markov__) */
