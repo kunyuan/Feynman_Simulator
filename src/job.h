@@ -6,16 +6,16 @@
 #ifndef __Fermion_Simulator__parameter__
 #define __Fermion_Simulator__parameter__
 
-#include "definition_global.h"
+#include "definition.h"
 
+enum JobType { MC, DYSON };
 // parameters needed to define a job
-class JobPara {
+class Jobs {
   public:
-    real Temp;
-    real Beta;
+    real T;
     int Order;
     int Seed;
-
+    JobType Type;
     void Read();
 };
 
