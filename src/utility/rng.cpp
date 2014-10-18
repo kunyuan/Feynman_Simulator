@@ -10,8 +10,6 @@
 
 using namespace std;
 
-mt19937 RandomFactory::_eng{};
-
 RandomFactory::RandomFactory()
 {
     random_device dev;
@@ -54,4 +52,3 @@ std::istream &operator>>(std::istream &is, RandomFactory &r)
     return is;
 }
 
-RandomFactory RNG;

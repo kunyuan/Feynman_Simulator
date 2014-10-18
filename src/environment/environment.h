@@ -13,7 +13,8 @@
 #include "lattice.h"
 #include "diagram.h"
 #include "rng.h"
-#include "observable.h"
+#include "diagram_object.h"
+#include "convention.h"
 
 class Environment
 {
@@ -22,22 +23,31 @@ public:
     real Beta;
     int Order;
     Lattice Lat;
-    Diagram Diag;
-    RandomFactory *RNG;
     
-    EstimatorBundle<Complex> cEstimator;
-    EstimatorBundle<real> rEstimator;
-    
-    void Build();
     bool ReadState();
-    void WriteState();
+    void SaveState();
 };
 
 class EnvMoneCarlo: public Environment
 {
 public:
     EnvMoneCarlo(Jobs &);
-    real *OrderWeight;
+    RandomFactory RNG;
+    Diagram Diag;
+    int Counter;
+    real OrderWeight[MAX_ORDER];
+    EstimatorBundle<Complex> cEstimator;
+    EstimatorBundle<real> rEstimator;
+    
+    void Annealing();
+    void SqueezeStatistics();
+    void ReWeightEachOrder();
+    void Measure();
+    void AddStatistics();
+    
+    void Build();
+    bool ReadState();
+    void SaveState();
 };
 
 class EnvDyson: public Environment
