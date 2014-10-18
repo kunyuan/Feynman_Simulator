@@ -9,7 +9,27 @@
 #include "initialization.h"
 using namespace std;
 
-void Initilization()
+void InitGlobalUtility()
+{
+    //initialize LOGGER
+    LOGGER_CONF("", "MC", Logger::file_on | Logger::screen_on, INFO, INFO);
+    //initialize Counter
+    Counter=0;
+    //Randomize
+    RNG.Reset();
+}
+
+void InitEveryOneNeedsIt()
+{
+    
+}
+
+void InitMonteCarlo()
+{
+    return;
+}
+
+void InitDyson()
 {
     return;
 }

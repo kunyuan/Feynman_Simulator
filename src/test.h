@@ -3,6 +3,6 @@
 
 #include "initialization.h"
 
-int TestAll();
+int RunTest();
 
 #endif

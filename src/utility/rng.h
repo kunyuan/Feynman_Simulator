@@ -42,5 +42,7 @@ class RandomFactory {
     }
 };
 
+extern RandomFactory RNG;
+
 int TestRNG();
 #endif

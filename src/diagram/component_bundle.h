@@ -11,7 +11,7 @@
 
 #include "component.h"
 #include "utility.h"
-#include "definition_global.h"
+#include "definition.h"
 #include <string>
 
 const int MAX_BUNDLE = 1024;
