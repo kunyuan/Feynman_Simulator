@@ -124,7 +124,7 @@ ostream& Diagram::Component2gv(ostream &os, WLine &r)
 
 ostream& Diagram::Component2gv(ostream &os, Vertex &r)
 {
-    os << r.Name << " " << VertexColor(r.R.SubLattice) << ";";
+    os << r.Name << " " << VertexColor(r.R.Sublattice) << ";";
     os << "  //InG=" << r.G[IN] << "; OutG=" << r.G[OUT] << "; W=" << r.W << endl;
     return os;
 }

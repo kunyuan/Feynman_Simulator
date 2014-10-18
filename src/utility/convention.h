@@ -17,13 +17,10 @@ enum spin { DOWN,
             UP };
 #define FlipSpin(x) (1-x)
 //Spin DOWN: 0,  Spin UP:1
-<<<<<<< HEAD
 const int SPIN=2;
 const int SPIN2=SPIN*SPIN;
 const int SPIN3=SPIN2*SPIN;
 const int SPIN4=SPIN2*SPIN2;
-=======
->>>>>>> master
 
 const int IN = 0;
 const int OUT = 1;

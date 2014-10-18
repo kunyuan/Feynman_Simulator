@@ -39,7 +39,7 @@ istream &operator>>(istream &is, WLine &r)
 
 ostream &operator<<(ostream &os, Vertex &r)
 {
-    os << r.Name << SEP << r.R.SubLattice << SEP << r.R.Coordinate << SEP << r.tau << SEP << int(r.Spin[IN]) << SEP << int(r.Spin[OUT]) << endl;
+    os << r.Name << SEP << r.R.Sublattice << SEP << r.R.Coordinate << SEP << r.tau << SEP << int(r.Spin[IN]) << SEP << int(r.Spin[OUT]) << endl;
     return os;
 }
 
@@ -47,7 +47,7 @@ istream &operator>>(istream &is, Vertex &r)
 {
     int spinin, spinout;
     //format: name sublattice r tau
-    is >> r.Name >> r.R.SubLattice >> r.R.Coordinate >> r.tau >> spinin >> spinout;
+    is >> r.Name >> r.R.Sublattice >> r.R.Coordinate >> r.tau >> spinin >> spinout;
     r.Spin[IN]=spin(spinin);
     r.Spin[OUT]=spin(spinout);
     return is;

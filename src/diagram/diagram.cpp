@@ -33,7 +33,7 @@ spin Diagram::Spin(GLine &g, const int& dir)
 
 int Diagram::Sublattice(GLine &g, const int& dir)
 {
-    return Ver[g.Vertex[dir]].R.SubLattice;
+    return Ver[g.Vertex[dir]].R.Sublattice;
 }
 
 string Diagram::PrettyString(GLine &g)
@@ -57,7 +57,7 @@ spin Diagram::Spin(WLine &w, const int& dir1, const int& dir2)
 
 int Diagram::Sublattice(WLine &w, const int& dir)
 {
-    return Ver[w.Vertex[dir]].R.SubLattice;
+    return Ver[w.Vertex[dir]].R.Sublattice;
 }
 
 
@@ -80,7 +80,7 @@ spin Diagram::Spin(Vertex &v, const int& dir)
 
 int Diagram::Sublattice(Vertex &v)
 {
-    return v.R.SubLattice;
+    return v.R.Sublattice;
 }
 
 string Diagram::PrettyString(Vertex &v)
