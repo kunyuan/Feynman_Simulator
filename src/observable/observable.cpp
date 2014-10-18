@@ -19,9 +19,15 @@ inline int SpinIndex(spin* TwoSpinIn, spin* TwoSpinOut)
         TwoSpinOut[0]*SPIN+TwoSpinOut[1];
 }
 
+inline int TauToBin_Sym(real tau)
+{
+    if(tau>0)
+}
+
 Complex SigmaWeight::Weight(Distance dR, real dtau, spin SpinIn, spin SpinOut)
 {
-    return Complex(0.0,0.0);
+    Complex _Weight[SPIN2][NSublattice2][Vol][MAX_BIN];
+    return _Weight[SpinIndex(SpinIn, SpinOut)][dR.dSublattice][dR.dCoordinate][;
 }
 
 
