@@ -9,7 +9,7 @@
 #include "test.h"
 using namespace std;
 
-int TestAll()
+int RunTest()
 {
 
     //    TestTimer();  //Test the timer

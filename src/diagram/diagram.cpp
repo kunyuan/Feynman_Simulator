@@ -8,7 +8,17 @@
 
 #include "diagram.h"
 #include "utility.h"
+#include "convention.h"
+#include "lattice.h"
 using namespace std;
+
+ostream &operator<<(ostream &os, spin &s)
+{
+    if (s == UP)
+        return os << "UP";
+    else
+        return os << "DOWN";
+}
 
 Diagram::Diagram()
     : G("GLine"), W("WLine"), Ver("Vertex")
@@ -16,20 +26,73 @@ Diagram::Diagram()
 }
 
 /****************   GLine  *****************************/
-spin Diagram::G_Spin(GLine &g, int dir)
+spin Diagram::Spin(GLine &g, const int& dir)
 {
-    return g.Spin[dir];
+    return Ver[g.Vertex[dir]].Spin[FlipDir(dir)];
 }
 
-int Diagram::G_Sublattice(GLine &g, int dir)
+int Diagram::Sublattice(GLine &g, const int& dir)
 {
-    return Ver[g.Vertex[dir]].Sublattice;
+    return Ver[g.Vertex[dir]].R.SubLattice;
+}
+
+string Diagram::PrettyString(GLine &g)
+{
+    stringstream os;
+    os << "\n";
+    os << g.Vertex[IN] << " (" << Spin(g,IN) << ") >>===";
+    os << "Name:" << g.Name << ",Weight:" << g.Weight;
+    os << "===>>" << g.Vertex[OUT] << " (" << Spin(g,OUT) << ");";
+    os << endl;
+    return os.str();
+}
+
+
+
+/****************   WLine  *****************************/
+spin Diagram::Spin(WLine &w, const int& dir1, const int& dir2)
+{
+    return Ver[w.Vertex[dir1]].Spin[dir2];
+}
+
+int Diagram::Sublattice(WLine &w, const int& dir)
+{
+    return Ver[w.Vertex[dir]].R.SubLattice;
+}
+
+
+string Diagram::PrettyString(WLine& w)
+{
+    stringstream os;
+    os << "\n";
+    os << w.Vertex[IN] << " (" << Spin(w, IN, IN) << "," << Spin(w, IN,OUT) << ") ~~~";
+    os << "Name:" << w.Name << ",Weight:" << w.Weight;
+    os << "~~~" << w.Vertex[OUT] << " (" << Spin(w,OUT,IN) << "," << Spin(w,OUT,OUT) << ");";
+    os << endl;
+    return os.str();
 }
 
 /****************   Vertex  *****************************/
-spin Diagram::VerSpin(Vertex &v, int dir)
+spin Diagram::Spin(Vertex &v, const int& dir)
 {
-    return G[v.G[dir]].Spin[1 - dir];
+    return v.Spin[dir];
+}
+
+int Diagram::Sublattice(Vertex &v)
+{
+    return v.R.SubLattice;
+}
+
+string Diagram::PrettyString(Vertex &v)
+{
+    stringstream os;
+    os << "\n";
+    os << v.G[IN] << ">===";
+    os << "Name:" << v.Name << ",r:" << v.R.Coordinate.PrettyString() << ",tau:" << v.tau;
+    os << "===>" << v.G[OUT] << "\n";
+    os << "       ~~~~" << v.W;
+    os << endl;
+    return os.str();
 }
 
 /****************   Diagram  *****************************/
@@ -59,7 +122,7 @@ bool Diagram::FixDiagram()
     //TODO: you may also need to fix diagram weight
     for (int index = 0; index < Ver.HowMany(); index++) {
         for (int dir = 0; dir < 2; dir++) {
-            NeighVer(G[index], dir).G[1 - dir] = index;
+            NeighVer(G[index], dir).G[FlipDir(dir)] = index;
         }
     }
 
@@ -68,8 +131,6 @@ bool Diagram::FixDiagram()
         for (int dir = 0; dir < 2; dir++) {
             Vertex &v = NeighVer(w, dir);
             v.W = index;
-            w.Spin[dir][0] = VerSpin(v, 0);
-            w.Spin[dir][1] = VerSpin(v, 1);
         }
     }
 

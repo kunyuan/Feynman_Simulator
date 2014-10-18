@@ -53,3 +53,5 @@ std::istream &operator>>(std::istream &is, RandomFactory &r)
     is >> r._eng;
     return is;
 }
+
+RandomFactory RNG;

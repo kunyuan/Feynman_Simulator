@@ -11,20 +11,12 @@
 
 #include "component.h"
 #include "utility.h"
-#include "definition_global.h"
+#include "definition.h"
 #include <string>
 
 const int MAX_BUNDLE = 1024;
 template <typename T>
 class Bundle {
-
-    //you may find the implementation in diagram_IO.cpp
-    template <typename TT>
-    friend std::ostream &operator<<(std::ostream &os, Bundle<TT> &r);
-    //you may find the implementation in diagram_IO.cpp
-    template <typename TT>
-    friend std::ostream &Bundle2gv(std::ostream &os, Bundle<TT> &r);
-
   private:
     T *_component_name[MAX_BUNDLE];
     T _component_bundle[MAX_BUNDLE];
@@ -41,7 +33,6 @@ class Bundle {
     void Recover(int step);
     //step>0: Recover successive "step" steps of removing T*
     //step<0: Recover successive "step" steps of adding T*
-    T &Get(int name);
     T &operator[](int name);
     int HowMany();
     bool Exist(int name);

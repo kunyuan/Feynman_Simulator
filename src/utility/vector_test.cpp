@@ -31,6 +31,7 @@ void Test_Vector()
     v[1]=1;
     v2[0]=8;
     v2[1]=4;
+    cout << v2 << ' ' << v << v.PrettyString() <<endl;
     sput_fail_unless((v*3+v)==v2, "test the operators for vectors");
 }
 
