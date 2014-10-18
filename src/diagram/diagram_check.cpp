@@ -17,9 +17,9 @@ bool Diagram::CheckG()
         for (int dir = 0; i < 2; i++) {
             Vertex &v = NeighVer(G[i], dir);
             if (!Ver.Exist(v))
-                ABORT("Vertex not exists!" + v.PrettyString());
+                ABORT("Vertex not exists!" + PrettyString(v));
             if (&G[i] != &NeighG(v, 1 - dir))
-                ABORT("Neigh of G is incorrect!" + G[i].PrettyString());
+                ABORT("Neigh of G is incorrect!" + PrettyString(G[i]));
         }
     }
     return true;
@@ -31,13 +31,9 @@ bool Diagram::CheckW()
         for (int dir = 0; i < 2; i++) {
             Vertex &v = NeighVer(W[i], dir);
             if (!Ver.Exist(v))
-                ABORT("Vertex not exists!" + v.PrettyString());
+                ABORT("Vertex not exists!" + PrettyString(v));
             if (&W[i] != &NeighW(v))
-                ABORT("Neigh of W is incorrect!" + W[i].PrettyString());
-            if (W[i].Spin[dir][IN] != VerSpin(v, IN))
-                ABORT("Spin of W in direction " + to_string(dir) + ",0 is incorrect!" + W[i].PrettyString());
-            if (W[i].Spin[dir][OUT] != VerSpin(v, OUT))
-                ABORT("Spin of W in direction " + to_string(dir) + ",1 is incorrect!" + W[i].PrettyString());
+                ABORT("Neigh of W is incorrect!" + PrettyString(W[i]));
         }
     }
     return true;

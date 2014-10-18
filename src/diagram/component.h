@@ -14,36 +14,26 @@
 #include "utility.h"
 #include "logger.h"
 #include "convention.h"
+#include "lattice.h"
 
 class GLine {
     friend std::ostream &operator<<(std::ostream &os, GLine &r);
     friend std::istream &operator>>(std::istream &is, GLine &r);
 
-  private:
-    int SublatticeIndex;
-    int SpinIndex;
-
   public:
     int Name;
     int Vertex[2];
-    spin Spin[2];
     Complex Weight;
-    std::string PrettyString();
 };
 
 class WLine {
     friend std::ostream &operator<<(std::ostream &os, WLine &r);
     friend std::istream &operator>>(std::istream &is, WLine &r);
 
-  private:
-    int SublatticeIndex;
-
   public:
     int Name;
     int Vertex[2];
-    spin Spin[2][2];
     Complex Weight;
-    std::string PrettyString();
 };
 
 class Vertex {
@@ -54,10 +44,9 @@ class Vertex {
     int Name;
     int G[2];
     int W;
-    int Sublattice;
+    spin Spin[2];// IN/OUT spins
+    Site R;
     double tau;
-    int r; //TODO: use real space coordinate here
-    std::string PrettyString();
 };
 
 #endif /* defined(__Fermion_Simulator__component__) */
