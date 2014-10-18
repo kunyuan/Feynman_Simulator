@@ -27,7 +27,13 @@ public:
     bool operator==(const Site& v2)
     {
         if(Sublattice!=v2.Sublattice) return false;
-        if(!(Coordinate==v2.Coordinate)) return false;
+        if(Coordinate!=v2.Coordinate)) return false;
+        return true;
+    }
+    
+    bool operator!=(const Site& v2)
+    {
+        if(*this==v2) return false;
         return true;
     }
 };
@@ -52,6 +58,19 @@ public:
     Vec<real> GetVec();
     Distance Mirror();
     int GetSublattice(const int&);
+    
+    bool operator==(const Distance& v2)
+    {
+        if(dSublattice!=v2.dSublattice) return false;
+        if(Dr!=v2.Dr) return false;
+        return true;
+    }
+    
+    bool operator!=(const Distance& v2)
+    {
+        if(*this==v2) return false;
+        return true;
+    }
 };
 
 Distance operator-(const Site& S1, const Site& S2);

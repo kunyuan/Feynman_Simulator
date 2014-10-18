@@ -9,21 +9,24 @@
 #ifndef __Fermion_Simulator__initialization__
 #define __Fermion_Simulator__initialization__
 
-#include "definition_global.h"
+#include "definition.h"
 #include "logger.h"
-#include "job.h"
 #include "rng.h"
+#include "cnpy.h"
 #include "timer.h"
 #include "pystring.h"
 #include "test.h"
-#include "component.h"
-#include "component_bundle.h"
+#include "environment.h"
 #include "lattice.h"
-#include "vector.h"
-#include "cnpy.h"
+#include "job.h"
+#include "diagram.h"
 #include "observable.h"
 
-void Initilization();
+void InitGlobalUtility();
+
+void InitEveryOneNeedsIt();
+void InitMonteCarlo();
+void InitDyson();
 // define all objects to start the simulation here
 
 #endif /* defined(__Fermion_Simulator__initialization__) */

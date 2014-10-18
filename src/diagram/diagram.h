@@ -20,12 +20,17 @@ class Diagram {
     Bundle<WLine> W;
     Bundle<Vertex> Ver;
 
-    //GLine
-    spin G_Spin(GLine &g, int dir);
-    int G_Sublattice(GLine &g, int dir);
-
-    //Vertex
-    spin VerSpin(Vertex &, int dir);
+    spin Spin(GLine &, const int&);
+    spin Spin(WLine &, const int&, const int&);
+    spin Spin(Vertex&, const int&);
+    
+    int Sublattice(GLine &, const int&);
+    int Sublattice(WLine &, const int&);
+    int Sublattice(Vertex &);
+    
+    string PrettyString(GLine &);
+    string PrettyString(WLine &);
+    string PrettyString(Vertex &);
 
     //Diagram
     Vertex &NeighVer(GLine &, int dir);
@@ -47,5 +52,14 @@ class Diagram {
     void WriteDiagram(std::ostream &);
     void WriteDiagram2gv(std::string);
     void WriteDiagram2gv(std::ostream &);
+    
+private:
+    std::ostream& Component2gv(std::ostream &, GLine &);
+    std::ostream& Component2gv(std::ostream &, WLine &);
+    std::ostream& Component2gv(std::ostream &, Vertex &);
+    
+    template <typename T>
+    std::ostream& Bundle2gv(std::ostream &, Bundle<T> &);
+    
 };
 #endif /* defined(__Fermion_Simulator__diagram_global__) */

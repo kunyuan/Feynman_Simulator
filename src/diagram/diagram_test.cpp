@@ -61,13 +61,12 @@ void Test_Diagram_Component()
 
 void Test_Diagram_IO()
 {
+    Diagram Diag;
     stringstream strtemp;
     GLine NewG;
     NewG.Name = 2;
     NewG.Vertex[IN] = 0;
     NewG.Vertex[OUT] = 1;
-    NewG.Spin[IN] = UP;
-    NewG.Spin[OUT] = DOWN;
     NewG.Weight = Complex(1.0, 3.0e9);
     LOG_INFO(NewG);
     strtemp << NewG;
@@ -80,22 +79,24 @@ void Test_Diagram_IO()
 
     Vertex NewV;
     NewV.Name = 0;
-    NewV.Sublattice = 2;
-    NewV.r = 12;
+    NewV.R.SubLattice = 1;
+    NewV.R.Coordinate[0] = 12;
+    NewV.R.Coordinate[1] = 2;
     NewV.tau = 0.51;
+    NewV.Spin[IN]=UP;
+    NewV.Spin[OUT]=DOWN;
     LOG_INFO(NewV);
     strtemp << NewV;
 
     strtemp >> NewG;
-    sput_fail_unless(Equal(NewG.Spin[OUT], DOWN), "Check GLine reading");
+    sput_fail_unless(Equal(Diag.Spin(NewG,OUT), DOWN), "Check GLine reading");
     strtemp >> NewW;
     sput_fail_unless(Equal(NewW.Vertex[OUT], 3), "Check WLine reading");
     strtemp >> NewV;
     sput_fail_unless(Equal(NewV.tau, 0.51), "Check Vertex reading");
 
-    Diagram Diag;
     Diag.ReadDiagram("../src/diagram/diagram_template.config");
     sput_fail_unless(Diag.CheckDiagram(), "Check diagram reading");
-    //    WriteDiagram(cout);
-    //    WriteDiagram2gv("./test.gv");
+    Diag.WriteDiagram(cout);
+    Diag.WriteDiagram2gv("./test.gv");
 }

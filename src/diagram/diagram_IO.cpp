@@ -21,33 +21,22 @@ using namespace std;
 #define SEP_LINE_SHORT "####"
 
 /*******************  Read/write diagram to dat file ****************/
-
-template <typename T>
-ostream &operator<<(ostream &os, Bundle<T> &r)
-{
-    os << SEP_LINE << endl;
-    os << COMMENT << r.Name() << endl;
-    for (int index = 0; index < r.HowMany(); index++) {
-        if (r.Name() == "GLine")
-            os << 'g' << SEP;
-        else if (r.Name() == "WLine")
-            os << 'w' << SEP;
-        else if (r.Name() == "Vertex")
-            os << 'v' << SEP;
-        else
-            ABORT("What the hell is " + ToString(r.Name()) + "?");
-        os << r[index];
-    }
-    return os;
-}
-
-template ostream &operator<<(ostream &os, Bundle<GLine> &r);
-template ostream &operator<<(ostream &os, Bundle<WLine> &r);
-template ostream &operator<<(ostream &os, Bundle<Vertex> &r);
-
 void Diagram::WriteDiagram(ostream &os)
 {
-    os << Ver << G << W;
+    os << SEP_LINE << endl;
+    os << COMMENT << Ver.Name() << endl;
+    for (int index = 0; index < Ver.HowMany(); index++)
+        os << 'v' << SEP<<Ver[index];
+    
+    os << SEP_LINE << endl;
+    os << COMMENT << G.Name() << endl;
+    for (int index = 0; index < G.HowMany(); index++)
+        os << 'g' << SEP<<G[index];
+    
+    os << SEP_LINE << endl;
+    os << COMMENT << W.Name() << endl;
+    for (int index = 0; index < W.HowMany(); index++)
+        os << 'w' << SEP<<W[index];
 }
 
 void Diagram::WriteDiagram(string path)
@@ -117,15 +106,15 @@ string VertexColor(int sublattice)
     return "[fillcolor=" + colorstr + "]";
 }
 
-ostream &Component2gv(ostream &os, GLine &r)
+ostream& Diagram::Component2gv(ostream &os, GLine &r)
 {
     os << r.Vertex[IN] << "->" << r.Vertex[OUT];
-    os << " " << EdgeColor(r.Spin[IN], r.Spin[OUT]) << ";";
+    os << " " << EdgeColor(Spin(r,IN), Spin(r,OUT)) << ";";
     os << "  //Name=" << r.Name << "; Weight=" << r.Weight << endl;
     return os;
 }
 
-ostream &Component2gv(ostream &os, WLine &r)
+ostream& Diagram::Component2gv(ostream &os, WLine &r)
 {
     os << r.Vertex[IN] << "->" << r.Vertex[OUT];
     os << " [style=dashed arrowhead=none]; ";
@@ -133,16 +122,17 @@ ostream &Component2gv(ostream &os, WLine &r)
     return os;
 }
 
-ostream &Component2gv(ostream &os, Vertex &r)
+ostream& Diagram::Component2gv(ostream &os, Vertex &r)
 {
-    os << r.Name << " " << VertexColor(r.Sublattice) << ";";
+    os << r.Name << " " << VertexColor(r.R.SubLattice) << ";";
     os << "  //InG=" << r.G[IN] << "; OutG=" << r.G[OUT] << "; W=" << r.W << endl;
     return os;
 }
 
 /********************  write diagram to gv ********************/
+
 template <typename T>
-ostream &Bundle2gv(ostream &os, Bundle<T> &r)
+ostream& Diagram::Bundle2gv(ostream &os, Bundle<T> &r)
 {
     os << "    //" << r.Name() << endl;
     for (int index = 0; index < r.HowMany(); index++) {
@@ -152,9 +142,9 @@ ostream &Bundle2gv(ostream &os, Bundle<T> &r)
     return os;
 }
 
-template ostream &Bundle2gv(ostream &os, Bundle<GLine> &r);
-template ostream &Bundle2gv(ostream &os, Bundle<WLine> &r);
-template ostream &Bundle2gv(ostream &os, Bundle<Vertex> &r);
+template ostream& Diagram::Bundle2gv(ostream &os, Bundle<GLine> &r);
+template ostream& Diagram::Bundle2gv(ostream &os, Bundle<WLine> &r);
+template ostream& Diagram::Bundle2gv(ostream &os, Bundle<Vertex> &r);
 
 /**
 *  write diagram object to .gv file so that it can be visualized by Graphviz

@@ -9,7 +9,7 @@
 #include "job.h"
 //using namespace std;
 
-void JobPara::Read()
+void Jobs::Read()
 {
     return;
 }
