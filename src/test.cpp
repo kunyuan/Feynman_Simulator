@@ -7,18 +7,22 @@
 //
 
 #include "test.h"
+#include "abort.h"
 using namespace std;
 
+#define TEST(func)  {if(func()!=EXIT_SUCCESS) ABORT("Shit happens!");}
 int RunTest()
 {
 
     //    TestTimer();  //Test the timer
 //        TestRNG();
     //    TestPystring();
-    TestDiagram();
-    TestVector();
-    TestLattice();
-    Testcnpy();
-    TestObservable();
+    TEST(TestDiagram);
+    TEST(TestVector);
+    TEST(TestLattice);
+    TEST(TestObservable);
+    
+    TestArray();
+//    Testcnpy();
     return 0;
 }

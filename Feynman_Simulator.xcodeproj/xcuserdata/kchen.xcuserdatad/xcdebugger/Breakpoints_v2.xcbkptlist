@@ -804,11 +804,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "src/observable/observable_test.cpp"
-            timestampString = "435119307.911636"
+            timestampString = "435377099.799092"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "25"
-            endingLineNumber = "25"
+            startingLineNumber = "31"
+            endingLineNumber = "31"
             landmarkName = "TestObservable()"
             landmarkType = "7">
          </BreakpointContent>
@@ -852,11 +852,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "src/observable/estimate.cpp"
-            timestampString = "435166721.573592"
+            timestampString = "435377099.799092"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "174"
-            endingLineNumber = "174"
+            startingLineNumber = "176"
+            endingLineNumber = "176"
             landmarkName = "ReadState(cnpy::npz_t NpzMap)"
             landmarkType = "7">
             <Locations>
@@ -898,11 +898,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "src/observable/observable_test.cpp"
-            timestampString = "435185693.261892"
+            timestampString = "435377099.799092"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "56"
-            endingLineNumber = "56"
+            startingLineNumber = "62"
+            endingLineNumber = "62"
             landmarkName = "TestObservableComplex()"
             landmarkType = "7">
          </BreakpointContent>
@@ -914,11 +914,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "src/observable/observable_test.cpp"
-            timestampString = "435185693.261892"
+            timestampString = "435377099.799092"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "58"
-            endingLineNumber = "58"
+            startingLineNumber = "64"
+            endingLineNumber = "64"
             landmarkName = "TestObservableComplex()"
             landmarkType = "7">
          </BreakpointContent>
@@ -930,11 +930,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "src/observable/observable_test.cpp"
-            timestampString = "435185693.261892"
+            timestampString = "435377099.799092"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "59"
-            endingLineNumber = "59"
+            startingLineNumber = "65"
+            endingLineNumber = "65"
             landmarkName = "TestObservableComplex()"
             landmarkType = "7">
             <Locations>
@@ -1008,11 +1008,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "src/observable/observable_test.cpp"
-            timestampString = "435185693.261892"
+            timestampString = "435377099.799092"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "54"
-            endingLineNumber = "54"
+            startingLineNumber = "60"
+            endingLineNumber = "60"
             landmarkName = "TestObservableComplex()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1023,14 +1023,150 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "src/observable/diagram_object.h"
-            timestampString = "435205092.821724"
+            filePath = "src/lattice/lattice_test.cpp"
+            timestampString = "435378815.088278"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "30"
-            endingLineNumber = "30"
-            landmarkName = "class SigmaWeight"
-            landmarkType = "3">
+            startingLineNumber = "25"
+            endingLineNumber = "25"
+            landmarkName = "TestLattice()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TestLattice()"
+                  moduleName = "Feynman_Simulator"
+                  urlString = "file:///Users/kchen/project/Feynman_Simulator/src/lattice/lattice_test.cpp"
+                  timestampString = "435378829.997774"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "25"
+                  endingLineNumber = "25"
+                  offsetFromSymbolStart = "115">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TestLattice()"
+                  moduleName = "Feynman_Simulator"
+                  urlString = "file:///Users/kchen/project/Feynman_Simulator/src/lattice/lattice_test.cpp"
+                  timestampString = "435378829.997943"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "25"
+                  endingLineNumber = "25"
+                  offsetFromSymbolStart = "120">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TestLattice()"
+                  moduleName = "Feynman_Simulator"
+                  urlString = "file:///Users/kchen/project/Feynman_Simulator/src/lattice/lattice_test.cpp"
+                  timestampString = "435378829.998066"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "25"
+                  endingLineNumber = "25"
+                  offsetFromSymbolStart = "173">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TestLattice()"
+                  moduleName = "Feynman_Simulator"
+                  urlString = "file:///Users/kchen/project/Feynman_Simulator/src/lattice/lattice_test.cpp"
+                  timestampString = "435378829.998184"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "25"
+                  endingLineNumber = "25"
+                  offsetFromSymbolStart = "190">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TestLattice()"
+                  moduleName = "Feynman_Simulator"
+                  urlString = "file:///Users/kchen/project/Feynman_Simulator/src/lattice/lattice_test.cpp"
+                  timestampString = "435378829.9983"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "25"
+                  endingLineNumber = "25"
+                  offsetFromSymbolStart = "198">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "src/observable/observable_test.cpp"
+            timestampString = "435380274.118973"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "96"
+            endingLineNumber = "96"
+            landmarkName = "TestDiagramObject()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "src/observable/observable_test.cpp"
+            timestampString = "435380562.250016"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "97"
+            endingLineNumber = "97"
+            landmarkName = "TestDiagramObject()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "src/utility/array_test.cpp"
+            timestampString = "435382883.567098"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "32"
+            endingLineNumber = "32"
+            landmarkName = "TestArray()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "src/utility/array_test.cpp"
+            timestampString = "435382977.195299"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "26"
+            endingLineNumber = "26"
+            landmarkName = "TestArray()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

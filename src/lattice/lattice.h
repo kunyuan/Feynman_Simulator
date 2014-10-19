@@ -47,13 +47,26 @@ class Distance{
 public:
     int dSublattice;
     Vec<int> dCoordinate;
+    int _Coordinate;
     
     Distance(){}
     Distance(const Site& i, const Site& j)
     {
-        dCoordinate=j.Coordinate-i.Coordinate;
         dSublattice=GetSublatticeIndex(i.Sublattice, j.Sublattice);
+        dCoordinate=j.Coordinate-i.Coordinate;
+        _Coordinate = 0;
+        int layer;
+        for(int i=0; i<D; i++)
+        {
+            layer = dCoordinate[i];
+            for(int j=0; j<i; j++)
+                layer = layer*L[j];
+            _Coordinate += layer;
+        }
     }
+    
+    inline int Sublattice() const {return dSublattice;}
+    inline int Coordinate() const {return _Coordinate;}
     
     Vec<real> GetVec();
     Distance Mirror();
@@ -63,6 +76,7 @@ public:
     {
         if(dSublattice!=v2.dSublattice) return false;
         if(dCoordinate!=v2.dCoordinate) return false;
+        if(_Coordinate!=v2._Coordinate) return false;
         return true;
     }
     
