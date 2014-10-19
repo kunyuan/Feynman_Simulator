@@ -167,11 +167,14 @@ bool Estimator<T>::ReadState(cnpy::npz_t NpzMap)
     if(start==NULL) ABORT("Can't find estimator "<<Name<<" in .npz data file!"<<endl);
     ClearStatistics();
     _history.assign(start,start+history.shape[0]);
+    
     //read normalization factor
     cnpy::NpyArray norm=NpzMap[Name+"_Norm"];
     real* start_Norm = reinterpret_cast<real*>(norm.data);
     if(start_Norm==NULL) ABORT("Can't find estimator "<<Name<<"_Norm in .npz data file!"<<endl);
     _norm=*start_Norm;
+    
+    //read accumulation
     cnpy::NpyArray accu=NpzMap[Name+"_Accu"];
     T* start_accu = reinterpret_cast<T*>(accu.data);
     if(start_accu==NULL) ABORT("Can't find estimator "<<Name<<"_Accu in .npz data file!"<<endl);
@@ -214,10 +217,8 @@ void EstimatorBundle<T>::AddEstimator(const Estimator<T>& est)
 template <typename T>
 void EstimatorBundle<T>::AddStatistics()
 {
-    typename vector<EstimatorT>::iterator begin=_EstimatorVector.begin();
-    typename vector<EstimatorT>::iterator end=_EstimatorVector.end();
-    for(auto it=begin;it!=end;it++)
-        it->AddStatistics();
+    for(int i=0;i<HowMany();i++)
+        _EstimatorVector[i].AddStatistics();
 }
 
 template <typename T>

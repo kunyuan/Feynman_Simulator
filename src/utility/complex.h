@@ -61,6 +61,13 @@ Complex operator-(const Complex &); // unary - operator
 Complex operator*(const Complex &, const Complex &);
 Complex operator/(const Complex &, const Complex &);
 
+Complex operator+(const Complex &, real);
+Complex operator+(real, const Complex &);
+Complex operator-(const Complex &, real);
+Complex operator-(real, const Complex &);
+Complex operator*(real, const Complex &);
+Complex operator*(const Complex &, real);
+Complex operator/(const Complex &, real);
 // Complex library
 
 // mod2 = Re*Re + Im*Im

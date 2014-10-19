@@ -14,6 +14,7 @@
 #include "estimate.h"
 #include "lattice.h"
 #include <iostream>
+#include "array.h"
 
 const int MAX_BIN=128;
 /**
@@ -26,14 +27,17 @@ class SigmaWeight
 {
 private:
     real _Norm;
-    Complex _Weight[SPIN2][NSublattice2][Vol][MAX_BIN];
-    Complex _WeightAccu[SPIN2][NSublattice2][Vol][MAX_BIN];
-    Complex _ErrorSquare[SPIN2][NSublattice2][Vol][MAX_BIN];
+    Array::array4<Complex> * _Weight;
+    Array::array4<Complex> * _WeightAccu;
+    Array::array4<Complex> * _WeightSquareAccu;
+    
 public:
-    void Update();
-    Complex Weight(Distance dR, real dtau,spin,spin);
-    Estimate<Complex> WeightWithError(Distance dR, real dtau, spin, spin);
-    void Measure(Complex &weight, real norm);
+    SigmaWeight(int Vol, int Sublattice);
+    ~SigmaWeight();
+    void UpdateWeight();
+    inline Complex Weight(const Distance& dR, real dtau,spin,spin);
+    Estimate<Complex> WeightWithError(const Distance& dR, real dtau, spin, spin);
+    inline void Measure(const Complex &weight,const Distance& dR, real dtau, spin, spin);
 //    std::string PrettyString();
     void SaveState(std::string);
     bool ReadState(std::string);

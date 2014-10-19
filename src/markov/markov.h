@@ -20,7 +20,7 @@ private:
     
 public:
     Markov(EnvMoneCarlo *);
-    void Hop(const int&);
+    void Hop(int&&);
     void CreateWorm();
     void DeleteWorm();
 };
