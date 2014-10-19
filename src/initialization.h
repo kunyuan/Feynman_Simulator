@@ -10,6 +10,7 @@
 #define __Fermion_Simulator__initialization__
 
 #include "definition.h"
+#include "array.h"
 #include "logger.h"
 #include "rng.h"
 #include "cnpy.h"

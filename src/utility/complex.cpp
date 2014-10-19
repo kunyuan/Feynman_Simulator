@@ -141,6 +141,16 @@ Complex operator+(const Complex &lhs, const Complex &rhs)
     return Complex(lhs) += rhs;
 }
 
+Complex operator+(real lhs, const Complex &rhs)
+{
+    return Complex(rhs.Re+lhs,rhs.Im+lhs);
+}
+
+Complex operator+(const Complex &lhs, real rhs)
+{
+    return Complex(lhs.Re+rhs,lhs.Im+rhs);
+}
+
 Complex operator+(const Complex &lhs)
 {
     return Complex(lhs);
@@ -149,6 +159,16 @@ Complex operator+(const Complex &lhs)
 Complex operator-(const Complex &lhs, const Complex &rhs)
 {
     return Complex(lhs) -= rhs;
+}
+
+Complex operator-(real lhs, const Complex &rhs)
+{
+    return Complex(rhs.Re-lhs,rhs.Im-lhs);
+}
+
+Complex operator-(const Complex &lhs, real rhs)
+{
+    return Complex(lhs.Re+rhs,lhs.Im+rhs);
 }
 
 Complex operator-(const Complex &c)
@@ -161,10 +181,33 @@ Complex operator*(const Complex &lhs, const Complex &rhs)
     return Complex(lhs) *= rhs;
 }
 
+Complex operator*(real lhs, const Complex &rhs)
+{
+    return Complex(rhs.Re*lhs,rhs.Im*lhs);
+}
+
+Complex operator*(const Complex &lhs, real rhs)
+{
+    return Complex(lhs.Re*rhs,lhs.Im*rhs);
+}
+
 Complex operator/(const Complex &lhs, const Complex &rhs)
 {
     return Complex(lhs) /= rhs;
 }
+
+Complex operator/(real x, const Complex &y)
+{
+  double factor;
+  factor=1.0/(y.Re*y.Re+y.Im*y.Im);
+  return Complex(x*y.Re*factor,-x*y.Im*factor);
+}
+
+Complex operator/(const Complex &rhs, real lhs)
+{
+    return Complex(rhs) /= lhs;
+}
+
 
 // Complex library
 

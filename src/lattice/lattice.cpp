@@ -189,6 +189,15 @@ Distance operator-(const Site& i, const Site& j)
 {
     Distance dis;
     dis.dCoordinate=i.Coordinate-j.Coordinate;
+    dis._Coordinate=0;
+    int layer;
+    for(int i=0; i<D; i++)
+    {
+        layer = dis.dCoordinate[i];
+        for(int j=0; j<i; j++)
+            layer = layer*L[j];
+        dis._Coordinate += layer;
+    }
     dis.dSublattice = GetSublatticeIndex(i.Sublattice, j.Sublattice);
     return dis;
 }
@@ -202,7 +211,7 @@ void Lattice::PlotLattice()
     //save it to file
     const unsigned int shape[] = {N, (unsigned int)D};
     real data[N*D];
-    for(int i; i<N; i++)
+    for(int i=0; i<N; i++)
     {
         Site s(i);
         for(int j=0; j<D; j++)

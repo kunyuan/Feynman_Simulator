@@ -20,7 +20,7 @@ Markov::Markov(EnvMoneCarlo *Env)
 *
 *  @param Steps
 */
-void Markov::Hop(const int & Steps)
+void Markov::Hop(int && Steps)
 {
     const double W1=1.0;
     const double W2=1.0;

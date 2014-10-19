@@ -42,7 +42,7 @@ void MonteCarlo(Jobs &Job)
 {
     EnvMoneCarlo Env(Job);
     Markov GrassHopper(&Env);
-    while(true)
+    while(Env.Counter<10000)
     {
         GrassHopper.Hop(10);
         
@@ -50,7 +50,7 @@ void MonteCarlo(Jobs &Job)
         
         if(Env.Counter%10)
         {
-            Env.AddStatistics();
+//            Env.AddStatistics();
             Env.ReWeightEachOrder();
         }
         if(Env.Counter%20)

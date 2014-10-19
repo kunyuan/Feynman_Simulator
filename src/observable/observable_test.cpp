@@ -9,19 +9,25 @@
 #include "diagram_object.h"
 #include "cnpy.h"
 #include "sput.h"
+#include "utility.h"
 using namespace std;
 
 void TestObservableComplex();
 void TestObservableReal();
+void TestDiagramObject();
 
 int TestObservable()
 {
     sput_start_testing();
     sput_enter_suite("Test Observable...");
+    
     //complex and real Estimator have to be tested separatelly,
     //since Estimator._update() is different for those two types
     sput_run_test(TestObservableComplex);
     sput_run_test(TestObservableReal);
+    
+    //test diagram object weight, like sigma, G
+    sput_run_test(TestDiagramObject);
     sput_finish_testing();
     return sput_get_return_value();
 }
@@ -83,4 +89,12 @@ void TestObservableReal()
                      "check the Mean value.");
     sput_fail_unless(Equal(quan1.Estimate().Error, ExpectedResult.Error),
                      "check the Error value.");
+}
+
+void TestDiagramObject()
+{
+    SigmaWeight Sigma(512,4);
+//    Site S0
+//    Sigma.Measure(Complex(1.0,0.0), <#const Distance &dR#>, <#double dtau#>, <#spin#>, <#spin#>)
+    
 }
