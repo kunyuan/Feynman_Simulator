@@ -39,7 +39,7 @@ int main(int argc, const char *argv[])
 
 void MonteCarlo(Jobs &Job)
 {
-    EnvMoneCarlo PaddyField(Job);
+    EnvMonteCarlo PaddyField(Job);
     Markov GrassHopper(&PaddyField);
     MarkovMonitor Scarecrow(&PaddyField);
     while (PaddyField.Counter < 10000) {

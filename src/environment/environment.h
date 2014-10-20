@@ -28,9 +28,9 @@ class Environment {
     void SaveState();
 };
 
-class EnvMoneCarlo : public Environment {
+class EnvMonteCarlo : public Environment {
   public:
-    EnvMoneCarlo(Jobs &);
+    EnvMonteCarlo(Jobs &);
     RandomFactory RNG;
     Diagram Diag;
     int Counter;

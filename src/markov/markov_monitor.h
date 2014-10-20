@@ -10,15 +10,15 @@
 #define __Feynman_Simulator__measure__
 
 #include "environment.h"
+#include "weight.h"
+#include "estimate.h"
 
 class MarkovMonitor {
   private:
-    EnvMoneCarlo *_Env;
-    Diagram *_Diag;
-    RandomFactory *_RNG;
+    EnvMonteCarlo *_Env;
 
   public:
-    MarkovMonitor(EnvMoneCarlo *);
+    MarkovMonitor(EnvMonteCarlo *);
     void Annealing();
     void SqueezeStatistics();
     void ReWeightEachOrder();
