@@ -12,6 +12,21 @@
 #include <iostream>
 #include "logger.h"
 #include "component_bundle.h"
+#include "rng.h"
+
+class Worm{
+public:
+    bool Exist;
+    int Ira, Masha;    //extra line: Ira---"k,dSpin"--->Masha
+    int K;
+    int dSpin;
+    
+    Worm():Exist(false), Ira(0),Masha(0),K(0),dSpin(0){}
+    Worm(int ira, int masha, int dk, spin s)
+    : Exist(true), Ira(ira), Masha(masha), K(dk), dSpin(1-2*int(s))
+    {
+    }
+};
 
 class Diagram {
   public:
@@ -19,6 +34,8 @@ class Diagram {
     Bundle<GLine> G;
     Bundle<WLine> W;
     Bundle<Vertex> Ver;
+    
+    Worm Worm;
 
     spin Spin(GLine &, const int&);
     spin Spin(WLine &, const int&, const int&);
@@ -32,6 +49,11 @@ class Diagram {
     string PrettyString(WLine &);
     string PrettyString(Vertex &);
 
+    //Randomly Pick
+    GLine& RandomPickG();
+    WLine& RandomPickW();
+    Vertex& RandomPickVer();
+    
     //Diagram
     Vertex &NeighVer(GLine &, int dir);
     Vertex &NeighVer(WLine &, int dir);
@@ -60,6 +82,5 @@ private:
     
     template <typename T>
     std::ostream& Bundle2gv(std::ostream &, Bundle<T> &);
-    
 };
 #endif /* defined(__Fermion_Simulator__diagram_global__) */

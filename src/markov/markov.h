@@ -11,6 +11,7 @@
 
 #include "environment.h"
 #include "weight.h"
+#include "rng.h"
 
 class Markov {
   private:
@@ -18,7 +19,6 @@ class Markov {
     Lattice *Lat;
     real *OrderWeight;
     Diagram *Diag;
-    RandomFactory *RNG;
     Weight::Sigma *Sigma;
     Weight::Pi *Pi;
 

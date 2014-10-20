@@ -31,7 +31,6 @@ class Environment {
 class EnvMonteCarlo : public Environment {
   public:
     EnvMonteCarlo(Jobs &);
-    RandomFactory RNG;
     Diagram Diag;
     int Counter;
     real OrderWeight[MAX_ORDER];

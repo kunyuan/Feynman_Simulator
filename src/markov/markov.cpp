@@ -14,7 +14,6 @@ Markov::Markov(EnvMonteCarlo *Env)
     Lat=&Env->Lat;
     OrderWeight=Env->OrderWeight;
     Diag = &Env->Diag;
-    RNG = &Env->RNG;
     Sigma=&Env->Sigma;
 }
 
@@ -28,7 +27,7 @@ void Markov::Hop(int &&Steps)
     const double W1 = 1.0;
     const double W2 = 1.0;
     const double W = W1 + W2;
-    double x = RNG->urn();
+    double x = RNG.urn();
     if (x < W1 / W)
         CreateWorm();
     else if (x < (W1 + W2) / W)
@@ -37,8 +36,12 @@ void Markov::Hop(int &&Steps)
 
 void Markov::CreateWorm()
 {
+    if(Diag->Worm.Exist) return;
+    WLine& w=Diag->RandomPickW();
+    cout<< Diag->PrettyString(w)<<endl;
 }
 
 void Markov::DeleteWorm()
 {
+    if(!Diag->Worm.Exist) return;
 }

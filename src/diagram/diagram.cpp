@@ -10,6 +10,7 @@
 #include "utility.h"
 #include "convention.h"
 #include "lattice.h"
+#include "rng.h"
 using namespace std;
 
 ostream &operator<<(ostream &os, spin &s)
@@ -115,6 +116,21 @@ GLine &Diagram::NeighG(Vertex &v, int dir)
 WLine &Diagram::NeighW(Vertex &v)
 {
     return W[v.W];
+}
+
+GLine& Diagram::RandomPickG()
+{
+    return G[RNG.irn(0, G.HowMany())];
+}
+
+WLine& Diagram::RandomPickW()
+{
+    return W[RNG.irn(0, W.HowMany())];
+}
+
+Vertex& Diagram::RandomPickVer()
+{
+    return Ver[RNG.irn(0, Ver.HowMany())];
 }
 
 bool Diagram::FixDiagram()
