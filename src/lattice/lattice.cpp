@@ -33,12 +33,12 @@ int GetSublatIndex(int In, int Out)
 
 int Distance::Sublattice(const int &dir) const
 {
-    if (DEBUGMODE && (_SublatIndex < 0 || _SublatIndex >= NSublattice2))
+    if (DEBUGMODE && (SublatIndex < 0 || SublatIndex >= NSublattice2))
         ABORT("Wrong sublattice index number!");
     if (dir == IN)
-        return _SublatIndex % NSublattice;
+        return SublatIndex % NSublattice;
     else
-        return _SublatIndex / NSublattice;
+        return SublatIndex / NSublattice;
 }
 
 Lattice::Lattice()
@@ -183,9 +183,9 @@ Distance Lattice::Distance(const Site& SiteIn, const Site& SiteOut)
 
 Vec<int> Lattice::Coordinate(const class Distance& dis)
 {
-    if (DEBUGMODE && (dis._CoordiIndex < 0 || dis._CoordiIndex >= Vol))
+    if (DEBUGMODE && (dis.CoordiIndex < 0 || dis.CoordiIndex >= Vol))
         ABORT("Wrong Coordinate index number!");
-    return ToVec(dis._CoordiIndex);
+    return ToVec(dis.CoordiIndex);
 }
 
 /**

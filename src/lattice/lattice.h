@@ -21,11 +21,13 @@ class Site {
     int Sublattice;
     Vec<int> Coordinate;
 
-    Site(): Sublattice(0), Coordinate(0)
+    Site()
+        : Sublattice(0), Coordinate(0)
     {
     }
-    
-    Site(int sub, Vec<int> vec):Sublattice(sub), Coordinate(vec)
+
+    Site(int sub, Vec<int> vec)
+        : Sublattice(sub), Coordinate(vec)
     {
     }
 
@@ -46,39 +48,31 @@ class Site {
     }
 };
 
-
 /**
  *  class Distance defines Site1-Site2 using the vector: Dr and sublattice of Site1 and Site2: Sublattice[0] and Sublattice[1].
  */
 
 class Distance {
   public:
-    int _SublatIndex;
-    int _CoordiIndex;
+    int SublatIndex;
+    int CoordiIndex;
 
     Distance()
     {
     }
-    
-    Distance(int sublat, int coordi) : _SublatIndex(sublat), _CoordiIndex(coordi)
+
+    Distance(int sublat, int coordi)
+        : SublatIndex(sublat), CoordiIndex(coordi)
     {
     }
 
-    inline int SublatIndex() const
-    {
-        return _SublatIndex;
-    }
-    inline int CoordiIndex() const
-    {
-        return _CoordiIndex;
-    }
     int Sublattice(const int &) const;
 
     bool operator==(const Distance &v2)
     {
-        if (_SublatIndex != v2._SublatIndex)
+        if (SublatIndex != v2.SublatIndex)
             return false;
-        if (_CoordiIndex != v2._CoordiIndex)
+        if (CoordiIndex != v2.CoordiIndex)
             return false;
         return true;
     }
@@ -106,21 +100,21 @@ class Lattice {
 
     Lattice();
     void PlotLattice();
-    
-    Vec<int>& Shift(Vec<int>&);
 
-    int ToIndex(const Vec<int>&);
+    Vec<int> &Shift(Vec<int> &);
+
+    int ToIndex(const Vec<int> &);
     Vec<int> ToVec(int);
-    
+
     Site GetSite(int name);
-    int GetName(const Site&);
-    int ToIndex(const Site&);
+    int GetName(const Site &);
+    int ToIndex(const Site &);
     Vec<real> GetRealVec(const Site &);
-    
-    Distance Distance(const Site&, const Site&);
-    Vec<int> Coordinate(const class Distance&);
-    Vec<real> GetRealVec(const class Distance&);
-    
+
+    Distance Distance(const Site &, const Site &);
+    Vec<int> Coordinate(const class Distance &);
+    Vec<real> GetRealVec(const class Distance &);
+
   private:
     void Initialize();
 };

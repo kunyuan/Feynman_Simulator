@@ -19,7 +19,7 @@ void Testcnpy()
         data[i] = Complex(RNG.urn(), RNG.urn());
 
     //save it to file
-    const unsigned int shape[] = {Nz, Ny, Nx};
+    const unsigned int shape[] = {Nx, Ny, Nz};
     cnpy::npy_save("arr1.npy", data, shape, 3, "w");
 
     //load it into a new array
@@ -28,7 +28,7 @@ void Testcnpy()
 
     //make sure the loaded data matches the saved data
     assert(arr.word_size == sizeof(Complex));
-    assert(arr.shape.size() == 3 && arr.shape[0] == Nz && arr.shape[1] == Ny && arr.shape[2] == Nx);
+    assert(arr.shape.size() == 3 && arr.shape[0] == Nx && arr.shape[1] == Ny && arr.shape[2] == Nz);
     for (int i = 0; i < Nx * Ny * Nz; i++)
         assert(Equal(data[i], loaded_data[i]));
     //append the same data to file
@@ -47,7 +47,8 @@ void Testcnpy()
     //load a single var from the npz file
     cnpy::NpyArray arr2 = cnpy::npz_load("out.npz", "arr1");
     //check that the loaded arr1 matches myVar1
-    assert(arr2.shape.size() == Nx * Ny * Nz && arr2.shape[0] == Nz);
+    assert(arr2.word_size == sizeof(Complex));
+    assert(arr2.shape.size() == 3 && arr2.shape[0] == Nx && arr2.shape[1] == Ny && arr2.shape[2] == Nz);
 
     //load the entire npz file
     cnpy::npz_t my_npz = cnpy::npz_load("out.npz");

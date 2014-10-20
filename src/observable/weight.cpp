@@ -8,14 +8,14 @@
 
 #include "weight.h"
 
+using namespace std;
 using namespace Array;
 using namespace Weight;
 
-Base::Base(const Lattice &lat, real beta, const std::string &file)
+Base::Base(const Lattice &lat, real beta)
 {
-    _Lattice = lat;
+    _Lat = lat;
     _Beta = beta;
-    _File = file;
 }
 
 int Base::SpinIndex(spin SpinIn, spin SpinOut)
@@ -41,8 +41,8 @@ real Base::BinToTau(int Bin)
     return (real(Bin / MAX_BIN) + 0.5) * _Beta;
 }
 
-Sigma::Sigma(const Lattice &lat, real beta, const std::string &file)
-    : Base(lat, beta, file)
+Sigma::Sigma(const Lattice &lat, real beta)
+    : Base(lat, beta)
 {
     _Shape[0] = SPIN2;
     _Shape[1] = lat.SublatVol * lat.SublatVol;
@@ -52,52 +52,49 @@ Sigma::Sigma(const Lattice &lat, real beta, const std::string &file)
     _Weight = new Array4<Complex>(_Shape[0], _Shape[1], _Shape[2], _Shape[3]);
     _WeightAccu = new Array4<Complex>(_Shape[0], _Shape[1], _Shape[2], _Shape[3]);
     _WeightSquareAccu = new Array4<Complex>(_Shape[0], _Shape[1], _Shape[2], _Shape[3]);
+
+    _Name = "Sigma";
     _Norm = 1.0;
 }
 
-Weight::Sigma::~Sigma()
+Sigma::~Sigma()
 {
     delete _Weight;
     delete _WeightAccu;
     delete _WeightSquareAccu;
 }
 
-void Weight::Sigma::UpdateWeight()
+void Sigma::UpdateWeight()
 {
     for (int i = 0; i < _Weight->Size(); i++) {
         (*_Weight)(i) = (*_WeightAccu)(i) / _Norm;
     }
 }
 
-Complex Weight::Sigma::Weight(const Distance &dR, real dtau, spin SpinIn, spin SpinOut)
+Complex Sigma::Weight(const Distance &d, real dtau, spin SpinIn, spin SpinOut)
 {
-    return (*_Weight)[SpinIndex(SpinIn, SpinOut)][dR.SublatIndex()][dR.CoordiIndex()][TauToBin(dtau)];
+    return (*_Weight)[SpinIndex(SpinIn, SpinOut)][d.SublatIndex][d.CoordiIndex][TauToBin(dtau)];
 }
 
-Estimate<Complex> Weight::Sigma::WeightWithError(const Distance &dR, real dtau, spin SpinIn, spin SpinOut)
+Estimate<Complex> Sigma::WeightWithError(const Distance &d, real dtau, spin SpinIn, spin SpinOut)
 {
-    Complex sq2 = (*_WeightSquareAccu)[SpinIndex(SpinIn, SpinOut)][dR.SublatIndex()][dR.CoordiIndex()][TauToBin(dtau)] / _Norm;
-    Complex mean = (*_WeightAccu)[SpinIndex(SpinIn, SpinOut)][dR.SublatIndex()][dR.CoordiIndex()][TauToBin(dtau)] / _Norm;
+    Complex sq2 = (*_WeightSquareAccu)[SpinIndex(SpinIn, SpinOut)][d.SublatIndex][d.CoordiIndex][TauToBin(dtau)] / _Norm;
+    Complex mean = (*_WeightAccu)[SpinIndex(SpinIn, SpinOut)][d.SublatIndex][d.CoordiIndex][TauToBin(dtau)] / _Norm;
     return Estimate<Complex>(mean, sq2 - mean * mean);
 }
 
-void Weight::Sigma::Measure(const Complex &weight, const Distance &dR, real dtau, spin SpinIn, spin SpinOut)
+void Sigma::Measure(const Complex &weight, const Distance &d, real dtau, spin SpinIn, spin SpinOut)
 {
     int spin_index = SpinIndex(SpinIn, SpinOut);
     int tau_bin = TauToBin(dtau);
-    _WeightAccu[spin_index][dR.SublatIndex()][dR.CoordiIndex()][tau_bin] += weight;
-    _WeightSquareAccu[spin_index][dR.SublatIndex()][dR.CoordiIndex()][tau_bin] += weight * weight;
-}
-
-void Sigma::SaveState(const std::string &FileName, const std::string &Mode)
-{
-    //    cnpy::npz_save(cnpy::npz_name(FileName), "Sigma_Accu", _WeightAccu, shape, 1, Mode);
+    (*_WeightAccu)[spin_index][d.SublatIndex][d.CoordiIndex][tau_bin] += weight;
+    (*_WeightSquareAccu)[spin_index][d.SublatIndex][d.CoordiIndex][tau_bin] += weight * weight;
 }
 
 /************************   Polarization   *********************************/
 
-Pi::Pi(const Lattice &lat, real beta, const std::string &file)
-    : Base(lat, beta, file)
+Pi::Pi(const Lattice &lat, real beta)
+    : Base(lat, beta)
 {
     _Weight = new Array4<Complex>(SPIN4, lat.SublatVol * lat.SublatVol, lat.Vol, MAX_BIN);
     _WeightAccu = new Array4<Complex>(SPIN4, lat.SublatVol * lat.SublatVol,
@@ -113,8 +110,8 @@ Pi::~Pi()
     delete _WeightSquareAccu;
 }
 
-G::G(const Lattice &lat, real beta, const std::string &file)
-    : Base(lat, beta, file)
+G::G(const Lattice &lat, real beta)
+    : Base(lat, beta)
 {
     _Weight = new Array4<Complex>(SPIN2, lat.SublatVol * lat.SublatVol, lat.Vol, MAX_BIN);
 }
@@ -126,11 +123,11 @@ G::~G()
 
 Complex G::Weight(const Distance &dR, real dtau, spin SpinIn, spin SpinOut)
 {
-    return (*_Weight)[SpinIndex(SpinIn, SpinOut)][dR.SublatIndex()][dR.CoordiIndex()][TauToBin(dtau)];
+    return (*_Weight)[SpinIndex(SpinIn, SpinOut)][dR.SublatIndex][dR.CoordiIndex][TauToBin(dtau)];
 }
 
-W::W(const Lattice &lat, real beta, const std::string &file)
-    : Base(lat, beta, file)
+W::W(const Lattice &lat, real beta)
+    : Base(lat, beta)
 {
     _Weight = new Array4<Complex>(SPIN4, lat.SublatVol * lat.SublatVol, lat.Vol, MAX_BIN);
 }

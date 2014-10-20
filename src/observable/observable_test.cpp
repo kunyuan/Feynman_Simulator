@@ -10,6 +10,9 @@
 #include "cnpy.h"
 #include "sput.h"
 #include "utility.h"
+#include "convention.h"
+#include "rng.h"
+
 using namespace std;
 
 void TestObservableComplex();
@@ -91,8 +94,13 @@ void TestObservableReal()
 
 void TestDiagramObject()
 {
+    RandomFactory rng;
     Lattice lat;
-    Weight::Sigma Sigma(lat, 5.0, "test_statisicts.txt");
-    //    Site S0
-    //    Sigma.Measure(Complex(1.0,0.0), <#const Distance &dR#>, <#double dtau#>, <#spin#>, <#spin#>)
+    real Beta = 5.0;
+    Weight::Sigma Sig(lat, Beta);
+    Distance d(0, 0);
+    for (int i = 0; i < 1000000; i++) {
+        Sig.Measure(Complex(rng.nrn(2.0, 1.0), rng.nrn(2.0, 1.0)), d, Beta * rng.urn(), UP, UP);
+    }
+    Sig.SaveState("test_weight");
 }

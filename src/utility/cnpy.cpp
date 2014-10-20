@@ -17,12 +17,6 @@ std::string cnpy::npy_name(std::string file)
 {
     return file + ".npy";
 }
-void reverse_shape(unsigned int *source, unsigned int *target, int size)
-{
-    for (int i = 0; i < size; i++) {
-        target[i] = source[size - i - 1];
-    }
-}
 
 char cnpy::BigEndianTest()
 {
@@ -117,7 +111,7 @@ void cnpy::parse_npy_header(FILE *fp, unsigned int &word_size, unsigned int *&sh
     shape = new unsigned int[ndims];
     for (unsigned int i = 0; i < ndims; i++) {
         loc1 = str_shape.find(",");
-        shape[i] = atoi(str_shape.substr(0, loc1).c_str());
+        shape[ndims - i - 1] = atoi(str_shape.substr(0, loc1).c_str());
         str_shape = str_shape.substr(loc1 + 1);
     }
 

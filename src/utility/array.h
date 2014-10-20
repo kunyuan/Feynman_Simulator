@@ -29,6 +29,8 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. */
 #include <cstdlib>
 #include <cerrno>
 
+#define NDEBUG
+
 #ifdef NDEBUG
 #define __check(i, n, dim, m)
 #define __checkSize()
@@ -357,6 +359,11 @@ class array1 {
     array1<T> operator+(int i) const
     {
         return array1<T>(size - i, v + i);
+    }
+
+    T *Data() const
+    {
+        return v;
     }
 
     void Load(T a) const

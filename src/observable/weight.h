@@ -19,10 +19,10 @@ namespace Weight {
 
 class Base {
   protected:
-    Base(const Lattice &, real Beta, const std::string &);
+    Base(const Lattice &, real Beta);
+    std::string _Name;
     real _Beta;
-    Lattice _Lattice;
-    std::string _File;
+    Lattice _Lat;
     inline int SpinIndex(spin SpinIn, spin SpinOut);
     inline int SpinIndex(spin *TwoSpinIn, spin *TwoSpinOut);
     inline int TauToBin(real tau);
@@ -44,17 +44,17 @@ class Sigma : Base {
     Array::array4<Complex> *_WeightSquareAccu;
 
   public:
-    Sigma(const Lattice &, real Beta, const std::string &);
+    Sigma(const Lattice &, real Beta);
     ~Sigma();
     void UpdateWeight();
-    inline Complex Weight(const Distance &dR, real dtau, spin, spin);
-    inline Complex Weight(spin, spin);
+    Complex Weight(const Distance &dR, real dtau, spin, spin);
+    Complex Weight(spin, spin);
     //TODO: no r dependence, really?
     Estimate<Complex> WeightWithError(const Distance &dR, real dtau, spin, spin);
-    inline void Measure(const Complex &weight, const Distance &dR, real dtau, spin, spin);
+    void Measure(const Complex &weight, const Distance &, real dtau, spin, spin);
     //    std::string PrettyString();
-    void SaveState(const std::string& FileName, const std::string& Mode="a");
-    bool LoadState(std::string&);
+    void SaveState(const std::string &FileName, const std::string &Mode = "a");
+    bool LoadState(const std::string &);
 };
 
 class Pi : Base {
@@ -65,7 +65,7 @@ class Pi : Base {
     Array::array4<Complex> *_WeightSquareAccu;
 
   public:
-    Pi(const Lattice &, real Beta, const std::string &);
+    Pi(const Lattice &, real Beta);
     ~Pi();
     void UpdateWeight();
     inline Complex Weight(const Distance &dR, real dtau, spin *, spin *);
@@ -81,7 +81,7 @@ class G : Base {
     Array::array4<Complex> *_Weight;
 
   public:
-    G(const Lattice &, real Beta, const std::string &);
+    G(const Lattice &, real Beta);
     ~G();
     inline Complex Weight(const Distance &dR, real dtau, spin, spin);
     inline Complex BareWeight(const Distance &dR, real dtau, spin, spin);
@@ -94,7 +94,7 @@ class W : Base {
     Array::array4<Complex> *_Weight;
 
   public:
-    W(const Lattice &, real Beta, const std::string &);
+    W(const Lattice &, real Beta);
     ~W();
     inline Complex Weight(const Distance &dR, real dtau, spin *, spin *);
     inline Complex Weight(const Distance &dR, spin *, spin *);
