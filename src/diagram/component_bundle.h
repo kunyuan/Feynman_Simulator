@@ -35,6 +35,7 @@ class Bundle {
     //step<0: Recover successive "step" steps of adding T*
     T &operator[](int name);
     int HowMany();
+    T& RandomPick();
     bool Exist(int name);
     bool Exist(T &target);
 };

@@ -17,7 +17,7 @@ using namespace std;
 template <typename T>
 class Vec {
   private:
-    T _Arrary[D];
+    T _Array[D];
 
   public:
     Vec()
@@ -27,25 +27,25 @@ class Vec {
     Vec(T value)
     {
         for(int j=0; j<D; j++)
-            _Arrary[j] = value;
+            _Array[j] = value;
     }
 
 
     T &operator[](int index)
     {
-        return _Arrary[index];
+        return _Array[index];
     }
 
     const T &operator[](int index) const
     {
-        return _Arrary[index];
+        return _Array[index];
     }
 
     Vec operator*(int i) const
     {
         Vec v;
         for (int j = 0; j < D; j++)
-            v[j] = _Arrary[j] * i;
+            v[j] = _Array[j] * i;
         return v;
     }
 
@@ -53,7 +53,7 @@ class Vec {
     {
         Vec v;
         for (int j = 0; j < D; j++)
-            v[j] = _Arrary[j] * i;
+            v[j] = _Array[j] * i;
         return v;
     }
 
@@ -61,7 +61,7 @@ class Vec {
     {
         Vec v;
         for (int j = 0; j < D; j++)
-            v[j] = _Arrary[j] + v2._Arrary[j];
+            v[j] = _Array[j] + v2._Array[j];
         return v;
     }
 
@@ -69,21 +69,21 @@ class Vec {
     {
         Vec v;
         for (int j = 0; j < D; j++)
-            v[j] = _Arrary[j] - v2._Arrary[j];
+            v[j] = _Array[j] - v2._Array[j];
         return v;
     }
 
     Vec &operator+=(const Vec &v2)
     {
         for (int j = 0; j < D; j++)
-            _Arrary[j] += v2._Arrary[j];
+            _Array[j] += v2._Array[j];
         return *this;
     }
 
     Vec &operator-=(const Vec &v2)
     {
         for (int j = 0; j < D; j++)
-            _Arrary[j] -= v2._Arrary[j];
+            _Array[j] -= v2._Array[j];
         return *this;
     }
 
