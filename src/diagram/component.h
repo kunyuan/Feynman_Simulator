@@ -23,6 +23,7 @@ class GLine {
   public:
     int Name;
     int Vertex[2];
+    int K;
     Complex Weight;
 };
 
@@ -33,6 +34,7 @@ class WLine {
   public:
     int Name;
     int Vertex[2];
+    int K;
     Complex Weight;
 };
 

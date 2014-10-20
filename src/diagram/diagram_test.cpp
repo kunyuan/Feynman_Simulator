@@ -67,6 +67,7 @@ void Test_Diagram_IO()
     NewG.Name = 2;
     NewG.Vertex[IN] = 0;
     NewG.Vertex[OUT] = 1;
+    NewG.K = 1;
     NewG.Weight = Complex(1.0, 3.0e9);
     LOG_INFO(NewG);
     strtemp << NewG;
@@ -74,6 +75,7 @@ void Test_Diagram_IO()
     WLine NewW;
     NewW.Vertex[IN] = 2;
     NewW.Vertex[OUT] = 3;
+    NewW.K = 2;
     LOG_INFO(NewW);
     strtemp << NewW;
 
@@ -89,7 +91,7 @@ void Test_Diagram_IO()
     strtemp << NewV;
 
     strtemp >> NewG;
-    sput_fail_unless(Equal(Diag.Spin(NewG,OUT), DOWN), "Check GLine reading");
+    sput_fail_unless(Equal(NewG.Vertex[OUT], 1), "Check GLine reading");
     strtemp >> NewW;
     sput_fail_unless(Equal(NewW.Vertex[OUT], 3), "Check WLine reading");
     strtemp >> NewV;

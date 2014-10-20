@@ -14,7 +14,7 @@
 #include "definition.h"
 #include <string>
 
-const int MAX_BUNDLE = 1024;
+const int MAX_BUNDLE = 16;
 template <typename T>
 class Bundle {
   private:
