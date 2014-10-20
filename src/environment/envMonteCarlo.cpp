@@ -8,11 +8,15 @@
 
 #include "environment.h"
 
-EnvMoneCarlo::EnvMoneCarlo(Jobs &Job):Environment(Job)
+EnvMoneCarlo::EnvMoneCarlo(Jobs &Job)
+    : Environment(Job),
+      //The base class is constructed first!!!
+      Sigma(Lat, Beta, StateFile),
+      Pi(Lat, Beta, StateFile)
 {
     //Initialize random number generator
     RNG.Reset(Job.Seed);
-    
+
     //Add estimators
     cEstimator.AddEstimator("1");
     rEstimator.AddEstimator("1");
@@ -25,17 +29,15 @@ void EnvMoneCarlo::Annealing()
 
 void EnvMoneCarlo::SqueezeStatistics()
 {
-    
 }
 
 void EnvMoneCarlo::ReWeightEachOrder()
 {
-    
 }
 
 void EnvMoneCarlo::Measure()
 {
-//    cEstimator[0].Measure(<#const Complex &#>)
+    //    cEstimator[0].Measure(<#const Complex &#>)
 }
 
 void EnvMoneCarlo::AddStatistics()
