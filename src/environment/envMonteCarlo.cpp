@@ -8,7 +8,7 @@
 
 #include "environment.h"
 
-EnvMoneCarlo::EnvMoneCarlo(Jobs &Job)
+EnvMonteCarlo::EnvMonteCarlo(Jobs &Job)
     : Environment(Job),
       //The base class is constructed first!!!
       Sigma(Lat, Beta, StateFile),
@@ -22,31 +22,7 @@ EnvMoneCarlo::EnvMoneCarlo(Jobs &Job)
     rEstimator.AddEstimator("1");
 }
 
-void EnvMoneCarlo::Annealing()
-{
-    SqueezeStatistics();
-}
-
-void EnvMoneCarlo::SqueezeStatistics()
-{
-}
-
-void EnvMoneCarlo::ReWeightEachOrder()
-{
-}
-
-void EnvMoneCarlo::Measure()
-{
-    //    cEstimator[0].Measure(<#const Complex &#>)
-}
-
-void EnvMoneCarlo::AddStatistics()
-{
-    cEstimator.AddStatistics();
-    rEstimator.AddStatistics();
-}
-
-void EnvMoneCarlo::SaveState()
+void EnvMonteCarlo::SaveState()
 {
     Environment::SaveState();
 }

@@ -10,17 +10,21 @@
 #define __Feynman_Simulator__markov__
 
 #include "environment.h"
+#include "weight.h"
 
-class Markov
-{
-private:
-    EnvMoneCarlo *_Env;
-    Diagram *_Diag;
-    RandomFactory *_RNG;
-    
-public:
-    Markov(EnvMoneCarlo *);
-    void Hop(int&&);
+class Markov {
+  private:
+    real Beta;
+    Lattice *Lat;
+    real *OrderWeight;
+    Diagram *Diag;
+    RandomFactory *RNG;
+    Weight::Sigma *Sigma;
+    Weight::Pi *Pi;
+
+  public:
+    Markov(EnvMonteCarlo *);
+    void Hop(int &&);
     void CreateWorm();
     void DeleteWorm();
 };
