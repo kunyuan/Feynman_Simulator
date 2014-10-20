@@ -44,11 +44,15 @@ real Base::BinToTau(int Bin)
 Sigma::Sigma(const Lattice &lat, real beta, const std::string &file)
     : Base(lat, beta, file)
 {
-    _Weight = new Array4<Complex>(SPIN2, lat.SublatVol * lat.SublatVol, lat.Vol, MAX_BIN);
-    _WeightAccu = new Array4<Complex>(SPIN2, lat.SublatVol * lat.SublatVol,
-                                      lat.Vol, MAX_BIN);
-    _WeightSquareAccu = new Array4<Complex>(SPIN2, lat.SublatVol * lat.SublatVol,
-                                            lat.Vol, MAX_BIN);
+    _Shape[0] = SPIN2;
+    _Shape[1] = lat.SublatVol * lat.SublatVol;
+    _Shape[2] = lat.Vol;
+    _Shape[3] = MAX_BIN;
+
+    _Weight = new Array4<Complex>(_Shape[0], _Shape[1], _Shape[2], _Shape[3]);
+    _WeightAccu = new Array4<Complex>(_Shape[0], _Shape[1], _Shape[2], _Shape[3]);
+    _WeightSquareAccu = new Array4<Complex>(_Shape[0], _Shape[1], _Shape[2], _Shape[3]);
+    _Norm = 1.0;
 }
 
 Weight::Sigma::~Sigma()
@@ -84,6 +88,13 @@ void Weight::Sigma::Measure(const Complex &weight, const Distance &dR, real dtau
     _WeightAccu[spin_index][dR.SublatIndex()][dR.CoordiIndex()][tau_bin] += weight;
     _WeightSquareAccu[spin_index][dR.SublatIndex()][dR.CoordiIndex()][tau_bin] += weight * weight;
 }
+
+void Sigma::SaveState(const std::string &FileName, const std::string &Mode)
+{
+    //    cnpy::npz_save(cnpy::npz_name(FileName), "Sigma_Accu", _WeightAccu, shape, 1, Mode);
+}
+
+/************************   Polarization   *********************************/
 
 Pi::Pi(const Lattice &lat, real beta, const std::string &file)
     : Base(lat, beta, file)
