@@ -22,7 +22,6 @@ int RunTest()
     //        TestRNG();
     //    TestPystring();
     TEST(TestDiagram);
-    TEST(TestVector);
     TEST(TestLattice);
     TEST(TestObservable);
 

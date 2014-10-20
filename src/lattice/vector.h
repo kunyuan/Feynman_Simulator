@@ -23,15 +23,13 @@ class Vec {
     Vec()
     {
     }
-
-    Vec(int index)
+    
+    Vec(T value)
     {
-        for (int i = 0; i < D - 1; i++) {
-            _Arrary[i] = index % L[i];
-            index = index / L[i];
-        }
-        _Arrary[D - 1] = index;
+        for(int j=0; j<D; j++)
+            _Arrary[j] = value;
     }
+
 
     T &operator[](int index)
     {
@@ -89,30 +87,18 @@ class Vec {
         return *this;
     }
 
-    bool operator==(const Vec &v2) const
-    {
-        for (int j = 0; j < D; j++)
-            if (_Arrary[j] != v2._Arrary[j])
-                return false;
-        return true;
-    }
-
-    bool operator!=(const Vec &v2) const
-    {
-        if (*this == v2)
-            return false;
-        return true;
-    }
-
     string PrettyString();
 
-    int ToIndex() const;
 
     template <typename TT>
     friend std::ostream &operator<<(std::ostream &os, Vec<TT> &);
     template <typename TT>
     friend std::istream &operator>>(std::istream &is, Vec<TT> &);
+    
+    friend bool operator==(const Vec<int>&, const Vec<int>&);
+    friend bool operator==(const Vec<real>&, const Vec<real>&);
+    template <typename TT>
+    friend bool operator!=(const Vec<TT>&, const Vec<TT>&);
 };
 
-int TestVector();
 #endif /* defined(__Feynman_Simulator__vector__) */
