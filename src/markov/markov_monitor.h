@@ -19,5 +19,10 @@ class MarkovMonitor {
 
   public:
     MarkovMonitor(EnvMoneCarlo *);
+    void Annealing();
+    void SqueezeStatistics();
+    void ReWeightEachOrder();
+    void Measure();
+    void AddStatistics();
 };
 #endif /* defined(__Feynman_Simulator__measure__) */
