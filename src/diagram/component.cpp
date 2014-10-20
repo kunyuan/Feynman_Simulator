@@ -14,26 +14,26 @@ using namespace std;
 /*******************   Read/write component to dat file  ********************************/
 ostream &operator<<(ostream &os, GLine &r)
 {
-    os << r.Vertex[IN] << SEP << r.Vertex[OUT] << SEP<<endl;
+    os << r.Vertex[IN] << SEP << r.Vertex[OUT] << SEP<< r.K << endl;
     return os;
 }
 
 istream &operator>>(istream &is, GLine &r)
 {
     //format: start/end/in_spin/out_spin
-    is >> r.Vertex[IN] >> r.Vertex[OUT];
+    is >> r.Vertex[IN] >> r.Vertex[OUT] >>r.K;
     return is;
 }
 ostream &operator<<(ostream &os, WLine &r)
 {
-    os << r.Vertex[IN] << SEP << r.Vertex[OUT] << endl;
+    os << r.Vertex[IN] << SEP << r.Vertex[OUT] <<SEP << r.K<< endl;
     return os;
 }
 
 istream &operator>>(istream &is, WLine &r)
 {
     //format: start/end
-    is >> r.Vertex[IN] >> r.Vertex[OUT];
+    is >> r.Vertex[IN] >> r.Vertex[OUT] >>r.K;
     return is;
 }
 

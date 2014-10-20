@@ -41,7 +41,7 @@ string Diagram::PrettyString(GLine &g)
     stringstream os;
     os << "\n";
     os << g.Vertex[IN] << " (" << Spin(g,IN) << ") >>===";
-    os << "Name:" << g.Name << ",Weight:" << g.Weight;
+    os << "Name:" << g.Name << ",K:"<<g.K<<",Weight:" << g.Weight;
     os << "===>>" << g.Vertex[OUT] << " (" << Spin(g,OUT) << ");";
     os << endl;
     return os.str();
@@ -66,7 +66,7 @@ string Diagram::PrettyString(WLine& w)
     stringstream os;
     os << "\n";
     os << w.Vertex[IN] << " (" << Spin(w, IN, IN) << "," << Spin(w, IN,OUT) << ") ~~~";
-    os << "Name:" << w.Name << ",Weight:" << w.Weight;
+    os << "Name:" << w.Name << ", K:"<<w.K<<",Weight:" << w.Weight;
     os << "~~~" << w.Vertex[OUT] << " (" << Spin(w,OUT,IN) << "," << Spin(w,OUT,OUT) << ");";
     os << endl;
     return os.str();
@@ -120,17 +120,18 @@ WLine &Diagram::NeighW(Vertex &v)
 bool Diagram::FixDiagram()
 {
     //TODO: you may also need to fix diagram weight
-    for (int index = 0; index < Ver.HowMany(); index++) {
+    for (int index = 0; index < G.HowMany(); index++) {
         for (int dir = 0; dir < 2; dir++) {
             NeighVer(G[index], dir).G[FlipDir(dir)] = index;
         }
     }
 
-    for (int index = 0; index < Ver.HowMany(); index++) {
+    for (int index = 0; index < W.HowMany(); index++) {
         WLine &w = W[index];
         for (int dir = 0; dir < 2; dir++) {
             Vertex &v = NeighVer(w, dir);
             v.W = index;
+            cout << v.W;
         }
     }
 
