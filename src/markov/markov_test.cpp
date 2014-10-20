@@ -6,4 +6,5 @@
 //  Copyright (c) 2014 Kun Chen. All rights reserved.
 //
 
-#include <stdio.h>
+#include "markov.h"
+#include "markov_monitor.h"
