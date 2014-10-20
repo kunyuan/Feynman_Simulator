@@ -38,6 +38,7 @@ class Base {
 class Sigma : Base {
   private:
     real _Norm;
+    unsigned int _Shape[4];
     Array::array4<Complex> *_Weight;
     Array::array4<Complex> *_WeightAccu;
     Array::array4<Complex> *_WeightSquareAccu;
@@ -52,8 +53,8 @@ class Sigma : Base {
     Estimate<Complex> WeightWithError(const Distance &dR, real dtau, spin, spin);
     inline void Measure(const Complex &weight, const Distance &dR, real dtau, spin, spin);
     //    std::string PrettyString();
-    void SaveState(std::string);
-    bool ReadState(std::string);
+    void SaveState(const std::string& FileName, const std::string& Mode="a");
+    bool LoadState(std::string&);
 };
 
 class Pi : Base {
@@ -72,7 +73,7 @@ class Pi : Base {
     inline void Measure(const Complex &weight, const Distance &dR, real dtau, spin *, spin *);
     //    std::string PrettyString();
     void SaveState(std::string);
-    bool ReadState(std::string);
+    bool LoadState(std::string);
 };
 
 class G : Base {
@@ -85,7 +86,7 @@ class G : Base {
     inline Complex Weight(const Distance &dR, real dtau, spin, spin);
     inline Complex BareWeight(const Distance &dR, real dtau, spin, spin);
     void SaveState(std::string);
-    bool ReadState(std::string);
+    bool LoadState(std::string);
 };
 
 class W : Base {
@@ -99,7 +100,7 @@ class W : Base {
     inline Complex Weight(const Distance &dR, spin *, spin *);
     inline Complex BareWeight(const Distance &dR, real dtau, spin *, spin *);
     void SaveState(std::string);
-    bool ReadState(std::string);
+    bool LoadState(std::string);
 };
 }
 
