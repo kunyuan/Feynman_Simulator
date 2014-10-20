@@ -7,12 +7,15 @@
 #define __Fermion_Simulator__parameter__
 
 #include "definition.h"
+#include "convention.h"
 
-enum JobType { MC, DYSON };
 // parameters needed to define a job
 class Jobs {
+  private:
+    real _T;
+
   public:
-    real T;
+    real Beta;
     int Order;
     int Seed;
     JobType Type;

@@ -10,19 +10,23 @@
 #include "abort.h"
 using namespace std;
 
-#define TEST(func)  {if(func()!=EXIT_SUCCESS) ABORT("Shit happens!");}
+#define TEST(func)                  \
+    {                               \
+        if (func() != EXIT_SUCCESS) \
+            ABORT("Shit happens!"); \
+    }
 int RunTest()
 {
 
     //    TestTimer();  //Test the timer
-//        TestRNG();
+    //        TestRNG();
     //    TestPystring();
     TEST(TestDiagram);
     TEST(TestVector);
     TEST(TestLattice);
     TEST(TestObservable);
-    
-    TestArray();
-//    Testcnpy();
+
+    //    TestArray();
+    //    Testcnpy();
     return 0;
 }

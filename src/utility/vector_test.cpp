@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include "vector.h"
+#include "convention.h"
 #include "sput.h"
 
 using std::cout;
@@ -26,12 +27,16 @@ int TestVector()
 
 void Test_Vector()
 {
-    Vec<int> v, v2;
-    v[0]=2;
-    v[1]=1;
-    v2[0]=8;
-    v2[1]=4;
-    cout << v2 << ' ' << v << v.PrettyString() <<endl;
-    sput_fail_unless((v*3+v)==v2, "test the operators for vectors");
+    if(D==2)
+    {
+        Vec<int> v, v2, v3(1*L[0]+2);
+        v[0]=2;
+        v[1]=1;
+        v2[0]=8;
+        v2[1]=4;
+        cout << v2 << ' ' << v3 << v.PrettyString() <<endl;
+        sput_fail_unless((v*3+v)==v2, "test the operators for vectors");
+        sput_fail_unless(v==v3, "test the index constructor");
+    }
 }
 

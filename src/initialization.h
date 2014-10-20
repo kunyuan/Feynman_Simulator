@@ -21,7 +21,7 @@
 #include "lattice.h"
 #include "job.h"
 #include "diagram.h"
-#include "diagram_object.h"
+#include "weight.h"
 
 void InitGlobalUtility();
 

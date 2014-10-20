@@ -8,10 +8,7 @@
 /***********  This files define all constant and definition ***************/
 #ifndef Fermion_Simulator_definition_h
 #define Fermion_Simulator_definition_h
-#include <string>
 
 #define real double // define user defined float type here
-
-const bool DEBUGMODE = true;
 
 #endif
