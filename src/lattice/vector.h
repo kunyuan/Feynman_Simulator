@@ -15,92 +15,103 @@
 using namespace std;
 
 template <typename T>
-class Vec{
-private:
+class Vec {
+  private:
     T _Arrary[D];
-public:
+
+  public:
     Vec()
     {
-        for(int i=0; i<D; i++)
-            _Arrary[i]=0;
     }
-    
-    Vec(T t)
+
+    Vec(int index)
     {
-        for(int i=0; i<D; i++)
-            _Arrary[i]=t;
+        for (int i = 0; i < D - 1; i++) {
+            _Arrary[i] = index % L[i];
+            index = index / L[i];
+        }
+        _Arrary[D - 1] = index;
     }
-    
-    T& operator[](const int& index)
+
+    T &operator[](int index)
     {
         return _Arrary[index];
     }
-    
-    Vec operator*(const int& i) const
+
+    const T &operator[](int index) const
+    {
+        return _Arrary[index];
+    }
+
+    Vec operator*(int i) const
     {
         Vec v;
-        for(int j=0; j<D; j++)
-            v[j]=_Arrary[j]*i;
+        for (int j = 0; j < D; j++)
+            v[j] = _Arrary[j] * i;
         return v;
     }
 
-    Vec operator*(const real& i) const
+    Vec operator*(const real &i) const
     {
         Vec v;
-        for(int j=0; j<D; j++)
-            v[j]=_Arrary[j]*i;
+        for (int j = 0; j < D; j++)
+            v[j] = _Arrary[j] * i;
         return v;
     }
-    
-    Vec operator+(const Vec& v2) const
+
+    Vec operator+(const Vec &v2) const
     {
         Vec v;
-        for(int j=0; j<D; j++)
-            v[j]=_Arrary[j]+v2._Arrary[j];
+        for (int j = 0; j < D; j++)
+            v[j] = _Arrary[j] + v2._Arrary[j];
         return v;
     }
-    
-    Vec operator-(const Vec& v2) const
+
+    Vec operator-(const Vec &v2) const
     {
         Vec v;
-        for(int j=0; j<D; j++)
-            v[j]=_Arrary[j]-v2._Arrary[j];
+        for (int j = 0; j < D; j++)
+            v[j] = _Arrary[j] - v2._Arrary[j];
         return v;
     }
-    
-    Vec& operator+=(const Vec& v2)
+
+    Vec &operator+=(const Vec &v2)
     {
-        for(int j=0; j<D; j++)
-            _Arrary[j]+=v2._Arrary[j];
+        for (int j = 0; j < D; j++)
+            _Arrary[j] += v2._Arrary[j];
         return *this;
     }
-    
-    Vec& operator-=(const Vec& v2)
+
+    Vec &operator-=(const Vec &v2)
     {
-        for(int j=0; j<D; j++)
-            _Arrary[j]-=v2._Arrary[j];
+        for (int j = 0; j < D; j++)
+            _Arrary[j] -= v2._Arrary[j];
         return *this;
     }
-    
-    bool operator==(const Vec& v2) const
+
+    bool operator==(const Vec &v2) const
     {
-        for(int j=0; j<D; j++)
-            if(_Arrary[j]!=v2._Arrary[j]) return false;
+        for (int j = 0; j < D; j++)
+            if (_Arrary[j] != v2._Arrary[j])
+                return false;
         return true;
     }
-    
-    bool operator!=(const Vec& v2) const
+
+    bool operator!=(const Vec &v2) const
     {
-        if(*this==v2) return false;
+        if (*this == v2)
+            return false;
         return true;
     }
-    
+
     string PrettyString();
-    
+
+    int ToIndex() const;
+
     template <typename TT>
-    friend std::ostream& operator<<(std::ostream &os, Vec<TT> &);
+    friend std::ostream &operator<<(std::ostream &os, Vec<TT> &);
     template <typename TT>
-    friend std::istream& operator>>(std::istream &is, Vec<TT> &);
+    friend std::istream &operator>>(std::istream &is, Vec<TT> &);
 };
 
 int TestVector();

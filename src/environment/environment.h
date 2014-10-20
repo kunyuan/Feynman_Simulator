@@ -13,24 +13,23 @@
 #include "lattice.h"
 #include "diagram.h"
 #include "rng.h"
-#include "diagram_object.h"
+#include "weight.h"
 #include "convention.h"
 
-class Environment
-{
-public:
+class Environment {
+  public:
     Environment(Jobs &);
+    Lattice Lat;
     real Beta;
     int Order;
-    Lattice Lat;
-    
+    std::string StateFile;
+
     bool ReadState();
     void SaveState();
 };
 
-class EnvMoneCarlo: public Environment
-{
-public:
+class EnvMoneCarlo : public Environment {
+  public:
     EnvMoneCarlo(Jobs &);
     RandomFactory RNG;
     Diagram Diag;
@@ -38,21 +37,22 @@ public:
     real OrderWeight[MAX_ORDER];
     EstimatorBundle<Complex> cEstimator;
     EstimatorBundle<real> rEstimator;
-    
+    Weight::Sigma Sigma;
+    Weight::Pi Pi;
+
     void Annealing();
     void SqueezeStatistics();
     void ReWeightEachOrder();
     void Measure();
     void AddStatistics();
-    
+
     void Build();
     bool ReadState();
     void SaveState();
 };
 
-class EnvDyson: public Environment
-{
-public:
+class EnvDyson : public Environment {
+  public:
     EnvDyson(Jobs &);
 };
 
