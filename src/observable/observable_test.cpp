@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Kun Chen. All rights reserved.
 //
 
-#include "diagram_object.h"
+#include "weight.h"
 #include "cnpy.h"
 #include "sput.h"
 #include "utility.h"
@@ -20,12 +20,12 @@ int TestObservable()
 {
     sput_start_testing();
     sput_enter_suite("Test Observable...");
-    
+
     //complex and real Estimator have to be tested separatelly,
     //since Estimator._update() is different for those two types
     sput_run_test(TestObservableComplex);
     sput_run_test(TestObservableReal);
-    
+
     //test diagram object weight, like sigma, G
     sput_run_test(TestDiagramObject);
     sput_finish_testing();
@@ -37,23 +37,22 @@ void TestObservableComplex()
     Estimator<Complex> quan1("1");
     Estimator<Complex> quan2("2");
     Complex a[10];
-    for(int i=0;i<10;i++)
-    {
-        a[i]=Complex(i+1,10-i);
+    for (int i = 0; i < 10; i++) {
+        a[i] = Complex(i + 1, 10 - i);
         quan1.Measure(a[i]);
         quan1.AddStatistics();
         quan2.Measure(-a[i]);
         quan2.AddStatistics();
     }
-    Estimate<Complex> ExpectedResult(Complex(5.0, 5.0),Complex(1.5, 0.9));
+    Estimate<Complex> ExpectedResult(Complex(5.0, 5.0), Complex(1.5, 0.9));
     //!!!This two value only works if you set _norm=1.0 and ThrowRatio=1.0/3
     sput_fail_unless(Equal(quan1.Estimate().Mean, ExpectedResult.Mean),
                      "check the Mean value.");
     sput_fail_unless(Equal(quan1.Estimate().Error, ExpectedResult.Error),
                      "check the Error value.");
-    
+
     //Estimator IO operation
-    
+
     EstimatorBundle<Complex> QuanVector;
     QuanVector.AddEstimator(quan1);
     QuanVector.AddEstimator(quan2);
@@ -77,13 +76,12 @@ void TestObservableReal()
     Estimator<real> quan1("1");
     Estimator<real> quan2("2");
     real a[10];
-    for(int i=0;i<10;i++)
-    {
-        a[i]=i+1;
+    for (int i = 0; i < 10; i++) {
+        a[i] = i + 1;
         quan1.Measure(a[i]);
         quan1.AddStatistics();
     }
-    Estimate<Complex> ExpectedResult(5.0,1.5);
+    Estimate<Complex> ExpectedResult(5.0, 1.5);
     //!!!This two value only works if you set _norm=1.0 and ThrowRatio=1.0/3
     sput_fail_unless(Equal(quan1.Estimate().Mean, ExpectedResult.Mean),
                      "check the Mean value.");
@@ -93,8 +91,8 @@ void TestObservableReal()
 
 void TestDiagramObject()
 {
-    SigmaWeight Sigma(512,4);
-//    Site S0
-//    Sigma.Measure(Complex(1.0,0.0), <#const Distance &dR#>, <#double dtau#>, <#spin#>, <#spin#>)
-    
+    Lattice lat;
+    Weight::Sigma Sigma(lat, 5.0, "test_statisicts.txt");
+    //    Site S0
+    //    Sigma.Measure(Complex(1.0,0.0), <#const Distance &dR#>, <#double dtau#>, <#spin#>, <#spin#>)
 }

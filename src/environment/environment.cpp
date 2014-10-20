@@ -9,11 +9,12 @@
 #include "environment.h"
 
 Environment::Environment(Jobs &Job)
+    : Lat()
 {
+    Beta = 1.0;
+    StateFile = "test.dat";
 }
 
 void Environment::SaveState()
 {
-    
 }
-

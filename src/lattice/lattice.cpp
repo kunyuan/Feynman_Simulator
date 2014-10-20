@@ -12,47 +12,56 @@
 #include "abort.h"
 #include <iostream>
 
-Lattice lattice;
-
+Lattice::Lattice()
+{
+    Dimension = D;
+    Vol=1;
+    for (int i = 0; i < D; i++)
+    {
+        Size[i] = L[i];
+        Vol*=L[i];
+    }
+    SublatVol=NSublattice;
+    Initialize();
+}
 /**
  *  initialize the lattice vectors
  */
 void Lattice::Initialize()
 {
     //Square Lattice
-    LatticeVec[0][0]=1.0;
-    LatticeVec[0][1]=0.0;
-    
-    LatticeVec[1][0]=0.0;
-    LatticeVec[1][1]=1.0;
-    
-    ReciprocalLatticeVec[0][0]=2.0*Pi;
-    ReciprocalLatticeVec[0][1]=0.0;
-    ReciprocalLatticeVec[1][0]=0.0;
-    ReciprocalLatticeVec[1][1]=2.0*Pi;
-    
-    SublatticeVec[0][0]=0.0;
-    SublatticeVec[0][1]=0.0;
-    SublatticeVec[1][0]=0.5;
-    SublatticeVec[1][1]=0.5;
-    
+    LatticeVec[0][0] = 1.0;
+    LatticeVec[0][1] = 0.0;
+
+    LatticeVec[1][0] = 0.0;
+    LatticeVec[1][1] = 1.0;
+
+    ReciprocalLatticeVec[0][0] = 2.0 * Pi;
+    ReciprocalLatticeVec[0][1] = 0.0;
+    ReciprocalLatticeVec[1][0] = 0.0;
+    ReciprocalLatticeVec[1][1] = 2.0 * Pi;
+
+    SublatticeVec[0][0] = 0.0;
+    SublatticeVec[0][1] = 0.0;
+    SublatticeVec[1][0] = 0.5;
+    SublatticeVec[1][1] = 0.5;
+
     //Lattice Honeycomb
-//    LatticeVec[0][0]=0.0;
-//    LatticeVec[0][1]=1.0;
-//    
-//    LatticeVec[1][0]=sqrt(3.0)/2.0;
-//    LatticeVec[1][1]=-0.5;
-//    
-//    ReciprocalLatticeVec[0][0]=2.0*Pi/sqrt(3.0);
-//    ReciprocalLatticeVec[0][1]=2.0*Pi;
-//    ReciprocalLatticeVec[1][0]=4.0*Pi/sqrt(3.0);
-//    ReciprocalLatticeVec[1][1]=0.0;
-//    
-//    SublatticeVec[0][0]=0.0;
-//    SublatticeVec[0][1]=0.0;
-//    SublatticeVec[1][0]=1.0/2.0/sqrt(3.0);
-//    SublatticeVec[1][1]=0.5;
-    
+    //    LatticeVec[0][0]=0.0;
+    //    LatticeVec[0][1]=1.0;
+    //
+    //    LatticeVec[1][0]=sqrt(3.0)/2.0;
+    //    LatticeVec[1][1]=-0.5;
+    //
+    //    ReciprocalLatticeVec[0][0]=2.0*Pi/sqrt(3.0);
+    //    ReciprocalLatticeVec[0][1]=2.0*Pi;
+    //    ReciprocalLatticeVec[1][0]=4.0*Pi/sqrt(3.0);
+    //    ReciprocalLatticeVec[1][1]=0.0;
+    //
+    //    SublatticeVec[0][0]=0.0;
+    //    SublatticeVec[0][1]=0.0;
+    //    SublatticeVec[1][0]=1.0/2.0/sqrt(3.0);
+    //    SublatticeVec[1][1]=0.5;
 }
 
 /**
@@ -62,30 +71,7 @@ void Lattice::Initialize()
  */
 int Site::GetName()
 {
-    int cell, layer;
-    cell = 0;
-    for(int i=D-1; i>=0; i--)
-    {
-        layer = Coordinate[i];
-        for(int j=i-1; j>=0; j--)
-            layer = layer*L[j];
-        cell = cell + layer;
-    }
-    return cell*NSublattice+Sublattice;
-}
-
-/**
- *  get the real vector for each site
- *
- *  @return a vector which defines the site's coordinate on the lattice
- */
-Vec<real> Site::GetVec()
-{
-    Vec<real> vec(0.0);
-    for(int i=0; i<D; i++)
-        vec += lattice.LatticeVec[i]*Coordinate[i];
-    vec += lattice.SublatticeVec[Sublattice];
-    return vec;
+    return Coordinate.ToIndex() * NSublattice + Sublattice;
 }
 
 /**
@@ -96,57 +82,43 @@ Vec<real> Site::GetVec()
  *  @return a site struct
  */
 Site::Site(const int name)
+    : Coordinate(name / 2), Sublattice(name % 2)
 {
-    int i, layer;
-    Site s;
-    i = name/2;
-    s.Sublattice = name-i*2;
-    
-    for(int j=D-1; j>=0; j--)
-    {
-        layer = 1;
-        for(int k=j-1; k>=0; k--)
-            layer = layer*L[k];
-        s.Coordinate[j] = i/layer;
-        i = i - s.Coordinate[j]*layer;
-    }
 }
 
 /**
- *  get the sublattice index from j to i
+ *  get the sublattice index from In to Out
  *
- *  @para i the outgoing sublattice j the incoming sublattice
+ *  @para Out: the outgoing sublattice In: the incoming sublattice
  *
  *  @return [0, NSublattice**2-1]
  */
-int GetSublatticeIndex(const int& i, const int& j)
+int GetSublatIndex(int In, int Out)
 {
-    if(i<0 || i>=NSublattice) ABORT("Wrong sublattice number!");
-    if(j<0 || j>=NSublattice) ABORT("Wrong sublattice number!");
-    return i*NSublattice+j;
+    if (DEBUGMODE) {
+        if (In < 0 || In >= NSublattice)
+            ABORT("Wrong sublattice number!");
+        if (Out < 0 || Out >= NSublattice)
+            ABORT("Wrong sublattice number!");
+    }
+    return Out * NSublattice + In;
 }
 
-int Distance::GetSublattice(const int& dir)
+int Distance::Sublattice(const int &dir) const
 {
-    if(dSublattice<0 || dSublattice>=NSublattice2) ABORT("Wrong sublattice index number!");
-    if(dir==IN)
-        return dSublattice-dSublattice/NSublattice*NSublattice;
+    if (DEBUGMODE && (_SublatIndex < 0 || _SublatIndex >= NSublattice2))
+        ABORT("Wrong sublattice index number!");
+    if (dir == IN)
+        return _SublatIndex % NSublattice;
     else
-        return dSublattice/NSublattice;
+        return _SublatIndex / NSublattice;
 }
 
-/**
- *  get the real vector for the distance between two sites
- *
- *  @return a real vector $\vec{r_2}-\vec{r_1}$
- */
-Vec<real> Distance::GetVec()
+Vec<int> Distance::Coordinate() const
 {
-    Vec<real> vec(0.0);
-    for(int i=0; i<D; i++)
-        vec += lattice.LatticeVec[i]*dCoordinate[i];
-    vec += lattice.SublatticeVec[GetSublattice(OUT)]-lattice.SublatticeVec[GetSublattice(IN)];
-    return vec;
+    if (DEBUGMODE && (_CoordiIndex < 0 || _CoordiIndex >= Vol))
+        ABORT("Wrong Coordinate index number!");
+    return Vec<int>(_CoordiIndex);
 }
 
 /**
@@ -157,9 +129,11 @@ Vec<real> Distance::GetVec()
 Distance Distance::Mirror()
 {
     Distance dis;
-    dis=*this;
-    for(int i=0; i<D; i++)
-        dis.dCoordinate[i] = ::Mirror(dCoordinate[i], L[i]);
+    dis = *this;
+    Vec<int> v;
+    for (int i = 0; i < D; i++)
+        v[i] = ::Mirror(Coordinate()[i], L[i]);
+    dis._CoordiIndex = v.ToIndex();
     return dis;
 }
 /**
@@ -170,10 +144,12 @@ Distance Distance::Mirror()
  *
  *  @return new variable within [0, L/2] which is symmetric with i
  */
-int Mirror(int i, const int& L)
+int Mirror(int i, const int &L)
 {
-    if(i<0) i=abs(i);
-    if(i>L/2) i = L-i;
+    if (i < 0)
+        i = abs(i);
+    if (i > L / 2)
+        i = L - i;
     return i;
 }
 
@@ -185,21 +161,40 @@ int Mirror(int i, const int& L)
  *
  *  @return a new Distance(Site1-Site2)
  */
-Distance operator-(const Site& i, const Site& j)
+Distance operator-(const Site &i, const Site &j)
 {
     Distance dis;
-    dis.dCoordinate=i.Coordinate-j.Coordinate;
-    dis._Coordinate=0;
-    int layer;
-    for(int i=0; i<D; i++)
-    {
-        layer = dis.dCoordinate[i];
-        for(int j=0; j<i; j++)
-            layer = layer*L[j];
-        dis._Coordinate += layer;
-    }
-    dis.dSublattice = GetSublatticeIndex(i.Sublattice, j.Sublattice);
+    dis._SublatIndex = GetSublatIndex(j.Sublattice, i.Sublattice);
+    dis._CoordiIndex = (Vec<int>(i.Coordinate - j.Coordinate)).ToIndex();
     return dis;
+}
+
+/**
+ *  get the real vector for each site
+ *
+ *  @return a vector which defines the site's coordinate on the lattice
+ */
+Vec<real> Lattice::GetRealVec(const Site &site)
+{
+    Vec<real> vec(0.0);
+    for (int i = 0; i < D; i++)
+        vec += LatticeVec[i] * site.Coordinate[i];
+    vec += SublatticeVec[site.Sublattice];
+    return vec;
+}
+
+/**
+ *  get the real vector for the distance between two sites
+ *
+ *  @return a real vector $\vec{r_2}-\vec{r_1}$
+ */
+Vec<real> Lattice::GetRealVec(const Distance &dis)
+{
+    Vec<real> vec(0.0);
+    for (int i = 0; i < D; i++)
+        vec += LatticeVec[i] * dis.Coordinate()[i];
+    vec += SublatticeVec[dis.Sublattice(OUT)] - SublatticeVec[dis.Sublattice(IN)];
+    return vec;
 }
 
 /**
@@ -207,15 +202,14 @@ Distance operator-(const Site& i, const Site& j)
  */
 void Lattice::PlotLattice()
 {
-    const unsigned int N=NSublattice*Vol;
+    const unsigned int N = NSublattice * Vol;
     //save it to file
     const unsigned int shape[] = {N, (unsigned int)D};
-    real data[N*D];
-    for(int i=0; i<N; i++)
-    {
+    real data[N * D];
+    for (int i = 0; i < N; i++) {
         Site s(i);
-        for(int j=0; j<D; j++)
-            data[i*D+j]=s.GetVec()[j];
+        for (int j = 0; j < D; j++)
+            data[i * D + j] = GetRealVec(s)[j];
     }
-    cnpy::npy_save("sq.npy",data,shape,2,"w");
+    cnpy::npy_save("sq.npy", data, shape, 2, "w");
 }
