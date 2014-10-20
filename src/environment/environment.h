@@ -40,12 +40,6 @@ class EnvMoneCarlo : public Environment {
     Weight::Sigma Sigma;
     Weight::Pi Pi;
 
-    void Annealing();
-    void SqueezeStatistics();
-    void ReWeightEachOrder();
-    void Measure();
-    void AddStatistics();
-
     void Build();
     bool ReadState();
     void SaveState();
