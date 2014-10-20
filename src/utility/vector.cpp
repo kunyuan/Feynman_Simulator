@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Kun Chen. All rights reserved.
 //
 #include "vector.h"
+#include "utility.h"
 #include <iostream>
 #include <sstream>
 #define SEP ' '
@@ -44,16 +45,30 @@ string Vec<T>::PrettyString()
     os << _Arrary[D - 1] << ")";
     return os.str();
 }
-
 template <typename T>
-int Vec<T>::ToIndex() const
+bool operator!=(const Vec<T>& v1, const Vec<T>&v2)
 {
-    int Index = _Arrary[D - 1];
-    for (int i = D - 2; i >= 0; i--) {
-        Index = Index * L[i] + _Arrary[i];
-    }
-    return Index;
+    if (v1 == v2)
+        return false;
+    return true;
 }
 
 template class Vec<int>;
 template class Vec<real>;
+
+
+bool operator==(const Vec<int>& v1, const Vec<int>&v2)
+{
+    for (int j = 0; j < D; j++)
+        if (v1[j]!=v2[j])
+            return false;
+    return true;
+}
+
+bool operator==(const Vec<real>& v1, const Vec<real>&v2)
+{
+    for (int j = 0; j < D; j++)
+        if (!Equal(v1[j],v2[j],eps0))
+            return false;
+    return true;
+}
