@@ -11,6 +11,8 @@
 
 #include "vector.h"
 
+int GetSublatIndex(int, int);
+
 /**
  *  class Site defines all the vertexes on the lattice using a vector of the unit cell: Coordinate and the sublattice number: Sublattice
  */
@@ -19,12 +21,13 @@ class Site {
     int Sublattice;
     Vec<int> Coordinate;
 
-    Site()
-        : Sublattice(0)
+    Site(): Sublattice(0), Coordinate(0)
     {
     }
-    Site(const int name);
-    int GetName();
+    
+    Site(int sub, Vec<int> vec):Sublattice(sub), Coordinate(vec)
+    {
+    }
 
     bool operator==(const Site &v2)
     {
@@ -43,7 +46,6 @@ class Site {
     }
 };
 
-int GetSublatIndex(int, int);
 
 /**
  *  class Distance defines Site1-Site2 using the vector: Dr and sublattice of Site1 and Site2: Sublattice[0] and Sublattice[1].
@@ -57,10 +59,9 @@ class Distance {
     Distance()
     {
     }
-    Distance(const Site &SiteIn, const Site &SiteOut)
+    
+    Distance(int sublat, int coordi) : _SublatIndex(sublat), _CoordiIndex(coordi)
     {
-        _SublatIndex = GetSublatIndex(SiteIn.Sublattice, SiteOut.Sublattice);
-        _CoordiIndex = (Vec<int>(SiteOut.Coordinate - SiteIn.Coordinate)).ToIndex();
     }
 
     inline int SublatIndex() const
@@ -72,9 +73,6 @@ class Distance {
         return _CoordiIndex;
     }
     int Sublattice(const int &) const;
-    Vec<int> Coordinate() const;
-
-    Distance Mirror();
 
     bool operator==(const Distance &v2)
     {
@@ -93,8 +91,6 @@ class Distance {
     }
 };
 
-Distance operator-(const Site &S1, const Site &S2);
-
 /**
  *  class Lattice includes three set of vectors: 1) LatticeVec (unit cell lattice vector); 2)ReLatticeVec (reciprocal lattice vector for k); 3) SublatticeVec (vectors between different sublattices in the same unit cell).
  */
@@ -110,14 +106,25 @@ class Lattice {
 
     Lattice();
     void PlotLattice();
-    Vec<real> GetRealVec(const Site &);
-    Vec<real> GetRealVec(const Distance &);
+    
+    Vec<int>& Shift(Vec<int>&);
 
+    int ToIndex(const Vec<int>&);
+    Vec<int> ToVec(int);
+    
+    Site GetSite(int name);
+    int GetName(const Site&);
+    int ToIndex(const Site&);
+    Vec<real> GetRealVec(const Site &);
+    
+    Distance Distance(const Site&, const Site&);
+    Vec<int> Coordinate(const class Distance&);
+    Vec<real> GetRealVec(const class Distance&);
+    
   private:
     void Initialize();
 };
 
-int Mirror(int, const int &);
 int TestLattice();
 
 #endif /* defined(__Fermion_Simulator__lattice__) */
