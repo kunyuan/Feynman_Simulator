@@ -45,7 +45,7 @@ real Base::BinToTau(int Bin)
 Sigma::Sigma(const Lattice &lat, real beta, int order)
     : Base(lat, beta, order)
 {
-    _Shape[ORDER] = _Order;
+    _Shape[ORDER] = order;
     _Shape[SP] = SPIN2;
     _Shape[SUB] = lat.SublatVol * lat.SublatVol;
     _Shape[VOL] = lat.Vol;
@@ -185,29 +185,40 @@ Polar::~Polar()
     delete _WeightSquareAccu;
 }
 
-//G::G(const Lattice &lat, real beta)
-//    : Base(lat, beta)
-//{
-//    _Weight = new Array4<Complex>(SPIN2, lat.SublatVol * lat.SublatVol, lat.Vol, MAX_BIN);
-//}
-//
-//G::~G()
-//{
-//    delete _Weight;
-//}
-//
-//Complex G::Weight(const Distance &dR, real dtau, spin SpinIn, spin SpinOut)
-//{
-//    return (*_Weight)[SpinIndex(SpinIn, SpinOut)][dR.SublatIndex][dR.CoordiIndex][TauToBin(dtau)];
-//}
-//
-//W::W(const Lattice &lat, real beta)
-//    : Base(lat, beta)
-//{
-//    _Weight = new Array4<Complex>(SPIN4, lat.SublatVol * lat.SublatVol, lat.Vol, MAX_BIN);
-//}
-//
-//Weight::W::~W()
-//{
-//    delete _Weight;
-//}
+G::G(const Lattice &lat, real beta, int order)
+    : Base(lat, beta, order)
+{
+    _Weight = new Array4<Complex>(SPIN2, lat.SublatVol * lat.SublatVol, lat.Vol, MAX_BIN);
+}
+
+G::~G()
+{
+    delete _Weight;
+}
+
+Complex G::Weight(const Distance &dR, real dtau, spin SpinIn, spin SpinOut)
+{
+    return Complex(1.0, 0.0);
+}
+
+W::W(const Lattice &lat, real beta, int order)
+    : Base(lat, beta, order)
+{
+    _Weight = new Array4<Complex>(SPIN4, lat.SublatVol * lat.SublatVol, lat.Vol, MAX_BIN);
+}
+
+Weight::W::~W()
+{
+    delete _Weight;
+}
+
+Complex W::Weight(const Distance &dR, real dtau, spin* SpinIn, spin* SpinOut, bool isworm)
+{
+    return Complex(1.0, 0.0);
+}
+
+real Worm::Weight(const Distance &dR, real dtau)
+{
+    return 1.0;
+}
+

@@ -14,6 +14,11 @@
 #include "component_bundle.h"
 #include "rng.h"
 
+const int MAX_K=10000;
+
+int RandomPickK();
+int RandomPickdSpin();
+
 class Worm{
 public:
     bool Exist;
@@ -22,8 +27,8 @@ public:
     int dSpin;
     
     Worm():Exist(false), Ira(0),Masha(0),K(0),dSpin(0){}
-    Worm(int ira, int masha, int dk, spin s)
-    : Exist(true), Ira(ira), Masha(masha), K(dk), dSpin(1-2*int(s))
+    Worm(int ira, int masha, int dk, int s)
+    : Exist(true), Ira(ira), Masha(masha), K(dk), dSpin(s)
     {
     }
 };
@@ -31,11 +36,15 @@ public:
 class Diagram {
   public:
     Diagram();
+    int Order;
+    Complex Phase, Weight;
     Bundle<GLine> G;
     Bundle<WLine> W;
     Bundle<Vertex> Ver;
     
     Worm Worm;
+    bool IsWorm(const Vertex&);
+    bool CanNotMoveWorm(int, const Vertex&);
 
     spin Spin(GLine &, const int&);
     spin Spin(WLine &, const int&, const int&);

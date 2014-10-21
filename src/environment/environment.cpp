@@ -9,9 +9,8 @@
 #include "environment.h"
 
 Environment::Environment(Jobs &Job)
-    : Lat()
+    : Lat(), Beta(Job.Beta), Order(Job.Order)
 {
-    Beta = 1.0;
     StateFile = "test.dat";
 }
 

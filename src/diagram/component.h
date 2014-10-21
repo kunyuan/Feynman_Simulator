@@ -33,6 +33,7 @@ class WLine {
 
   public:
     int Name;
+    bool IsWorm;
     int Vertex[2];
     int K;
     Complex Weight;
@@ -48,7 +49,7 @@ class Vertex {
     int W;
     spin Spin[2];// IN/OUT spins
     Site R;
-    double tau;
+    double Tau;
 };
 
 #endif /* defined(__Fermion_Simulator__component__) */
