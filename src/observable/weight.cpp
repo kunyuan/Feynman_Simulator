@@ -8,14 +8,15 @@
 
 #include "weight.h"
 
+using namespace std;
 using namespace Array;
 using namespace Weight;
 
-Base::Base(const Lattice &lat, real beta, const std::string &file)
+Base::Base(const Lattice &lat, real beta, int order)
 {
-    _Lattice = lat;
+    _Lat = lat;
     _Beta = beta;
-    _File = file;
+    _Order = order;
 }
 
 int Base::SpinIndex(spin SpinIn, spin SpinOut)
@@ -41,90 +42,172 @@ real Base::BinToTau(int Bin)
     return (real(Bin / MAX_BIN) + 0.5) * _Beta;
 }
 
-Sigma::Sigma(const Lattice &lat, real beta, const std::string &file)
-    : Base(lat, beta, file)
+Sigma::Sigma(const Lattice &lat, real beta, int order)
+    : Base(lat, beta, order)
 {
-    _Weight = new Array4<Complex>(SPIN2, lat.SublatVol * lat.SublatVol, lat.Vol, MAX_BIN);
-    _WeightAccu = new Array4<Complex>(SPIN2, lat.SublatVol * lat.SublatVol,
-                                      lat.Vol, MAX_BIN);
-    _WeightSquareAccu = new Array4<Complex>(SPIN2, lat.SublatVol * lat.SublatVol,
-                                            lat.Vol, MAX_BIN);
+    _Shape[ORDER] = _Order;
+    _Shape[SP] = SPIN2;
+    _Shape[SUB] = lat.SublatVol * lat.SublatVol;
+    _Shape[VOL] = lat.Vol;
+    _Shape[TAU] = MAX_BIN;
+
+    _Weight = new array4<Complex>(_Shape[SP], _Shape[SUB], _Shape[VOL], _Shape[TAU]);
+    _WeightAccu = new array5<Complex>(_Shape[ORDER], _Shape[SP], _Shape[SUB], _Shape[VOL], _Shape[TAU]);
+    _WeightSquareAccu = new array2<Complex>(_Shape[ORDER], _Shape[TAU]);
+
+    _Name = "Sigma";
+    _Norm = 1.0;
 }
 
-Weight::Sigma::~Sigma()
+Sigma::~Sigma()
 {
     delete _Weight;
     delete _WeightAccu;
     delete _WeightSquareAccu;
 }
-
-void Weight::Sigma::UpdateWeight()
+/**
+*  \brief Check statistics from StartFromOrder up to _Order
+*
+*  @param StartFromOrder defines the start order to check
+*  @param ErrorThreshold threshold*100% defines how big error is acceptiable
+*
+*  @return return the maxium order with acceptable errors
+*/
+int Sigma::OrderAcceptable(int StartFromOrder, real ErrorThreshold)
 {
-    for (int i = 0; i < _Weight->Size(); i++) {
-        (*_Weight)(i) = (*_WeightAccu)(i) / _Norm;
+    Complex mean(0.0, 0.0);
+    Complex std(0.0, 0.0);
+    int order = StartFromOrder;
+    for (bool flag = true; flag && order <= _Order; order++) {
+        array1<Complex> pSquareAccu = (*_WeightSquareAccu)[order - 1];
+        array1<Complex> pAccu = (*_WeightAccu)[order - 1][0][0][0];
+        for (int t = 0; t < _Shape[TAU]; t++) {
+            mean = pAccu[t] / _Norm;
+            std = pSquareAccu[t] / _Norm;
+            std = std - mean * mean;
+            if (mean.Re > ErrorThreshold * sqrt(std.Re) ||
+                mean.Im > ErrorThreshold * sqrt(std.Im)) {
+                flag = false;
+                break;
+            }
+        }
+    }
+    return order - 1;
+}
+
+/**
+*  Update the Sigma weight up to the UpToOrder
+*
+*  @param UpToOrder the upper limit of orders to accept
+*/
+
+void Sigma::UpdateWeight(int UpToOrder)
+{
+    int size = _Weight->Size();
+    int order = 1;
+    for (int i = 0; i < size; i++)
+        //assign order=1 directly to initialize _Weight
+        (*_Weight)(i) = (*_WeightAccu)[order - 1](i) / _Norm;
+
+    for (order = 2; order <= UpToOrder; order++) {
+        //add order>1 on _Weight
+        for (int i = 0; i < size; i++)
+            (*_Weight)(i) += (*_WeightAccu)[order - 1](i) / _Norm;
     }
 }
 
-Complex Weight::Sigma::Weight(const Distance &dR, real dtau, spin SpinIn, spin SpinOut)
+Complex Sigma::Weight(const Distance &d, real dtau, spin SpinIn, spin SpinOut)
 {
-    return (*_Weight)[SpinIndex(SpinIn, SpinOut)][dR.SublatIndex()][dR.CoordiIndex()][TauToBin(dtau)];
+    return (*_Weight)[SpinIndex(SpinIn, SpinOut)][d.SublatIndex][d.CoordiIndex][TauToBin(dtau)];
 }
 
-Estimate<Complex> Weight::Sigma::WeightWithError(const Distance &dR, real dtau, spin SpinIn, spin SpinOut)
-{
-    Complex sq2 = (*_WeightSquareAccu)[SpinIndex(SpinIn, SpinOut)][dR.SublatIndex()][dR.CoordiIndex()][TauToBin(dtau)] / _Norm;
-    Complex mean = (*_WeightAccu)[SpinIndex(SpinIn, SpinOut)][dR.SublatIndex()][dR.CoordiIndex()][TauToBin(dtau)] / _Norm;
-    return Estimate<Complex>(mean, sq2 - mean * mean);
-}
+//Estimate<Complex> Sigma::WeightWithError(const Distance &d, real dtau, spin SpinIn, spin SpinOut)
+//{
+//}
 
-void Weight::Sigma::Measure(const Complex &weight, const Distance &dR, real dtau, spin SpinIn, spin SpinOut)
+void Sigma::Measure(const Distance &d, real dtau, spin SpinIn, spin SpinOut, int order, const Complex &weight)
 {
+    if (DEBUGMODE && order <= 0)
+        LOG_ERROR("Too small order=" << order << endl);
     int spin_index = SpinIndex(SpinIn, SpinOut);
     int tau_bin = TauToBin(dtau);
-    _WeightAccu[spin_index][dR.SublatIndex()][dR.CoordiIndex()][tau_bin] += weight;
-    _WeightSquareAccu[spin_index][dR.SublatIndex()][dR.CoordiIndex()][tau_bin] += weight * weight;
+    (*_WeightAccu)[order - 1][spin_index][d.SublatIndex][d.CoordiIndex][tau_bin] += weight;
+    if (spin_index == 0 && d.SublatIndex == 0 && d.CoordiIndex == 0)
+        (*_WeightSquareAccu)[order - 1][tau_bin] += weight * weight;
+    _Norm += 1.0;
 }
 
-Pi::Pi(const Lattice &lat, real beta, const std::string &file)
-    : Base(lat, beta, file)
+void Sigma::ClearStatistics()
 {
-    _Weight = new Array4<Complex>(SPIN4, lat.SublatVol * lat.SublatVol, lat.Vol, MAX_BIN);
-    _WeightAccu = new Array4<Complex>(SPIN4, lat.SublatVol * lat.SublatVol,
-                                      lat.Vol, MAX_BIN);
-    _WeightSquareAccu = new Array4<Complex>(SPIN4, lat.SublatVol * lat.SublatVol,
-                                            lat.Vol, MAX_BIN);
+    _Norm = 1.0;
+    int size = _WeightAccu->Size();
+    for (int i = 0; i < size; i++)
+        (*_WeightAccu)(i) = 0.0;
+    size = _WeightSquareAccu->Size();
+    for (int i = 0; i < size; i++)
+        (*_WeightSquareAccu)(i) = 0.0;
 }
 
-Pi::~Pi()
+void Sigma::SqueezeStatistics(real factor)
+{
+    _Norm /= factor;
+    int size = _WeightAccu->Size();
+    for (int i = 0; i < size; i++)
+        (*_WeightAccu)(i) /= factor;
+    size = _WeightSquareAccu->Size();
+    for (int i = 0; i < size; i++)
+        (*_WeightSquareAccu)(i) /= factor;
+}
+
+/************************   Polarization   *********************************/
+//
+Polar::Polar(const Lattice &lat, real beta, int order)
+    : Base(lat, beta, order)
+{
+    _Shape[ORDER] = _Order;
+    _Shape[SP] = SPIN4;
+    _Shape[SUB] = lat.SublatVol * lat.SublatVol;
+    _Shape[VOL] = lat.Vol;
+    _Shape[TAU] = MAX_BIN;
+
+    _Weight = new array4<Complex>(_Shape[SP], _Shape[SUB], _Shape[VOL], _Shape[TAU]);
+    _WeightAccu = new array5<Complex>(_Shape[ORDER], _Shape[SP], _Shape[SUB], _Shape[VOL], _Shape[TAU]);
+    _WeightSquareAccu = new array2<Complex>(_Shape[ORDER], _Shape[TAU]);
+
+    _Name = "Polar";
+    _Norm = 1.0;
+}
+
+Polar::~Polar()
 {
     delete _Weight;
     delete _WeightAccu;
     delete _WeightSquareAccu;
 }
 
-G::G(const Lattice &lat, real beta, const std::string &file)
-    : Base(lat, beta, file)
-{
-    _Weight = new Array4<Complex>(SPIN2, lat.SublatVol * lat.SublatVol, lat.Vol, MAX_BIN);
-}
-
-G::~G()
-{
-    delete _Weight;
-}
-
-Complex G::Weight(const Distance &dR, real dtau, spin SpinIn, spin SpinOut)
-{
-    return (*_Weight)[SpinIndex(SpinIn, SpinOut)][dR.SublatIndex()][dR.CoordiIndex()][TauToBin(dtau)];
-}
-
-W::W(const Lattice &lat, real beta, const std::string &file)
-    : Base(lat, beta, file)
-{
-    _Weight = new Array4<Complex>(SPIN4, lat.SublatVol * lat.SublatVol, lat.Vol, MAX_BIN);
-}
-
-Weight::W::~W()
-{
-    delete _Weight;
-}
+//G::G(const Lattice &lat, real beta)
+//    : Base(lat, beta)
+//{
+//    _Weight = new Array4<Complex>(SPIN2, lat.SublatVol * lat.SublatVol, lat.Vol, MAX_BIN);
+//}
+//
+//G::~G()
+//{
+//    delete _Weight;
+//}
+//
+//Complex G::Weight(const Distance &dR, real dtau, spin SpinIn, spin SpinOut)
+//{
+//    return (*_Weight)[SpinIndex(SpinIn, SpinOut)][dR.SublatIndex][dR.CoordiIndex][TauToBin(dtau)];
+//}
+//
+//W::W(const Lattice &lat, real beta)
+//    : Base(lat, beta)
+//{
+//    _Weight = new Array4<Complex>(SPIN4, lat.SublatVol * lat.SublatVol, lat.Vol, MAX_BIN);
+//}
+//
+//Weight::W::~W()
+//{
+//    delete _Weight;
+//}

@@ -10,6 +10,9 @@
 #include "cnpy.h"
 #include "sput.h"
 #include "utility.h"
+#include "convention.h"
+#include "rng.h"
+
 using namespace std;
 
 void TestObservableComplex();
@@ -45,6 +48,7 @@ void TestObservableComplex()
         quan2.AddStatistics();
     }
     Estimate<Complex> ExpectedResult(Complex(5.0, 5.0), Complex(1.5, 0.9));
+    cout << ExpectedResult << endl;
     //!!!This two value only works if you set _norm=1.0 and ThrowRatio=1.0/3
     sput_fail_unless(Equal(quan1.Estimate().Mean, ExpectedResult.Mean),
                      "check the Mean value.");
@@ -91,8 +95,13 @@ void TestObservableReal()
 
 void TestDiagramObject()
 {
+    RandomFactory rng;
     Lattice lat;
-    Weight::Sigma Sigma(lat, 5.0, "test_statisicts.txt");
-    //    Site S0
-    //    Sigma.Measure(Complex(1.0,0.0), <#const Distance &dR#>, <#double dtau#>, <#spin#>, <#spin#>)
+    real Beta = 5.0;
+    Weight::Sigma Sig(lat, Beta, 4);
+    Distance d(0, 0);
+    for (int i = 0; i < 1000000; i++) {
+        Sig.Measure(d, rng.urn() * Beta, DOWN, DOWN, 1, Complex(1.0, 1.0));
+    }
+    Sig.SaveState("test_weight", "w");
 }
