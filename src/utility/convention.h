@@ -14,6 +14,8 @@
 #endif
 
 const bool DEBUGMODE = true;
+//#define TURNOFFDEBUG
+//define TURNOFFDEBUG will turn off debug checking, including the boundary check in array.h
 
 const real Pi = 3.14159265359;
 

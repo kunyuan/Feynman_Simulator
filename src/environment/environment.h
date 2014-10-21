@@ -38,7 +38,7 @@ class EnvMonteCarlo : public Environment {
     EstimatorBundle<Complex> cEstimator;
     EstimatorBundle<real> rEstimator;
     Weight::Sigma Sigma;
-    Weight::Pi Pi;
+    Weight::Polar Polar;
 
     void Build();
     bool ReadState();

@@ -29,14 +29,14 @@ Estimate<T>::Estimate(const T& mean, const T& error):Mean(mean),Error(error){}
 /**
 *  \brief Pretty output of Complex Estimate
 */
-ostream& operator<<(ostream &os, Estimate<Complex> & e)
+ostream& operator<<(ostream &os, const Estimate<Complex> & e)
 {
     os.setf(ios::showpoint);
     os<<"("<<e.Mean.Re<<"+/-"<<e.Error.Re<<","<<e.Mean.Im<<"+/-"<<e.Error.Im<<")"<<endl;
     return os;
 }
 
-ostream& operator<<(ostream &os, Estimate<real> & e)
+ostream& operator<<(ostream &os, const Estimate<real> & e)
 {
     os.setf(ios::showpoint);
     os<<e.Mean<<"+/-"<<e.Error<<endl;
