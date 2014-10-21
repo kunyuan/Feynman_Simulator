@@ -21,8 +21,8 @@ int RunTest()
     //    TestTimer();  //Test the timer
     //        TestRNG();
     //    TestPystring();
-    TEST(TestDiagram);
-    TEST(TestLattice);
+    //    TEST(TestDiagram);
+    //    TEST(TestLattice);
     TEST(TestObservable);
 
     //    TestArray();

@@ -16,6 +16,7 @@ Markov::Markov(EnvMonteCarlo *Env)
     Diag = &Env->Diag;
     RNG = &Env->RNG;
     Sigma=&Env->Sigma;
+    Polar=&Env->Polar;
 }
 
 /**

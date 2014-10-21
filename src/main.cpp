@@ -43,6 +43,7 @@ void MonteCarlo(Jobs &Job)
     Markov GrassHopper(&PaddyField);
     MarkovMonitor Scarecrow(&PaddyField);
     while (PaddyField.Counter < 10000) {
+        PaddyField.Counter++;
         GrassHopper.Hop(10);
 
         Scarecrow.Measure();
@@ -51,7 +52,7 @@ void MonteCarlo(Jobs &Job)
             //            Env.AddStatistics();
             Scarecrow.ReWeightEachOrder();
         }
-        if (PaddyField.Counter % 20) {
+        if (PaddyField.Counter % 100000) {
             PaddyField.SaveState();
         }
         if (PaddyField.Counter % 20) {
