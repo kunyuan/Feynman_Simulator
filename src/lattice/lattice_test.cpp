@@ -66,7 +66,7 @@ void Test_Lattice()
         
         sput_fail_unless(dis.Sublattice(IN) == s1.Sublattice, "Distance: distance=site1-site2, sublattices");
         sput_fail_unless(dis.Sublattice(OUT) == s2.Sublattice, "Distance: distance=site1-site2, sublattices");
-        sput_fail_unless(dis.CoordiIndex() == 2 * lattice.Size[0] + 1, "Distance: distance=site1-site2, Coordinates");
+        sput_fail_unless(dis.CoordiIndex == 2 * lattice.Size[0] + 1, "Distance: distance=site1-site2, Coordinates");
         
         sput_fail_unless(lattice.ToVec(lattice.ToIndex(v)) == v, "Lattice: ToIndex and ToVec for Vec");
         sput_fail_unless(lattice.ToIndex(v) == lattice.ToIndex(s), "Lattice: ToIndex for Site");
@@ -114,7 +114,7 @@ void Test_Lattice()
         
         sput_fail_unless(dis.Sublattice(IN) == s1.Sublattice, "Distance: distance=site1-site2, sublattices");
         sput_fail_unless(dis.Sublattice(OUT) == s2.Sublattice, "Distance: distance=site1-site2, sublattices");
-        sput_fail_unless(dis.CoordiIndex() == 3*lattice.Size[0]*lattice.Size[1]+2 * lattice.Size[0] + 1, "Distance: distance=site1-site2, Coordinates");
+        sput_fail_unless(dis.CoordiIndex == 3*lattice.Size[0]*lattice.Size[1]+2 * lattice.Size[0] + 1, "Distance: distance=site1-site2, Coordinates");
         
         sput_fail_unless(lattice.ToVec(lattice.ToIndex(v)) == v, "Lattice: ToIndex and ToVec for Vec");
         sput_fail_unless(lattice.ToIndex(v) == lattice.ToIndex(s), "Lattice: ToIndex for Site");

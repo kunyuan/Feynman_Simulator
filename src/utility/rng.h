@@ -40,6 +40,11 @@ class RandomFactory {
     {
         return _eng() % (thru - from + 1) + from;
     }
+    inline int nrn(real mean, real std)
+    {
+        static std::normal_distribution<> d{};
+        return d(_eng, decltype(d)::param_type{mean, std});
+    }
 };
 
 extern RandomFactory RNG;

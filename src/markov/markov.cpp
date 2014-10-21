@@ -15,6 +15,7 @@ Markov::Markov(EnvMonteCarlo *Env)
     OrderWeight=Env->OrderWeight;
     Diag = &Env->Diag;
     Sigma=&Env->Sigma;
+    Polar=&Env->Polar;
 }
 
 /**

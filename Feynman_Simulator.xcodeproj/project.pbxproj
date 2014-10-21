@@ -44,6 +44,7 @@
 		84D7EFBF19F4B32E006B1CA5 /* markov_monitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84D7EFBD19F4B32E006B1CA5 /* markov_monitor.cpp */; };
 		84D7EFC119F552C3006B1CA5 /* markov_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84D7EFC019F552C3006B1CA5 /* markov_test.cpp */; };
 		84D7EFC319F552F5006B1CA5 /* env_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84D7EFC219F552F5006B1CA5 /* env_test.cpp */; };
+		84D7EFC519F59FD3006B1CA5 /* weight_IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84D7EFC419F59FD3006B1CA5 /* weight_IO.cpp */; };
 		84FDE07419DDFC2F0092B441 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84FDE07319DDFC2F0092B441 /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -124,6 +125,7 @@
 		84D7EFBE19F4B32E006B1CA5 /* markov_monitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = markov_monitor.h; path = markov/markov_monitor.h; sourceTree = "<group>"; };
 		84D7EFC019F552C3006B1CA5 /* markov_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = markov_test.cpp; path = markov/markov_test.cpp; sourceTree = "<group>"; };
 		84D7EFC219F552F5006B1CA5 /* env_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = env_test.cpp; path = environment/env_test.cpp; sourceTree = "<group>"; };
+		84D7EFC419F59FD3006B1CA5 /* weight_IO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = weight_IO.cpp; path = observable/weight_IO.cpp; sourceTree = "<group>"; };
 		84FDE07019DDFC2F0092B441 /* Feynman_Simulator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Feynman_Simulator; sourceTree = BUILT_PRODUCTS_DIR; };
 		84FDE07319DDFC2F0092B441 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -206,6 +208,7 @@
 			children = (
 				84B8FC3B19EC97B2003D6DF6 /* weight.h */,
 				84B8FC3A19EC97B2003D6DF6 /* weight.cpp */,
+				84D7EFC419F59FD3006B1CA5 /* weight_IO.cpp */,
 				84B8FC4519ED6F15003D6DF6 /* estimate.h */,
 				84B8FC4419ED6F15003D6DF6 /* estimate.cpp */,
 				84B8FC4119ECBE1E003D6DF6 /* observable_test.cpp */,
@@ -368,6 +371,7 @@
 				84D7EFC119F552C3006B1CA5 /* markov_test.cpp in Sources */,
 				84519AEB19F2C554007CB81B /* environment.cpp in Sources */,
 				8426668D19E4482100CF7B59 /* component_bundle.cpp in Sources */,
+				84D7EFC519F59FD3006B1CA5 /* weight_IO.cpp in Sources */,
 				61266E5CDE0355C1306E9EBD /* rng_test.cpp in Sources */,
 				84D4287319F1F3BB0051CE96 /* markov.cpp in Sources */,
 				6126638BECC823E2FECDBE1A /* utility.cpp in Sources */,

@@ -20,7 +20,7 @@ class Markov {
     real *OrderWeight;
     Diagram *Diag;
     Weight::Sigma *Sigma;
-    Weight::Pi *Pi;
+    Weight::Polar *Polar;
 
   public:
     Markov(EnvMonteCarlo *);
