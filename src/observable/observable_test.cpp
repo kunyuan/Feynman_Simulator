@@ -48,6 +48,7 @@ void TestObservableComplex()
         quan2.AddStatistics();
     }
     Estimate<Complex> ExpectedResult(Complex(5.0, 5.0), Complex(1.5, 0.9));
+    cout << ExpectedResult << endl;
     //!!!This two value only works if you set _norm=1.0 and ThrowRatio=1.0/3
     sput_fail_unless(Equal(quan1.Estimate().Mean, ExpectedResult.Mean),
                      "check the Mean value.");
@@ -97,10 +98,10 @@ void TestDiagramObject()
     RandomFactory rng;
     Lattice lat;
     real Beta = 5.0;
-    Weight::Sigma Sig(lat, Beta);
+    Weight::Sigma Sig(lat, Beta, 4);
     Distance d(0, 0);
     for (int i = 0; i < 1000000; i++) {
-        Sig.Measure(Complex(rng.nrn(2.0, 1.0), rng.nrn(2.0, 1.0)), d, Beta * rng.urn(), UP, UP);
+        Sig.Measure(d, rng.urn() * Beta, DOWN, DOWN, 1, Complex(1.0, 1.0));
     }
-    Sig.SaveState("test_weight");
+    Sig.SaveState("test_weight", "w");
 }

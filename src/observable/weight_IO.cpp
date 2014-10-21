@@ -18,8 +18,11 @@ void Sigma::SaveState(const std::string &FileName, const std::string &Mode)
 {
     unsigned int shape[1] = {1};
     cnpy::npz_save(cnpy::npz_name(FileName), _Name + "_Norm", &_Norm, shape, 1, Mode);
-    cnpy::npz_save(cnpy::npz_name(FileName), _Name + "_Accu", _WeightAccu->Data(), _Shape, 4, Mode);
-    cnpy::npz_save(cnpy::npz_name(FileName), _Name + "_SquareAccu", _WeightSquareAccu->Data(), _Shape, 4, Mode);
+    cnpy::npz_save(cnpy::npz_name(FileName), _Name + "_Accu", _WeightAccu->Data(), _Shape, 5, "a");
+    unsigned int shape2[2];
+    shape2[0] = _Shape[ORDER];
+    shape2[1] = _Shape[TAU];
+    cnpy::npz_save(cnpy::npz_name(FileName), _Name + "_SquareAccu", _WeightSquareAccu->Data(), shape2, 2, "a");
 }
 
 bool Sigma::LoadState(const std::string &FileName)
@@ -46,6 +49,5 @@ bool Sigma::LoadState(const std::string &FileName)
     _Norm = *start_Norm;
 
     NpzMap.destruct();
-    UpdateWeight();
     return true;
 }

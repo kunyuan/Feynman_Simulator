@@ -849,29 +849,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "src/observable/observable_test.cpp"
-            timestampString = "435532089.021297"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "103"
-            endingLineNumber = "103"
-            landmarkName = "TestDiagramObject()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "src/observable/weight.cpp"
-            timestampString = "435532142.591355"
+            timestampString = "435552721.96247"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "90"
-            endingLineNumber = "90"
-            landmarkName = "Sigma::Measure(const Complex &amp;weight, const Distance &amp;d, real dtau, spin SpinIn, spin SpinOut)"
+            startingLineNumber = "134"
+            endingLineNumber = "134"
+            landmarkName = "Sigma::Measure(const Distance &amp;d, real dtau, spin SpinIn, spin SpinOut, int order, const Complex &amp;weight)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -882,11 +866,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "src/utility/array.h"
-            timestampString = "435532757.503407"
+            timestampString = "435553065.725693"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "310"
-            endingLineNumber = "310"
+            startingLineNumber = "309"
+            endingLineNumber = "309"
             landmarkName = "Check(int i, int n, unsigned int dim, unsigned int m, int o = 0)"
             landmarkType = "5">
             <Locations>
@@ -928,11 +912,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "src/utility/array.h"
-            timestampString = "435533247.263236"
+            timestampString = "435553065.725693"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "990"
-            endingLineNumber = "990"
+            startingLineNumber = "989"
+            endingLineNumber = "989"
             landmarkName = "operator[](int ix)"
             landmarkType = "7">
          </BreakpointContent>

@@ -126,7 +126,7 @@ void npy_save(std::string fname, const T *data, const unsigned int *shape, const
 
     unsigned int nels = 1;
     for (int i = 0; i < ndims; i++)
-        nels *= shape[ndims - i - 1];
+        nels *= shape[ndims];
 
     fwrite(data, sizeof(T), nels, fp);
     fclose(fp);
@@ -170,7 +170,7 @@ void npz_save(std::string zipname, std::string fname, const T *data, const unsig
 
     unsigned long nels = 1;
     for (int m = 0; m < ndims; m++)
-        nels *= shape[ndims - m - 1];
+        nels *= shape[m];
     unsigned int nbytes = (unsigned int)nels * sizeof(T) + (unsigned int)npy_header.size();
 
     //get the CRC of the data to be added
@@ -236,10 +236,10 @@ std::vector<char> create_npy_header(const T *data, const unsigned int *shape, co
     dict += map_type(typeid(T));
     dict += tostring(sizeof(T));
     dict += "', 'fortran_order': False, 'shape': (";
-    dict += tostring(shape[ndims - 1]);
+    dict += tostring(shape[0]);
     for (int i = 1; i < ndims; i++) {
         dict += ", ";
-        dict += tostring(shape[ndims - i - 1]);
+        dict += tostring(shape[i]);
     }
     if (ndims == 1)
         dict += ",";
