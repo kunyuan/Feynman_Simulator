@@ -81,33 +81,42 @@ class Polar : Base {
     inline Complex Weight(const Distance &dR, real dtau, spin *, spin *);
     Estimate<Complex> WeightWithError(const Distance &dR, real dtau, spin *, spin *);
 };
-//
-//class G : Base {
-//  private:
-//    Array::array4<Complex> *_Weight;
-//
-//  public:
-//    G(const Lattice &, real Beta);
-//    ~G();
-//    inline Complex Weight(const Distance &dR, real dtau, spin, spin);
-//    inline Complex BareWeight(const Distance &dR, real dtau, spin, spin);
-//    void SaveState(std::string);
-//    bool LoadState(std::string);
-//};
-//
-//class W : Base {
-//  private:
-//    Array::array4<Complex> *_Weight;
-//
-//  public:
-//    W(const Lattice &, real Beta);
-//    ~W();
-//    inline Complex Weight(const Distance &dR, real dtau, spin *, spin *);
-//    inline Complex Weight(const Distance &dR, spin *, spin *);
-//    inline Complex BareWeight(const Distance &dR, real dtau, spin *, spin *);
-//    void SaveState(std::string);
-//    bool LoadState(std::string);
-//};
+
+class G : Base {
+  private:
+    Array::array4<Complex> *_Weight;
+    
+  public:
+    G(const Lattice &, real Beta, int order);
+    ~G();
+    void UpdateWeight(int UpToOrder);
+    Complex Weight(const Distance &dR, real dtau, spin, spin);
+    Complex BareWeight(const Distance &dR, real dtau, spin, spin);
+    void SaveState(const std::string &FileName, const std::string &Mode = "a");
+    bool LoadState(const std::string &);
+};
+
+class W : Base {
+  private:
+    Array::array4<Complex> *_Weight;
+
+  public:
+    W(const Lattice &, real Beta, int order);
+    ~W();
+    void UpdateWeight(int UpToOrder);
+    Complex Weight(const Distance &dR, real dtau, spin *, spin *, bool);
+    Complex WeightOfDelta(const Distance &dR, spin *, spin *, bool);
+    Complex BareWeight(const Distance &dR, real dtau, spin *, spin *, bool);
+    void SaveState(const std::string &FileName, const std::string &Mode = "a");
+    bool LoadState(const std::string &);
+};
+    
+class Worm
+{
+  public:
+    real Weight(const Distance &dR, real dtau);
+};
+    
 }
 
 int TestObservable();

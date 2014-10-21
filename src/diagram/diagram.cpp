@@ -13,6 +13,31 @@
 #include "rng.h"
 using namespace std;
 
+int RandomPickK()
+{
+    return RNG.irn(-MAX_K, MAX_K);
+}
+
+int RandomPickdSpin()
+{
+    return RNG.irn(0, 2)*2-1;
+}
+
+bool Diagram::CanNotMoveWorm(int dspin, const Vertex& v)
+{
+    if(dspin==1 && v.Spin[IN]==DOWN && v.Spin[OUT]==UP) return true;
+    if(dspin==-1 && v.Spin[IN]==UP && v.Spin[OUT]==DOWN) return true;
+    return false;
+}
+
+bool Diagram::IsWorm(const Vertex& v)
+{
+    if(Worm.Ira==v.Name || Worm.Masha==v.Name)
+        return true;
+    else
+        return false;
+}
+
 ostream &operator<<(ostream &os, spin &s)
 {
     if (s == UP)
@@ -22,7 +47,7 @@ ostream &operator<<(ostream &os, spin &s)
 }
 
 Diagram::Diagram()
-    : G("GLine"), W("WLine"), Ver("Vertex")
+    : Order(0), Phase(Complex(1.0, 0.0)), Weight(Complex(1.0, 0.0)), G("GLine"), W("WLine"), Ver("Vertex")
 {
 }
 
@@ -89,7 +114,7 @@ string Diagram::PrettyString(Vertex &v)
     stringstream os;
     os << "\n";
     os << v.G[IN] << ">===";
-    os << "Name:" << v.Name << ",r:" << v.R.Coordinate.PrettyString() << ",tau:" << v.tau;
+    os << "Name:" << v.Name << ",r:" << v.R.Coordinate.PrettyString() << ",tau:" << v.Tau;
     os << "===>" << v.G[OUT] << "\n";
     os << "       ~~~~" << v.W;
     os << endl;
@@ -135,6 +160,8 @@ Vertex& Diagram::RandomPickVer()
 
 bool Diagram::FixDiagram()
 {
+    Order = W.HowMany();
+    
     //TODO: you may also need to fix diagram weight
     for (int index = 0; index < G.HowMany(); index++) {
         for (int dir = 0; dir < 2; dir++) {
@@ -144,6 +171,8 @@ bool Diagram::FixDiagram()
 
     for (int index = 0; index < W.HowMany(); index++) {
         WLine &w = W[index];
+        w.IsWorm = false;
+        
         for (int dir = 0; dir < 2; dir++) {
             Vertex &v = NeighVer(w, dir);
             v.W = index;

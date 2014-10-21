@@ -19,14 +19,18 @@ class Markov {
     Lattice *Lat;
     real *OrderWeight;
     Diagram *Diag;
+    Worm *Worm;
     Weight::Sigma *Sigma;
     Weight::Polar *Polar;
+    Weight::G *G;
+    Weight::W *W;
+    Weight::Worm *WormWeight;
 
   public:
     Markov(EnvMonteCarlo *);
     void Hop(int &&);
-    void CreateWorm();
-    void DeleteWorm();
+    void CreateWorm(real, real);
+    void DeleteWorm(real, real);
 };
 
 #endif /* defined(__Feynman_Simulator__markov__) */

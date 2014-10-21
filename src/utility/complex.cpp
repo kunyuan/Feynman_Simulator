@@ -221,6 +221,12 @@ real mod(const Complex &c)
     return sqrt(mod2(c));
 }
 
+Complex phase(const Complex &c)
+{
+    return c/mod(c);
+}
+
+
 bool Equal(Complex c1, Complex c2, real eps)
 
 {
