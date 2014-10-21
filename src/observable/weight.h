@@ -19,88 +19,95 @@ namespace Weight {
 
 class Base {
   protected:
-    Base(const Lattice &, real Beta, const std::string &);
+    Base(const Lattice &, real Beta, int Order);
+    std::string _Name;
     real _Beta;
-    Lattice _Lattice;
-    std::string _File;
+    Lattice _Lat;
+    int _Order;
     inline int SpinIndex(spin SpinIn, spin SpinOut);
     inline int SpinIndex(spin *TwoSpinIn, spin *TwoSpinOut);
     inline int TauToBin(real tau);
     inline real BinToTau(int Bin);
     const int MAX_BIN = 128;
+    enum Dim {
+        ORDER,
+        SP,
+        SUB,
+        VOL,
+        TAU
+    };
 };
 /**
 *  Estimate gives a estimation of certain quantity with it's error bar'
 */
 
 //TODO: Add fitting function here
-//TODO: Add reweighting
 class Sigma : Base {
   private:
     real _Norm;
+    unsigned int _Shape[5];
     Array::array4<Complex> *_Weight;
-    Array::array4<Complex> *_WeightAccu;
-    Array::array4<Complex> *_WeightSquareAccu;
+    Array::array5<Complex> *_WeightAccu;
+    Array::array2<Complex> *_WeightSquareAccu;
 
   public:
-    Sigma(const Lattice &, real Beta, const std::string &);
+    Sigma(const Lattice &, real Beta, int order);
     ~Sigma();
-    void UpdateWeight();
-    inline Complex Weight(const Distance &dR, real dtau, spin, spin);
-    inline Complex Weight(spin, spin);
+    int OrderAcceptable(int StartFromOrder, real ErrorThreshold);
+    void UpdateWeight(int UpToOrder);
+    Complex Weight(const Distance &dR, real dtau, spin, spin);
+    Complex WeightOfDelta(spin, spin);
     //TODO: no r dependence, really?
-    Estimate<Complex> WeightWithError(const Distance &dR, real dtau, spin, spin);
-    inline void Measure(const Complex &weight, const Distance &dR, real dtau, spin, spin);
+    //    Estimate<Complex> WeightWithError(const Distance &dR, real dtau, spin, spin);
+    void Measure(const Distance &, real dtau, spin, spin, int Order, const Complex &);
+    void ClearStatistics();
+    void SqueezeStatistics(real factor);
     //    std::string PrettyString();
-    void SaveState(std::string);
-    bool ReadState(std::string);
+    void SaveState(const std::string &FileName, const std::string &Mode = "a");
+    bool LoadState(const std::string &);
 };
 
-class Pi : Base {
+class Polar : Base {
   private:
     real _Norm;
+    unsigned int _Shape[5];
     Array::array4<Complex> *_Weight;
-    Array::array4<Complex> *_WeightAccu;
-    Array::array4<Complex> *_WeightSquareAccu;
+    Array::array5<Complex> *_WeightAccu;
+    Array::array2<Complex> *_WeightSquareAccu;
 
   public:
-    Pi(const Lattice &, real Beta, const std::string &);
-    ~Pi();
-    void UpdateWeight();
+    Polar(const Lattice &, real Beta, int order);
+    ~Polar();
     inline Complex Weight(const Distance &dR, real dtau, spin *, spin *);
     Estimate<Complex> WeightWithError(const Distance &dR, real dtau, spin *, spin *);
-    inline void Measure(const Complex &weight, const Distance &dR, real dtau, spin *, spin *);
-    //    std::string PrettyString();
-    void SaveState(std::string);
-    bool ReadState(std::string);
 };
-
-class G : Base {
-  private:
-    Array::array4<Complex> *_Weight;
-
-  public:
-    G(const Lattice &, real Beta, const std::string &);
-    ~G();
-    inline Complex Weight(const Distance &dR, real dtau, spin, spin);
-    inline Complex BareWeight(const Distance &dR, real dtau, spin, spin);
-    void SaveState(std::string);
-    bool ReadState(std::string);
-};
-
-class W : Base {
-  private:
-    Array::array4<Complex> *_Weight;
-
-  public:
-    W(const Lattice &, real Beta, const std::string &);
-    ~W();
-    inline Complex Weight(const Distance &dR, real dtau, spin *, spin *);
-    inline Complex Weight(const Distance &dR, spin *, spin *);
-    inline Complex BareWeight(const Distance &dR, real dtau, spin *, spin *);
-    void SaveState(std::string);
-    bool ReadState(std::string);
-};
+//
+//class G : Base {
+//  private:
+//    Array::array4<Complex> *_Weight;
+//
+//  public:
+//    G(const Lattice &, real Beta);
+//    ~G();
+//    inline Complex Weight(const Distance &dR, real dtau, spin, spin);
+//    inline Complex BareWeight(const Distance &dR, real dtau, spin, spin);
+//    void SaveState(std::string);
+//    bool LoadState(std::string);
+//};
+//
+//class W : Base {
+//  private:
+//    Array::array4<Complex> *_Weight;
+//
+//  public:
+//    W(const Lattice &, real Beta);
+//    ~W();
+//    inline Complex Weight(const Distance &dR, real dtau, spin *, spin *);
+//    inline Complex Weight(const Distance &dR, spin *, spin *);
+//    inline Complex BareWeight(const Distance &dR, real dtau, spin *, spin *);
+//    void SaveState(std::string);
+//    bool LoadState(std::string);
+//};
 }
 
 int TestObservable();

@@ -20,7 +20,7 @@ class Markov {
     Diagram *Diag;
     RandomFactory *RNG;
     Weight::Sigma *Sigma;
-    Weight::Pi *Pi;
+    Weight::Polar *Polar;
 
   public:
     Markov(EnvMonteCarlo *);

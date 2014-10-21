@@ -11,8 +11,8 @@
 EnvMonteCarlo::EnvMonteCarlo(Jobs &Job)
     : Environment(Job),
       //The base class is constructed first!!!
-      Sigma(Lat, Beta, StateFile),
-      Pi(Lat, Beta, StateFile)
+      Sigma(Lat, Beta, Order),
+      Polar(Lat, Beta, Order)
 {
     //Initialize random number generator
     RNG.Reset(Job.Seed);

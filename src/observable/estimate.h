@@ -25,7 +25,7 @@ public:
     Estimate(const T &m, const T &e);
     T Mean;
     T Error;
-    friend std::ostream& operator<<(std::ostream &, Estimate &);
+    friend std::ostream& operator<<(std::ostream &,const Estimate &);
 };
 
 /**
