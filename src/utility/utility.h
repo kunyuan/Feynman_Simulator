@@ -55,6 +55,11 @@ std::string ToString(const T &value)
     return oss.str();
 }
 
-
+template <typename T>
+void AssignFromTo(T *source, T *target, int size)
+{
+    for (int i = 0; i < size; i++)
+        source[i] = target[i];
+}
 
 #endif

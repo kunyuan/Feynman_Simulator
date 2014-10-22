@@ -627,6 +627,10 @@ class array2 : public array1<T> {
     {
         Dimension(nx0, ny0, v0);
     }
+    array2(unsigned int *n)
+    {
+        Allocate(n[0], n[1]);
+    }
 
     unsigned int Nx() const
     {
@@ -800,6 +804,10 @@ class array3 : public array1<T> {
     {
         Dimension(nx0, ny0, nz0, v0);
     }
+    array3(unsigned int *n)
+    {
+        Allocate(n[0], n[1], n[2]);
+    }
 
     unsigned int Nx() const
     {
@@ -965,6 +973,10 @@ class array4 : public array1<T> {
            unsigned int nw0, T *v0)
     {
         Dimension(nx0, ny0, nz0, nw0, v0);
+    }
+    array4(unsigned int *n)
+    {
+        Allocate(n[0], n[1], n[2], n[3]);
     }
 
     unsigned int Nx() const
@@ -1142,7 +1154,11 @@ class array5 : public array1<T> {
     array5(unsigned int nx0, unsigned int ny0, unsigned int nz0,
            unsigned int nw0, unsigned int nv0, T *v0)
     {
-        Dimension(nx0, ny0, nz0, nw0, nv0, nv0);
+        Dimension(nx0, ny0, nz0, nw0, nv0, v0);
+    }
+    array5(unsigned int *n)
+    {
+        Allocate(n[0], n[1], n[2], n[3], n[4]);
     }
 
     unsigned int Nx() const

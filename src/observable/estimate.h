@@ -43,6 +43,7 @@ private:
     void _update();
 public:
     std::vector<T> _history;
+    Estimator();
     Estimator(std::string);
     std::string Name;
     void Measure(const T&);
@@ -52,6 +53,7 @@ public:
     bool ReadState(cnpy::npz_t);
     void SaveState(const std::string FileName, const std::string Mode="a");
     void ClearStatistics();
+    void SqueezeStatistics(real factor);
 };
 
 /**
@@ -76,6 +78,7 @@ public:
     EstimatorT &operator[](int);
     EstimatorT &operator[](std::string);
     void ClearStatistics();
+    void SqueezeStatistics(real factor);
 };
 
 #endif /* defined(__Feynman_Simulator__Estimate__) */
