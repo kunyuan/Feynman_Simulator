@@ -54,9 +54,9 @@ void Markov::CreateWorm(real pcall1, real pcall2)
     Complex wWeight= W->Weight(Lat->Distance(vin.R, vout.R), vout.Tau-vin.Tau, vin.Spin, vout.Spin, true);
     
     Complex weightratio = wWeight/w.Weight;
-    real prob=mod(weightratio);
     Complex sgn=phase(weightratio);
     
+    real prob=mod(weightratio);
     real wormWeight = WormWeight->Weight(Lat->Distance(vin.R, vout.R), vout.Tau-vin.Tau);
     
     prob *= pcall2/pcall1*wormWeight*Diag->Order*2.0;
