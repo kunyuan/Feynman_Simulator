@@ -10,13 +10,14 @@ import inlist
 
 PROCLIST = []
 PROCLIST_BACK = []
-logging.basicConfig(filename="./data/project.log",
+workdir="./data"
+logging.basicConfig(filename=workdir+"/project.log",
         level=logging.INFO,
         format="\n[job.daemon][%(asctime)s][%(levelname)s]:\n%(message)s",
         datefmt='%y/%m/%d %H:%M:%S')
 
-INFILEPATH = os.path.abspath("./data/infile")
-OUTFILEPATH = os.path.abspath("./data/outfile")
+INFILEPATH = os.path.abspath(workdir+"/infile")
+OUTFILEPATH = os.path.abspath(workdir+"/outfile")
 PURE_BACK = False
 
 class JobAtom():
@@ -96,13 +97,13 @@ def submit_job(job_atom):
     infile = INFILEPATH+"/_in_{0}_{1}".format(job_atom.name, job_atom.pid)
     outfile = OUTFILEPATH+"/out_{0}_{1}.txt".format(
         job_atom.name, job_atom.pid)
-    jobfile = os.path.abspath("./_job_{0}_{1}.sh".format(
+    jobfile = os.path.abspath(workdir+"/_job_{0}_{1}.sh".format(
         job_atom.name, job_atom.pid))
     #write input file into ./infile folder
     f_job = open(infile, "w")
     f_job.write(job_atom.input_str)
     f_job.close()
-    f_allinput = open(os.path.abspath("./all_input.log"), "a")
+    f_allinput = open(os.path.abspath(workdir+"/all_input.log"), "a")
     f_allinput.write("Job ID: {0}, Job name: {1}\n".format(
             job_atom.pid, job_atom.name))
     f_allinput.write(job_atom.input_str)
