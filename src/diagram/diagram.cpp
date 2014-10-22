@@ -10,6 +10,7 @@
 #include "utility.h"
 #include "convention.h"
 #include "lattice.h"
+#include "weight.h"
 #include "rng.h"
 using namespace std;
 bool Diagram::IsWorm(const Vertex &v)
@@ -138,11 +139,10 @@ Vertex &Diagram::RandomPickVer()
 bool Diagram::FixDiagram()
 {
     Order = W.HowMany();
-
-    //TODO: you may also need to fix diagram weight
     for (int index = 0; index < G.HowMany(); index++) {
+        GLine &g = G[index];
         for (int dir = 0; dir < 2; dir++) {
-            NeighVer(G[index], dir).G[FlipDir(dir)] = index;
+            NeighVer(g, dir).G[FlipDir(dir)] = index;
         }
     }
 
@@ -151,14 +151,15 @@ bool Diagram::FixDiagram()
         w.IsWorm = false;
 
         for (int dir = 0; dir < 2; dir++) {
-            Vertex &v = NeighVer(w, dir);
-            v.W = index;
-            cout << v.W;
+            NeighVer(w, dir).W = index;
         }
     }
 
     for (int index = 0; index < Ver.HowMany(); index++) {
         //TODO: Do something here if you want to fix vertex
     }
+    
+    Phase = Complex(1.0, 0.0);
+    Weight = Complex(1.0, 0.0);
     return true;
 }
