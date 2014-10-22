@@ -37,6 +37,7 @@
 
 *.npy
 *.npz
+*.pyc
 *.xccheckout
 *.xcuserstate
 doc
