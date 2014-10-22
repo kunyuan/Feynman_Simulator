@@ -88,8 +88,12 @@ class Polar : public WeightNeedMeasure {
 class G : public WeightNeedMeasure {
   public:
     G(const Lattice &, real Beta, int order);
+    ~G();
+    void UpdateWeight(int UpToOrder);
     Complex Weight(const Distance &dR, real dtau, spin, spin);
     Complex BareWeight(const Distance &dR, real dtau, spin, spin);
+    void SaveState(const std::string &FileName, const std::string &Mode = "a");
+    bool LoadState(const std::string &);
 };
 
 class W : public WeightNeedMeasure {
@@ -99,6 +103,13 @@ class W : public WeightNeedMeasure {
     Complex WeightOfDelta(const Distance &dR, spin *, spin *);
     Complex BareWeight(const Distance &dR, real dtau, spin *, spin *);
 };
+    
+class Worm
+{
+  public:
+    real Weight(const Distance &dR, real dtau);
+};
+    
 }
 
 int TestObservable();

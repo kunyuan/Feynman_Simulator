@@ -110,7 +110,7 @@ ostream& Diagram::Component2gv(ostream &os, GLine &r)
 {
     os << r.Vertex[IN] << "->" << r.Vertex[OUT];
     os << " " << EdgeColor(Spin(r,IN), Spin(r,OUT)) << ";";
-    os << "  //Name=" << r.Name << "; Weight=" << r.Weight << endl;
+    os << "  //Name=" << r.Name << "; K="<<r.K<< "; Weight=" << r.Weight << endl;
     return os;
 }
 
@@ -118,7 +118,7 @@ ostream& Diagram::Component2gv(ostream &os, WLine &r)
 {
     os << r.Vertex[IN] << "->" << r.Vertex[OUT];
     os << " [style=dashed arrowhead=none]; ";
-    os << "  //Name=" << r.Name << "; Weight=" << r.Weight << endl;
+    os << "  //Name=" << r.Name << "; K="<<r.K<<"; Weight=" << r.Weight << endl;
     return os;
 }
 
