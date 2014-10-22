@@ -661,22 +661,6 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "src/observable/estimate.cpp"
-            timestampString = "435102468.799904"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "43"
-            endingLineNumber = "43"
-            landmarkName = "operator&lt;&lt;(ostream &amp;os, Estimate&lt;real&gt; &amp; e)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "src/utility/cnpy_test.cpp"
             timestampString = "435526233.211994"
             startingColumnNumber = "9223372036854775807"
@@ -693,74 +677,12 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "src/observable/estimate.cpp"
-            timestampString = "435103227.66248"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "103"
-            endingLineNumber = "103"
-            landmarkName = "_update()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "src/observable/estimate.cpp"
-            timestampString = "435377099.799092"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "176"
-            endingLineNumber = "176"
-            landmarkName = "ReadState(cnpy::npz_t NpzMap)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "EstimateKeeper&lt;double&gt;::ReadFromFile(cnpy::npz_t)"
-                  moduleName = "Feynman_Simulator"
-                  urlString = "file:///Users/kchen/project/Feynman_Simulator/src/observable/estimate.cpp"
-                  timestampString = "435103227.957303"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "164"
-                  endingLineNumber = "164"
-                  offsetFromSymbolStart = "1814">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "EstimateKeeper&lt;Complex&gt;::ReadFromFile(cnpy::npz_t)"
-                  moduleName = "Feynman_Simulator"
-                  urlString = "file:///Users/kchen/project/Feynman_Simulator/src/observable/estimate.cpp"
-                  timestampString = "435103227.957584"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "164"
-                  endingLineNumber = "164"
-                  offsetFromSymbolStart = "1814">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "src/observable/estimate.h"
-            timestampString = "435178713.264679"
+            timestampString = "435617190.250902"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "67"
-            endingLineNumber = "67"
+            startingLineNumber = "69"
+            endingLineNumber = "69"
             landmarkName = "class EstimatorBundle"
             landmarkType = "3">
          </BreakpointContent>
@@ -849,22 +771,6 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "src/observable/weight.cpp"
-            timestampString = "435552721.96247"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "134"
-            endingLineNumber = "134"
-            landmarkName = "Sigma::Measure(const Distance &amp;d, real dtau, spin SpinIn, spin SpinOut, int order, const Complex &amp;weight)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "src/utility/array.h"
             timestampString = "435553065.725693"
             startingColumnNumber = "9223372036854775807"
@@ -912,13 +818,89 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "src/utility/array.h"
-            timestampString = "435553065.725693"
+            timestampString = "435602711.283296"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "989"
-            endingLineNumber = "989"
+            startingLineNumber = "1001"
+            endingLineNumber = "1001"
             landmarkName = "operator[](int ix)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "src/observable/weight_specific.cpp"
+            timestampString = "435617190.250902"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "18"
+            endingLineNumber = "18"
+            landmarkName = "Sigma::Sigma(const Lattice &amp;lat, real beta, int order)"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Weight::Sigma::Sigma(Lattice const&amp;, double, int)"
+                  moduleName = "Feynman_Simulator"
+                  urlString = "file:///Users/kchen/project/Feynman_Simulator/src/observable/weight_specific.cpp"
+                  timestampString = "435611355.574475"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "19"
+                  endingLineNumber = "19"
+                  offsetFromSymbolStart = "107">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Weight::Sigma::Sigma(Lattice const&amp;, double, int)"
+                  moduleName = "Feynman_Simulator"
+                  urlString = "file:///Users/kchen/project/Feynman_Simulator/src/observable/weight_specific.cpp"
+                  timestampString = "435611355.574738"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "19"
+                  endingLineNumber = "19"
+                  offsetFromSymbolStart = "113">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Weight::Sigma::Sigma(Lattice const&amp;, double, int)"
+                  moduleName = "Feynman_Simulator"
+                  urlString = "file:///Users/kchen/project/Feynman_Simulator/src/observable/weight_specific.cpp"
+                  timestampString = "435611355.57492"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "19"
+                  endingLineNumber = "19"
+                  offsetFromSymbolStart = "28">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "src/observable/weight_generic.cpp"
+            timestampString = "435637360.739971"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "131"
+            endingLineNumber = "131"
+            landmarkName = "WeightNeedMeasure::OrderAcceptable(int StartFromOrder, real ErrorThreshold)"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

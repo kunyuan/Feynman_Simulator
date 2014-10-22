@@ -9,18 +9,24 @@
 #include "markov.h"
 #include "weight.h"
 
+const int MAX_K = 10000;
+
+int RandomPickK();
+int RandomPickDeltaSpin();
+bool CanNotMoveWorm(int dspin, const Vertex &v);
+
 Markov::Markov(EnvMonteCarlo *Env)
 {
-    Beta=Env->Beta;
-    Lat=&Env->Lat;
-    OrderWeight=Env->OrderWeight;
+    Beta = Env->Beta;
+    Lat = &Env->Lat;
+    OrderWeight = Env->OrderWeight;
     Diag = &Env->Diag;
     Worm = &Env->Diag.Worm;
-    Sigma=&Env->Sigma;
-    Polar=&Env->Polar;
-    G=&Env->G;
-    W=&Env->W;
-    WormWeight=&Env->Worm;
+    Sigma = &Env->Sigma;
+    Polar = &Env->Polar;
+    G = &Env->G;
+    W = &Env->W;
+    WormWeight = &Env->Worm;
 }
 
 /**
@@ -36,17 +42,17 @@ void Markov::Hop(int &&Steps)
     double x = RNG.urn();
     if (x < W1 / W)
         CreateWorm(W1, W2);
-    else if (x < (W1+W2) / W)
+    else if (x < (W1 + W2) / W)
         DeleteWorm(W2, W1);
 }
-
 void Markov::CreateWorm(real pcall1, real pcall2)
 {
-    if(Worm->Exist) return;
-    WLine& w=Diag->RandomPickW();
-    Vertex& vin=Diag->NeighVer(w, IN);
-    Vertex& vout=Diag->NeighVer(w, OUT);
-    
+    if (Worm->Exist)
+        return;
+    WLine &w = Diag->RandomPickW();
+    Vertex &vin = Diag->NeighVer(w, IN);
+    Vertex &vout = Diag->NeighVer(w, OUT);
+
     int k = RandomPickK();
     int dspin = RandomPickdSpin();
     if(Diag->CanNotMoveWorm(dspin, vin) && Diag->CanNotMoveWorm(-dspin, vout)) return;
@@ -64,20 +70,40 @@ void Markov::CreateWorm(real pcall1, real pcall2)
     if(RNG.urn()<prob)
     {
         Diag->Phase *= sgn;
-        Diag->Weight *= weightratio;
-        
+        Diag->Weight *= weightRatio;
+
         Worm->Exist = true;
         Worm->Ira = vin.Name;
         Worm->Masha = vout.Name;
         Worm->dSpin = dspin;
         Worm->K = k;
-        
+
         w.IsWorm = true;
-        w.Weight = wWeight;  //has to be after Diag->Weight *= ...
+        w.Weight = wWeight;
     }
 }
 
 void Markov::DeleteWorm(real pcall1, real pcall2)
 {
-    if(!Worm->Exist) return;
+    if (!Worm->Exist)
+        return;
+}
+
+bool CanNotMoveWorm(int dspin, const Vertex &v)
+{
+    if (dspin == 1 && v.Spin[IN] == DOWN && v.Spin[OUT] == UP)
+        return true;
+    if (dspin == -1 && v.Spin[IN] == UP && v.Spin[OUT] == DOWN)
+        return true;
+    return false;
+}
+
+int RandomPickK()
+{
+    return RNG.irn(-MAX_K, MAX_K);
+}
+
+int RandomPickDeltaSpin()
+{
+    return RNG.irn(0, 2) * 2 - 1;
 }

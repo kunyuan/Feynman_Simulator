@@ -48,7 +48,6 @@ void TestObservableComplex()
         quan2.AddStatistics();
     }
     Estimate<Complex> ExpectedResult(Complex(5.0, 5.0), Complex(1.5, 0.9));
-    cout << ExpectedResult << endl;
     //!!!This two value only works if you set _norm=1.0 and ThrowRatio=1.0/3
     sput_fail_unless(Equal(quan1.Estimate().Mean, ExpectedResult.Mean),
                      "check the Mean value.");
@@ -95,13 +94,32 @@ void TestObservableReal()
 
 void TestDiagramObject()
 {
-    RandomFactory rng;
+    RandomFactory rng(100);
     Lattice lat;
     real Beta = 5.0;
     Weight::Sigma Sig(lat, Beta, 4);
     Distance d(0, 0);
     for (int i = 0; i < 1000000; i++) {
-        Sig.Measure(d, rng.urn() * Beta, DOWN, DOWN, 1, Complex(1.0, 1.0));
+        Sig.Measure(d, rng.urn() * Beta, DOWN, DOWN, 1, Complex(rng.urn(), rng.urn()));
+        if (i % 4 == 0)
+            Sig.Measure(d, rng.urn() * Beta, DOWN, DOWN, 2, Complex(rng.urn(), rng.urn()));
+        if (i % 9 == 0) {
+            Sig.Measure(d, rng.urn() * Beta, DOWN, DOWN, 3, Complex(rng.urn(), rng.urn()));
+            Sig.AddStatistics();
+        }
     }
+    //Do random walk so that the error ratio between Order 3, Order 2 and Order 1 is 3:2:1 roughly
+
+    LOG_INFO("Order 1: " << Sig.WeightWithError(1) << endl << "Order 2: " << Sig.WeightWithError(2) << endl << "Order 3: " << Sig.WeightWithError(3));
+    int order = Sig.OrderAcceptable(1, 500.0);
+    LOG_INFO("Accepted Order=" << order);
+    sput_fail_unless(order == 2, "Accepted order check.");
+    Sig.UpdateWeight(2);
+    LOG_INFO(Sig.Weight(d, Beta / 2, DOWN, DOWN));
+
+    //Weight class IO operation
     Sig.SaveState("test_weight", "w");
+    Weight::Sigma Sig2(lat, Beta, 4);
+    Sig2.LoadState("test_weight");
+    sput_fail_unless(Equal(Sig.Weight(d, Beta / 2, DOWN, DOWN), Sig.Weight(d, Beta / 2, DOWN, DOWN)), "Weight class IO check.");
 }
