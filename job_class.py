@@ -48,9 +48,9 @@ class Job:
         '''change a key in the parameter dictionary into a string'''
         if type(self.para[key])==bool:
             if self.para[key]:
-                return ".true.    #{0}\n".format(key)
+                return "true    #{0}\n".format(key)
             else:
-                return ".false.    #{0}\n".format(key)
+                return "false    #{0}\n".format(key)
         elif type(self.para[key])==str:
             return self.para[key]+"\n"
         elif type(self.para[key])==list:
