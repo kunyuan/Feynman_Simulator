@@ -87,12 +87,16 @@ W::W(const Lattice &lat, real beta, int order)
 {
 }
 
-Complex W::Weight(const Distance &d, real dtau, spin *SpinIn, spin *SpinOut)
+Complex W::Weight(const Distance &d, real dtau, spin *SpinIn, spin *SpinOut, bool IsWorm)
 {
-    return (*_Weight)[SpinIndex(SpinIn, SpinOut)][d.SublatIndex][d.CoordiIndex][TauToBin(dtau)];
+    if (IsWorm)
+        //define your fake function here
+        return (*_Weight)[SpinIndex(UP, UP)][d.SublatIndex][d.CoordiIndex][TauToBin(dtau)];
+    else
+        return (*_Weight)[SpinIndex(SpinIn, SpinOut)][d.SublatIndex][d.CoordiIndex][TauToBin(dtau)];
 }
 
-Complex W::WeightOfDelta(const Distance &d, spin *SpinIn, spin *SpinOut)
+Complex W::WeightOfDelta(const Distance &d, spin *SpinIn, spin *SpinOut, bool IsWorm)
 {
     //TODO: add Delta expression of W here, you may need to add new API to measure it
     return 0.0;

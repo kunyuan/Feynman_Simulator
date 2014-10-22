@@ -14,21 +14,19 @@
 #include "component_bundle.h"
 #include "rng.h"
 
-const int MAX_K=10000;
-
-int RandomPickK();
-int RandomPickdSpin();
-
-class Worm{
-public:
+class Worm {
+  public:
     bool Exist;
-    int Ira, Masha;    //extra line: Ira---"k,dSpin"--->Masha
+    int Ira, Masha; //extra line: Ira---"k,dSpin"--->Masha
     int K;
     int dSpin;
-    
-    Worm():Exist(false), Ira(0),Masha(0),K(0),dSpin(0){}
+
+    Worm()
+        : Exist(false), Ira(0), Masha(0), K(0), dSpin(0)
+    {
+    }
     Worm(int ira, int masha, int dk, int s)
-    : Exist(true), Ira(ira), Masha(masha), K(dk), dSpin(s)
+        : Exist(true), Ira(ira), Masha(masha), K(dk), dSpin(s)
     {
     }
 };
@@ -41,28 +39,27 @@ class Diagram {
     Bundle<GLine> G;
     Bundle<WLine> W;
     Bundle<Vertex> Ver;
-    
-    Worm Worm;
-    bool IsWorm(const Vertex&);
-    bool CanNotMoveWorm(int, const Vertex&);
 
-    spin Spin(GLine &, const int&);
-    spin Spin(WLine &, const int&, const int&);
-    spin Spin(Vertex&, const int&);
-    
-    int Sublattice(GLine &, const int&);
-    int Sublattice(WLine &, const int&);
+    Worm Worm;
+    bool IsWorm(const Vertex &);
+
+    spin Spin(GLine &, const int &);
+    spin Spin(WLine &, const int &, const int &);
+    spin Spin(Vertex &, const int &);
+
+    int Sublattice(GLine &, const int &);
+    int Sublattice(WLine &, const int &);
     int Sublattice(Vertex &);
-    
+
     string PrettyString(GLine &);
     string PrettyString(WLine &);
     string PrettyString(Vertex &);
 
     //Randomly Pick
-    GLine& RandomPickG();
-    WLine& RandomPickW();
-    Vertex& RandomPickVer();
-    
+    GLine &RandomPickG();
+    WLine &RandomPickW();
+    Vertex &RandomPickVer();
+
     //Diagram
     Vertex &NeighVer(GLine &, int dir);
     Vertex &NeighVer(WLine &, int dir);
@@ -83,13 +80,13 @@ class Diagram {
     void WriteDiagram(std::ostream &);
     void WriteDiagram2gv(std::string);
     void WriteDiagram2gv(std::ostream &);
-    
-private:
-    std::ostream& Component2gv(std::ostream &, GLine &);
-    std::ostream& Component2gv(std::ostream &, WLine &);
-    std::ostream& Component2gv(std::ostream &, Vertex &);
-    
+
+  private:
+    std::ostream &Component2gv(std::ostream &, GLine &);
+    std::ostream &Component2gv(std::ostream &, WLine &);
+    std::ostream &Component2gv(std::ostream &, Vertex &);
+
     template <typename T>
-    std::ostream& Bundle2gv(std::ostream &, Bundle<T> &);
+    std::ostream &Bundle2gv(std::ostream &, Bundle<T> &);
 };
 #endif /* defined(__Fermion_Simulator__diagram_global__) */
