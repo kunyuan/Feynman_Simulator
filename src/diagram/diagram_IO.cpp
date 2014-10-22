@@ -11,7 +11,6 @@
 #include "component.h"
 #include "component_bundle.h"
 #include "diagram.h"
-#include "pystring.h"
 #include "abort.h"
 using namespace std;
 

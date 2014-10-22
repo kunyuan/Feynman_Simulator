@@ -15,7 +15,6 @@
 #include "rng.h"
 #include "cnpy.h"
 #include "timer.h"
-#include "pystring.h"
 #include "test.h"
 #include "environment.h"
 #include "lattice.h"
