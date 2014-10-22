@@ -75,6 +75,7 @@ real mod2(const Complex &c);
 
 // sqrt(Re*Re + Im*Im)
 real mod(const Complex &c);
+Complex phase(const Complex &c);
 
 bool Equal(Complex c1, Complex c2, real eps = eps0);
 

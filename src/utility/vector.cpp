@@ -41,8 +41,8 @@ string Vec<T>::PrettyString()
     stringstream os;
     os << "(";
     for (int i = 0; i < D - 1; i++)
-        os << _Arrary[i] << ",";
-    os << _Arrary[D - 1] << ")";
+        os << _Array[i] << ",";
+    os << _Array[D - 1] << ")";
     return os.str();
 }
 template <typename T>

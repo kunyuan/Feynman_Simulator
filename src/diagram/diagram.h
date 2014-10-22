@@ -12,13 +12,39 @@
 #include <iostream>
 #include "logger.h"
 #include "component_bundle.h"
+#include "rng.h"
+
+const int MAX_K=10000;
+
+int RandomPickK();
+int RandomPickdSpin();
+
+class Worm{
+public:
+    bool Exist;
+    int Ira, Masha;    //extra line: Ira---"k,dSpin"--->Masha
+    int K;
+    int dSpin;
+    
+    Worm():Exist(false), Ira(0),Masha(0),K(0),dSpin(0){}
+    Worm(int ira, int masha, int dk, int s)
+    : Exist(true), Ira(ira), Masha(masha), K(dk), dSpin(s)
+    {
+    }
+};
 
 class Diagram {
   public:
     Diagram();
+    int Order;
+    Complex Phase, Weight;
     Bundle<GLine> G;
     Bundle<WLine> W;
     Bundle<Vertex> Ver;
+    
+    Worm Worm;
+    bool IsWorm(const Vertex&);
+    bool CanNotMoveWorm(int, const Vertex&);
 
     spin Spin(GLine &, const int&);
     spin Spin(WLine &, const int&, const int&);
@@ -32,6 +58,11 @@ class Diagram {
     string PrettyString(WLine &);
     string PrettyString(Vertex &);
 
+    //Randomly Pick
+    GLine& RandomPickG();
+    WLine& RandomPickW();
+    Vertex& RandomPickVer();
+    
     //Diagram
     Vertex &NeighVer(GLine &, int dir);
     Vertex &NeighVer(WLine &, int dir);
@@ -60,6 +91,5 @@ private:
     
     template <typename T>
     std::ostream& Bundle2gv(std::ostream &, Bundle<T> &);
-    
 };
 #endif /* defined(__Fermion_Simulator__diagram_global__) */

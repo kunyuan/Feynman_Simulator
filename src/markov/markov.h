@@ -11,6 +11,7 @@
 
 #include "environment.h"
 #include "weight.h"
+#include "rng.h"
 
 class Markov {
   private:
@@ -18,15 +19,18 @@ class Markov {
     Lattice *Lat;
     real *OrderWeight;
     Diagram *Diag;
-    RandomFactory *RNG;
+    Worm *Worm;
     Weight::Sigma *Sigma;
     Weight::Polar *Polar;
+    Weight::G *G;
+    Weight::W *W;
+    Weight::Worm *WormWeight;
 
   public:
     Markov(EnvMonteCarlo *);
     void Hop(int &&);
-    void CreateWorm();
-    void DeleteWorm();
+    void CreateWorm(real, real);
+    void DeleteWorm(real, real);
 };
 
 #endif /* defined(__Feynman_Simulator__markov__) */
