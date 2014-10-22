@@ -18,14 +18,13 @@
 *  \brief estimate with mean value and standard error
 */
 template <typename T>
-class Estimate
-{
-public:
+class Estimate {
+  public:
     Estimate();
     Estimate(const T &m, const T &e);
     T Mean;
     T Error;
-    friend std::ostream& operator<<(std::ostream &,const Estimate &);
+    friend std::ostream &operator<<(std::ostream &, const Estimate &);
 };
 
 /**
@@ -33,25 +32,25 @@ public:
 */
 
 template <typename T>
-class Estimator
-{
-private:
+class Estimator {
+  private:
     T _accumulator;
     real _norm;
     real _ratio;
     Estimate<T> _value;
     void _update();
-public:
+
+  public:
     std::vector<T> _history;
     Estimator();
     Estimator(std::string);
     std::string Name;
-    void Measure(const T&);
+    void Measure(const T &);
     void AddStatistics();
     Estimate<T> Estimate();
     double Ratio();
-    bool ReadState(cnpy::npz_t);
-    void SaveState(const std::string FileName, const std::string Mode="a");
+    bool LoadState(cnpy::npz_t);
+    void SaveState(const std::string& FileName, string Mode = "a");
     void ClearStatistics();
     void SqueezeStatistics(real factor);
 };
@@ -61,20 +60,20 @@ public:
 */
 
 template <typename T>
-class EstimatorBundle
-{
-private:
+class EstimatorBundle {
+  private:
     typedef Estimator<T> EstimatorT;
     std::vector<EstimatorT> _EstimatorVector;
     std::unordered_map<std::string, EstimatorT *> _EstimatorMap;
-public:
+
+  public:
     void AddEstimator(const std::string);
-    void AddEstimator(const EstimatorT&);
+    void AddEstimator(const EstimatorT &);
     void RemoveEstimator(const std::string);
     void AddStatistics();
     int HowMany();
-    bool ReadState(const std::string FileName);
-    void SaveState(const std::string FileName, const std::string Mode="a");
+    bool LoadState(const std::string& FileName);
+    void SaveState(const std::string& FileName, string Mode = "a");
     EstimatorT &operator[](int);
     EstimatorT &operator[](std::string);
     void ClearStatistics();

@@ -12,20 +12,20 @@
 #include "lattice.h"
 #include "rng.h"
 using namespace std;
-bool Diagram::IsWorm(const Vertex& v)
+bool Diagram::IsWorm(const Vertex &v)
 {
-    if(Worm.Ira==v.Name || Worm.Masha==v.Name)
+    if (Worm.Ira == v.Name || Worm.Masha == v.Name)
         return true;
     else
         return false;
 }
 
-ostream &operator<<(ostream &os, spin &s)
+const string ToString(const spin &s)
 {
     if (s == UP)
-        return os << "UP";
+        return "UP";
     else
-        return os << "DOWN";
+        return "DOWN";
 }
 
 Diagram::Diagram()
@@ -34,12 +34,12 @@ Diagram::Diagram()
 }
 
 /****************   GLine  *****************************/
-spin Diagram::Spin(GLine &g, const int& dir)
+spin Diagram::Spin(GLine &g, const int &dir)
 {
     return Ver[g.Vertex[dir]].Spin[FlipDir(dir)];
 }
 
-int Diagram::Sublattice(GLine &g, const int& dir)
+int Diagram::Sublattice(GLine &g, const int &dir)
 {
     return Ver[g.Vertex[dir]].R.Sublattice;
 }
@@ -47,41 +47,37 @@ int Diagram::Sublattice(GLine &g, const int& dir)
 string Diagram::PrettyString(GLine &g)
 {
     stringstream os;
-    os << "\n";
-    os << g.Vertex[IN] << " (" << Spin(g,IN) << ") >>===";
-    os << "Name:" << g.Name << ",K:"<<g.K<<",Weight:" << g.Weight;
-    os << "===>>" << g.Vertex[OUT] << " (" << Spin(g,OUT) << ");";
+    os << "{V " << g.Vertex[IN] << "}->-" << ToString(Spin(g, IN)) << "---";
+    os << "[G " << g.Name << " ,K:" << g.K << ",Weight:" << g.Weight << "]";
+    os << "---" << ToString(Spin(g, OUT)) << "->-{V " << g.Vertex[OUT] << "}";
     os << endl;
     return os.str();
 }
 
-
-
 /****************   WLine  *****************************/
-spin Diagram::Spin(WLine &w, const int& dir1, const int& dir2)
+spin Diagram::Spin(WLine &w, const int &dir1, const int &dir2)
 {
     return Ver[w.Vertex[dir1]].Spin[dir2];
 }
 
-int Diagram::Sublattice(WLine &w, const int& dir)
+int Diagram::Sublattice(WLine &w, const int &dir)
 {
     return Ver[w.Vertex[dir]].R.Sublattice;
 }
 
-
-string Diagram::PrettyString(WLine& w)
+string Diagram::PrettyString(WLine &w)
 {
     stringstream os;
-    os << "\n";
-    os << w.Vertex[IN] << " (" << Spin(w, IN, IN) << "," << Spin(w, IN,OUT) << ") ~~~";
-    os << "Name:" << w.Name << ", K:"<<w.K<<",Weight:" << w.Weight;
-    os << "~~~" << w.Vertex[OUT] << " (" << Spin(w,OUT,IN) << "," << Spin(w,OUT,OUT) << ");";
+    os << "{V " << w.Vertex[IN] << "| " << ToString(Spin(w, IN, IN)) << "," << ToString(Spin(w, IN, OUT)) << "}~~~";
+    os << "<W " << w.Name << ", K:" << w.K << ",Weight:" << w.Weight << ">";
+    os << "~~~"
+       << "{" << ToString(Spin(w, OUT, IN)) << "," << ToString(Spin(w, OUT, OUT)) << "|W " << w.Vertex[OUT] << "}";
     os << endl;
     return os.str();
 }
 
 /****************   Vertex  *****************************/
-spin Diagram::Spin(Vertex &v, const int& dir)
+spin Diagram::Spin(Vertex &v, const int &dir)
 {
     return v.Spin[dir];
 }
@@ -94,11 +90,10 @@ int Diagram::Sublattice(Vertex &v)
 string Diagram::PrettyString(Vertex &v)
 {
     stringstream os;
-    os << "\n";
-    os << v.G[IN] << ">===";
-    os << "Name:" << v.Name << ",r:" << v.R.Coordinate.PrettyString() << ",tau:" << v.Tau;
-    os << "===>" << v.G[OUT] << "\n";
-    os << "       ~~~~" << v.W;
+    os << "-[G " << v.G[IN] << "]-" << ToString(v.Spin[IN]) << "->--";
+    os << "{V " << v.Name << ",r:" << v.R.Coordinate.PrettyString() << ",tau:" << v.Tau << "}";
+    os << "-->-" << ToString(v.Spin[OUT]) << "-[G " << v.G[OUT] << "]-";
+    os << "  /~~~<W " << v.W << ">";
     os << endl;
     return os.str();
 }
@@ -125,17 +120,17 @@ WLine &Diagram::NeighW(Vertex &v)
     return W[v.W];
 }
 
-GLine& Diagram::RandomPickG()
+GLine &Diagram::RandomPickG()
 {
     return G[RNG.irn(0, G.HowMany())];
 }
 
-WLine& Diagram::RandomPickW()
+WLine &Diagram::RandomPickW()
 {
     return W[RNG.irn(0, W.HowMany())];
 }
 
-Vertex& Diagram::RandomPickVer()
+Vertex &Diagram::RandomPickVer()
 {
     return Ver[RNG.irn(0, Ver.HowMany())];
 }
@@ -143,7 +138,7 @@ Vertex& Diagram::RandomPickVer()
 bool Diagram::FixDiagram()
 {
     Order = W.HowMany();
-    
+
     //TODO: you may also need to fix diagram weight
     for (int index = 0; index < G.HowMany(); index++) {
         for (int dir = 0; dir < 2; dir++) {
@@ -154,7 +149,7 @@ bool Diagram::FixDiagram()
     for (int index = 0; index < W.HowMany(); index++) {
         WLine &w = W[index];
         w.IsWorm = false;
-        
+
         for (int dir = 0; dir < 2; dir++) {
             Vertex &v = NeighVer(w, dir);
             v.W = index;

@@ -69,15 +69,17 @@ void Test_Diagram_IO()
     NewG.Vertex[OUT] = 1;
     NewG.K = 1;
     NewG.Weight = Complex(1.0, 3.0e9);
-    LOG_INFO(NewG);
-    strtemp << NewG;
+    NewG.SaveConfig(strtemp);
+    NewG.LoadConfig(strtemp);
+    sput_fail_unless(Equal(NewG.Vertex[OUT], 1), "Check GLine reading");
 
     WLine NewW;
     NewW.Vertex[IN] = 2;
     NewW.Vertex[OUT] = 3;
     NewW.K = 2;
-    LOG_INFO(NewW);
-    strtemp << NewW;
+    NewW.SaveConfig(strtemp);
+    NewW.LoadConfig(strtemp);
+    sput_fail_unless(Equal(NewW.Vertex[OUT], 3), "Check WLine reading");
 
     Vertex NewV;
     NewV.Name = 0;
@@ -87,18 +89,12 @@ void Test_Diagram_IO()
     NewV.Tau = 0.51;
     NewV.Spin[IN] = UP;
     NewV.Spin[OUT] = DOWN;
-    LOG_INFO(NewV);
-    strtemp << NewV;
-
-    strtemp >> NewG;
-    sput_fail_unless(Equal(NewG.Vertex[OUT], 1), "Check GLine reading");
-    strtemp >> NewW;
-    sput_fail_unless(Equal(NewW.Vertex[OUT], 3), "Check WLine reading");
-    strtemp >> NewV;
+    NewV.SaveConfig(strtemp);
+    NewV.LoadConfig(strtemp);
     sput_fail_unless(Equal(NewV.Tau, 0.51), "Check Vertex reading");
 
-    Diag.ReadDiagram("../src/diagram/diagram_template.config");
+    Diag.LoadConfig("../src/diagram/diagram_template.config");
+    LOG_INFO(Diag.PrettyString(Diag.Ver[0]));
     sput_fail_unless(Diag.CheckDiagram(), "Check diagram reading");
-    Diag.WriteDiagram(cout);
     Diag.WriteDiagram2gv("./test.gv");
 }

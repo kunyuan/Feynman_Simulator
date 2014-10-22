@@ -63,7 +63,7 @@ void TestObservableComplex()
     EstimatorBundle<Complex> QuanVector2;
     QuanVector2.AddEstimator("1");
     QuanVector2.AddEstimator("2");
-    QuanVector2.ReadState("TestObservable");
+    QuanVector2.LoadState("TestObservable");
     sput_fail_unless(Equal(QuanVector2[1].Estimate().Mean, -ExpectedResult.Mean),
                      "EstimatorVector:check the Mean value.");
     sput_fail_unless(Equal(QuanVector2[1].Estimate().Error, ExpectedResult.Error),

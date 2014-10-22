@@ -42,7 +42,7 @@ class WeightNoMeasure {
                TAU };
 
   public:
-    void SaveState(const std::string &FileName, const std::string &Mode = "a");
+    void SaveState(const std::string &FileName, std::string Mode = "a");
     bool LoadState(const std::string &);
 };
 
@@ -65,7 +65,7 @@ class WeightNeedMeasure : public WeightNoMeasure {
     void ClearStatistics();
     void SqueezeStatistics(real factor);
     //    std::string PrettyString();
-    void SaveState(const std::string &FileName, const std::string &Mode = "a");
+    void SaveState(const std::string &FileName, std::string Mode = "a");
     bool LoadState(const std::string &);
 };
 
