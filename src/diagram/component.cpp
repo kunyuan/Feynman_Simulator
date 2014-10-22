@@ -13,6 +13,19 @@
 using namespace std;
 
 /*******************   Read/write component to dat file  ********************************/
+istream &Worm::LoadConfig(istream &is)
+{
+    //format: i/Ira/Masha/dSpin/K
+    is >> Ira >> Masha >> dSpin >> K;
+    return is;
+}
+
+ostream &Worm::SaveConfig(ostream &os)
+{
+    os << Ira <<SEP<< Masha <<SEP<< dSpin << SEP<<K <<endl;
+    return os;
+}
+
 istream &GLine::LoadConfig(istream &is)
 {
     //format: g/start/end/in_spin/out_spin

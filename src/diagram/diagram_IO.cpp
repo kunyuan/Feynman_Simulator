@@ -48,10 +48,8 @@ void Diagram::SaveConfig(const std::string &FileName, string Mode)
 
         if(Worm.Exist)
         {
-            os << SEP_LINE << endl;
             os << COMMENT << "Worm" << endl;
-            os << "i" << SEP<< Worm.Ira <<SEP <<Worm.Masha <<SEP<<Worm.dSpin
-                <<SEP<<Worm.K<<endl;
+            Worm.SaveConfig(os << 'i' <<SEP);
         }
     }
 }
@@ -76,8 +74,10 @@ bool Diagram::LoadConfig(const std::string &FileName)
         }
         ifs.clear();
         ifs.seekg(lastBlockPos);
+        ClearDiagram();
         char head;
         string temp;
+        i=0;
         while (!ifs.eof()) {
             ifs >> head;
             if (head == COMMENT) {
@@ -92,8 +92,10 @@ bool Diagram::LoadConfig(const std::string &FileName)
                 Ver.Add().LoadConfig(ifs);
             else if (head == 'i')
                 //TODO read from Worm
+                Worm.LoadConfig(ifs);
             else
                 ABORT("Error in reading diagram! Get " + ToString(head) + " as the head!");
+            head=COMMENT;
         }
         FixDiagram();
         return true;

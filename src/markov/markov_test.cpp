@@ -32,7 +32,7 @@ void Test_CreateWorm()
     Job.Read();
     EnvMonteCarlo Env(Job);
     Markov markov(&Env);
-    markov.Diag->ReadDiagram("../src/diagram/diagram_template.config");
+    markov.Diag->LoadConfig("../src/diagram/diagram_template.config");
     int total=0;
     for(int i=0; i<10; i++)
     {
@@ -40,9 +40,9 @@ void Test_CreateWorm()
         if(markov.Diag->Worm.Exist)
         {
             total += 1;
-            markov.Diag->WriteDiagram(cout);
+            markov.Diag->SaveConfig("diagram_template.config", "w");
         }
-        markov.Diag->ReadDiagram("../src/diagram/diagram_template.config");
+        markov.Diag->LoadConfig("../src/diagram/diagram_template.config");
     }
     cout <<total <<endl;
     sput_fail_unless(total==10, "The accept ratio of CreateWorm");
