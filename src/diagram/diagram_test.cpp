@@ -85,8 +85,8 @@ void Test_Diagram_IO()
     NewV.R.Coordinate[0] = 12;
     NewV.R.Coordinate[1] = 2;
     NewV.Tau = 0.51;
-    NewV.Spin[IN]=UP;
-    NewV.Spin[OUT]=DOWN;
+    NewV.Spin[IN] = UP;
+    NewV.Spin[OUT] = DOWN;
     LOG_INFO(NewV);
     strtemp << NewV;
 
