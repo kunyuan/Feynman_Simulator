@@ -88,10 +88,9 @@ class Diagram {
     bool CheckDiagram();
 
     //Diagram IO
-    bool ReadDiagram(std::string);
-    bool ReadDiagram(std::istream &);
-    void WriteDiagram(std::string);
-    void WriteDiagram(std::ostream &);
+    bool LoadConfig(const std::string &FileName);
+    void SaveConfig(const std::string &FileName, std::string Mode = "a");
+
     void WriteDiagram2gv(std::string);
     void WriteDiagram2gv(std::ostream &);
 

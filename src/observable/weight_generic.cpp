@@ -78,7 +78,7 @@ void WeightNoMeasure::InitializeState()
     }
 }
 
-void WeightNoMeasure::SaveState(const std::string &FileName, const std::string &Mode)
+void WeightNoMeasure::SaveState(const std::string &FileName, std::string Mode)
 {
     cnpy::npz_save(cnpy::npz_name(FileName), _Name, _Weight->Data(), _Shape + SP, 4, Mode);
 }
@@ -186,7 +186,7 @@ void WeightNeedMeasure::SqueezeStatistics(real factor)
 }
 
 /**********************   Weight IO ****************************************/
-void WeightNeedMeasure::SaveState(const std::string &FileName, const std::string &Mode)
+void WeightNeedMeasure::SaveState(const std::string &FileName, std::string Mode)
 {
     unsigned int shape[1] = {1};
     cnpy::npz_save(cnpy::npz_name(FileName), _Name + "_Norm", &_Norm, shape, 1, Mode);
@@ -197,7 +197,7 @@ void WeightNeedMeasure::SaveState(const std::string &FileName, const std::string
 
 bool WeightNeedMeasure::LoadState(const std::string &FileName)
 {
-    _Average.ReadState(FileName);
+    _Average.LoadState(FileName);
     WeightNoMeasure::LoadState(FileName);
 
     cnpy::npz_t NpzMap = cnpy::npz_load(cnpy::npz_name(FileName));

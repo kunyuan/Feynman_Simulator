@@ -94,9 +94,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "111"
-            endingLineNumber = "111"
-            landmarkName = "WeightNeedMeasure::~WeightNeedMeasure()"
-            landmarkType = "5">
+            endingLineNumber = "111">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -216,9 +214,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "159"
-            endingLineNumber = "159"
-            landmarkName = "Diagram::ClearDiagram()"
-            landmarkType = "5">
+            endingLineNumber = "159">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -233,7 +229,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "86"
             endingLineNumber = "86"
-            landmarkName = "Diagram::ReadDiagram(istream &amp;is)"
+            landmarkName = "Diagram::WriteDiagram(string path)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -249,7 +245,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "87"
             endingLineNumber = "87"
-            landmarkName = "Diagram::ReadDiagram(istream &amp;is)"
+            landmarkName = "Diagram::WriteDiagram(string path)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

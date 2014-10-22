@@ -179,7 +179,7 @@ real Estimator<T>::Ratio()
 }
 
 template <typename T>
-bool Estimator<T>::ReadState(cnpy::npz_t NpzMap)
+bool Estimator<T>::LoadState(cnpy::npz_t NpzMap)
 {
     cnpy::NpyArray history = NpzMap[Name];
     T *start = reinterpret_cast<T *>(history.data);
@@ -206,7 +206,7 @@ bool Estimator<T>::ReadState(cnpy::npz_t NpzMap)
 }
 
 template <typename T>
-void Estimator<T>::SaveState(const string FileName, string Mode)
+void Estimator<T>::SaveState(const string &FileName, string Mode)
 {
     unsigned int shape[1];
     shape[0] = (unsigned int)_history.size();
@@ -250,17 +250,17 @@ int EstimatorBundle<T>::HowMany()
 }
 
 template <typename T>
-bool EstimatorBundle<T>::ReadState(const string FileName)
+bool EstimatorBundle<T>::LoadState(const string &FileName)
 {
     cnpy::npz_t NpzMap = cnpy::npz_load(cnpy::npz_name(FileName));
     for (unsigned int i = 0; i < _EstimatorVector.size(); i++) {
-        _EstimatorVector[i].ReadState(NpzMap);
+        _EstimatorVector[i].LoadState(NpzMap);
     }
     return true;
 }
 
 template <typename T>
-void EstimatorBundle<T>::SaveState(const string FileName, string Mode)
+void EstimatorBundle<T>::SaveState(const string &FileName, string Mode)
 {
     string Mod = Mode;
     for (unsigned int i = 0; i < _EstimatorVector.size(); i++) {
