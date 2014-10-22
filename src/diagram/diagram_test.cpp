@@ -97,8 +97,18 @@ void Test_Diagram_IO()
     strtemp >> NewV;
     sput_fail_unless(Equal(NewV.Tau, 0.51), "Check Vertex reading");
 
+    Lattice lat;
+    Weight::G G(lat, 1.0, 1);
+    Weight::W W(lat, 1.0, 1);
+    G.InitializeState();
+    W.InitializeState();
+    
+    Diag.SetLat(&lat);
+    Diag.SetGWWeight(&G, &W);
+    
     Diag.ReadDiagram("../src/diagram/diagram_template.config");
     sput_fail_unless(Diag.CheckDiagram(), "Check diagram reading");
+    sput_fail_unless(Equal(Diag.Weight,Complex(64.0, 0.0)), "Check diagram reading");
     Diag.WriteDiagram(cout);
     Diag.WriteDiagram2gv("./test.gv");
 }

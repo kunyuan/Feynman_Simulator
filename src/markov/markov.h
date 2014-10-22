@@ -13,24 +13,29 @@
 #include "weight.h"
 #include "rng.h"
 
+
 class Markov {
   private:
     real Beta;
     Lattice *Lat;
     real *OrderWeight;
-    Diagram *Diag;
     Worm *Worm;
     Weight::Sigma *Sigma;
     Weight::Polar *Polar;
     Weight::G *G;
     Weight::W *W;
     Weight::Worm *WormWeight;
+    
+    const static int NUpdates = 2;
+    real ProbofCall[NUpdates];
 
   public:
+    Diagram *Diag;
     Markov(EnvMonteCarlo *);
     void Hop(int &&);
-    void CreateWorm(real, real);
-    void DeleteWorm(real, real);
+    void CreateWorm();
+    void DeleteWorm();
 };
 
+int TestMarkov();
 #endif /* defined(__Feynman_Simulator__markov__) */

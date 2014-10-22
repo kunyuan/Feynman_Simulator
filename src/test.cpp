@@ -23,7 +23,8 @@ int RunTest()
     //    TestPystring();
         TEST(TestDiagram);
         TEST(TestLattice);
-    TEST(TestObservable);
+        TEST(TestObservable);
+        TEST(TestMarkov);
 
     //    TestArray();
     //    Testcnpy();
