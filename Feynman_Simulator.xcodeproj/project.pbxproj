@@ -96,6 +96,9 @@
 		84519AF019F33F22007CB81B /* complex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = complex.cpp; sourceTree = "<group>"; };
 		84519AF119F33F22007CB81B /* complex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = complex.h; sourceTree = "<group>"; };
 		845C92C019F75B340066B590 /* vector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = vector.cpp; path = lattice/vector.cpp; sourceTree = "<group>"; };
+		845C92C619F834460066B590 /* inlist.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = inlist.py; sourceTree = SOURCE_ROOT; };
+		845C92C719F834460066B590 /* job_manager.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = job_manager.py; sourceTree = SOURCE_ROOT; };
+		845C92C819F834460066B590 /* run_loop.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = run_loop.py; sourceTree = SOURCE_ROOT; };
 		84B1D57919DEFC19004C3A89 /* test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = test.h; sourceTree = "<group>"; };
 		84B1D57C19DF4215004C3A89 /* definition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = definition.h; sourceTree = "<group>"; };
 		84B1D57D19DF42EE004C3A89 /* job.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = job.cpp; sourceTree = "<group>"; };
@@ -221,6 +224,9 @@
 		84D4287419F1F4B40051CE96 /* job */ = {
 			isa = PBXGroup;
 			children = (
+				845C92C619F834460066B590 /* inlist.py */,
+				845C92C719F834460066B590 /* job_manager.py */,
+				845C92C819F834460066B590 /* run_loop.py */,
 				84B1D57E19DF42EE004C3A89 /* job.h */,
 				84B1D57D19DF42EE004C3A89 /* job.cpp */,
 			);
