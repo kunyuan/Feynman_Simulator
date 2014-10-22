@@ -49,26 +49,25 @@ void Markov::CreateWorm(real pcall1, real pcall2)
 {
     if (Worm->Exist)
         return;
-    WLine &w = Diag->RandomPickW();
-    Vertex &vin = Diag->NeighVer(w, IN);
-    Vertex &vout = Diag->NeighVer(w, OUT);
+    static WLine &w = Diag->RandomPickW();
+    static Vertex &vin = Diag->NeighVer(w, IN);
+    static Vertex &vout = Diag->NeighVer(w, OUT);
 
-    int k = RandomPickK();
-    int dspin = RandomPickdSpin();
-    if(Diag->CanNotMoveWorm(dspin, vin) && Diag->CanNotMoveWorm(-dspin, vout)) return;
-    
-    Complex wWeight= W->Weight(Lat->Distance(vin.R, vout.R), vout.Tau-vin.Tau, vin.Spin, vout.Spin, true);
-    
-    Complex weightratio = wWeight/w.Weight;
-    Complex sgn=phase(weightratio);
-    
-    real prob=mod(weightratio);
-    real wormWeight = WormWeight->Weight(Lat->Distance(vin.R, vout.R), vout.Tau-vin.Tau);
-    
-    prob *= pcall2/pcall1*wormWeight*Diag->Order*2.0;
-    
-    if(RNG.urn()<prob)
-    {
+    static int k = RandomPickK();
+    static int dspin = RandomPickDeltaSpin();
+    if (CanNotMoveWorm(dspin, vin) && CanNotMoveWorm(-dspin, vout))
+        return;
+
+    static Complex wWeight = W->Weight(Lat->Distance(vin.R, vout.R), vout.Tau - vin.Tau, vin.Spin, vout.Spin, true);
+    static Complex weightRatio = wWeight / w.Weight;
+    static real prob = mod(weightRatio);
+    static Complex sgn = phase(weightRatio);
+
+    static real wormWeight = WormWeight->Weight(Lat->Distance(vin.R, vout.R), vout.Tau - vin.Tau);
+
+    prob *= pcall2 / pcall1 * wormWeight * Diag->Order * 2.0;
+
+    if (prob >= 1.0 || RNG.urn() < prob) {
         Diag->Phase *= sgn;
         Diag->Weight *= weightRatio;
 
