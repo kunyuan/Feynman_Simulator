@@ -31,20 +31,23 @@ class RandomFactory {
         static std::uniform_real_distribution<real> d(0.0, 1.0);
         return d(_eng);
     }
+    //Generator integer random numbers in the closed interval [from, thru]
     inline int irn(int from, int thru)
     {
         static std::uniform_int_distribution<> d{};
         return d(_eng, decltype(d)::param_type{from, thru});
     }
+
+    //Generator integer random numbers in the closed interval [from, thru]
     inline int irn1(int from, int thru)
     {
         return _eng() % (thru - from + 1) + from;
     }
-    inline int nrn(real mean, real std)
-    {
-        static std::normal_distribution<> d{};
-        return d(_eng, decltype(d)::param_type{mean, std});
-    }
+    //    inline int nrn(real mean, real std)
+    //    {
+    //        static std::normal_distribution<> d{};
+    //        return d(_eng, decltype(d)::param_type{mean, std});
+    //    }
 };
 
 extern RandomFactory RNG;
