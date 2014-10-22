@@ -84,9 +84,9 @@ void Test_Diagram_IO()
     NewV.R.Sublattice = 1;
     NewV.R.Coordinate[0] = 12;
     NewV.R.Coordinate[1] = 2;
-    NewV.tau = 0.51;
-    NewV.Spin[IN]=UP;
-    NewV.Spin[OUT]=DOWN;
+    NewV.Tau = 0.51;
+    NewV.Spin[IN] = UP;
+    NewV.Spin[OUT] = DOWN;
     LOG_INFO(NewV);
     strtemp << NewV;
 
@@ -95,7 +95,7 @@ void Test_Diagram_IO()
     strtemp >> NewW;
     sput_fail_unless(Equal(NewW.Vertex[OUT], 3), "Check WLine reading");
     strtemp >> NewV;
-    sput_fail_unless(Equal(NewV.tau, 0.51), "Check Vertex reading");
+    sput_fail_unless(Equal(NewV.Tau, 0.51), "Check Vertex reading");
 
     Diag.ReadDiagram("../src/diagram/diagram_template.config");
     sput_fail_unless(Diag.CheckDiagram(), "Check diagram reading");
