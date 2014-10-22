@@ -19,8 +19,7 @@ int RunTest()
 {
 
     //    TestTimer();  //Test the timer
-    //        TestRNG();
-    //    TestPystring();
+    //    TestRNG();
         TEST(TestDiagram);
         TEST(TestLattice);
         TEST(TestObservable);
