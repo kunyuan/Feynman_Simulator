@@ -16,23 +16,6 @@
 #include "weight.h"
 #include "lattice.h"
 
-class Worm {
-  public:
-    bool Exist;
-    int Ira, Masha; //extra line: Ira---"k,dSpin"--->Masha
-    int K;
-    int dSpin;
-
-    Worm()
-        : Exist(false), Ira(0), Masha(0), K(0), dSpin(0)
-    {
-    }
-    Worm(int ira, int masha, int dk, int s)
-        : Exist(true), Ira(ira), Masha(masha), K(dk), dSpin(s)
-    {
-    }
-};
-
 class Diagram {
   public:
     Diagram();
