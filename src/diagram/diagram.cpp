@@ -13,24 +13,6 @@
 #include "weight.h"
 #include "rng.h"
 using namespace std;
-
-int RandomPickK()
-{
-    return RNG.irn(-MAX_K, MAX_K);
-}
-
-int RandomPickdSpin()
-{
-    return RNG.irn(0, 2)*2-1;
-}
-
-bool Diagram::CanNotMoveWorm(int dspin, const Vertex& v)
-{
-    if(dspin==1 && v.Spin[IN]==DOWN && v.Spin[OUT]==UP) return true;
-    if(dspin==-1 && v.Spin[IN]==UP && v.Spin[OUT]==DOWN) return true;
-    return false;
-}
-
 bool Diagram::IsWorm(const Vertex& v)
 {
     if(Worm.Ira==v.Name || Worm.Masha==v.Name)

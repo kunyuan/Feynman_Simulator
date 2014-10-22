@@ -17,49 +17,51 @@
 
 namespace Weight {
 
-class Base {
+class WeightNoMeasure {
   protected:
-    Base(const Lattice &, real Beta, int Order);
+    WeightNoMeasure(const Lattice &, real Beta, int Order, int SpinVol, std::string);
+    ~WeightNoMeasure();
     std::string _Name;
     real _Beta;
-    Lattice _Lat;
+    real _dBeta;
+    real _dBetaInverse;
     int _Order;
-    inline int SpinIndex(spin SpinIn, spin SpinOut);
-    inline int SpinIndex(spin *TwoSpinIn, spin *TwoSpinOut);
-    inline int TauToBin(real tau);
-    inline real BinToTau(int Bin);
-    const int MAX_BIN = 128;
-    enum Dim {
-        ORDER,
-        SP,
-        SUB,
-        VOL,
-        TAU
-    };
-};
-/**
-*  Estimate gives a estimation of certain quantity with it's error bar'
-*/
-
-//TODO: Add fitting function here
-class Sigma : Base {
-  private:
-    real _Norm;
+    Lattice _Lat;
     unsigned int _Shape[5];
     Array::array4<Complex> *_Weight;
-    Array::array5<Complex> *_WeightAccu;
-    Array::array2<Complex> *_WeightSquareAccu;
+
+    int SpinIndex(spin SpinIn, spin SpinOut);
+    int SpinIndex(spin *TwoSpinIn, spin *TwoSpinOut);
+    int TauToBin(real tau);
+    real BinToTau(int Bin);
+    const int MAX_BIN = 128;
+    enum Dim { ORDER,
+               SP,
+               SUB,
+               VOL,
+               TAU };
 
   public:
-    Sigma(const Lattice &, real Beta, int order);
-    ~Sigma();
+    void SaveState(const std::string &FileName, const std::string &Mode = "a");
+    bool LoadState(const std::string &);
+};
+
+class WeightNeedMeasure : public WeightNoMeasure {
+  protected:
+    real _Norm;
+    Array::array5<Complex> *_WeightAccu;
+    EstimatorBundle<Complex> _Average;
+
+  public:
+    WeightNeedMeasure(const Lattice &, real Beta, int order, int Spine, std::string);
+    ~WeightNeedMeasure();
+
+    Estimate<Complex> WeightWithError(int order);
+
     int OrderAcceptable(int StartFromOrder, real ErrorThreshold);
     void UpdateWeight(int UpToOrder);
-    Complex Weight(const Distance &dR, real dtau, spin, spin);
-    Complex WeightOfDelta(spin, spin);
-    //TODO: no r dependence, really?
-    //    Estimate<Complex> WeightWithError(const Distance &dR, real dtau, spin, spin);
-    void Measure(const Distance &, real dtau, spin, spin, int Order, const Complex &);
+
+    void AddStatistics();
     void ClearStatistics();
     void SqueezeStatistics(real factor);
     //    std::string PrettyString();
@@ -67,56 +69,44 @@ class Sigma : Base {
     bool LoadState(const std::string &);
 };
 
-class Polar : Base {
-  private:
-    real _Norm;
-    unsigned int _Shape[5];
-    Array::array4<Complex> *_Weight;
-    Array::array5<Complex> *_WeightAccu;
-    Array::array2<Complex> *_WeightSquareAccu;
+//TODO: Add fitting function here
+class Sigma : public WeightNeedMeasure {
+  public:
+    Sigma(const Lattice &, real Beta, int order);
+    Complex Weight(const Distance &dR, real dtau, spin, spin);
+    Complex WeightOfDelta(spin, spin);
+    void Measure(const Distance &, real dtau, spin, spin, int Order, const Complex &);
+};
 
+class Polar : public WeightNeedMeasure {
   public:
     Polar(const Lattice &, real Beta, int order);
-    ~Polar();
-    inline Complex Weight(const Distance &dR, real dtau, spin *, spin *);
-    Estimate<Complex> WeightWithError(const Distance &dR, real dtau, spin *, spin *);
+    Complex Weight(const Distance &dR, real dtau, spin *, spin *);
+    void Measure(const Distance &, real dtau, spin *, spin *, int Order, const Complex &);
 };
 
-class G : Base {
-  private:
-    Array::array4<Complex> *_Weight;
-    
+class G : public WeightNeedMeasure {
   public:
     G(const Lattice &, real Beta, int order);
-    ~G();
-    void UpdateWeight(int UpToOrder);
     Complex Weight(const Distance &dR, real dtau, spin, spin);
     Complex BareWeight(const Distance &dR, real dtau, spin, spin);
-    void SaveState(const std::string &FileName, const std::string &Mode = "a");
-    bool LoadState(const std::string &);
 };
 
-class W : Base {
-  private:
-    Array::array4<Complex> *_Weight;
-
+class W : public WeightNeedMeasure {
   public:
     W(const Lattice &, real Beta, int order);
-    ~W();
-    void UpdateWeight(int UpToOrder);
     Complex Weight(const Distance &dR, real dtau, spin *, spin *, bool);
     Complex WeightOfDelta(const Distance &dR, spin *, spin *, bool);
-    Complex BareWeight(const Distance &dR, real dtau, spin *, spin *, bool);
-    void SaveState(const std::string &FileName, const std::string &Mode = "a");
-    bool LoadState(const std::string &);
+    Complex BareWeight(const Distance &dR, real dtau, spin *, spin *);
 };
-    
-class Worm
-{
+
+class Worm {
   public:
-    real Weight(const Distance &dR, real dtau);
+    inline real Weight(const Distance &dR, real dtau)
+    {
+        return 1.0;
+    }
 };
-    
 }
 
 int TestObservable();
