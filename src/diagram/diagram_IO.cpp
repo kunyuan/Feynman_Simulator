@@ -37,6 +37,18 @@ void Diagram::WriteDiagram(ostream &os)
     os << COMMENT << W.Name() << endl;
     for (int index = 0; index < W.HowMany(); index++)
         os << 'w' << SEP<<W[index];
+    
+    if(Worm.Exist)
+    {
+        os << SEP_LINE << endl;
+        os << COMMENT << "Worm" << endl;
+        os << "worm" << SEP<< Worm.Ira <<SEP <<Worm.Masha <<SEP<<Worm.dSpin
+            <<SEP<<Worm.K<<endl;
+    }
+    
+    os << SEP_LINE << endl;
+    os << COMMENT << "Weight" << Weight << endl;
+    os << endl;
 }
 
 void Diagram::WriteDiagram(string path)
@@ -55,6 +67,7 @@ bool Diagram::ReadDiagram(istream &is)
 {
     char head;
     string temp;
+    ClearDiagram();
     while (!is.eof()) {
         is >> head;
         if (head == COMMENT) {

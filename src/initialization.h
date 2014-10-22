@@ -22,6 +22,7 @@
 #include "job.h"
 #include "diagram.h"
 #include "weight.h"
+#include "markov.h"
 
 void InitGlobalUtility();
 

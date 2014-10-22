@@ -70,6 +70,14 @@ real WeightNoMeasure::BinToTau(int Bin)
     return Bin * _dBeta + _Beta / 2;
 }
 
+void WeightNoMeasure::InitializeState()
+{
+    for(unsigned int i=0;i<_Weight->Size();i++)
+    {
+        (*_Weight)(i)=Complex(2.0, 0.0);
+    }
+}
+
 void WeightNoMeasure::SaveState(const std::string &FileName, const std::string &Mode)
 {
     cnpy::npz_save(cnpy::npz_name(FileName), _Name, _Weight->Data(), _Shape + SP, 4, Mode);
@@ -77,9 +85,9 @@ void WeightNoMeasure::SaveState(const std::string &FileName, const std::string &
 
 bool WeightNoMeasure::LoadState(const std::string &FileName)
 {
-    cnpy::NpyArray sigma = cnpy::npz_load(cnpy::npz_name(FileName), _Name);
+    cnpy::NpyArray weight = cnpy::npz_load(cnpy::npz_name(FileName), _Name);
 
-    Complex *start = reinterpret_cast<Complex *>(sigma.data);
+    Complex *start = reinterpret_cast<Complex *>(weight.data);
     if (start == NULL)
         ABORT("Can't find estimator " << _Name << " in .npz data file!" << endl);
     _Weight->Set(start);
