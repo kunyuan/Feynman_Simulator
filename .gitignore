@@ -41,7 +41,9 @@
 *.xcuserstate
 doc
 data
+data*
 .DS_Store
-
 *.DS_Store
+data/infile
+data/outfile
 
