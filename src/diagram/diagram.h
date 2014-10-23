@@ -12,21 +12,22 @@
 #include <iostream>
 #include "component_bundle.h"
 #include "../utility/rng.h"
+#include "../observable/weight.h"
 
 class Diagram {
   public:
     Diagram();
-    
+
     void SetGWWeight(Weight::G *, Weight::W *);
     Weight::G *GWeight;
     Weight::W *WWeight;
-    
+
     void SetLat(Lattice *);
     Lattice *Lat;
-    
+
     int Order;
     Complex Phase, Weight;
-    
+
     Bundle<GLine> G;
     Bundle<WLine> W;
     Bundle<Vertex> Ver;
@@ -45,7 +46,6 @@ class Diagram {
     string PrettyString(GLine &);
     string PrettyString(WLine &);
     string PrettyString(Vertex &);
-
 
     //Randomly Pick
     GLine &RandomPickG();
