@@ -29,7 +29,7 @@
 		84519AF219F33F22007CB81B /* complex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84519AF019F33F22007CB81B /* complex.cpp */; };
 		845C92C119F75B340066B590 /* vector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 845C92C019F75B340066B590 /* vector.cpp */; };
 		845C92D819F855980066B590 /* job.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 845C92D619F855980066B590 /* job.cpp */; };
-		845C92EB19F89D5A0066B590 /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 845C92EA19F89D5A0066B590 /* libz.1.2.5.dylib */; };
+		84681F4919F9497800832DAD /* crc32.c in Sources */ = {isa = PBXBuildFile; fileRef = 84681F4519F9497800832DAD /* crc32.c */; };
 		84B1D57A19DEFC19004C3A89 /* test.h in Sources */ = {isa = PBXBuildFile; fileRef = 84B1D57919DEFC19004C3A89 /* test.h */; };
 		84B8FC3419EC7469003D6DF6 /* diagram_IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84B8FC3319EC7469003D6DF6 /* diagram_IO.cpp */; };
 		84B8FC3C19EC97B2003D6DF6 /* weight_generic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84B8FC3A19EC97B2003D6DF6 /* weight_generic.cpp */; };
@@ -102,7 +102,10 @@
 		845C92C919F835590066B590 /* job_class.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = job_class.py; sourceTree = SOURCE_ROOT; };
 		845C92D619F855980066B590 /* job.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = job.cpp; path = job/job.cpp; sourceTree = "<group>"; };
 		845C92D719F855980066B590 /* job.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = job.h; path = job/job.h; sourceTree = "<group>"; };
-		845C92EA19F89D5A0066B590 /* libz.1.2.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.5.dylib; path = usr/lib/libz.1.2.5.dylib; sourceTree = SDKROOT; };
+		84681F4519F9497800832DAD /* crc32.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = crc32.c; path = zlib/crc32.c; sourceTree = "<group>"; };
+		84681F4619F9497800832DAD /* crc32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = crc32.h; path = zlib/crc32.h; sourceTree = "<group>"; };
+		84681F4719F9497800832DAD /* zconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = zconf.h; path = zlib/zconf.h; sourceTree = "<group>"; };
+		84681F4819F9497800832DAD /* zlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = zlib.h; path = zlib/zlib.h; sourceTree = "<group>"; };
 		84B1D57919DEFC19004C3A89 /* test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = test.h; sourceTree = "<group>"; };
 		84B1D57C19DF4215004C3A89 /* definition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = definition.h; sourceTree = "<group>"; };
 		84B8FC3319EC7469003D6DF6 /* diagram_IO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = diagram_IO.cpp; path = diagram/diagram_IO.cpp; sourceTree = "<group>"; };
@@ -133,7 +136,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				845C92EB19F89D5A0066B590 /* libz.1.2.5.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -197,6 +199,17 @@
 			name = diagram;
 			sourceTree = "<group>";
 		};
+		84681F4A19F9497D00832DAD /* zlib */ = {
+			isa = PBXGroup;
+			children = (
+				84681F4519F9497800832DAD /* crc32.c */,
+				84681F4619F9497800832DAD /* crc32.h */,
+				84681F4719F9497800832DAD /* zconf.h */,
+				84681F4819F9497800832DAD /* zlib.h */,
+			);
+			name = zlib;
+			sourceTree = "<group>";
+		};
 		84B8FC3819EC9753003D6DF6 /* observable */ = {
 			isa = PBXGroup;
 			children = (
@@ -250,7 +263,6 @@
 		84FDE06719DDFC2F0092B441 = {
 			isa = PBXGroup;
 			children = (
-				845C92EA19F89D5A0066B590 /* libz.1.2.5.dylib */,
 				84FDE07219DDFC2F0092B441 /* Feynman_Simulator */,
 				84FDE07119DDFC2F0092B441 /* Products */,
 			);
@@ -267,6 +279,7 @@
 		84FDE07219DDFC2F0092B441 /* Feynman_Simulator */ = {
 			isa = PBXGroup;
 			children = (
+				84681F4A19F9497D00832DAD /* zlib */,
 				84FDE07319DDFC2F0092B441 /* main.cpp */,
 				841D905719DF833E0066116A /* initialization.h */,
 				841D905619DF833E0066116A /* initialization.cpp */,
@@ -370,6 +383,7 @@
 				84D7EFC519F59FD3006B1CA5 /* weight_specific.cpp in Sources */,
 				61266E5CDE0355C1306E9EBD /* rng_test.cpp in Sources */,
 				84D4287319F1F3BB0051CE96 /* markov.cpp in Sources */,
+				84681F4919F9497800832DAD /* crc32.c in Sources */,
 				6126638BECC823E2FECDBE1A /* utility.cpp in Sources */,
 				61266A9275E9B7A6FCF57FEA /* timer_test.cpp in Sources */,
 				84B8FC4B19EDA348003D6DF6 /* cnpy.cpp in Sources */,
