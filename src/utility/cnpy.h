@@ -14,7 +14,7 @@
 #include <iostream>
 #include <cassert>
 #include <map>
-#include "zlib/zlib.h"
+#include "crc32.h"
 /**
 *  You may add -lz to link to the zlib library
 *  If you are using xcode, add libz.dylib to "Build Phases/Link Binary with Libraries
@@ -171,11 +171,11 @@ void npz_save(std::string zipname, std::string fname, const T *data, const unsig
     unsigned long nels = 1;
     for (int m = 0; m < ndims; m++)
         nels *= shape[m];
-    unsigned int nbytes = (unsigned int)nels * sizeof(T) + (unsigned int)npy_header.size();
+    unsigned long nbytes = nels * sizeof(T) + npy_header.size();
 
     //get the CRC of the data to be added
-    unsigned long crc = crc32((unsigned long)0L, (unsigned char *)&npy_header[0], (unsigned int)npy_header.size());
-    crc = crc32(crc, (unsigned char *)data, (unsigned int)nels * sizeof(T));
+    uint32_t crc = crc32((uint32_t)0L, (unsigned char *)&npy_header[0], npy_header.size());
+    crc = crc32(crc, (unsigned char *)data, nels * sizeof(T));
 
     //    std::cout << "Save " << fname << ", " << (unsigned int)crc << std::endl;
 
