@@ -8,12 +8,13 @@
 
 #include "test.h"
 #include "utility/abort.h"
+#include "zlib.h"
 using namespace std;
 
 #define TEST(func)                  \
     {                               \
-        if (func() != EXIT_SUCCESS) \
-            ABORT("Shit happens!"); \
+        if (EXIT_SUCCESS != func()) \
+            exit(0);                \
     }
 int RunTest()
 {
@@ -22,7 +23,8 @@ int RunTest()
     //        TestRNG();
     TEST(TestDiagram);
     //    TEST(TestLattice);
-    //    TEST(TestObservable);
+    TEST(TestObservable);
+    TEST(TestCRC32);
 
     //    TestArray();
     //    Testcnpy();

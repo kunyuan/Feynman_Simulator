@@ -31,9 +31,6 @@
 #include "zlib.h"
 
 #if defined(STDC) && !defined(Z_SOLO)
-#if !(defined(_WIN32_WCE) && defined(_MSC_VER))
-#include <stddef.h>
-#endif
 #include <string.h>
 #include <stdlib.h>
 #endif
@@ -46,12 +43,6 @@ typedef long ptrdiff_t; /* guess -- will be caught if guess is wrong */
 #define local static
 #endif
 /* compile with -Dlocal if your debugger can't find static symbols */
-
-typedef unsigned char uch;
-typedef uch FAR uchf;
-typedef unsigned short ush;
-typedef ush FAR ushf;
-typedef unsigned long ulg;
 
 /* Reverse the bytes in a 32-bit value */
 #define ZSWAP32(q) ((((q) >> 24) & 0xff) + (((q) >> 8) & 0xff00) + \
@@ -72,11 +63,6 @@ local unsigned long crc32_big OF((unsigned long,
 #endif /* BYFOUR */
 
 /* Local functions for crc concatenation */
-local unsigned long gf2_matrix_times OF((unsigned long *mat,
-                                         unsigned long vec));
-local void gf2_matrix_square OF((unsigned long *square, unsigned long *mat));
-local uLong crc32_combine_ OF((uLong crc1, uLong crc2, z_off64_t len2));
-
 #ifdef DYNAMIC_CRC_TABLE
 
 local volatile int crc_table_empty = 1;
@@ -212,13 +198,13 @@ const z_crc_t FAR *table;
 /* =========================================================================
  * This function can be used by asm versions of crc32()
  */
-const z_crc_t FAR *ZEXPORT get_crc_table()
+const z_crc_t *get_crc_table()
 {
 #ifdef DYNAMIC_CRC_TABLE
     if (crc_table_empty)
         make_crc_table();
 #endif /* DYNAMIC_CRC_TABLE */
-    return (const z_crc_t FAR *)crc_table;
+    return (const z_crc_t *)crc_table;
 }
 
 /* ========================================================================= */
@@ -234,11 +220,11 @@ const z_crc_t FAR *ZEXPORT get_crc_table()
     DO1
 
 /* ========================================================================= */
-unsigned long ZEXPORT crc32(crc, buf, len) unsigned long crc;
-const unsigned char FAR *buf;
+unsigned long crc32(crc, buf, len) unsigned long crc;
+const unsigned char *buf;
 uInt len;
 {
-    if (buf == Z_NULL)
+    if (buf == 0)
         return 0UL;
 
 #ifdef DYNAMIC_CRC_TABLE
@@ -372,104 +358,3 @@ unsigned len;
 }
 
 #endif /* BYFOUR */
-
-#define GF2_DIM 32 /* dimension of GF(2) vectors (length of CRC) */
-
-/* ========================================================================= */
-local unsigned long gf2_matrix_times(mat, vec) unsigned long *mat;
-unsigned long vec;
-{
-    unsigned long sum;
-
-    sum = 0;
-    while (vec) {
-        if (vec & 1)
-            sum ^= *mat;
-        vec >>= 1;
-        mat++;
-    }
-    return sum;
-}
-
-/* ========================================================================= */
-local void gf2_matrix_square(square, mat) unsigned long *square;
-unsigned long *mat;
-{
-    int n;
-
-    for (n = 0; n < GF2_DIM; n++)
-        square[n] = gf2_matrix_times(mat, mat[n]);
-}
-
-/* ========================================================================= */
-local uLong crc32_combine_(crc1, crc2, len2)
-    uLong crc1;
-uLong crc2;
-z_off64_t len2;
-{
-    int n;
-    unsigned long row;
-    unsigned long even[GF2_DIM]; /* even-power-of-two zeros operator */
-    unsigned long odd[GF2_DIM];  /* odd-power-of-two zeros operator */
-
-    /* degenerate case (also disallow negative lengths) */
-    if (len2 <= 0)
-        return crc1;
-
-    /* put operator for one zero bit in odd */
-    odd[0] = 0xedb88320UL; /* CRC-32 polynomial */
-    row = 1;
-    for (n = 1; n < GF2_DIM; n++) {
-        odd[n] = row;
-        row <<= 1;
-    }
-
-    /* put operator for two zero bits in even */
-    gf2_matrix_square(even, odd);
-
-    /* put operator for four zero bits in odd */
-    gf2_matrix_square(odd, even);
-
-    /* apply len2 zeros to crc1 (first square will put the operator for one
-       zero byte, eight zero bits, in even) */
-    do {
-        /* apply zeros operator for this bit of len2 */
-        gf2_matrix_square(even, odd);
-        if (len2 & 1)
-            crc1 = gf2_matrix_times(even, crc1);
-        len2 >>= 1;
-
-        /* if no more bits set, then done */
-        if (len2 == 0)
-            break;
-
-        /* another iteration of the loop with odd and even swapped */
-        gf2_matrix_square(odd, even);
-        if (len2 & 1)
-            crc1 = gf2_matrix_times(odd, crc1);
-        len2 >>= 1;
-
-        /* if no more bits set, then done */
-    } while (len2 != 0);
-
-    /* return combined crc */
-    crc1 ^= crc2;
-    return crc1;
-}
-
-/* ========================================================================= */
-uLong ZEXPORT crc32_combine(crc1, crc2, len2)
-    uLong crc1;
-uLong crc2;
-z_off_t len2;
-{
-    return crc32_combine_(crc1, crc2, len2);
-}
-
-uLong ZEXPORT crc32_combine64(crc1, crc2, len2)
-    uLong crc1;
-uLong crc2;
-z_off64_t len2;
-{
-    return crc32_combine_(crc1, crc2, len2);
-}

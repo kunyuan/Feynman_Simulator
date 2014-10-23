@@ -247,6 +247,8 @@ cnpy::NpyArray cnpy::npz_load(std::string fname, std::string varname)
             throw std::runtime_error("npz_load: failed fread");
         vname.erase(vname.end() - 4, vname.end()); //erase the lagging .npy
 
+        //        std::cout << "Read " << vname << ", " << *(unsigned int *)&local_header[14] << std::endl;
+
         //read in the extra field
         unsigned short extra_field_len = *(unsigned short *)&local_header[28];
         fseek(fp, extra_field_len, SEEK_CUR); //skip past the extra field
