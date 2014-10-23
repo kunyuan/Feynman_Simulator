@@ -108,6 +108,12 @@ void TestDiagramObject()
         }
     }
     //Do random walk so that the error ratio between Order 3, Order 2 and Order 1 is 3:2:1 roughly
+    /*
+      After the random walk, the first order of Sig has the weight mean/Beta/(1+1/4+1/9),
+      where mean=0.5 is the mean of samples,
+      the strange factor in denominator comes the fact that Sig._Norm
+      will increase for all order 1, 2 and 3 measuring. 
+    */
 
     LOG_INFO("Order 1: " << Sig.WeightWithError(1) << endl << "Order 2: " << Sig.WeightWithError(2) << endl << "Order 3: " << Sig.WeightWithError(3));
     int order = Sig.OrderAcceptable(1, 500.0);

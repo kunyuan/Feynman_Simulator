@@ -14,7 +14,7 @@
 #include <iostream>
 #include <cassert>
 #include <map>
-#include "../zlib/zlib.h"
+#include "zlib/zlib.h"
 /**
 *  You may add -lz to link to the zlib library
 *  If you are using xcode, add libz.dylib to "Build Phases/Link Binary with Libraries
@@ -177,6 +177,8 @@ void npz_save(std::string zipname, std::string fname, const T *data, const unsig
     unsigned long crc = crc32((unsigned long)0L, (unsigned char *)&npy_header[0], (unsigned int)npy_header.size());
     crc = crc32(crc, (unsigned char *)data, (unsigned int)nels * sizeof(T));
 
+    //    std::cout << "Save " << fname << ", " << (unsigned int)crc << std::endl;
+
     //build the local header
     std::vector<char> local_header;
     local_header += "PK";                         //first part of sig
@@ -186,6 +188,7 @@ void npz_save(std::string zipname, std::string fname, const T *data, const unsig
     local_header += (unsigned short)0;            //compression method
     local_header += (unsigned short)0;            //file last mod time
     local_header += (unsigned short)0;            //file last mod date
+                                                  //    local_header += (unsigned int)crc;            //crc
     local_header += (unsigned int)crc;            //crc
     local_header += (unsigned int)nbytes;         //compressed size
     local_header += (unsigned int)nbytes;         //uncompressed size
