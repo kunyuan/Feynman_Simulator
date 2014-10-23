@@ -8,7 +8,7 @@
 
 #include "test.h"
 #include "utility/abort.h"
-#include "zlib.h"
+#include "utility/crc32.h"
 using namespace std;
 
 #define TEST(func)                  \

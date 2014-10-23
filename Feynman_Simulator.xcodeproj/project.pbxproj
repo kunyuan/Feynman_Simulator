@@ -10,8 +10,6 @@
 		1CA5CF3819ED6F1B00212E20 /* lattice_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CA5CF3719ED6F1B00212E20 /* lattice_test.cpp */; };
 		1CA5CF3A19ED6F3F00212E20 /* lattice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CA5CF3919ED6F3F00212E20 /* lattice.cpp */; };
 		6126638BECC823E2FECDBE1A /* utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 612660FB5825D574D3D39D34 /* utility.cpp */; };
-		6126664567718CEF01AA47EA /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61266E544CE6B7D4D4077492 /* timer.cpp */; };
-		61266A9275E9B7A6FCF57FEA /* timer_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61266699848E3D36323A2CE1 /* timer_test.cpp */; };
 		61266D7AEDBA61CFA3C84C6B /* rng.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 612667B1A17242731ADAF002 /* rng.cpp */; };
 		61266E5CDE0355C1306E9EBD /* rng_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6126679998941F2D7A5DBE4E /* rng_test.cpp */; };
 		841D50E919E85C8600FDB7FF /* diagram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 841D50E419E85C8600FDB7FF /* diagram.cpp */; };
@@ -29,8 +27,10 @@
 		84519AF219F33F22007CB81B /* complex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84519AF019F33F22007CB81B /* complex.cpp */; };
 		845C92C119F75B340066B590 /* vector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 845C92C019F75B340066B590 /* vector.cpp */; };
 		845C92D819F855980066B590 /* job.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 845C92D619F855980066B590 /* job.cpp */; };
-		84681F6119F99C7200832DAD /* crc32.c in Sources */ = {isa = PBXBuildFile; fileRef = 84681F5C19F99C7200832DAD /* crc32.c */; };
-		84681F6219F99C7200832DAD /* zlib_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84681F5F19F99C7200832DAD /* zlib_test.cpp */; };
+		84681F6519F9AAA600832DAD /* crc32.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84681F6319F9AAA600832DAD /* crc32.cpp */; };
+		84681F6719F9AC0600832DAD /* crc32_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84681F6619F9AC0600832DAD /* crc32_test.cpp */; };
+		84681F6B19F9B4C700832DAD /* timer_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84681F6819F9B4C700832DAD /* timer_test.cpp */; };
+		84681F6C19F9B4C700832DAD /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84681F6919F9B4C700832DAD /* timer.cpp */; };
 		84B1D57A19DEFC19004C3A89 /* test.h in Sources */ = {isa = PBXBuildFile; fileRef = 84B1D57919DEFC19004C3A89 /* test.h */; };
 		84B8FC3419EC7469003D6DF6 /* diagram_IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84B8FC3319EC7469003D6DF6 /* diagram_IO.cpp */; };
 		84B8FC3C19EC97B2003D6DF6 /* weight_generic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84B8FC3A19EC97B2003D6DF6 /* weight_generic.cpp */; };
@@ -67,11 +67,8 @@
 		612660FB5825D574D3D39D34 /* utility.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = utility.cpp; sourceTree = "<group>"; };
 		612664CF0EF6FC3F36675242 /* sput_tutorial.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sput_tutorial.txt; sourceTree = "<group>"; };
 		612665F3FD7F1A73D9E774F8 /* rng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rng.h; sourceTree = "<group>"; };
-		6126662233F7B93A84352910 /* timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = timer.h; sourceTree = "<group>"; };
-		61266699848E3D36323A2CE1 /* timer_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = timer_test.cpp; sourceTree = "<group>"; };
 		6126679998941F2D7A5DBE4E /* rng_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = rng_test.cpp; sourceTree = "<group>"; };
 		612667B1A17242731ADAF002 /* rng.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = rng.cpp; sourceTree = "<group>"; };
-		61266E544CE6B7D4D4077492 /* timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = timer.cpp; sourceTree = "<group>"; };
 		61266FC5A53017300457D92B /* utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utility.h; sourceTree = "<group>"; };
 		841D50E419E85C8600FDB7FF /* diagram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = diagram.cpp; path = diagram/diagram.cpp; sourceTree = "<group>"; };
 		841D50E519E85C8600FDB7FF /* diagram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = diagram.h; path = diagram/diagram.h; sourceTree = "<group>"; };
@@ -103,11 +100,12 @@
 		845C92C919F835590066B590 /* job_class.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = job_class.py; sourceTree = SOURCE_ROOT; };
 		845C92D619F855980066B590 /* job.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = job.cpp; path = job/job.cpp; sourceTree = "<group>"; };
 		845C92D719F855980066B590 /* job.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = job.h; path = job/job.h; sourceTree = "<group>"; };
-		84681F5C19F99C7200832DAD /* crc32.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = crc32.c; path = zlib/crc32.c; sourceTree = "<group>"; };
-		84681F5D19F99C7200832DAD /* crc32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = crc32.h; path = zlib/crc32.h; sourceTree = "<group>"; };
-		84681F5E19F99C7200832DAD /* zconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = zconf.h; path = zlib/zconf.h; sourceTree = "<group>"; };
-		84681F5F19F99C7200832DAD /* zlib_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = zlib_test.cpp; path = zlib/zlib_test.cpp; sourceTree = "<group>"; };
-		84681F6019F99C7200832DAD /* zlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = zlib.h; path = zlib/zlib.h; sourceTree = "<group>"; };
+		84681F6319F9AAA600832DAD /* crc32.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = crc32.cpp; sourceTree = "<group>"; };
+		84681F6419F9AAA600832DAD /* crc32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crc32.h; sourceTree = "<group>"; };
+		84681F6619F9AC0600832DAD /* crc32_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = crc32_test.cpp; sourceTree = "<group>"; };
+		84681F6819F9B4C700832DAD /* timer_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = timer_test.cpp; sourceTree = "<group>"; };
+		84681F6919F9B4C700832DAD /* timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = timer.cpp; sourceTree = "<group>"; };
+		84681F6A19F9B4C700832DAD /* timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = timer.h; sourceTree = "<group>"; };
 		84B1D57919DEFC19004C3A89 /* test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = test.h; sourceTree = "<group>"; };
 		84B1D57C19DF4215004C3A89 /* definition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = definition.h; sourceTree = "<group>"; };
 		84B8FC3319EC7469003D6DF6 /* diagram_IO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = diagram_IO.cpp; path = diagram/diagram_IO.cpp; sourceTree = "<group>"; };
@@ -159,7 +157,9 @@
 		612661D40BB91FC506C3E572 /* utility */ = {
 			isa = PBXGroup;
 			children = (
-				84681F5B19F99C6300832DAD /* zlib */,
+				84681F6819F9B4C700832DAD /* timer_test.cpp */,
+				84681F6919F9B4C700832DAD /* timer.cpp */,
+				84681F6A19F9B4C700832DAD /* timer.h */,
 				84D7EFBA19F36361006B1CA5 /* array_test.cpp */,
 				84D7EFBB19F36361006B1CA5 /* array.h */,
 				84519AF119F33F22007CB81B /* complex.h */,
@@ -175,12 +175,12 @@
 				612665F3FD7F1A73D9E774F8 /* rng.h */,
 				612667B1A17242731ADAF002 /* rng.cpp */,
 				6126679998941F2D7A5DBE4E /* rng_test.cpp */,
-				6126662233F7B93A84352910 /* timer.h */,
-				61266E544CE6B7D4D4077492 /* timer.cpp */,
-				61266699848E3D36323A2CE1 /* timer_test.cpp */,
 				61266FC5A53017300457D92B /* utility.h */,
 				612660FB5825D574D3D39D34 /* utility.cpp */,
 				841D50F619EA176800FDB7FF /* abort.h */,
+				84681F6419F9AAA600832DAD /* crc32.h */,
+				84681F6319F9AAA600832DAD /* crc32.cpp */,
+				84681F6619F9AC0600832DAD /* crc32_test.cpp */,
 			);
 			path = utility;
 			sourceTree = "<group>";
@@ -200,18 +200,6 @@
 				841D50E819E85C8600FDB7FF /* diagram_test.cpp */,
 			);
 			name = diagram;
-			sourceTree = "<group>";
-		};
-		84681F5B19F99C6300832DAD /* zlib */ = {
-			isa = PBXGroup;
-			children = (
-				84681F5C19F99C7200832DAD /* crc32.c */,
-				84681F5D19F99C7200832DAD /* crc32.h */,
-				84681F5E19F99C7200832DAD /* zconf.h */,
-				84681F5F19F99C7200832DAD /* zlib_test.cpp */,
-				84681F6019F99C7200832DAD /* zlib.h */,
-			);
-			name = zlib;
 			sourceTree = "<group>";
 		};
 		84B8FC3819EC9753003D6DF6 /* observable */ = {
@@ -360,6 +348,8 @@
 			files = (
 				841D50E919E85C8600FDB7FF /* diagram.cpp in Sources */,
 				84FDE07419DDFC2F0092B441 /* main.cpp in Sources */,
+				84681F6B19F9B4C700832DAD /* timer_test.cpp in Sources */,
+				84681F6C19F9B4C700832DAD /* timer.cpp in Sources */,
 				84D7EFBF19F4B32E006B1CA5 /* markov_monitor.cpp in Sources */,
 				845C92D819F855980066B590 /* job.cpp in Sources */,
 				841D50EB19E85C8600FDB7FF /* diagram_test.cpp in Sources */,
@@ -369,7 +359,6 @@
 				84B8FC3C19EC97B2003D6DF6 /* weight_generic.cpp in Sources */,
 				841D511319EB6DD900FDB7FF /* logger.cpp in Sources */,
 				1CA5CF3A19ED6F3F00212E20 /* lattice.cpp in Sources */,
-				84681F6119F99C7200832DAD /* crc32.c in Sources */,
 				84B8FC4A19EDA348003D6DF6 /* cnpy_test.cpp in Sources */,
 				841D905C19E054900066116A /* test.cpp in Sources */,
 				84519AF219F33F22007CB81B /* complex.cpp in Sources */,
@@ -377,10 +366,10 @@
 				841D905819DF833E0066116A /* initialization.cpp in Sources */,
 				84B8FC3419EC7469003D6DF6 /* diagram_IO.cpp in Sources */,
 				61266D7AEDBA61CFA3C84C6B /* rng.cpp in Sources */,
+				84681F6719F9AC0600832DAD /* crc32_test.cpp in Sources */,
 				841D50EF19E885D700FDB7FF /* diagram_check.cpp in Sources */,
 				84D7EFBC19F36361006B1CA5 /* array_test.cpp in Sources */,
 				84519AED19F2C57A007CB81B /* envMonteCarlo.cpp in Sources */,
-				6126664567718CEF01AA47EA /* timer.cpp in Sources */,
 				84D7EFC119F552C3006B1CA5 /* markov_test.cpp in Sources */,
 				84519AEB19F2C554007CB81B /* environment.cpp in Sources */,
 				8426668D19E4482100CF7B59 /* component_bundle.cpp in Sources */,
@@ -388,11 +377,10 @@
 				61266E5CDE0355C1306E9EBD /* rng_test.cpp in Sources */,
 				84D4287319F1F3BB0051CE96 /* markov.cpp in Sources */,
 				6126638BECC823E2FECDBE1A /* utility.cpp in Sources */,
-				61266A9275E9B7A6FCF57FEA /* timer_test.cpp in Sources */,
+				84681F6519F9AAA600832DAD /* crc32.cpp in Sources */,
 				84B8FC4B19EDA348003D6DF6 /* cnpy.cpp in Sources */,
 				84B8FC4219ECBE1E003D6DF6 /* observable_test.cpp in Sources */,
 				1CA5CF3819ED6F1B00212E20 /* lattice_test.cpp in Sources */,
-				84681F6219F99C7200832DAD /* zlib_test.cpp in Sources */,
 				84D7EFC319F552F5006B1CA5 /* env_test.cpp in Sources */,
 				8426668F19E475DF00CF7B59 /* definition.cpp in Sources */,
 				841D50F419E9EE8C00FDB7FF /* component.cpp in Sources */,

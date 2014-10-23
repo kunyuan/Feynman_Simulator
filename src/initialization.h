@@ -15,7 +15,6 @@
 #include "utility/logger.h"
 #include "utility/rng.h"
 #include "utility/cnpy.h"
-#include "utility/timer.h"
 #include "environment/environment.h"
 #include "lattice/lattice.h"
 #include "diagram/diagram.h"
