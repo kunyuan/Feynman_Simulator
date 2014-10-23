@@ -45,6 +45,11 @@ bool Diagram::CheckVer()
     return true;
 }
 
+bool Diagram::CheckWeight()
+{
+    return true;
+}
+
 bool Diagram::CheckDiagram()
 {
     //TODO: don't forget to check diagram weight

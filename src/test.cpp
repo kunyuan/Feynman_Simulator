@@ -20,10 +20,12 @@ int RunTest()
 {
 
     //    TestTimer();  //Test the timer
-    //        TestRNG();
-    TEST(TestDiagram);
-    //    TEST(TestLattice);
-    TEST(TestObservable);
+    //    TestRNG();
+        TEST(TestDiagram);
+        //TEST(TestLattice);
+        TEST(TestObservable);
+        TEST(TestMarkov);
+
     TEST(TestCRC32);
 
     //    TestArray();
