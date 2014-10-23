@@ -19,8 +19,8 @@ void Test_RNG_IO()
     RandomFactory RNG;
     stringstream RngStr;
     RngStr << RNG;
-    real a=RNG.urn();
-    for(int i=0;i<100;i++)
+    real a = RNG.urn();
+    for (int i = 0; i < 100; i++)
         RNG.urn();
     RngStr >> RNG;
     sput_fail_unless(RNG.urn() == a, "import/export the RNG state");
@@ -48,7 +48,7 @@ void Test_RNG_Bound_And_Efficiency()
     LOG_INFO("Int random number generator 0 started..." << endl);
     T.restart();
     for (int i = 0; i < N; i++) {
-        Temp = RNG.irn(0, bound - 1);
+        Temp = RNG.irn1(0, bound - 1);
         if (Temp < bound && Temp >= 0)
             bin[Temp]++;
         else
@@ -59,7 +59,7 @@ void Test_RNG_Bound_And_Efficiency()
     LOG_INFO("Distribution:" << endl);
     stringstream msg;
     for (int i = 0; i < bound; i++) {
-        msg<<"Number=" << i << ", Prob=" << setprecision(4) << bin[i] / N << endl;
+        msg << "Number=" << i << ", Prob=" << setprecision(4) << bin[i] / N << endl;
         bin[i] = 0.0;
     }
     LOG_INFO(msg.str());
@@ -80,7 +80,7 @@ void Test_RNG_Bound_And_Efficiency()
     LOG_INFO("Distribution:" << endl);
     msg.clear();
     for (int i = 0; i < bound; i++) {
-        msg<<"Number=" << i << ", Prob=" << setprecision(4) << bin[i] / N << endl;
+        msg << "Number=" << i << ", Prob=" << setprecision(4) << bin[i] / N << endl;
         bin[i] = 0.0;
     }
     LOG_INFO(msg.str());

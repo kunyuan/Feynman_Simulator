@@ -7,9 +7,8 @@
 //
 
 #include "estimate.h"
-#include "utility.h"
-#include "cnpy.h"
-#include "abort.h"
+#include "../utility/utility.h"
+#include "../utility/abort.h"
 
 using namespace std;
 

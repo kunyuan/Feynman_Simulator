@@ -28,15 +28,15 @@
 		84519AEF19F2C5B2007CB81B /* envDyson.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84519AEE19F2C5B2007CB81B /* envDyson.cpp */; };
 		84519AF219F33F22007CB81B /* complex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84519AF019F33F22007CB81B /* complex.cpp */; };
 		845C92C119F75B340066B590 /* vector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 845C92C019F75B340066B590 /* vector.cpp */; };
+		845C92D819F855980066B590 /* job.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 845C92D619F855980066B590 /* job.cpp */; };
+		845C92EB19F89D5A0066B590 /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 845C92EA19F89D5A0066B590 /* libz.1.2.5.dylib */; };
 		84B1D57A19DEFC19004C3A89 /* test.h in Sources */ = {isa = PBXBuildFile; fileRef = 84B1D57919DEFC19004C3A89 /* test.h */; };
-		84B1D57F19DF42EE004C3A89 /* job.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84B1D57D19DF42EE004C3A89 /* job.cpp */; };
 		84B8FC3419EC7469003D6DF6 /* diagram_IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84B8FC3319EC7469003D6DF6 /* diagram_IO.cpp */; };
 		84B8FC3C19EC97B2003D6DF6 /* weight_generic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84B8FC3A19EC97B2003D6DF6 /* weight_generic.cpp */; };
 		84B8FC4219ECBE1E003D6DF6 /* observable_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84B8FC4119ECBE1E003D6DF6 /* observable_test.cpp */; };
 		84B8FC4619ED6F15003D6DF6 /* estimate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84B8FC4419ED6F15003D6DF6 /* estimate.cpp */; };
 		84B8FC4A19EDA348003D6DF6 /* cnpy_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84B8FC4719EDA348003D6DF6 /* cnpy_test.cpp */; };
 		84B8FC4B19EDA348003D6DF6 /* cnpy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84B8FC4819EDA348003D6DF6 /* cnpy.cpp */; };
-		84B8FC4D19EDA40F003D6DF6 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 84B8FC4C19EDA40F003D6DF6 /* libz.dylib */; };
 		84D4287319F1F3BB0051CE96 /* markov.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84D4287119F1F3BB0051CE96 /* markov.cpp */; };
 		84D7EFBC19F36361006B1CA5 /* array_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84D7EFBA19F36361006B1CA5 /* array_test.cpp */; };
 		84D7EFBF19F4B32E006B1CA5 /* markov_monitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84D7EFBD19F4B32E006B1CA5 /* markov_monitor.cpp */; };
@@ -100,10 +100,11 @@
 		845C92C719F834460066B590 /* job_manager.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = job_manager.py; sourceTree = SOURCE_ROOT; };
 		845C92C819F834460066B590 /* run_loop.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = run_loop.py; sourceTree = SOURCE_ROOT; };
 		845C92C919F835590066B590 /* job_class.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = job_class.py; sourceTree = SOURCE_ROOT; };
+		845C92D619F855980066B590 /* job.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = job.cpp; path = job/job.cpp; sourceTree = "<group>"; };
+		845C92D719F855980066B590 /* job.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = job.h; path = job/job.h; sourceTree = "<group>"; };
+		845C92EA19F89D5A0066B590 /* libz.1.2.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.5.dylib; path = usr/lib/libz.1.2.5.dylib; sourceTree = SDKROOT; };
 		84B1D57919DEFC19004C3A89 /* test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = test.h; sourceTree = "<group>"; };
 		84B1D57C19DF4215004C3A89 /* definition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = definition.h; sourceTree = "<group>"; };
-		84B1D57D19DF42EE004C3A89 /* job.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = job.cpp; sourceTree = "<group>"; };
-		84B1D57E19DF42EE004C3A89 /* job.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = job.h; sourceTree = "<group>"; };
 		84B8FC3319EC7469003D6DF6 /* diagram_IO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = diagram_IO.cpp; path = diagram/diagram_IO.cpp; sourceTree = "<group>"; };
 		84B8FC3A19EC97B2003D6DF6 /* weight_generic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = weight_generic.cpp; path = observable/weight_generic.cpp; sourceTree = "<group>"; };
 		84B8FC3B19EC97B2003D6DF6 /* weight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = weight.h; path = observable/weight.h; sourceTree = "<group>"; };
@@ -114,7 +115,6 @@
 		84B8FC4719EDA348003D6DF6 /* cnpy_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cnpy_test.cpp; sourceTree = "<group>"; };
 		84B8FC4819EDA348003D6DF6 /* cnpy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cnpy.cpp; sourceTree = "<group>"; };
 		84B8FC4919EDA348003D6DF6 /* cnpy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cnpy.h; sourceTree = "<group>"; };
-		84B8FC4C19EDA40F003D6DF6 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		84D4287119F1F3BB0051CE96 /* markov.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = markov.cpp; path = markov/markov.cpp; sourceTree = "<group>"; };
 		84D4287219F1F3BB0051CE96 /* markov.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = markov.h; path = markov/markov.h; sourceTree = "<group>"; };
 		84D7EFBA19F36361006B1CA5 /* array_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = array_test.cpp; sourceTree = "<group>"; };
@@ -133,7 +133,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				84B8FC4D19EDA40F003D6DF6 /* libz.dylib in Frameworks */,
+				845C92EB19F89D5A0066B590 /* libz.1.2.5.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -225,12 +225,12 @@
 		84D4287419F1F4B40051CE96 /* job */ = {
 			isa = PBXGroup;
 			children = (
+				845C92D619F855980066B590 /* job.cpp */,
+				845C92D719F855980066B590 /* job.h */,
 				845C92C919F835590066B590 /* job_class.py */,
 				845C92C619F834460066B590 /* inlist.py */,
 				845C92C719F834460066B590 /* job_manager.py */,
 				845C92C819F834460066B590 /* run_loop.py */,
-				84B1D57E19DF42EE004C3A89 /* job.h */,
-				84B1D57D19DF42EE004C3A89 /* job.cpp */,
 			);
 			name = job;
 			sourceTree = "<group>";
@@ -250,7 +250,7 @@
 		84FDE06719DDFC2F0092B441 = {
 			isa = PBXGroup;
 			children = (
-				84B8FC4C19EDA40F003D6DF6 /* libz.dylib */,
+				845C92EA19F89D5A0066B590 /* libz.1.2.5.dylib */,
 				84FDE07219DDFC2F0092B441 /* Feynman_Simulator */,
 				84FDE07119DDFC2F0092B441 /* Products */,
 			);
@@ -345,9 +345,9 @@
 				841D50E919E85C8600FDB7FF /* diagram.cpp in Sources */,
 				84FDE07419DDFC2F0092B441 /* main.cpp in Sources */,
 				84D7EFBF19F4B32E006B1CA5 /* markov_monitor.cpp in Sources */,
+				845C92D819F855980066B590 /* job.cpp in Sources */,
 				841D50EB19E85C8600FDB7FF /* diagram_test.cpp in Sources */,
 				84B1D57A19DEFC19004C3A89 /* test.h in Sources */,
-				84B1D57F19DF42EE004C3A89 /* job.cpp in Sources */,
 				84B8FC4619ED6F15003D6DF6 /* estimate.cpp in Sources */,
 				845C92C119F75B340066B590 /* vector.cpp in Sources */,
 				84B8FC3C19EC97B2003D6DF6 /* weight_generic.cpp in Sources */,

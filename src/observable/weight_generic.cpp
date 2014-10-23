@@ -7,8 +7,8 @@
 //
 
 #include "weight.h"
-#include "utility.h"
-#include "abort.h"
+#include "../utility/utility.h"
+#include "../utility/abort.h"
 
 using namespace std;
 using namespace Array;

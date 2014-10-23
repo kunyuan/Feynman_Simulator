@@ -7,7 +7,6 @@
 //
 
 #include "markov.h"
-#include "weight.h"
 
 const int MAX_K = 10000;
 
@@ -34,7 +33,7 @@ Markov::Markov(EnvMonteCarlo *Env)
 *
 *  @param Steps
 */
-void Markov::Hop(int &&Steps)
+void Markov::Hop(int sweep)
 {
     const double W1 = 1.0;
     const double W2 = 1.0;
@@ -99,10 +98,10 @@ bool CanNotMoveWorm(int dspin, const Vertex &v)
 
 int RandomPickK()
 {
-    return RNG.irn(-MAX_K, MAX_K);
+    return RNG.irn1(-MAX_K, MAX_K);
 }
 
 int RandomPickDeltaSpin()
 {
-    return RNG.irn(0, 2) * 2 - 1;
+    return RNG.irn1(0, 2) * 2 - 1;
 }

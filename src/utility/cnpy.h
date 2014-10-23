@@ -13,8 +13,9 @@
 #include <typeinfo>
 #include <iostream>
 #include <cassert>
-#include <zlib.h>
+//#include <zlib.h>
 #include <map>
+#include <zlib.h>
 /**
 *  You may add -lz to link to the zlib library
 *  If you are using xcode, add libz.dylib to "Build Phases/Link Binary with Libraries

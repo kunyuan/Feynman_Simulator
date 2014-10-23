@@ -10,8 +10,8 @@
 #include <iostream>
 #include "definition.h"
 #include "initialization.h"
-#include "markov.h"
-#include "markov_monitor.h"
+#include "markov/markov.h"
+#include "markov/markov_monitor.h"
 using namespace std;
 
 void MonteCarlo(Jobs &Job);
@@ -44,7 +44,7 @@ void MonteCarlo(Jobs &Job)
     MarkovMonitor Scarecrow(&PaddyField);
     while (PaddyField.Counter < 10000) {
         PaddyField.Counter++;
-        GrassHopper.Hop(10);
+        //        GrassHopper.Hop(10);
 
         Scarecrow.Measure();
 

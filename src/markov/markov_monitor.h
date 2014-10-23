@@ -9,9 +9,9 @@
 #ifndef __Feynman_Simulator__measure__
 #define __Feynman_Simulator__measure__
 
-#include "environment.h"
-#include "weight.h"
-#include "estimate.h"
+#include "../environment/environment.h"
+#include "../observable/weight.h"
+#include "../observable/estimate.h"
 
 class MarkovMonitor {
   private:

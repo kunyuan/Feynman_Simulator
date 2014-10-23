@@ -10,17 +10,17 @@
 #define __Fermion_Simulator__initialization__
 
 #include "definition.h"
-#include "array.h"
-#include "logger.h"
-#include "rng.h"
-#include "cnpy.h"
-#include "timer.h"
 #include "test.h"
-#include "environment.h"
-#include "lattice.h"
-#include "job.h"
-#include "diagram.h"
-#include "weight.h"
+#include "utility/array.h"
+#include "utility/logger.h"
+#include "utility/rng.h"
+#include "utility/cnpy.h"
+#include "utility/timer.h"
+#include "environment/environment.h"
+#include "lattice/lattice.h"
+#include "diagram/diagram.h"
+#include "observable/weight.h"
+#include "job/job.h"
 
 void InitGlobalUtility();
 

@@ -7,7 +7,7 @@
 //
 
 #include "component_bundle.h"
-#include "abort.h"
+#include "../utility/abort.h"
 using namespace std;
 
 template <typename T>
@@ -127,4 +127,3 @@ bool Bundle<T>::Exist(T &target)
 template class Bundle<GLine>;
 template class Bundle<WLine>;
 template class Bundle<Vertex>;
-

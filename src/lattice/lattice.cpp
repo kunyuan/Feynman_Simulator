@@ -5,13 +5,12 @@
 //  Created by Kun Chen on 10/6/14.
 //  Copyright (c) 2014 Kun Chen. All rights reserved.
 //
-#include "lattice.h"
-#include "math.h"
-#include "convention.h"
-#include "cnpy.h"
-#include "abort.h"
+#include <math.h>
 #include <iostream>
-
+#include "lattice.h"
+#include "../utility/convention.h"
+#include "../utility/cnpy.h"
+#include "../utility/abort.h"
 
 /**
  *  get the sublattice index from In to Out
@@ -44,13 +43,12 @@ int Distance::Sublattice(const int &dir) const
 Lattice::Lattice()
 {
     Dimension = D;
-    Vol=1;
-    for (int i = 0; i < D; i++)
-    {
+    Vol = 1;
+    for (int i = 0; i < D; i++) {
         Size[i] = L[i];
-        Vol*=L[i];
+        Vol *= L[i];
     }
-    SublatVol=NSublattice;
+    SublatVol = NSublattice;
     Initialize();
 }
 /**
@@ -59,7 +57,7 @@ Lattice::Lattice()
 void Lattice::Initialize()
 {
     //TODO: Simple Cubic Lattice with two sublattices
-    
+
     //Square Lattice with two sublattices
     LatticeVec[0][0] = 1.0;
     LatticeVec[0][1] = 0.0;
@@ -102,18 +100,16 @@ void Lattice::Initialize()
  *
  *  @return new variable within [0, L]
  */
-Vec<int>& Lattice::Shift(Vec<int>& vec )
+Vec<int> &Lattice::Shift(Vec<int> &vec)
 {
-    for(int i=0; i<Dimension; i++)
-    {
+    for (int i = 0; i < Dimension; i++) {
         if (vec[i] < 0)
-            vec[i] = vec[i]+Size[i];
+            vec[i] = vec[i] + Size[i];
     }
     return vec;
 }
 
-
-int Lattice::ToIndex(const Vec<int>& vec)
+int Lattice::ToIndex(const Vec<int> &vec)
 {
     int Index = vec[Dimension - 1];
     for (int i = Dimension - 2; i >= 0; i--) {
@@ -141,7 +137,7 @@ Vec<int> Lattice::ToVec(int index)
  */
 Site Lattice::GetSite(int name)
 {
-    return Site(name%2, ToVec(name/2));
+    return Site(name % 2, ToVec(name / 2));
 }
 
 /**
@@ -149,12 +145,12 @@ Site Lattice::GetSite(int name)
  *
  *  @return Name for the Site in [0, NSublattice*Vol)
  */
-int Lattice::GetName(const Site& site)
+int Lattice::GetName(const Site &site)
 {
     return ToIndex(site) * NSublattice + site.Sublattice;
 }
 
-int Lattice::ToIndex(const Site& site)
+int Lattice::ToIndex(const Site &site)
 {
     return ToIndex(site.Coordinate);
 }
@@ -173,15 +169,14 @@ Vec<real> Lattice::GetRealVec(const Site &site)
     return vec;
 }
 
-Distance Lattice::Distance(const Site& SiteIn, const Site& SiteOut)
+Distance Lattice::Distance(const Site &SiteIn, const Site &SiteOut)
 {
-    Vec<int> vec = SiteOut.Coordinate-SiteIn.Coordinate;
+    Vec<int> vec = SiteOut.Coordinate - SiteIn.Coordinate;
     return ::Distance(GetSublatIndex((SiteIn.Sublattice), (SiteOut.Sublattice)),
                       ToIndex(Shift(vec)));
 }
 
-
-Vec<int> Lattice::Coordinate(const class Distance& dis)
+Vec<int> Lattice::Coordinate(const class Distance &dis)
 {
     if (DEBUGMODE && (dis.CoordiIndex < 0 || dis.CoordiIndex >= Vol))
         ABORT("Wrong Coordinate index number!");
@@ -212,7 +207,7 @@ void Lattice::PlotLattice()
     const unsigned int shape[] = {N, (unsigned int)Dimension};
     real data[N * Dimension];
     for (int i = 0; i < N; i++) {
-        Site s=GetSite(i);
+        Site s = GetSite(i);
         for (int j = 0; j < Dimension; j++)
             data[i * Dimension + j] = GetRealVec(s)[j];
     }

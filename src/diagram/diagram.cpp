@@ -7,11 +7,7 @@
 //
 
 #include "diagram.h"
-#include "utility.h"
-#include "convention.h"
-#include "lattice.h"
-#include "weight.h"
-#include "rng.h"
+#include "../observable/weight.h"
 using namespace std;
 bool Diagram::IsWorm(const Vertex &v)
 {
@@ -123,17 +119,17 @@ WLine &Diagram::NeighW(Vertex &v)
 
 GLine &Diagram::RandomPickG()
 {
-    return G[RNG.irn(0, G.HowMany())];
+    return G[RNG.irn1(0, G.HowMany())];
 }
 
 WLine &Diagram::RandomPickW()
 {
-    return W[RNG.irn(0, W.HowMany())];
+    return W[RNG.irn1(0, W.HowMany())];
 }
 
 Vertex &Diagram::RandomPickVer()
 {
-    return Ver[RNG.irn(0, Ver.HowMany())];
+    return Ver[RNG.irn1(0, Ver.HowMany())];
 }
 
 bool Diagram::FixDiagram()
@@ -158,7 +154,7 @@ bool Diagram::FixDiagram()
     for (int index = 0; index < Ver.HowMany(); index++) {
         //TODO: Do something here if you want to fix vertex
     }
-    
+
     Phase = Complex(1.0, 0.0);
     Weight = Complex(1.0, 0.0);
     return true;

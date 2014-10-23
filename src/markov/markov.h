@@ -9,9 +9,9 @@
 #ifndef __Feynman_Simulator__markov__
 #define __Feynman_Simulator__markov__
 
-#include "environment.h"
-#include "weight.h"
-#include "rng.h"
+#include "../environment/environment.h"
+#include "../observable/weight.h"
+#include "../utility/rng.h"
 
 class Markov {
   private:
@@ -28,7 +28,7 @@ class Markov {
 
   public:
     Markov(EnvMonteCarlo *);
-    void Hop(int &&);
+    void Hop(int);
     void CreateWorm(real, real);
     void DeleteWorm(real, real);
 };

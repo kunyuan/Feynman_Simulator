@@ -6,12 +6,8 @@
 //  Copyright (c) 2014 Kun Chen. All rights reserved.
 //
 
-#include <sstream>
-#include "sput.h"
-#include "component_bundle.h"
-#include "utility.h"
 #include "diagram.h"
-#include "logger.h"
+#include "../utility/sput.h"
 using namespace std;
 
 void Test_Diagram_Component();

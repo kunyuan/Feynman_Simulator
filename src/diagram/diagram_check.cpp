@@ -7,7 +7,7 @@
 //
 
 #include "diagram.h"
-#include "abort.h"
+#include "../utility/abort.h"
 using namespace std;
 
 ///*************************   Diagram check    *************************/
