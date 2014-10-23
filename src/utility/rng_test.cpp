@@ -48,7 +48,7 @@ void Test_RNG_Bound_And_Efficiency()
     LOG_INFO("Int random number generator 0 started..." << endl);
     T.restart();
     for (int i = 0; i < N; i++) {
-        Temp = RNG.irn1(0, bound - 1);
+        Temp = RNG.irn(0, bound - 1);
         if (Temp < bound && Temp >= 0)
             bin[Temp]++;
         else
@@ -69,7 +69,7 @@ void Test_RNG_Bound_And_Efficiency()
     LOG_INFO("Int random number generator 1 started..." << endl);
     T.restart();
     for (int i = 0; i < N; i++) {
-        Temp = RNG.irn1(0, bound - 1);
+        Temp = RNG.irn(0, bound - 1);
         if (Temp < bound && Temp >= 0)
             bin[Temp]++;
         else

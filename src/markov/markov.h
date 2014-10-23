@@ -13,7 +13,6 @@
 #include "../observable/weight.h"
 #include "../utility/rng.h"
 
-
 class Markov {
   private:
     real Beta;
@@ -25,14 +24,14 @@ class Markov {
     Weight::G *G;
     Weight::W *W;
     Weight::Worm *WormWeight;
-    
+
     const static int NUpdates = 2;
     real ProbofCall[NUpdates];
 
   public:
     Diagram *Diag;
     Markov(EnvMonteCarlo *);
-    void Hop(int &&);
+    void Hop(int);
     void CreateWorm();
     void DeleteWorm();
 };

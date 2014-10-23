@@ -9,6 +9,10 @@
 #include "test.h"
 #include "utility/abort.h"
 #include "utility/crc32.h"
+#include "markov/markov.h"
+#include "diagram/diagram.h"
+#include "lattice/lattice.h"
+#include "observable/weight.h"
 using namespace std;
 
 #define TEST(func)                  \
@@ -21,10 +25,10 @@ int RunTest()
 
     //    TestTimer();  //Test the timer
     //    TestRNG();
-        TEST(TestDiagram);
-        //TEST(TestLattice);
-        TEST(TestObservable);
-        TEST(TestMarkov);
+    TEST(TestDiagram);
+    //TEST(TestLattice);
+    TEST(TestObservable);
+    TEST(TestMarkov);
 
     TEST(TestCRC32);
 
