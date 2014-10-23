@@ -16,6 +16,13 @@ EnvMonteCarlo::EnvMonteCarlo(Jobs &Job)
       G(Lat, Beta, Order),
       W(Lat, Beta, Order)
 {
+    
+    //set Diag weight
+    Diag.SetLat(&Lat);
+    
+    //set Diag weight
+    Diag.SetGWWeight(&G, &W);
+    
     //Initialize random number generator
     RNG.Reset(Job.Seed);
 

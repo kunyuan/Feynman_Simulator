@@ -13,28 +13,20 @@
 #include "component_bundle.h"
 #include "../utility/rng.h"
 
-class Worm {
-  public:
-    bool Exist;
-    int Ira, Masha; //extra line: Ira---"k,dSpin"--->Masha
-    int K;
-    int dSpin;
-
-    Worm()
-        : Exist(false), Ira(0), Masha(0), K(0), dSpin(0)
-    {
-    }
-    Worm(int ira, int masha, int dk, int s)
-        : Exist(true), Ira(ira), Masha(masha), K(dk), dSpin(s)
-    {
-    }
-};
-
 class Diagram {
   public:
     Diagram();
+    
+    void SetGWWeight(Weight::G *, Weight::W *);
+    Weight::G *GWeight;
+    Weight::W *WWeight;
+    
+    void SetLat(Lattice *);
+    Lattice *Lat;
+    
     int Order;
     Complex Phase, Weight;
+    
     Bundle<GLine> G;
     Bundle<WLine> W;
     Bundle<Vertex> Ver;
@@ -54,6 +46,7 @@ class Diagram {
     string PrettyString(WLine &);
     string PrettyString(Vertex &);
 
+
     //Randomly Pick
     GLine &RandomPickG();
     WLine &RandomPickW();
@@ -65,11 +58,13 @@ class Diagram {
     GLine &NeighG(Vertex &, int dir);
     WLine &NeighW(Vertex &);
     bool FixDiagram();
+    void ClearDiagram();
 
     //Diagram Check
     bool CheckG();
     bool CheckW();
     bool CheckVer();
+    bool CheckWeight();
     bool CheckDiagram();
 
     //Diagram IO

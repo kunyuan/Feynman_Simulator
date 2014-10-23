@@ -41,6 +41,7 @@ class WeightNoMeasure {
                TAU };
 
   public:
+    void InitializeState();
     void SaveState(const std::string &FileName, std::string Mode = "a");
     bool LoadState(const std::string &);
 };
@@ -84,14 +85,14 @@ class Polar : public WeightNeedMeasure {
     void Measure(const Distance &, real dtau, spin *, spin *, int Order, const Complex &);
 };
 
-class G : public WeightNeedMeasure {
+class G : public WeightNoMeasure {
   public:
     G(const Lattice &, real Beta, int order);
     Complex Weight(const Distance &dR, real dtau, spin, spin);
     Complex BareWeight(const Distance &dR, real dtau, spin, spin);
 };
 
-class W : public WeightNeedMeasure {
+class W : public WeightNoMeasure {
   public:
     W(const Lattice &, real Beta, int order);
     Complex Weight(const Distance &dR, real dtau, spin *, spin *, bool);

@@ -28,6 +28,20 @@ const string ToString(const spin &s)
 Diagram::Diagram()
     : Order(0), Phase(Complex(1.0, 0.0)), Weight(Complex(1.0, 0.0)), G("GLine"), W("WLine"), Ver("Vertex")
 {
+    Lat = nullptr;
+    GWeight=nullptr;
+    WWeight=nullptr;
+}
+
+void Diagram::SetGWWeight(Weight::G *g, Weight::W *w)
+{
+    GWeight = g;
+    WWeight = w;
+}
+
+void Diagram::SetLat(Lattice *lat)
+{
+    Lat = lat;
 }
 
 /****************   GLine  *****************************/
@@ -119,43 +133,69 @@ WLine &Diagram::NeighW(Vertex &v)
 
 GLine &Diagram::RandomPickG()
 {
-    return G[RNG.irn1(0, G.HowMany())];
+    return G[RNG.irn(0, G.HowMany()-1)];
 }
 
 WLine &Diagram::RandomPickW()
 {
-    return W[RNG.irn1(0, W.HowMany())];
+    return W[RNG.irn(0, W.HowMany()-1)];
 }
 
 Vertex &Diagram::RandomPickVer()
 {
-    return Ver[RNG.irn1(0, Ver.HowMany())];
+    return Ver[RNG.irn(0, Ver.HowMany()-1)];
 }
 
+void Diagram::ClearDiagram()
+{
+    while(G.HowMany()>0)
+        G.Remove(G.HowMany()-1);
+    while(W.HowMany()>0)
+        W.Remove(W.HowMany()-1);
+    while(Ver.HowMany()>0)
+        Ver.Remove(Ver.HowMany()-1);
+}
 bool Diagram::FixDiagram()
 {
+    if(DEBUGMODE && Lat==nullptr)
+        ABORT("Lattice is not defined yet!");
+    if(DEBUGMODE && (GWeight==nullptr || WWeight==nullptr))
+        ABORT("G and W weight are not defined yet!");
+    
     Order = W.HowMany();
+    Worm.Exist = false;
+    
+    Weight = Complex(1.0, 0.0);
     for (int index = 0; index < G.HowMany(); index++) {
         GLine &g = G[index];
-        for (int dir = 0; dir < 2; dir++) {
-            NeighVer(g, dir).G[FlipDir(dir)] = index;
-        }
+        Vertex &vin = NeighVer(g, IN);
+        Vertex &vout = NeighVer(g, OUT);
+        
+        vin.G[OUT] = index;
+        vout.G[IN] = index;
+        
+        g.Weight = GWeight->Weight(Lat->Distance(vin.R, vout.R), vout.Tau-vin.Tau, vin.Spin[OUT], vout.Spin[IN]);
+        Weight *= g.Weight;
     }
 
     for (int index = 0; index < W.HowMany(); index++) {
         WLine &w = W[index];
+        Vertex &vin = NeighVer(w, IN);
+        Vertex &vout = NeighVer(w, OUT);
+        
         w.IsWorm = false;
-
-        for (int dir = 0; dir < 2; dir++) {
-            NeighVer(w, dir).W = index;
-        }
+        
+        vin.W = index;
+        vout.W = index;
+        
+        w.Weight = WWeight->Weight(Lat->Distance(vin.R, vout.R), vout.Tau-vin.Tau, vin.Spin, vout.Spin, w.IsWorm);
+        Weight *= w.Weight;
     }
 
     for (int index = 0; index < Ver.HowMany(); index++) {
         //TODO: Do something here if you want to fix vertex
     }
-
-    Phase = Complex(1.0, 0.0);
-    Weight = Complex(1.0, 0.0);
+    
+    Phase = phase(Weight);
     return true;
 }

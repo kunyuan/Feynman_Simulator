@@ -65,7 +65,7 @@ void Polar::Measure(const Distance &d, real dtau, spin *SpinIn, spin *SpinOut, i
 /***********************  G  **************************************/
 
 G::G(const Lattice &lat, real beta, int order)
-    : WeightNeedMeasure(lat, beta, order, SPIN4, "Polar")
+    : Weight::WeightNoMeasure(lat, beta, order, SPIN4, "Polar")
 {
 }
 
@@ -83,7 +83,7 @@ Complex G::BareWeight(const Distance &d, real dtau, spin SpinIn, spin SpinOut)
 /***********************  W  **************************************/
 
 W::W(const Lattice &lat, real beta, int order)
-    : WeightNeedMeasure(lat, beta, order, SPIN4, "Polar")
+    : WeightNoMeasure(lat, beta, order, SPIN4, "Polar")
 {
 }
 
