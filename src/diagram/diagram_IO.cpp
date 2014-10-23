@@ -8,10 +8,8 @@
 
 #include <vector>
 #include <sstream>
-#include "component.h"
-#include "component_bundle.h"
 #include "diagram.h"
-#include "abort.h"
+#include "../utility/abort.h"
 using namespace std;
 
 const char SEP = ' ';

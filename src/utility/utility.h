@@ -36,7 +36,7 @@ int iabs(int x); // { return ( (x >= 0.0) ? x : -x); }
 real Zero(real x, real eps);
 
 // float equal
-bool Equal(real x1, real x2, real eps＝eps0); // { return (fabs(x1-x2) < eps); };
+bool Equal(real x1, real x2, real eps = eps0);
 
 // initial an array with some value
 template <typename T>

@@ -6,8 +6,7 @@
 #ifndef __Fermion_Simulator__parameter__
 #define __Fermion_Simulator__parameter__
 
-#include "definition.h"
-#include "convention.h"
+#include "../utility/convention.h"
 
 // parameters needed to define a job
 class Jobs {

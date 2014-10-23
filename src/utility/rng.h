@@ -32,11 +32,11 @@ class RandomFactory {
         return d(_eng);
     }
     //Generator integer random numbers in the closed interval [from, thru]
-    inline int irn(int from, int thru)
-    {
-        static std::uniform_int_distribution<> d{};
-        return d(_eng, decltype(d)::param_type{from, thru});
-    }
+    //    inline int irn(int from, int thru)
+    //    {
+    //        static std::uniform_int_distribution<> d{};
+    //        return d(_eng, decltype(d)::param_type{from, thru});
+    //    }
 
     //Generator integer random numbers in the closed interval [from, thru]
     inline int irn1(int from, int thru)

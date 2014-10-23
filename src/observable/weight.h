@@ -9,11 +9,10 @@
 #ifndef __Feynman_Simulator__observable__
 #define __Feynman_Simulator__observable__
 
-#include "complex.h"
-#include "convention.h"
-#include "estimate.h"
 #include <iostream>
-#include "array.h"
+#include "estimate.h"
+#include "../utility/array.h"
+#include "../lattice/lattice.h"
 
 namespace Weight {
 

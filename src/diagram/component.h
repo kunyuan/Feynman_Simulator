@@ -10,11 +10,11 @@
 #define __Fermion_Simulator__component__
 
 #include <string>
-#include "complex.h"
-#include "utility.h"
-#include "logger.h"
-#include "convention.h"
-#include "lattice.h"
+#include "../utility/complex.h"
+#include "../utility/utility.h"
+#include "../utility/logger.h"
+#include "../utility/convention.h"
+#include "../lattice/lattice.h"
 
 class GLine {
     friend std::ostream &operator<<(std::ostream &os, GLine &r);

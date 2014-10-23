@@ -12,8 +12,10 @@
 #include <iostream>
 #include <vector>
 #include <unordered_map>
-#include "component.h"
-#include "cnpy.h"
+#include "../utility/cnpy.h"
+#include "../utility/convention.h"
+#include "../utility/complex.h"
+
 /**
 *  \brief estimate with mean value and standard error
 */
@@ -50,7 +52,7 @@ class Estimator {
     Estimate<T> Estimate();
     double Ratio();
     bool LoadState(cnpy::npz_t);
-    void SaveState(const std::string& FileName, string Mode = "a");
+    void SaveState(const std::string &FileName, std::string Mode = "a");
     void ClearStatistics();
     void SqueezeStatistics(real factor);
 };
@@ -72,8 +74,8 @@ class EstimatorBundle {
     void RemoveEstimator(const std::string);
     void AddStatistics();
     int HowMany();
-    bool LoadState(const std::string& FileName);
-    void SaveState(const std::string& FileName, string Mode = "a");
+    bool LoadState(const std::string &FileName);
+    void SaveState(const std::string &FileName, std::string Mode = "a");
     EstimatorT &operator[](int);
     EstimatorT &operator[](std::string);
     void ClearStatistics();

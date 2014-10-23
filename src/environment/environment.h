@@ -9,12 +9,12 @@
 #ifndef __Feynman_Simulator__environment__
 #define __Feynman_Simulator__environment__
 
-#include "job.h"
-#include "lattice.h"
-#include "diagram.h"
-#include "rng.h"
-#include "weight.h"
-#include "convention.h"
+#include "../diagram/diagram.h"
+#include "../utility/rng.h"
+#include "../observable/weight.h"
+#include "../utility/convention.h"
+#include "../job/job.h"
+#include "../lattice/lattice.h"
 
 class Environment {
   public:

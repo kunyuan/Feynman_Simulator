@@ -6,9 +6,7 @@
 //  Copyright (c) 2014 Kun Chen. All rights reserved.
 //
 #include "vector.h"
-#include "utility.h"
-#include <iostream>
-#include <sstream>
+#include "../utility/utility.h"
 #define SEP ' '
 
 using namespace std;
@@ -46,7 +44,7 @@ string Vec<T>::PrettyString()
     return os.str();
 }
 template <typename T>
-bool operator!=(const Vec<T>& v1, const Vec<T>&v2)
+bool operator!=(const Vec<T> &v1, const Vec<T> &v2)
 {
     if (v1 == v2)
         return false;
@@ -56,19 +54,18 @@ bool operator!=(const Vec<T>& v1, const Vec<T>&v2)
 template class Vec<int>;
 template class Vec<real>;
 
-
-bool operator==(const Vec<int>& v1, const Vec<int>&v2)
+bool operator==(const Vec<int> &v1, const Vec<int> &v2)
 {
     for (int j = 0; j < D; j++)
-        if (v1[j]!=v2[j])
+        if (v1[j] != v2[j])
             return false;
     return true;
 }
 
-bool operator==(const Vec<real>& v1, const Vec<real>&v2)
+bool operator==(const Vec<real> &v1, const Vec<real> &v2)
 {
     for (int j = 0; j < D; j++)
-        if (!Equal(v1[j],v2[j],eps0))
+        if (!Equal(v1[j], v2[j], eps0))
             return false;
     return true;
 }

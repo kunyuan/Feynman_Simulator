@@ -6,6 +6,5 @@
 //  Copyright (c) 2014 Kun Chen. All rights reserved.
 //
 
-#include "logger.h"
-#include "component_bundle.h"
+#include "utility/logger.h"
 using namespace std;

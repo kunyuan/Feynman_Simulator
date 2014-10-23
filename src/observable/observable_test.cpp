@@ -7,11 +7,10 @@
 //
 
 #include "weight.h"
-#include "cnpy.h"
-#include "sput.h"
-#include "utility.h"
-#include "convention.h"
-#include "rng.h"
+#include "../utility/sput.h"
+#include "../utility/utility.h"
+#include "../utility/convention.h"
+#include "../utility/rng.h"
 
 using namespace std;
 

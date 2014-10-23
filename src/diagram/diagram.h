@@ -10,9 +10,8 @@
 #define __Fermion_Simulator__diagram_global__
 
 #include <iostream>
-#include "logger.h"
 #include "component_bundle.h"
-#include "rng.h"
+#include "../utility/rng.h"
 
 class Worm {
   public:

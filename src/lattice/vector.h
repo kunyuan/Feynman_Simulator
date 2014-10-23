@@ -9,9 +9,8 @@
 #ifndef __Feynman_Simulator__vector__
 #define __Feynman_Simulator__vector__
 
-#include <stdio.h>
 #include <iostream>
-#include "convention.h"
+#include "../utility/convention.h"
 using namespace std;
 
 template <typename T>
@@ -23,13 +22,12 @@ class Vec {
     Vec()
     {
     }
-    
+
     Vec(T value)
     {
-        for(int j=0; j<D; j++)
+        for (int j = 0; j < D; j++)
             _Array[j] = value;
     }
-
 
     T &operator[](int index)
     {
@@ -89,16 +87,15 @@ class Vec {
 
     string PrettyString();
 
-
     template <typename TT>
     friend std::ostream &operator<<(std::ostream &os, Vec<TT> &);
     template <typename TT>
     friend std::istream &operator>>(std::istream &is, Vec<TT> &);
-    
-    friend bool operator==(const Vec<int>&, const Vec<int>&);
-    friend bool operator==(const Vec<real>&, const Vec<real>&);
+
+    friend bool operator==(const Vec<int> &, const Vec<int> &);
+    friend bool operator==(const Vec<real> &, const Vec<real> &);
     template <typename TT>
-    friend bool operator!=(const Vec<TT>&, const Vec<TT>&);
+    friend bool operator!=(const Vec<TT> &, const Vec<TT> &);
 };
 
 #endif /* defined(__Feynman_Simulator__vector__) */
