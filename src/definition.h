@@ -9,6 +9,5 @@
 #ifndef Fermion_Simulator_definition_h
 #define Fermion_Simulator_definition_h
 
-#define real double // define user defined float type here
 
 #endif

@@ -12,6 +12,8 @@
 #ifndef real
 #define real double
 #endif
+//#define NDEBUG
+//turn off all assert
 
 const bool DEBUGMODE = true;
 //#define TURNOFFDEBUG
