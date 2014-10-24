@@ -143,12 +143,12 @@ Complex operator+(const Complex &lhs, const Complex &rhs)
 
 Complex operator+(real lhs, const Complex &rhs)
 {
-    return Complex(rhs.Re+lhs,rhs.Im+lhs);
+    return Complex(rhs.Re + lhs, rhs.Im + lhs);
 }
 
 Complex operator+(const Complex &lhs, real rhs)
 {
-    return Complex(lhs.Re+rhs,lhs.Im+rhs);
+    return Complex(lhs.Re + rhs, lhs.Im + rhs);
 }
 
 Complex operator+(const Complex &lhs)
@@ -163,12 +163,12 @@ Complex operator-(const Complex &lhs, const Complex &rhs)
 
 Complex operator-(real lhs, const Complex &rhs)
 {
-    return Complex(rhs.Re-lhs,rhs.Im-lhs);
+    return Complex(rhs.Re - lhs, rhs.Im - lhs);
 }
 
 Complex operator-(const Complex &lhs, real rhs)
 {
-    return Complex(lhs.Re+rhs,lhs.Im+rhs);
+    return Complex(lhs.Re + rhs, lhs.Im + rhs);
 }
 
 Complex operator-(const Complex &c)
@@ -183,12 +183,12 @@ Complex operator*(const Complex &lhs, const Complex &rhs)
 
 Complex operator*(real lhs, const Complex &rhs)
 {
-    return Complex(rhs.Re*lhs,rhs.Im*lhs);
+    return Complex(rhs.Re * lhs, rhs.Im * lhs);
 }
 
 Complex operator*(const Complex &lhs, real rhs)
 {
-    return Complex(lhs.Re*rhs,lhs.Im*rhs);
+    return Complex(lhs.Re * rhs, lhs.Im * rhs);
 }
 
 Complex operator/(const Complex &lhs, const Complex &rhs)
@@ -198,16 +198,15 @@ Complex operator/(const Complex &lhs, const Complex &rhs)
 
 Complex operator/(real x, const Complex &y)
 {
-  double factor;
-  factor=1.0/(y.Re*y.Re+y.Im*y.Im);
-  return Complex(x*y.Re*factor,-x*y.Im*factor);
+    double factor;
+    factor = 1.0 / (y.Re * y.Re + y.Im * y.Im);
+    return Complex(x * y.Re * factor, -x * y.Im * factor);
 }
 
 Complex operator/(const Complex &rhs, real lhs)
 {
     return Complex(rhs) /= lhs;
 }
-
 
 // Complex library
 
@@ -223,21 +222,16 @@ real mod(const Complex &c)
 
 Complex phase(const Complex &c)
 {
-    return c/mod(c);
+    return c / mod(c);
 }
 
-
-bool Equal(Complex c1, Complex c2, real eps)
-
+bool Equal(const Complex &c1, const Complex &c2, real eps)
 {
-
     return (fabs(c1.Re - c2.Re) < eps && fabs(c1.Im - c2.Im) < eps);
 }
 
-bool Equal(Complex c1, real r, real i, real eps)
-
+bool Equal(const Complex &c1, real r, real i, real eps)
 {
-
     return (fabs(c1.Re - r) < eps && fabs(c1.Im - i) < eps);
 }
 
@@ -255,7 +249,7 @@ Complex Csqrt(Complex z)
     return result;
 };
 
-string ToString(Complex c)
+string ToString(const Complex &c)
 {
     string s = ToString(c.Re);
     if (c.Im > 0.0)

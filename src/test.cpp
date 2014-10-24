@@ -13,6 +13,7 @@
 #include "diagram/diagram.h"
 #include "lattice/lattice.h"
 #include "observable/weight.h"
+#include "utility/fft.h"
 using namespace std;
 
 #define TEST(func)                  \
@@ -30,7 +31,8 @@ int RunTest()
     TEST(TestObservable);
     TEST(TestMarkov);
 
-    TEST(TestCRC32);
+    //    TEST(TestCRC32);
+    TEST(TestFFT);
 
     //    TestArray();
     //    Testcnpy();

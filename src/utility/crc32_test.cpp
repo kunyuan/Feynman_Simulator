@@ -13,7 +13,6 @@ void Test_CRC();
 
 int TestCRC32()
 {
-
     sput_start_testing();
     sput_enter_suite("Test crc32...");
 
