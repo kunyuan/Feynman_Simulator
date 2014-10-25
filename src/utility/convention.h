@@ -21,9 +21,6 @@ const bool DEBUGMODE = true;
 
 const real Pi = 3.14159265359;
 
-enum JobType { MC,
-               DYSON };
-
 enum spin { DOWN,
             UP };
 #define FlipSpin(x) (1 - x)

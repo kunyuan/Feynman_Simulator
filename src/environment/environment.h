@@ -24,7 +24,7 @@ class Environment {
     int Order;
     std::string StateFile;
 
-    bool ReadState();
+    bool LoadState();
     void SaveState();
 };
 
@@ -32,7 +32,7 @@ class EnvMonteCarlo : public Environment {
   public:
     EnvMonteCarlo(Jobs &);
     Diagram Diag;
-    int Counter;
+    long long Counter;
     real OrderWeight[MAX_ORDER];
     EstimatorBundle<Complex> cEstimator;
     EstimatorBundle<real> rEstimator;
@@ -43,7 +43,7 @@ class EnvMonteCarlo : public Environment {
     Weight::Worm Worm;
 
     void Build();
-    bool ReadState();
+    bool LoadState();
     void SaveState();
 };
 

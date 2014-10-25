@@ -26,6 +26,7 @@ int RunTest()
 
     //    TestTimer();  //Test the timer
     //    TestRNG();
+    //    TestArray();
     TEST(TestDiagram);
     //TEST(TestLattice);
     TEST(TestObservable);
@@ -34,7 +35,6 @@ int RunTest()
     //    TEST(TestCRC32);
     TEST(TestFFT);
 
-    //    TestArray();
     //    Testcnpy();
     return 0;
 }

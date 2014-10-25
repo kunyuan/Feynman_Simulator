@@ -29,9 +29,9 @@ int main(int argc, const char *argv[])
 
     InitEveryOneNeedsIt();
     switch (Job.Type) {
-        case MC:
+        case Jobs::MC:
             MonteCarlo(Job);
-        case DYSON:
+        case Jobs::DYSON:
             Dyson(Job);
     }
     return 0;
