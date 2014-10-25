@@ -114,6 +114,7 @@ class Lattice {
     Distance Distance(const Site &, const Site &);
     Vec<int> Coordinate(const class Distance &);
     Vec<real> GetRealVec(const class Distance &);
+    //TODO: lattice IO
 
   private:
     void Initialize();

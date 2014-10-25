@@ -25,8 +25,8 @@ EnvMonteCarlo::EnvMonteCarlo(Jobs &Job)
     //set Diag weight
     Diag.SetGWWeight(&G, &W);
 
-    //Initialize random number generator
-    RNG.Reset(Job.Seed);
+    //    //Initialize random number generator
+    //    RNG.Reset(Job.Seed);
 
     //Add estimators
     cEstimator.AddEstimator("1");

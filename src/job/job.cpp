@@ -13,7 +13,6 @@ void Jobs::Read()
 {
     Beta = 1.0;
     Order = 1;
-    Seed = 1;
     Type = MC;
     return;
 }

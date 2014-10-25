@@ -181,6 +181,7 @@ class array1 {
     }
     void clear(int flag) const
     {
+        //clear flag from the state
         state &= ~flag;
     }
     void set(int flag) const
@@ -224,6 +225,7 @@ class array1 {
     }
     void Dimension(unsigned int nx0, T *v0)
     {
+        //if the data pointer is passed from outside, then this array has not been allocated by itself
         Dimension(nx0);
         v = v0;
         clear(allocated);
@@ -278,6 +280,8 @@ class array1 {
         : v(A.v), size(A.size),
           state(A.test(temporary))
     {
+        //if A is temporary, then this array is also temporary
+        //if A is activte or aligned, then this array is nothing but a reference to A, thus it is unallocated
     }
 
     virtual ~array1()
@@ -615,6 +619,11 @@ class array2 : public array1<T> {
         __checkActivate(2, align);
     }
 
+    void Allocate(unsigned int *n)
+    {
+        Allocate(n[0], n[1]);
+    }
+
     array2()
         : nx(0), ny(0)
     {
@@ -683,7 +692,7 @@ class array2 : public array1<T> {
     {
         __checkEqual(nx, A.Nx(), 2, 1);
         __checkEqual(ny, A.Ny(), 2, 2);
-        Load(A());
+        this->Load(A());
         A.Purge();
         return *this;
     }
@@ -789,6 +798,11 @@ class array3 : public array1<T> {
     {
         Dimension(nx0, ny0, nz0);
         __checkActivate(3, align);
+    }
+
+    void Allocate(unsigned int *n)
+    {
+        Allocate(n[0], n[1], n[2]);
     }
 
     array3()
@@ -958,6 +972,11 @@ class array4 : public array1<T> {
     {
         Dimension(nx0, ny0, nz0, nw0);
         __checkActivate(4, align);
+    }
+
+    void Allocate(unsigned int *n)
+    {
+        Allocate(n[0], n[1], n[2], n[3]);
     }
 
     array4()
@@ -1140,6 +1159,11 @@ class array5 : public array1<T> {
     {
         Dimension(nx0, ny0, nz0, nw0, nv0);
         __checkActivate(5, align);
+    }
+
+    void Allocate(unsigned int *n)
+    {
+        Allocate(n[0], n[1], n[2], n[3], n[4]);
     }
 
     array5()
