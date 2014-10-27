@@ -7,28 +7,70 @@
 //
 
 #include "job.h"
-//using namespace std;
+#include "../utility/abort.h"
+#define GET(is, thing)                               \
+    {                                                \
+        string temp;                                 \
+        (*is) >> thing;                              \
+        getline((*is), temp);                        \
+        if (!(*is).good())                           \
+            ABORT("Fail to read " << #thing << "!"); \
+    }
 
-void Jobs::Read()
+using namespace std;
+using namespace Jobs;
+
+void OpenFile(string InputFile, jobstream ifs)
+{
+    (*ifs).open(InputFile, ios::in);
+    if (!(*ifs).is_open())
+        ABORT("Fail to open input file " << InputFile);
+}
+
+JobType GetJobsType(std::string InputFile)
+{
+    jobstream ifs;
+    OpenFile(InputFile, ifs);
+    int type;
+    GET(ifs, type);
+    return (JobType)type;
+}
+
+JobsBase::JobsBase(string InputFile)
+{
+    jobstream ifs;
+    OpenFile(InputFile, ifs);
+    int type;
+    GET(ifs, type);
+    Type = (JobType)type;
+    GET(ifs, PID);
+    GET(ifs, L);
+    GET(ifs, Jcp);
+    GET(ifs, InitialBeta);
+    GET(ifs, DeltaBeta);
+    GET(ifs, Beta);
+    GET(ifs, Order);
+    string doesload;
+    GET(ifs, doesload);
+    if (doesload == "true") {
+        GET(ifs, StateFile);
+        DoesLoad = true;
+    }
+    else if (doesload == "false") {
+        DoesLoad = false;
+    }
+    else
+        ABORT("Fail to read DoesLoad");
+}
+
+void JobsBase::TestJob()
 {
     Beta = 1.0;
     Order = 1;
     Type = MC;
-    return;
 }
-//6    #pid
-//8,8    #L
-//1.0    #Jcp
-//1.0    #iniBeta
-//0.0    #dBeta
-//1.0    #finalBeta
-//4    #Order
-//false    #IsLoad
-//2    #Type: MC
-//10000    #Toss
-//5000000    #Sample
-//10    #Sweep
-//-573165127    #Seed
-//1.00_4_coll
-//0.1    #Worm/Norm
-//1.5,1.0,3.0,4.0    #Reweight
+
+JobsMC::JobsMC(string InputFile)
+    : JobsBase(InputFile)
+{
+}

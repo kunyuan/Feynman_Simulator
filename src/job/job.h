@@ -7,38 +7,54 @@
 #define __Fermion_Simulator__parameter__
 
 #include <string>
+#include <iostream>
 #include "../utility/convention.h"
 #include "../lattice/vector.h"
 
-// parameters needed to define a job
-class Jobs {
-  private:
-    real _T;
+namespace Jobs {
+
+typedef shared_ptr<std::ifstream> jobstream;
+
+enum JobType { MC,
+               DYSON };
+
+JobType GetJobsType(std::string);
+
+class JobsBase {
+  protected:
+    jobstream ifs;
 
   public:
-    enum JobType { MC,
-                   DYSON };
+    JobsBase(std::string InputFile);
+    JobType Type;
     int PID;
     Vec<int> L;
+    real Jcp;
     real InitialBeta;
     real DeltaBeta;
     real Beta;
     int Order;
     bool DoesLoad;
     std::string StateFile;
-    JobType Type;
-    void Read();
+    void TestJob();
 };
 
-class JobsMC : public Jobs {
+class JobsMC : public JobsBase {
+  public:
+    JobsMC();
+    JobsMC(std::string InputFile);
     int Toss;
     int Sample;
     int Sweep;
     int Seed;
-    real WormSpaceReWeight;
+    real WormSpaceReweight;
     real OrderReweight[];
 };
 
-class JobsDyson : public Jobs {
+class JobsDyson : public JobsBase {
+  public:
+    JobsDyson();
+    JobsDyson(std::string InputFile);
 };
+}
 #endif /* defined(__Fermion_Simulator__parameter__) */

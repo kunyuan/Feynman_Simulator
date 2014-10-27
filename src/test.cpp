@@ -27,13 +27,13 @@ int RunTest()
     //    TestTimer();  //Test the timer
     //    TestRNG();
     //    TestArray();
-    TEST(TestDiagram);
+    //    TEST(TestDiagram);
     //TEST(TestLattice);
-    TEST(TestObservable);
-    TEST(TestMarkov);
+    //    TEST(TestObservable);
+    //    TEST(TestMarkov);
 
     //    TEST(TestCRC32);
-    TEST(TestFFT);
+    //    TEST(TestFFT);
 
     //    Testcnpy();
     return 0;

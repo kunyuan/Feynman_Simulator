@@ -29,21 +29,18 @@ int TestMarkov()
 void Test_CreateWorm()
 {
     Jobs Job;
-    Job.Read();
     EnvMonteCarlo Env(Job);
     Markov markov(&Env);
     markov.Diag->LoadConfig("../src/diagram/diagram_template.config");
-    int total=0;
-    for(int i=0; i<10; i++)
-    {
+    int total = 0;
+    for (int i = 0; i < 10; i++) {
         markov.CreateWorm();
-        if(markov.Diag->Worm.Exist)
-        {
+        if (markov.Diag->Worm.Exist) {
             total += 1;
             markov.Diag->SaveConfig("diagram_template.config", "w");
         }
         markov.Diag->LoadConfig("../src/diagram/diagram_template.config");
     }
-    cout <<total <<endl;
-    sput_fail_unless(total==10, "The accept ratio of CreateWorm");
+    cout << total << endl;
+    sput_fail_unless(total == 10, "The accept ratio of CreateWorm");
 }

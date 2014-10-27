@@ -14,8 +14,8 @@
 #include "markov/markov_monitor.h"
 using namespace std;
 
-void MonteCarlo(Jobs &Job);
-void Dyson(Jobs &Job);
+void MonteCarlo(Jobs::JobsMC &Job);
+void Dyson(Jobs::JobsDyson &Job);
 int main(int argc, const char *argv[])
 {
     //initialize LOGGER
@@ -23,21 +23,19 @@ int main(int argc, const char *argv[])
 
     InitGlobalUtility();
     RunTest();
+    //    InitEveryOneNeedsIt();
+    string InputFile = "infile/_in_MC_1";
 
-    Jobs Job;
-    Job.Read();
-
-    InitEveryOneNeedsIt();
-    switch (Job.Type) {
+    switch (Jobs::GetJobsType(InputFile)) {
         case Jobs::MC:
-            MonteCarlo(Job);
+            MonteCarlo(Jobs::JobsMC(InputFile));
         case Jobs::DYSON:
-            Dyson(Job);
+            Dyson(Jobs::JobsDyson(InputFile));
     }
     return 0;
 }
 
-void MonteCarlo(Jobs &Job)
+void MonteCarlo(Jobs::JobsMC &Job)
 {
     EnvMonteCarlo PaddyField(Job);
     Markov GrassHopper(&PaddyField);
@@ -61,7 +59,7 @@ void MonteCarlo(Jobs &Job)
     }
 }
 
-void Dyson(Jobs &Job)
+void Dyson(Jobs::JobsDyson &Job)
 {
     EnvDyson Env(Job);
 }

@@ -18,7 +18,7 @@
 
 class Environment {
   public:
-    Environment(Jobs &);
+    Environment(Jobs::Jobs &);
     Lattice Lat;
     real Beta;
     int Order;
