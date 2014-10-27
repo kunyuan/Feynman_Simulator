@@ -24,12 +24,13 @@ JobType GetJobsType(std::string InputFile)
 
 Environment::Environment()
 {
-    BuildTest();
+    Lat = nullptr;
 }
 
 Environment::~Environment()
 {
-    delete Lat;
+    if (Lat != nullptr)
+        delete Lat;
 }
 
 bool Environment::BuildFromFile(string InputFile)
@@ -41,6 +42,7 @@ bool Environment::BuildFromFile(string InputFile)
     _para.clear();
     while (getline(ifs, temp))
         _para.push_back(temp);
+    ifs.close();
 
     int type;
     GET(_para, type);

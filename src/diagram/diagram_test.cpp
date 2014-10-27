@@ -94,14 +94,13 @@ void Test_Diagram_IO()
     Weight::W W(lat, 1.0, 1);
     G.InitializeState();
     W.InitializeState();
-    
-    Diag.SetLat(&lat);
-    Diag.SetGWWeight(&G, &W);
-    
+
+    Diag.Build(&lat, &G, &W);
+
     Diag.LoadConfig("../src/diagram/diagram_template.config");
     LOG_INFO(Diag.PrettyString(Diag.Ver[0]));
     sput_fail_unless(Diag.CheckDiagram(), "Check diagram reading");
-    sput_fail_unless(Equal(Diag.Weight,Complex(64.0, 0.0)), "Check diagram reading");
+    sput_fail_unless(Equal(Diag.Weight, Complex(64.0, 0.0)), "Check diagram reading");
     Diag.SaveConfig("diagram_template.config", "w");
     Diag.WriteDiagram2gv("./test.gv");
 }

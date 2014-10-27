@@ -44,38 +44,36 @@ void Diagram::SaveConfig(const std::string &FileName, string Mode)
         for (int index = 0; index < W.HowMany(); index++)
             W[index].SaveConfig(os << 'w' << SEP);
 
-        if(Worm.Exist)
-        {
+        if (Worm.Exist) {
             os << COMMENT << "Worm" << endl;
-            Worm.SaveConfig(os << 'i' <<SEP);
+            Worm.SaveConfig(os << 'i' << SEP);
         }
     }
+    os.close();
 }
 
 bool Diagram::LoadConfig(const std::string &FileName)
 {
     ifstream ifs;
     ifs.open(FileName, ios::in);
-    if (!ifs) {
-        ABORT("Cannot find " + FileName);
+    if (!ifs.is_open()) {
+        ABORT("Cannot open " + FileName);
         return false;
     }
     else {
         string line;
-        int i = 0;
         //locate the last configration block
         streampos lastBlockPos = 0;
-        while (std::getline(ifs, line)) {
-            i++;
+        while (getline(ifs, line)) {
             if (line.compare(0, SEP_LINE_SHORT.size(), SEP_LINE_SHORT) == 0)
                 lastBlockPos = ifs.tellg();
         }
         ifs.clear();
         ifs.seekg(lastBlockPos);
+
         ClearDiagram();
         char head;
         string temp;
-        i=0;
         while (!ifs.eof()) {
             ifs >> head;
             if (head == COMMENT) {
@@ -93,8 +91,9 @@ bool Diagram::LoadConfig(const std::string &FileName)
                 Worm.LoadConfig(ifs);
             else
                 ABORT("Error in reading diagram! Get " + ToString(head) + " as the head!");
-            head=COMMENT;
+            head = COMMENT;
         }
+        ifs.close();
         FixDiagram();
         return true;
     }

@@ -44,7 +44,7 @@ void MonteCarlo(EnvMonteCarlo &PaddyField)
 {
     Markov GrassHopper(&PaddyField);
     MarkovMonitor Scarecrow(&PaddyField);
-    while (PaddyField.Counter < 10000) {
+    while (PaddyField.Counter < 10) {
         PaddyField.Counter++;
         //        GrassHopper.Hop(10);
 
