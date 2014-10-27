@@ -9,10 +9,10 @@
 #include <sstream>
 #include "markov.h"
 #include "markov_monitor.h"
-#include "sput.h"
-#include "utility.h"
-#include "diagram.h"
-#include "logger.h"
+#include "../diagram/diagram.h"
+#include "../utility/sput.h"
+#include "../utility/utility.h"
+#include "../utility/logger.h"
 using namespace std;
 
 void Test_CreateWorm();
@@ -29,6 +29,7 @@ int TestMarkov()
 void Test_CreateWorm()
 {
     EnvMonteCarlo Env;
+    Env.BuildFromFile("../src/environment/_in_MC_test");
     Markov markov(&Env);
     markov.Diag->LoadConfig("../src/diagram/diagram_template.config");
     int total = 0;

@@ -11,6 +11,12 @@
 
 EnvMonteCarlo::EnvMonteCarlo()
 {
+    OrderWeight = nullptr;
+    Sigma = nullptr;
+    Polar = nullptr;
+    G = nullptr;
+    W = nullptr;
+    WormWeight = nullptr;
 }
 
 EnvMonteCarlo::~EnvMonteCarlo()
@@ -41,9 +47,7 @@ bool EnvMonteCarlo::BuildFromFile(string InputFile)
     W = new Weight::W(*Lat, Beta, Order);
     WormWeight = new Weight::Worm();
 
-    Diag.SetLat(Lat);
-
-    Diag.SetGWWeight(G, W);
+    Diag.Build(Lat, G, W);
 
     //    //Initialize random number generator
     RNG.Reset(Seed);

@@ -9,19 +9,19 @@
 #ifndef __Feynman_Simulator__environment__
 #define __Feynman_Simulator__environment__
 
+#include <list>
 #include "../diagram/diagram.h"
 #include "../utility/rng.h"
 #include "../observable/weight.h"
 #include "../utility/convention.h"
 #include "../lattice/lattice.h"
-#include <list>
 
 #ifndef GET
 #define GET(para, thing)                             \
     {                                                \
         stringstream ss(para.front());               \
         (ss) >> thing;                               \
-        if (!(ss).good())                            \
+        if ((ss).fail())                             \
             ABORT("Fail to read " << #thing << "!"); \
         para.pop_front();                            \
     }
@@ -81,6 +81,7 @@ class EnvMonteCarlo : public Environment {
     Weight::G *G;
 
     bool BuildFromFile(std::string InputFile);
+    void BuildTest();
     bool LoadState();
     void SaveState();
 };

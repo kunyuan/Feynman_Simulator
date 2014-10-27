@@ -18,11 +18,10 @@ class Diagram {
   public:
     Diagram();
 
-    void SetGWWeight(Weight::G *, Weight::W *);
+    void Build(Lattice *, Weight::G *, Weight::W *);
+
     Weight::G *GWeight;
     Weight::W *WWeight;
-
-    void SetLat(Lattice *);
     Lattice *Lat;
 
     int Order;
