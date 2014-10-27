@@ -13,8 +13,8 @@
 #include "../utility/rng.h"
 #include "../observable/weight.h"
 #include "../utility/convention.h"
-#include "../job/job.h"
 #include "../lattice/lattice.h"
+#include <list>
 
 #ifndef GET
 #define GET(para, thing)                             \
@@ -26,6 +26,11 @@
         para.pop_front();                            \
     }
 #endif
+
+enum JobType { MC,
+               DYSON };
+
+JobType GetJobsType(std::string);
 
 class Environment {
   protected:

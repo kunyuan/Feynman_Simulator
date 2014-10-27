@@ -26,7 +26,6 @@
 		84519AEF19F2C5B2007CB81B /* envDyson.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84519AEE19F2C5B2007CB81B /* envDyson.cpp */; };
 		84519AF219F33F22007CB81B /* complex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84519AF019F33F22007CB81B /* complex.cpp */; };
 		845C92C119F75B340066B590 /* vector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 845C92C019F75B340066B590 /* vector.cpp */; };
-		845C92D819F855980066B590 /* job.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 845C92D619F855980066B590 /* job.cpp */; };
 		84681F6519F9AAA600832DAD /* crc32.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84681F6319F9AAA600832DAD /* crc32.cpp */; };
 		84681F6719F9AC0600832DAD /* crc32_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84681F6619F9AC0600832DAD /* crc32_test.cpp */; };
 		84681F6B19F9B4C700832DAD /* timer_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84681F6819F9B4C700832DAD /* timer_test.cpp */; };
@@ -100,8 +99,6 @@
 		845C92C719F834460066B590 /* job_manager.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = job_manager.py; sourceTree = SOURCE_ROOT; };
 		845C92C819F834460066B590 /* run_loop.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = run_loop.py; sourceTree = SOURCE_ROOT; };
 		845C92C919F835590066B590 /* job_class.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = job_class.py; sourceTree = SOURCE_ROOT; };
-		845C92D619F855980066B590 /* job.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = job.cpp; path = job/job.cpp; sourceTree = "<group>"; };
-		845C92D719F855980066B590 /* job.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = job.h; path = job/job.h; sourceTree = "<group>"; };
 		84681F6319F9AAA600832DAD /* crc32.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = crc32.cpp; sourceTree = "<group>"; };
 		84681F6419F9AAA600832DAD /* crc32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crc32.h; sourceTree = "<group>"; };
 		84681F6619F9AC0600832DAD /* crc32_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = crc32_test.cpp; sourceTree = "<group>"; };
@@ -235,22 +232,13 @@
 			name = markov;
 			sourceTree = "<group>";
 		};
-		84D4287419F1F4B40051CE96 /* job */ = {
-			isa = PBXGroup;
-			children = (
-				845C92D719F855980066B590 /* job.h */,
-				845C92D619F855980066B590 /* job.cpp */,
-				845C92C919F835590066B590 /* job_class.py */,
-				845C92C619F834460066B590 /* inlist.py */,
-				845C92C719F834460066B590 /* job_manager.py */,
-				845C92C819F834460066B590 /* run_loop.py */,
-			);
-			name = job;
-			sourceTree = "<group>";
-		};
 		84D4287819F208300051CE96 /* environment */ = {
 			isa = PBXGroup;
 			children = (
+				845C92C819F834460066B590 /* run_loop.py */,
+				845C92C719F834460066B590 /* job_manager.py */,
+				845C92C619F834460066B590 /* inlist.py */,
+				845C92C919F835590066B590 /* job_class.py */,
 				84519AEA19F2C554007CB81B /* environment.h */,
 				84519AE919F2C554007CB81B /* environment.cpp */,
 				84519AEC19F2C57A007CB81B /* envMonteCarlo.cpp */,
@@ -286,7 +274,6 @@
 				841D905B19E054900066116A /* test.cpp */,
 				84B1D57C19DF4215004C3A89 /* definition.h */,
 				8426668E19E475DF00CF7B59 /* definition.cpp */,
-				84D4287419F1F4B40051CE96 /* job */,
 				84D4287819F208300051CE96 /* environment */,
 				84B8FC3919EC9763003D6DF6 /* markov */,
 				1CA5CF3C19ED6F5400212E20 /* lattice */,
@@ -360,7 +347,6 @@
 				84681F6B19F9B4C700832DAD /* timer_test.cpp in Sources */,
 				84681F6C19F9B4C700832DAD /* timer.cpp in Sources */,
 				84D7EFBF19F4B32E006B1CA5 /* markov_monitor.cpp in Sources */,
-				845C92D819F855980066B590 /* job.cpp in Sources */,
 				841D50EB19E85C8600FDB7FF /* diagram_test.cpp in Sources */,
 				84B1D57A19DEFC19004C3A89 /* test.h in Sources */,
 				84B8FC4619ED6F15003D6DF6 /* estimate.cpp in Sources */,

@@ -19,7 +19,6 @@
 #include "lattice/lattice.h"
 #include "diagram/diagram.h"
 #include "observable/weight.h"
-#include "job/job.h"
 
 void InitGlobalUtility();
 
