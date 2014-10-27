@@ -17,21 +17,20 @@ bool CanNotMoveWorm(int dspin, const Vertex &v);
 Markov::Markov(EnvMonteCarlo *Env)
 {
     Beta = Env->Beta;
-    Lat = &Env->Lat;
+    Lat = Env->Lat;
     OrderWeight = Env->OrderWeight;
     Diag = &Env->Diag;
     Worm = &Env->Diag.Worm;
-    Sigma = &Env->Sigma;
-    Polar = &Env->Polar;
-    G = &Env->G;
+    Sigma = Env->Sigma;
+    Polar = Env->Polar;
+    G = Env->G;
     G->InitializeState();
-    W = &Env->W;
+    W = Env->W;
     W->InitializeState();
-    WormWeight = &Env->Worm;
-    
+    WormWeight = Env->WormWeight;
+
     ProbofCall[0] = 0.50;
     ProbofCall[1] = 0.50;
-    
 }
 
 /**
@@ -44,7 +43,7 @@ void Markov::Hop(int sweep)
     double x = RNG.urn();
     if (x < ProbofCall[0])
         CreateWorm();
-    else if (x < ProbofCall[0]+ProbofCall[1])
+    else if (x < ProbofCall[0] + ProbofCall[1])
         DeleteWorm();
 }
 
@@ -62,7 +61,7 @@ void Markov::CreateWorm()
         return;
 
     Complex wWeight = W->Weight(Lat->Distance(vin.R, vout.R), vout.Tau - vin.Tau, vin.Spin, vout.Spin, true);
-    Complex weightRatio = wWeight/w.Weight;
+    Complex weightRatio = wWeight / w.Weight;
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
@@ -103,7 +102,7 @@ bool CanNotMoveWorm(int dspin, const Vertex &v)
 
 int RandomPickK()
 {
-    return RNG.irn(-MAX_K, MAX_K-1);
+    return RNG.irn(-MAX_K, MAX_K - 1);
 }
 
 int RandomPickDeltaSpin()

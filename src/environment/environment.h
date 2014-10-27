@@ -16,39 +16,74 @@
 #include "../job/job.h"
 #include "../lattice/lattice.h"
 
+#ifndef GET
+#define GET(para, thing)                             \
+    {                                                \
+        stringstream ss(para.front());               \
+        (ss) >> thing;                               \
+        if (!(ss).good())                            \
+            ABORT("Fail to read " << #thing << "!"); \
+        para.pop_front();                            \
+    }
+#endif
+
 class Environment {
+  protected:
+    std::list<std::string> _para;
+    Vec<int> _L;
+
   public:
-    Environment(const JobsBase &);
-    Lattice Lat;
+    Environment();
+    ~Environment();
+    JobType Type;
+    int PID;
+    real Jcp;
+    real InitialBeta;
+    real DeltaBeta;
     real Beta;
     int Order;
+    bool DoesLoad;
     std::string StateFile;
+    Lattice *Lat;
 
+    bool BuildFromFile(std::string InputFile);
+    void BuildTest();
     bool LoadState();
     void SaveState();
 };
 
 class EnvMonteCarlo : public Environment {
   public:
-    EnvMonteCarlo(const JobsMC &);
-    Diagram Diag;
+    EnvMonteCarlo();
+    ~EnvMonteCarlo();
     long long Counter;
-    real OrderWeight[MAX_ORDER];
+    int Toss;
+    int Sample;
+    int Sweep;
+    int Seed;
+    real WormSpaceReweight;
+
+    Diagram Diag;
+    real *OrderWeight;
+
     EstimatorBundle<Complex> cEstimator;
     EstimatorBundle<real> rEstimator;
-    Weight::Sigma Sigma;
-    Weight::Polar Polar;
-    Weight::W W;
-    Weight::G G;
-    Weight::Worm Worm;
 
+    Weight::Worm *WormWeight;
+    Weight::Sigma *Sigma;
+    Weight::Polar *Polar;
+    Weight::W *W;
+    Weight::G *G;
+
+    bool BuildFromFile(std::string InputFile);
     bool LoadState();
     void SaveState();
 };
 
 class EnvDyson : public Environment {
   public:
-    EnvDyson(const JobsDyson &);
+    EnvDyson();
+    bool BuildFromFile(std::string InputFile);
 };
 
 #endif /* defined(__Feynman_Simulator__environment__) */

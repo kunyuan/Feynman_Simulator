@@ -8,6 +8,8 @@
 
 #include "job.h"
 #include "../utility/abort.h"
+using namespace std;
+
 #define GET(para, thing)                             \
     {                                                \
         stringstream ss(para.front());               \
@@ -16,8 +18,6 @@
             ABORT("Fail to read " << #thing << "!"); \
         para.pop_front();                            \
     }
-
-using namespace std;
 
 JobType GetJobsType(std::string InputFile)
 {

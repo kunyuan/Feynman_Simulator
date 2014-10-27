@@ -28,8 +28,7 @@ int TestMarkov()
 
 void Test_CreateWorm()
 {
-    JobsMC Job;
-    EnvMonteCarlo Env(Job);
+    EnvMonteCarlo Env;
     Markov markov(&Env);
     markov.Diag->LoadConfig("../src/diagram/diagram_template.config");
     int total = 0;

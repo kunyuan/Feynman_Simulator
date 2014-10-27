@@ -7,30 +7,51 @@
 //
 
 #include "environment.h"
+#include <string>
 
-EnvMonteCarlo::EnvMonteCarlo(const JobsMC &Job)
-    : Environment(Job),
-      //The base class is constructed first!!!
-      Sigma(Lat, Beta, Order),
-      Polar(Lat, Beta, Order),
-      G(Lat, Beta, Order),
-      W(Lat, Beta, Order)
+EnvMonteCarlo::EnvMonteCarlo()
 {
+}
+
+EnvMonteCarlo::~EnvMonteCarlo()
+{
+    delete OrderWeight;
+    delete Sigma;
+    delete Polar;
+    delete G;
+    delete W;
+    delete WormWeight;
+}
+
+bool EnvMonteCarlo::BuildFromFile(string InputFile)
+{
+    Environment::BuildFromFile(InputFile);
+
+    GET(_para, Toss);
+    GET(_para, Sample);
+    GET(_para, Sweep);
+    GET(_para, Seed);
+    GET(_para, WormSpaceReweight);
 
     Counter = 0;
 
-    //set Diag weight
-    Diag.SetLat(&Lat);
+    Sigma = new Weight::Sigma(*Lat, Beta, Order);
+    Polar = new Weight::Polar(*Lat, Beta, Order);
+    G = new Weight::G(*Lat, Beta, Order);
+    W = new Weight::W(*Lat, Beta, Order);
+    WormWeight = new Weight::Worm();
 
-    //set Diag weight
-    Diag.SetGWWeight(&G, &W);
+    Diag.SetLat(Lat);
+
+    Diag.SetGWWeight(G, W);
 
     //    //Initialize random number generator
-    //    RNG.Reset(Job.Seed);
+    RNG.Reset(Seed);
 
     //Add estimators
     cEstimator.AddEstimator("1");
     rEstimator.AddEstimator("1");
+    return true;
 }
 
 void EnvMonteCarlo::SaveState()
