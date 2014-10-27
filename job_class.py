@@ -77,7 +77,7 @@ class JobMonteCarlo(Job):
     def __init__(self, para):
         Job.__init__(self, para)
         self.keep_cpu_busy = True
-        self.para["Type: MC"] = 2
+        self.para["Type: MC"] = 0
         self.name = "MC"
 
     def __check_parameters__(self, para):
@@ -91,8 +91,8 @@ class JobMonteCarlo(Job):
             return False
 
     def to_string(self, pid=0):
-        input_str = Job.to_string(self, pid)
-        input_str += self.key_to_string("Type: MC")
+        input_str = self.key_to_string("Type: MC")
+        input_str = input_str+Job.to_string(self, pid)
         input_str += self.key_to_string("Toss")
         input_str += self.key_to_string("Sample")
         input_str += self.key_to_string("Sweep")
@@ -112,8 +112,8 @@ class JobConsistLoop(Job):
         self.name = "SCL"
 
     def to_string(self, pid=0):
-        input_str = Job.to_string(self, pid)
-        input_str += self.key_to_string("Type: SCL")
+        input_str = self.key_to_string("Type: SCL")
+        input_str = input_str+Job.to_string(self, pid)
         input_str += self.key_to_string("ReadFile")
         return input_str
 
@@ -126,8 +126,8 @@ class JobIntegration(Job):
         self.name = "NI"
 
     def to_string(self, pid=0):
-        input_str = Job.to_string(self, pid)
-        input_str += self.key_to_string("Type: NI")
+        input_str = self.key_to_string("Type: NI")
+        input_str = input_str+Job.to_string(self, pid)
         return input_str
 
 class JobOutputOrder(Job):
@@ -139,8 +139,8 @@ class JobOutputOrder(Job):
         self.name = "OO"
 
     def to_string(self, pid=0):
-        input_str = Job.to_string(self, pid)
-        input_str += self.key_to_string("Type: OO")
+        input_str = self.key_to_string("Type: OO")
+        input_str = input_str+Job.to_string(self, pid)
         input_str += self.key_to_string("ReadFile")
         return input_str
 
@@ -153,8 +153,8 @@ class JobOutputLoop(Job):
         self.name = "OL"
 
     def to_string(self, pid=0):
-        input_str = Job.to_string(self, pid)
-        input_str += self.key_to_string("Type: OL")
+        input_str = self.key_to_string("Type: OL")
+        input_str = input_str+ Job.to_string(self, pid)
         input_str += self.key_to_string("ReadFile")
         return input_str
 
@@ -167,8 +167,8 @@ class JobDebug(Job):
         self.name = "BG"
 
     def to_string(self, pid=0):
-        input_str = Job.to_string(self, pid)
-        input_str += self.key_to_string("Type: BG")
+        input_str = self.key_to_string("Type: BG")
+        input_str = input_str+Job.to_string(self, pid)
         return input_str
 
 if __name__ == "__main__":

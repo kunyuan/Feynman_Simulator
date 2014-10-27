@@ -7,13 +7,10 @@
 #define __Fermion_Simulator__parameter__
 
 #include <string>
+#include <list>
 #include <iostream>
 #include "../utility/convention.h"
 #include "../lattice/vector.h"
-
-namespace Jobs {
-
-typedef shared_ptr<std::ifstream> jobstream;
 
 enum JobType { MC,
                DYSON };
@@ -22,9 +19,10 @@ JobType GetJobsType(std::string);
 
 class JobsBase {
   protected:
-    jobstream ifs;
+    std::list<std::string> _para;
 
   public:
+    JobsBase() = default;
     JobsBase(std::string InputFile);
     JobType Type;
     int PID;
@@ -56,5 +54,4 @@ class JobsDyson : public JobsBase {
     JobsDyson();
     JobsDyson(std::string InputFile);
 };
-}
 #endif /* defined(__Fermion_Simulator__parameter__) */
