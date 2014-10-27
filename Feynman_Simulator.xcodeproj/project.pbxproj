@@ -150,8 +150,8 @@
 		1CA5CF3C19ED6F5400212E20 /* lattice */ = {
 			isa = PBXGroup;
 			children = (
-				845C92C019F75B340066B590 /* vector.cpp */,
 				1CA5CF3E19ED6FD100212E20 /* vector.h */,
+				845C92C019F75B340066B590 /* vector.cpp */,
 				1CA5CF3B19ED6F4900212E20 /* lattice.h */,
 				1CA5CF3919ED6F3F00212E20 /* lattice.cpp */,
 				1CA5CF3719ED6F1B00212E20 /* lattice_test.cpp */,
@@ -238,8 +238,8 @@
 		84D4287419F1F4B40051CE96 /* job */ = {
 			isa = PBXGroup;
 			children = (
-				845C92D619F855980066B590 /* job.cpp */,
 				845C92D719F855980066B590 /* job.h */,
+				845C92D619F855980066B590 /* job.cpp */,
 				845C92C919F835590066B590 /* job_class.py */,
 				845C92C619F834460066B590 /* inlist.py */,
 				845C92C719F834460066B590 /* job_manager.py */,

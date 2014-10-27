@@ -39,8 +39,8 @@ class Job:
         if para["__Execute"] is "":
             print "Please specify the executive file name!"
             return False
-        if type(para["IsLoad"]) is not bool:
-            print "IsLoad should be a bool!"
+        if type(para["DoesLoad"]) is not bool:
+            print "DoesLoad should be a bool!"
             return False
         return True
 
@@ -69,7 +69,7 @@ class Job:
         input_str += self.key_to_string("dBeta")
         input_str += self.key_to_string("finalBeta")
         input_str += self.key_to_string("Order")
-        input_str += self.key_to_string("IsLoad")
+        input_str += self.key_to_string("DoesLoad")
         return input_str
 
 class JobMonteCarlo(Job):
@@ -99,7 +99,7 @@ class JobMonteCarlo(Job):
         self.para["Seed"] = -int(random.random()*2**30)
         input_str += self.key_to_string("Seed")
         input_str += self.key_to_string("ReadFile")
-        input_str += self.key_to_string("Worm/Norm")
+        input_str += self.key_to_string("WormSpaceReweight")
         input_str += self.key_to_string("Reweight")
         return input_str
 
@@ -180,7 +180,7 @@ if __name__ == "__main__":
         "Sample" : 1000000,
         "Sweep" : 10,
         "Toss" : 1000,
-        "IsLoad" : True,
+        "DoesLoad" : True,
         "Type" : 2,
         "Lx" :  4,
         "Ly" :  4,
@@ -191,7 +191,7 @@ if __name__ == "__main__":
         "Order" :  2,
         "Reweight" : [1,5],
         #"ReadFile" : "0.90_1_coll",
-        "Worm/Norm" : 0.5
+        "WormSpaceReweight" : 0.5
     })
     print A.to_string(1)
     print A.execute

@@ -7,7 +7,8 @@
 //
 #include "vector.h"
 #include "../utility/utility.h"
-#define SEP ' '
+#include "../utility/abort.h"
+#define SEP ','
 
 using namespace std;
 
@@ -26,8 +27,13 @@ template ostream &operator<<(ostream &, Vec<real> &);
 template <typename T>
 istream &operator>>(istream &is, Vec<T> &v)
 {
-    for (int i = 0; i < D; i++)
-        is >> v[i];
+    is >> v[0];
+    char sep;
+    for (int i = 1; i < D; i++) {
+        is >> sep >> v[i];
+        if (sep != SEP)
+            is.setstate(ios::failbit);
+    }
     return is;
 }
 template istream &operator>>(istream &, Vec<int> &);
