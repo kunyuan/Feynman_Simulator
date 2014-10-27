@@ -8,7 +8,7 @@
 
 #include "environment.h"
 
-Environment::Environment(Jobs &Job)
+Environment::Environment(const JobsBase &Job)
     : Lat(), Beta(Job.Beta), Order(Job.Order)
 {
     StateFile = "test.dat";

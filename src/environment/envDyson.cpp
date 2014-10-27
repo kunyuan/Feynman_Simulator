@@ -8,6 +8,7 @@
 
 #include "environment.h"
 
-EnvDyson::EnvDyson(Jobs &Job):Environment(Job)
+EnvDyson::EnvDyson(const JobsDyson &Job)
+    : Environment(Job)
 {
 }

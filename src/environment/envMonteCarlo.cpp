@@ -8,7 +8,7 @@
 
 #include "environment.h"
 
-EnvMonteCarlo::EnvMonteCarlo(Jobs &Job)
+EnvMonteCarlo::EnvMonteCarlo(const JobsMC &Job)
     : Environment(Job),
       //The base class is constructed first!!!
       Sigma(Lat, Beta, Order),

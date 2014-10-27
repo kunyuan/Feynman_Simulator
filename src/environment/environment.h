@@ -18,7 +18,7 @@
 
 class Environment {
   public:
-    Environment(Jobs::Jobs &);
+    Environment(const JobsBase &);
     Lattice Lat;
     real Beta;
     int Order;
@@ -30,7 +30,7 @@ class Environment {
 
 class EnvMonteCarlo : public Environment {
   public:
-    EnvMonteCarlo(Jobs &);
+    EnvMonteCarlo(const JobsMC &);
     Diagram Diag;
     long long Counter;
     real OrderWeight[MAX_ORDER];
@@ -42,14 +42,13 @@ class EnvMonteCarlo : public Environment {
     Weight::G G;
     Weight::Worm Worm;
 
-    void Build();
     bool LoadState();
     void SaveState();
 };
 
 class EnvDyson : public Environment {
   public:
-    EnvDyson(Jobs &);
+    EnvDyson(const JobsDyson &);
 };
 
 #endif /* defined(__Feynman_Simulator__environment__) */
