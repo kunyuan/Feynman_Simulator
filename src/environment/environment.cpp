@@ -9,6 +9,19 @@
 #include "environment.h"
 using namespace std;
 
+JobType GetJobsType(std::string InputFile)
+{
+    ifstream ifs(InputFile, ios::in);
+    if (!ifs.is_open())
+        ABORT("Fail to open input file " << InputFile);
+    int type;
+    ifs >> type;
+    if (!ifs.good())
+        ABORT("Fail to read JobType!");
+    ifs.close();
+    return (JobType)type;
+}
+
 Environment::Environment()
 {
     BuildTest();
