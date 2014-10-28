@@ -40,7 +40,7 @@ bool Equal(real x1, real x2, real eps = eps0);
 
 // initial an array with some value
 template <typename T>
-static void InitialArry(T *array, int num, T value)
+static void InitialArray(T *array, int num, T value)
 {
     for (int i = 0; i < num; i++) {
         *(array + i) = value;
@@ -61,5 +61,4 @@ void AssignFromTo(T *source, T *target, int size)
     for (int i = 0; i < size; i++)
         source[i] = target[i];
 }
-
 #endif

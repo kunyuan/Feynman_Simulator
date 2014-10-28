@@ -8,18 +8,16 @@
 
 #include "component.h"
 #include "../utility/abort.h"
-#include <sstream>
 
 #define SEP ' '
-#ifndef READ
+using namespace std;
+
 #define READ(is, thing)                              \
     {                                                \
         is >> (thing);                               \
         if (is.fail())                               \
             ABORT("Fail to read " << #thing << "!"); \
     }
-#endif
-using namespace std;
 
 /*******************   Read/write component to dat file  ********************************/
 istream &Worm::LoadConfig(istream &is)

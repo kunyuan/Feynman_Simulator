@@ -9,7 +9,6 @@
 #ifndef __Fermion_Simulator__component__
 #define __Fermion_Simulator__component__
 
-#include <string>
 #include "../utility/complex.h"
 #include "../utility/utility.h"
 #include "../utility/logger.h"

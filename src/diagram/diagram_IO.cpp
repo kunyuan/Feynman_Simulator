@@ -10,6 +10,7 @@
 #include <sstream>
 #include "diagram.h"
 #include "../utility/abort.h"
+#include "../utility/scopeguard.h"
 using namespace std;
 
 const char SEP = ' ';
@@ -27,6 +28,7 @@ void Diagram::SaveConfig(const std::string &FileName, string Mode)
         os.open(FileName, ios::app);
     else
         ABORT("What is Mode=" << Mode << "?");
+    ON_SCOPE_EXIT([&] {os.close(); });
     if (!os.is_open()) {
         ABORT("Cannot open " + FileName);
     }
@@ -49,13 +51,13 @@ void Diagram::SaveConfig(const std::string &FileName, string Mode)
             Worm.SaveConfig(os << 'i' << SEP);
         }
     }
-    os.close();
 }
 
 bool Diagram::LoadConfig(const std::string &FileName)
 {
     ifstream ifs;
     ifs.open(FileName, ios::in);
+    ON_SCOPE_EXIT([&] {ifs.close(); });
     if (!ifs.is_open()) {
         ABORT("Cannot open " + FileName);
         return false;
@@ -93,7 +95,6 @@ bool Diagram::LoadConfig(const std::string &FileName)
                 ABORT("Error in reading diagram! Get " + ToString(head) + " as the head!");
             head = COMMENT;
         }
-        ifs.close();
         FixDiagram();
         return true;
     }

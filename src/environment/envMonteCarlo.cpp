@@ -7,11 +7,10 @@
 //
 
 #include "environment.h"
-#include <string>
 
+using namespace std;
 EnvMonteCarlo::EnvMonteCarlo()
 {
-    OrderWeight = nullptr;
     Sigma = nullptr;
     Polar = nullptr;
     G = nullptr;
@@ -21,7 +20,6 @@ EnvMonteCarlo::EnvMonteCarlo()
 
 EnvMonteCarlo::~EnvMonteCarlo()
 {
-    delete OrderWeight;
     delete Sigma;
     delete Polar;
     delete G;
@@ -33,12 +31,16 @@ bool EnvMonteCarlo::BuildFromFile(string InputFile)
 {
     Environment::BuildFromFile(InputFile);
 
+    //Read more parameters
     GET(_para, Toss);
     GET(_para, Sample);
     GET(_para, Sweep);
     GET(_para, Seed);
+    GET(_para, ReadFile);
     GET(_para, WormSpaceReweight);
+    ReadOrderWeight();
 
+    //Initialize utilies for MC simulations
     Counter = 0;
 
     Sigma = new Weight::Sigma(*Lat, Beta, Order);
@@ -61,4 +63,20 @@ bool EnvMonteCarlo::BuildFromFile(string InputFile)
 void EnvMonteCarlo::SaveState()
 {
     Environment::SaveState();
+}
+
+void EnvMonteCarlo::ReadOrderWeight(char sep)
+{
+    stringstream ss(_para.front());
+    char sepchar;
+    ss >> OrderWeight[0];
+    for (int i = 1; i < Order; i++) {
+        ss >> sepchar;
+        if (sepchar != sep)
+            ABORT("Sep char " << sepchar << " is not expected as the separator. I will expect " << sep);
+        ss >> OrderWeight[i];
+    }
+    if (ss.fail())
+        ABORT("Read OrderWeight fails!");
+    _para.pop_front();
 }

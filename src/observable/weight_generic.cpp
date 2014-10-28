@@ -81,7 +81,7 @@ bool WeightNoMeasure::LoadState(const std::string &FileName)
 {
     cnpy::NpyArray weight = cnpy::npz_load(cnpy::npz_name(FileName), _Name);
     if (weight.data == nullptr)
-        ABORT("Can't find estimator " << _Name << " in .npz data file!" << endl);
+        ABORT("Can't find estimator " << _Name << " in .npz data file!");
     _Weight = reinterpret_cast<Complex *>(weight.data);
     return true;
 }
@@ -164,7 +164,7 @@ void WeightNeedMeasure::ClearStatistics()
 void WeightNeedMeasure::SqueezeStatistics(real factor)
 {
     if (DEBUGMODE && factor <= 0.0)
-        ABORT("factor=" << factor << "<=0!" << endl);
+        ABORT("factor=" << factor << "<=0!");
     _Norm /= factor;
     int size = _WeightAccu.Size();
     for (int i = 0; i < size; i++)
@@ -190,14 +190,14 @@ bool WeightNeedMeasure::LoadState(const std::string &FileName)
     cnpy::npz_t NpzMap = cnpy::npz_load(cnpy::npz_name(FileName));
     cnpy::NpyArray sigma_accu = NpzMap[_Name + "_Accu"];
     if (sigma_accu.data == nullptr)
-        ABORT("Can't find estimator " << _Name << " _Accu in .npz data file!" << endl);
+        ABORT("Can't find estimator " << _Name << " _Accu in .npz data file!" );
     _WeightAccu = reinterpret_cast<Complex *>(sigma_accu.data);
     //using assign here will make a copy of the data in Complex *start
 
     //read normalization factor
     cnpy::NpyArray norm = NpzMap[_Name + "_Norm"];
     if (norm.data == nullptr)
-        ABORT("Can't find estimator " << _Name << "_Norm in .npz data file!" << endl);
+        ABORT("Can't find estimator " << _Name << "_Norm in .npz data file!");
     _Norm = *reinterpret_cast<real *>(norm.data);
 
     NpzMap.destruct();

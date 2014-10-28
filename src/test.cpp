@@ -7,7 +7,6 @@
 //
 
 #include "test.h"
-#include "utility/abort.h"
 #include "utility/crc32.h"
 #include "markov/markov.h"
 #include "diagram/diagram.h"

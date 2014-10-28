@@ -37,7 +37,7 @@ Estimate<T>::Estimate(const T &mean, const T &error)
 ostream &operator<<(ostream &os, const Estimate<Complex> &e)
 {
     os.setf(ios::showpoint);
-    os << "(" << e.Mean.Re << "+/-" << e.Error.Re << "," << e.Mean.Im << "+/-" << e.Error.Im << ")" << endl;
+    os << "(" << e.Mean.Re << "+/-" << e.Error.Re << "," << e.Mean.Im << "+/-" << e.Error.Im << ")";
     return os;
 }
 
@@ -82,7 +82,7 @@ template <typename T>
 void Estimator<T>::SqueezeStatistics(real factor)
 {
     if (DEBUGMODE && factor <= 0.0)
-        ABORT("factor=" << factor << "<=0!" << endl);
+        ABORT("factor=" << factor << "<=0!");
     size_t offset = _history.size() * (1 - 1 / factor);
     _history.erase(_history.begin(), _history.begin() + offset);
     _accumulator /= factor;
@@ -183,7 +183,7 @@ bool Estimator<T>::LoadState(cnpy::npz_t NpzMap)
     cnpy::NpyArray history = NpzMap[Name];
     T *start = reinterpret_cast<T *>(history.data);
     if (start == NULL)
-        ABORT("Can't find estimator " << Name << " in .npz data file!" << endl);
+        ABORT("Can't find estimator " << Name << " in .npz data file!");
     ClearStatistics();
     _history.assign(start, start + history.shape[0]);
 
@@ -191,14 +191,14 @@ bool Estimator<T>::LoadState(cnpy::npz_t NpzMap)
     cnpy::NpyArray norm = NpzMap[Name + "_Norm"];
     real *start_Norm = reinterpret_cast<real *>(norm.data);
     if (start_Norm == NULL)
-        ABORT("Can't find estimator " << Name << "_Norm in .npz data file!" << endl);
+        ABORT("Can't find estimator " << Name << "_Norm in .npz data file!");
     _norm = *start_Norm;
 
     //read accumulation
     cnpy::NpyArray accu = NpzMap[Name + "_Accu"];
     T *start_accu = reinterpret_cast<T *>(accu.data);
     if (start_accu == NULL)
-        ABORT("Can't find estimator " << Name << "_Accu in .npz data file!" << endl);
+        ABORT("Can't find estimator " << Name << "_Accu in .npz data file!");
     _accumulator = *start_accu;
     _update();
     return true;
