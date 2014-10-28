@@ -57,7 +57,6 @@ string Diagram::PrettyString(GLine &g)
     os << "{V " << g.Vertex[IN] << "}->-" << ToString(Spin(g, IN)) << "---";
     os << "[G " << g.Name << " ,K:" << g.K << ",Weight:" << g.Weight << "]";
     os << "---" << ToString(Spin(g, OUT)) << "->-{V " << g.Vertex[OUT] << "}";
-    os << endl;
     return os.str();
 }
 
@@ -79,7 +78,6 @@ string Diagram::PrettyString(WLine &w)
     os << "<W " << w.Name << ", K:" << w.K << ",Weight:" << w.Weight << ">";
     os << "~~~"
        << "{" << ToString(Spin(w, OUT, IN)) << "," << ToString(Spin(w, OUT, OUT)) << "|W " << w.Vertex[OUT] << "}";
-    os << endl;
     return os.str();
 }
 
@@ -101,7 +99,6 @@ string Diagram::PrettyString(Vertex &v)
     os << "{V " << v.Name << ",r:" << v.R.Coordinate.PrettyString() << ",tau:" << v.Tau << "}";
     os << "-->-" << ToString(v.Spin[OUT]) << "-[G " << v.G[OUT] << "]-";
     os << "  /~~~<W " << v.W << ">";
-    os << endl;
     return os.str();
 }
 

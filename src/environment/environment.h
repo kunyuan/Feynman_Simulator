@@ -15,6 +15,7 @@
 #include "../observable/weight.h"
 #include "../utility/convention.h"
 #include "../lattice/lattice.h"
+#include "../utility/scopeguard.h"
 
 #ifndef GET
 #define GET(para, thing)                             \
@@ -52,12 +53,14 @@ class Environment {
     Lattice *Lat;
 
     bool BuildFromFile(std::string InputFile);
-    void BuildTest();
     bool LoadState();
     void SaveState();
 };
 
 class EnvMonteCarlo : public Environment {
+  private:
+    void ReadOrderWeight(char sep = ',');
+
   public:
     EnvMonteCarlo();
     ~EnvMonteCarlo();
@@ -67,9 +70,10 @@ class EnvMonteCarlo : public Environment {
     int Sweep;
     int Seed;
     real WormSpaceReweight;
+    std::string ReadFile;
 
     Diagram Diag;
-    real *OrderWeight;
+    real OrderWeight[MAX_ORDER];
 
     EstimatorBundle<Complex> cEstimator;
     EstimatorBundle<real> rEstimator;
@@ -81,7 +85,6 @@ class EnvMonteCarlo : public Environment {
     Weight::G *G;
 
     bool BuildFromFile(std::string InputFile);
-    void BuildTest();
     bool LoadState();
     void SaveState();
 };

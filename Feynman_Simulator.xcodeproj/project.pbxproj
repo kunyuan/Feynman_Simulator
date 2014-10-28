@@ -108,6 +108,8 @@
 		8499DAD419F9EA3C00AABA1E /* fft.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fft.cpp; sourceTree = "<group>"; };
 		8499DAD619F9ECD700AABA1E /* fft.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = fft.h; sourceTree = "<group>"; };
 		8499DAD719F9ED2A00AABA1E /* fft_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fft_test.cpp; sourceTree = "<group>"; };
+		8499DB0919FEECEC00AABA1E /* scopeguard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = scopeguard.h; sourceTree = "<group>"; };
+		8499DB0A19FEF81C00AABA1E /* _in_MC_test */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = _in_MC_test; path = environment/_in_MC_test; sourceTree = "<group>"; };
 		84B1D57919DEFC19004C3A89 /* test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = test.h; sourceTree = "<group>"; };
 		84B1D57C19DF4215004C3A89 /* definition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = definition.h; sourceTree = "<group>"; };
 		84B8FC3319EC7469003D6DF6 /* diagram_IO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = diagram_IO.cpp; path = diagram/diagram_IO.cpp; sourceTree = "<group>"; };
@@ -186,6 +188,7 @@
 				84681F6419F9AAA600832DAD /* crc32.h */,
 				84681F6319F9AAA600832DAD /* crc32.cpp */,
 				84681F6619F9AC0600832DAD /* crc32_test.cpp */,
+				8499DB0919FEECEC00AABA1E /* scopeguard.h */,
 			);
 			path = utility;
 			sourceTree = "<group>";
@@ -235,6 +238,7 @@
 		84D4287819F208300051CE96 /* environment */ = {
 			isa = PBXGroup;
 			children = (
+				8499DB0A19FEF81C00AABA1E /* _in_MC_test */,
 				845C92C819F834460066B590 /* run_loop.py */,
 				845C92C719F834460066B590 /* job_manager.py */,
 				845C92C619F834460066B590 /* inlist.py */,

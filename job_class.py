@@ -52,7 +52,7 @@ class Job:
             else:
                 return "false    #{0}\n".format(key)
         elif type(self.para[key])==str:
-            return self.para[key]+"\n"
+            return self.para[key]+"    #{0}\n".format(key)
         elif type(self.para[key])==list:
             return "{0}    #{1}\n".format(",".join([str(elem)
                                  for elem in self.para[key]]), key)

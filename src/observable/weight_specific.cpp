@@ -31,7 +31,7 @@ Complex Sigma::WeightOfDelta(spin SpinIn, spin SpinOut)
 void Sigma::Measure(const Distance &d, real dtau, spin SpinIn, spin SpinOut, int order, const Complex &weight)
 {
     if (DEBUGMODE && order <= 0)
-        LOG_ERROR("Too small order=" << order << endl);
+        LOG_ERROR("Too small order=" << order);
     int spin_index = SpinIndex(SpinIn, SpinOut);
     int tau_bin = TauToBin(dtau);
     _WeightAccu[order - 1][spin_index][d.SublatIndex][d.CoordiIndex][tau_bin] += weight;
@@ -54,7 +54,7 @@ Complex Polar::Weight(const Distance &d, real dtau, spin *SpinIn, spin *SpinOut)
 void Polar::Measure(const Distance &d, real dtau, spin *SpinIn, spin *SpinOut, int order, const Complex &weight)
 {
     if (DEBUGMODE && order <= 0)
-        LOG_ERROR("Too small order=" << order << endl);
+        LOG_ERROR("Too small order=" << order);
     int spin_index = SpinIndex(SpinIn, SpinOut);
     int tau_bin = TauToBin(dtau);
     _WeightAccu[order - 1][spin_index][d.SublatIndex][d.CoordiIndex][tau_bin] += weight;

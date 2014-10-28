@@ -29,20 +29,19 @@ Environment::Environment()
 
 Environment::~Environment()
 {
-    if (Lat != nullptr)
-        delete Lat;
+    delete Lat;
 }
 
 bool Environment::BuildFromFile(string InputFile)
 {
     ifstream ifs(InputFile, ios::in);
+    ON_SCOPE_EXIT([&] {ifs.close(); });
     if (!ifs.is_open())
         ABORT("Fail to open input file " << InputFile);
     string temp;
     _para.clear();
     while (getline(ifs, temp))
         _para.push_back(temp);
-    ifs.close();
 
     int type;
     GET(_para, type);
@@ -57,6 +56,9 @@ bool Environment::BuildFromFile(string InputFile)
     GET(_para, DeltaBeta);
     GET(_para, Beta);
     GET(_para, Order);
+    if (Order >= MAX_ORDER)
+        ABORT("Order can not be bigger than " << MAX_ORDER);
+
     string doesload;
     GET(_para, doesload);
     if (doesload == "true") {
@@ -74,12 +76,4 @@ bool Environment::BuildFromFile(string InputFile)
 
 void Environment::SaveState()
 {
-}
-
-void Environment::BuildTest()
-{
-    Beta = 1.0;
-    Order = 1;
-    Type = MC;
-    StateFile = "test.dat";
 }
