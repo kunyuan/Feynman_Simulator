@@ -94,7 +94,7 @@ void TestObservableReal()
 void TestDiagramObject()
 {
     RandomFactory rng(100);
-    Lattice lat;
+    Lattice lat(Vec<int>(1));
     real Beta = 5.0;
     Weight::Sigma Sig(lat, Beta, 4);
     Distance d(0, 0);
