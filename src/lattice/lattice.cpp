@@ -11,42 +11,13 @@
 #include "../utility/convention.h"
 #include "../utility/cnpy.h"
 #include "../utility/abort.h"
-
-/**
- *  get the sublattice index from In to Out
- *
- *  @para Out: the outgoing sublattice In: the incoming sublattice
- *
- *  @return [0, NSublattice**2-1]
- */
-int GetSublatIndex(int In, int Out)
-{
-    if (DEBUGMODE) {
-        if (In < 0 || In >= NSublattice)
-            ABORT("Wrong sublattice number!");
-        if (Out < 0 || Out >= NSublattice)
-            ABORT("Wrong sublattice number!");
-    }
-    return Out * NSublattice + In;
-}
-
-int Distance::Sublattice(const int &dir) const
-{
-    if (DEBUGMODE && (SublatIndex < 0 || SublatIndex >= NSublattice2))
-        ABORT("Wrong sublattice index number!");
-    if (dir == IN)
-        return SublatIndex % NSublattice;
-    else
-        return SublatIndex / NSublattice;
-}
-
-Lattice::Lattice()
+Lattice::Lattice(const Vec<int> &size)
 {
     Dimension = D;
     Vol = 1;
+    Size = size;
     for (int i = 0; i < D; i++) {
-        Size[i] = L[i];
-        Vol *= L[i];
+        Vol *= Size[i];
     }
     SublatVol = NSublattice;
     Initialize();
@@ -100,16 +71,17 @@ void Lattice::Initialize()
  *
  *  @return new variable within [0, L]
  */
-Vec<int> &Lattice::Shift(Vec<int> &vec)
+Vec<int> Lattice::Shift(const Vec<int> &vec) const
 {
+    Vec<int> newvec(vec);
     for (int i = 0; i < Dimension; i++) {
         if (vec[i] < 0)
-            vec[i] = vec[i] + Size[i];
+            newvec[i] = vec[i] + Size[i];
     }
-    return vec;
+    return newvec;
 }
 
-int Lattice::ToIndex(const Vec<int> &vec)
+int Lattice::Vec2Index(const Vec<int> &vec) const
 {
     int Index = vec[Dimension - 1];
     for (int i = Dimension - 2; i >= 0; i--) {
@@ -118,7 +90,7 @@ int Lattice::ToIndex(const Vec<int> &vec)
     return Index;
 }
 
-Vec<int> Lattice::ToVec(int index)
+Vec<int> Lattice::Index2Vec(int index) const
 {
     Vec<int> v(0);
     for (int i = 0; i < Dimension - 1; i++) {
@@ -128,6 +100,27 @@ Vec<int> Lattice::ToVec(int index)
     v[Dimension - 1] = index;
     return v;
 }
+
+/**
+ *  get the sublattice index from In to Out
+ *
+ *  @para Out: the outgoing sublattice In: the incoming sublattice
+ *
+ *  @return [0, NSublattice**2-1]
+ */
+int Lattice::Sublat2Index(int In, int Out) const
+{
+    return Out * SublatVol + In;
+}
+
+int Lattice::Index2Sublat(int index, int dir) const
+{
+    if (dir == IN)
+        return index % SublatVol;
+    else
+        return index / SublatVol;
+}
+
 /**
  *  get the corresponding site of a name [0, Vol)
  *
@@ -135,9 +128,9 @@ Vec<int> Lattice::ToVec(int index)
  *
  *  @return a site struct
  */
-Site Lattice::GetSite(int name)
+Site Lattice::GetSite(int name) const
 {
-    return Site(name % 2, ToVec(name / 2));
+    return Site(name % 2, Index2Vec(name / 2));
 }
 
 /**
@@ -145,14 +138,9 @@ Site Lattice::GetSite(int name)
  *
  *  @return Name for the Site in [0, NSublattice*Vol)
  */
-int Lattice::GetName(const Site &site)
+int Lattice::GetName(const Site &site) const
 {
-    return ToIndex(site) * NSublattice + site.Sublattice;
-}
-
-int Lattice::ToIndex(const Site &site)
-{
-    return ToIndex(site.Coordinate);
+    return Vec2Index(site.Coordinate) * NSublattice + site.Sublattice;
 }
 
 /**
@@ -160,7 +148,7 @@ int Lattice::ToIndex(const Site &site)
  *
  *  @return a vector which defines the site's coordinate on the lattice
  */
-Vec<real> Lattice::GetRealVec(const Site &site)
+Vec<real> Lattice::GetRealVec(const Site &site) const
 {
     Vec<real> vec(0.0);
     for (int i = 0; i < Dimension; i++)
@@ -169,18 +157,22 @@ Vec<real> Lattice::GetRealVec(const Site &site)
     return vec;
 }
 
-Distance Lattice::Distance(const Site &SiteIn, const Site &SiteOut)
+Distance Lattice::Dist(const Site &SiteIn, const Site &SiteOut) const
 {
-    Vec<int> vec = SiteOut.Coordinate - SiteIn.Coordinate;
-    return ::Distance(GetSublatIndex((SiteIn.Sublattice), (SiteOut.Sublattice)),
-                      ToIndex(Shift(vec)));
+    return Distance(Sublat2Index(SiteIn.Sublattice, SiteOut.Sublattice),
+                    Vec2Index(Shift(SiteOut.Coordinate - SiteIn.Coordinate)));
 }
 
-Vec<int> Lattice::Coordinate(const class Distance &dis)
+int Lattice::GetSublat(const Distance &dis, int dir) const
+{
+    return Index2Sublat(dis.SublatIndex, dir);
+}
+
+Vec<int> Lattice::GetVec(const class Distance &dis) const
 {
     if (DEBUGMODE && (dis.CoordiIndex < 0 || dis.CoordiIndex >= Vol))
         ABORT("Wrong Coordinate index number!");
-    return ToVec(dis.CoordiIndex);
+    return Index2Vec(dis.CoordiIndex);
 }
 
 /**
@@ -188,12 +180,12 @@ Vec<int> Lattice::Coordinate(const class Distance &dis)
  *
  *  @return a real vector $\vec{r_2}-\vec{r_1}$
  */
-Vec<real> Lattice::GetRealVec(const class Distance &dis)
+Vec<real> Lattice::GetRealVec(const class Distance &dis) const
 {
     Vec<real> vec(0.0);
     for (int i = 0; i < Dimension; i++)
-        vec += LatticeVec[i] * Coordinate(dis)[i];
-    vec += SublatticeVec[dis.Sublattice(OUT)] - SublatticeVec[dis.Sublattice(IN)];
+        vec += LatticeVec[i] * GetVec(dis)[i];
+    vec += SublatticeVec[GetSublat(dis, OUT)] - SublatticeVec[GetSublat(dis, IN)];
     return vec;
 }
 

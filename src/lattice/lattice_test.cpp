@@ -14,7 +14,10 @@ using std::endl;
 
 void Test_Lattice();
 
-Lattice lattice;
+int L[] = {16, 32};
+Vec<int> size(L);
+
+Lattice lattice(size);
 
 int TestLattice()
 {
@@ -60,13 +63,13 @@ void Test_Lattice()
         s2.Coordinate[1] = 3;
         s2.Sublattice = 0;
 
-        Distance dis = lattice.Distance(s1, s2); //s1---->s2, equal to dis=s2-s1;
+        Distance dis = lattice.Dist(s1, s2); //s1---->s2, equal to dis=s2-s1;
 
-        sput_fail_unless(dis.Sublattice(IN) == s1.Sublattice, "Distance: distance=site1-site2, sublattices");
-        sput_fail_unless(dis.Sublattice(OUT) == s2.Sublattice, "Distance: distance=site1-site2, sublattices");
+        sput_fail_unless(lattice.GetSublat(dis, IN) == s1.Sublattice, "Distance: distance=site1-site2, sublattices");
+        sput_fail_unless(lattice.GetSublat(dis, OUT) == s2.Sublattice, "Distance: distance=site1-site2, sublattices");
         sput_fail_unless(dis.CoordiIndex == 2 * lattice.Size[0] + 1, "Distance: distance=site1-site2, Coordinates");
 
-        sput_fail_unless(lattice.ToVec(lattice.ToIndex(v)) == v, "Lattice: ToIndex and ToVec for Vec");
+        sput_fail_unless(lattice.GetVec(lattice.ToIndex(v)) == v, "Lattice: ToIndex and ToVec for Vec");
         sput_fail_unless(lattice.ToIndex(v) == lattice.ToIndex(s), "Lattice: ToIndex for Site");
         sput_fail_unless(lattice.GetRealVec(s) == vec, "Lattice: real vector for Site");
         sput_fail_unless(lattice.GetRealVec(dis) == (lattice.GetRealVec(s2) - lattice.GetRealVec(s1)), "Lattice: real vector of distance");

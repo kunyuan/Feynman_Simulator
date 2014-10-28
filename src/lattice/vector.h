@@ -29,6 +29,12 @@ class Vec {
             _Array[j] = value;
     }
 
+    Vec(T *value)
+    {
+        for (int j = 0; j < D; j++)
+            _Array[j] = value[j];
+    }
+
     T &operator[](int index)
     {
         return _Array[index];

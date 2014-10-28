@@ -77,7 +77,9 @@ class EnvMonteCarlo : public Environment {
 
     EstimatorBundle<Complex> cEstimator;
     EstimatorBundle<real> rEstimator;
+    EstimatorBundle<real> DetailBalanceEstimator;
 
+    Estimator<real> ZeroOrderWeight;
     Weight::Worm *WormWeight;
     Weight::Sigma *Sigma;
     Weight::Polar *Polar;

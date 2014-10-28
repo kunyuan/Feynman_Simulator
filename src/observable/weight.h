@@ -73,6 +73,7 @@ class Sigma : public WeightNeedMeasure {
     Sigma(const Lattice &, real Beta, int order);
     Complex Weight(const Distance &dR, real dtau, spin, spin);
     Complex WeightOfDelta(spin, spin);
+    void MeasureNorm(real weight);
     void Measure(const Distance &, real dtau, spin, spin, int Order, const Complex &);
 };
 

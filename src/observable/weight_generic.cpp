@@ -15,8 +15,8 @@ using namespace Array;
 using namespace Weight;
 
 WeightNoMeasure::WeightNoMeasure(const Lattice &lat, real beta, int order, int SpinVol, string name)
+    : _Lat(lat)
 {
-    _Lat = lat;
     _Beta = beta;
     _Order = order;
     _dBeta = beta / MAX_BIN;
@@ -190,7 +190,7 @@ bool WeightNeedMeasure::LoadState(const std::string &FileName)
     cnpy::npz_t NpzMap = cnpy::npz_load(cnpy::npz_name(FileName));
     cnpy::NpyArray sigma_accu = NpzMap[_Name + "_Accu"];
     if (sigma_accu.data == nullptr)
-        ABORT("Can't find estimator " << _Name << " _Accu in .npz data file!" );
+        ABORT("Can't find estimator " << _Name << " _Accu in .npz data file!");
     _WeightAccu = reinterpret_cast<Complex *>(sigma_accu.data);
     //using assign here will make a copy of the data in Complex *start
 

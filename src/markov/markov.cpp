@@ -67,7 +67,7 @@ void Markov::CreateWorm()
 
     real wormWeight = WormWeight->Weight(Lat->Distance(vin.R, vout.R), vout.Tau - vin.Tau);
 
-    prob *= ProbofCall[1] / ProbofCall[0] * wormWeight * real(Diag->Order) * 2.0;
+    prob *= ProbofCall[1] / ProbofCall[0] * wormWeight * Diag->Order * 2.0;
 
     if (prob >= 1.0 || RNG.urn() < prob) {
         Diag->Phase *= sgn;
