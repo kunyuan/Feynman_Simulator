@@ -49,7 +49,7 @@ bool Environment::BuildFromFile(string InputFile)
     GET(_para, PID);
     GET(_para, _L);
 
-    Lat = new Lattice();
+    Lat = new Lattice(_L);
 
     GET(_para, Jcp);
     GET(_para, InitialBeta);

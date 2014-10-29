@@ -9,7 +9,7 @@
 #ifndef __Feynman_Simulator__vector__
 #define __Feynman_Simulator__vector__
 
-#include <iostream>
+#include <iosfwd>
 #include "../utility/convention.h"
 using namespace std;
 
@@ -27,6 +27,12 @@ class Vec {
     {
         for (int j = 0; j < D; j++)
             _Array[j] = value;
+    }
+
+    Vec(T *value)
+    {
+        for (int j = 0; j < D; j++)
+            _Array[j] = value[j];
     }
 
     T &operator[](int index)

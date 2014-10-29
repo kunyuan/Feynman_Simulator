@@ -16,7 +16,7 @@
 #define Complex_h
 
 #include <string>
-#include <iostream>
+#include <iosfwd>
 #include <iomanip>
 #include <math.h>
 //#include <limits>

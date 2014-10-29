@@ -8,6 +8,7 @@
 
 #include "diagram.h"
 #include "../observable/weight.h"
+#include "../utility/rng.h"
 using namespace std;
 bool Diagram::IsWorm(const Vertex &v)
 {
@@ -167,7 +168,7 @@ bool Diagram::FixDiagram()
         vin.G[OUT] = index;
         vout.G[IN] = index;
 
-        g.Weight = GWeight->Weight(Lat->Distance(vin.R, vout.R), vout.Tau - vin.Tau, vin.Spin[OUT], vout.Spin[IN]);
+        g.Weight = GWeight->Weight(Lat->Dist(vin.R, vout.R), vout.Tau - vin.Tau, vin.Spin[OUT], vout.Spin[IN]);
         Weight *= g.Weight;
     }
 
@@ -181,7 +182,7 @@ bool Diagram::FixDiagram()
         vin.W = index;
         vout.W = index;
 
-        w.Weight = WWeight->Weight(Lat->Distance(vin.R, vout.R), vout.Tau - vin.Tau, vin.Spin, vout.Spin, w.IsWorm);
+        w.Weight = WWeight->Weight(Lat->Dist(vin.R, vout.R), vout.Tau - vin.Tau, vin.Spin, vout.Spin, w.IsWorm);
         Weight *= w.Weight;
     }
 

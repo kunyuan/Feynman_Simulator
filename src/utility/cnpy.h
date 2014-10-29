@@ -15,6 +15,7 @@
 #include <cassert>
 #include <map>
 #include "crc32.h"
+#include "abort.h"
 /**
 *  You may add -lz to link to the zlib library
 *  If you are using xcode, add libz.dylib to "Build Phases/Link Binary with Libraries
@@ -32,6 +33,7 @@ struct NpyArray {
     void destruct()
     {
         delete[] data;
+        data = nullptr;
     }
 };
 
@@ -262,8 +264,96 @@ std::vector<char> create_npy_header(const T *data, const unsigned int *shape, co
 
     return header;
 }
+
+template <typename T>
+bool npz_load_number(cnpy::npz_t &NpzMap, std::string varname, T &number)
+{
+    cnpy::NpyArray &arr = NpzMap[varname];
+    if (arr.data == nullptr) {
+        ABORT("Can't find " << varname << " in .npz data file!");
+        return false;
+    }
+    assert(arr.shape.size() == 1 && arr.shape[0] == 1);
+    number = *reinterpret_cast<T *>(arr.data);
+    return true;
 }
 
+template <typename T>
+bool npz_load_number(std::string fname, std::string varname, T &number)
+{
+    cnpy::NpyArray arr = cnpy::npz_load(fname, varname);
+    if (arr.data == nullptr) {
+        ABORT("Can't find " << varname << " in .npz data file!");
+        arr.destruct();
+        return false;
+    }
+    assert(arr.shape.size() == 1 && arr.shape[0] == 1);
+    number = *reinterpret_cast<T *>(arr.data);
+    arr.destruct();
+    return true;
+}
+
+template <typename T>
+bool npz_load_vector(cnpy::npz_t &NpzMap, std::string varname, std::vector<T> &vec)
+{
+    cnpy::NpyArray &arr = NpzMap[varname];
+    if (arr.data == nullptr) {
+        ABORT("Can't find " << varname << " in .npz data file!");
+        return false;
+    }
+    assert(arr.shape.size() == 1);
+    T *begin = reinterpret_cast<T *>(arr.data);
+    vec = std::vector<T>(begin, begin + arr.shape[0]);
+    return true;
+}
+
+template <typename T>
+bool npz_load_vector(std::string fname, std::string varname, std::vector<T> &vec)
+{
+    cnpy::NpyArray arr = cnpy::npz_load(fname, varname);
+    if (arr.data == nullptr) {
+        ABORT("Can't find " << varname << " in .npz data file!");
+        arr.destruct();
+        return false;
+    }
+    assert(arr.shape.size() == 1);
+    T *begin = reinterpret_cast<T *>(arr.data);
+    vec = std::vector<T>(begin, begin + arr.shape[0]);
+    arr.destruct();
+    return true;
+}
+
+template <typename T>
+bool npy_load_number(std::string fname, T &number)
+{
+    cnpy::NpyArray arr = cnpy::npy_load(fname);
+    if (arr.data == nullptr) {
+        ABORT("Can't find in .npy data file!");
+        arr.destruct();
+        return false;
+    }
+    assert(arr.shape.size() == 1 && arr.shape[0] == 1);
+    number = *reinterpret_cast<T *>(arr.data);
+    arr.destruct();
+    return true;
+}
+
+template <typename T>
+bool npy_load_vector(std::string fname, std::vector<T> &vec)
+{
+    cnpy::NpyArray arr = cnpy::npy_load(fname);
+    if (arr.data == nullptr) {
+        ABORT("Can't find in .npy data file!");
+        arr.destruct();
+        return false;
+    }
+    assert(arr.shape.size() == 1);
+    T *begin = reinterpret_cast<T *>(arr.data);
+    vec = std::vector<T>(begin, begin + arr.shape[0]);
+    arr.destruct();
+    return true;
+}
+}
 void Testcnpy();
 
 #endif

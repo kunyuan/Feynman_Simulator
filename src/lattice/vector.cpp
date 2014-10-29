@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Kun Chen. All rights reserved.
 //
 #include "vector.h"
+#include <iostream>
 #include "../utility/utility.h"
 #define SEP ','
 

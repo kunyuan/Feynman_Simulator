@@ -10,10 +10,7 @@
 #include <math.h>
 #include <string>
 #include <sstream>
-
-#ifndef real
-#define real double
-#endif
+#include "convention.h"
 
 //---------------------------------------------------------------------------
 

@@ -52,11 +52,13 @@
 */
 /* Inclusion of standard C libraries */
 
-#include <stdio.h>
+#include "fft.h"
+#include "complex.h"
+#include "convention.h"
+
 #include <math.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "fft.h"
 
 #define REALSIZE 8 /* in units of byte */
 

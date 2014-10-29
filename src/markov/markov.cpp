@@ -60,14 +60,14 @@ void Markov::CreateWorm()
     if (CanNotMoveWorm(dspin, vin) && CanNotMoveWorm(-dspin, vout))
         return;
 
-    Complex wWeight = W->Weight(Lat->Distance(vin.R, vout.R), vout.Tau - vin.Tau, vin.Spin, vout.Spin, true);
+    Complex wWeight = W->Weight(Lat->Dist(vin.R, vout.R), vout.Tau - vin.Tau, vin.Spin, vout.Spin, true);
     Complex weightRatio = wWeight / w.Weight;
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    real wormWeight = WormWeight->Weight(Lat->Distance(vin.R, vout.R), vout.Tau - vin.Tau);
+    real wormWeight = WormWeight->Weight(Lat->Dist(vin.R, vout.R), vout.Tau - vin.Tau);
 
-    prob *= ProbofCall[1] / ProbofCall[0] * wormWeight * real(Diag->Order) * 2.0;
+    prob *= ProbofCall[1] / ProbofCall[0] * wormWeight * Diag->Order * 2.0;
 
     if (prob >= 1.0 || RNG.urn() < prob) {
         Diag->Phase *= sgn;

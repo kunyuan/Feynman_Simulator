@@ -10,8 +10,6 @@
 #define __Feynman_Simulator__markov__
 
 #include "../environment/environment.h"
-#include "../observable/weight.h"
-#include "../utility/rng.h"
 
 class Markov {
   private:
