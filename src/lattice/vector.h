@@ -9,7 +9,7 @@
 #ifndef __Feynman_Simulator__vector__
 #define __Feynman_Simulator__vector__
 
-#include <iostream>
+#include <iosfwd>
 #include "../utility/convention.h"
 using namespace std;
 

@@ -8,6 +8,8 @@
 
 #include "fft.h"
 #include "sput.h"
+#include "complex.h"
+#include <iostream>
 
 void Test_fft1D();
 void Test_fft2D();

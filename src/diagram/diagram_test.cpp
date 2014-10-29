@@ -8,6 +8,7 @@
 
 #include "diagram.h"
 #include "../utility/sput.h"
+#include "../observable/weight.h"
 using namespace std;
 
 void Test_Diagram_Component();

@@ -7,7 +7,7 @@
 //
 
 #include <vector>
-#include <sstream>
+#include <iostream>
 #include "diagram.h"
 #include "../utility/abort.h"
 #include "../utility/scopeguard.h"

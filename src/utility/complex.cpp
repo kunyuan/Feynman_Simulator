@@ -4,6 +4,7 @@
 // Variant 2 - based on compound assignment
 //---------------------------------------------------------------------------
 #include "Complex.h"
+#include <iostream>
 
 using namespace std;
 

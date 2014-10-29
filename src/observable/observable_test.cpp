@@ -8,8 +8,6 @@
 
 #include "weight.h"
 #include "../utility/sput.h"
-#include "../utility/utility.h"
-#include "../utility/convention.h"
 #include "../utility/rng.h"
 
 using namespace std;

@@ -7,7 +7,6 @@
 //
 
 #include "initialization.h"
-using namespace std;
 
 void InitGlobalUtility()
 {
@@ -15,7 +14,6 @@ void InitGlobalUtility()
 
 void InitEveryOneNeedsIt()
 {
-    
 }
 
 void InitMonteCarlo()
