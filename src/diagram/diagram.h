@@ -9,10 +9,12 @@
 #ifndef __Fermion_Simulator__diagram_global__
 #define __Fermion_Simulator__diagram_global__
 
-#include <iostream>
+#include <iosfwd>
 #include "component_bundle.h"
-#include "../utility/rng.h"
-#include "../observable/weight.h"
+namespace Weight {
+class G;
+class W;
+}
 
 class Diagram {
   public:

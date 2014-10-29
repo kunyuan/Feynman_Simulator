@@ -56,7 +56,9 @@ bool EnvMonteCarlo::BuildFromFile(string InputFile)
 
     //Add estimators
     cEstimator.AddEstimator("1");
-    rEstimator.AddEstimator("1");
+    cEstimator.AddEstimator("2");
+    rEstimator.AddEstimator("2");
+    rEstimator.AddEstimator("3");
     return true;
 }
 

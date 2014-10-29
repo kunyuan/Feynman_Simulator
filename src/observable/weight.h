@@ -9,7 +9,6 @@
 #ifndef __Feynman_Simulator__observable__
 #define __Feynman_Simulator__observable__
 
-#include <iostream>
 #include "estimate.h"
 #include "../utility/array.h"
 #include "../lattice/lattice.h"
@@ -73,6 +72,7 @@ class Sigma : public WeightNeedMeasure {
     Sigma(const Lattice &, real Beta, int order);
     Complex Weight(const Distance &dR, real dtau, spin, spin);
     Complex WeightOfDelta(spin, spin);
+    void MeasureNorm(real weight);
     void Measure(const Distance &, real dtau, spin, spin, int Order, const Complex &);
 };
 

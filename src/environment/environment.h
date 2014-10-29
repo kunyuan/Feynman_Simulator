@@ -13,7 +13,6 @@
 #include "../diagram/diagram.h"
 #include "../utility/rng.h"
 #include "../observable/weight.h"
-#include "../utility/convention.h"
 #include "../lattice/lattice.h"
 #include "../utility/scopeguard.h"
 
@@ -77,7 +76,9 @@ class EnvMonteCarlo : public Environment {
 
     EstimatorBundle<Complex> cEstimator;
     EstimatorBundle<real> rEstimator;
+    EstimatorBundle<real> DetailBalanceEstimator;
 
+    Estimator<real> ZeroOrderWeight;
     Weight::Worm *WormWeight;
     Weight::Sigma *Sigma;
     Weight::Polar *Polar;

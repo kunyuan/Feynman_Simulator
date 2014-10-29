@@ -10,6 +10,7 @@
 #include <iostream>
 #include "definition.h"
 #include "initialization.h"
+#include "test.h"
 #include "markov/markov.h"
 #include "markov/markov_monitor.h"
 using namespace std;

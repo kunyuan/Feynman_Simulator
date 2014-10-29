@@ -8,6 +8,7 @@
 
 #include "diagram.h"
 #include "../utility/sput.h"
+#include "../observable/weight.h"
 using namespace std;
 
 void Test_Diagram_Component();
@@ -89,7 +90,7 @@ void Test_Diagram_IO()
     NewV.LoadConfig(strtemp);
     sput_fail_unless(Equal(NewV.Tau, 0.51), "Check Vertex reading");
 
-    Lattice lat;
+    Lattice lat(Vec<int>(1));
     Weight::G G(lat, 1.0, 1);
     Weight::W W(lat, 1.0, 1);
     G.InitializeState();

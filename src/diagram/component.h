@@ -10,8 +10,6 @@
 #define __Fermion_Simulator__component__
 
 #include "../utility/complex.h"
-#include "../utility/utility.h"
-#include "../utility/logger.h"
 #include "../utility/convention.h"
 #include "../lattice/lattice.h"
 

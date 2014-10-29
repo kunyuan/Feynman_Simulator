@@ -7,16 +7,16 @@
 //
 
 #include "weight.h"
-#include "../utility/utility.h"
 #include "../utility/abort.h"
+#include "../utility/scopeguard.h"
 
 using namespace std;
 using namespace Array;
 using namespace Weight;
 
 WeightNoMeasure::WeightNoMeasure(const Lattice &lat, real beta, int order, int SpinVol, string name)
+    : _Lat(lat)
 {
-    _Lat = lat;
     _Beta = beta;
     _Order = order;
     _dBeta = beta / MAX_BIN;
@@ -80,9 +80,11 @@ void WeightNoMeasure::SaveState(const std::string &FileName, std::string Mode)
 bool WeightNoMeasure::LoadState(const std::string &FileName)
 {
     cnpy::NpyArray weight = cnpy::npz_load(cnpy::npz_name(FileName), _Name);
+    ON_SCOPE_EXIT([&] {weight.destruct(); });
     if (weight.data == nullptr)
         ABORT("Can't find estimator " << _Name << " in .npz data file!");
     _Weight = reinterpret_cast<Complex *>(weight.data);
+    //assignment here will copy data in weight.data into _Weight
     return true;
 }
 
@@ -160,6 +162,7 @@ void WeightNeedMeasure::ClearStatistics()
         _WeightAccu(i) = 0.0;
     _Average.ClearStatistics();
 }
+//TODO: you may have to replace int with size_t here
 
 void WeightNeedMeasure::SqueezeStatistics(real factor)
 {
@@ -188,18 +191,16 @@ bool WeightNeedMeasure::LoadState(const std::string &FileName)
     WeightNoMeasure::LoadState(FileName);
 
     cnpy::npz_t NpzMap = cnpy::npz_load(cnpy::npz_name(FileName));
+    ON_SCOPE_EXIT([&] {NpzMap.destruct(); });
+
     cnpy::NpyArray sigma_accu = NpzMap[_Name + "_Accu"];
     if (sigma_accu.data == nullptr)
-        ABORT("Can't find estimator " << _Name << " _Accu in .npz data file!" );
+        ABORT("Can't find estimator " << _Name << " _Accu in .npz data file!");
     _WeightAccu = reinterpret_cast<Complex *>(sigma_accu.data);
     //using assign here will make a copy of the data in Complex *start
 
     //read normalization factor
-    cnpy::NpyArray norm = NpzMap[_Name + "_Norm"];
-    if (norm.data == nullptr)
-        ABORT("Can't find estimator " << _Name << "_Norm in .npz data file!");
-    _Norm = *reinterpret_cast<real *>(norm.data);
+    cnpy::npz_load_number(NpzMap, _Name + "_Norm", _Norm);
 
-    NpzMap.destruct();
     return true;
 }
