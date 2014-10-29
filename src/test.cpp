@@ -32,7 +32,7 @@ int RunTest()
     TEST(TestMarkov);
 
     //    TEST(TestCRC32);
-    //    TEST(TestFFT);
+    TEST(TestFFT);
 
     //    Testcnpy();
     return 0;

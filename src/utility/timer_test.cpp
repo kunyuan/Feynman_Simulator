@@ -1,6 +1,7 @@
 // Example program to demonstrate the timer class
 
 #include "timer.h"
+#include <iostream>
 
 using namespace std;
 

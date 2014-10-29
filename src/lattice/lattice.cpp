@@ -5,9 +5,9 @@
 //  Created by Kun Chen on 10/6/14.
 //  Copyright (c) 2014 Kun Chen. All rights reserved.
 //
+#include "lattice.h"
 #include <math.h>
 #include <iostream>
-#include "lattice.h"
 #include "../utility/convention.h"
 #include "../utility/cnpy.h"
 #include "../utility/abort.h"
@@ -74,7 +74,7 @@ void Lattice::Initialize()
 Vec<int> Lattice::Shift(const Vec<int> &vec) const
 {
     Vec<int> newvec(vec);
-    for (int i = 0; i < Dimension; i++) {
+    for (int i = 0; i < D; i++) {
         if (vec[i] < 0)
             newvec[i] = vec[i] + Size[i];
     }
@@ -83,8 +83,8 @@ Vec<int> Lattice::Shift(const Vec<int> &vec) const
 
 int Lattice::Vec2Index(const Vec<int> &vec) const
 {
-    int Index = vec[Dimension - 1];
-    for (int i = Dimension - 2; i >= 0; i--) {
+    int Index = vec[D - 1];
+    for (int i = D - 2; i >= 0; i--) {
         Index = Index * Size[i] + vec[i];
     }
     return Index;
@@ -93,11 +93,11 @@ int Lattice::Vec2Index(const Vec<int> &vec) const
 Vec<int> Lattice::Index2Vec(int index) const
 {
     Vec<int> v(0);
-    for (int i = 0; i < Dimension - 1; i++) {
+    for (int i = 0; i < D - 1; i++) {
         v[i] = index % Size[i];
         index = index / Size[i];
     }
-    v[Dimension - 1] = index;
+    v[D - 1] = index;
     return v;
 }
 
@@ -110,15 +110,15 @@ Vec<int> Lattice::Index2Vec(int index) const
  */
 int Lattice::Sublat2Index(int In, int Out) const
 {
-    return Out * SublatVol + In;
+    return Out * NSublattice + In;
 }
 
 int Lattice::Index2Sublat(int index, int dir) const
 {
     if (dir == IN)
-        return index % SublatVol;
+        return index % NSublattice;
     else
-        return index / SublatVol;
+        return index / NSublattice;
 }
 
 /**
@@ -151,7 +151,7 @@ int Lattice::GetName(const Site &site) const
 Vec<real> Lattice::GetRealVec(const Site &site) const
 {
     Vec<real> vec(0.0);
-    for (int i = 0; i < Dimension; i++)
+    for (int i = 0; i < D; i++)
         vec += LatticeVec[i] * site.Coordinate[i];
     vec += SublatticeVec[site.Sublattice];
     return vec;
@@ -183,7 +183,7 @@ Vec<int> Lattice::GetVec(const class Distance &dis) const
 Vec<real> Lattice::GetRealVec(const class Distance &dis) const
 {
     Vec<real> vec(0.0);
-    for (int i = 0; i < Dimension; i++)
+    for (int i = 0; i < D; i++)
         vec += LatticeVec[i] * GetVec(dis)[i];
     vec += SublatticeVec[GetSublat(dis, OUT)] - SublatticeVec[GetSublat(dis, IN)];
     return vec;
@@ -196,12 +196,12 @@ void Lattice::PlotLattice()
 {
     const unsigned int N = NSublattice * Vol;
     //save it to file
-    const unsigned int shape[] = {N, (unsigned int)Dimension};
-    real data[N * Dimension];
+    const unsigned int shape[] = {N, (unsigned int)D};
+    real data[N * D];
     for (int i = 0; i < N; i++) {
         Site s = GetSite(i);
-        for (int j = 0; j < Dimension; j++)
-            data[i * Dimension + j] = GetRealVec(s)[j];
+        for (int j = 0; j < D; j++)
+            data[i * D + j] = GetRealVec(s)[j];
     }
     cnpy::npy_save("sq.npy", data, shape, 2, "w");
 }

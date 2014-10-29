@@ -9,11 +9,10 @@
 #ifndef __Feynman_Simulator__Estimate__
 #define __Feynman_Simulator__Estimate__
 
-#include <iostream>
+#include <iosfwd>
 #include <vector>
 #include <unordered_map>
 #include "../utility/cnpy.h"
-#include "../utility/convention.h"
 #include "../utility/complex.h"
 
 /**

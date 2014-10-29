@@ -13,6 +13,12 @@
 #define SCOPEGUARD_LINENAME(name, line) SCOPEGUARD_LINENAME_CAT(name, line)
 #define ON_SCOPE_EXIT(callback) ScopeGuard SCOPEGUARD_LINENAME(EXIT, __LINE__)(callback)
 
+/**
+*    ifstream ifs;
+*    ifs.open(FileName, ios::in);
+*    ON_SCOPE_EXIT([&] {ifs.close(); });
+*/
+
 class ScopeGuard {
   public:
     explicit ScopeGuard(std::function<void()> onExitScope)

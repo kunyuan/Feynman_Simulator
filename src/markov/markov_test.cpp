@@ -6,13 +6,9 @@
 //  Copyright (c) 2014 Kun Chen. All rights reserved.
 //
 
-#include <sstream>
 #include "markov.h"
 #include "markov_monitor.h"
-#include "../diagram/diagram.h"
 #include "../utility/sput.h"
-#include "../utility/utility.h"
-#include "../utility/logger.h"
 using namespace std;
 
 void Test_CreateWorm();

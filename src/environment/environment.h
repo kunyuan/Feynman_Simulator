@@ -13,7 +13,6 @@
 #include "../diagram/diagram.h"
 #include "../utility/rng.h"
 #include "../observable/weight.h"
-#include "../utility/convention.h"
 #include "../lattice/lattice.h"
 #include "../utility/scopeguard.h"
 

@@ -9,7 +9,6 @@
 #ifndef __Feynman_Simulator__observable__
 #define __Feynman_Simulator__observable__
 
-#include <iostream>
 #include "estimate.h"
 #include "../utility/array.h"
 #include "../lattice/lattice.h"

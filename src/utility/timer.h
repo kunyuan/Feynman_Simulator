@@ -7,7 +7,7 @@
 #define __timer_H_
 
 #include <ctime>
-#include <iostream>
+#include <iosfwd>
 #include <iomanip>
 
 class timer {

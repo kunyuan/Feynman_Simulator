@@ -6,9 +6,10 @@
 //  Copyright (c) 2014 Kun Chen. All rights reserved.
 //
 
+#include <iostream>
 #include "estimate.h"
-#include "../utility/utility.h"
 #include "../utility/abort.h"
+#include "../utility/scopeguard.h"
 
 using namespace std;
 
@@ -180,28 +181,15 @@ real Estimator<T>::Ratio()
 template <typename T>
 bool Estimator<T>::LoadState(cnpy::npz_t NpzMap)
 {
-    cnpy::NpyArray history = NpzMap[Name];
-    T *start = reinterpret_cast<T *>(history.data);
-    if (start == NULL)
-        ABORT("Can't find estimator " << Name << " in .npz data file!");
     ClearStatistics();
-    _history.assign(start, start + history.shape[0]);
-
+    bool flag = true;
+    flag &= cnpy::npz_load_vector(NpzMap, Name, _history);
     //read normalization factor
-    cnpy::NpyArray norm = NpzMap[Name + "_Norm"];
-    real *start_Norm = reinterpret_cast<real *>(norm.data);
-    if (start_Norm == NULL)
-        ABORT("Can't find estimator " << Name << "_Norm in .npz data file!");
-    _norm = *start_Norm;
-
+    flag &= cnpy::npz_load_number(NpzMap, Name + "_Norm", _norm);
     //read accumulation
-    cnpy::NpyArray accu = NpzMap[Name + "_Accu"];
-    T *start_accu = reinterpret_cast<T *>(accu.data);
-    if (start_accu == NULL)
-        ABORT("Can't find estimator " << Name << "_Accu in .npz data file!");
-    _accumulator = *start_accu;
+    flag &= cnpy::npz_load_number(NpzMap, Name + "_Accu", _accumulator);
     _update();
-    return true;
+    return flag;
 }
 
 template <typename T>
@@ -252,9 +240,9 @@ template <typename T>
 bool EstimatorBundle<T>::LoadState(const string &FileName)
 {
     cnpy::npz_t NpzMap = cnpy::npz_load(cnpy::npz_name(FileName));
-    for (unsigned int i = 0; i < _EstimatorVector.size(); i++) {
-        _EstimatorVector[i].LoadState(NpzMap);
-    }
+    ON_SCOPE_EXIT([&] {NpzMap.destruct(); });
+    for (auto &vector : _EstimatorVector)
+        vector.LoadState(NpzMap);
     return true;
 }
 
@@ -289,17 +277,15 @@ Estimator<T> &EstimatorBundle<T>::operator[](string name)
 template <typename T>
 void EstimatorBundle<T>::ClearStatistics()
 {
-    for (unsigned int i = 0; i < _EstimatorVector.size(); i++) {
-        _EstimatorVector[i].ClearStatistics();
-    }
+    for (auto &vector : _EstimatorVector)
+        vector.ClearStatistics();
 }
 
 template <typename T>
 void EstimatorBundle<T>::SqueezeStatistics(double factor)
 {
-    for (unsigned int i = 0; i < _EstimatorVector.size(); i++) {
-        _EstimatorVector[i].SqueezeStatistics(factor);
-    }
+    for (auto &vector : _EstimatorVector)
+        vector.SqueezeStatistics(factor);
 }
 
 template class EstimatorBundle<Complex>;

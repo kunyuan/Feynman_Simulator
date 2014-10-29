@@ -23,13 +23,12 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. */
 // Defining TURNOFFDEBUG improves optimization but disables argument checking.
 // Defining __NOARRAY2OPT inhibits special optimization of Array2[].
 
-#include <iostream>
+#include "abort.h"
 #include <sstream>
 #include <climits>
 #include <cstdlib>
 #include <cerrno>
-#include "convention.h"
-#include "abort.h"
+#include <iostream>
 
 #ifdef TURNOFFDEBUG
 #define __check(i, n, dim, m)
@@ -1048,6 +1047,7 @@ class array4 : public array1<T> {
         this->Load(a);
         return *this;
     }
+
     array4<T> &operator=(const array4<T> &A)
     {
         __checkEqual(nx, A.Nx(), 4, 1);
@@ -1240,6 +1240,7 @@ class array5 : public array1<T> {
         this->Load(a);
         return *this;
     }
+
     array5<T> &operator=(const array5<T> &A)
     {
         __checkEqual(nx, A.Nx(), 5, 1);
