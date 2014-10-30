@@ -7,16 +7,16 @@
 //
 
 #include "weight.h"
-#include "utility.h"
-#include "abort.h"
+#include "../utility/abort.h"
+#include "../utility/scopeguard.h"
 
 using namespace std;
 using namespace Array;
 using namespace Weight;
 
 WeightNoMeasure::WeightNoMeasure(const Lattice &lat, real beta, int order, int SpinVol, string name)
+    : _Lat(lat)
 {
-    _Lat = lat;
     _Beta = beta;
     _Order = order;
     _dBeta = beta / MAX_BIN;
@@ -29,13 +29,8 @@ WeightNoMeasure::WeightNoMeasure(const Lattice &lat, real beta, int order, int S
     _Shape[VOL] = lat.Vol;
     _Shape[TAU] = MAX_BIN;
 
-    _Weight = new array4<Complex>((unsigned int *)(_Shape + SP));
+    _Weight.Allocate((unsigned int *)(_Shape + SP));
     //use _Shape[SP] to _Shape[TAU] to construct array4
-}
-
-WeightNoMeasure::~WeightNoMeasure()
-{
-    delete _Weight;
 }
 
 int WeightNoMeasure::SpinIndex(spin SpinIn, spin SpinOut)
@@ -72,25 +67,24 @@ real WeightNoMeasure::BinToTau(int Bin)
 
 void WeightNoMeasure::InitializeState()
 {
-    for(unsigned int i=0;i<_Weight->Size();i++)
-    {
-        (*_Weight)(i)=Complex(2.0, 0.0);
+    for (unsigned int i = 0; i < _Weight.Size(); i++) {
+        _Weight(i) = Complex(2.0, 0.0);
     }
 }
 
 void WeightNoMeasure::SaveState(const std::string &FileName, std::string Mode)
 {
-    cnpy::npz_save(cnpy::npz_name(FileName), _Name, _Weight->Data(), _Shape + SP, 4, Mode);
+    cnpy::npz_save(cnpy::npz_name(FileName), _Name, _Weight.Data(), _Shape + SP, 4, Mode);
 }
 
 bool WeightNoMeasure::LoadState(const std::string &FileName)
 {
     cnpy::NpyArray weight = cnpy::npz_load(cnpy::npz_name(FileName), _Name);
-
-    Complex *start = reinterpret_cast<Complex *>(weight.data);
-    if (start == NULL)
-        ABORT("Can't find estimator " << _Name << " in .npz data file!" << endl);
-    _Weight->Set(start);
+    ON_SCOPE_EXIT([&] {weight.destruct(); });
+    if (weight.data == nullptr)
+        ABORT("Can't find estimator " << _Name << " in .npz data file!");
+    _Weight = reinterpret_cast<Complex *>(weight.data);
+    //assignment here will copy data in weight.data into _Weight
     return true;
 }
 
@@ -99,16 +93,11 @@ bool WeightNoMeasure::LoadState(const std::string &FileName)
 WeightNeedMeasure::WeightNeedMeasure(const Lattice &lat, real beta, int order, int SpinVol, string name)
     : WeightNoMeasure(lat, beta, order, SpinVol, name)
 {
-    _WeightAccu = new array5<Complex>((unsigned int *)_Shape);
+    _WeightAccu.Allocate((unsigned int *)_Shape);
     //use _Shape[ORDER] to _Shape[TAU] to construct array5
     _Norm = _dBeta;
     for (int i = 1; i <= order; i++)
         _Average.AddEstimator(name + "_AvgofOrder" + ToString(i));
-}
-
-WeightNeedMeasure::~WeightNeedMeasure()
-{
-    delete _WeightAccu;
 }
 
 Estimate<Complex> WeightNeedMeasure::WeightWithError(int order)
@@ -147,16 +136,16 @@ int WeightNeedMeasure::OrderAcceptable(int StartFromOrder, real ErrorThreshold)
 
 void WeightNeedMeasure::UpdateWeight(int UpToOrder)
 {
-    int size = _Weight->Size();
+    int size = _Weight.Size();
     int order = 1;
     for (int i = 0; i < size; i++)
         //assign order=1 directly to initialize _Weight
-        (*_Weight)(i) = (*_WeightAccu)[order - 1](i) / _Norm;
+        _Weight(i) = _WeightAccu[order - 1](i) / _Norm;
 
     for (order = 2; order <= UpToOrder; order++) {
         //add order>1 on _Weight
         for (int i = 0; i < size; i++)
-            (*_Weight)(i) += (*_WeightAccu)[order - 1](i) / _Norm;
+            _Weight(i) += _WeightAccu[order - 1](i) / _Norm;
     }
 }
 
@@ -168,20 +157,21 @@ void WeightNeedMeasure::AddStatistics()
 void WeightNeedMeasure::ClearStatistics()
 {
     _Norm = _dBeta;
-    int size = _WeightAccu->Size();
+    int size = _WeightAccu.Size();
     for (int i = 0; i < size; i++)
-        (*_WeightAccu)(i) = 0.0;
+        _WeightAccu(i) = 0.0;
     _Average.ClearStatistics();
 }
+//TODO: you may have to replace int with size_t here
 
 void WeightNeedMeasure::SqueezeStatistics(real factor)
 {
     if (DEBUGMODE && factor <= 0.0)
-        ABORT("factor=" << factor << "<=0!" << endl);
+        ABORT("factor=" << factor << "<=0!");
     _Norm /= factor;
-    int size = _WeightAccu->Size();
+    int size = _WeightAccu.Size();
     for (int i = 0; i < size; i++)
-        (*_WeightAccu)(i) /= factor;
+        _WeightAccu(i) /= factor;
     _Average.SqueezeStatistics(factor);
 }
 
@@ -190,7 +180,7 @@ void WeightNeedMeasure::SaveState(const std::string &FileName, std::string Mode)
 {
     unsigned int shape[1] = {1};
     cnpy::npz_save(cnpy::npz_name(FileName), _Name + "_Norm", &_Norm, shape, 1, Mode);
-    cnpy::npz_save(cnpy::npz_name(FileName), _Name + "_Accu", _WeightAccu->Data(), _Shape, 5, "a");
+    cnpy::npz_save(cnpy::npz_name(FileName), _Name + "_Accu", _WeightAccu(), _Shape, 5, "a");
     WeightNoMeasure::SaveState(FileName);
     _Average.SaveState(FileName, "a");
 }
@@ -201,19 +191,16 @@ bool WeightNeedMeasure::LoadState(const std::string &FileName)
     WeightNoMeasure::LoadState(FileName);
 
     cnpy::npz_t NpzMap = cnpy::npz_load(cnpy::npz_name(FileName));
+    ON_SCOPE_EXIT([&] {NpzMap.destruct(); });
+
     cnpy::NpyArray sigma_accu = NpzMap[_Name + "_Accu"];
-    Complex *start = reinterpret_cast<Complex *>(sigma_accu.data);
-    if (start == NULL)
-        ABORT("Can't find estimator " << _Name << " _Accu in .npz data file!" << endl);
-    _WeightAccu->Set(start);
+    if (sigma_accu.data == nullptr)
+        ABORT("Can't find estimator " << _Name << " _Accu in .npz data file!");
+    _WeightAccu = reinterpret_cast<Complex *>(sigma_accu.data);
+    //using assign here will make a copy of the data in Complex *start
 
     //read normalization factor
-    cnpy::NpyArray norm = NpzMap[_Name + "_Norm"];
-    real *start_Norm = reinterpret_cast<real *>(norm.data);
-    if (start_Norm == NULL)
-        ABORT("Can't find estimator " << _Name << "_Norm in .npz data file!" << endl);
-    _Norm = *start_Norm;
+    cnpy::npz_load_number(NpzMap, _Name + "_Norm", _Norm);
 
-    NpzMap.destruct();
     return true;
 }

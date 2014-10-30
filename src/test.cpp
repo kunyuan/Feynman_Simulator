@@ -7,25 +7,33 @@
 //
 
 #include "test.h"
-#include "abort.h"
+#include "utility/crc32.h"
+#include "markov/markov.h"
+#include "diagram/diagram.h"
+#include "lattice/lattice.h"
+#include "observable/weight.h"
+#include "utility/fft.h"
 using namespace std;
 
 #define TEST(func)                  \
     {                               \
-        if (func() != EXIT_SUCCESS) \
-            ABORT("Shit happens!"); \
+        if (EXIT_SUCCESS != func()) \
+            exit(0);                \
     }
 int RunTest()
 {
 
     //    TestTimer();  //Test the timer
     //    TestRNG();
-        TEST(TestDiagram);
-        TEST(TestLattice);
-        TEST(TestObservable);
-        TEST(TestMarkov);
-
     //    TestArray();
+    TEST(TestDiagram);
+    TEST(TestLattice);
+    TEST(TestObservable);
+    TEST(TestMarkov);
+
+    //    TEST(TestCRC32);
+    TEST(TestFFT);
+
     //    Testcnpy();
     return 0;
 }

@@ -4,6 +4,7 @@
 //
 
 #include "timer.h"
+#include <iostream>
 
 //===========================================================================
 // Return the total time that the timer has been in the "running"

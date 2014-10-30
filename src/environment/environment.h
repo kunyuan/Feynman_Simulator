@@ -9,47 +9,91 @@
 #ifndef __Feynman_Simulator__environment__
 #define __Feynman_Simulator__environment__
 
-#include "job.h"
-#include "lattice.h"
-#include "diagram.h"
-#include "rng.h"
-#include "weight.h"
-#include "convention.h"
+#include <list>
+#include "../diagram/diagram.h"
+#include "../utility/rng.h"
+#include "../observable/weight.h"
+#include "../lattice/lattice.h"
+#include "../utility/scopeguard.h"
+
+#ifndef GET
+#define GET(para, thing)                             \
+    {                                                \
+        stringstream ss(para.front());               \
+        (ss) >> thing;                               \
+        if ((ss).fail())                             \
+            ABORT("Fail to read " << #thing << "!"); \
+        para.pop_front();                            \
+    }
+#endif
+
+enum JobType { MC,
+               DYSON };
+
+JobType GetJobsType(std::string);
 
 class Environment {
+  protected:
+    std::list<std::string> _para;
+    Vec<int> _L;
+
   public:
-    Environment(Jobs &);
-    Lattice Lat;
+    Environment();
+    ~Environment();
+    JobType Type;
+    int PID;
+    real Jcp;
+    real InitialBeta;
+    real DeltaBeta;
     real Beta;
     int Order;
+    bool DoesLoad;
     std::string StateFile;
+    Lattice *Lat;
 
-    bool ReadState();
+    bool BuildFromFile(std::string InputFile);
+    bool LoadState();
     void SaveState();
 };
 
 class EnvMonteCarlo : public Environment {
+  private:
+    void ReadOrderWeight(char sep = ',');
+
   public:
-    EnvMonteCarlo(Jobs &);
+    EnvMonteCarlo();
+    ~EnvMonteCarlo();
+    long long Counter;
+    int Toss;
+    int Sample;
+    int Sweep;
+    int Seed;
+    real WormSpaceReweight;
+    std::string ReadFile;
+
     Diagram Diag;
-    int Counter;
     real OrderWeight[MAX_ORDER];
+
     EstimatorBundle<Complex> cEstimator;
     EstimatorBundle<real> rEstimator;
-    Weight::Sigma Sigma;
-    Weight::Polar Polar;
-    Weight::W W;
-    Weight::G G;
-    Weight::Worm Worm;
+    EstimatorBundle<real> DetailBalanceEstimator;
 
-    void Build();
-    bool ReadState();
+    Estimator<real> ZeroOrderWeight;
+    Weight::Worm *WormWeight;
+    Weight::Sigma *Sigma;
+    Weight::Polar *Polar;
+    Weight::W *W;
+    Weight::G *G;
+
+    bool BuildFromFile(std::string InputFile);
+    bool LoadState();
     void SaveState();
 };
 
 class EnvDyson : public Environment {
   public:
-    EnvDyson(Jobs &);
+    EnvDyson();
+    bool BuildFromFile(std::string InputFile);
 };
 
 #endif /* defined(__Feynman_Simulator__environment__) */

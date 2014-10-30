@@ -39,8 +39,8 @@ class Job:
         if para["__Execute"] is "":
             print "Please specify the executive file name!"
             return False
-        if type(para["IsLoad"]) is not bool:
-            print "IsLoad should be a bool!"
+        if type(para["DoesLoad"]) is not bool:
+            print "DoesLoad should be a bool!"
             return False
         return True
 
@@ -52,7 +52,7 @@ class Job:
             else:
                 return "false    #{0}\n".format(key)
         elif type(self.para[key])==str:
-            return self.para[key]+"\n"
+            return self.para[key]+"    #{0}\n".format(key)
         elif type(self.para[key])==list:
             return "{0}    #{1}\n".format(",".join([str(elem)
                                  for elem in self.para[key]]), key)
@@ -69,7 +69,7 @@ class Job:
         input_str += self.key_to_string("dBeta")
         input_str += self.key_to_string("finalBeta")
         input_str += self.key_to_string("Order")
-        input_str += self.key_to_string("IsLoad")
+        input_str += self.key_to_string("DoesLoad")
         return input_str
 
 class JobMonteCarlo(Job):
@@ -77,7 +77,7 @@ class JobMonteCarlo(Job):
     def __init__(self, para):
         Job.__init__(self, para)
         self.keep_cpu_busy = True
-        self.para["Type: MC"] = 2
+        self.para["Type: MC"] = 0
         self.name = "MC"
 
     def __check_parameters__(self, para):
@@ -91,15 +91,15 @@ class JobMonteCarlo(Job):
             return False
 
     def to_string(self, pid=0):
-        input_str = Job.to_string(self, pid)
-        input_str += self.key_to_string("Type: MC")
+        input_str = self.key_to_string("Type: MC")
+        input_str = input_str+Job.to_string(self, pid)
         input_str += self.key_to_string("Toss")
         input_str += self.key_to_string("Sample")
         input_str += self.key_to_string("Sweep")
         self.para["Seed"] = -int(random.random()*2**30)
         input_str += self.key_to_string("Seed")
         input_str += self.key_to_string("ReadFile")
-        input_str += self.key_to_string("Worm/Norm")
+        input_str += self.key_to_string("WormSpaceReweight")
         input_str += self.key_to_string("Reweight")
         return input_str
 
@@ -112,8 +112,8 @@ class JobConsistLoop(Job):
         self.name = "SCL"
 
     def to_string(self, pid=0):
-        input_str = Job.to_string(self, pid)
-        input_str += self.key_to_string("Type: SCL")
+        input_str = self.key_to_string("Type: SCL")
+        input_str = input_str+Job.to_string(self, pid)
         input_str += self.key_to_string("ReadFile")
         return input_str
 
@@ -126,8 +126,8 @@ class JobIntegration(Job):
         self.name = "NI"
 
     def to_string(self, pid=0):
-        input_str = Job.to_string(self, pid)
-        input_str += self.key_to_string("Type: NI")
+        input_str = self.key_to_string("Type: NI")
+        input_str = input_str+Job.to_string(self, pid)
         return input_str
 
 class JobOutputOrder(Job):
@@ -139,8 +139,8 @@ class JobOutputOrder(Job):
         self.name = "OO"
 
     def to_string(self, pid=0):
-        input_str = Job.to_string(self, pid)
-        input_str += self.key_to_string("Type: OO")
+        input_str = self.key_to_string("Type: OO")
+        input_str = input_str+Job.to_string(self, pid)
         input_str += self.key_to_string("ReadFile")
         return input_str
 
@@ -153,8 +153,8 @@ class JobOutputLoop(Job):
         self.name = "OL"
 
     def to_string(self, pid=0):
-        input_str = Job.to_string(self, pid)
-        input_str += self.key_to_string("Type: OL")
+        input_str = self.key_to_string("Type: OL")
+        input_str = input_str+ Job.to_string(self, pid)
         input_str += self.key_to_string("ReadFile")
         return input_str
 
@@ -167,8 +167,8 @@ class JobDebug(Job):
         self.name = "BG"
 
     def to_string(self, pid=0):
-        input_str = Job.to_string(self, pid)
-        input_str += self.key_to_string("Type: BG")
+        input_str = self.key_to_string("Type: BG")
+        input_str = input_str+Job.to_string(self, pid)
         return input_str
 
 if __name__ == "__main__":
@@ -180,7 +180,7 @@ if __name__ == "__main__":
         "Sample" : 1000000,
         "Sweep" : 10,
         "Toss" : 1000,
-        "IsLoad" : True,
+        "DoesLoad" : True,
         "Type" : 2,
         "Lx" :  4,
         "Ly" :  4,
@@ -191,7 +191,7 @@ if __name__ == "__main__":
         "Order" :  2,
         "Reweight" : [1,5],
         #"ReadFile" : "0.90_1_coll",
-        "Worm/Norm" : 0.5
+        "WormSpaceReweight" : 0.5
     })
     print A.to_string(1)
     print A.execute

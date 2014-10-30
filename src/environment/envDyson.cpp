@@ -8,6 +8,12 @@
 
 #include "environment.h"
 
-EnvDyson::EnvDyson(Jobs &Job):Environment(Job)
+EnvDyson::EnvDyson()
 {
+}
+
+bool EnvDyson::BuildFromFile(string InputFile)
+{
+    Environment::BuildFromFile(InputFile);
+    return true;
 }

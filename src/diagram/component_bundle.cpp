@@ -7,7 +7,7 @@
 //
 
 #include "component_bundle.h"
-#include "abort.h"
+#include "../utility/abort.h"
 using namespace std;
 
 template <typename T>
@@ -34,7 +34,7 @@ T &Bundle<T>::Add()
     //    address->Name = _available_space;
     _available_space++;
     if (_available_space >= MAX_BUNDLE)
-        ABORT("Too many objects >=" << MAX_BUNDLE << endl);
+        ABORT("Too many objects >=" << MAX_BUNDLE);
     return address;
 }
 
@@ -44,14 +44,14 @@ void Bundle<T>::Add(T &Target)
     *_component_name[_available_space] = Target;
     _available_space++;
     if (_available_space >= MAX_BUNDLE)
-        ABORT("Too many objects >=" << MAX_BUNDLE << endl);
+        ABORT("Too many objects >=" << MAX_BUNDLE);
 }
 
 template <typename T>
 void Bundle<T>::Remove(int name)
 {
     if (DEBUGMODE && _available_space == 0)
-        ABORT("Nothing to delete!" << endl);
+        ABORT("Nothing to delete!");
     _available_space--;
     T *last = _component_name[_available_space];
     T *target = _component_name[name];
@@ -70,9 +70,9 @@ void Bundle<T>::Remove(T &target)
 {
     if (DEBUGMODE) {
         if (!Exist(target))
-            ABORT("The component to remove do not belong to the bundle!" << endl);
+            ABORT("The component to remove do not belong to the bundle!");
         if (_available_space == 0)
-            ABORT("Nothing to delete!" << endl);
+            ABORT("Nothing to delete!");
     }
     _available_space--;
     int name = target.Name;
@@ -127,4 +127,3 @@ bool Bundle<T>::Exist(T &target)
 template class Bundle<GLine>;
 template class Bundle<WLine>;
 template class Bundle<Vertex>;
-

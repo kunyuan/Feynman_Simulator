@@ -7,7 +7,6 @@
 //
 
 #include "markov.h"
-#include "weight.h"
 
 const int MAX_K = 10000;
 
@@ -18,21 +17,20 @@ bool CanNotMoveWorm(int dspin, const Vertex &v);
 Markov::Markov(EnvMonteCarlo *Env)
 {
     Beta = Env->Beta;
-    Lat = &Env->Lat;
+    Lat = Env->Lat;
     OrderWeight = Env->OrderWeight;
     Diag = &Env->Diag;
     Worm = &Env->Diag.Worm;
-    Sigma = &Env->Sigma;
-    Polar = &Env->Polar;
-    G = &Env->G;
+    Sigma = Env->Sigma;
+    Polar = Env->Polar;
+    G = Env->G;
     G->InitializeState();
-    W = &Env->W;
+    W = Env->W;
     W->InitializeState();
-    WormWeight = &Env->Worm;
-    
+    WormWeight = Env->WormWeight;
+
     ProbofCall[0] = 0.50;
     ProbofCall[1] = 0.50;
-    
 }
 
 /**
@@ -40,12 +38,12 @@ Markov::Markov(EnvMonteCarlo *Env)
 *
 *  @param Steps
 */
-void Markov::Hop(int &&Steps)
+void Markov::Hop(int sweep)
 {
     double x = RNG.urn();
     if (x < ProbofCall[0])
         CreateWorm();
-    else if (x < ProbofCall[0]+ProbofCall[1])
+    else if (x < ProbofCall[0] + ProbofCall[1])
         DeleteWorm();
 }
 
@@ -62,14 +60,14 @@ void Markov::CreateWorm()
     if (CanNotMoveWorm(dspin, vin) && CanNotMoveWorm(-dspin, vout))
         return;
 
-    Complex wWeight = W->Weight(Lat->Distance(vin.R, vout.R), vout.Tau - vin.Tau, vin.Spin, vout.Spin, true);
-    Complex weightRatio = wWeight/w.Weight;
+    Complex wWeight = W->Weight(Lat->Dist(vin.R, vout.R), vout.Tau - vin.Tau, vin.Spin, vout.Spin, true);
+    Complex weightRatio = wWeight / w.Weight;
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    real wormWeight = WormWeight->Weight(Lat->Distance(vin.R, vout.R), vout.Tau - vin.Tau);
+    real wormWeight = WormWeight->Weight(Lat->Dist(vin.R, vout.R), vout.Tau - vin.Tau);
 
-    prob *= ProbofCall[1] / ProbofCall[0] * wormWeight * real(Diag->Order) * 2.0;
+    prob *= ProbofCall[1] / ProbofCall[0] * wormWeight * Diag->Order * 2.0;
 
     if (prob >= 1.0 || RNG.urn() < prob) {
         Diag->Phase *= sgn;
@@ -104,7 +102,7 @@ bool CanNotMoveWorm(int dspin, const Vertex &v)
 
 int RandomPickK()
 {
-    return RNG.irn(-MAX_K, MAX_K-1);
+    return RNG.irn(-MAX_K, MAX_K - 1);
 }
 
 int RandomPickDeltaSpin()

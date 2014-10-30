@@ -19,8 +19,8 @@ void Test_RNG_IO()
     RandomFactory RNG;
     stringstream RngStr;
     RngStr << RNG;
-    real a=RNG.urn();
-    for(int i=0;i<100;i++)
+    real a = RNG.urn();
+    for (int i = 0; i < 100; i++)
         RNG.urn();
     RngStr >> RNG;
     sput_fail_unless(RNG.urn() == a, "import/export the RNG state");
@@ -35,7 +35,7 @@ void Test_RNG_Bound_And_Efficiency()
     double bin[bound] = {0};
     RandomFactory RNG;
 
-    LOG_INFO("Real random number generator started..." << endl);
+    LOG_INFO("Real random number generator started...");
     timer T;
     T.start();
 
@@ -43,9 +43,9 @@ void Test_RNG_Bound_And_Efficiency()
         RNG.urn();
     }
     T.stop();
-    LOG_INFO("Time for " << N << " real numbers: " << T << endl);
+    LOG_INFO("Time for " << N << " real numbers: " << T);
 
-    LOG_INFO("Int random number generator 0 started..." << endl);
+    LOG_INFO("Int random number generator 0 started...");
     T.restart();
     for (int i = 0; i < N; i++) {
         Temp = RNG.irn(0, bound - 1);
@@ -55,32 +55,32 @@ void Test_RNG_Bound_And_Efficiency()
             flag = true;
     }
     T.stop();
-    LOG_INFO("Time for " << N << " real numbers: " << T << endl);
+    LOG_INFO("Time for " << N << " real numbers: " << T );
     LOG_INFO("Distribution:" << endl);
     stringstream msg;
     for (int i = 0; i < bound; i++) {
-        msg<<"Number=" << i << ", Prob=" << setprecision(4) << bin[i] / N << endl;
+        msg << "Number=" << i << ", Prob=" << setprecision(4) << bin[i] / N;
         bin[i] = 0.0;
     }
     LOG_INFO(msg.str());
     sput_fail_unless(flag == false, "RNG irn() exceeds the limit");
 
     flag = false;
-    LOG_INFO("Int random number generator 1 started..." << endl);
+    LOG_INFO("Int random number generator 1 started..." );
     T.restart();
     for (int i = 0; i < N; i++) {
-        Temp = RNG.irn1(0, bound - 1);
+        Temp = RNG.irn(0, bound - 1);
         if (Temp < bound && Temp >= 0)
             bin[Temp]++;
         else
             flag = true;
     }
     T.stop();
-    LOG_INFO("Time for " << N << " real numbers: " << T << endl);
-    LOG_INFO("Distribution:" << endl);
+    LOG_INFO("Time for " << N << " real numbers: " << T);
+    LOG_INFO("Distribution:");
     msg.clear();
     for (int i = 0; i < bound; i++) {
-        msg<<"Number=" << i << ", Prob=" << setprecision(4) << bin[i] / N << endl;
+        msg << "Number=" << i << ", Prob=" << setprecision(4) << bin[i] / N ;
         bin[i] = 0.0;
     }
     LOG_INFO(msg.str());

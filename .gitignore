@@ -47,4 +47,5 @@ data*
 *.DS_Store
 data/infile
 data/outfile
+build
 

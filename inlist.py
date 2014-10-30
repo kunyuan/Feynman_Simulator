@@ -25,13 +25,13 @@ mc_dict={
     "__Duplicate" : 4,
     "__IsCluster" : False,
     "__AutoRun" : True,
-    "IsLoad" : False,
+    "DoesLoad" : False,
     "Reweight" : [1.5, 1.0, 3.0,4.0],
     "ReadFile" : readfile,
     "Sample" :  5000000,
     "Sweep" : 10,
     "Toss" : 10000,
-    "Worm/Norm" : 0.100 
+    "WormSpaceReweight" : 0.100
     }
 mc_dict.update(com_dict)
 TO_DO.append(job.JobMonteCarlo(mc_dict))
@@ -42,7 +42,7 @@ sc_dict={
     "__Duplicate" : 0,
     "__IsCluster" : False,
     "__AutoRun" : False, 
-    "IsLoad" : True,
+    "DoesLoad" : True,
     "ReadFile" : readfile,
     }
 sc_dict.update(com_dict)
@@ -54,7 +54,7 @@ sc_ini_dict={
     "__Duplicate" : 0,
     "__IsCluster" : False,
     "__AutoRun" : False, 
-    "IsLoad" : False,
+    "DoesLoad" : False,
     "ReadFile" : readfile,
     }
 sc_ini_dict.update(com_dict)
@@ -68,7 +68,7 @@ ol_dict={
     "__IsCluster" : False,
     #"__AutoRun" : True,
     "__AutoRun" : False,
-    "IsLoad" : True,
+    "DoesLoad" : True,
     "ReadFile" : readfile,
     }
 ol_dict.update(com_dict)
@@ -80,7 +80,7 @@ ni_dict={
     "__Duplicate" : 0,
     "__IsCluster" : False,
     "__AutoRun" : False,
-    "IsLoad" : False,
+    "DoesLoad" : False,
     }
 ni_dict.update(com_dict)
 TO_DO.append(job.JobIntegration(ni_dict))
@@ -92,7 +92,7 @@ oo_dict={
     "__Duplicate" : 0,
     "__IsCluster" : False,
     "__AutoRun" : False,
-    "IsLoad" : True,
+    "DoesLoad" : True,
     "ReadFile" : readfile,
     }
 oo_dict.update(com_dict)
@@ -104,7 +104,7 @@ bg_dict={
     "__Duplicate" : 0,
     "__IsCluster" : False,
     "__AutoRun" : False,
-    "IsLoad" : False,
+    "DoesLoad" : False,
     }
 bg_dict.update(com_dict)
 TO_DO.append(job.JobDebug(bg_dict))

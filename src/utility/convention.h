@@ -12,15 +12,14 @@
 #ifndef real
 #define real double
 #endif
+//#define NDEBUG
+//turn off all assert
 
 const bool DEBUGMODE = true;
 //#define TURNOFFDEBUG
 //define TURNOFFDEBUG will turn off debug checking, including the boundary check in array.h
 
 const real Pi = 3.14159265359;
-
-enum JobType { MC,
-               DYSON };
 
 enum spin { DOWN,
             UP };
@@ -39,10 +38,6 @@ const int OUT = 1;
 const int D = 2;
 const int NSublattice = 2;
 const int NSublattice2 = NSublattice * NSublattice;
-const int Lx = 16;
-const int Ly = 32;
-const int L[D] = {Lx, Ly};
-const int Vol = Lx * Ly;
 
 const int MAX_ORDER = 10;
 

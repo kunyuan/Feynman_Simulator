@@ -9,10 +9,7 @@
 #ifndef __Feynman_Simulator__markov__
 #define __Feynman_Simulator__markov__
 
-#include "environment.h"
-#include "weight.h"
-#include "rng.h"
-
+#include "../environment/environment.h"
 
 class Markov {
   private:
@@ -25,14 +22,14 @@ class Markov {
     Weight::G *G;
     Weight::W *W;
     Weight::Worm *WormWeight;
-    
+
     const static int NUpdates = 2;
     real ProbofCall[NUpdates];
 
   public:
     Diagram *Diag;
     Markov(EnvMonteCarlo *);
-    void Hop(int &&);
+    void Hop(int);
     void CreateWorm();
     void DeleteWorm();
 };

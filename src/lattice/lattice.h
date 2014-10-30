@@ -58,6 +58,7 @@ class Distance {
     int CoordiIndex;
 
     Distance()
+        : SublatIndex(0), CoordiIndex(0)
     {
     }
 
@@ -65,8 +66,6 @@ class Distance {
         : SublatIndex(sublat), CoordiIndex(coordi)
     {
     }
-
-    int Sublattice(const int &) const;
 
     bool operator==(const Distance &v2)
     {
@@ -89,34 +88,40 @@ class Distance {
  *  class Lattice includes three set of vectors: 1) LatticeVec (unit cell lattice vector); 2)ReLatticeVec (reciprocal lattice vector for k); 3) SublatticeVec (vectors between different sublattices in the same unit cell).
  */
 class Lattice {
+  private:
+    void Initialize();
+    int Vec2Index(const Vec<int> &) const;
+    Vec<int> Index2Vec(int) const;
+
+    int Sublat2Index(int, int) const;
+    int Index2Sublat(int, int direction) const;
+
+    Vec<int> Shift(const Vec<int> &) const;
+
   public:
     int Dimension;
     int Vol;
     int SublatVol;
+    int SublatVol2;
     Vec<int> Size;
     Vec<real> LatticeVec[D];
     Vec<real> ReciprocalLatticeVec[D];
     Vec<real> SublatticeVec[NSublattice];
 
-    Lattice();
+    Lattice(const Vec<int> &size);
+
+    Site GetSite(int name) const;
+    int GetName(const Site &) const;
+
+    Distance Dist(const Site &, const Site &) const;
+    int GetSublat(const Distance &, int direction) const;
+    Vec<int> GetVec(const Distance &) const;
+
+    Vec<real> GetRealVec(const Site &) const;
+    Vec<real> GetRealVec(const Distance &) const;
+
+    //TODO: lattice IO
     void PlotLattice();
-
-    Vec<int> &Shift(Vec<int> &);
-
-    int ToIndex(const Vec<int> &);
-    Vec<int> ToVec(int);
-
-    Site GetSite(int name);
-    int GetName(const Site &);
-    int ToIndex(const Site &);
-    Vec<real> GetRealVec(const Site &);
-
-    Distance Distance(const Site &, const Site &);
-    Vec<int> Coordinate(const class Distance &);
-    Vec<real> GetRealVec(const class Distance &);
-
-  private:
-    void Initialize();
 };
 
 int TestLattice();
