@@ -51,9 +51,9 @@ void Markov::Hop(int &&Steps)
 
 void Markov::CreateWorm()
 {
-    if (Worm->Exist)
-        return;
-    WLine &w = Diag->RandomPickW();
+    if (Worm->Exist)  return;
+    
+    WLine &w= Diag->RandomPickW();
     Vertex &vin = Diag->NeighVer(w, IN);
     Vertex &vout = Diag->NeighVer(w, OUT);
 
