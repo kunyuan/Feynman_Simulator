@@ -9,12 +9,9 @@
 #ifndef __Fermion_Simulator__component__
 #define __Fermion_Simulator__component__
 
-#include <string>
-#include "complex.h"
-#include "utility.h"
-#include "logger.h"
-#include "convention.h"
-#include "lattice.h"
+#include "../utility/complex.h"
+#include "../utility/convention.h"
+#include "../lattice/lattice.h"
 
 class Worm {
   public:

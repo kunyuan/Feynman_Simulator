@@ -28,7 +28,8 @@ void MarkovMonitor::ReWeightEachOrder()
 
 void MarkovMonitor::Measure()
 {
-    //    cEstimator[0].Measure(<#const Complex &#>)
+    //    cEstimator[0].Measure(<#const Complex &#>);
+    //    _Env->cEstimator["1"].Measure(<#const Complex &#>);
 }
 
 void MarkovMonitor::AddStatistics()

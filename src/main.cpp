@@ -10,12 +10,13 @@
 #include <iostream>
 #include "definition.h"
 #include "initialization.h"
-#include "markov.h"
-#include "markov_monitor.h"
+#include "test.h"
+#include "markov/markov.h"
+#include "markov/markov_monitor.h"
 using namespace std;
 
-void MonteCarlo(Jobs &Job);
-void Dyson(Jobs &Job);
+void MonteCarlo(EnvMonteCarlo &);
+void Dyson(EnvDyson &);
 int main(int argc, const char *argv[])
 {
     //initialize LOGGER
@@ -23,28 +24,30 @@ int main(int argc, const char *argv[])
 
     InitGlobalUtility();
     RunTest();
+    //    InitEveryOneNeedsIt();
+    string InputFile = "infile/_in_MC_1";
 
-    Jobs Job;
-    Job.Read();
-
-    InitEveryOneNeedsIt();
-    switch (Job.Type) {
-        case MC:
-            MonteCarlo(Job);
+    switch (GetJobsType(InputFile)) {
+        case MC: {
+            EnvMonteCarlo env;
+            env.BuildFromFile(InputFile);
+            MonteCarlo(env);
+        }
         case DYSON:
-            Dyson(Job);
+            EnvDyson env;
+            env.BuildFromFile(InputFile);
+            Dyson(env);
     }
     return 0;
 }
 
-void MonteCarlo(Jobs &Job)
+void MonteCarlo(EnvMonteCarlo &PaddyField)
 {
-    EnvMonteCarlo PaddyField(Job);
     Markov GrassHopper(&PaddyField);
     MarkovMonitor Scarecrow(&PaddyField);
-    while (PaddyField.Counter < 10000) {
+    while (PaddyField.Counter < 10) {
         PaddyField.Counter++;
-        GrassHopper.Hop(10);
+        //        GrassHopper.Hop(10);
 
         Scarecrow.Measure();
 
@@ -61,7 +64,6 @@ void MonteCarlo(Jobs &Job)
     }
 }
 
-void Dyson(Jobs &Job)
+void Dyson(EnvDyson &env)
 {
-    EnvDyson Env(Job);
 }

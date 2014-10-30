@@ -10,8 +10,6 @@
 #define __Fermion_Simulator__component_bundle__
 
 #include "component.h"
-#include "utility.h"
-#include "definition.h"
 #include <string>
 
 const int MAX_BUNDLE = 16;

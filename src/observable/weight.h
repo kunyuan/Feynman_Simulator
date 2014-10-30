@@ -9,18 +9,15 @@
 #ifndef __Feynman_Simulator__observable__
 #define __Feynman_Simulator__observable__
 
-#include "complex.h"
-#include "convention.h"
 #include "estimate.h"
-#include <iostream>
-#include "array.h"
+#include "../utility/array.h"
+#include "../lattice/lattice.h"
 
 namespace Weight {
 
 class WeightNoMeasure {
   protected:
     WeightNoMeasure(const Lattice &, real Beta, int Order, int SpinVol, std::string);
-    ~WeightNoMeasure();
     std::string _Name;
     real _Beta;
     real _dBeta;
@@ -28,7 +25,7 @@ class WeightNoMeasure {
     int _Order;
     Lattice _Lat;
     unsigned int _Shape[5];
-    Array::array4<Complex> *_Weight;
+    Array::array4<Complex> _Weight;
 
     int SpinIndex(spin SpinIn, spin SpinOut);
     int SpinIndex(spin *TwoSpinIn, spin *TwoSpinOut);
@@ -50,12 +47,11 @@ class WeightNoMeasure {
 class WeightNeedMeasure : public WeightNoMeasure {
   protected:
     real _Norm;
-    Array::array5<Complex> *_WeightAccu;
+    Array::array5<Complex> _WeightAccu;
     EstimatorBundle<Complex> _Average;
 
   public:
     WeightNeedMeasure(const Lattice &, real Beta, int order, int Spine, std::string);
-    ~WeightNeedMeasure();
 
     Estimate<Complex> WeightWithError(int order);
 
@@ -76,6 +72,7 @@ class Sigma : public WeightNeedMeasure {
     Sigma(const Lattice &, real Beta, int order);
     Complex Weight(const Distance &dR, real dtau, spin, spin);
     Complex WeightOfDelta(spin, spin);
+    void MeasureNorm(real weight);
     void Measure(const Distance &, real dtau, spin, spin, int Order, const Complex &);
 };
 

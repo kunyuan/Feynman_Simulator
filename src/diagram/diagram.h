@@ -9,27 +9,26 @@
 #ifndef __Fermion_Simulator__diagram_global__
 #define __Fermion_Simulator__diagram_global__
 
-#include <iostream>
-#include "logger.h"
+#include <iosfwd>
 #include "component_bundle.h"
-#include "rng.h"
-#include "weight.h"
-#include "lattice.h"
+namespace Weight {
+class G;
+class W;
+}
 
 class Diagram {
   public:
     Diagram();
-    
-    void SetGWWeight(Weight::G *, Weight::W *);
+
+    void Build(Lattice *, Weight::G *, Weight::W *);
+
     Weight::G *GWeight;
     Weight::W *WWeight;
-    
-    void SetLat(Lattice *);
     Lattice *Lat;
-    
+
     int Order;
     Complex Phase, Weight;
-    
+
     Bundle<GLine> G;
     Bundle<WLine> W;
     Bundle<Vertex> Ver;
@@ -48,7 +47,6 @@ class Diagram {
     string PrettyString(GLine &);
     string PrettyString(WLine &);
     string PrettyString(Vertex &);
-
 
     //Randomly Pick
     GLine &RandomPickG();

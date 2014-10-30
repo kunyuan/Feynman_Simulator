@@ -6,13 +6,9 @@
 //  Copyright (c) 2014 Kun Chen. All rights reserved.
 //
 
-#include <sstream>
 #include "markov.h"
 #include "markov_monitor.h"
-#include "sput.h"
-#include "utility.h"
-#include "diagram.h"
-#include "logger.h"
+#include "../utility/sput.h"
 using namespace std;
 
 void Test_CreateWorm();
@@ -28,22 +24,19 @@ int TestMarkov()
 
 void Test_CreateWorm()
 {
-    Jobs Job;
-    Job.Read();
-    EnvMonteCarlo Env(Job);
+    EnvMonteCarlo Env;
+    Env.BuildFromFile("../src/environment/_in_MC_test");
     Markov markov(&Env);
     markov.Diag->LoadConfig("../src/diagram/diagram_template.config");
-    int total=0;
-    for(int i=0; i<10; i++)
-    {
+    int total = 0;
+    for (int i = 0; i < 10; i++) {
         markov.CreateWorm();
-        if(markov.Diag->Worm.Exist)
-        {
+        if (markov.Diag->Worm.Exist) {
             total += 1;
             markov.Diag->SaveConfig("diagram_template.config", "a");
         }
         markov.Diag->LoadConfig("../src/diagram/diagram_template.config");
     }
-    cout <<total <<endl;
-    sput_fail_unless(total==10, "The accept ratio of CreateWorm");
+    cout << total << endl;
+    sput_fail_unless(total == 10, "The accept ratio of CreateWorm");
 }

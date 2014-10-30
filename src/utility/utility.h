@@ -10,10 +10,7 @@
 #include <math.h>
 #include <string>
 #include <sstream>
-
-#ifndef real
-#define real double
-#endif
+#include "convention.h"
 
 //---------------------------------------------------------------------------
 
@@ -36,11 +33,11 @@ int iabs(int x); // { return ( (x >= 0.0) ? x : -x); }
 real Zero(real x, real eps);
 
 // float equal
-bool Equal(real x1, real x2, real eps＝eps0); // { return (fabs(x1-x2) < eps); };
+bool Equal(real x1, real x2, real eps = eps0);
 
 // initial an array with some value
 template <typename T>
-static void InitialArry(T *array, int num, T value)
+static void InitialArray(T *array, int num, T value)
 {
     for (int i = 0; i < num; i++) {
         *(array + i) = value;
@@ -61,5 +58,4 @@ void AssignFromTo(T *source, T *target, int size)
     for (int i = 0; i < size; i++)
         source[i] = target[i];
 }
-
 #endif

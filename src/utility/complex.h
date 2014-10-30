@@ -16,7 +16,7 @@
 #define Complex_h
 
 #include <string>
-#include <iostream>
+#include <iosfwd>
 #include <iomanip>
 #include <math.h>
 //#include <limits>
@@ -77,15 +77,15 @@ real mod2(const Complex &c);
 real mod(const Complex &c);
 Complex phase(const Complex &c);
 
-bool Equal(Complex c1, Complex c2, real eps = eps0);
+bool Equal(const Complex &c1, const Complex &c2, real eps = eps0);
 
-bool Equal(Complex c1, real r, real i, real eps = eps0);
+bool Equal(const Complex &c1, real r, real i, real eps = eps0);
 
 bool IsZero(const Complex &c);
 
 Complex exp(const Complex &c);
 
-std::string ToString(Complex c);
+std::string ToString(const Complex &c);
 // More complex functions ...
 
 #endif
