@@ -40,7 +40,7 @@ void Test_CreateWorm()
         if(markov.Diag->Worm.Exist)
         {
             total += 1;
-            markov.Diag->SaveConfig("diagram_template.config", "w");
+            markov.Diag->SaveConfig("diagram_template.config", "a");
         }
         markov.Diag->LoadConfig("../src/diagram/diagram_template.config");
     }
