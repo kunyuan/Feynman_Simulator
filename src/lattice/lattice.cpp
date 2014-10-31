@@ -13,6 +13,11 @@
 #include "../utility/abort.h"
 Lattice::Lattice(const Vec<int> &size)
 {
+    Reset(size);
+}
+
+void Lattice::Reset(const Vec<int> &size)
+{
     Dimension = D;
     Vol = 1;
     Size = size;
@@ -22,6 +27,7 @@ Lattice::Lattice(const Vec<int> &size)
     SublatVol = NSublattice;
     Initialize();
 }
+
 /**
  *  initialize the lattice vectors
  */

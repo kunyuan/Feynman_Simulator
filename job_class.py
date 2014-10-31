@@ -62,14 +62,15 @@ class Job:
     def to_string(self, pid=0):
         '''output the corresponding string of the job class'''
         self.para["pid"] = pid
-        input_str = self.key_to_string("pid")
+        input_str = self.key_to_string("DoesLoad")
+        input_str += self.key_to_string("StartFromBare")
+        input_str += self.key_to_string("pid")
         input_str += self.key_to_string("L")
         input_str += self.key_to_string("Jcp")
         input_str += self.key_to_string("iniBeta")
         input_str += self.key_to_string("dBeta")
         input_str += self.key_to_string("finalBeta")
         input_str += self.key_to_string("Order")
-        input_str += self.key_to_string("DoesLoad")
         return input_str
 
 class JobMonteCarlo(Job):
@@ -98,7 +99,6 @@ class JobMonteCarlo(Job):
         input_str += self.key_to_string("Sweep")
         self.para["Seed"] = -int(random.random()*2**30)
         input_str += self.key_to_string("Seed")
-        input_str += self.key_to_string("ReadFile")
         input_str += self.key_to_string("WormSpaceReweight")
         input_str += self.key_to_string("Reweight")
         return input_str
@@ -181,6 +181,7 @@ if __name__ == "__main__":
         "Sweep" : 10,
         "Toss" : 1000,
         "DoesLoad" : True,
+        "StartFromBare" :False,
         "Type" : 2,
         "Lx" :  4,
         "Ly" :  4,

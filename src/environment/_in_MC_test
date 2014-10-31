@@ -1,4 +1,6 @@
 0    #Type: MC
+false    #DoesLoad
+true     #StartFromBare
 1    #pid
 8,8    #L
 1.0    #Jcp
@@ -6,11 +8,9 @@
 0.0    #dBeta
 1.0    #finalBeta
 4    #Order
-false    #DoesLoad
 10000    #Toss
 5000000    #Sample
 10    #Sweep
 -519180543    #Seed
-1.00_4_coll   #ReadFile
 0.1    #WormSpaceReweight
 1.5,1.0,3.0,4.0    #Reweight
