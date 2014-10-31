@@ -5,6 +5,7 @@
 //---------------------------------------------------------------------------
 
 #include "utility.h"
+#include <fstream>
 
 using namespace std;
 
@@ -33,3 +34,16 @@ bool Equal(real x1, real x2, real eps)
 {
     return (fabs(x1 - x2) < eps);
 };
+
+bool CleanFile(const string &FileName)
+{
+    ofstream ofs(FileName, std::ofstream::out | std::ofstream::trunc);
+    if (ofs.is_open()) {
+        ofs.close();
+        return true;
+    }
+    else {
+        ofs.close();
+        return false;
+    }
+}

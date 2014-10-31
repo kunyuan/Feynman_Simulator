@@ -13,6 +13,7 @@
 #include "lattice/lattice.h"
 #include "observable/weight.h"
 #include "utility/fft.h"
+#include "environment/environment.h"
 using namespace std;
 
 #define TEST(func)                  \
@@ -26,6 +27,7 @@ int RunTest()
     //    TestTimer();  //Test the timer
     //    TestRNG();
     //    TestArray();
+    TEST(TestEnvironment);
     TEST(TestDiagram);
     TEST(TestLattice);
     TEST(TestObservable);

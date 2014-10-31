@@ -56,11 +56,11 @@ void TestObservableComplex()
     EstimatorBundle<Complex> QuanVector;
     QuanVector.AddEstimator(quan1);
     QuanVector.AddEstimator(quan2);
-    QuanVector.SaveState("TestObservable", "w");
+    QuanVector.SaveStatistics("TestObservable", "w");
     EstimatorBundle<Complex> QuanVector2;
     QuanVector2.AddEstimator("1");
     QuanVector2.AddEstimator("2");
-    QuanVector2.LoadState("TestObservable");
+    QuanVector2.LoadStatistics("TestObservable");
     sput_fail_unless(Equal(QuanVector2[1].Estimate().Mean, -ExpectedResult.Mean),
                      "EstimatorVector:check the Mean value.");
     sput_fail_unless(Equal(QuanVector2[1].Estimate().Error, ExpectedResult.Error),
@@ -121,8 +121,8 @@ void TestDiagramObject()
     LOG_INFO(Sig.Weight(s1, s2, 0.0, Beta / 2, DOWN, DOWN));
 
     //Weight class IO operation
-    Sig.SaveState("test_weight", "w");
+    Sig.Save("test_weight", "w");
     Weight::Sigma Sig2(lat, Beta, 4);
-    Sig2.LoadState("test_weight");
+    Sig2.Load("test_weight");
     sput_fail_unless(Equal(Sig.Weight(s1, s2, 0.0, Beta / 2, DOWN, DOWN), Sig.Weight(s1, s2, 0.0, Beta / 2, DOWN, DOWN)), "Weight class IO check.");
 }
