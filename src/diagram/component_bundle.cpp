@@ -33,7 +33,6 @@ T *Bundle<T>::Add()
     if (_available_space >= MAX_BUNDLE)
         ABORT("Too many objects >=" << MAX_BUNDLE);
     T *address = _component_name[_available_space];
-    //    address->Name = _available_space;
     _available_space++;
     return address;
 }
@@ -41,10 +40,10 @@ T *Bundle<T>::Add()
 template <typename T>
 void Bundle<T>::Add(T *Target)
 {
-    _component_name[_available_space] = Target;
-    _available_space++;
     if (_available_space >= MAX_BUNDLE)
         ABORT("Too many objects >=" << MAX_BUNDLE);
+    _component_name[_available_space] = Target;
+    _available_space++;
 }
 
 template <typename T>
