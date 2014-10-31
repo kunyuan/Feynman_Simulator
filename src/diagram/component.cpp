@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Kun Chen. All rights reserved.
 //
 
-#include "component.h"
+#include "diagram.h"
 #include "../utility/abort.h"
 
 #define SEP ' '
@@ -20,49 +20,50 @@ using namespace std;
     }
 
 /*******************   Read/write component to dat file  ********************************/
-istream &Worm::LoadConfig(istream &is)
+bool Diagram::LoadConfig(istream &is, WormClass &worm)
 {
     //format: i/Ira/Masha/dSpin/K
-    READ(is, Ira);
-    READ(is, Masha);
-    READ(is, dSpin);
-    READ(is, K);
-    return is;
+    READ(is, worm.Ira);
+    READ(is, worm.Masha);
+    READ(is, worm.dSpin);
+    READ(is, worm.K);
+    return true;
 }
 
-ostream &Worm::SaveConfig(ostream &os)
+void Diagram::SaveConfig(ostream &os, WormClass &worm)
 {
-    os << Ira << SEP << Masha << SEP << dSpin << SEP << K << endl;
-    return os;
+    os << worm.Ira << SEP << worm.Masha << SEP << worm.dSpin << SEP << worm.K << endl;
 }
 
-istream &GLine::LoadConfig(istream &is)
+bool Diagram::LoadConfig(istream &is, gLine g)
 {
     //format: g/start/end/in_spin/out_spin
-    READ(is, Vertex[IN]);
-    READ(is, Vertex[OUT]);
-    READ(is, K);
-    return is;
+    size_t in, out;
+    READ(is, in);
+    g->nVer[IN] = Ver.ToPointer(in);
+    READ(is, out);
+    g->nVer[OUT] = Ver.ToPointer(out);
+    READ(is, g->K);
+    return true;
 }
 
-ostream &GLine::SaveConfig(ostream &os)
+void Diagram::SaveConfig(ostream &os, gLine g)
 {
-    os << Vertex[IN] << SEP << Vertex[OUT] << SEP << K << endl;
-    return os;
+    os << Ver.ToIndex(g->nVer[IN]) << SEP << Ver.ToIndex(g->nVer[OUT]) << SEP << g->K << endl;
 }
 
 istream &WLine::LoadConfig(istream &is)
 {
     //format: start/end
-    READ(is, Vertex[IN]);
-    READ(is, Vertex[OUT]);
+    READ(is, nVer[IN]);
+    READ(is, nVer[OUT]);
     READ(is, K);
     return is;
 }
 
 ostream &WLine::SaveConfig(ostream &os)
 {
-    os << Vertex[IN] << SEP << Vertex[OUT] << SEP << K << endl;
+    os << nVer[IN] << SEP << nVer[OUT] << SEP << K << endl;
     return os;
 }
 

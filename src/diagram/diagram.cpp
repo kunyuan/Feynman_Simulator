@@ -27,7 +27,7 @@ const string ToString(const spin &s)
 }
 
 Diagram::Diagram()
-    : Order(0), Phase(Complex(1.0, 0.0)), Weight(Complex(1.0, 0.0)), G("GLine"), W("WLine"), Ver("Vertex")
+    : Order(0), Phase(Complex(1.0, 0.0)), Weight(Complex(1.0, 0.0)), G("GLine"), W("WLine"), Ver("nVer")
 {
     Lat = nullptr;
     GWeight = nullptr;
@@ -44,45 +44,45 @@ void Diagram::Build(Lattice *lat, Weight::G *g, Weight::W *w)
 /****************   GLine  *****************************/
 spin Diagram::Spin(GLine &g, const int &dir)
 {
-    return Ver[g.Vertex[dir]].Spin[FlipDir(dir)];
+    return Ver[g.nVer[dir]].Spin[FlipDir(dir)];
 }
 
 int Diagram::Sublattice(GLine &g, const int &dir)
 {
-    return Ver[g.Vertex[dir]].R.Sublattice;
+    return Ver[g.nVer[dir]].R.Sublattice;
 }
 
 string Diagram::PrettyString(GLine &g)
 {
     stringstream os;
-    os << "{V " << g.Vertex[IN] << "}->-" << ToString(Spin(g, IN)) << "---";
+    os << "{V " << g.nVer[IN] << "}->-" << ToString(Spin(g, IN)) << "---";
     os << "[G " << g.Name << " ,K:" << g.K << ",Weight:" << g.Weight << "]";
-    os << "---" << ToString(Spin(g, OUT)) << "->-{V " << g.Vertex[OUT] << "}";
+    os << "---" << ToString(Spin(g, OUT)) << "->-{V " << g.nVer[OUT] << "}";
     return os.str();
 }
 
 /****************   WLine  *****************************/
 spin Diagram::Spin(WLine &w, const int &dir1, const int &dir2)
 {
-    return Ver[w.Vertex[dir1]].Spin[dir2];
+    return Ver[w.nVer[dir1]].Spin[dir2];
 }
 
 int Diagram::Sublattice(WLine &w, const int &dir)
 {
-    return Ver[w.Vertex[dir]].R.Sublattice;
+    return Ver[w.nVer[dir]].R.Sublattice;
 }
 
 string Diagram::PrettyString(WLine &w)
 {
     stringstream os;
-    os << "{V " << w.Vertex[IN] << "| " << ToString(Spin(w, IN, IN)) << "," << ToString(Spin(w, IN, OUT)) << "}~~~";
+    os << "{V " << w.nVer[IN] << "| " << ToString(Spin(w, IN, IN)) << "," << ToString(Spin(w, IN, OUT)) << "}~~~";
     os << "<W " << w.Name << ", K:" << w.K << ",Weight:" << w.Weight << ">";
     os << "~~~"
-       << "{" << ToString(Spin(w, OUT, IN)) << "," << ToString(Spin(w, OUT, OUT)) << "|W " << w.Vertex[OUT] << "}";
+       << "{" << ToString(Spin(w, OUT, IN)) << "," << ToString(Spin(w, OUT, OUT)) << "|W " << w.nVer[OUT] << "}";
     return os.str();
 }
 
-/****************   Vertex  *****************************/
+/****************   nVer  *****************************/
 spin Diagram::Spin(Vertex &v, const int &dir)
 {
     return v.Spin[dir];
@@ -107,12 +107,12 @@ string Diagram::PrettyString(Vertex &v)
 
 Vertex &Diagram::NeighVer(GLine &g, int dir)
 {
-    return Ver[g.Vertex[dir]];
+    return Ver[g.nVer[dir]];
 }
 
 Vertex &Diagram::NeighVer(WLine &w, int dir)
 {
-    return Ver[w.Vertex[dir]];
+    return Ver[w.nVer[dir]];
 }
 
 GLine &Diagram::NeighG(Vertex &v, int dir)

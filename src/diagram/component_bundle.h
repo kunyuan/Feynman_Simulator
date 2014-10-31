@@ -23,6 +23,8 @@ class Bundle {
 
   public:
     Bundle(std::string);
+    T *ToPointer(size_t Index);
+    size_t ToIndex(T *);
     T &Add();      //CAUTION: This function returns the address of the added object
     void Add(T &); //Add a copy of component to bundle
     std::string Name();
@@ -33,7 +35,7 @@ class Bundle {
     //step<0: Recover successive "step" steps of adding T*
     T &operator[](int name);
     int HowMany();
-    T& RandomPick();
+    T &RandomPick();
     bool Exist(int name);
     bool Exist(T &target);
 };

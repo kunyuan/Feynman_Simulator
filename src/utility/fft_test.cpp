@@ -34,8 +34,9 @@ int TestFFT()
 bool CheckArray(Complex *source, Complex *target, int size)
 {
     for (int i = 0; i < size; i++) {
-        if (!Equal(source[i], target[i], 1e-5))
+        if (!Equal(source[i], target[i], 1e-5)) {
             return false;
+        }
     }
     return true;
 }
@@ -79,6 +80,9 @@ void Test_fft3D()
     fft3D((Complex *)in, Nx, Ny, Nz, 1);
     extern Complex out3D[];
     sput_fail_unless(CheckArray((Complex *)in, (Complex *)out3D, Nx * Ny * Nz), "Check fft 3d");
+    fft4D((Complex *)in, 1, Nx, Ny, Nz, -1);
+    fft4D((Complex *)in, 1, Nx, Ny, Nz, 1);
+    sput_fail_unless(CheckArray((Complex *)in, (Complex *)out3D, Nx * Ny * Nz), "Check fft 4d");
 }
 
 Complex out3D[] = {

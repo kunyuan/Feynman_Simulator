@@ -62,21 +62,21 @@ void Test_Diagram_IO()
     stringstream strtemp;
     GLine NewG;
     NewG.Name = 2;
-    NewG.Vertex[IN] = 0;
-    NewG.Vertex[OUT] = 1;
+    NewG.nVer[IN] = 0;
+    NewG.nVer[OUT] = 1;
     NewG.K = 1;
     NewG.Weight = Complex(1.0, 3.0e9);
     NewG.SaveConfig(strtemp);
     NewG.LoadConfig(strtemp);
-    sput_fail_unless(Equal(NewG.Vertex[OUT], 1), "Check GLine reading");
+    sput_fail_unless(Equal(NewG.nVer[OUT], 1), "Check GLine reading");
 
     WLine NewW;
-    NewW.Vertex[IN] = 2;
-    NewW.Vertex[OUT] = 3;
+    NewW.nVer[IN] = 2;
+    NewW.nVer[OUT] = 3;
     NewW.K = 2;
     NewW.SaveConfig(strtemp);
     NewW.LoadConfig(strtemp);
-    sput_fail_unless(Equal(NewW.Vertex[OUT], 3), "Check WLine reading");
+    sput_fail_unless(Equal(NewW.nVer[OUT], 3), "Check WLine reading");
 
     Vertex NewV;
     NewV.Name = 0;
@@ -88,7 +88,7 @@ void Test_Diagram_IO()
     NewV.Spin[OUT] = DOWN;
     NewV.SaveConfig(strtemp);
     NewV.LoadConfig(strtemp);
-    sput_fail_unless(Equal(NewV.Tau, 0.51), "Check Vertex reading");
+    sput_fail_unless(Equal(NewV.Tau, 0.51), "Check nVer reading");
 
     Lattice lat(Vec<int>(1));
     Weight::G G(lat, 1.0, 1);

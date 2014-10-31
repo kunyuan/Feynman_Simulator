@@ -20,6 +20,18 @@ Bundle<T>::Bundle(string bundle_name)
     }
     _available_space = 0;
 }
+template <typename T>
+T *Bundle<T>::ToPointer(size_t index)
+{
+    return _component_bundle + index;
+}
+
+template <typename T>
+size_t Bundle<T>::ToIndex(T *pointer)
+{
+    //TODO: check the existence of pointer in Bundle;
+    return pointer - _component_bundle;
+}
 
 template <typename T>
 string Bundle<T>::Name()
