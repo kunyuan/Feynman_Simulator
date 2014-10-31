@@ -35,15 +35,6 @@ real Zero(real x, real eps);
 // float equal
 bool Equal(real x1, real x2, real eps = eps0);
 
-// initial an array with some value
-template <typename T>
-static void InitialArray(T *array, int num, T value)
-{
-    for (int i = 0; i < num; i++) {
-        *(array + i) = value;
-    }
-}
-
 template <typename T>
 std::string ToString(const T &value)
 {

@@ -121,7 +121,7 @@ string VertexColor(int sublattice)
 
 ostream &Diagram::Component2gv(ostream &os, GLine &r)
 {
-    os << r.Vertex[IN] << "->" << r.Vertex[OUT];
+    os << r.nVer[IN] << "->" << r.nVer[OUT];
     os << " " << EdgeColor(Spin(r, IN), Spin(r, OUT)) << ";";
     os << "  //" << PrettyString(r);
     return os;
@@ -129,7 +129,7 @@ ostream &Diagram::Component2gv(ostream &os, GLine &r)
 
 ostream &Diagram::Component2gv(ostream &os, WLine &r)
 {
-    os << r.Vertex[IN] << "->" << r.Vertex[OUT];
+    os << r.nVer[IN] << "->" << r.nVer[OUT];
     os << " [style=dashed arrowhead=none]; ";
     os << "  //" << PrettyString(r);
     return os;

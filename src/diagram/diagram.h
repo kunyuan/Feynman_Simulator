@@ -33,7 +33,7 @@ class Diagram {
     Bundle<WLine> W;
     Bundle<Vertex> Ver;
 
-    Worm Worm;
+    WormClass Worm;
     bool IsWorm(const Vertex &);
 
     spin Spin(GLine &, const int &);
@@ -43,10 +43,6 @@ class Diagram {
     int Sublattice(GLine &, const int &);
     int Sublattice(WLine &, const int &);
     int Sublattice(Vertex &);
-
-    string PrettyString(GLine &);
-    string PrettyString(WLine &);
-    string PrettyString(Vertex &);
 
     //Randomly Pick
     GLine &RandomPickG();
@@ -69,6 +65,10 @@ class Diagram {
     bool CheckDiagram();
 
     //Diagram IO
+    string PrettyString(GLine &);
+    string PrettyString(WLine &);
+    string PrettyString(Vertex &);
+
     bool LoadConfig(const std::string &FileName);
     void SaveConfig(const std::string &FileName, std::string Mode = "a");
 
@@ -80,7 +80,19 @@ class Diagram {
     std::ostream &Component2gv(std::ostream &, WLine &);
     std::ostream &Component2gv(std::ostream &, Vertex &);
 
+    bool LoadConfig(std::istream &is, WormClass &);
+    bool LoadConfig(std::istream &is, gLine);
+    bool LoadConfig(std::istream &is, wLine);
+    bool LoadConfig(std::istream &is, vertex);
+
+    void SaveConfig(std::ostream &is, WormClass &);
+    void SaveConfig(std::ostream &is, gLine);
+    void SaveConfig(std::ostream &is, wLine);
+    void SaveConfig(std::ostream &is, vertex);
+
     template <typename T>
     std::ostream &Bundle2gv(std::ostream &, Bundle<T> &);
+
+    template <typename T>
 };
 #endif /* defined(__Fermion_Simulator__diagram_global__) */

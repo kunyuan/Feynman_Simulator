@@ -17,7 +17,7 @@ bool Diagram::CheckG()
         for (int dir = 0; i < 2; i++) {
             Vertex &v = NeighVer(G[i], dir);
             if (!Ver.Exist(v))
-                ABORT("Vertex not exists!" + PrettyString(v));
+                ABORT("nVer not exists!" + PrettyString(v));
             if (&G[i] != &NeighG(v, 1 - dir))
                 ABORT("Neigh of G is incorrect!" + PrettyString(G[i]));
         }
@@ -31,7 +31,7 @@ bool Diagram::CheckW()
         for (int dir = 0; i < 2; i++) {
             Vertex &v = NeighVer(W[i], dir);
             if (!Ver.Exist(v))
-                ABORT("Vertex not exists!" + PrettyString(v));
+                ABORT("nVer not exists!" + PrettyString(v));
             if (&W[i] != &NeighW(v))
                 ABORT("Neigh of W is incorrect!" + PrettyString(W[i]));
         }
