@@ -33,6 +33,12 @@ WeightNoMeasure::WeightNoMeasure(const Lattice &lat, real beta, int order, int S
     //use _Shape[SP] to _Shape[TAU] to construct array4
 }
 
+void WeightNoMeasure::Reset(real beta)
+{
+    _Beta = beta;
+    //TODO: please implement how to reset the weight here
+}
+
 int WeightNoMeasure::SpinIndex(spin SpinIn, spin SpinOut)
 {
     return SpinIn * SPIN + SpinOut;
@@ -72,12 +78,12 @@ void WeightNoMeasure::InitializeState()
     }
 }
 
-void WeightNoMeasure::SaveState(const std::string &FileName, std::string Mode)
+void WeightNoMeasure::Save(const std::string &FileName, std::string Mode)
 {
     cnpy::npz_save(cnpy::npz_name(FileName), _Name, _Weight.Data(), _Shape + SP, 4, Mode);
 }
 
-bool WeightNoMeasure::LoadState(const std::string &FileName)
+bool WeightNoMeasure::Load(const std::string &FileName)
 {
     cnpy::NpyArray weight = cnpy::npz_load(cnpy::npz_name(FileName), _Name);
     ON_SCOPE_EXIT([&] {weight.destruct(); });
@@ -176,19 +182,19 @@ void WeightNeedMeasure::SqueezeStatistics(real factor)
 }
 
 /**********************   Weight IO ****************************************/
-void WeightNeedMeasure::SaveState(const std::string &FileName, std::string Mode)
+void WeightNeedMeasure::Save(const std::string &FileName, std::string Mode)
 {
     unsigned int shape[1] = {1};
     cnpy::npz_save(cnpy::npz_name(FileName), _Name + "_Norm", &_Norm, shape, 1, Mode);
     cnpy::npz_save(cnpy::npz_name(FileName), _Name + "_Accu", _WeightAccu(), _Shape, 5, "a");
-    WeightNoMeasure::SaveState(FileName);
-    _Average.SaveState(FileName, "a");
+    WeightNoMeasure::Save(FileName);
+    _Average.SaveStatistics(FileName, "a");
 }
 
-bool WeightNeedMeasure::LoadState(const std::string &FileName)
+bool WeightNeedMeasure::Load(const std::string &FileName)
 {
-    _Average.LoadState(FileName);
-    WeightNoMeasure::LoadState(FileName);
+    _Average.LoadStatistics(FileName);
+    WeightNoMeasure::Load(FileName);
 
     cnpy::npz_t NpzMap = cnpy::npz_load(cnpy::npz_name(FileName));
     ON_SCOPE_EXIT([&] {NpzMap.destruct(); });

@@ -20,7 +20,7 @@ class WeightNoMeasure {
     WeightNoMeasure(const Lattice &, real Beta, int Order, int SpinVol, std::string);
     std::string _Name;
     real _Beta;
-    real _dBeta;
+    real _dBeta; //_Beta/MAX_TAU
     real _dBetaInverse;
     int _Order;
     Lattice _Lat;
@@ -39,9 +39,10 @@ class WeightNoMeasure {
                TAU };
 
   public:
+    void Reset(real Beta);
     void InitializeState();
-    void SaveState(const std::string &FileName, std::string Mode = "a");
-    bool LoadState(const std::string &);
+    void Save(const std::string &FileName, std::string Mode = "a");
+    bool Load(const std::string &);
 };
 
 class WeightNeedMeasure : public WeightNoMeasure {
@@ -62,8 +63,8 @@ class WeightNeedMeasure : public WeightNoMeasure {
     void ClearStatistics();
     void SqueezeStatistics(real factor);
     //    std::string PrettyString();
-    void SaveState(const std::string &FileName, std::string Mode = "a");
-    bool LoadState(const std::string &);
+    void Save(const std::string &FileName, std::string Mode = "a");
+    bool Load(const std::string &);
 };
 
 //TODO: Add fitting function here
