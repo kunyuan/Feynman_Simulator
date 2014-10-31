@@ -34,21 +34,21 @@ void Diagram::SaveConfig(const std::string &FileName, string Mode)
     }
     else {
         os << SEP_LINE << endl;
-        os << COMMENT << Ver.Name() << endl;
+        os << COMMENT << Ver.BundleName() << endl;
         for (int index = 0; index < Ver.HowMany(); index++)
-            Ver[index].SaveConfig(os << 'v' << SEP);
+            SaveConfig(os << 'v' << SEP, Ver(index));
 
-        os << COMMENT << G.Name() << endl;
+        os << COMMENT << G.BundleName() << endl;
         for (int index = 0; index < G.HowMany(); index++)
-            G[index].SaveConfig(os << 'g' << SEP);
+            SaveConfig(os << 'g' << SEP, G(index));
 
-        os << COMMENT << W.Name() << endl;
+        os << COMMENT << W.BundleName() << endl;
         for (int index = 0; index < W.HowMany(); index++)
-            W[index].SaveConfig(os << 'w' << SEP);
+            SaveConfig(os << 'w' << SEP, W(index));
 
         if (Worm.Exist) {
             os << COMMENT << "Worm" << endl;
-            Worm.SaveConfig(os << 'i' << SEP);
+            SaveConfig(os << 'i' << SEP, Worm);
         }
     }
 }
@@ -83,14 +83,14 @@ bool Diagram::LoadConfig(const std::string &FileName)
                 continue;
             }
             else if (head == 'g')
-                G.Add().LoadConfig(ifs);
+                LoadConfig(ifs, G.Add());
             else if (head == 'w')
-                W.Add().LoadConfig(ifs);
+                LoadConfig(ifs, W.Add());
             else if (head == 'v')
-                Ver.Add().LoadConfig(ifs);
+                LoadConfig(ifs, Ver.Add());
             else if (head == 'i')
                 //TODO read from Worm
-                Worm.LoadConfig(ifs);
+                LoadConfig(ifs, Worm);
             else
                 ABORT("Error in reading diagram! Get " + ToString(head) + " as the head!");
             head = COMMENT;
@@ -119,25 +119,25 @@ string VertexColor(int sublattice)
     return "[fillcolor=" + colorstr + "]";
 }
 
-ostream &Diagram::Component2gv(ostream &os, GLine &r)
+ostream &Diagram::Component2gv(ostream &os, gLine r)
 {
-    os << r.nVer[IN] << "->" << r.nVer[OUT];
+    os << r->nVer[IN] << "->" << r->nVer[OUT];
     os << " " << EdgeColor(Spin(r, IN), Spin(r, OUT)) << ";";
     os << "  //" << PrettyString(r);
     return os;
 }
 
-ostream &Diagram::Component2gv(ostream &os, WLine &r)
+ostream &Diagram::Component2gv(ostream &os, wLine r)
 {
-    os << r.nVer[IN] << "->" << r.nVer[OUT];
+    os << r->nVer[IN] << "->" << r->nVer[OUT];
     os << " [style=dashed arrowhead=none]; ";
     os << "  //" << PrettyString(r);
     return os;
 }
 
-ostream &Diagram::Component2gv(ostream &os, Vertex &r)
+ostream &Diagram::Component2gv(ostream &os, vertex r)
 {
-    os << r.Name << " " << VertexColor(r.R.Sublattice) << ";";
+    os << r->Name << " " << VertexColor(r->R.Sublattice) << ";";
     os << "  //" << PrettyString(r);
     return os;
 }
@@ -147,9 +147,9 @@ ostream &Diagram::Component2gv(ostream &os, Vertex &r)
 template <typename T>
 ostream &Diagram::Bundle2gv(ostream &os, Bundle<T> &r)
 {
-    os << "    //" << r.Name() << endl;
+    os << "    //" << r.BundleName() << endl;
     for (int index = 0; index < r.HowMany(); index++) {
-        Component2gv(os << "    ", r[index]);
+        Component2gv(os << "    ", r(index));
     }
     os << endl;
     return os;

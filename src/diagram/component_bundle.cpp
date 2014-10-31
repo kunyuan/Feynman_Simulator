@@ -20,29 +20,17 @@ Bundle<T>::Bundle(string bundle_name)
     }
     _available_space = 0;
 }
-template <typename T>
-T *Bundle<T>::ToPointer(size_t index)
-{
-    return _component_bundle + index;
-}
 
 template <typename T>
-size_t Bundle<T>::ToIndex(T *pointer)
-{
-    //TODO: check the existence of pointer in Bundle;
-    return pointer - _component_bundle;
-}
-
-template <typename T>
-string Bundle<T>::Name()
+string Bundle<T>::BundleName()
 {
     return _bundle_name;
 }
 
 template <typename T>
-T &Bundle<T>::Add()
+T *Bundle<T>::Add()
 {
-    T &address = *_component_name[_available_space];
+    T *address = _component_name[_available_space];
     //    address->Name = _available_space;
     _available_space++;
     if (_available_space >= MAX_BUNDLE)
@@ -51,16 +39,16 @@ T &Bundle<T>::Add()
 }
 
 template <typename T>
-void Bundle<T>::Add(T &Target)
+void Bundle<T>::Add(T *Target)
 {
-    *_component_name[_available_space] = Target;
+    _component_name[_available_space] = Target;
     _available_space++;
     if (_available_space >= MAX_BUNDLE)
         ABORT("Too many objects >=" << MAX_BUNDLE);
 }
 
 template <typename T>
-void Bundle<T>::Remove(int name)
+void Bundle<T>::Remove(name name)
 {
     if (DEBUGMODE && _available_space == 0)
         ABORT("Nothing to delete!");
@@ -78,7 +66,7 @@ void Bundle<T>::Remove(int name)
 }
 
 template <typename T>
-void Bundle<T>::Remove(T &target)
+void Bundle<T>::Remove(T *target)
 {
     if (DEBUGMODE) {
         if (!Exist(target))
@@ -87,26 +75,36 @@ void Bundle<T>::Remove(T &target)
             ABORT("Nothing to delete!");
     }
     _available_space--;
-    int name = target.Name;
+    int name = target->Name;
     T *last = _component_name[_available_space];
 
     //switch name
-    target.Name = _available_space;
+    target->Name = _available_space;
     last->Name = name;
 
     _component_name[name] = last;
-    _component_name[_available_space] = &target;
+    _component_name[_available_space] = target;
     return;
 }
 
 template <typename T>
-T &Bundle<T>::operator[](int index)
+T &Bundle<T>::operator[](name name)
 {
-    //    if (DEBUGMODE && index >= _available_space) {
-    //        Log.error() << index << " exceeds the storage!" << endl;
-    //        exit(0);
-    //    }
-    return *_component_name[index];
+    if (DEBUGMODE && name >= _available_space) {
+        LOG_ERROR(name << " exceeds the storage!");
+        exit(0);
+    }
+    return *_component_name[name];
+}
+
+template <typename T>
+T *Bundle<T>::operator()(name name)
+{
+    if (DEBUGMODE && name >= _available_space) {
+        LOG_ERROR(name << " exceeds the storage!");
+        exit(0);
+    }
+    return _component_name[name];
 }
 
 template <typename T>
@@ -122,15 +120,9 @@ void Bundle<T>::Recover(int step)
 }
 
 template <typename T>
-bool Bundle<T>::Exist(int name)
+bool Bundle<T>::Exist(T *target)
 {
-    return name < _available_space;
-}
-
-template <typename T>
-bool Bundle<T>::Exist(T &target)
-{
-    if (target.Name < _available_space && &target >= _component_bundle && &target < _component_bundle + MAX_BUNDLE)
+    if (target->Name < _available_space && target >= _component_bundle && target < _component_bundle + MAX_BUNDLE)
         return true;
     else
         return false;

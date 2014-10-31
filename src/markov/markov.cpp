@@ -12,7 +12,7 @@ const int MAX_K = 10000;
 
 int RandomPickK();
 int RandomPickDeltaSpin();
-bool CanNotMoveWorm(int dspin, const Vertex &v);
+bool CanNotMoveWorm(int dspin, vertex v);
 
 Markov::Markov(EnvMonteCarlo *Env)
 {
@@ -49,23 +49,23 @@ void Markov::Hop(int sweep)
 
 void Markov::CreateWorm()
 {
-    if (Worm->Exist)
-        return;
-    WLine &w = Diag->RandomPickW();
-    Vertex &vin = Diag->NeighVer(w, IN);
-    Vertex &vout = Diag->NeighVer(w, OUT);
+    if (Worm->Exist)  return;
+    
+    wLine w= Diag->RandomPickW();
+    vertex vin = Diag->NeighVer(w, IN);
+    vertex vout = Diag->NeighVer(w, OUT);
 
     int k = RandomPickK();
     int dspin = RandomPickDeltaSpin();
     if (CanNotMoveWorm(dspin, vin) && CanNotMoveWorm(-dspin, vout))
         return;
 
-    Complex wWeight = W->Weight(Lat->Dist(vin.R, vout.R), vout.Tau - vin.Tau, vin.Spin, vout.Spin, true);
-    Complex weightRatio = wWeight / w.Weight;
+    Complex wWeight = W->Weight(vin->R, vout->R, vout->Tau, vin->Tau, vin->Spin, vout->Spin, true);
+    Complex weightRatio = wWeight / w->Weight;
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    real wormWeight = WormWeight->Weight(Lat->Dist(vin.R, vout.R), vout.Tau - vin.Tau);
+    real wormWeight = WormWeight->Weight(vin->R, vout->R, vout->Tau, vin->Tau);
 
     prob *= ProbofCall[1] / ProbofCall[0] * wormWeight * Diag->Order * 2.0;
 
@@ -74,28 +74,28 @@ void Markov::CreateWorm()
         Diag->Weight *= weightRatio;
 
         Worm->Exist = true;
-        Worm->Ira = vin.Name;
-        Worm->Masha = vout.Name;
+        Worm->Ira = vin;
+        Worm->Masha = vout;
         Worm->dSpin = dspin;
         Worm->K = k;
 
-        w.IsWorm = true;
-        w.K -= k;
-        w.Weight = wWeight;
+        w->IsWorm = true;
+        w->K -= k;
+        w->Weight = wWeight;
     }
 }
 
 void Markov::DeleteWorm()
 {
-    if (!Worm->Exist)
-        return;
+    if (!Worm->Exist)  return;
+    if (Diag->NeighW(Worm->Ira)!=Diag->NeighW(Worm->Masha)) return;
 }
 
-bool CanNotMoveWorm(int dspin, const Vertex &v)
+bool CanNotMoveWorm(int dspin, vertex v)
 {
-    if (dspin == 1 && v.Spin[IN] == DOWN && v.Spin[OUT] == UP)
+    if (dspin == 1 && v->Spin[IN] == DOWN && v->Spin[OUT] == UP)
         return true;
-    if (dspin == -1 && v.Spin[IN] == UP && v.Spin[OUT] == DOWN)
+    if (dspin == -1 && v->Spin[IN] == UP && v->Spin[OUT] == DOWN)
         return true;
     return false;
 }
