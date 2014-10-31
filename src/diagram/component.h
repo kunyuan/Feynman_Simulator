@@ -13,31 +13,23 @@
 #include "../utility/convention.h"
 #include "../lattice/lattice.h"
 
-class Worm {
-  public:
-    bool Exist;
-    int Ira, Masha; //extra line: Ira---"k,dSpin"--->Masha
-    int K;
-    int dSpin;
-    std::istream &LoadConfig(std::istream &os);
-    std::ostream &SaveConfig(std::ostream &is);
+class Vertex;
+class WLine;
+class GLine;
+class WormClass;
 
-    Worm()
-        : Exist(false), Ira(0), Masha(0), K(0), dSpin(0)
-    {
-    }
-    Worm(int ira, int masha, int dk, int s)
-        : Exist(true), Ira(ira), Masha(masha), K(dk), dSpin(s)
-    {
-    }
-};
+typedef Vertex* vertex;
+typedef GLine* gLine;
+typedef WLine* wLine;
 
 class GLine {
     friend std::ostream &operator<<(std::ostream &os, GLine &r);
+    friend bool operator==(const GLine&, const GLine&);
+    friend bool operator!=(const GLine&, const GLine&);
 
   public:
     int Name;
-    int Vertex[2];
+    Vertex * nVer[2];
     int K;
     Complex Weight;
     std::istream &LoadConfig(std::istream &os);
@@ -46,11 +38,13 @@ class GLine {
 
 class WLine {
     friend std::ostream &operator<<(std::ostream &os, WLine &r);
+    friend bool operator==(const WLine&, const WLine&);
+    friend bool operator!=(const WLine&, const WLine&);
 
   public:
     int Name;
     bool IsWorm;
-    int Vertex[2];
+    Vertex* nVer[2];
     int K;
     Complex Weight;
     std::istream &LoadConfig(std::istream &os);
@@ -59,16 +53,37 @@ class WLine {
 
 class Vertex {
     friend std::ostream &operator<<(std::ostream &os, Vertex &r);
+    friend bool operator==(const Vertex&, const Vertex&);
+    friend bool operator!=(const Vertex&, const Vertex&);
 
   public:
     int Name;
-    int G[2];
-    int W;
+    GLine* nG[2];
+    WLine* nW;
     spin Spin[2]; // IN/OUT spins
     Site R;
     double Tau;
     std::istream &LoadConfig(std::istream &os);
     std::ostream &SaveConfig(std::ostream &is);
+};
+
+class WormClass {
+  public:
+    bool Exist;
+    Vertex *Ira, *Masha; //extra line: Ira---"k,dSpin"--->Masha
+    int K;
+    int dSpin;
+    std::istream &LoadConfig(std::istream &os);
+    std::ostream &SaveConfig(std::ostream &is);
+
+    WormClass()
+        : Exist(false), Ira(nullptr), Masha(nullptr), K(0), dSpin(0)
+    {
+    }
+    WormClass(Vertex* ira, Vertex* masha, int dk, int s)
+        : Exist(true), Ira(ira), Masha(masha), K(dk), dSpin(s)
+    {
+    }
 };
 
 #endif /* defined(__Fermion_Simulator__component__) */

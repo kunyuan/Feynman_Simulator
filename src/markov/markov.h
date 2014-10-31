@@ -16,7 +16,7 @@ class Markov {
     real Beta;
     Lattice *Lat;
     real *OrderWeight;
-    Worm *Worm;
+    WormClass *Worm;
     Weight::Sigma *Sigma;
     Weight::Polar *Polar;
     Weight::G *G;

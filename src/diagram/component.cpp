@@ -23,7 +23,7 @@ using namespace std;
 istream &Worm::LoadConfig(istream &is)
 {
     //format: i/Ira/Masha/dSpin/K
-    READ(is, Ira);
+    READ(is, Ira->Name);
     READ(is, Masha);
     READ(is, dSpin);
     READ(is, K);
@@ -39,15 +39,18 @@ ostream &Worm::SaveConfig(ostream &os)
 istream &GLine::LoadConfig(istream &is)
 {
     //format: g/start/end/in_spin/out_spin
-    READ(is, Vertex[IN]);
-    READ(is, Vertex[OUT]);
+    size_t vertex_in,vertex_out;
+    READ(is, vertex_in);
+    nVer[IN]=(Vertex *)vertex_in;
+    READ(is, vertex_out);
+    nVer[OUT]=(Vertex *)vertex_out;
     READ(is, K);
     return is;
 }
 
 ostream &GLine::SaveConfig(ostream &os)
 {
-    os << Vertex[IN] << SEP << Vertex[OUT] << SEP << K << endl;
+    os << nVer[IN] << SEP << nVer[OUT] << SEP << K << endl;
     return os;
 }
 
