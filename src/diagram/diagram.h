@@ -65,9 +65,9 @@ class Diagram {
     bool CheckDiagram();
 
     //Diagram IO
-    string PrettyString(gLine);
-    string PrettyString(wLine);
-    string PrettyString(vertex);
+    std::string PrettyString(gLine);
+    std::string PrettyString(wLine);
+    std::string PrettyString(vertex);
 
     bool LoadConfig(const std::string &FileName);
     void SaveConfig(const std::string &FileName, std::string Mode = "a");

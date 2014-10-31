@@ -49,9 +49,10 @@ void Markov::Hop(int sweep)
 
 void Markov::CreateWorm()
 {
-    if (Worm->Exist)  return;
-    
-    wLine w= Diag->RandomPickW();
+    if (Worm->Exist)
+        return;
+
+    wLine w = Diag->RandomPickW();
     vertex vin = Diag->NeighVer(w, IN);
     vertex vout = Diag->NeighVer(w, OUT);
 
@@ -60,12 +61,12 @@ void Markov::CreateWorm()
     if (CanNotMoveWorm(dspin, vin) && CanNotMoveWorm(-dspin, vout))
         return;
 
-    Complex wWeight = W->Weight(vin->R, vout->R, vout->Tau, vin->Tau, vin->Spin, vout->Spin, true);
+    Complex wWeight = W->Weight(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin, vout->Spin, true);
     Complex weightRatio = wWeight / w->Weight;
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    real wormWeight = WormWeight->Weight(vin->R, vout->R, vout->Tau, vin->Tau);
+    real wormWeight = WormWeight->Weight(vin->R, vout->R, vin->Tau, vout->Tau);
 
     prob *= ProbofCall[1] / ProbofCall[0] * wormWeight * Diag->Order * 2.0;
 
@@ -87,8 +88,10 @@ void Markov::CreateWorm()
 
 void Markov::DeleteWorm()
 {
-    if (!Worm->Exist)  return;
-    if (Diag->NeighW(Worm->Ira)!=Diag->NeighW(Worm->Masha)) return;
+    if (!Worm->Exist)
+        return;
+    if (Diag->NeighW(Worm->Ira) != Diag->NeighW(Worm->Masha))
+        return;
 }
 
 bool CanNotMoveWorm(int dspin, vertex v)
