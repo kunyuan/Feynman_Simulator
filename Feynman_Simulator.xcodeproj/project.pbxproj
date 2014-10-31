@@ -15,7 +15,7 @@
 		841D50E919E85C8600FDB7FF /* diagram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 841D50E419E85C8600FDB7FF /* diagram.cpp */; };
 		841D50EB19E85C8600FDB7FF /* diagram_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 841D50E819E85C8600FDB7FF /* diagram_test.cpp */; };
 		841D50EF19E885D700FDB7FF /* diagram_check.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 841D50EE19E885D700FDB7FF /* diagram_check.cpp */; };
-		841D50F419E9EE8C00FDB7FF /* component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 841D50F319E9EE8C00FDB7FF /* component.cpp */; };
+		841D50F419E9EE8C00FDB7FF /* component_IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 841D50F319E9EE8C00FDB7FF /* component_IO.cpp */; };
 		841D511319EB6DD900FDB7FF /* logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 841D511119EB6DD900FDB7FF /* logger.cpp */; };
 		841D905819DF833E0066116A /* initialization.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 841D905619DF833E0066116A /* initialization.cpp */; };
 		841D905C19E054900066116A /* test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 841D905B19E054900066116A /* test.cpp */; };
@@ -76,7 +76,7 @@
 		841D50E719E85C8600FDB7FF /* diagram_template.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = diagram_template.config; path = diagram/diagram_template.config; sourceTree = "<group>"; };
 		841D50E819E85C8600FDB7FF /* diagram_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = diagram_test.cpp; path = diagram/diagram_test.cpp; sourceTree = "<group>"; };
 		841D50EE19E885D700FDB7FF /* diagram_check.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = diagram_check.cpp; path = diagram/diagram_check.cpp; sourceTree = "<group>"; };
-		841D50F319E9EE8C00FDB7FF /* component.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = component.cpp; path = diagram/component.cpp; sourceTree = "<group>"; };
+		841D50F319E9EE8C00FDB7FF /* component_IO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = component_IO.cpp; path = diagram/component_IO.cpp; sourceTree = "<group>"; };
 		841D50F619EA176800FDB7FF /* abort.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = abort.h; sourceTree = "<group>"; };
 		841D511119EB6DD900FDB7FF /* logger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = logger.cpp; sourceTree = "<group>"; };
 		841D511219EB6DD900FDB7FF /* logger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = logger.h; sourceTree = "<group>"; };
@@ -199,9 +199,9 @@
 				841D50E519E85C8600FDB7FF /* diagram.h */,
 				841D50E419E85C8600FDB7FF /* diagram.cpp */,
 				84B8FC3319EC7469003D6DF6 /* diagram_IO.cpp */,
+				841D50F319E9EE8C00FDB7FF /* component_IO.cpp */,
 				841D50EE19E885D700FDB7FF /* diagram_check.cpp */,
 				8426668919E4469B00CF7B59 /* component.h */,
-				841D50F319E9EE8C00FDB7FF /* component.cpp */,
 				8426668C19E4482100CF7B59 /* component_bundle.h */,
 				8426668B19E4482100CF7B59 /* component_bundle.cpp */,
 				841D50E719E85C8600FDB7FF /* diagram_template.config */,
@@ -383,7 +383,7 @@
 				8499DAD819F9ED2A00AABA1E /* fft_test.cpp in Sources */,
 				84D7EFC319F552F5006B1CA5 /* env_test.cpp in Sources */,
 				8426668F19E475DF00CF7B59 /* definition.cpp in Sources */,
-				841D50F419E9EE8C00FDB7FF /* component.cpp in Sources */,
+				841D50F419E9EE8C00FDB7FF /* component_IO.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

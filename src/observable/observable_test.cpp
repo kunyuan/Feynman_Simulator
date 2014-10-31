@@ -95,13 +95,13 @@ void TestDiagramObject()
     Lattice lat(Vec<int>(1));
     real Beta = 5.0;
     Weight::Sigma Sig(lat, Beta, 4);
-    Distance d(0, 0);
+    Site s1, s2;
     for (int i = 0; i < 1000000; i++) {
-        Sig.Measure(d, rng.urn() * Beta, DOWN, DOWN, 1, Complex(rng.urn(), rng.urn()));
+        Sig.Measure(s1, s2, 0.0, rng.urn() * Beta, DOWN, DOWN, 1, Complex(rng.urn(), rng.urn()));
         if (i % 4 == 0)
-            Sig.Measure(d, rng.urn() * Beta, DOWN, DOWN, 2, Complex(rng.urn(), rng.urn()));
+            Sig.Measure(s1, s2, 0.0, rng.urn() * Beta, DOWN, DOWN, 2, Complex(rng.urn(), rng.urn()));
         if (i % 9 == 0) {
-            Sig.Measure(d, rng.urn() * Beta, DOWN, DOWN, 3, Complex(rng.urn(), rng.urn()));
+            Sig.Measure(s1, s2, 0.0, rng.urn() * Beta, DOWN, DOWN, 3, Complex(rng.urn(), rng.urn()));
             Sig.AddStatistics();
         }
     }
@@ -118,11 +118,11 @@ void TestDiagramObject()
     LOG_INFO("Accepted Order=" << order);
     sput_fail_unless(order == 2, "Accepted order check.");
     Sig.UpdateWeight(2);
-    LOG_INFO(Sig.Weight(d, Beta / 2, DOWN, DOWN));
+    LOG_INFO(Sig.Weight(s1, s2, 0.0, Beta / 2, DOWN, DOWN));
 
     //Weight class IO operation
     Sig.SaveState("test_weight", "w");
     Weight::Sigma Sig2(lat, Beta, 4);
     Sig2.LoadState("test_weight");
-    sput_fail_unless(Equal(Sig.Weight(d, Beta / 2, DOWN, DOWN), Sig.Weight(d, Beta / 2, DOWN, DOWN)), "Weight class IO check.");
+    sput_fail_unless(Equal(Sig.Weight(s1, s2, 0.0, Beta / 2, DOWN, DOWN), Sig.Weight(s1, s2, 0.0, Beta / 2, DOWN, DOWN)), "Weight class IO check.");
 }

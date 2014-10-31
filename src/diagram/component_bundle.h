@@ -22,22 +22,20 @@ class Bundle {
     int _available_space;
 
   public:
+    std::string BundleName();
     Bundle(std::string);
-    T *ToPointer(size_t Index);
-    size_t ToIndex(T *);
-    T &Add();      //CAUTION: This function returns the address of the added object
-    void Add(T &); //Add a copy of component to bundle
-    std::string Name();
-    void Remove(int name);
-    void Remove(T &target);
+    T *Add();      //CAUTION: This function returns the address of the added object
+    void Add(T *); //Add a copy of component to bundle
+    void Remove(T *target);
+    void Remove(int);
     void Recover(int step);
     //step>0: Recover successive "step" steps of removing T*
     //step<0: Recover successive "step" steps of adding T*
-    T &operator[](int name);
+    T &operator[](name);
+    T *operator()(name);
     int HowMany();
     T &RandomPick();
-    bool Exist(int name);
-    bool Exist(T &target);
+    bool Exist(T *target);
 };
 
 int TestDiagram();

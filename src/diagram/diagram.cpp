@@ -10,9 +10,9 @@
 #include "../observable/weight.h"
 #include "../utility/rng.h"
 using namespace std;
-bool Diagram::IsWorm(const Vertex &v)
+bool Diagram::IsWorm(vertex v)
 {
-    if (Worm.Ira == v.Name || Worm.Masha == v.Name)
+    if (Worm.Ira == v || Worm.Masha == v)
         return true;
     else
         return false;
@@ -42,102 +42,102 @@ void Diagram::Build(Lattice *lat, Weight::G *g, Weight::W *w)
 }
 
 /****************   GLine  *****************************/
-spin Diagram::Spin(GLine &g, const int &dir)
+spin Diagram::Spin(gLine g, int dir)
 {
-    return Ver[g.nVer[dir]].Spin[FlipDir(dir)];
+    return g->nVer[dir]->Spin[FlipDir(dir)];
 }
 
-int Diagram::Sublattice(GLine &g, const int &dir)
+int Diagram::Sublattice(gLine g, int dir)
 {
-    return Ver[g.nVer[dir]].R.Sublattice;
+    return g->nVer[dir]->R.Sublattice;
 }
 
-string Diagram::PrettyString(GLine &g)
+string Diagram::PrettyString(gLine g)
 {
     stringstream os;
-    os << "{V " << g.nVer[IN] << "}->-" << ToString(Spin(g, IN)) << "---";
-    os << "[G " << g.Name << " ,K:" << g.K << ",Weight:" << g.Weight << "]";
-    os << "---" << ToString(Spin(g, OUT)) << "->-{V " << g.nVer[OUT] << "}";
+    os << "{V " << g->nVer[IN] << "}->-" << ToString(Spin(g, IN)) << "---";
+    os << "[G " << g->Name << " ,K:" << g->K << ",Weight:" << g->Weight << "]";
+    os << "---" << ToString(Spin(g, OUT)) << "->-{V " << g->nVer[OUT] << "}";
     return os.str();
 }
 
 /****************   WLine  *****************************/
-spin Diagram::Spin(WLine &w, const int &dir1, const int &dir2)
+spin Diagram::Spin(wLine w, int dir1, int dir2)
 {
-    return Ver[w.nVer[dir1]].Spin[dir2];
+    return w->nVer[dir1]->Spin[dir2];
 }
 
-int Diagram::Sublattice(WLine &w, const int &dir)
+int Diagram::Sublattice(wLine w, int dir)
 {
-    return Ver[w.nVer[dir]].R.Sublattice;
+    return w->nVer[dir]->R.Sublattice;
 }
 
-string Diagram::PrettyString(WLine &w)
+string Diagram::PrettyString(wLine w)
 {
     stringstream os;
-    os << "{V " << w.nVer[IN] << "| " << ToString(Spin(w, IN, IN)) << "," << ToString(Spin(w, IN, OUT)) << "}~~~";
-    os << "<W " << w.Name << ", K:" << w.K << ",Weight:" << w.Weight << ">";
+    os << "{V " << w->nVer[IN] << "| " << ToString(Spin(w, IN, IN)) << "," << ToString(Spin(w, IN, OUT)) << "}~~~";
+    os << "<W " << w->Name << ", K:" << w->K << ",Weight:" << w->Weight << ">";
     os << "~~~"
-       << "{" << ToString(Spin(w, OUT, IN)) << "," << ToString(Spin(w, OUT, OUT)) << "|W " << w.nVer[OUT] << "}";
+       << "{" << ToString(Spin(w, OUT, IN)) << "," << ToString(Spin(w, OUT, OUT)) << "|W " << w->nVer[OUT] << "}";
     return os.str();
 }
 
-/****************   nVer  *****************************/
-spin Diagram::Spin(Vertex &v, const int &dir)
+/****************   Vertex  *****************************/
+spin Diagram::Spin(vertex v, int dir)
 {
-    return v.Spin[dir];
+    return v->Spin[dir];
 }
 
-int Diagram::Sublattice(Vertex &v)
+int Diagram::Sublattice(vertex v)
 {
-    return v.R.Sublattice;
+    return v->R.Sublattice;
 }
 
-string Diagram::PrettyString(Vertex &v)
+string Diagram::PrettyString(vertex v)
 {
     stringstream os;
-    os << "-[G " << v.G[IN] << "]-" << ToString(v.Spin[IN]) << "->--";
-    os << "{V " << v.Name << ",r:" << v.R.Coordinate.PrettyString() << ",tau:" << v.Tau << "}";
-    os << "-->-" << ToString(v.Spin[OUT]) << "-[G " << v.G[OUT] << "]-";
-    os << "  /~~~<W " << v.W << ">";
+    os << "-[G " << v->nG[IN] << "]-" << ToString(v->Spin[IN]) << "->--";
+    os << "{V " << v->Name << ",r:" << v->R.Coordinate.PrettyString() << ",tau:" << v->Tau << "}";
+    os << "-->-" << ToString(v->Spin[OUT]) << "-[G " << v->nG[OUT] << "]-";
+    os << "  /~~~<W " << v->nW << ">";
     return os.str();
 }
 
 /****************   Diagram  *****************************/
 
-Vertex &Diagram::NeighVer(GLine &g, int dir)
+vertex Diagram::NeighVer(gLine g, int dir)
 {
-    return Ver[g.nVer[dir]];
+    return g->nVer[dir];
 }
 
-Vertex &Diagram::NeighVer(WLine &w, int dir)
+vertex Diagram::NeighVer(wLine w, int dir)
 {
-    return Ver[w.nVer[dir]];
+    return w->nVer[dir];
 }
 
-GLine &Diagram::NeighG(Vertex &v, int dir)
+gLine Diagram::NeighG(vertex v, int dir)
 {
-    return G[v.G[dir]];
+    return v->nG[dir];
 }
 
-WLine &Diagram::NeighW(Vertex &v)
+wLine Diagram::NeighW(vertex v)
 {
-    return W[v.W];
+    return v->nW;
 }
 
-GLine &Diagram::RandomPickG()
+gLine Diagram::RandomPickG()
 {
-    return G[RNG.irn(0, G.HowMany() - 1)];
+    return &G[RNG.irn(0, G.HowMany() - 1)];
 }
 
-WLine &Diagram::RandomPickW()
+wLine Diagram::RandomPickW()
 {
-    return W[RNG.irn(0, W.HowMany() - 1)];
+    return &W[RNG.irn(0, W.HowMany() - 1)];
 }
 
-Vertex &Diagram::RandomPickVer()
+vertex Diagram::RandomPickVer()
 {
-    return Ver[RNG.irn(0, Ver.HowMany() - 1)];
+    return &Ver[RNG.irn(0, Ver.HowMany() - 1)];
 }
 
 void Diagram::ClearDiagram()
@@ -161,29 +161,29 @@ bool Diagram::FixDiagram()
 
     Weight = Complex(1.0, 0.0);
     for (int index = 0; index < G.HowMany(); index++) {
-        GLine &g = G[index];
-        Vertex &vin = NeighVer(g, IN);
-        Vertex &vout = NeighVer(g, OUT);
+        gLine g = G(index);
+        vertex vin = NeighVer(g, IN);
+        vertex vout = NeighVer(g, OUT);
 
-        vin.G[OUT] = index;
-        vout.G[IN] = index;
+        vin->nG[OUT] = g;
+        vout->nG[IN] = g;
 
-        g.Weight = GWeight->Weight(Lat->Dist(vin.R, vout.R), vout.Tau - vin.Tau, vin.Spin[OUT], vout.Spin[IN]);
-        Weight *= g.Weight;
+        g->Weight = GWeight->Weight(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin[OUT], vout->Spin[IN]);
+        Weight *= g->Weight;
     }
 
     for (int index = 0; index < W.HowMany(); index++) {
-        WLine &w = W[index];
-        Vertex &vin = NeighVer(w, IN);
-        Vertex &vout = NeighVer(w, OUT);
+        wLine w = W(index);
+        vertex vin = NeighVer(w, IN);
+        vertex vout = NeighVer(w, OUT);
 
-        w.IsWorm = false;
+        w->IsWorm = false;
 
-        vin.W = index;
-        vout.W = index;
+        vin->nW = w;
+        vout->nW = w;
 
-        w.Weight = WWeight->Weight(Lat->Dist(vin.R, vout.R), vout.Tau - vin.Tau, vin.Spin, vout.Spin, w.IsWorm);
-        Weight *= w.Weight;
+        w->Weight = WWeight->Weight(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin, vout->Spin, w->IsWorm);
+        Weight *= w->Weight;
     }
 
     for (int index = 0; index < Ver.HowMany(); index++) {

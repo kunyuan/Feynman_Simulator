@@ -16,53 +16,67 @@
 class GLine;
 class WLine;
 class Vertex;
+class WormClass;
 
 typedef Vertex *vertex;
-typedef WLine *wLine;
 typedef GLine *gLine;
-
-class WormClass {
-  public:
-    bool Exist;
-    int Ira, Masha; //extra line: Ira---"k,dSpin"--->Masha
-    int K;
-    int dSpin;
-
-    WormClass()
-        : Exist(false), Ira(0), Masha(0), K(0), dSpin(0)
-    {
-    }
-    WormClass(int ira, int masha, int dk, int s)
-        : Exist(true), Ira(ira), Masha(masha), K(dk), dSpin(s)
-    {
-    }
-};
+typedef WLine *wLine;
+typedef int name;
 
 class GLine {
+    friend std::ostream &operator<<(std::ostream &os, GLine &r);
+    friend bool operator==(const GLine &, const GLine &);
+    friend bool operator!=(const GLine &, const GLine &);
+
   public:
-    int Name;
-    Vertex *nVer[2];
+    name Name;
+    vertex nVer[2];
     int K;
     Complex Weight;
 };
 
 class WLine {
+    friend std::ostream &operator<<(std::ostream &os, WLine &r);
+    friend bool operator==(const WLine &, const WLine &);
+    friend bool operator!=(const WLine &, const WLine &);
+
   public:
-    int Name;
+    name Name;
     bool IsWorm;
-    Vertex *nVer[2];
+    vertex nVer[2];
     int K;
     Complex Weight;
 };
 
 class Vertex {
+    friend std::ostream &operator<<(std::ostream &os, Vertex &r);
+    friend bool operator==(const Vertex &, const Vertex &);
+    friend bool operator!=(const Vertex &, const Vertex &);
+
   public:
-    int Name;
-    GLine *G[2];
-    WLine *nW;
+    name Name;
+    gLine nG[2];
+    wLine nW;
     spin Spin[2]; // IN/OUT spins
     Site R;
     double Tau;
+};
+
+class WormClass {
+  public:
+    bool Exist;
+    vertex Ira, Masha; //extra line: Ira---"k,dSpin"--->Masha
+    int K;
+    int dSpin;
+
+    WormClass()
+        : Exist(false), Ira(nullptr), Masha(nullptr), K(0), dSpin(0)
+    {
+    }
+    WormClass(vertex ira, vertex masha, int dk, int s)
+        : Exist(true), Ira(ira), Masha(masha), K(dk), dSpin(s)
+    {
+    }
 };
 
 #endif /* defined(__Fermion_Simulator__component__) */
