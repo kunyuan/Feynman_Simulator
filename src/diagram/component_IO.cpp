@@ -41,11 +41,11 @@ void Diagram::SaveConfig(ostream &os, WormClass &worm)
 bool Diagram::LoadConfig(istream &is, gLine g)
 {
     //format: g/start/end/K
-    name in, out;
-    READ(is, in);
-    g->nVer[IN] = Ver(in);
-    READ(is, out);
-    g->nVer[OUT] = Ver(out);
+    name g_in, g_out;
+    READ(is, g_in);
+    g->nVer[IN] = Ver(g_in);
+    READ(is, g_out);
+    g->nVer[OUT] = Ver(g_out);
     READ(is, g->K);
     return true;
 }
@@ -58,11 +58,11 @@ void Diagram::SaveConfig(ostream &os, gLine g)
 bool Diagram::LoadConfig(istream &is, wLine w)
 {
     //format: w/start/end
-    name in, out;
-    READ(is, in);
-    w->nVer[IN] = Ver(in);
-    READ(is, out);
-    w->nVer[OUT] = Ver(out);
+    name w_in, w_out;
+    READ(is, w_in);
+    w->nVer[IN] = Ver(w_in);
+    READ(is, w_out);
+    w->nVer[OUT] = Ver(w_out);
     READ(is, w->K);
     return true;
 }

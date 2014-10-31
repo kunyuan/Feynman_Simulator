@@ -30,11 +30,11 @@ string Bundle<T>::BundleName()
 template <typename T>
 T *Bundle<T>::Add()
 {
+    if (_available_space >= MAX_BUNDLE)
+        ABORT("Too many objects >=" << MAX_BUNDLE);
     T *address = _component_name[_available_space];
     //    address->Name = _available_space;
     _available_space++;
-    if (_available_space >= MAX_BUNDLE)
-        ABORT("Too many objects >=" << MAX_BUNDLE);
     return address;
 }
 
@@ -90,20 +90,16 @@ void Bundle<T>::Remove(T *target)
 template <typename T>
 T &Bundle<T>::operator[](name name)
 {
-    if (DEBUGMODE && name >= _available_space) {
-        LOG_ERROR(name << " exceeds the storage!");
-        exit(0);
-    }
+    if (DEBUGMODE && name >= _available_space)
+        ABORT(name << " exceeds the storage!");
     return *_component_name[name];
 }
 
 template <typename T>
 T *Bundle<T>::operator()(name name)
 {
-    if (DEBUGMODE && name >= _available_space) {
-        LOG_ERROR(name << " exceeds the storage!");
-        exit(0);
-    }
+    if (DEBUGMODE && name >= _available_space)
+        ABORT(name << " exceeds the storage!");
     return _component_name[name];
 }
 
@@ -117,12 +113,13 @@ template <typename T>
 void Bundle<T>::Recover(int step)
 {
     _available_space += step;
+    //TODO: please take a careful thought on Recover, does the component has the correct name?
 }
 
 template <typename T>
 bool Bundle<T>::Exist(T *target)
 {
-    if (target->Name < _available_space && target >= _component_bundle && target < _component_bundle + MAX_BUNDLE)
+    if (target != nullptr && target->Name < _available_space && target >= _component_bundle && target < _component_bundle + MAX_BUNDLE)
         return true;
     else
         return false;
