@@ -70,37 +70,37 @@ class WeightNeedMeasure : public WeightNoMeasure {
 class Sigma : public WeightNeedMeasure {
   public:
     Sigma(const Lattice &, real Beta, int order);
-    Complex Weight(const Distance &dR, real dtau, spin, spin);
+    Complex Weight(const Site &, const Site &, real, real, spin, spin);
     Complex WeightOfDelta(spin, spin);
     void MeasureNorm(real weight);
-    void Measure(const Distance &, real dtau, spin, spin, int Order, const Complex &);
+    void Measure(const Site &, const Site &, real, real, spin, spin, int Order, const Complex &);
 };
 
 class Polar : public WeightNeedMeasure {
   public:
     Polar(const Lattice &, real Beta, int order);
-    Complex Weight(const Distance &dR, real dtau, spin *, spin *);
-    void Measure(const Distance &, real dtau, spin *, spin *, int Order, const Complex &);
+    Complex Weight(const Site &, const Site &, real, real, spin *, spin *);
+    void Measure(const Site &, const Site &, real, real, spin *, spin *, int Order, const Complex &);
 };
 
 class G : public WeightNoMeasure {
   public:
     G(const Lattice &, real Beta, int order);
-    Complex Weight(const Distance &dR, real dtau, spin, spin);
-    Complex BareWeight(const Distance &dR, real dtau, spin, spin);
+    Complex Weight(const Site &, const Site &, real, real, spin, spin);
+    Complex BareWeight(const Site &, const Site &, real, real, spin, spin);
 };
 
 class W : public WeightNoMeasure {
   public:
     W(const Lattice &, real Beta, int order);
-    Complex Weight(const Distance &dR, real dtau, spin *, spin *, bool);
-    Complex WeightOfDelta(const Distance &dR, spin *, spin *, bool);
-    Complex BareWeight(const Distance &dR, real dtau, spin *, spin *);
+    Complex Weight(const Site &, const Site &, real, real, spin *, spin *, bool);
+    Complex WeightOfDelta(const Site &, const Site &, spin *, spin *, bool);
+    Complex BareWeight(const Site &, const Site &, real, real, spin *, spin *);
 };
 
 class Worm {
   public:
-    inline real Weight(const Distance &dR, real dtau)
+    inline real Weight(const Site &, const Site &, real, real)
     {
         return 1.0;
     }

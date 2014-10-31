@@ -33,31 +33,31 @@ class Diagram {
     Bundle<WLine> W;
     Bundle<Vertex> Ver;
 
-    Worm Worm;
-    bool IsWorm(const Vertex &);
+    WormClass Worm;
+    bool IsWorm(vertex);
 
-    spin Spin(GLine &, const int &);
-    spin Spin(WLine &, const int &, const int &);
-    spin Spin(Vertex &, const int &);
+    spin Spin(gLine, int);
+    spin Spin(wLine, int, int);
+    spin Spin(vertex, int);
 
-    int Sublattice(GLine &, const int &);
-    int Sublattice(WLine &, const int &);
-    int Sublattice(Vertex &);
+    int Sublattice(gLine, int);
+    int Sublattice(wLine, int);
+    int Sublattice(vertex);
 
-    string PrettyString(GLine &);
-    string PrettyString(WLine &);
-    string PrettyString(Vertex &);
+    string PrettyString(gLine);
+    string PrettyString(wLine);
+    string PrettyString(vertex);
 
     //Randomly Pick
-    GLine &RandomPickG();
-    WLine &RandomPickW();
-    Vertex &RandomPickVer();
+    gLine RandomPickG();
+    wLine RandomPickW();
+    vertex RandomPickVer();
 
     //Diagram
-    Vertex &NeighVer(GLine &, int dir);
-    Vertex &NeighVer(WLine &, int dir);
-    GLine &NeighG(Vertex &, int dir);
-    WLine &NeighW(Vertex &);
+    vertex NeighVer(gLine, int);
+    vertex NeighVer(wLine, int);
+    gLine NeighG(vertex, int);
+    wLine NeighW(vertex);
     bool FixDiagram();
     void ClearDiagram();
 
