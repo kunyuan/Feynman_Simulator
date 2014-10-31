@@ -20,7 +20,7 @@ void Dyson(EnvDyson &);
 int main(int argc, const char *argv[])
 {
     //initialize LOGGER
-    LOGGER_CONF("", "MC", Logger::file_on | Logger::screen_on, INFO, INFO);
+    LOGGER_CONF("test.log", "TEST", Logger::file_on | Logger::screen_on, INFO, INFO);
 
     InitGlobalUtility();
     RunTest();

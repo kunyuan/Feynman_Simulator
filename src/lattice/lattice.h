@@ -109,6 +109,7 @@ class Lattice {
     Vec<real> SublatticeVec[NSublattice];
 
     Lattice(const Vec<int> &size);
+    void Reset(const Vec<int> &size);
 
     Site GetSite(int name) const;
     int GetName(const Site &) const;
