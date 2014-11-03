@@ -69,30 +69,35 @@ G::G(const Lattice &lat, real beta, int order)
 {
 }
 
-Complex G::Weight(const Site &rin, const Site& rout, real tin, real tout, spin SpinIn, spin SpinOut, bool IsMeasure)
+Complex G::Weight(const Site &rin, const Site &rout, real tin, real tout, spin SpinIn, spin SpinOut, bool IsMeasure)
 {
-    if(IsMeasure)
+    if (IsMeasure)
         //TODO: define the measuring weight for G
         return Complex(1.0, 0.0);
     else
-        return _Weight[SpinIndex(SpinIn, SpinOut)][_Lat.Dist(rin, rout).SublatIndex][_Lat.Dist(rin, rout).CoordiIndex][TauToBin(tout-tin)];
+        return _Weight[SpinIndex(SpinIn, SpinOut)][_Lat.Dist(rin, rout).SublatIndex][_Lat.Dist(rin, rout).CoordiIndex][TauToBin(tout - tin)];
 }
 
-Complex G::Weight(int dir, const Site &r1, const Site& r2, real t1, real t2, spin Spin1, spin Spin2, bool IsMeasure)
+Complex G::Weight(int dir, const Site &r1, const Site &r2, real t1, real t2, spin Spin1, spin Spin2, bool IsMeasure)
 {
-    if(IsMeasure)
+    if (IsMeasure)
         //TODO: define the measuring weight for G
         return Complex(1.0, 0.0);
+    else if (dir == IN)
+        return _Weight[SpinIndex(Spin1, Spin2)][_Lat.Dist(r1, r2).SublatIndex][_Lat.Dist(r1, r2).CoordiIndex][TauToBin(t2 - t1)];
     else
-        if(dir==IN)
-            return _Weight[SpinIndex(Spin1, Spin2)][_Lat.Dist(r1, r2).SublatIndex][_Lat.Dist(r1, r2).CoordiIndex][TauToBin(t2-t1)];
-        else
-            return _Weight[SpinIndex(Spin2, Spin1)][_Lat.Dist(r2, r1).SublatIndex][_Lat.Dist(r2, r1).CoordiIndex][TauToBin(t1-t2)];
+        return _Weight[SpinIndex(Spin2, Spin1)][_Lat.Dist(r2, r1).SublatIndex][_Lat.Dist(r2, r1).CoordiIndex][TauToBin(t1 - t2)];
+}
+
+Complex G::BareWeight(const Site &rin, const Site &rout, real tin, real tout, spin SpinIn, spin SpinOut)
+{
+    //TODO: add bare G expression here
+    return Complex(1.0, 0.0);
 }
 
 void G::InitialWithBare()
 {
-    //TODO: add bare G expression here
+    //TODO: add bare G initialization
 }
 
 /***********************  W  **************************************/
@@ -102,60 +107,63 @@ W::W(const Lattice &lat, real beta, int order)
 {
 }
 
-Complex W::Weight(const Site &rin, const Site& rout, real tin, real tout, spin *SpinIn, spin *SpinOut, bool IsWorm, bool IsMeasure)
+Complex W::Weight(const Site &rin, const Site &rout, real tin, real tout, spin *SpinIn, spin *SpinOut, bool IsWorm, bool IsMeasure)
 {
-    if(IsMeasure)
+    if (IsMeasure)
         //TODO: define the measuring weight of W
         return Complex(1.0, 0.0);
+    else if (IsWorm)
+        //define your fake function here
+        return _Weight[SpinIndex(UP, UP)][_Lat.Dist(rin, rout).SublatIndex][_Lat.Dist(rin, rout).CoordiIndex][TauToBin(tout - tin)];
     else
-        if (IsWorm)
-            //define your fake function here
-            return _Weight[SpinIndex(UP, UP)][_Lat.Dist(rin, rout).SublatIndex][_Lat.Dist(rin, rout).CoordiIndex][TauToBin(tout-tin)];
-        else
-            return _Weight[SpinIndex(SpinIn, SpinOut)][_Lat.Dist(rin, rout).SublatIndex][_Lat.Dist(rin, rout).CoordiIndex][TauToBin(tout-tin)];
+        return _Weight[SpinIndex(SpinIn, SpinOut)][_Lat.Dist(rin, rout).SublatIndex][_Lat.Dist(rin, rout).CoordiIndex][TauToBin(tout - tin)];
 }
 
-Complex W::Weight(int dir, const Site &r1, const Site& r2, real t1, real t2, spin *Spin1, spin *Spin2, bool IsWorm, bool IsMeasure)
+Complex W::Weight(int dir, const Site &r1, const Site &r2, real t1, real t2, spin *Spin1, spin *Spin2, bool IsWorm, bool IsMeasure)
 {
     int spinindex, subindex, coordindex, tau;
-    if(dir==IN)
-    {
+    if (dir == IN) {
         spinindex = SpinIndex(Spin1, Spin2);
         subindex = _Lat.Dist(r1, r2).SublatIndex;
         coordindex = _Lat.Dist(r1, r2).CoordiIndex;
-        tau = TauToBin(t2-t1);
-    }else{
+        tau = TauToBin(t2 - t1);
+    }
+    else {
         spinindex = SpinIndex(Spin2, Spin1);
         subindex = _Lat.Dist(r2, r1).SublatIndex;
         coordindex = _Lat.Dist(r2, r1).CoordiIndex;
-        tau = TauToBin(t1-t2);
+        tau = TauToBin(t1 - t2);
     }
-    
-    
-    if(IsMeasure)
+
+    if (IsMeasure)
         //TODO: define the measuring weight of W
         return Complex(1.0, 0.0);
+    else if (IsWorm)
+        //define your fake function here
+        return _Weight[SpinIndex(UP, UP)][subindex][coordindex][tau];
     else
-        if (IsWorm)
-            //define your fake function here
-            return _Weight[SpinIndex(UP, UP)][subindex][coordindex][tau];
-        else
-            return _Weight[spinindex][subindex][coordindex][tau];
+        return _Weight[spinindex][subindex][coordindex][tau];
 }
 
 Complex W::WeightOfDelta(const Site &rin, const Site &rout, spin *SpinIn, spin *SpinOut, bool IsWorm)
 {
     //TODO: add Delta expression of W here, you may need to add new API to measure it
-    return Complex(1.0,0.0);
+    return Complex(1.0, 0.0);
 }
 
-Complex W::WeightOfDelta(int dir, const Site &r1, const Site& r2, spin *Spin1, spin *Spin2, bool IsWorm)
+Complex W::WeightOfDelta(int dir, const Site &r1, const Site &r2, spin *Spin1, spin *Spin2, bool IsWorm)
 {
     //TODO: add Delta expression of W here, you may need to add new API to measure it
-    return Complex(1.0,0.0);
+    return Complex(1.0, 0.0);
+}
+
+Complex W::BareWeight(const Site &rin, const Site &rout, real tin, real tout, spin *SpinIn, spin *SpinOut)
+{
+    //TODO: add bare W expression here
+    return Complex(1.0, 0.0);
 }
 
 void W::InitialWithBare()
 {
-    //TODO: add bare W expression here
+    //TODO: add bare W initialization
 }
