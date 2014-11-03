@@ -222,6 +222,17 @@
 			name = parameter;
 			sourceTree = "<group>";
 		};
+		8422FDED1A07D2BC002EB44E /* module */ = {
+			isa = PBXGroup;
+			children = (
+				8426668419E445F000CF7B59 /* diagram */,
+				84B8FC3819EC9753003D6DF6 /* observable */,
+				8422FDEA1A06F812002EB44E /* parameter */,
+				84B8FC3919EC9763003D6DF6 /* markov */,
+			);
+			name = module;
+			sourceTree = "<group>";
+		};
 		8426668419E445F000CF7B59 /* diagram */ = {
 			isa = PBXGroup;
 			children = (
@@ -304,11 +315,8 @@
 				84B1D57C19DF4215004C3A89 /* definition.h */,
 				8426668E19E475DF00CF7B59 /* definition.cpp */,
 				84D4287819F208300051CE96 /* environment */,
-				8422FDEA1A06F812002EB44E /* parameter */,
-				84B8FC3919EC9763003D6DF6 /* markov */,
+				8422FDED1A07D2BC002EB44E /* module */,
 				1CA5CF3C19ED6F5400212E20 /* lattice */,
-				84B8FC3819EC9753003D6DF6 /* observable */,
-				8426668419E445F000CF7B59 /* diagram */,
 				612661D40BB91FC506C3E572 /* utility */,
 			);
 			name = Feynman_Simulator;
