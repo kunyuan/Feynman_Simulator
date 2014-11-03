@@ -27,10 +27,10 @@ int RunTest()
     //    TestTimer();  //Test the timer
     //    TestRNG();
     //    TestArray();
-    TEST(TestEnvironment);
-    TEST(TestDiagram);
-    TEST(TestLattice);
-    TEST(TestObservable);
+    //    TEST(TestEnvironment);
+    //    TEST(TestDiagram);
+    //    TEST(TestLattice);
+    //    TEST(TestObservable);
     TEST(TestMarkov);
 
     //    TEST(TestCRC32);

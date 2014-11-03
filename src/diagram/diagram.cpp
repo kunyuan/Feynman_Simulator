@@ -41,6 +41,9 @@ void Diagram::BuildNew(Lattice &lat, weight::G *g, weight::W *w)
     Lat = &lat;
     GWeight = g;
     WWeight = w;
+    
+    Load("../src/diagram/diagram_initialize.config", lat, g, w);
+    FixDiagram();
 }
 
 void Diagram::Reset(weight::G *g, weight::W *w)
