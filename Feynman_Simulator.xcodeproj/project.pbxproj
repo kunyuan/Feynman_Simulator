@@ -245,9 +245,9 @@
 				8426668919E4469B00CF7B59 /* component.h */,
 				8426668C19E4482100CF7B59 /* component_bundle.h */,
 				8426668B19E4482100CF7B59 /* component_bundle.cpp */,
+				841D50E819E85C8600FDB7FF /* diagram_test.cpp */,
 				841D50E719E85C8600FDB7FF /* diagram_template.config */,
 				1CA5603F1A07DF7B0016F6A1 /* diagram_initialize.config */,
-				841D50E819E85C8600FDB7FF /* diagram_test.cpp */,
 			);
 			name = diagram;
 			sourceTree = "<group>";

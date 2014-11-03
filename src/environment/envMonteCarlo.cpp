@@ -37,10 +37,10 @@ bool EnvMonteCarlo::Load()
 
 void EnvMonteCarlo::Save()
 {
-    Para.Save(_ParaFile());
-    Weight.Save(_WeightFile());
-    Diag.Save(_ConfigFile());
-    Scarecrow.Save(_StatisFile());
+    Para.Save(_ParaFile(), "w");
+    Weight.Save(_WeightFile(), "w");
+    Diag.Save(_ConfigFile(), "w");
+    Scarecrow.Save(_StatisFile(), "w");
 }
 
 /**

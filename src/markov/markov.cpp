@@ -7,6 +7,7 @@
 //
 
 #include "markov.h"
+#include "math.h"
 
 const int MAX_K = 10000;
 
@@ -33,7 +34,11 @@ bool Markov::BuildNew(ParameterMC &para, Diagram &diag, weight::Weight &weight)
     WormWeight = weight.WormWeight;
 
     for (int i = 0; i < NUpdates; i++)
+    {
         ProbofCall[i] = 1.0 / real(NUpdates);
+        for(int j=i; j< NUpdates; j++)
+            SumofProbofCall[j] += ProbofCall[i];
+    }
     return true;
 }
 
@@ -46,13 +51,13 @@ void Markov::Hop(int sweep)
 {
     for (int i = 0; i < sweep; i++) {
         double x = RNG.urn();
-        if (x < ProbofCall[0])
+        if (x < SumofProbofCall[0])
             CreateWorm();
-        else if (x < ProbofCall[0] + ProbofCall[1])
+        else if (x < SumofProbofCall[1])
             DeleteWorm();
-        else if (x < ProbofCall[0] + ProbofCall[1] + ProbofCall[2])
+        else if (x < SumofProbofCall[2])
             MoveWormOnG();
-        else if (x < ProbofCall[0] + ProbofCall[1] + ProbofCall[2] + ProbofCall[3])
+        else if (x < SumofProbofCall[3])
             MoveWormOnW();
     }
 }
@@ -160,8 +165,8 @@ void Markov::MoveWormOnG()
 {
     if (!Worm->Exist)
         return;
-    int dir = RandomPickDir();
     vertex vi = Worm->Ira;
+    int dir = RandomPickDir();
     gLine g = Diag->NeighG(vi, dir);
     vertex vj = Diag->NeighVer(g, dir);
     if (vj == Worm->Masha)
@@ -197,8 +202,40 @@ void Markov::MoveWormOnG()
         wjWeight = W->WeightOfDelta(vj->Dir, vj->R, vWj->R, spinVj, vWj->Spin, true);
     else
         wjWeight = W->Weight(vj->Dir, vj->R, vWj->R, vj->Tau, vWj->Tau, spinVj, vWj->Spin, true, wj->IsMeasure);
+    Complex gWeight = G->Weight(FlipDir(dir), vi->R, vj->R, vi->Tau, vj->Tau, spinVi[dir], spinVj[FlipDir(dir)], g->IsMeasure);
+    
+    Complex weightRatio = wiWeight*wjWeight*gWeight / (g->Weight *wi->Weight *wj->Weight);
+    real prob = mod(weightRatio);
+    Complex sgn = phase(weightRatio);
+
+    real wormWeight = WormWeight->Weight(vj->R, Worm->Masha->R, vj->Tau, Worm->Masha->Tau);
+
+    prob *= wormWeight/Worm->Weight;
+
+    if (prob >= 1.0 || RNG.urn() < prob) {
+        Diag->Phase *= sgn;
+        Diag->Weight *= weightRatio;
+
+        g->Weight = gWeight;
+        g->K = g->K - pow(-1, dir)*Worm->K;
+        
+        wi->Weight = wiWeight;
+        wi->IsWorm = isWormWi;
+        
+        wj->Weight = wjWeight;
+        wj->IsWorm = true;
+        
+        vi->Spin[dir] = spinVi[dir];
+        vj->Spin[FlipDir(dir)] = spinVj[FlipDir(dir)];
+        
+        Worm->Ira = vj;
+        Worm->Weight = wormWeight;
+    }
 }
 
+/**
+ *  Move Ira along a wline
+ */
 void Markov::MoveWormOnW()
 {
 }
