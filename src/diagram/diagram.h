@@ -36,9 +36,13 @@ class Diagram {
     WormClass Worm;
     bool IsWorm(vertex);
 
-    spin Spin(gLine, int);
+    spin Spin(gLine, int);///For gline with different spins on two ends
+    
+    spin Spin(gLine); ///For gline with same spin on two ends
+    void FlipGSpin(gLine);
     spin Spin(wLine, int, int);
     spin Spin(vertex, int);
+    
 
     int Sublattice(gLine, int);
     int Sublattice(wLine, int);

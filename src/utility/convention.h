@@ -23,7 +23,9 @@ const real Pi = 3.14159265359;
 
 enum spin { DOWN,
             UP };
-#define FlipSpin(x) (1 - x)
+
+#define FlipSpin(x) spin(1 - x)
+
 //Spin DOWN: 0,  Spin UP:1
 const int SPIN = 2;
 const int SPIN2 = SPIN * SPIN;

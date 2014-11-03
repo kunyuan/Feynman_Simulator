@@ -11,8 +11,10 @@
 const int MAX_K = 10000;
 
 int RandomPickK();
+int RandomPickDir();
 int RandomPickDeltaSpin();
-bool CanNotMoveWorm(int dspin, vertex v);
+bool CanNotMoveWorm(int dspin, spin sin, spin sout);
+bool CanNotMoveWorm(int dspin, spin sin, int dir);
 
 Markov::Markov(EnvMonteCarlo *Env)
 {
@@ -29,8 +31,8 @@ Markov::Markov(EnvMonteCarlo *Env)
     W->InitializeState();
     WormWeight = Env->WormWeight;
 
-    ProbofCall[0] = 0.50;
-    ProbofCall[1] = 0.50;
+    for(int i=0; i<NUpdates; i++)
+        ProbofCall[i] = 1.0/real(NUpdates);
 }
 
 /**
@@ -45,8 +47,15 @@ void Markov::Hop(int sweep)
         CreateWorm();
     else if (x < ProbofCall[0] + ProbofCall[1])
         DeleteWorm();
+    else if (x < ProbofCall[0] + ProbofCall[1] + ProbofCall[2])
+        MoveWormOnG();
+    else if (x < ProbofCall[0] + ProbofCall[1] + ProbofCall[2] + ProbofCall[3])
+        MoveWormOnW();
 }
 
+/**
+ *  Create Ira and Masha on a wline
+ */
 void Markov::CreateWorm()
 {
     if (Worm->Exist)
@@ -58,10 +67,14 @@ void Markov::CreateWorm()
 
     int k = RandomPickK();
     int dspin = RandomPickDeltaSpin();
-    if (CanNotMoveWorm(dspin, vin) && CanNotMoveWorm(-dspin, vout))
+    if (CanNotMoveWorm(dspin, Diag->Spin(vin, IN), Diag->Spin(vin, OUT)) && CanNotMoveWorm(-dspin, Diag->Spin(vout, IN), Diag->Spin(vout, OUT)))
         return;
 
-    Complex wWeight = W->Weight(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin, vout->Spin, true);
+    Complex wWeight;
+    if(w->IsDelta)
+        wWeight= W->WeightOfDelta(vin->R, vout->R, vin->Spin, vout->Spin, true);
+    else
+        wWeight = W->Weight(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin, vout->Spin, true, w->IsMeasure);
     Complex weightRatio = wWeight / w->Weight;
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
@@ -79,6 +92,7 @@ void Markov::CreateWorm()
         Worm->Masha = vout;
         Worm->dSpin = dspin;
         Worm->K = k;
+        Worm->Weight = wormWeight;
 
         w->IsWorm = true;
         w->K -= k;
@@ -86,22 +100,150 @@ void Markov::CreateWorm()
     }
 }
 
+/**
+ *  Delete Ira and Masha on the same wline
+ */
 void Markov::DeleteWorm()
 {
     if (!Worm->Exist)
         return;
-    if (Diag->NeighW(Worm->Ira) != Diag->NeighW(Worm->Masha))
+    wLine w = Diag->NeighW(Worm->Ira);
+    if (w != Diag->NeighW(Worm->Masha))
         return;
+    vertex vin, vout;
+    int k;
+    if(Worm->Ira->Dir==IN)
+    {
+        vin = Worm->Ira;
+        vout = Worm->Masha;
+        
+        k = w->K+Worm->K;
+    }else{
+        vin = Worm->Masha;
+        vout = Worm->Ira;
+        
+        k = w->K-Worm->K;
+    }
+    
+    Complex wWeight;
+    if(w->IsDelta)
+        wWeight = W->WeightOfDelta(vin->R, vout->R, vin->Spin, vout->Spin, false);
+    else
+        wWeight = W->Weight(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin, vout->Spin, false, w->IsMeasure);
+    
+    Complex weightRatio = wWeight / w->Weight;
+    real prob = mod(weightRatio);
+    Complex sgn = phase(weightRatio);
+
+    prob *= ProbofCall[0] / (ProbofCall[1] * Worm->Weight * Diag->Order * 2.0);
+    
+    if (prob >= 1.0 || RNG.urn() < prob) {
+        Diag->Phase *= sgn;
+        Diag->Weight *= weightRatio;
+
+        Worm->Exist = false;
+
+        w->IsWorm = false;
+        w->K = k;
+        w->Weight = wWeight;
+    }
 }
 
-bool CanNotMoveWorm(int dspin, vertex v)
+/**
+ *  Move Ira along a GLine
+ */
+void Markov::MoveWormOnG()
 {
-    if (dspin == 1 && v->Spin[IN] == DOWN && v->Spin[OUT] == UP)
+    if(!Worm->Exist)
+        return;
+    int dir = RandomPickDir();
+    vertex vi = Worm->Ira;
+    gLine g = Diag->NeighG(vi, dir);
+    vertex vj = Diag->NeighVer(g, dir);
+    if(vj==Worm->Masha)
+        return;
+    if(CanNotMoveWorm(Worm->dSpin, Diag->Spin(g), dir))
+        return;
+    
+    wLine wi = Diag->NeighW(vi);
+    vertex vWi = Diag->NeighVer(wi, FlipDir(vi->Dir));
+    bool isWormWi;
+    if(vWi==vj)
+        isWormWi = true;
+    else
+        isWormWi = Diag->IsWorm(vWi);
+    
+    spin spinVi[2] = {vi->Spin[0], vi->Spin[1]};
+    spinVi[dir] = FlipSpin(spinVi[dir]);
+    
+    Complex wiWeight;
+    if(wi->IsDelta)
+        wiWeight= W->WeightOfDelta(vi->Dir, vi->R, vWi->R, spinVi, vWi->Spin, isWormWi);
+    else
+        wiWeight= W->Weight(vi->Dir, vi->R, vWi->R, vi->Tau, vWi->Tau, spinVi, vWi->Spin, isWormWi, wi->IsMeasure);
+    
+    wLine wj = Diag->NeighW(vj);
+    vertex vWj = Diag->NeighVer(wj, FlipDir(vj->Dir));
+    
+    spin spinVj[2] = {vj->Spin[0], vj->Spin[1]};
+    spinVj[FlipDir(dir)] = FlipSpin(spinVj[FlipDir(dir)]);
+    
+    Complex wjWeight;
+    if(wj->IsDelta)
+        wjWeight= W->WeightOfDelta(vj->Dir, vj->R, vWj->R, spinVj, vWj->Spin, true);
+    else
+        wjWeight= W->Weight(vj->Dir, vj->R, vWj->R, vj->Tau, vWj->Tau, spinVj, vWj->Spin, true, wj->IsMeasure);
+    
+}
+
+void Markov::MoveWormOnW() {}
+
+/**
+ *  determine whether a Ira can move around to another vertex
+ *  used in CreateWorm
+ *
+ *  @param dspin the spin current of Ira
+ *  @param sin   the spin incoming of vertex Ira
+ *  @param sout  the spin outgoing of vertex Ira
+ *
+ *  @return true: cannot move; false: can move
+ */
+bool CanNotMoveWorm(int dspin, spin sin, spin sout)
+{
+    if (dspin == 1 && sin == DOWN && sout == UP)
         return true;
-    if (dspin == -1 && v->Spin[IN] == UP && v->Spin[OUT] == DOWN)
+    if (dspin == -1 && sin == UP && sout == DOWN)
         return true;
     return false;
 }
+
+/**
+ *  determine whether a Ira can move on a gline
+ *  used in MoveWormOnG
+ *
+ *  @param dspin the spin current of Ira
+ *  @param sg    the spin on Gline
+ *  @param dir   the Gline is incoming or outgoing of Ira
+ *
+ *  @return true: cannot move; false: can move
+ */
+bool CanNotMoveWorm(int dspin, spin sg, int dir)
+{
+    if (dspin == 1)
+    {
+        if(dir == IN && sg == DOWN)
+            return true;
+        if (dir == OUT && sg == UP)
+            return true;
+    }else{
+        if(dir == IN && sg == UP)
+            return true;
+        if (dir == OUT && sg == DOWN)
+            return true;
+    }
+    return false;
+}
+
 
 int RandomPickK()
 {
@@ -111,4 +253,9 @@ int RandomPickK()
 int RandomPickDeltaSpin()
 {
     return RNG.irn(0, 1) * 2 - 1;
+}
+
+int RandomPickDir()
+{
+    return RNG.irn(0, 1);
 }

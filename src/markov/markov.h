@@ -23,7 +23,7 @@ class Markov {
     Weight::W *W;
     Weight::Worm *WormWeight;
 
-    const static int NUpdates = 2;
+    const static int NUpdates = 4;
     real ProbofCall[NUpdates];
 
   public:
@@ -32,6 +32,8 @@ class Markov {
     void Hop(int);
     void CreateWorm();
     void DeleteWorm();
+    void MoveWormOnG();
+    void MoveWormOnW();
 };
 
 int TestMarkov();

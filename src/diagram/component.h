@@ -25,11 +25,10 @@ typedef int name;
 
 class GLine {
     friend std::ostream &operator<<(std::ostream &os, GLine &r);
-    friend bool operator==(const GLine &, const GLine &);
-    friend bool operator!=(const GLine &, const GLine &);
 
   public:
     name Name;
+    bool IsMeasure;
     vertex nVer[2];
     int K;
     Complex Weight;
@@ -37,12 +36,12 @@ class GLine {
 
 class WLine {
     friend std::ostream &operator<<(std::ostream &os, WLine &r);
-    friend bool operator==(const WLine &, const WLine &);
-    friend bool operator!=(const WLine &, const WLine &);
 
   public:
     name Name;
     bool IsWorm;
+    bool IsDelta;
+    bool IsMeasure;
     vertex nVer[2];
     int K;
     Complex Weight;
@@ -50,8 +49,6 @@ class WLine {
 
 class Vertex {
     friend std::ostream &operator<<(std::ostream &os, Vertex &r);
-    friend bool operator==(const Vertex &, const Vertex &);
-    friend bool operator!=(const Vertex &, const Vertex &);
 
   public:
     name Name;
@@ -60,6 +57,7 @@ class Vertex {
     spin Spin[2]; // IN/OUT spins
     Site R;
     double Tau;
+    int Dir;
 };
 
 class WormClass {
@@ -68,6 +66,7 @@ class WormClass {
     vertex Ira, Masha; //extra line: Ira---"k,dSpin"--->Masha
     int K;
     int dSpin;
+    real Weight;
 
     WormClass()
         : Exist(false), Ira(nullptr), Masha(nullptr), K(0), dSpin(0)

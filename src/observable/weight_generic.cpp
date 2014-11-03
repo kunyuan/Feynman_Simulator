@@ -68,7 +68,7 @@ real WeightNoMeasure::BinToTau(int Bin)
 void WeightNoMeasure::InitializeState()
 {
     for (unsigned int i = 0; i < _Weight.Size(); i++) {
-        _Weight(i) = Complex(2.0, 0.0);
+        _Weight(i) = Complex(1.0, 0.0);
     }
 }
 

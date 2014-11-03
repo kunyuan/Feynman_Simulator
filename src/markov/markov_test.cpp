@@ -31,14 +31,25 @@ void Test_CreateWorm()
     markov.Diag->LoadConfig("../src/diagram/diagram_template.config");
     LOG_INFO("Load Diagram from config file succeed!");
     int total = 0;
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 100; i++) {
         markov.CreateWorm();
         if (markov.Diag->Worm.Exist) {
             total += 1;
             markov.Diag->SaveConfig("diagram_template.config", "a");
         }
-        markov.Diag->LoadConfig("../src/diagram/diagram_template.config");
     }
-    LOG_INFO("Updates(Create Worm) are done!");
-    sput_fail_unless(total == 10, "The accept ratio of CreateWorm");
+    LOG_INFO("Update(Create Worm) are done!");
+    sput_fail_unless(total == 100, "The accept ratio of CreateWorm = 1.0");
+    
+    total = 0;
+    for (int i = 0; i < 100; i++) {
+        markov.CreateWorm();
+        markov.DeleteWorm();
+        if (!markov.Diag->Worm.Exist) {
+            total += 1;
+            markov.Diag->SaveConfig("diagram_template.config", "a");
+        }
+    }
+    LOG_INFO("Update(Delete Worm) are done!");
+    sput_fail_unless(total == 25, "The accept ratio of DeleteWorm = 0.25");
 }

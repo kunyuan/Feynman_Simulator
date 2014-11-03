@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Kun Chen. All rights reserved.
 //
 
+//TODO: G, W IsDelta, IsMeasure
+
 #include "diagram.h"
 #include "../observable/weight.h"
 #include "../utility/rng.h"
@@ -42,9 +44,23 @@ void Diagram::Build(Lattice *lat, Weight::G *g, Weight::W *w)
 }
 
 /****************   GLine  *****************************/
+spin Diagram::Spin(gLine g)
+{
+    if(DEBUGMODE && g->nVer[0]->Spin[1]!=g->nVer[1]->Spin[0])
+        ABORT("The two spins of gline are different!");
+    return g->nVer[0]->Spin[1];
+}
+
 spin Diagram::Spin(gLine g, int dir)
 {
     return g->nVer[dir]->Spin[FlipDir(dir)];
+}
+
+void Diagram::FlipGSpin(gLine g)
+{
+    g->nVer[0]->Spin[1] = FlipSpin(g->nVer[0]->Spin[1]);
+    g->nVer[1]->Spin[0] = FlipSpin(g->nVer[1]->Spin[0]);
+    
 }
 
 int Diagram::Sublattice(gLine g, int dir)
@@ -158,6 +174,7 @@ bool Diagram::FixDiagram()
 
     Order = W.HowMany();
     Worm.Exist = false;
+    Worm.Weight = 1.0;
 
     Weight = Complex(1.0, 0.0);
     for (int index = 0; index < G.HowMany(); index++) {
@@ -168,7 +185,7 @@ bool Diagram::FixDiagram()
         vin->nG[OUT] = g;
         vout->nG[IN] = g;
 
-        g->Weight = GWeight->Weight(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin[OUT], vout->Spin[IN]);
+        g->Weight = GWeight->Weight(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin[OUT], vout->Spin[IN], g->IsMeasure);
         Weight *= g->Weight;
     }
 
@@ -180,9 +197,12 @@ bool Diagram::FixDiagram()
         w->IsWorm = false;
 
         vin->nW = w;
+        vin->Dir = IN;
+        
         vout->nW = w;
+        vout->Dir = OUT;
 
-        w->Weight = WWeight->Weight(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin, vout->Spin, w->IsWorm);
+        w->Weight = WWeight->Weight(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin, vout->Spin, w->IsWorm, w->IsMeasure);
         Weight *= w->Weight;
     }
 
