@@ -11,7 +11,7 @@
 
 #include "estimate.h"
 #include "../utility/array.h"
-#include "../lattice/lattice.h"
+#include "../parameter/parameter.h"
 
 namespace weight {
 
@@ -31,7 +31,7 @@ class WeightNoMeasure {
     int SpinIndex(spin *TwoSpinIn, spin *TwoSpinOut);
     int TauToBin(real tau);
     real BinToTau(int Bin);
-    const int MAX_BIN = 128;
+    const int MAX_BIN = 32;
     enum Dim { ORDER,
                SP,
                SUB,
@@ -126,11 +126,11 @@ class Weight {
     G *G;
     Worm WormWeight;
 
-    bool BuildNew(flag,const Lattice &Lat, real Beta, int order);
+    bool BuildNew(flag, const Parameter &);
     bool Load(const std::string &InputFile, flag);
-    bool Load(const std::string &InputFile, flag, const Lattice &Lat, real Beta, int order);
+    bool Load(const std::string &InputFile, flag, const Parameter &);
     void Save(const std::string &InputFile, flag, string Mode = "a");
-    void Reset(real Beta, int order);
+    void ReWeight(flag, const Parameter &);
 
   private:
     void _AllocateGW(const Lattice &Lat, real Beta, int order);

@@ -27,14 +27,21 @@ bool Markov::BuildNew(ParameterMC &para, Diagram &diag, weight::Weight &weight)
     Polar = weight.Polar;
     G = weight.G;
     W = weight.W;
-    //TODO: shouldn't initialize G, W here
-    G->InitializeState();
-    W->InitializeState();
     WormWeight = &weight.WormWeight;
 
     for (int i = 0; i < NUpdates; i++)
         ProbofCall[i] = 1.0 / real(NUpdates);
     return true;
+}
+
+void Markov::ReWeight(ParameterMC &para)
+{
+    Beta = para.Beta;
+    OrderWeight = para.OrderReWeight;
+
+    for (int i = 0; i < NUpdates; i++)
+        ProbofCall[i] = 1.0 / real(NUpdates);
+    //TODO: consider what have to be reweighted here
 }
 
 /**

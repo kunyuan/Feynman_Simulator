@@ -24,6 +24,7 @@ class Diagram {
     bool Load(const std::string &FileName, Lattice &, weight::G *, weight::W *);
     bool Load(const std::string &FileName);
     void Save(const std::string &FileName, std::string Mode = "a");
+    void Reset(weight::G *, weight::W *);
 
     weight::G *GWeight;
     weight::W *WWeight;

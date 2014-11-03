@@ -17,6 +17,7 @@
 #include "../markov/markov.h"
 #include "../lattice/lattice.h"
 #include "../utility/scopeguard.h"
+#include "../parameter/state.h"
 
 class Environment {
   public:
@@ -45,7 +46,7 @@ class EnvMonteCarlo : public Environment {
     bool BuildNew(const std::string &InputFile, bool StarFromBare);
     bool Load();
     void Save(); //Save everything in EnvMonteCarlo
-    void Reset(ParameterMap);
+    void ReWeight(const State &);
 
   private:
     std::string _ConfigFile();

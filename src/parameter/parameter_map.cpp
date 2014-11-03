@@ -18,18 +18,25 @@ using namespace std;
 *
 *  @param InputFile Input file name
 */
-void ParameterMap::LoadFromFile(const std::string &InputFile)
+bool ParameterMap::LoadFromFile(const std::string &InputFile, bool AbortIfFail)
 {
     clear();
     ifstream ifs(InputFile, ios::in);
     ON_SCOPE_EXIT([&] {ifs.close(); });
-    if (!ifs.is_open())
-        ABORT("Fail to open input file " << InputFile);
+    if (!ifs.is_open()) {
+        if (AbortIfFail) {
+            ABORT("Fail to open input file " << InputFile);
+        }
+        else {
+            return false;
+        }
+    }
     string temp;
     _map.clear();
     while (getline(ifs, temp)) {
         _map.insert(make_pair(temp));
     }
+    return true;
 }
 /**
 *  Save all key/value pair to Outputfile
