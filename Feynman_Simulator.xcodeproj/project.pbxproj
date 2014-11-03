@@ -65,6 +65,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1CA5603F1A07DF7B0016F6A1 /* diagram_initialize.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = diagram_initialize.config; path = diagram/diagram_initialize.config; sourceTree = "<group>"; };
 		1CA5CF3719ED6F1B00212E20 /* lattice_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lattice_test.cpp; path = lattice/lattice_test.cpp; sourceTree = "<group>"; };
 		1CA5CF3919ED6F3F00212E20 /* lattice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lattice.cpp; path = lattice/lattice.cpp; sourceTree = "<group>"; };
 		1CA5CF3B19ED6F4900212E20 /* lattice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lattice.h; path = lattice/lattice.h; sourceTree = "<group>"; };
@@ -245,6 +246,7 @@
 				8426668C19E4482100CF7B59 /* component_bundle.h */,
 				8426668B19E4482100CF7B59 /* component_bundle.cpp */,
 				841D50E719E85C8600FDB7FF /* diagram_template.config */,
+				1CA5603F1A07DF7B0016F6A1 /* diagram_initialize.config */,
 				841D50E819E85C8600FDB7FF /* diagram_test.cpp */,
 			);
 			name = diagram;
