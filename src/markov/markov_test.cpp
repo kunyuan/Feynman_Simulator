@@ -24,7 +24,7 @@ int TestMarkov()
 void Test_CreateWorm()
 {
     EnvMonteCarlo Env(0);
-    Env.BuildNew("../src/environment/_in_MC_test");
+    Env.BuildNew("../src/environment/_in_MC_test", true);
     LOG_INFO("Build Environment succeed!");
     Env.Diag.Load("../src/diagram/diagram_template.config");
     LOG_INFO("Load Diagram from config file succeed!");
@@ -39,7 +39,7 @@ void Test_CreateWorm()
     }
     LOG_INFO("Update(Create Worm) are done!");
     sput_fail_unless(total == 100, "The accept ratio of CreateWorm = 1.0");
-    
+
     RNG.Reset(15);
     total = 0;
     for (int i = 0; i < 100; i++) {
@@ -52,5 +52,4 @@ void Test_CreateWorm()
     }
     LOG_INFO("Update(Delete Worm) are done!");
     sput_fail_unless(total == 28, "The accept ratio of DeleteWorm = 0.25");
-    
 }

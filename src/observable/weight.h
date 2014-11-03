@@ -112,6 +112,10 @@ class Worm {
     }
 };
 
+typedef const int flag;
+flag SigmaPolar = 1;
+flag GW = 2;
+
 class Weight {
   public:
     Weight();
@@ -120,14 +124,17 @@ class Weight {
     Polar *Polar;
     W *W;
     G *G;
-    Worm *WormWeight;
+    Worm WormWeight;
 
-    bool BuildNew(const Lattice &Lat, real Beta, int order);
-    bool Load(const std::string &InputFile, const Lattice &Lat, real Beta, int order);
-    void Save(const std::string &InputFile, const std::string &Mode = "a");
+    bool BuildNew(flag,const Lattice &Lat, real Beta, int order);
+    bool Load(const std::string &InputFile, flag);
+    bool Load(const std::string &InputFile, flag, const Lattice &Lat, real Beta, int order);
+    void Save(const std::string &InputFile, flag, string Mode = "a");
+    void Reset(real Beta, int order);
 
   private:
-    void _AllocateResources(const Lattice &Lat, real Beta, int order);
+    void _AllocateGW(const Lattice &Lat, real Beta, int order);
+    void _AllocateSigmaPolar(const Lattice &Lat, real Beta, int order);
 };
 }
 

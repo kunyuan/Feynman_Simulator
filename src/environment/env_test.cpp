@@ -25,7 +25,7 @@ void Test_EnvMC()
 {
     EnvMonteCarlo env(0);
     string inputfile = "../src/environment/_in_MC_test";
-    env.BuildNew(inputfile);
+    env.BuildNew(inputfile, true);
     sput_fail_unless(Equal(env.Para.OrderReWeight[3], 4.0), "check reading the job file");
 
     //do some change on env
@@ -35,7 +35,7 @@ void Test_EnvMC()
     env.Save();
 
     EnvMonteCarlo new_env(0);
-    new_env.BuildNew(inputfile);
+    new_env.BuildNew(inputfile, true);
     new_env.Load();
     sput_fail_unless(Equal(new_env.Para.OrderReWeight[3], 4.1), "Check reading state file");
     sput_fail_unless(Equal(env.Para.RNG.urn(), new_env.Para.RNG.urn()), "Check reading RNG from state file");

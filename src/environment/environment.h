@@ -21,6 +21,8 @@
 class Environment {
   public:
     int PID;
+    enum flag { Bare,
+                OldGW };
 
   protected:
     Environment(int pid);
@@ -40,7 +42,7 @@ class EnvMonteCarlo : public Environment {
     Markov Grasshopper;
     MarkovMonitor Scarecrow;
 
-    bool BuildNew(const std::string &InputFile);
+    bool BuildNew(const std::string &InputFile, bool StarFromBare);
     bool Load();
     void Save(); //Save everything in EnvMonteCarlo
     void Reset(ParameterMap);
@@ -52,7 +54,7 @@ class EnvMonteCarlo : public Environment {
 class EnvDyson : public Environment {
   public:
     EnvDyson(int pid);
-    bool BuildNew(const std::string& InputFile);
+    bool BuildNew(const std::string &InputFile);
 
   private:
     std::string _FinalQuanFile();

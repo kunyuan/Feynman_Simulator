@@ -16,7 +16,6 @@ weight::Weight::Weight()
     Polar = nullptr;
     G = nullptr;
     W = nullptr;
-    WormWeight = nullptr;
 }
 
 weight::Weight::~Weight()
@@ -25,48 +24,89 @@ weight::Weight::~Weight()
     delete Polar;
     delete G;
     delete W;
-    delete WormWeight;
 }
+/**
+*  Build G, W, Sigma, Polar from file, you may use flag weight::GW and weight::SigmaPolar to control which group to load. Notice those in unflaged group will remain the same.
+*
+*  @param _flag     weight::GW to allocate memory for GW, weight::SigmaPolar to allocate memory for Sigma and Polar
+*  @param Lat       Lattice
+*  @param Beta      Beta
+*  @param order     order
+*/
 
-bool weight::Weight::BuildNew(const Lattice &Lat, real Beta, int order)
+bool weight::Weight::BuildNew(flag _flag, const Lattice &Lat, real Beta, int order)
 {
-    _AllocateResources(Lat, Beta, order);
-    G->InitialWithBare();
-    W->InitialWithBare();
-    Sigma->ClearStatistics();
-    Polar->ClearStatistics();
+    if (_flag & weight::GW) {
+        _AllocateGW(Lat, Beta, order);
+        G->InitialWithBare();
+        W->InitialWithBare();
+    }
+    if (_flag & weight::SigmaPolar) {
+        _AllocateSigmaPolar(Lat, Beta, order);
+        Sigma->ClearStatistics();
+        Polar->ClearStatistics();
+    }
     return true;
 }
-
-bool weight::Weight::Load(const std::string &InputFile, const Lattice &Lat, real Beta, int order)
+/**
+*  Load G, W, Sigma, Polar from file, you may use flag weight::GW and weight::SigmaPolar to control which group to load. Notice those in unflaged group will remain the same.
+*
+*  @param InputFile Input File Name
+*  @param _flag     weight::GW|weight::SigmaPolar
+*  @param Lat       Lattice
+*  @param Beta      Beta
+*  @param order     order
+*
+*  @return alway true for now
+*/
+bool weight::Weight::Load(const std::string &InputFile, flag _flag, const Lattice &Lat, real Beta, int order)
 {
-    _AllocateResources(Lat, Beta, order);
-    G->Load(InputFile);
-    W->Load(InputFile);
-    Sigma->Load(InputFile);
-    Polar->Load(InputFile);
+    if (_flag & weight::GW) {
+        _AllocateGW(Lat, Beta, order);
+        G->Load(InputFile);
+        W->Load(InputFile);
+    }
+    if (_flag & weight::SigmaPolar) {
+        _AllocateSigmaPolar(Lat, Beta, order);
+        Sigma->Load(InputFile);
+        Polar->Load(InputFile);
+    }
     return true;
 }
-
-void weight::Weight::Save(const std::string &InputFile, const std::string &Mode)
+/**
+*  Save G, W, Sigma, Polar to file, you may use flag weight::GW and weight::SigmaPolar to control which group to save
+*
+*  @param InputFile output file name
+*  @param _flag     weight::GW|weight::SigmaPolar
+*  @param Mode      "a" or "w"
+*/
+void weight::Weight::Save(const string &FileName, flag _flag, string Mode)
 {
-    G->Save(InputFile, Mode);
-    W->Save(InputFile, "a");
-    Sigma->Save(InputFile, "a");
-    Polar->Save(InputFile, "a");
+    if (_flag & weight::GW) {
+        G->Save(FileName, Mode);
+        W->Save(FileName, "a");
+        Mode = "a";
+    }
+    if (_flag & weight::SigmaPolar) {
+        Sigma->Save(FileName, Mode);
+        Polar->Save(FileName, "a");
+        Mode = "a";
+    }
 }
 
-void weight::Weight::_AllocateResources(const Lattice &Lat, real Beta, int order)
+void weight::Weight::_AllocateGW(const Lattice &Lat, real Beta, int order)
 {
     //make sure old Sigma/Polar/G/W are released before assigning new memory
-    delete Sigma;
-    Sigma = new weight::Sigma(Lat, Beta, order);
-    delete Polar;
-    Polar = new weight::Polar(Lat, Beta, order);
     delete G;
     G = new weight::G(Lat, Beta, order);
     delete W;
     W = new weight::W(Lat, Beta, order);
-    delete WormWeight;
-    WormWeight = new weight::Worm();
+}
+
+void weight::Weight::_AllocateSigmaPolar(const Lattice &Lat, real Beta, int order)
+{
+    delete Sigma;
+    Sigma = new weight::Sigma(Lat, Beta, order);
+    delete Polar;
+    Polar = new weight::Polar(Lat, Beta, order);
 }
