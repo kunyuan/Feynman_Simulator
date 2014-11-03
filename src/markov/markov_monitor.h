@@ -29,6 +29,7 @@ class MarkovMonitor {
     bool BuildNew(ParameterMC &, Diagram &, weight::Weight &);
     bool Load(const std::string &InputFile, ParameterMC &, Diagram &, weight::Weight &);
     void Save(const std::string &InputFile, const std::string &Mode = "a");
+    void ReWeight();
 
     void Annealing();
     void SqueezeStatistics();

@@ -31,6 +31,7 @@ class Markov {
     Diagram *Diag;
 
     bool BuildNew(ParameterMC &, Diagram &, weight::Weight &);
+    void ReWeight(ParameterMC &);
     void Hop(int);
     void CreateWorm();
     void DeleteWorm();

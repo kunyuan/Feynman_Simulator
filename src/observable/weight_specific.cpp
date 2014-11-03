@@ -65,7 +65,7 @@ void Polar::Measure(const Site &rin, const Site &rout, real tin, real tout, spin
 /***********************  G  **************************************/
 
 G::G(const Lattice &lat, real beta, int order)
-    : WeightNoMeasure(lat, beta, order, SPIN4, "Polar")
+    : WeightNoMeasure(lat, beta, order, SPIN4, "G")
 {
 }
 
@@ -103,7 +103,7 @@ void G::InitialWithBare()
 /***********************  W  **************************************/
 
 W::W(const Lattice &lat, real beta, int order)
-    : WeightNoMeasure(lat, beta, order, SPIN4, "Polar")
+    : WeightNoMeasure(lat, beta, order, SPIN4, "W")
 {
 }
 

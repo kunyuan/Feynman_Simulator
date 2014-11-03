@@ -43,10 +43,18 @@ void Diagram::BuildNew(Lattice &lat, weight::G *g, weight::W *w)
     WWeight = w;
 }
 
+void Diagram::Reset(weight::G *g, weight::W *w)
+{
+    GWeight = g;
+    WWeight = w;
+    FixDiagram();
+    //TODO: maybe you have to do more to reset
+}
+
 /****************   GLine  *****************************/
 spin Diagram::Spin(gLine g)
 {
-    if(DEBUGMODE && g->nVer[0]->Spin[1]!=g->nVer[1]->Spin[0])
+    if (DEBUGMODE && g->nVer[0]->Spin[1] != g->nVer[1]->Spin[0])
         ABORT("The two spins of gline are different!");
     return g->nVer[0]->Spin[1];
 }
@@ -60,7 +68,6 @@ void Diagram::FlipGSpin(gLine g)
 {
     g->nVer[0]->Spin[1] = FlipSpin(g->nVer[0]->Spin[1]);
     g->nVer[1]->Spin[0] = FlipSpin(g->nVer[1]->Spin[0]);
-    
 }
 
 int Diagram::Sublattice(gLine g, int dir)
@@ -198,7 +205,7 @@ bool Diagram::FixDiagram()
 
         vin->nW = w;
         vin->Dir = IN;
-        
+
         vout->nW = w;
         vout->Dir = OUT;
 

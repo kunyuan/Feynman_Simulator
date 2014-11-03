@@ -25,6 +25,11 @@ bool MarkovMonitor::BuildNew(ParameterMC &para, Diagram &diag, weight::Weight &w
     return true;
 }
 
+void MarkovMonitor::ReWeight()
+{
+    //TODO: reweight Estimators here
+}
+
 bool MarkovMonitor::Load(const string &InputFile, ParameterMC &para, Diagram &diag, weight::Weight &weight)
 {
     Para = &para;

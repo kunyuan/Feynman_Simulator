@@ -34,19 +34,29 @@ weight::Weight::~Weight()
 *  @param order     order
 */
 
-bool weight::Weight::BuildNew(flag _flag, const Lattice &Lat, real Beta, int order)
+bool weight::Weight::BuildNew(flag _flag, const Parameter &para)
 {
     if (_flag & weight::GW) {
-        _AllocateGW(Lat, Beta, order);
+        _AllocateGW(para.Lat, para.Beta, para.Order);
         G->InitialWithBare();
         W->InitialWithBare();
     }
     if (_flag & weight::SigmaPolar) {
-        _AllocateSigmaPolar(Lat, Beta, order);
+        _AllocateSigmaPolar(para.Lat, para.Beta, para.Order);
         Sigma->ClearStatistics();
         Polar->ClearStatistics();
     }
     return true;
+}
+
+void weight::Weight::ReWeight(flag _flag, const Parameter &para)
+{
+    if (_flag & weight::GW) {
+        //TODO: reweight G, W
+    }
+    if (_flag & weight::SigmaPolar) {
+        //TODO: reweight SigmaPolar
+    }
 }
 /**
 *  Load G, W, Sigma, Polar from file, you may use flag weight::GW and weight::SigmaPolar to control which group to load. Notice those in unflaged group will remain the same.
@@ -59,15 +69,15 @@ bool weight::Weight::BuildNew(flag _flag, const Lattice &Lat, real Beta, int ord
 *
 *  @return alway true for now
 */
-bool weight::Weight::Load(const std::string &InputFile, flag _flag, const Lattice &Lat, real Beta, int order)
+bool weight::Weight::Load(const std::string &InputFile, flag _flag, const Parameter &para)
 {
     if (_flag & weight::GW) {
-        _AllocateGW(Lat, Beta, order);
+        _AllocateGW(para.Lat, para.Beta, para.Order);
         G->Load(InputFile);
         W->Load(InputFile);
     }
     if (_flag & weight::SigmaPolar) {
-        _AllocateSigmaPolar(Lat, Beta, order);
+        _AllocateSigmaPolar(para.Lat, para.Beta, para.Order);
         Sigma->Load(InputFile);
         Polar->Load(InputFile);
     }

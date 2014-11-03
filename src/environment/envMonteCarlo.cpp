@@ -19,10 +19,10 @@ bool EnvMonteCarlo::BuildNew(const string &InputFile, bool StarFromBare)
     //Read more stuff for the state of MC only
     Para.BuildNew(InputFile);
     if (StarFromBare)
-        Weight.BuildNew(weight::GW | weight::SigmaPolar, Para.Lat, Para.Beta, Para.Order);
+        Weight.BuildNew(weight::GW | weight::SigmaPolar, Para);
     else {
-        Weight.Load(_WeightFile(), weight::GW, Para.Lat, Para.Beta, Para.Order);
-        Weight.BuildNew(weight::SigmaPolar, Para.Lat, Para.Beta, Para.Order);
+        Weight.Load(_WeightFile(), weight::GW, Para);
+        Weight.BuildNew(weight::SigmaPolar, Para);
     }
     Diag.BuildNew(Para.Lat, Weight.G, Weight.W);
     Grasshopper.BuildNew(Para, Diag, Weight);
@@ -33,7 +33,7 @@ bool EnvMonteCarlo::BuildNew(const string &InputFile, bool StarFromBare)
 bool EnvMonteCarlo::Load()
 {
     Para.Load(_ParaFile());
-    Weight.Load(_WeightFile(), weight::GW | weight::SigmaPolar, Para.Lat, Para.Beta, Para.Order);
+    Weight.Load(_WeightFile(), weight::GW | weight::SigmaPolar, Para);
     Diag.Load(_ConfigFile(), Para.Lat, Weight.G, Weight.W);
     Grasshopper.BuildNew(Para, Diag, Weight);
     Scarecrow.Load(_StatisFile(), Para, Diag, Weight);
@@ -42,23 +42,27 @@ bool EnvMonteCarlo::Load()
 
 void EnvMonteCarlo::Save()
 {
-    Para.Save(_ParaFile());
-    Weight.Save(_WeightFile(), weight::GW | weight::SigmaPolar);
-    Diag.Save(_ConfigFile());
-    Scarecrow.Save(_StatisFile());
+    Para.Save(_ParaFile(), "w");
+    Weight.Save(_WeightFile(), weight::GW | weight::SigmaPolar, "w");
+    Diag.Save(_ConfigFile(), "w");
+    Scarecrow.Save(_StatisFile(), "w");
 }
 
 /**
 *  Adjust everything according to new parameters, like new Beta, Jcp
 */
-void EnvMonteCarlo::Reset(ParameterMap map)
+void EnvMonteCarlo::ReWeight(const State &state)
 {
-    //    T = 1.0 / Beta;
-    //    Sigma->Reset(Beta);
-    //    Polar->Reset(Beta);
-    //    G->Reset(Beta);
-    //    W->Reset(Beta);
+    if (Para.Version >= state.Version)
+        return;
+    Para.Jcp = state.Jcp;
+    Para.Beta = state.Beta;
+    Para.T = 1.0 / Para.Beta;
+    Weight.ReWeight(weight::GW | weight::SigmaPolar, Para);
+    Grasshopper.ReWeight(Para);
+    Scarecrow.ReWeight();
 }
+
 string EnvMonteCarlo::_ConfigFile()
 {
     return ToString(PID) + "_config_env.txt";

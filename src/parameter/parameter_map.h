@@ -23,7 +23,7 @@
 */
 class ParameterMap {
   public:
-    void LoadFromFile(const std::string &);
+    bool LoadFromFile(const std::string &, bool AbortIfFail = true);
     void SaveToFile(const std::string &, std::string Mode = "a");
 
     void clear();

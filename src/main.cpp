@@ -8,8 +8,6 @@
 
 /********************** include files *****************************************/
 #include <iostream>
-#include "definition.h"
-#include "initialization.h"
 #include "test.h"
 #include "environment/environment.h"
 #include "parameter/job.h"
@@ -23,9 +21,8 @@ int main(int argc, const char *argv[])
 {
     //initialize LOGGER
     LOGGER_CONF("test.log", "TEST", Logger::file_on | Logger::screen_on, INFO, INFO);
-
     RunTest();
-    //    InitEveryOneNeedsIt();
+
     string InputFile = "infile/_in_MC_1";
     job Job(InputFile);
     LOGGER_CONF(ToString(Job.PID) + ".log", Job.Type, Logger::file_on | Logger::screen_on, INFO, INFO);
