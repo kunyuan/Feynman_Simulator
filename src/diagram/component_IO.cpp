@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Kun Chen. All rights reserved.
 //
 
+//TODO: G, W IsDelta, IsMeasure
 #include "diagram.h"
 #include "../utility/abort.h"
 
@@ -47,12 +48,13 @@ bool Diagram::LoadConfig(istream &is, gLine g)
     READ(is, g_out);
     g->nVer[OUT] = Ver(g_out);
     READ(is, g->K);
+    READ(is, g->IsMeasure);
     return true;
 }
 
 void Diagram::SaveConfig(ostream &os, gLine g)
 {
-    os << g->nVer[IN]->Name << SEP << g->nVer[OUT]->Name << SEP << g->K << endl;
+    os << g->nVer[IN]->Name << SEP << g->nVer[OUT]->Name << SEP << g->K << SEP << g->IsMeasure << endl;
 }
 
 bool Diagram::LoadConfig(istream &is, wLine w)
@@ -64,12 +66,14 @@ bool Diagram::LoadConfig(istream &is, wLine w)
     READ(is, w_out);
     w->nVer[OUT] = Ver(w_out);
     READ(is, w->K);
+    READ(is, w->IsDelta);
+    READ(is, w->IsMeasure);
     return true;
 }
 
 void Diagram::SaveConfig(ostream &os, wLine w)
 {
-    os << w->nVer[IN]->Name << SEP << w->nVer[OUT]->Name << SEP << w->K << endl;
+    os << w->nVer[IN]->Name << SEP << w->nVer[OUT]->Name << SEP << w->K << SEP << w->IsDelta <<SEP << w->IsMeasure << endl;
 }
 
 bool Diagram::LoadConfig(istream &is, vertex v)

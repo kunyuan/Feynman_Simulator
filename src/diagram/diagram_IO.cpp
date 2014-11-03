@@ -5,6 +5,7 @@
 //  Created by Kun Chen on 10/9/14.
 //  Copyright (c) 2014 Kun Chen. All rights reserved.
 //
+//TODO: G, W IsDelta, IsMeasure
 
 #include <vector>
 #include <iostream>
