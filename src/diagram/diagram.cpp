@@ -11,6 +11,7 @@
 #include "diagram.h"
 #include "../observable/weight.h"
 #include "../utility/rng.h"
+
 using namespace std;
 bool Diagram::IsWorm(vertex v)
 {
@@ -36,13 +37,14 @@ Diagram::Diagram()
     WWeight = nullptr;
 }
 
+#include "diagram_initialize.config"
 void Diagram::BuildNew(Lattice &lat, weight::G *g, weight::W *w)
 {
     Lat = &lat;
     GWeight = g;
     WWeight = w;
-    
-    Load("../src/diagram/diagram_initialize.config", lat, g, w);
+    stringstream ss(InitialDiagram);
+    _Load(ss);
     FixDiagram();
 }
 
@@ -52,6 +54,17 @@ void Diagram::Reset(weight::G *g, weight::W *w)
     WWeight = w;
     FixDiagram();
     //TODO: maybe you have to do more to reset
+}
+
+#include "diagram_template.config"
+void Diagram::SetTest(Lattice &lat, weight::G *g, weight::W *w)
+{
+    Lat = &lat;
+    GWeight = g;
+    WWeight = w;
+    stringstream ss(TestDiagramString);
+    _Load(ss);
+    FixDiagram();
 }
 
 /****************   GLine  *****************************/

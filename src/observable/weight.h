@@ -39,7 +39,7 @@ class WeightNoMeasure {
                TAU };
 
   public:
-    void InitializeState();
+    void SetTest();
     void Save(const std::string &FileName, std::string Mode = "a");
     bool Load(const std::string &);
     void Reset(real Beta);
@@ -126,6 +126,7 @@ class Weight {
     G *G;
     Worm WormWeight;
 
+    void SetTest(const Parameter &);
     bool BuildNew(flag, const Parameter &);
     bool Load(const std::string &InputFile, flag);
     bool Load(const std::string &InputFile, flag, const Parameter &);

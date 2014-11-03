@@ -25,6 +25,7 @@ class Diagram {
     bool Load(const std::string &FileName);
     void Save(const std::string &FileName, std::string Mode = "a");
     void Reset(weight::G *, weight::W *);
+    void SetTest(Lattice &, weight::G *, weight::W *);
 
     weight::G *GWeight;
     weight::W *WWeight;
@@ -40,13 +41,12 @@ class Diagram {
     WormClass Worm;
     bool IsWorm(vertex);
 
-    spin Spin(gLine, int);///For gline with different spins on two ends
-    
+    spin Spin(gLine, int); ///For gline with different spins on two ends
+
     spin Spin(gLine); ///For gline with same spin on two ends
     void FlipGSpin(gLine);
     spin Spin(wLine, int, int);
     spin Spin(vertex, int);
-    
 
     int Sublattice(gLine, int);
     int Sublattice(wLine, int);
@@ -81,6 +81,8 @@ class Diagram {
     void WriteDiagram2gv(std::ostream &);
 
   private:
+    bool _Load(std::istream &);
+
     std::ostream &Component2gv(std::ostream &, gLine);
     std::ostream &Component2gv(std::ostream &, wLine);
     std::ostream &Component2gv(std::ostream &, vertex);

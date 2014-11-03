@@ -71,7 +71,7 @@ real WeightNoMeasure::BinToTau(int Bin)
     return Bin * _dBeta + _Beta / 2;
 }
 
-void WeightNoMeasure::InitializeState()
+void WeightNoMeasure::SetTest()
 {
     for (unsigned int i = 0; i < _Weight.Size(); i++) {
         _Weight(i) = Complex(1.0, 0.0);
