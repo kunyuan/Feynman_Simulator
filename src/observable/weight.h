@@ -39,10 +39,10 @@ class WeightNoMeasure {
                TAU };
 
   public:
-    void Reset(real Beta);
     void InitializeState();
     void Save(const std::string &FileName, std::string Mode = "a");
     bool Load(const std::string &);
+    void Reset(real Beta);
 };
 
 class WeightNeedMeasure : public WeightNoMeasure {
