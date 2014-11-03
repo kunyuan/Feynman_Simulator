@@ -8,12 +8,21 @@
 
 #include "environment.h"
 
-EnvDyson::EnvDyson()
+EnvDyson::EnvDyson(int pid)
+    : Environment(pid)
 {
 }
 
-bool EnvDyson::BuildFromFile(string InputFile)
+bool EnvDyson::BuildNew(const string &InputFile)
 {
-    Environment::BuildFromFile(InputFile);
     return true;
+}
+
+string EnvDyson::_FinalQuanFile()
+{
+    return "final_quantity.dat";
+}
+string EnvDyson::_FinalStatisFile()
+{
+    return "final_quantity_statis.npz";
 }

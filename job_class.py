@@ -48,9 +48,9 @@ class Job:
         '''change a key in the parameter dictionary into a string'''
         if type(self.para[key])==bool:
             if self.para[key]:
-                return "true    #{0}\n".format(key)
+                return "1    #{0}\n".format(key)
             else:
-                return "false    #{0}\n".format(key)
+                return "0    #{0}\n".format(key)
         elif type(self.para[key])==str:
             return self.para[key]+"    #{0}\n".format(key)
         elif type(self.para[key])==list:
@@ -62,14 +62,15 @@ class Job:
     def to_string(self, pid=0):
         '''output the corresponding string of the job class'''
         self.para["pid"] = pid
-        input_str = self.key_to_string("pid")
+        input_str = self.key_to_string("DoesLoad")
+        input_str += self.key_to_string("StartFromBare")
+        input_str += self.key_to_string("pid")
         input_str += self.key_to_string("L")
         input_str += self.key_to_string("Jcp")
-        input_str += self.key_to_string("iniBeta")
-        input_str += self.key_to_string("dBeta")
+        input_str += self.key_to_string("initialBeta")
+        input_str += self.key_to_string("deltaBeta")
         input_str += self.key_to_string("finalBeta")
         input_str += self.key_to_string("Order")
-        input_str += self.key_to_string("DoesLoad")
         return input_str
 
 class JobMonteCarlo(Job):
@@ -77,30 +78,29 @@ class JobMonteCarlo(Job):
     def __init__(self, para):
         Job.__init__(self, para)
         self.keep_cpu_busy = True
-        self.para["Type: MC"] = 0
+        self.para["Type"] = "MC"
         self.name = "MC"
 
     def __check_parameters__(self, para):
         if Job.__check_parameters__(self, para) is False:
             return False
-        if type(para["Reweight"]) is not list:
+        if type(para["OrderReweight"]) is not list:
             print "The Reweight should be a list!"
             return False
-        if para["Order"] is not len(para["Reweight"]):
+        if para["Order"] is not len(para["OrderReweight"]):
             print "The Reweight numbers should be equal to Order!"
             return False
 
     def to_string(self, pid=0):
-        input_str = self.key_to_string("Type: MC")
+        input_str = self.key_to_string("Type")
         input_str = input_str+Job.to_string(self, pid)
         input_str += self.key_to_string("Toss")
         input_str += self.key_to_string("Sample")
         input_str += self.key_to_string("Sweep")
         self.para["Seed"] = -int(random.random()*2**30)
         input_str += self.key_to_string("Seed")
-        input_str += self.key_to_string("ReadFile")
         input_str += self.key_to_string("WormSpaceReweight")
-        input_str += self.key_to_string("Reweight")
+        input_str += self.key_to_string("OrderReweight")
         return input_str
 
 class JobConsistLoop(Job):
@@ -108,11 +108,11 @@ class JobConsistLoop(Job):
     def __init__(self, para):
         Job.__init__(self, para)
         self.keep_cpu_busy = False
-        self.para["Type: SCL"] = 1
-        self.name = "SCL"
+        self.para["Type"] = "DYSON"
+        self.name = "DYSON"
 
     def to_string(self, pid=0):
-        input_str = self.key_to_string("Type: SCL")
+        input_str = self.key_to_string("Type")
         input_str = input_str+Job.to_string(self, pid)
         input_str += self.key_to_string("ReadFile")
         return input_str
@@ -122,11 +122,11 @@ class JobIntegration(Job):
     def __init__(self, para):
         Job.__init__(self, para)
         self.keep_cpu_busy = True
-        self.para["Type: NI"] = 3
+        self.para["Type"] = "NI"
         self.name = "NI"
 
     def to_string(self, pid=0):
-        input_str = self.key_to_string("Type: NI")
+        input_str = self.key_to_string("Type")
         input_str = input_str+Job.to_string(self, pid)
         return input_str
 
@@ -135,11 +135,11 @@ class JobOutputOrder(Job):
     def __init__(self, para):
         Job.__init__(self, para)
         self.keep_cpu_busy = True
-        self.para["Type: OO"] = 5
+        self.para["Type"] = "OO"
         self.name = "OO"
 
     def to_string(self, pid=0):
-        input_str = self.key_to_string("Type: OO")
+        input_str = self.key_to_string("Type")
         input_str = input_str+Job.to_string(self, pid)
         input_str += self.key_to_string("ReadFile")
         return input_str
@@ -149,11 +149,11 @@ class JobOutputLoop(Job):
     def __init__(self, para):
         Job.__init__(self, para)
         self.keep_cpu_busy = False
-        self.para["Type: OL"] = 4
+        self.para["Type"] = "OL"
         self.name = "OL"
 
     def to_string(self, pid=0):
-        input_str = self.key_to_string("Type: OL")
+        input_str = self.key_to_string("Type")
         input_str = input_str+ Job.to_string(self, pid)
         input_str += self.key_to_string("ReadFile")
         return input_str
@@ -163,11 +163,11 @@ class JobDebug(Job):
     def __init__(self, para):
         Job.__init__(self, para)
         self.keep_cpu_busy = False
-        self.para["Type: BG"] = 6
+        self.para["Type"] = "BG"
         self.name = "BG"
 
     def to_string(self, pid=0):
-        input_str = self.key_to_string("Type: BG")
+        input_str = self.key_to_string("Type")
         input_str = input_str+Job.to_string(self, pid)
         return input_str
 
@@ -181,6 +181,7 @@ if __name__ == "__main__":
         "Sweep" : 10,
         "Toss" : 1000,
         "DoesLoad" : True,
+        "StartFromBare" :False,
         "Type" : 2,
         "Lx" :  4,
         "Ly" :  4,

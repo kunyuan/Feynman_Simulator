@@ -10,6 +10,7 @@
 #define __Feynman_Simulator__vector__
 
 #include <iosfwd>
+#include <sstream>
 #include "../utility/convention.h"
 using namespace std;
 
@@ -103,5 +104,13 @@ class Vec {
     template <typename TT>
     friend bool operator!=(const Vec<TT> &, const Vec<TT> &);
 };
+
+template <typename T>
+std::string ToString(Vec<T> value)
+{
+    std::ostringstream oss;
+    oss << value;
+    return oss.str();
+}
 
 #endif /* defined(__Feynman_Simulator__vector__) */

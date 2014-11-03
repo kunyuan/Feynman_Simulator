@@ -11,6 +11,7 @@
 #include <string>
 #include <sstream>
 #include "convention.h"
+#include "abort.h"
 
 //---------------------------------------------------------------------------
 
@@ -49,4 +50,15 @@ void AssignFromTo(T *source, T *target, int size)
     for (int i = 0; i < size; i++)
         source[i] = target[i];
 }
+
+bool CleanFile(const std::string &FileName);
+
+std::ofstream OpenFile(const std::string &FileName, const std::string &Mode = "a");
+
+#define CHECKNULL(source)                     \
+    {                                         \
+        if ((source) == nullptr)              \
+            ABORT(#source << " is nullptr!"); \
+    }
+
 #endif

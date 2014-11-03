@@ -10,8 +10,8 @@ TO_DO = []
 com_dict={
     "L" :   [8,8],
     "Jcp" :  1.0,
-    "iniBeta" :  1.00,
-    "dBeta" :  0.00,
+    "initialBeta" :  1.00,
+    "deltaBeta" :  0.00,
     "finalBeta" :  1.00,
     "Order" :  4,
     }
@@ -26,8 +26,8 @@ mc_dict={
     "__IsCluster" : False,
     "__AutoRun" : True,
     "DoesLoad" : False,
-    "Reweight" : [1.5, 1.0, 3.0,4.0],
-    "ReadFile" : readfile,
+    "StartFromBare" : True,
+    "OrderReweight" : [1.5, 1.0, 3.0,4.0],
     "Sample" :  5000000,
     "Sweep" : 10,
     "Toss" : 10000,
@@ -43,7 +43,8 @@ sc_dict={
     "__IsCluster" : False,
     "__AutoRun" : False, 
     "DoesLoad" : True,
-    "ReadFile" : readfile,
+    "StartFromBare" : True,
+    "ReadFile" : readfile
     }
 sc_dict.update(com_dict)
 TO_DO.append(job.JobConsistLoop(sc_dict))
@@ -55,7 +56,8 @@ sc_ini_dict={
     "__IsCluster" : False,
     "__AutoRun" : False, 
     "DoesLoad" : False,
-    "ReadFile" : readfile,
+    "StartFromBare" : True,
+    "ReadFile" : readfile
     }
 sc_ini_dict.update(com_dict)
 
@@ -69,45 +71,11 @@ ol_dict={
     #"__AutoRun" : True,
     "__AutoRun" : False,
     "DoesLoad" : True,
-    "ReadFile" : readfile,
+    "StartFromBare" : True,
+    "ReadFile" : readfile
     }
 ol_dict.update(com_dict)
 TO_DO.append(job.JobOutputLoop(ol_dict))
-
-# output numerical integration job definition
-ni_dict={
-    "__Execute" : ["./gamma3.exe"],
-    "__Duplicate" : 0,
-    "__IsCluster" : False,
-    "__AutoRun" : False,
-    "DoesLoad" : False,
-    }
-ni_dict.update(com_dict)
-TO_DO.append(job.JobIntegration(ni_dict))
-
-
-# output order job definition
-oo_dict={
-    "__Execute" : ["./gamma3.exe"],
-    "__Duplicate" : 0,
-    "__IsCluster" : False,
-    "__AutoRun" : False,
-    "DoesLoad" : True,
-    "ReadFile" : readfile,
-    }
-oo_dict.update(com_dict)
-TO_DO.append(job.JobOutputOrder(oo_dict))
-
-# debug job definition
-bg_dict={
-    "__Execute" : ["./gamma3.exe"],
-    "__Duplicate" : 0,
-    "__IsCluster" : False,
-    "__AutoRun" : False,
-    "DoesLoad" : False,
-    }
-bg_dict.update(com_dict)
-TO_DO.append(job.JobDebug(bg_dict))
 
 if __name__ == "__main__":
     for e in TO_DO:

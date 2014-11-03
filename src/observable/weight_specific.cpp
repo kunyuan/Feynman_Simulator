@@ -10,16 +10,16 @@
 
 using namespace std;
 using namespace Array;
-using namespace Weight;
+using namespace weight;
 
 Sigma::Sigma(const Lattice &lat, real beta, int order)
     : WeightNeedMeasure(lat, beta, order, SPIN2, "Sigma")
 {
 }
 
-Complex Sigma::Weight(const Site &rin, const Site& rout, real tin, real tout, spin SpinIn, spin SpinOut)
+Complex Sigma::Weight(const Site &rin, const Site &rout, real tin, real tout, spin SpinIn, spin SpinOut)
 {
-    return _Weight[SpinIndex(SpinIn, SpinOut)][_Lat.Dist(rin, rout).SublatIndex][_Lat.Dist(rin, rout).CoordiIndex][TauToBin(tout-tin)];
+    return _Weight[SpinIndex(SpinIn, SpinOut)][_Lat.Dist(rin, rout).SublatIndex][_Lat.Dist(rin, rout).CoordiIndex][TauToBin(tout - tin)];
 }
 
 Complex Sigma::WeightOfDelta(spin SpinIn, spin SpinOut)
@@ -28,12 +28,12 @@ Complex Sigma::WeightOfDelta(spin SpinIn, spin SpinOut)
     return 0.0;
 }
 
-void Sigma::Measure( const Site &rin, const Site& rout, real tin, real tout,spin SpinIn, spin SpinOut, int order, const Complex &weight)
+void Sigma::Measure(const Site &rin, const Site &rout, real tin, real tout, spin SpinIn, spin SpinOut, int order, const Complex &weight)
 {
     if (DEBUGMODE && order <= 0)
         LOG_ERROR("Too small order=" << order);
     int spin_index = SpinIndex(SpinIn, SpinOut);
-    int tau_bin = TauToBin(tout-tin);
+    int tau_bin = TauToBin(tout - tin);
     _WeightAccu[order - 1][spin_index][_Lat.Dist(rin, rout).SublatIndex][_Lat.Dist(rin, rout).CoordiIndex][tau_bin] += weight;
     _Norm += _dBeta;
     _Average[order - 1].Measure(weight);
@@ -46,17 +46,17 @@ Polar::Polar(const Lattice &lat, real beta, int order)
 {
 }
 
-Complex Polar::Weight(const Site &rin, const Site& rout, real tin, real tout, spin *SpinIn, spin *SpinOut)
+Complex Polar::Weight(const Site &rin, const Site &rout, real tin, real tout, spin *SpinIn, spin *SpinOut)
 {
-    return _Weight[SpinIndex(SpinIn, SpinOut)][_Lat.Dist(rin, rout).SublatIndex][_Lat.Dist(rin, rout).CoordiIndex][TauToBin(tout-tin)];
+    return _Weight[SpinIndex(SpinIn, SpinOut)][_Lat.Dist(rin, rout).SublatIndex][_Lat.Dist(rin, rout).CoordiIndex][TauToBin(tout - tin)];
 }
 
-void Polar::Measure(const Site &rin, const Site& rout, real tin, real tout, spin *SpinIn, spin *SpinOut, int order, const Complex &weight)
+void Polar::Measure(const Site &rin, const Site &rout, real tin, real tout, spin *SpinIn, spin *SpinOut, int order, const Complex &weight)
 {
     if (DEBUGMODE && order <= 0)
         LOG_ERROR("Too small order=" << order);
     int spin_index = SpinIndex(SpinIn, SpinOut);
-    int tau_bin = TauToBin(tout-tin);
+    int tau_bin = TauToBin(tout - tin);
     _WeightAccu[order - 1][spin_index][_Lat.Dist(rin, rout).SublatIndex][_Lat.Dist(rin, rout).CoordiIndex][tau_bin] += weight;
     _Norm += _dBeta;
     _Average[order - 1].Measure(weight);
@@ -65,7 +65,7 @@ void Polar::Measure(const Site &rin, const Site& rout, real tin, real tout, spin
 /***********************  G  **************************************/
 
 G::G(const Lattice &lat, real beta, int order)
-    : Weight::WeightNoMeasure(lat, beta, order, SPIN4, "Polar")
+    : WeightNoMeasure(lat, beta, order, SPIN4, "Polar")
 {
 }
 
@@ -90,10 +90,9 @@ Complex G::Weight(int dir, const Site &r1, const Site& r2, real t1, real t2, spi
             return _Weight[SpinIndex(Spin2, Spin1)][_Lat.Dist(r2, r1).SublatIndex][_Lat.Dist(r2, r1).CoordiIndex][TauToBin(t1-t2)];
 }
 
-Complex G::BareWeight(const Site &rin, const Site& rout, real tin, real tout, spin SpinIn, spin SpinOut)
+void G::InitialWithBare()
 {
     //TODO: add bare G expression here
-    return 0.0;
 }
 
 /***********************  W  **************************************/
@@ -144,7 +143,7 @@ Complex W::Weight(int dir, const Site &r1, const Site& r2, real t1, real t2, spi
             return _Weight[spinindex][subindex][coordindex][tau];
 }
 
-Complex W::WeightOfDelta(const Site &rin, const Site& rout, spin *SpinIn, spin *SpinOut, bool IsWorm)
+Complex W::WeightOfDelta(const Site &rin, const Site &rout, spin *SpinIn, spin *SpinOut, bool IsWorm)
 {
     //TODO: add Delta expression of W here, you may need to add new API to measure it
     return Complex(1.0,0.0);
@@ -156,8 +155,7 @@ Complex W::WeightOfDelta(int dir, const Site &r1, const Site& r2, spin *Spin1, s
     return Complex(1.0,0.0);
 }
 
-Complex BareWeight(const Site &rin, const Site& rout, real tin, real tout, spin *SpinIn, spin *SpinOut)
+void W::InitialWithBare()
 {
     //TODO: add bare W expression here
-    return 0.0;
 }

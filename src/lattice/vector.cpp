@@ -42,13 +42,9 @@ template istream &operator>>(istream &, Vec<real> &);
 template <typename T>
 string Vec<T>::PrettyString()
 {
-    stringstream os;
-    os << "(";
-    for (int i = 0; i < D - 1; i++)
-        os << _Array[i] << ",";
-    os << _Array[D - 1] << ")";
-    return os.str();
+    return "(" + ToString(*this) + ")";
 }
+
 template <typename T>
 bool operator!=(const Vec<T> &v1, const Vec<T> &v2)
 {

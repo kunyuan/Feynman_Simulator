@@ -20,7 +20,7 @@ const string SEP_LINE = "#######################################################
 const string SEP_LINE_SHORT = "####";
 
 /*******************  Read/write diagram to dat file ****************/
-void Diagram::SaveConfig(const std::string &FileName, string Mode)
+void Diagram::Save(const std::string &FileName, string Mode)
 {
     ofstream os;
     if (Mode == "w")
@@ -54,8 +54,9 @@ void Diagram::SaveConfig(const std::string &FileName, string Mode)
     }
 }
 
-bool Diagram::LoadConfig(const std::string &FileName)
+bool Diagram::Load(const std::string &FileName)
 {
+
     ifstream ifs;
     ifs.open(FileName, ios::in);
     ON_SCOPE_EXIT([&] {ifs.close(); });
@@ -99,6 +100,14 @@ bool Diagram::LoadConfig(const std::string &FileName)
         FixDiagram();
         return true;
     }
+}
+
+bool Diagram::Load(const std::string &FileName, Lattice &lat, weight::G *g, weight::W *w)
+{
+    Lat = &lat;
+    GWeight = g;
+    WWeight = w;
+    return Load(FileName);
 }
 
 /************************   write component to gv ****************************************/
