@@ -27,6 +27,7 @@ class Markov {
 
     const static int NUpdates = 4;
     real ProbofCall[NUpdates];
+    real SumofProbofCall[NUpdates]={0.0};
 
     Diagram *Diag;
 
