@@ -11,7 +11,17 @@
 #include "../utility/convention.h"
 #include "../utility/cnpy.h"
 #include "../utility/abort.h"
+Lattice::Lattice()
+{
+    Reset(Vec<int>());
+}
+
 Lattice::Lattice(const Vec<int> &size)
+{
+    Reset(size);
+}
+
+void Lattice::Reset(const Vec<int> &size)
 {
     Dimension = D;
     Vol = 1;
@@ -22,6 +32,7 @@ Lattice::Lattice(const Vec<int> &size)
     SublatVol = NSublattice;
     Initialize();
 }
+
 /**
  *  initialize the lattice vectors
  */

@@ -13,14 +13,14 @@
 #include "../utility/array.h"
 #include "../lattice/lattice.h"
 
-namespace Weight {
+namespace weight {
 
 class WeightNoMeasure {
   protected:
     WeightNoMeasure(const Lattice &, real Beta, int Order, int SpinVol, std::string);
     std::string _Name;
     real _Beta;
-    real _dBeta;
+    real _dBeta; //_Beta/MAX_TAU
     real _dBetaInverse;
     int _Order;
     Lattice _Lat;
@@ -39,9 +39,10 @@ class WeightNoMeasure {
                TAU };
 
   public:
+    void Reset(real Beta);
     void InitializeState();
-    void SaveState(const std::string &FileName, std::string Mode = "a");
-    bool LoadState(const std::string &);
+    void Save(const std::string &FileName, std::string Mode = "a");
+    bool Load(const std::string &);
 };
 
 class WeightNeedMeasure : public WeightNoMeasure {
@@ -62,8 +63,8 @@ class WeightNeedMeasure : public WeightNoMeasure {
     void ClearStatistics();
     void SqueezeStatistics(real factor);
     //    std::string PrettyString();
-    void SaveState(const std::string &FileName, std::string Mode = "a");
-    bool LoadState(const std::string &);
+    void Save(const std::string &FileName, std::string Mode = "a");
+    bool Load(const std::string &);
 };
 
 //TODO: Add fitting function here
@@ -107,6 +108,24 @@ class Worm {
     {
         return 1.0;
     }
+};
+
+class Weight {
+  public:
+    Weight();
+    ~Weight();
+    Sigma *Sigma;
+    Polar *Polar;
+    W *W;
+    G *G;
+    Worm *WormWeight;
+
+    bool BuildNew(const Lattice &Lat, real Beta, int order);
+    bool Load(const std::string &InputFile, const Lattice &Lat, real Beta, int order);
+    void Save(const std::string &InputFile, const std::string &Mode = "a");
+
+  private:
+    void _AllocateResources(const Lattice &Lat, real Beta, int order);
 };
 }
 

@@ -179,7 +179,7 @@ real Estimator<T>::Ratio()
 }
 
 template <typename T>
-bool Estimator<T>::LoadState(cnpy::npz_t NpzMap)
+bool Estimator<T>::LoadStatistics(cnpy::npz_t NpzMap)
 {
     ClearStatistics();
     bool flag = true;
@@ -193,7 +193,7 @@ bool Estimator<T>::LoadState(cnpy::npz_t NpzMap)
 }
 
 template <typename T>
-void Estimator<T>::SaveState(const string &FileName, string Mode)
+void Estimator<T>::SaveStatistics(const string &FileName, string Mode)
 {
     unsigned int shape[1];
     shape[0] = (unsigned int)_history.size();
@@ -209,6 +209,7 @@ template class Estimator<Complex>;
 template <typename T>
 void EstimatorBundle<T>::AddEstimator(string name)
 {
+    _MakeSureKeyNotExists(name);
     _EstimatorVector.push_back(EstimatorT(name));
     _EstimatorMap[name] = _EstimatorVector.data() + _EstimatorVector.size() - 1;
 }
@@ -219,8 +220,19 @@ void EstimatorBundle<T>::AddEstimator(string name)
 template <typename T>
 void EstimatorBundle<T>::AddEstimator(const Estimator<T> &est)
 {
+    _MakeSureKeyNotExists(est.Name);
     _EstimatorVector.push_back(est);
     _EstimatorMap[est.Name] = _EstimatorVector.data() + _EstimatorVector.size() - 1;
+}
+
+template <typename T>
+bool EstimatorBundle<T>::_MakeSureKeyNotExists(string key)
+{
+    if (_EstimatorMap.find(key) != _EstimatorMap.end()) {
+        ABORT(key << " has already existed!");
+        return true;
+    }
+    return false;
 }
 
 template <typename T>
@@ -237,21 +249,21 @@ int EstimatorBundle<T>::HowMany()
 }
 
 template <typename T>
-bool EstimatorBundle<T>::LoadState(const string &FileName)
+bool EstimatorBundle<T>::LoadStatistics(const string &FileName)
 {
     cnpy::npz_t NpzMap = cnpy::npz_load(cnpy::npz_name(FileName));
     ON_SCOPE_EXIT([&] {NpzMap.destruct(); });
     for (auto &vector : _EstimatorVector)
-        vector.LoadState(NpzMap);
+        vector.LoadStatistics(NpzMap);
     return true;
 }
 
 template <typename T>
-void EstimatorBundle<T>::SaveState(const string &FileName, string Mode)
+void EstimatorBundle<T>::SaveStatistics(const string &FileName, string Mode)
 {
     string Mod = Mode;
     for (unsigned int i = 0; i < _EstimatorVector.size(); i++) {
-        _EstimatorVector[i].SaveState(FileName, Mod);
+        _EstimatorVector[i].SaveStatistics(FileName, Mod);
         if (i == 0 && Mod == "w")
             Mod = "a"; //the second and the rest elements will be wrote as appended
     }

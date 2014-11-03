@@ -80,15 +80,13 @@ void Test_Diagram_Component_Bundle()
 void Test_Diagram_IO()
 {
     Lattice lat(Vec<int>(1));
-    Weight::G G(lat, 1.0, 1);
-    Weight::W W(lat, 1.0, 1);
+    weight::G G(lat, 1.0, 1);
+    weight::W W(lat, 1.0, 1);
     G.InitializeState();
     W.InitializeState();
     Diagram Diag;
 
-    Diag.Build(&lat, &G, &W);
-
-    Diag.LoadConfig("../src/diagram/diagram_template.config");
+    Diag.Load("../src/diagram/diagram_template.config", lat, &G, &W);
     LOG_INFO(Diag.PrettyString(Diag.Ver(0)));
     sput_fail_unless(Diag.CheckDiagram(), "Check diagram reading");
     sput_fail_unless(Equal(Diag.Weight, Complex(1.0, 0.0)), "Check diagram reading");

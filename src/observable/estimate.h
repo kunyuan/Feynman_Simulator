@@ -50,8 +50,8 @@ class Estimator {
     void AddStatistics();
     Estimate<T> Estimate();
     double Ratio();
-    bool LoadState(cnpy::npz_t);
-    void SaveState(const std::string &FileName, std::string Mode = "a");
+    bool LoadStatistics(cnpy::npz_t);
+    void SaveStatistics(const std::string &FileName, std::string Mode = "a");
     void ClearStatistics();
     void SqueezeStatistics(real factor);
 };
@@ -66,15 +66,15 @@ class EstimatorBundle {
     typedef Estimator<T> EstimatorT;
     std::vector<EstimatorT> _EstimatorVector;
     std::unordered_map<std::string, EstimatorT *> _EstimatorMap;
+    bool _MakeSureKeyNotExists(std::string key);
 
-  public:
-    void AddEstimator(const std::string);
+        public : void AddEstimator(const std::string);
     void AddEstimator(const EstimatorT &);
     void RemoveEstimator(const std::string);
     void AddStatistics();
     int HowMany();
-    bool LoadState(const std::string &FileName);
-    void SaveState(const std::string &FileName, std::string Mode = "a");
+    bool LoadStatistics(const std::string &FileName);
+    void SaveStatistics(const std::string &FileName, std::string Mode = "a");
     EstimatorT &operator[](int);
     EstimatorT &operator[](std::string);
     void ClearStatistics();
