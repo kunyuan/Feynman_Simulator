@@ -9,9 +9,7 @@
 #ifndef __Feynman_Simulator__parameter_map__
 #define __Feynman_Simulator__parameter_map__
 
-#include <set>
 #include <map>
-#include <iostream>
 #include "../utility/utility.h"
 #include "../utility/abort.h"
 
