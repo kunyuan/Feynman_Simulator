@@ -90,6 +90,6 @@ void Test_Diagram_IO()
     LOG_INFO(Diag.PrettyString(Diag.Ver(0)));
     sput_fail_unless(Diag.CheckDiagram(), "Check diagram reading");
     sput_fail_unless(Equal(Diag.Weight, Complex(1.0, 0.0)), "Check diagram reading");
-    Diag.SaveConfig("diagram_template.config", "a");
+    Diag.Save("diagram_template.config", "a");
     Diag.WriteDiagram2gv("./test.gv");
 }

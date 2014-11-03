@@ -90,6 +90,7 @@ class G : public WeightNoMeasure {
     Complex Weight(const Site &, const Site &, real, real, spin, spin, bool);
     Complex Weight(int, const Site &, const Site &, real, real, spin, spin, bool);
     Complex BareWeight(const Site &, const Site &, real, real, spin, spin);
+    void InitialWithBare();
 };
 
 class W : public WeightNoMeasure {
@@ -100,6 +101,7 @@ class W : public WeightNoMeasure {
     Complex WeightOfDelta(const Site &, const Site &, spin *, spin *, bool);
     Complex WeightOfDelta(int, const Site &, const Site &, spin *, spin *, bool);
     Complex BareWeight(const Site &, const Site &, real, real, spin *, spin *);
+    void InitialWithBare();
 };
 
 class Worm {

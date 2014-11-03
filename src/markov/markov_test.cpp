@@ -40,15 +40,17 @@ void Test_CreateWorm()
     LOG_INFO("Update(Create Worm) are done!");
     sput_fail_unless(total == 100, "The accept ratio of CreateWorm = 1.0");
     
+    RNG.Reset(15);
     total = 0;
     for (int i = 0; i < 100; i++) {
         markov.CreateWorm();
         markov.DeleteWorm();
         if (!markov.Diag->Worm.Exist) {
             total += 1;
-            markov.Diag->SaveConfig("diagram_template.config", "a");
+            markov.Diag->Save("diagram_template.config", "a");
         }
     }
     LOG_INFO("Update(Delete Worm) are done!");
-    sput_fail_unless(total == 25, "The accept ratio of DeleteWorm = 0.25");
+    sput_fail_unless(total == 28, "The accept ratio of DeleteWorm = 0.25");
+    
 }
