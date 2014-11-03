@@ -32,7 +32,7 @@ int main(int argc, const char *argv[])
 
     if (Job.Type == "MC") {
         EnvMonteCarlo env(Job.PID);
-        env.BuildNew(InputFile);
+        env.BuildNew(InputFile, Job.StartFromBare);
         MonteCarlo(env);
     }
     else if (Job.Type == "DYSON") {

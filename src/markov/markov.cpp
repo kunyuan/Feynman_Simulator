@@ -30,7 +30,7 @@ bool Markov::BuildNew(ParameterMC &para, Diagram &diag, weight::Weight &weight)
     //TODO: shouldn't initialize G, W here
     G->InitializeState();
     W->InitializeState();
-    WormWeight = weight.WormWeight;
+    WormWeight = &weight.WormWeight;
 
     for (int i = 0; i < NUpdates; i++)
         ProbofCall[i] = 1.0 / real(NUpdates);
