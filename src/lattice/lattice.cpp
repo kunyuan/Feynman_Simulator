@@ -11,6 +11,11 @@
 #include "../utility/convention.h"
 #include "../utility/cnpy.h"
 #include "../utility/abort.h"
+Lattice::Lattice()
+{
+    Reset(Vec<int>());
+}
+
 Lattice::Lattice(const Vec<int> &size)
 {
     Reset(size);

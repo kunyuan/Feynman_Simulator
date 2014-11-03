@@ -209,6 +209,7 @@ template class Estimator<Complex>;
 template <typename T>
 void EstimatorBundle<T>::AddEstimator(string name)
 {
+    _MakeSureKeyNotExists(name);
     _EstimatorVector.push_back(EstimatorT(name));
     _EstimatorMap[name] = _EstimatorVector.data() + _EstimatorVector.size() - 1;
 }
@@ -219,8 +220,19 @@ void EstimatorBundle<T>::AddEstimator(string name)
 template <typename T>
 void EstimatorBundle<T>::AddEstimator(const Estimator<T> &est)
 {
+    _MakeSureKeyNotExists(est.Name);
     _EstimatorVector.push_back(est);
     _EstimatorMap[est.Name] = _EstimatorVector.data() + _EstimatorVector.size() - 1;
+}
+
+template <typename T>
+bool EstimatorBundle<T>::_MakeSureKeyNotExists(string key)
+{
+    if (_EstimatorMap.find(key) != _EstimatorMap.end()) {
+        ABORT(key << " has already existed!");
+        return true;
+    }
+    return false;
 }
 
 template <typename T>

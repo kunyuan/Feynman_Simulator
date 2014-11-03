@@ -11,7 +11,7 @@
 
 #include <iosfwd>
 #include "component_bundle.h"
-namespace Weight {
+namespace weight {
 class G;
 class W;
 }
@@ -20,10 +20,13 @@ class Diagram {
   public:
     Diagram();
 
-    void Build(Lattice *, Weight::G *, Weight::W *);
+    void BuildNew(Lattice &, weight::G *, weight::W *);
+    bool Load(const std::string &FileName, Lattice &, weight::G *, weight::W *);
+    bool Load(const std::string &FileName);
+    void Save(const std::string &FileName, std::string Mode = "a");
 
-    Weight::G *GWeight;
-    Weight::W *WWeight;
+    weight::G *GWeight;
+    weight::W *WWeight;
     Lattice *Lat;
 
     int Order;
@@ -68,9 +71,6 @@ class Diagram {
     std::string PrettyString(gLine);
     std::string PrettyString(wLine);
     std::string PrettyString(vertex);
-
-    bool LoadConfig(const std::string &FileName);
-    void SaveConfig(const std::string &FileName, std::string Mode = "a");
 
     void WriteDiagram2gv(std::string);
     void WriteDiagram2gv(std::ostream &);

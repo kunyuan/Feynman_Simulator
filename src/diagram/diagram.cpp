@@ -34,9 +34,9 @@ Diagram::Diagram()
     WWeight = nullptr;
 }
 
-void Diagram::Build(Lattice *lat, Weight::G *g, Weight::W *w)
+void Diagram::BuildNew(Lattice &lat, weight::G *g, weight::W *w)
 {
-    Lat = lat;
+    Lat = &lat;
     GWeight = g;
     WWeight = w;
 }
@@ -97,7 +97,7 @@ string Diagram::PrettyString(vertex v)
 {
     stringstream os;
     os << "-[G " << v->nG[IN] << "]-" << ToString(v->Spin[IN]) << "->--";
-    os << "{V " << v->Name << ",r:" << v->R.Coordinate.PrettyString() << ",tau:" << v->Tau << "}";
+    os << "{V " << v->Name << ",r:" << ToString(v->R.Coordinate) << ",tau:" << v->Tau << "}";
     os << "-->-" << ToString(v->Spin[OUT]) << "-[G " << v->nG[OUT] << "]-";
     os << "  /~~~<W " << v->nW << ">";
     return os.str();

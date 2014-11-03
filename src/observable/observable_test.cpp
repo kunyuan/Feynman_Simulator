@@ -94,7 +94,7 @@ void TestDiagramObject()
     RandomFactory rng(100);
     Lattice lat(Vec<int>(1));
     real Beta = 5.0;
-    Weight::Sigma Sig(lat, Beta, 4);
+    weight::Sigma Sig(lat, Beta, 4);
     Site s1, s2;
     for (int i = 0; i < 1000000; i++) {
         Sig.Measure(s1, s2, 0.0, rng.urn() * Beta, DOWN, DOWN, 1, Complex(rng.urn(), rng.urn()));
@@ -122,7 +122,7 @@ void TestDiagramObject()
 
     //Weight class IO operation
     Sig.Save("test_weight", "w");
-    Weight::Sigma Sig2(lat, Beta, 4);
+    weight::Sigma Sig2(lat, Beta, 4);
     Sig2.Load("test_weight");
     sput_fail_unless(Equal(Sig.Weight(s1, s2, 0.0, Beta / 2, DOWN, DOWN), Sig.Weight(s1, s2, 0.0, Beta / 2, DOWN, DOWN)), "Weight class IO check.");
 }

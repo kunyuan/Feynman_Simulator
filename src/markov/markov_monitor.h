@@ -9,14 +9,27 @@
 #ifndef __Feynman_Simulator__measure__
 #define __Feynman_Simulator__measure__
 
-#include "../environment/environment.h"
+#include "../observable/weight.h"
+#include "../parameter/parameter.h"
+#include "../diagram/diagram.h"
 
 class MarkovMonitor {
-  private:
-    EnvMonteCarlo *_Env;
-
   public:
-    MarkovMonitor(EnvMonteCarlo *);
+    MarkovMonitor();
+
+    Parameter *Para;
+    Diagram *Diag;
+    weight::Weight *Weight;
+
+    EstimatorBundle<Complex> cEstimator;
+    EstimatorBundle<real> rEstimator;
+    EstimatorBundle<real> DetailBalanceEstimator;
+    Estimator<real> ZeroOrderWeight;
+
+    bool BuildNew(ParameterMC &, Diagram &, weight::Weight &);
+    bool Load(const std::string &InputFile, ParameterMC &, Diagram &, weight::Weight &);
+    void Save(const std::string &InputFile, const std::string &Mode = "a");
+
     void Annealing();
     void SqueezeStatistics();
     void ReWeightEachOrder();

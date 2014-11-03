@@ -108,6 +108,7 @@ class Lattice {
     Vec<real> ReciprocalLatticeVec[D];
     Vec<real> SublatticeVec[NSublattice];
 
+    Lattice();
     Lattice(const Vec<int> &size);
     void Reset(const Vec<int> &size);
 

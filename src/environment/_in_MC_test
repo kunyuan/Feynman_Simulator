@@ -1,11 +1,11 @@
-0    #Type: MC
-false    #DoesLoad
-true     #StartFromBare
+MC    #Type
+0    #DoesLoad
+1     #StartFromBare
 1    #pid
 8,8    #L
 1.0    #Jcp
-1.0    #iniBeta
-0.0    #dBeta
+1.0    #initialBeta
+0.0    #deltaBeta
 1.0    #finalBeta
 4    #Order
 10000    #Toss
@@ -13,4 +13,4 @@ true     #StartFromBare
 10    #Sweep
 -519180543    #Seed
 0.1    #WormSpaceReweight
-1.5,1.0,3.0,4.0    #Reweight
+1.5,1.0,3.0,4.0    #OrderReweight

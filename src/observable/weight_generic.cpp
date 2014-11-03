@@ -12,7 +12,7 @@
 
 using namespace std;
 using namespace Array;
-using namespace Weight;
+using namespace weight;
 
 WeightNoMeasure::WeightNoMeasure(const Lattice &lat, real beta, int order, int SpinVol, string name)
     : _Lat(lat)
