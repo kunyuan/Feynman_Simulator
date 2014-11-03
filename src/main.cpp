@@ -45,22 +45,25 @@ int main(int argc, const char *argv[])
 
 void MonteCarlo(EnvMonteCarlo &PaddyField)
 {
+    auto &Para = PaddyField.Para;
+    auto &Grasshopper = PaddyField.Grasshopper;
+    auto &Scarecrow = PaddyField.Scarecrow;
 
-    while (PaddyField.Para.Counter < 10) {
-        PaddyField.Para.Counter++;
-        //        GrassHopper.Hop(10);
+    while (Para.Counter < 10) {
+        Para.Counter++;
+        Grasshopper.Hop(0);
 
-        PaddyField.Scarecrow.Measure();
+        Scarecrow.Measure();
 
-        if (PaddyField.Para.Counter % 10) {
+        if (Para.Counter % 10) {
             //            Env.AddStatistics();
-            PaddyField.Scarecrow.ReWeightEachOrder();
+            Scarecrow.ReWeightEachOrder();
         }
-        if (PaddyField.Para.Counter % 100000) {
+        if (Para.Counter % 100000) {
             PaddyField.Save();
         }
-        if (PaddyField.Para.Counter % 20) {
-            PaddyField.Scarecrow.Annealing();
+        if (Para.Counter % 20) {
+            Scarecrow.Annealing();
         }
     }
 }
