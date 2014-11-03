@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Kun Chen. All rights reserved.
 //
 
-#include "../environment/environment.h"
+#include "markov.h"
 #include "../utility/sput.h"
 using namespace std;
 
@@ -23,14 +23,15 @@ int TestMarkov()
 
 void Test_CreateWorm()
 {
-    EnvMonteCarlo Env(0);
-    Env.BuildNew("../src/environment/_in_MC_test", true);
-    Env.Weight.G->InitializeState();
-    Env.Weight.W->InitializeState();
-    LOG_INFO("Build Environment succeed!");
-    Env.Diag.Load("../src/diagram/diagram_template.config", Env.Para.Lat, Env.Weight.G, Env.Weight.W);
-    LOG_INFO("Load Diagram from config file succeed!");
-    Markov &markov = Env.Grasshopper;
+    ParameterMC Para;
+    Para.SetTest();
+    weight::Weight Weight;
+    Weight.SetTest(Para);
+    Diagram Diag;
+    Diag.SetTest(Para.Lat, Weight.G, Weight.W);
+    Markov markov;
+    markov.BuildNew(Para, Diag, Weight);
+
     int total = 0;
     for (int i = 0; i < 100; i++) {
         markov.CreateWorm();
