@@ -14,23 +14,25 @@ int RandomPickK();
 int RandomPickDeltaSpin();
 bool CanNotMoveWorm(int dspin, vertex v);
 
-Markov::Markov(EnvMonteCarlo *Env)
+bool Markov::BuildNew(ParameterMC &para, Diagram &diag, weight::Weight &weight)
 {
-    Beta = Env->Beta;
-    Lat = Env->Lat;
-    OrderWeight = Env->OrderWeight;
-    Diag = &Env->Diag;
-    Worm = &Env->Diag.Worm;
-    Sigma = Env->Sigma;
-    Polar = Env->Polar;
-    G = Env->G;
+    Beta = para.Beta;
+    Lat = &para.Lat;
+    OrderWeight = para.OrderReWeight;
+    Diag = &diag;
+    Worm = &diag.Worm;
+    Sigma = weight.Sigma;
+    Polar = weight.Polar;
+    G = weight.G;
+    W = weight.W;
+    //TODO: shouldn't initialize G, W here
     G->InitializeState();
-    W = Env->W;
     W->InitializeState();
-    WormWeight = Env->WormWeight;
+    WormWeight = weight.WormWeight;
 
     ProbofCall[0] = 0.50;
     ProbofCall[1] = 0.50;
+    return true;
 }
 
 /**

@@ -10,6 +10,7 @@
 #define Fermion_Simulator_random_h
 
 #include <random>
+#include <string>
 #ifndef real
 #define real double
 #endif
@@ -17,6 +18,7 @@
 class RandomFactory {
     friend std::ostream &operator<<(std::ostream &os, RandomFactory &r);
     friend std::istream &operator>>(std::istream &is, RandomFactory &r);
+    friend std::string ToString(const RandomFactory &RNG);
 
   private:
     std::mt19937 _eng;

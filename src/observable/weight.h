@@ -13,7 +13,7 @@
 #include "../utility/array.h"
 #include "../lattice/lattice.h"
 
-namespace Weight {
+namespace weight {
 
 class WeightNoMeasure {
   protected:
@@ -88,7 +88,7 @@ class G : public WeightNoMeasure {
   public:
     G(const Lattice &, real Beta, int order);
     Complex Weight(const Site &, const Site &, real, real, spin, spin);
-    Complex BareWeight(const Site &, const Site &, real, real, spin, spin);
+    void InitialWithBare();
 };
 
 class W : public WeightNoMeasure {
@@ -96,7 +96,7 @@ class W : public WeightNoMeasure {
     W(const Lattice &, real Beta, int order);
     Complex Weight(const Site &, const Site &, real, real, spin *, spin *, bool);
     Complex WeightOfDelta(const Site &, const Site &, spin *, spin *, bool);
-    Complex BareWeight(const Site &, const Site &, real, real, spin *, spin *);
+    void InitialWithBare();
 };
 
 class Worm {
@@ -105,6 +105,24 @@ class Worm {
     {
         return 1.0;
     }
+};
+
+class Weight {
+  public:
+    Weight();
+    ~Weight();
+    Sigma *Sigma;
+    Polar *Polar;
+    W *W;
+    G *G;
+    Worm *WormWeight;
+
+    bool BuildNew(const Lattice &Lat, real Beta, int order);
+    bool Load(const std::string &InputFile, const Lattice &Lat, real Beta, int order);
+    void Save(const std::string &InputFile, const std::string &Mode = "a");
+
+  private:
+    void _AllocateResources(const Lattice &Lat, real Beta, int order);
 };
 }
 

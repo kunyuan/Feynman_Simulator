@@ -10,8 +10,8 @@ TO_DO = []
 com_dict={
     "L" :   [8,8],
     "Jcp" :  1.0,
-    "iniBeta" :  1.00,
-    "dBeta" :  0.00,
+    "initialBeta" :  1.00,
+    "deltaBeta" :  0.00,
     "finalBeta" :  1.00,
     "Order" :  4,
     }
@@ -27,7 +27,7 @@ mc_dict={
     "__AutoRun" : True,
     "DoesLoad" : False,
     "StartFromBare" : True,
-    "Reweight" : [1.5, 1.0, 3.0,4.0],
+    "OrderReweight" : [1.5, 1.0, 3.0,4.0],
     "Sample" :  5000000,
     "Sweep" : 10,
     "Toss" : 10000,

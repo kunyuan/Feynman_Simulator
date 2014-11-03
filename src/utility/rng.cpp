@@ -7,6 +7,7 @@
 //
 
 #include "rng.h"
+#include <sstream>
 
 using namespace std;
 
@@ -32,7 +33,6 @@ void RandomFactory::Reset(int seed)
     _eng.seed(seed);
 }
 
-
 // double pick_a_number(double from, double upto)
 //{
 //    static std::uniform_real_distribution<> d{};
@@ -52,5 +52,10 @@ std::istream &operator>>(std::istream &is, RandomFactory &r)
     return is;
 }
 
+std::string ToString(const RandomFactory &rng)
+{
+    std::ostringstream oss;
+    oss << rng._eng;
+    return oss.str();
+}
 RandomFactory RNG;
-

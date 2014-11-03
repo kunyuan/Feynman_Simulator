@@ -66,9 +66,9 @@ class EstimatorBundle {
     typedef Estimator<T> EstimatorT;
     std::vector<EstimatorT> _EstimatorVector;
     std::unordered_map<std::string, EstimatorT *> _EstimatorMap;
+    bool _MakeSureKeyNotExists(std::string key);
 
-  public:
-    void AddEstimator(const std::string);
+        public : void AddEstimator(const std::string);
     void AddEstimator(const EstimatorT &);
     void RemoveEstimator(const std::string);
     void AddStatistics();
