@@ -25,8 +25,10 @@ void Test_CreateWorm()
 {
     EnvMonteCarlo Env(0);
     Env.BuildNew("../src/environment/_in_MC_test", true);
+    Env.Weight.G->InitializeState();
+    Env.Weight.W->InitializeState();
     LOG_INFO("Build Environment succeed!");
-    Env.Diag.Load("../src/diagram/diagram_template.config");
+    Env.Diag.Load("../src/diagram/diagram_template.config", Env.Para.Lat, Env.Weight.G, Env.Weight.W);
     LOG_INFO("Load Diagram from config file succeed!");
     Markov &markov = Env.Grasshopper;
     int total = 0;
