@@ -82,14 +82,15 @@ void Test_Diagram_IO()
     Lattice lat(Vec<int>(1));
     weight::G G(lat, 1.0, 1);
     weight::W W(lat, 1.0, 1);
-    G.InitializeState();
-    W.InitializeState();
+    G.SetTest();
+    W.SetTest();
     Diagram Diag;
+    RandomFactory rng;
 
-    Diag.Load("../src/diagram/diagram_template.config", lat, &G, &W);
-    LOG_INFO(Diag.PrettyString(Diag.Ver(0)));
+    Diag.SetTest(lat, rng, &G, &W);
+    LOG_INFO(Diag.Ver(0)->PrettyString());
     sput_fail_unless(Diag.CheckDiagram(), "Check diagram reading");
     sput_fail_unless(Equal(Diag.Weight, Complex(1.0, 0.0)), "Check diagram reading");
-    Diag.Save("diagram_template.config", "a");
+    Diag.Save("diagram_test.config", "w");
     Diag.WriteDiagram2gv("./test.gv");
 }

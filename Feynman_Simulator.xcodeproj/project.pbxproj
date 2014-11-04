@@ -23,6 +23,7 @@
 		8422FDE51A06F03E002EB44E /* parameter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FDE11A06F03E002EB44E /* parameter.cpp */; };
 		8422FDEC1A06FA41002EB44E /* weight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FDEB1A06FA41002EB44E /* weight.cpp */; };
 		8422FDF01A080F5A002EB44E /* state.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FDEE1A080F5A002EB44E /* state.cpp */; };
+		8422FDF31A086AC0002EB44E /* component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FDF21A086AC0002EB44E /* component.cpp */; };
 		8426668D19E4482100CF7B59 /* component_bundle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8426668B19E4482100CF7B59 /* component_bundle.cpp */; };
 		84519AEB19F2C554007CB81B /* environment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84519AE919F2C554007CB81B /* environment.cpp */; };
 		84519AED19F2C57A007CB81B /* envMonteCarlo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84519AEC19F2C57A007CB81B /* envMonteCarlo.cpp */; };
@@ -94,6 +95,8 @@
 		8422FDEB1A06FA41002EB44E /* weight.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = weight.cpp; path = observable/weight.cpp; sourceTree = "<group>"; };
 		8422FDEE1A080F5A002EB44E /* state.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = state.cpp; path = parameter/state.cpp; sourceTree = "<group>"; };
 		8422FDEF1A080F5A002EB44E /* state.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = state.h; path = parameter/state.h; sourceTree = "<group>"; };
+		8422FDF11A0846B9002EB44E /* _in_MC_test */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = _in_MC_test; path = parameter/_in_MC_test; sourceTree = "<group>"; };
+		8422FDF21A086AC0002EB44E /* component.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = component.cpp; path = diagram/component.cpp; sourceTree = "<group>"; };
 		8426667D19E2E6B800CF7B59 /* sput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sput.h; sourceTree = "<group>"; };
 		8426668919E4469B00CF7B59 /* component.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = component.h; path = diagram/component.h; sourceTree = "<group>"; };
 		8426668B19E4482100CF7B59 /* component_bundle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = component_bundle.cpp; path = diagram/component_bundle.cpp; sourceTree = "<group>"; };
@@ -119,7 +122,6 @@
 		8499DAD619F9ECD700AABA1E /* fft.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = fft.h; sourceTree = "<group>"; };
 		8499DAD719F9ED2A00AABA1E /* fft_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fft_test.cpp; sourceTree = "<group>"; };
 		8499DB0919FEECEC00AABA1E /* scopeguard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = scopeguard.h; sourceTree = "<group>"; };
-		8499DB0A19FEF81C00AABA1E /* _in_MC_test */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = _in_MC_test; path = environment/_in_MC_test; sourceTree = "<group>"; };
 		84B1D57919DEFC19004C3A89 /* test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = test.h; sourceTree = "<group>"; };
 		84B8FC3319EC7469003D6DF6 /* diagram_IO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = diagram_IO.cpp; path = diagram/diagram_IO.cpp; sourceTree = "<group>"; };
 		84B8FC3A19EC97B2003D6DF6 /* weight_generic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = weight_generic.cpp; path = observable/weight_generic.cpp; sourceTree = "<group>"; };
@@ -205,7 +207,7 @@
 		8422FDEA1A06F812002EB44E /* parameter */ = {
 			isa = PBXGroup;
 			children = (
-				8499DB0A19FEF81C00AABA1E /* _in_MC_test */,
+				8422FDF11A0846B9002EB44E /* _in_MC_test */,
 				845C92C919F835590066B590 /* job_class.py */,
 				845C92C619F834460066B590 /* inlist.py */,
 				845C92C719F834460066B590 /* job_manager.py */,
@@ -242,6 +244,7 @@
 				841D50F319E9EE8C00FDB7FF /* component_IO.cpp */,
 				841D50EE19E885D700FDB7FF /* diagram_check.cpp */,
 				8426668919E4469B00CF7B59 /* component.h */,
+				8422FDF21A086AC0002EB44E /* component.cpp */,
 				8426668C19E4482100CF7B59 /* component_bundle.h */,
 				8426668B19E4482100CF7B59 /* component_bundle.cpp */,
 				841D50E819E85C8600FDB7FF /* diagram_test.cpp */,
@@ -387,6 +390,7 @@
 				84B1D57A19DEFC19004C3A89 /* test.h in Sources */,
 				84B8FC4619ED6F15003D6DF6 /* estimate.cpp in Sources */,
 				845C92C119F75B340066B590 /* vector.cpp in Sources */,
+				8422FDF31A086AC0002EB44E /* component.cpp in Sources */,
 				8422FDE41A06F03E002EB44E /* parameter_map.cpp in Sources */,
 				84B8FC3C19EC97B2003D6DF6 /* weight_generic.cpp in Sources */,
 				8422FDF01A080F5A002EB44E /* state.cpp in Sources */,

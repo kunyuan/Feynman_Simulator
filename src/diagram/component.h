@@ -24,19 +24,21 @@ typedef WLine *wLine;
 typedef int name;
 
 class GLine {
-    friend std::ostream &operator<<(std::ostream &os, GLine &r);
-
   public:
     name Name;
     bool IsMeasure;
     vertex nVer[2];
     int K;
     Complex Weight;
+    spin Spin();
+    spin Spin(int dir);
+    void FlipSpin();
+    int Sublattice(int dir);
+    vertex NeighVer(int dir);
+    std::string PrettyString();
 };
 
 class WLine {
-    friend std::ostream &operator<<(std::ostream &os, WLine &r);
-
   public:
     name Name;
     bool IsWorm;
@@ -45,19 +47,29 @@ class WLine {
     vertex nVer[2];
     int K;
     Complex Weight;
+    spin Spin(int, int);
+    void FlipSpin();
+    int Sublattice(int dir);
+    vertex NeighVer(int dir);
+    std::string PrettyString();
 };
 
 class Vertex {
-    friend std::ostream &operator<<(std::ostream &os, Vertex &r);
-
   public:
     name Name;
     gLine nG[2];
     wLine nW;
-    spin Spin[2]; // IN/OUT spins
     Site R;
+    spin _spin[2]; // IN/OUT spins
     double Tau;
     int Dir;
+    spin Spin(int);
+    void SetSpin(spin *);
+    spin *Spin();
+    int Sublattice();
+    gLine NeighG(int dir);
+    wLine NeighW();
+    std::string PrettyString();
 };
 
 class WormClass {

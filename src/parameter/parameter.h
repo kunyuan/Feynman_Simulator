@@ -52,6 +52,7 @@ class ParameterMC : public Parameter {
     bool BuildNew(const std::string &InputFile);
     bool Load(const std::string &InputFile);
     void Save(const std::string &InputFile, std::string Mode = "a");
+    void SetTest();
 };
 
 #endif /* defined(__Feynman_Simulator__state__) */

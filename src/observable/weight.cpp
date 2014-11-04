@@ -104,6 +104,16 @@ void weight::Weight::Save(const string &FileName, flag _flag, string Mode)
     }
 }
 
+void weight::Weight::SetTest(const Parameter &para)
+{
+    _AllocateGW(para.Lat, para.Beta, para.Order);
+    _AllocateSigmaPolar(para.Lat, para.Beta, para.Order);
+    G->SetTest();
+    W->SetTest();
+    Sigma->SetTest();
+    Polar->SetTest();
+}
+
 void weight::Weight::_AllocateGW(const Lattice &Lat, real Beta, int order)
 {
     //make sure old Sigma/Polar/G/W are released before assigning new memory

@@ -16,15 +16,15 @@
 //turn off all assert
 
 const bool DEBUGMODE = true;
-//#define TURNOFFDEBUG
-//define TURNOFFDEBUG will turn off debug checking, including the boundary check in array.h
+//#define NDEBUG
+//define NDEBUG will turn off debug checking, including the boundary check in array.h
 
 const real Pi = 3.14159265359;
 
 enum spin { DOWN,
             UP };
 
-#define FlipSpin(x) spin(1 - x)
+#define FLIP(x) spin(1 - x)
 
 //Spin DOWN: 0,  Spin UP:1
 const int SPIN = 2;
@@ -34,7 +34,7 @@ const int SPIN4 = SPIN2 * SPIN2;
 
 const int IN = 0;
 const int OUT = 1;
-#define FlipDir(x) (1 - x)
+#define INVERSE(x) (1 - x)
 
 //lattice information
 const int D = 2;
