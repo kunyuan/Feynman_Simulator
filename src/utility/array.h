@@ -20,7 +20,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. */
 
 #define __ARRAY_H_VERSION__ 1.47
 
-// Defining TURNOFFDEBUG improves optimization but disables argument checking.
+// Defining NDEBUG improves optimization but disables argument checking.
 // Defining __NOARRAY2OPT inhibits special optimization of Array2[].
 
 #include "abort.h"
@@ -30,7 +30,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. */
 #include <cerrno>
 #include <iostream>
 
-#ifdef TURNOFFDEBUG
+#ifdef NDEBUG
 #define __check(i, n, dim, m)
 #define __checkSize()
 #define __checkEqual(a, b, dim, m)
@@ -333,7 +333,7 @@ class array1 {
         return size;
     }
 
-#ifdef TURNOFFDEBUG
+#ifdef NDEBUG
     typedef T *opt;
 #else
     typedef array1<T> opt;
@@ -1317,7 +1317,7 @@ std::istream &operator>>(std::istream &s, const array5<T> &A)
 
 #undef __check
 
-#ifdef TURNOFFDEBUG
+#ifdef NDEBUG
 #define __check(i, n, o, dim, m)
 #else
 #define __check(i, n, o, dim, m) this->Check(i - o, n, dim, m, o)
@@ -1384,7 +1384,7 @@ class Array1 : public array1<T> {
         Dimension(INT_MAX, v0);
     }
 
-#ifdef TURNOFFDEBUG
+#ifdef NDEBUG
     typedef T *opt;
 #else
     typedef Array1<T> opt;

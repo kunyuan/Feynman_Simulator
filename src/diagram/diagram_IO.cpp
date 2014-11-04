@@ -105,11 +105,9 @@ bool Diagram::Load(const std::string &FileName)
     return _Load(ifs);
 }
 
-bool Diagram::Load(const std::string &FileName, Lattice &lat, weight::G *g, weight::W *w)
+bool Diagram::Load(const std::string &FileName, Lattice &lat, RandomFactory &rng, weight::G *g, weight::W *w)
 {
-    Lat = &lat;
-    GWeight = g;
-    WWeight = w;
+    Reset(lat, rng, g, w);
     return Load(FileName);
 }
 
@@ -134,24 +132,24 @@ string VertexColor(int sublattice)
 
 ostream &Diagram::Component2gv(ostream &os, gLine r)
 {
-    os << r->nVer[IN] << "->" << r->nVer[OUT];
-    os << " " << EdgeColor(Spin(r, IN), Spin(r, OUT)) << ";";
-    os << "  //" << PrettyString(r);
+    os << r->nVer[IN]->Name << "->" << r->nVer[OUT]->Name;
+    os << " " << EdgeColor(r->Spin(IN), r->Spin(OUT)) << ";";
+    os << "  //" << r->PrettyString() << endl;
     return os;
 }
 
 ostream &Diagram::Component2gv(ostream &os, wLine r)
 {
-    os << r->nVer[IN] << "->" << r->nVer[OUT];
+    os << r->nVer[IN]->Name << "->" << r->nVer[OUT]->Name;
     os << " [style=dashed arrowhead=none]; ";
-    os << "  //" << PrettyString(r);
+    os << "  //" << r->PrettyString() << endl;
     return os;
 }
 
 ostream &Diagram::Component2gv(ostream &os, vertex r)
 {
     os << r->Name << " " << VertexColor(r->R.Sublattice) << ";";
-    os << "  //" << PrettyString(r);
+    os << "  //" << r->PrettyString() << endl;
     return os;
 }
 
