@@ -17,7 +17,7 @@
 #include "../markov/markov.h"
 #include "../lattice/lattice.h"
 #include "../utility/scopeguard.h"
-#include "../parameter/state.h"
+#include "../parameter/status.h"
 
 class Environment {
   public:
@@ -26,16 +26,17 @@ class Environment {
                 OldGW };
 
   protected:
+    std::string _ParameterFile;
+    std::string _GWweightFile;
+    std::string _WeightFile;
+    std::string _StatisticsFile;
     Environment(int pid);
-    std::string _ParaFile();
-    std::string _ControlFile();
-    std::string _WeightFile();
-    std::string _StatisFile();
 };
 
 class EnvMonteCarlo : public Environment {
   public:
     EnvMonteCarlo(int pid);
+
     //can be read from StateFile or InputFile
     ParameterMC Para;
     weight::Weight Weight;
@@ -43,13 +44,13 @@ class EnvMonteCarlo : public Environment {
     Markov Grasshopper;
     MarkovMonitor Scarecrow;
 
-    bool BuildNew(const std::string &InputFile, bool StarFromBare);
+    bool BuildNew(const std::string &InputFile, bool StartFromBare);
     bool Load();
     void Save(); //Save everything in EnvMonteCarlo
-    void ReWeight(const State &);
+    void ReWeight(const Status &);
 
   private:
-    std::string _ConfigFile();
+    std::string _DiagramFile;
 };
 
 class EnvDyson : public Environment {
@@ -58,8 +59,6 @@ class EnvDyson : public Environment {
     bool BuildNew(const std::string &InputFile);
 
   private:
-    std::string _FinalQuanFile();
-    std::string _FinalStatisFile();
 };
 
 int TestEnvironment();

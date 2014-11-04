@@ -13,7 +13,7 @@ using namespace std;
 
 job::job(string inputfile)
 {
-    _Para.LoadFromFile(inputfile);
+    _Para.ParseFile(inputfile);
     GetPara(_Para, Type);
     if (TypeName.find(Type) == TypeName.end())
         ABORT("I don't know what is Job Type " << Type << "?");

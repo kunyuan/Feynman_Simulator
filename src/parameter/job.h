@@ -9,7 +9,7 @@
 #ifndef __Feynman_Simulator__job__
 #define __Feynman_Simulator__job__
 
-#include "parameter_map.h"
+#include "parser.h"
 #include <set>
 #include <sstream>
 
@@ -28,6 +28,6 @@ class job {
     std::string InputFile;
 
   private:
-    ParameterMap _Para;
+    SimpleParser _Para;
 };
 #endif /* defined(__Feynman_Simulator__job__) */

@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Kun Chen. All rights reserved.
 //
 
-#ifndef __Feynman_Simulator__parameter_map__
-#define __Feynman_Simulator__parameter_map__
+#ifndef __Feynman_Simulator__parser__
+#define __Feynman_Simulator__parser__
 
 #include <map>
 #include "../utility/utility.h"
@@ -19,11 +19,11 @@
 #define GetParaArray(para, value, num) (para).get((#value), (value), (num));
 
 /**
-*  to use this class, you always have to addKey first, then you are allowed use set method to set key's value
+*  to use the set member function of the class, you have to overload ToString(T) method for your type T
 */
-class ParameterMap {
+class SimpleParser {
   public:
-    bool LoadFromFile(const std::string &, bool AbortIfFail = true);
+    bool ParseFile(const std::string &, bool AbortIfFail = true);
     void SaveToFile(const std::string &, std::string Mode = "a");
 
     void clear();
@@ -87,4 +87,4 @@ class ParameterMap {
     bool _DoesKeyExist(std::string name);
 };
 
-#endif /* defined(__Feynman_Simulator__parameter_map__) */
+#endif /* defined(__Feynman_Simulator__parser__) */

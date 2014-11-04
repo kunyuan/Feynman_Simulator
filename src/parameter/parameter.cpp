@@ -10,7 +10,7 @@
 
 bool Parameter::BuildNew(const std::string &InputFile)
 {
-    _para.LoadFromFile(InputFile);
+    _para.ParseFile(InputFile);
     GetPara(_para, L);
     GetPara(_para, Jcp);
     GetPara(_para, InitialBeta);
@@ -28,7 +28,7 @@ bool Parameter::BuildNew(const std::string &InputFile)
 
 bool Parameter::Load(const std::string &InputFile)
 {
-    _para.LoadFromFile(InputFile);
+    _para.ParseFile(InputFile);
     GetPara(_para, L);
     GetPara(_para, Jcp);
     GetPara(_para, InitialBeta);
