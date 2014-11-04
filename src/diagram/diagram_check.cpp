@@ -15,11 +15,11 @@ bool Diagram::CheckG()
 {
     for (int i = 0; i < G.HowMany(); i++) {
         for (int dir = 0; i < 2; i++) {
-            vertex v = NeighVer(G(i), dir);
+            vertex v = G(i)->NeighVer(dir);
             if (!Ver.Exist(v))
-                ABORT("nVer not exists!" + PrettyString(v));
-            if (G(i) != NeighG(v, 1 - dir))
-                ABORT("Neigh of G is incorrect!" + PrettyString(G(i)));
+                ABORT("nVer not exists!" + v->PrettyString());
+            if (G(i) != v->NeighG(INVERSE(dir)))
+                ABORT("Neigh of G is incorrect!" + G(i)->PrettyString());
         }
     }
     return true;
@@ -29,11 +29,11 @@ bool Diagram::CheckW()
 {
     for (int i = 0; i < W.HowMany(); i++) {
         for (int dir = 0; i < 2; i++) {
-            vertex v = NeighVer(W(i), dir);
+            vertex v = W(i)->NeighVer(dir);
             if (!Ver.Exist(v))
-                ABORT("nVer not exists!" + PrettyString(v));
-            if (W(i) != NeighW(v))
-                ABORT("Neigh of W is incorrect!" + PrettyString(W(i)));
+                ABORT("nVer not exists!" + v->PrettyString());
+            if (W(i) != v->NeighW())
+                ABORT("Neigh of W is incorrect!" + W(i)->PrettyString());
         }
     }
     return true;

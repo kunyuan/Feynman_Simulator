@@ -21,14 +21,6 @@ bool Diagram::IsWorm(vertex v)
         return false;
 }
 
-const string ToString(const spin &s)
-{
-    if (s == UP)
-        return "UP";
-    else
-        return "DOWN";
-}
-
 Diagram::Diagram()
     : Order(0), Phase(Complex(1.0, 0.0)), Weight(Complex(1.0, 0.0)), G("GLine"), W("WLine"), Ver("nVer")
 {
@@ -38,18 +30,18 @@ Diagram::Diagram()
 }
 
 #include "diagram_initialize.config"
-void Diagram::BuildNew(Lattice &lat, weight::G *g, weight::W *w)
+void Diagram::BuildNew(Lattice &lat, RandomFactory &rng, weight::G *g, weight::W *w)
 {
-    Lat = &lat;
-    GWeight = g;
-    WWeight = w;
+    Reset(lat, rng, g, w);
     stringstream ss(InitialDiagram);
     _Load(ss);
     FixDiagram();
 }
 
-void Diagram::Reset(weight::G *g, weight::W *w)
+void Diagram::Reset(Lattice &lat, RandomFactory &rng, weight::G *g, weight::W *w)
 {
+    Lat = &lat;
+    RNG = &rng;
     GWeight = g;
     WWeight = w;
     FixDiagram();
@@ -57,126 +49,27 @@ void Diagram::Reset(weight::G *g, weight::W *w)
 }
 
 #include "diagram_template.config"
-void Diagram::SetTest(Lattice &lat, weight::G *g, weight::W *w)
+void Diagram::SetTest(Lattice &lat, RandomFactory &rng, weight::G *g, weight::W *w)
 {
-    Lat = &lat;
-    GWeight = g;
-    WWeight = w;
+    Reset(lat, rng, g, w);
     stringstream ss(TestDiagramString);
     _Load(ss);
     FixDiagram();
 }
 
-/****************   GLine  *****************************/
-spin Diagram::Spin(gLine g)
-{
-    if (DEBUGMODE && g->nVer[0]->Spin[1] != g->nVer[1]->Spin[0])
-        ABORT("The two spins of gline are different!");
-    return g->nVer[0]->Spin[1];
-}
-
-spin Diagram::Spin(gLine g, int dir)
-{
-    return g->nVer[dir]->Spin[FlipDir(dir)];
-}
-
-void Diagram::FlipGSpin(gLine g)
-{
-    g->nVer[0]->Spin[1] = FlipSpin(g->nVer[0]->Spin[1]);
-    g->nVer[1]->Spin[0] = FlipSpin(g->nVer[1]->Spin[0]);
-}
-
-int Diagram::Sublattice(gLine g, int dir)
-{
-    return g->nVer[dir]->R.Sublattice;
-}
-
-string Diagram::PrettyString(gLine g)
-{
-    stringstream os;
-    os << "{V " << g->nVer[IN] << "}->-" << ToString(Spin(g, IN)) << "---";
-    os << "[G " << g->Name << " ,K:" << g->K << ",Weight:" << g->Weight << "]";
-    os << "---" << ToString(Spin(g, OUT)) << "->-{V " << g->nVer[OUT] << "}";
-    return os.str();
-}
-
-/****************   WLine  *****************************/
-spin Diagram::Spin(wLine w, int dir1, int dir2)
-{
-    return w->nVer[dir1]->Spin[dir2];
-}
-
-int Diagram::Sublattice(wLine w, int dir)
-{
-    return w->nVer[dir]->R.Sublattice;
-}
-
-string Diagram::PrettyString(wLine w)
-{
-    stringstream os;
-    os << "{V " << w->nVer[IN] << "| " << ToString(Spin(w, IN, IN)) << "," << ToString(Spin(w, IN, OUT)) << "}~~~";
-    os << "<W " << w->Name << ", K:" << w->K << ",Weight:" << w->Weight << ">";
-    os << "~~~"
-       << "{" << ToString(Spin(w, OUT, IN)) << "," << ToString(Spin(w, OUT, OUT)) << "|W " << w->nVer[OUT] << "}";
-    return os.str();
-}
-
-/****************   Vertex  *****************************/
-spin Diagram::Spin(vertex v, int dir)
-{
-    return v->Spin[dir];
-}
-
-int Diagram::Sublattice(vertex v)
-{
-    return v->R.Sublattice;
-}
-
-string Diagram::PrettyString(vertex v)
-{
-    stringstream os;
-    os << "-[G " << v->nG[IN] << "]-" << ToString(v->Spin[IN]) << "->--";
-    os << "{V " << v->Name << ",r:" << ToString(v->R.Coordinate) << ",tau:" << v->Tau << "}";
-    os << "-->-" << ToString(v->Spin[OUT]) << "-[G " << v->nG[OUT] << "]-";
-    os << "  /~~~<W " << v->nW << ">";
-    return os.str();
-}
-
-/****************   Diagram  *****************************/
-
-vertex Diagram::NeighVer(gLine g, int dir)
-{
-    return g->nVer[dir];
-}
-
-vertex Diagram::NeighVer(wLine w, int dir)
-{
-    return w->nVer[dir];
-}
-
-gLine Diagram::NeighG(vertex v, int dir)
-{
-    return v->nG[dir];
-}
-
-wLine Diagram::NeighW(vertex v)
-{
-    return v->nW;
-}
-
 gLine Diagram::RandomPickG()
 {
-    return &G[RNG.irn(0, G.HowMany() - 1)];
+    return &G[RNG->irn(0, G.HowMany() - 1)];
 }
 
 wLine Diagram::RandomPickW()
 {
-    return &W[RNG.irn(0, W.HowMany() - 1)];
+    return &W[RNG->irn(0, W.HowMany() - 1)];
 }
 
 vertex Diagram::RandomPickVer()
 {
-    return &Ver[RNG.irn(0, Ver.HowMany() - 1)];
+    return &Ver[RNG->irn(0, Ver.HowMany() - 1)];
 }
 
 void Diagram::ClearDiagram()
@@ -202,20 +95,20 @@ bool Diagram::FixDiagram()
     Weight = Complex(1.0, 0.0);
     for (int index = 0; index < G.HowMany(); index++) {
         gLine g = G(index);
-        vertex vin = NeighVer(g, IN);
-        vertex vout = NeighVer(g, OUT);
+        vertex vin = g->NeighVer(IN);
+        vertex vout = g->NeighVer(OUT);
 
         vin->nG[OUT] = g;
         vout->nG[IN] = g;
 
-        g->Weight = GWeight->Weight(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin[OUT], vout->Spin[IN], g->IsMeasure);
+        g->Weight = GWeight->Weight(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin(OUT), vout->Spin(IN), g->IsMeasure);
         Weight *= g->Weight;
     }
 
     for (int index = 0; index < W.HowMany(); index++) {
         wLine w = W(index);
-        vertex vin = NeighVer(w, IN);
-        vertex vout = NeighVer(w, OUT);
+        vertex vin = w->NeighVer(IN);
+        vertex vout = w->NeighVer(OUT);
 
         w->IsWorm = false;
 
@@ -225,7 +118,7 @@ bool Diagram::FixDiagram()
         vout->nW = w;
         vout->Dir = OUT;
 
-        w->Weight = WWeight->Weight(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin, vout->Spin, w->IsWorm, w->IsMeasure);
+        w->Weight = WWeight->Weight(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin(), vout->Spin(), w->IsWorm, w->IsMeasure);
         Weight *= w->Weight;
     }
 

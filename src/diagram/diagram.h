@@ -11,6 +11,7 @@
 
 #include <iosfwd>
 #include "component_bundle.h"
+#include "../utility/rng.h"
 namespace weight {
 class G;
 class W;
@@ -20,16 +21,17 @@ class Diagram {
   public:
     Diagram();
 
-    void BuildNew(Lattice &, weight::G *, weight::W *);
-    bool Load(const std::string &FileName, Lattice &, weight::G *, weight::W *);
+    void BuildNew(Lattice &, RandomFactory &, weight::G *, weight::W *);
+    bool Load(const std::string &FileName, Lattice &, RandomFactory &, weight::G *, weight::W *);
     bool Load(const std::string &FileName);
     void Save(const std::string &FileName, std::string Mode = "a");
-    void Reset(weight::G *, weight::W *);
-    void SetTest(Lattice &, weight::G *, weight::W *);
+    void Reset(Lattice &, RandomFactory &, weight::G *, weight::W *);
+    void SetTest(Lattice &, RandomFactory &, weight::G *, weight::W *);
 
     weight::G *GWeight;
     weight::W *WWeight;
     Lattice *Lat;
+    RandomFactory *RNG;
 
     int Order;
     Complex Phase, Weight;

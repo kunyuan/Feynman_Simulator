@@ -24,10 +24,11 @@ class Markov {
     weight::G *G;
     weight::W *W;
     weight::Worm *WormWeight;
+    RandomFactory *RNG;
 
     const static int NUpdates = 4;
     real ProbofCall[NUpdates];
-    real SumofProbofCall[NUpdates]={0.0};
+    real SumofProbofCall[NUpdates] = {0.0};
 
     Diagram *Diag;
 
@@ -38,6 +39,11 @@ class Markov {
     void DeleteWorm();
     void MoveWormOnG();
     void MoveWormOnW();
+
+  private:
+    int RandomPickDeltaSpin();
+    int RandomPickK();
+    int RandomPickDir();
 };
 
 int TestMarkov();

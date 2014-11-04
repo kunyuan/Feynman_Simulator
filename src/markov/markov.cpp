@@ -29,11 +29,11 @@ bool Markov::BuildNew(ParameterMC &para, Diagram &diag, weight::Weight &weight)
     G = weight.G;
     W = weight.W;
     WormWeight = &weight.WormWeight;
+    RNG = &para.RNG;
 
-    for (int i = 0; i < NUpdates; i++)
-    {
+    for (int i = 0; i < NUpdates; i++) {
         ProbofCall[i] = 1.0 / real(NUpdates);
-        for(int j=i; j< NUpdates; j++)
+        for (int j = i; j < NUpdates; j++)
             SumofProbofCall[j] += ProbofCall[i];
     }
     return true;
@@ -57,7 +57,7 @@ void Markov::ReWeight(ParameterMC &para)
 void Markov::Hop(int sweep)
 {
     for (int i = 0; i < sweep; i++) {
-        double x = RNG.urn();
+        double x = RNG->urn();
         if (x < SumofProbofCall[0])
             CreateWorm();
         else if (x < SumofProbofCall[1])
@@ -78,19 +78,19 @@ void Markov::CreateWorm()
         return;
 
     wLine w = Diag->RandomPickW();
-    vertex vin = Diag->NeighVer(w, IN);
-    vertex vout = Diag->NeighVer(w, OUT);
+    vertex vin = w->NeighVer(IN);
+    vertex vout = w->NeighVer(OUT);
 
     int k = RandomPickK();
     int dspin = RandomPickDeltaSpin();
-    if (CanNotMoveWorm(dspin, Diag->Spin(vin, IN), Diag->Spin(vin, OUT)) && CanNotMoveWorm(-dspin, Diag->Spin(vout, IN), Diag->Spin(vout, OUT)))
+    if (CanNotMoveWorm(dspin, vin->Spin(IN), vin->Spin(OUT)) && CanNotMoveWorm(-dspin, vout->Spin(IN), vout->Spin(OUT)))
         return;
 
     Complex wWeight;
     if (w->IsDelta)
-        wWeight = W->WeightOfDelta(vin->R, vout->R, vin->Spin, vout->Spin, true);
+        wWeight = W->WeightOfDelta(vin->R, vout->R, vin->Spin(), vout->Spin(), true);
     else
-        wWeight = W->Weight(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin, vout->Spin, true, w->IsMeasure);
+        wWeight = W->Weight(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin(), vout->Spin(), true, w->IsMeasure);
     Complex weightRatio = wWeight / w->Weight;
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
@@ -99,7 +99,7 @@ void Markov::CreateWorm()
 
     prob *= ProbofCall[1] / ProbofCall[0] * wormWeight * Diag->Order * 2.0;
 
-    if (prob >= 1.0 || RNG.urn() < prob) {
+    if (prob >= 1.0 || RNG->urn() < prob) {
         Diag->Phase *= sgn;
         Diag->Weight *= weightRatio;
 
@@ -123,29 +123,27 @@ void Markov::DeleteWorm()
 {
     if (!Worm->Exist)
         return;
-    wLine w = Diag->NeighW(Worm->Ira);
-    if (w != Diag->NeighW(Worm->Masha))
+    wLine w = Worm->Ira->NeighW();
+    if (w != Worm->Masha->NeighW())
         return;
     vertex vin, vout;
     int k;
     if (Worm->Ira->Dir == IN) {
         vin = Worm->Ira;
         vout = Worm->Masha;
-
         k = w->K + Worm->K;
     }
     else {
         vin = Worm->Masha;
         vout = Worm->Ira;
-
         k = w->K - Worm->K;
     }
 
     Complex wWeight;
     if (w->IsDelta)
-        wWeight = W->WeightOfDelta(vin->R, vout->R, vin->Spin, vout->Spin, false);
+        wWeight = W->WeightOfDelta(vin->R, vout->R, vin->Spin(), vout->Spin(), false);
     else
-        wWeight = W->Weight(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin, vout->Spin, false, w->IsMeasure);
+        wWeight = W->Weight(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin(), vout->Spin(), false, w->IsMeasure);
 
     Complex weightRatio = wWeight / w->Weight;
     real prob = mod(weightRatio);
@@ -153,7 +151,7 @@ void Markov::DeleteWorm()
 
     prob *= ProbofCall[0] / (ProbofCall[1] * Worm->Weight * Diag->Order * 2.0);
 
-    if (prob >= 1.0 || RNG.urn() < prob) {
+    if (prob >= 1.0 || RNG->urn() < prob) {
         Diag->Phase *= sgn;
         Diag->Weight *= weightRatio;
 
@@ -174,67 +172,69 @@ void Markov::MoveWormOnG()
         return;
     vertex vi = Worm->Ira;
     int dir = RandomPickDir();
-    gLine g = Diag->NeighG(vi, dir);
-    vertex vj = Diag->NeighVer(g, dir);
-    if (vj == Worm->Masha)
-        return;
-    if (CanNotMoveWorm(Worm->dSpin, Diag->Spin(g), dir))
+    gLine g = vi->NeighG(dir);
+    vertex vj = g->NeighVer(dir);
+    if (vj == Worm->Masha || CanNotMoveWorm(Worm->dSpin, g->Spin(), dir))
         return;
 
-    wLine wi = Diag->NeighW(vi);
-    vertex vWi = Diag->NeighVer(wi, FlipDir(vi->Dir));
+    wLine wi = vi->NeighW();
+    vertex vWi = wi->NeighVer(INVERSE(vi->Dir));
     bool isWormWi;
     if (vWi == vj)
         isWormWi = true;
     else
         isWormWi = Diag->IsWorm(vWi);
 
-    spin spinVi[2] = {vi->Spin[0], vi->Spin[1]};
-    spinVi[dir] = FlipSpin(spinVi[dir]);
+    spin spinVi[2] = {vi->Spin(0), vi->Spin(1)};
+    spinVi[dir] = FLIP(spinVi[dir]);
 
     Complex wiWeight;
     if (wi->IsDelta)
-        wiWeight = W->WeightOfDelta(vi->Dir, vi->R, vWi->R, spinVi, vWi->Spin, isWormWi);
+        wiWeight = W->WeightOfDelta(vi->Dir, vi->R, vWi->R, spinVi, vWi->Spin(), isWormWi);
     else
-        wiWeight = W->Weight(vi->Dir, vi->R, vWi->R, vi->Tau, vWi->Tau, spinVi, vWi->Spin, isWormWi, wi->IsMeasure);
+        wiWeight = W->Weight(vi->Dir, vi->R, vWi->R, vi->Tau, vWi->Tau,
+                             spinVi, vWi->Spin(), isWormWi, wi->IsMeasure);
 
-    wLine wj = Diag->NeighW(vj);
-    vertex vWj = Diag->NeighVer(wj, FlipDir(vj->Dir));
+    wLine wj = vj->NeighW();
+    vertex vWj = wj->NeighVer(INVERSE(vj->Dir));
 
-    spin spinVj[2] = {vj->Spin[0], vj->Spin[1]};
-    spinVj[FlipDir(dir)] = FlipSpin(spinVj[FlipDir(dir)]);
+    spin spinVj[2] = {vj->Spin(0), vj->Spin(1)};
+    spinVj[INVERSE(dir)] = FLIP(spinVj[INVERSE(dir)]);
 
     Complex wjWeight;
     if (wj->IsDelta)
-        wjWeight = W->WeightOfDelta(vj->Dir, vj->R, vWj->R, spinVj, vWj->Spin, true);
+        wjWeight = W->WeightOfDelta(vj->Dir, vj->R, vWj->R, spinVj, vWj->Spin(), true);
     else
-        wjWeight = W->Weight(vj->Dir, vj->R, vWj->R, vj->Tau, vWj->Tau, spinVj, vWj->Spin, true, wj->IsMeasure);
-    Complex gWeight = G->Weight(FlipDir(dir), vi->R, vj->R, vi->Tau, vj->Tau, spinVi[dir], spinVj[FlipDir(dir)], g->IsMeasure);
-    
-    Complex weightRatio = wiWeight*wjWeight*gWeight / (g->Weight *wi->Weight *wj->Weight);
+        wjWeight = W->Weight(vj->Dir, vj->R, vWj->R, vj->Tau, vWj->Tau, spinVj, vWj->Spin(), true, wj->IsMeasure);
+
+    Complex gWeight = G->Weight(INVERSE(dir), vi->R, vj->R, vi->Tau, vj->Tau,
+                                spinVi[dir], spinVj[INVERSE(dir)], g->IsMeasure);
+
+    static Complex weightRatio =
+        wiWeight * wjWeight * gWeight / (g->Weight * wi->Weight * wj->Weight);
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
     real wormWeight = WormWeight->Weight(vj->R, Worm->Masha->R, vj->Tau, Worm->Masha->Tau);
 
-    prob *= wormWeight/Worm->Weight;
+    prob *= wormWeight / Worm->Weight;
 
-    if (prob >= 1.0 || RNG.urn() < prob) {
+    if (prob >= 1.0 || RNG->urn() < prob) {
         Diag->Phase *= sgn;
         Diag->Weight *= weightRatio;
 
         g->Weight = gWeight;
-        g->K = g->K - pow(-1, dir)*Worm->K;
-        
+        g->K = g->K - pow(-1, dir) * Worm->K;
+
         wi->Weight = wiWeight;
         wi->IsWorm = isWormWi;
-        
+
         wj->Weight = wjWeight;
         wj->IsWorm = true;
-        
-        vi->Spin[dir] = spinVi[dir];
-        vj->Spin[FlipDir(dir)] = spinVj[FlipDir(dir)];
-        
+
+        vi->SetSpin(spinVi);
+        vj->SetSpin(spinVj);
+
         Worm->Ira = vj;
         Worm->Weight = wormWeight;
     }
@@ -245,6 +245,21 @@ void Markov::MoveWormOnG()
  */
 void Markov::MoveWormOnW()
 {
+}
+
+int Markov::RandomPickK()
+{
+    return RNG->irn(-MAX_K, MAX_K - 1);
+}
+
+int Markov::RandomPickDeltaSpin()
+{
+    return RNG->irn(0, 1) * 2 - 1;
+}
+
+int Markov::RandomPickDir()
+{
+    return RNG->irn(0, 1);
 }
 
 /**
@@ -291,19 +306,4 @@ bool CanNotMoveWorm(int dspin, spin sg, int dir)
             return true;
     }
     return false;
-}
-
-int RandomPickK()
-{
-    return RNG.irn(-MAX_K, MAX_K - 1);
-}
-
-int RandomPickDeltaSpin()
-{
-    return RNG.irn(0, 1) * 2 - 1;
-}
-
-int RandomPickDir()
-{
-    return RNG.irn(0, 1);
 }

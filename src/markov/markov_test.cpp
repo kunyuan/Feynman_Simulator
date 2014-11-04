@@ -28,7 +28,7 @@ void Test_CreateWorm()
     weight::Weight Weight;
     Weight.SetTest(Para);
     Diagram Diag;
-    Diag.SetTest(Para.Lat, Weight.G, Weight.W);
+    Diag.SetTest(Para.Lat, Para.RNG, Weight.G, Weight.W);
     Markov markov;
     markov.BuildNew(Para, Diag, Weight);
 
@@ -43,7 +43,7 @@ void Test_CreateWorm()
     LOG_INFO("Update(Create Worm) are done!");
     sput_fail_unless(total == 100, "The accept ratio of CreateWorm = 1.0");
 
-    RNG.Reset(15);
+    Para.RNG.Reset(15);
     total = 0;
     for (int i = 0; i < 100; i++) {
         markov.CreateWorm();
