@@ -104,3 +104,26 @@ void ParameterMC::Save(const std::string &OutputFile, string Mode)
     _para.SaveToFile(OutputFile, "a");
     //save with append mode, so that it will not overwrite stuff wroten by Parameter:SaveParameter
 }
+
+void ParameterMC::SetTest()
+{
+    PID = 1;
+    int size[2] = {8, 8};
+    L = Vec<int>(size);
+    Lat.Reset(L);
+    Jcp = 1.0;
+    InitialBeta = 1.0;
+    DeltaBeta = 0.0;
+    FinalBeta = 1.0;
+    Beta = 1.0;
+    Order = 4;
+    Toss = 10000;
+    Sample = 5000000;
+    Seed = 519180543;
+    WormSpaceReweight = 0.1;
+    OrderReWeight[0] = 1.5;
+    OrderReWeight[1] = 1;
+    OrderReWeight[2] = 3.0;
+    OrderReWeight[3] = 4.0;
+    T = 1.0 / Beta;
+}

@@ -54,6 +54,44 @@ void Diagram::Save(const std::string &FileName, string Mode)
     }
 }
 
+bool Diagram::_Load(istream &ifs)
+{
+    string line;
+    //locate the last configration block
+    streampos lastBlockPos = 0;
+    while (getline(ifs, line)) {
+        if (line.compare(0, SEP_LINE_SHORT.size(), SEP_LINE_SHORT) == 0)
+            lastBlockPos = ifs.tellg();
+    }
+    ifs.clear();
+    ifs.seekg(lastBlockPos);
+
+    ClearDiagram();
+    char head;
+    string temp;
+    while (!ifs.eof()) {
+        ifs >> head;
+        if (head == COMMENT) {
+            getline(ifs, temp);
+            continue;
+        }
+        else if (head == 'g')
+            LoadConfig(ifs, G.Add());
+        else if (head == 'w')
+            LoadConfig(ifs, W.Add());
+        else if (head == 'v')
+            LoadConfig(ifs, Ver.Add());
+        else if (head == 'i')
+            //TODO read from Worm
+            LoadConfig(ifs, Worm);
+        else
+            ABORT("Error in reading diagram! Get " + ToString(head) + " as the head!");
+        head = COMMENT;
+    }
+    FixDiagram();
+    return true;
+}
+
 bool Diagram::Load(const std::string &FileName)
 {
 
@@ -64,49 +102,12 @@ bool Diagram::Load(const std::string &FileName)
         ABORT("Cannot open " + FileName);
         return false;
     }
-    else {
-        string line;
-        //locate the last configration block
-        streampos lastBlockPos = 0;
-        while (getline(ifs, line)) {
-            if (line.compare(0, SEP_LINE_SHORT.size(), SEP_LINE_SHORT) == 0)
-                lastBlockPos = ifs.tellg();
-        }
-        ifs.clear();
-        ifs.seekg(lastBlockPos);
-
-        ClearDiagram();
-        char head;
-        string temp;
-        while (!ifs.eof()) {
-            ifs >> head;
-            if (head == COMMENT) {
-                getline(ifs, temp);
-                continue;
-            }
-            else if (head == 'g')
-                LoadConfig(ifs, G.Add());
-            else if (head == 'w')
-                LoadConfig(ifs, W.Add());
-            else if (head == 'v')
-                LoadConfig(ifs, Ver.Add());
-            else if (head == 'i')
-                //TODO read from Worm
-                LoadConfig(ifs, Worm);
-            else
-                ABORT("Error in reading diagram! Get " + ToString(head) + " as the head!");
-            head = COMMENT;
-        }
-        FixDiagram();
-        return true;
-    }
+    return _Load(ifs);
 }
 
-bool Diagram::Load(const std::string &FileName, Lattice &lat, weight::G *g, weight::W *w)
+bool Diagram::Load(const std::string &FileName, Lattice &lat, RandomFactory &rng, weight::G *g, weight::W *w)
 {
-    Lat = &lat;
-    GWeight = g;
-    WWeight = w;
+    Reset(lat, rng, g, w);
     return Load(FileName);
 }
 
@@ -131,24 +132,24 @@ string VertexColor(int sublattice)
 
 ostream &Diagram::Component2gv(ostream &os, gLine r)
 {
-    os << r->nVer[IN] << "->" << r->nVer[OUT];
-    os << " " << EdgeColor(Spin(r, IN), Spin(r, OUT)) << ";";
-    os << "  //" << PrettyString(r);
+    os << r->nVer[IN]->Name << "->" << r->nVer[OUT]->Name;
+    os << " " << EdgeColor(r->Spin(IN), r->Spin(OUT)) << ";";
+    os << "  //" << r->PrettyString() << endl;
     return os;
 }
 
 ostream &Diagram::Component2gv(ostream &os, wLine r)
 {
-    os << r->nVer[IN] << "->" << r->nVer[OUT];
+    os << r->nVer[IN]->Name << "->" << r->nVer[OUT]->Name;
     os << " [style=dashed arrowhead=none]; ";
-    os << "  //" << PrettyString(r);
+    os << "  //" << r->PrettyString() << endl;
     return os;
 }
 
 ostream &Diagram::Component2gv(ostream &os, vertex r)
 {
     os << r->Name << " " << VertexColor(r->R.Sublattice) << ";";
-    os << "  //" << PrettyString(r);
+    os << "  //" << r->PrettyString() << endl;
     return os;
 }
 

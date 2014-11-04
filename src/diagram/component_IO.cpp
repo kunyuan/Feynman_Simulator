@@ -73,7 +73,7 @@ bool Diagram::LoadConfig(istream &is, wLine w)
 
 void Diagram::SaveConfig(ostream &os, wLine w)
 {
-    os << w->nVer[IN]->Name << SEP << w->nVer[OUT]->Name << SEP << w->K << SEP << w->IsDelta <<SEP << w->IsMeasure << endl;
+    os << w->nVer[IN]->Name << SEP << w->nVer[OUT]->Name << SEP << w->K << SEP << w->IsDelta << SEP << w->IsMeasure << endl;
 }
 
 bool Diagram::LoadConfig(istream &is, vertex v)
@@ -87,13 +87,13 @@ bool Diagram::LoadConfig(istream &is, vertex v)
     READ(is, spinin);
     READ(is, spinout);
     if (is.good()) {
-        v->Spin[IN] = spin(spinin);
-        v->Spin[OUT] = spin(spinout);
+        v->_spin[IN] = spin(spinin);
+        v->_spin[OUT] = spin(spinout);
     }
     return true;
 }
 
 void Diagram::SaveConfig(ostream &os, vertex v)
 {
-    os << v->Name << SEP << v->R.Sublattice << SEP << v->R.Coordinate << SEP << v->Tau << SEP << int(v->Spin[IN]) << SEP << int(v->Spin[OUT]) << endl;
+    os << v->Name << SEP << v->R.Sublattice << SEP << v->R.Coordinate << SEP << v->Tau << SEP << int(v->Spin(IN)) << SEP << int(v->Spin(OUT)) << endl;
 }
