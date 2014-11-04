@@ -10,7 +10,7 @@
 #define __Feynman_Simulator__state__
 
 #include "../lattice/lattice.h"
-#include "parameter_map.h"
+#include "parser.h"
 #include "../utility/rng.h"
 #include <string>
 
@@ -33,7 +33,7 @@ class Parameter {
     void Save(const std::string &InputFile, std::string Mode = "a");
 
   protected:
-    ParameterMap _para;
+    SimpleParser _para;
     Vec<int> L;
 };
 

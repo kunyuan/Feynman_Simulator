@@ -17,12 +17,3 @@ bool EnvDyson::BuildNew(const string &InputFile)
 {
     return true;
 }
-
-string EnvDyson::_FinalQuanFile()
-{
-    return "final_quantity.dat";
-}
-string EnvDyson::_FinalStatisFile()
-{
-    return "final_quantity_statis.npz";
-}

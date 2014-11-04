@@ -6,13 +6,13 @@
 //  Copyright (c) 2014 Kun Chen. All rights reserved.
 //
 
-#ifndef __Feynman_Simulator__control__
-#define __Feynman_Simulator__control__
+#ifndef __Feynman_Simulator__status__
+#define __Feynman_Simulator__status__
 
-#include "parameter_map.h"
+#include "parser.h"
 #include <string>
 
-class State {
+class Status {
   public:
     int Version;
     real Jcp;
@@ -23,8 +23,8 @@ class State {
     void Save();
 
   private:
-    const std::string _StateFile = "state.txt";
-    ParameterMap _Para;
+    const std::string _StatusFile = "status.txt";
+    SimpleParser _Para;
 };
 
 #endif /* defined(__Feynman_Simulator__control__) */

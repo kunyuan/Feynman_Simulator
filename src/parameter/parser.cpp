@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Kun Chen. All rights reserved.
 //
 
-#include "parameter_map.h"
+#include "parser.h"
 #include <iostream>
 #include "../utility/scopeguard.h"
 
@@ -18,7 +18,7 @@ using namespace std;
 *
 *  @param InputFile Input file name
 */
-bool ParameterMap::LoadFromFile(const std::string &InputFile, bool AbortIfFail)
+bool SimpleParser::ParseFile(const std::string &InputFile, bool AbortIfFail)
 {
     clear();
     ifstream ifs(InputFile, ios::in);
@@ -45,7 +45,7 @@ bool ParameterMap::LoadFromFile(const std::string &InputFile, bool AbortIfFail)
 *  @param Mode       "w" to write/"a" to append
 *
 */
-void ParameterMap::SaveToFile(const std::string &OutputFile, string Mode)
+void SimpleParser::SaveToFile(const std::string &OutputFile, string Mode)
 {
     auto mode = ios::out;
     if ((Mode) == "a")
@@ -62,23 +62,23 @@ void ParameterMap::SaveToFile(const std::string &OutputFile, string Mode)
             ofs << kv.second << "    #" << kv.first << std::endl;
 }
 
-void ParameterMap::clear()
+void SimpleParser::clear()
 {
     _map.clear();
 }
 
-void ParameterMap::addKey(std::string key)
+void SimpleParser::addKey(std::string key)
 {
     _map.at(_ToUpper(key)) = "";
 }
 
-void ParameterMap::eraseKey(std::string key)
+void SimpleParser::eraseKey(std::string key)
 {
     if (_DoesKeyExist(key))
         _map.erase(_ToUpper(key));
 }
 
-std::string ParameterMap::get(std::string key)
+std::string SimpleParser::get(std::string key)
 {
     _MakeSureKeyExists(key);
     return _map[_ToUpper(key)];
@@ -95,7 +95,7 @@ string trim(string s)
     return s;
 }
 
-std::pair<string, string> ParameterMap::make_pair(string source)
+std::pair<string, string> SimpleParser::make_pair(string source)
 {
     auto pos = source.find(SEP);
     if (pos == string::npos)
@@ -104,14 +104,14 @@ std::pair<string, string> ParameterMap::make_pair(string source)
     return pair<string, string>(_ToUpper(key),
                                 trim(source.substr(0, pos)));
 }
-string ParameterMap::_ToUpper(string source)
+string SimpleParser::_ToUpper(string source)
 {
     for (auto &c : source)
         c = toupper(c);
     return source;
 }
 
-bool ParameterMap::_DoesKeyExist(string key)
+bool SimpleParser::_DoesKeyExist(string key)
 {
     key = _ToUpper(key);
     if (_map.find(key) == _map.end())
@@ -119,7 +119,7 @@ bool ParameterMap::_DoesKeyExist(string key)
     else
         return true;
 }
-bool ParameterMap::_MakeSureKeyExists(string key)
+bool SimpleParser::_MakeSureKeyExists(string key)
 {
     key = _ToUpper(key);
     if (_map.find(key) == _map.end()) {

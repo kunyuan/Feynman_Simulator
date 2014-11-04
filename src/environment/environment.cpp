@@ -12,24 +12,8 @@ using namespace std;
 Environment::Environment(int pid)
     : PID(pid)
 {
-}
-
-string Environment::_ParaFile()
-{
-    return ToString(PID) + "_para_env.txt";
-}
-
-string Environment::_WeightFile()
-{
-    return ToString(PID) + "_weight_env.npz";
-}
-
-string Environment::_ControlFile()
-{
-    return "global_control.txt";
-}
-
-string Environment::_StatisFile()
-{
-    return ToString(PID) + "_statis_env.npz";
+    _ParameterFile = ToString(PID) + "_para.txt";
+    _GWweightFile = "GWweight.npz";
+    _WeightFile = ToString(PID) + "_statistics.npz";
+    _StatisticsFile = _WeightFile;
 }

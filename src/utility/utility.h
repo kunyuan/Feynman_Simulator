@@ -53,6 +53,8 @@ void AssignFromTo(T *source, T *target, int size)
 
 bool CleanFile(const std::string &FileName);
 
+bool DoesFileExist(const std::string &FileName);
+
 std::ofstream OpenFile(const std::string &FileName, const std::string &Mode = "a");
 
 #define CHECKNULL(source)                     \
