@@ -7,7 +7,6 @@
 //
 
 #include "environment.h"
-#include "module/parameter/status.h"
 
 using namespace std;
 using namespace para;
