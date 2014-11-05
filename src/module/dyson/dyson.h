@@ -10,6 +10,27 @@
 #define __Feynman_Simulator__dyson__
 
 #include "utility/convention.h"
+namespace weight {
+class Weight;
+class G;
+class W;
+class Sigma;
+class Polar;
+}
+namespace para {
+class ParaDyson;
+}
 
+namespace dyson {
+class Dyson {
+  public:
+    real Beta;
+    weight::G *G;
+    weight::W *W;
+    weight::Sigma *Sigma;
+    weight::Polar *Polar;
+    bool BuildNew(para::ParaDyson &, weight::Weight &);
+};
+}
 
 #endif /* defined(__Feynman_Simulator__dyson__) */

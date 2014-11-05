@@ -27,7 +27,7 @@ int mc::TestMarkov()
 
 void Test_CreateWorm()
 {
-    para::ParameterMC Para;
+    para::ParaMC Para;
     Para.SetTest();
     weight::Weight Weight;
     Weight.SetTest(Para);

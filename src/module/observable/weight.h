@@ -20,6 +20,10 @@ class Parameter;
 namespace weight {
 
 class WeightNoMeasure {
+  public:
+    unsigned int _Shape[5];
+    Array::array4<Complex> _Weight;
+
   protected:
     WeightNoMeasure(const Lattice &, real Beta, int Order, int SpinVol, std::string);
     std::string _Name;
@@ -28,8 +32,6 @@ class WeightNoMeasure {
     real _dBetaInverse;
     int _Order;
     Lattice _Lat;
-    unsigned int _Shape[5];
-    Array::array4<Complex> _Weight;
 
     int SpinIndex(spin SpinIn, spin SpinOut);
     int SpinIndex(spin *TwoSpinIn, spin *TwoSpinOut);
