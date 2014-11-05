@@ -82,7 +82,7 @@ void Parameter::_SavePreparation()
     SetPara(_para, Order);
 }
 
-bool ParameterMC::BuildNew(const std::string &InputFile)
+bool ParaMC::BuildNew(const std::string &InputFile)
 {
     Parameter::_BuildNew(InputFile);
     GetPara(_para, Toss);
@@ -97,7 +97,7 @@ bool ParameterMC::BuildNew(const std::string &InputFile)
     return true;
 }
 
-bool ParameterMC::Load(const std::string &InputFile)
+bool ParaMC::Load(const std::string &InputFile)
 {
     Parameter::_Load(InputFile);
     GetPara(_para, Counter);
@@ -110,7 +110,7 @@ bool ParameterMC::Load(const std::string &InputFile)
     return true;
 }
 
-void ParameterMC::Save(const std::string &OutputFile, string Mode)
+void ParaMC::Save(const std::string &OutputFile, string Mode)
 {
     Parameter::_SavePreparation();
     SetPara(_para, Counter);
@@ -124,7 +124,7 @@ void ParameterMC::Save(const std::string &OutputFile, string Mode)
     //save with append mode, so that it will not overwrite stuff wroten by Parameter:SaveParameter
 }
 
-void ParameterMC::SetTest()
+void ParaMC::SetTest()
 {
     Version = 0;
     int size[2] = {8, 8};
@@ -147,7 +147,7 @@ void ParameterMC::SetTest()
     T = 1.0 / Beta;
 }
 
-bool ParameterDyson::BuildNew(const string &InputFile)
+bool ParaDyson::BuildNew(const string &InputFile)
 {
     Parameter::_BuildNew(InputFile);
     GetPara(_para, OrderAccepted);
@@ -155,7 +155,7 @@ bool ParameterDyson::BuildNew(const string &InputFile)
     return true;
 }
 
-bool ParameterDyson::Load(const string &InputFile)
+bool ParaDyson::Load(const string &InputFile)
 {
     Parameter::_Load(InputFile);
     GetPara(_para, OrderAccepted);
@@ -163,7 +163,7 @@ bool ParameterDyson::Load(const string &InputFile)
     return true;
 }
 
-void ParameterDyson::Save(const std::string &OutputFile, string Mode)
+void ParaDyson::Save(const std::string &OutputFile, string Mode)
 {
     Parameter::_SavePreparation();
     SetPara(_para, OrderAccepted);
