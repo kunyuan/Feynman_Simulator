@@ -7,7 +7,7 @@
 //
 
 #include <iostream>
-#include "estimate.h"
+#include "estimator.h"
 #include "utility/abort.h"
 #include "utility/scopeguard.h"
 

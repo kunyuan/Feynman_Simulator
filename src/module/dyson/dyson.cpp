@@ -8,7 +8,7 @@
 
 #include "dyson.h"
 #include "module/parameter/parameter.h"
-#include "module/observable/weight.h"
+#include "module/weight/weight.h"
 
 using namespace dyson;
 using namespace weight;

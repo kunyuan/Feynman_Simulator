@@ -11,9 +11,10 @@
 #include "environment/environment.h"
 #include "module/markov/markov.h"
 #include "module/diagram/diagram.h"
-#include "module/observable/weight.h"
+#include "module/weight/weight.h"
 #include "lattice/lattice.h"
 #include "utility/fft.h"
+#include "estimator/estimator.h"
 using namespace std;
 
 #define TEST(func)                  \
@@ -30,8 +31,10 @@ int RunTest()
     TEST(TestEnvironment);
     TEST(diag::TestDiagram);
     TEST(TestLattice);
-    TEST(weight::TestObservable);
+    TEST(weight::TestWeight);
     TEST(mc::TestMarkov);
+
+    TEST(TestEstimator);
 
     //    TEST(TestCRC32);
     //    TEST(TestFFT);

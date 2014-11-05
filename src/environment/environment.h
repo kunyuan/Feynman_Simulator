@@ -14,7 +14,7 @@
 #include "lattice/lattice.h"
 #include "module/parameter/parameter.h"
 #include "module/diagram/diagram.h"
-#include "module/observable/weight.h"
+#include "module/weight/weight.h"
 #include "module/markov/markov_monitor.h"
 #include "module/markov/markov.h"
 #include "module/dyson/dyson.h"

@@ -1,11 +1,3 @@
-//
-//  crc32.cpp
-//  Feynman_Simulator
-//
-//  Created by Kun Chen on 10/23/14.
-//  Copyright (c) 2014 Kun Chen. All rights reserved.
-//
-
 #include "crc32.h"
 
 /* Standard CRC32 checksum: fast public domain implementation for
