@@ -22,9 +22,6 @@
 */
 namespace cnpy {
 
-std::string npz_name(std::string file);
-std::string npy_name(std::string file);
-
 struct NpyArray {
     char *data;
     std::vector<unsigned int> shape;

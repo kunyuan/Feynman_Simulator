@@ -47,3 +47,16 @@ bool CleanFile(const string &FileName)
         return false;
     }
 }
+
+bool DoesFileExist(const string &FileName)
+{
+    ofstream ofs(FileName, std::ofstream::in);
+    if (ofs.is_open()) {
+        ofs.close();
+        return true;
+    }
+    else {
+        ofs.close();
+        return false;
+    }
+}

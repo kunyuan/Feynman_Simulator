@@ -114,61 +114,8 @@ class JobConsistLoop(Job):
     def to_string(self, pid=0):
         input_str = self.key_to_string("Type")
         input_str = input_str+Job.to_string(self, pid)
-        input_str += self.key_to_string("ReadFile")
-        return input_str
-
-class JobIntegration(Job):
-    '''job subclass for numerical integration jobs'''
-    def __init__(self, para):
-        Job.__init__(self, para)
-        self.keep_cpu_busy = True
-        self.para["Type"] = "NI"
-        self.name = "NI"
-
-    def to_string(self, pid=0):
-        input_str = self.key_to_string("Type")
-        input_str = input_str+Job.to_string(self, pid)
-        return input_str
-
-class JobOutputOrder(Job):
-    '''job subclass for output different order Sigma and Chi'''
-    def __init__(self, para):
-        Job.__init__(self, para)
-        self.keep_cpu_busy = True
-        self.para["Type"] = "OO"
-        self.name = "OO"
-
-    def to_string(self, pid=0):
-        input_str = self.key_to_string("Type")
-        input_str = input_str+Job.to_string(self, pid)
-        input_str += self.key_to_string("ReadFile")
-        return input_str
-
-class JobOutputLoop(Job):
-    '''job subclass for output loop jobs'''
-    def __init__(self, para):
-        Job.__init__(self, para)
-        self.keep_cpu_busy = False
-        self.para["Type"] = "OL"
-        self.name = "OL"
-
-    def to_string(self, pid=0):
-        input_str = self.key_to_string("Type")
-        input_str = input_str+ Job.to_string(self, pid)
-        input_str += self.key_to_string("ReadFile")
-        return input_str
-
-class JobDebug(Job):
-    '''job subclass for debug jobs'''
-    def __init__(self, para):
-        Job.__init__(self, para)
-        self.keep_cpu_busy = False
-        self.para["Type"] = "BG"
-        self.name = "BG"
-
-    def to_string(self, pid=0):
-        input_str = self.key_to_string("Type")
-        input_str = input_str+Job.to_string(self, pid)
+        input_str += self.key_to_string("OrderAccepted")
+        input_str += self.key_to_string("SleepTime")
         return input_str
 
 if __name__ == "__main__":
