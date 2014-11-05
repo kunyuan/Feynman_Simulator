@@ -80,12 +80,12 @@ void WeightNoMeasure::SetTest()
 
 void WeightNoMeasure::Save(const std::string &FileName, std::string Mode)
 {
-    cnpy::npz_save(cnpy::npz_name(FileName), _Name, _Weight.Data(), _Shape + SP, 4, Mode);
+    cnpy::npz_save(FileName, _Name, _Weight.Data(), _Shape + SP, 4, Mode);
 }
 
 bool WeightNoMeasure::Load(const std::string &FileName)
 {
-    cnpy::NpyArray weight = cnpy::npz_load(cnpy::npz_name(FileName), _Name);
+    cnpy::NpyArray weight = cnpy::npz_load(FileName, _Name);
     ON_SCOPE_EXIT([&] {weight.destruct(); });
     if (weight.data == nullptr)
         ABORT("Can't find estimator " << _Name << " in .npz data file!");
@@ -185,8 +185,8 @@ void WeightNeedMeasure::SqueezeStatistics(real factor)
 void WeightNeedMeasure::Save(const std::string &FileName, std::string Mode)
 {
     unsigned int shape[1] = {1};
-    cnpy::npz_save(cnpy::npz_name(FileName), _Name + "_Norm", &_Norm, shape, 1, Mode);
-    cnpy::npz_save(cnpy::npz_name(FileName), _Name + "_Accu", _WeightAccu(), _Shape, 5, "a");
+    cnpy::npz_save(FileName, _Name + "_Norm", &_Norm, shape, 1, Mode);
+    cnpy::npz_save(FileName, _Name + "_Accu", _WeightAccu(), _Shape, 5, "a");
     WeightNoMeasure::Save(FileName);
     _Average.SaveStatistics(FileName, "a");
 }
@@ -196,7 +196,7 @@ bool WeightNeedMeasure::Load(const std::string &FileName)
     _Average.LoadStatistics(FileName);
     WeightNoMeasure::Load(FileName);
 
-    cnpy::npz_t NpzMap = cnpy::npz_load(cnpy::npz_name(FileName));
+    cnpy::npz_t NpzMap = cnpy::npz_load(FileName);
     ON_SCOPE_EXIT([&] {NpzMap.destruct(); });
 
     cnpy::NpyArray sigma_accu = NpzMap[_Name + "_Accu"];

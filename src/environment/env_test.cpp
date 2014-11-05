@@ -39,4 +39,5 @@ void Test_EnvMC()
     new_env.Load();
     sput_fail_unless(Equal(new_env.Para.OrderReWeight[3], 4.1), "Check reading state file");
     sput_fail_unless(Equal(env.Para.RNG.urn(), new_env.Para.RNG.urn()), "Check reading RNG from state file");
+    new_env.DeleteSavedFiles();
 }

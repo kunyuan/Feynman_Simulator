@@ -10,9 +10,8 @@
 #define __Feynman_Simulator__status__
 
 #include "parser.h"
-#include <string>
 
-class Status {
+class status {
   public:
     int Version;
     real Jcp;
@@ -21,6 +20,7 @@ class Status {
 
     bool Load();
     void Save();
+    std::string PrettyString();
 
   private:
     const std::string _StatusFile = "status.txt";

@@ -8,7 +8,24 @@
 
 #include "parameter.h"
 
-bool Parameter::BuildNew(const std::string &InputFile)
+status Parameter::GetStatus()
+{
+    status Status;
+    Status.Version = Version;
+    Status.Jcp = Jcp;
+    Status.Beta = Beta;
+    return Status;
+}
+
+void Parameter::SetStatus(const status &Status)
+{
+    Version = Status.Version;
+    Jcp = Status.Jcp;
+    Beta = Status.Beta;
+    T = 1.0 / Beta;
+}
+
+bool Parameter::_BuildNew(const std::string &InputFile)
 {
     _para.ParseFile(InputFile);
     GetPara(_para, L);
@@ -19,6 +36,7 @@ bool Parameter::BuildNew(const std::string &InputFile)
     GetPara(_para, Order);
 
     Lat.Reset(L);
+    Version = 0;
     Beta = InitialBeta;
     T = 1.0 / Beta;
     if (Order >= MAX_ORDER)
@@ -26,9 +44,10 @@ bool Parameter::BuildNew(const std::string &InputFile)
     return true;
 }
 
-bool Parameter::Load(const std::string &InputFile)
+bool Parameter::_Load(const std::string &InputFile)
 {
     _para.ParseFile(InputFile);
+    GetPara(_para, Version);
     GetPara(_para, L);
     GetPara(_para, Jcp);
     GetPara(_para, InitialBeta);
@@ -45,9 +64,13 @@ bool Parameter::Load(const std::string &InputFile)
     return true;
 }
 
-void Parameter::Save(const std::string &OutputFile, string Mode)
+/**
+*  subclass may have more parameters to write to _para, so the function does not really save _para to file here
+*/
+void Parameter::_SavePreparation()
 {
     _para.clear();
+    SetPara(_para, Version);
     SetPara(_para, L);
     SetPara(_para, Jcp);
     SetPara(_para, InitialBeta);
@@ -56,12 +79,11 @@ void Parameter::Save(const std::string &OutputFile, string Mode)
     //!!!Beta should be a part of state, so it will be stored
     SetPara(_para, Beta);
     SetPara(_para, Order);
-    _para.SaveToFile(OutputFile, Mode);
 }
 
 bool ParameterMC::BuildNew(const std::string &InputFile)
 {
-    Parameter::BuildNew(InputFile);
+    Parameter::_BuildNew(InputFile);
     GetPara(_para, Toss);
     GetPara(_para, Sample);
     GetPara(_para, Sweep);
@@ -69,7 +91,6 @@ bool ParameterMC::BuildNew(const std::string &InputFile)
     GetPara(_para, WormSpaceReweight);
     GetParaArray(_para, OrderReWeight, Order);
 
-    Version = 0;
     Counter = 0;
     this->RNG.Reset(Seed);
     return true;
@@ -77,8 +98,7 @@ bool ParameterMC::BuildNew(const std::string &InputFile)
 
 bool ParameterMC::Load(const std::string &InputFile)
 {
-    Parameter::Load(InputFile);
-    GetPara(_para, Version);
+    Parameter::_Load(InputFile);
     GetPara(_para, Counter);
     GetPara(_para, Toss);
     GetPara(_para, Sample);
@@ -91,9 +111,7 @@ bool ParameterMC::Load(const std::string &InputFile)
 
 void ParameterMC::Save(const std::string &OutputFile, string Mode)
 {
-    Parameter::Save(OutputFile, Mode);
-    _para.clear();
-    SetPara(_para, Version);
+    Parameter::_SavePreparation();
     SetPara(_para, Counter);
     SetPara(_para, Toss);
     SetPara(_para, Sample);
@@ -101,13 +119,13 @@ void ParameterMC::Save(const std::string &OutputFile, string Mode)
     SetPara(_para, WormSpaceReweight);
     SetParaArray(_para, OrderReWeight, Order);
     SetPara(_para, RNG);
-    _para.SaveToFile(OutputFile, "a");
+    _para.SaveToFile(OutputFile, Mode);
     //save with append mode, so that it will not overwrite stuff wroten by Parameter:SaveParameter
 }
 
 void ParameterMC::SetTest()
 {
-    PID = 1;
+    Version = 0;
     int size[2] = {8, 8};
     L = Vec<int>(size);
     Lat.Reset(L);
@@ -126,4 +144,28 @@ void ParameterMC::SetTest()
     OrderReWeight[2] = 3.0;
     OrderReWeight[3] = 4.0;
     T = 1.0 / Beta;
+}
+
+bool ParameterDyson::BuildNew(const string &InputFile)
+{
+    Parameter::_BuildNew(InputFile);
+    GetPara(_para, OrderAccepted);
+    GetPara(_para, SleepTime);
+    return true;
+}
+
+bool ParameterDyson::Load(const string &InputFile)
+{
+    Parameter::_Load(InputFile);
+    GetPara(_para, OrderAccepted);
+    GetPara(_para, SleepTime);
+    return true;
+}
+
+void ParameterDyson::Save(const std::string &OutputFile, string Mode)
+{
+    Parameter::_SavePreparation();
+    SetPara(_para, OrderAccepted);
+    SetPara(_para, SleepTime);
+    _para.SaveToFile(OutputFile, Mode);
 }

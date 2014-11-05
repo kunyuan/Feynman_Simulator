@@ -8,6 +8,7 @@
 
 /********************** include files *****************************************/
 #include <iostream>
+#include <unistd.h>
 #include "test.h"
 #include "environment/environment.h"
 #include "parameter/job.h"
@@ -15,33 +16,34 @@
 #include "markov/markov_monitor.h"
 using namespace std;
 
-void MonteCarlo(EnvMonteCarlo &);
-void Dyson(EnvDyson &);
+void MonteCarlo(const job &);
+void Dyson(const job &);
 int main(int argc, const char *argv[])
 {
-    //initialize LOGGER
-    LOGGER_CONF("test.log", "TEST", Logger::file_on | Logger::screen_on, INFO, INFO);
+    LOGGER_CONF("test.log", "test", Logger::file_on | Logger::screen_on, INFO, INFO);
     RunTest();
 
-    string InputFile = "infile/_in_MC_1";
+    string InputFile = "infile/_in_DYSON_1";
     job Job(InputFile);
     LOGGER_CONF(ToString(Job.PID) + ".log", Job.Type, Logger::file_on | Logger::screen_on, INFO, INFO);
 
     if (Job.Type == "MC") {
-        EnvMonteCarlo env(Job.PID);
-        env.BuildNew(InputFile, Job.StartFromBare);
-        MonteCarlo(env);
+        MonteCarlo(Job);
     }
     else if (Job.Type == "DYSON") {
-        EnvDyson env(Job.PID);
-        env.BuildNew(InputFile);
-        Dyson(env);
+        Dyson(Job);
     }
     return 0;
 }
 
-void MonteCarlo(EnvMonteCarlo &PaddyField)
+void MonteCarlo(const job &Job)
 {
+    EnvMonteCarlo PaddyField(Job.PID);
+    if (Job.DoesLoad)
+        PaddyField.BuildNew(Job.InputFile, Job.StartFromBare);
+    else
+        PaddyField.Load();
+
     auto &Para = PaddyField.Para;
     auto &Grasshopper = PaddyField.Grasshopper;
     auto &Scarecrow = PaddyField.Scarecrow;
@@ -65,6 +67,18 @@ void MonteCarlo(EnvMonteCarlo &PaddyField)
     }
 }
 
-void Dyson(EnvDyson &env)
+void Dyson(const job &Job)
 {
+    EnvDyson env(Job.PID);
+    if (Job.DoesLoad)
+        env.BuildNew(Job.InputFile, Job.StartFromBare);
+    else
+        env.Load();
+    auto &Para = env.Para;
+
+    while (true) {
+        Para.Version++;
+        LOG_INFO("Sleep");
+        sleep(Para.SleepTime);
+    }
 }

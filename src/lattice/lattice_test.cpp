@@ -22,8 +22,6 @@ Lattice lattice(size);
 
 int TestLattice()
 {
-    lattice.PlotLattice();
-
     sput_start_testing();
     sput_enter_suite("Test Definition of Class Lattice");
     sput_run_test(Test_Lattice);

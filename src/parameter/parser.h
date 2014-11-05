@@ -10,6 +10,7 @@
 #define __Feynman_Simulator__parser__
 
 #include <map>
+#include <string>
 #include "../utility/utility.h"
 #include "../utility/abort.h"
 
@@ -25,6 +26,7 @@ class SimpleParser {
   public:
     bool ParseFile(const std::string &, bool AbortIfFail = true);
     void SaveToFile(const std::string &, std::string Mode = "a");
+    std::string PrettyString();
 
     void clear();
 

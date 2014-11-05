@@ -28,6 +28,7 @@ bool SimpleParser::ParseFile(const std::string &InputFile, bool AbortIfFail)
             ABORT("Fail to open input file " << InputFile);
         }
         else {
+            LOG_WARNING(InputFile << " does not exist!");
             return false;
         }
     }
@@ -60,6 +61,15 @@ void SimpleParser::SaveToFile(const std::string &OutputFile, string Mode)
     for (auto &kv : _map)
         if (kv.second != "")
             ofs << kv.second << "    #" << kv.first << std::endl;
+}
+
+string SimpleParser::PrettyString()
+{
+    stringstream ss;
+    for (auto &kv : _map)
+        if (kv.second != "")
+            ss << kv.first << "=" << kv.second << std::endl;
+    return ss.str();
 }
 
 void SimpleParser::clear()
