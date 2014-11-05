@@ -9,7 +9,7 @@
 #ifndef __Feynman_Simulator__measure__
 #define __Feynman_Simulator__measure__
 
-#include "module/observable/weight.h"
+#include "module/weight/weight.h"
 namespace diag {
 class Diagram;
 }

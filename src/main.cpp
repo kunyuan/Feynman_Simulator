@@ -22,7 +22,7 @@ int main(int argc, const char *argv[])
     LOGGER_CONF("test.log", "test", Logger::file_on | Logger::screen_on, INFO, INFO);
     RunTest();
 
-    string InputFile = "infile/_in_MC_2";
+    string InputFile = "infile/_in_DYSON_1";
     para::Job Job(InputFile);
     LOGGER_CONF(ToString(Job.PID) + ".log", Job.Type, Logger::file_on | Logger::screen_on, INFO, INFO);
 

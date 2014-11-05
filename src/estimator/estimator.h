@@ -81,4 +81,6 @@ class EstimatorBundle {
     void SqueezeStatistics(real factor);
 };
 
+int TestEstimator();
+
 #endif /* defined(__Feynman_Simulator__Estimate__) */

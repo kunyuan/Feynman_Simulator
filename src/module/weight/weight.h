@@ -9,7 +9,7 @@
 #ifndef __Feynman_Simulator__observable__
 #define __Feynman_Simulator__observable__
 
-#include "estimate.h"
+#include "estimator/estimator.h"
 #include "utility/array.h"
 #include "lattice/lattice.h"
 
@@ -141,7 +141,7 @@ class Weight {
     void _AllocateGW(const Lattice &Lat, real Beta, int order);
     void _AllocateSigmaPolar(const Lattice &Lat, real Beta, int order);
 };
-int TestObservable();
+int TestWeight();
 }
 
 #endif /* defined(__Feynman_Simulator__observable__) */

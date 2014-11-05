@@ -25,15 +25,16 @@
 		8422FE111A09C112002EB44E /* diagram_IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FE081A09C112002EB44E /* diagram_IO.cpp */; };
 		8422FE121A09C112002EB44E /* diagram_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FE0A1A09C112002EB44E /* diagram_test.cpp */; };
 		8422FE131A09C112002EB44E /* diagram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FE0B1A09C112002EB44E /* diagram.cpp */; };
-		8422FE1B1A09C12A002EB44E /* estimate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FE141A09C12A002EB44E /* estimate.cpp */; };
-		8422FE1C1A09C12A002EB44E /* observable_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FE161A09C12A002EB44E /* observable_test.cpp */; };
-		8422FE1D1A09C12A002EB44E /* weight_generic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FE171A09C12A002EB44E /* weight_generic.cpp */; };
-		8422FE1E1A09C12A002EB44E /* weight_specific.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FE181A09C12A002EB44E /* weight_specific.cpp */; };
-		8422FE1F1A09C12A002EB44E /* weight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FE191A09C12A002EB44E /* weight.cpp */; };
 		8422FE251A09C13D002EB44E /* markov_monitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FE201A09C13D002EB44E /* markov_monitor.cpp */; };
 		8422FE261A09C13D002EB44E /* markov_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FE221A09C13D002EB44E /* markov_test.cpp */; };
 		8422FE271A09C13D002EB44E /* markov.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FE231A09C13D002EB44E /* markov.cpp */; };
 		8422FE2B1A09C57B002EB44E /* dyson.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FE291A09C57B002EB44E /* dyson.cpp */; };
+		8422FE311A0A7E7E002EB44E /* estimator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FE2F1A0A7E7E002EB44E /* estimator.cpp */; };
+		8422FE391A0A7ECA002EB44E /* weight_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FE341A0A7ECA002EB44E /* weight_test.cpp */; };
+		8422FE3A1A0A7ECA002EB44E /* weight_generic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FE351A0A7ECA002EB44E /* weight_generic.cpp */; };
+		8422FE3B1A0A7ECA002EB44E /* weight_specific.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FE361A0A7ECA002EB44E /* weight_specific.cpp */; };
+		8422FE3C1A0A7ECA002EB44E /* weight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FE371A0A7ECA002EB44E /* weight.cpp */; };
+		8422FE3E1A0A7F8D002EB44E /* estimator_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FE3D1A0A7F8D002EB44E /* estimator_test.cpp */; };
 		84519AEB19F2C554007CB81B /* environment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84519AE919F2C554007CB81B /* environment.cpp */; };
 		84519AED19F2C57A007CB81B /* envMonteCarlo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84519AEC19F2C57A007CB81B /* envMonteCarlo.cpp */; };
 		84519AEF19F2C5B2007CB81B /* envDyson.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84519AEE19F2C5B2007CB81B /* envDyson.cpp */; };
@@ -101,13 +102,6 @@
 		8422FE0A1A09C112002EB44E /* diagram_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = diagram_test.cpp; path = module/diagram/diagram_test.cpp; sourceTree = "<group>"; };
 		8422FE0B1A09C112002EB44E /* diagram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = diagram.cpp; path = module/diagram/diagram.cpp; sourceTree = "<group>"; };
 		8422FE0C1A09C112002EB44E /* diagram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = diagram.h; path = module/diagram/diagram.h; sourceTree = "<group>"; };
-		8422FE141A09C12A002EB44E /* estimate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = estimate.cpp; path = module/observable/estimate.cpp; sourceTree = "<group>"; };
-		8422FE151A09C12A002EB44E /* estimate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = estimate.h; path = module/observable/estimate.h; sourceTree = "<group>"; };
-		8422FE161A09C12A002EB44E /* observable_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = observable_test.cpp; path = module/observable/observable_test.cpp; sourceTree = "<group>"; };
-		8422FE171A09C12A002EB44E /* weight_generic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = weight_generic.cpp; path = module/observable/weight_generic.cpp; sourceTree = "<group>"; };
-		8422FE181A09C12A002EB44E /* weight_specific.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = weight_specific.cpp; path = module/observable/weight_specific.cpp; sourceTree = "<group>"; };
-		8422FE191A09C12A002EB44E /* weight.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = weight.cpp; path = module/observable/weight.cpp; sourceTree = "<group>"; };
-		8422FE1A1A09C12A002EB44E /* weight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = weight.h; path = module/observable/weight.h; sourceTree = "<group>"; };
 		8422FE201A09C13D002EB44E /* markov_monitor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = markov_monitor.cpp; path = module/markov/markov_monitor.cpp; sourceTree = "<group>"; };
 		8422FE211A09C13D002EB44E /* markov_monitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = markov_monitor.h; path = module/markov/markov_monitor.h; sourceTree = "<group>"; };
 		8422FE221A09C13D002EB44E /* markov_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = markov_test.cpp; path = module/markov/markov_test.cpp; sourceTree = "<group>"; };
@@ -115,6 +109,14 @@
 		8422FE241A09C13D002EB44E /* markov.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = markov.h; path = module/markov/markov.h; sourceTree = "<group>"; };
 		8422FE291A09C57B002EB44E /* dyson.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dyson.cpp; path = module/dyson/dyson.cpp; sourceTree = "<group>"; };
 		8422FE2A1A09C57B002EB44E /* dyson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dyson.h; path = module/dyson/dyson.h; sourceTree = "<group>"; };
+		8422FE2F1A0A7E7E002EB44E /* estimator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = estimator.cpp; path = estimator/estimator.cpp; sourceTree = "<group>"; };
+		8422FE301A0A7E7E002EB44E /* estimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = estimator.h; path = estimator/estimator.h; sourceTree = "<group>"; };
+		8422FE341A0A7ECA002EB44E /* weight_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = weight_test.cpp; path = module/weight/weight_test.cpp; sourceTree = "<group>"; };
+		8422FE351A0A7ECA002EB44E /* weight_generic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = weight_generic.cpp; path = module/weight/weight_generic.cpp; sourceTree = "<group>"; };
+		8422FE361A0A7ECA002EB44E /* weight_specific.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = weight_specific.cpp; path = module/weight/weight_specific.cpp; sourceTree = "<group>"; };
+		8422FE371A0A7ECA002EB44E /* weight.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = weight.cpp; path = module/weight/weight.cpp; sourceTree = "<group>"; };
+		8422FE381A0A7ECA002EB44E /* weight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = weight.h; path = module/weight/weight.h; sourceTree = "<group>"; };
+		8422FE3D1A0A7F8D002EB44E /* estimator_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = estimator_test.cpp; path = estimator/estimator_test.cpp; sourceTree = "<group>"; };
 		8426667D19E2E6B800CF7B59 /* sput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sput.h; sourceTree = "<group>"; };
 		84519AE919F2C554007CB81B /* environment.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = environment.cpp; path = environment/environment.cpp; sourceTree = "<group>"; };
 		84519AEA19F2C554007CB81B /* environment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = environment.h; path = environment/environment.h; sourceTree = "<group>"; };
@@ -230,10 +232,10 @@
 		8422FDED1A07D2BC002EB44E /* module */ = {
 			isa = PBXGroup;
 			children = (
+				8422FE331A0A7EB9002EB44E /* weight */,
 				8422FE281A09C545002EB44E /* dyson */,
 				8422FDEA1A06F812002EB44E /* parameter */,
 				8426668419E445F000CF7B59 /* diagram */,
-				84B8FC3819EC9753003D6DF6 /* observable */,
 				84B8FC3919EC9763003D6DF6 /* markov */,
 			);
 			name = module;
@@ -246,6 +248,28 @@
 				8422FE291A09C57B002EB44E /* dyson.cpp */,
 			);
 			name = dyson;
+			sourceTree = "<group>";
+		};
+		8422FE321A0A7E82002EB44E /* estimator */ = {
+			isa = PBXGroup;
+			children = (
+				8422FE301A0A7E7E002EB44E /* estimator.h */,
+				8422FE2F1A0A7E7E002EB44E /* estimator.cpp */,
+				8422FE3D1A0A7F8D002EB44E /* estimator_test.cpp */,
+			);
+			name = estimator;
+			sourceTree = "<group>";
+		};
+		8422FE331A0A7EB9002EB44E /* weight */ = {
+			isa = PBXGroup;
+			children = (
+				8422FE381A0A7ECA002EB44E /* weight.h */,
+				8422FE371A0A7ECA002EB44E /* weight.cpp */,
+				8422FE351A0A7ECA002EB44E /* weight_generic.cpp */,
+				8422FE361A0A7ECA002EB44E /* weight_specific.cpp */,
+				8422FE341A0A7ECA002EB44E /* weight_test.cpp */,
+			);
+			name = weight;
 			sourceTree = "<group>";
 		};
 		8426668419E445F000CF7B59 /* diagram */ = {
@@ -265,20 +289,6 @@
 				8422FE071A09C112002EB44E /* diagram_initialize.config */,
 			);
 			name = diagram;
-			sourceTree = "<group>";
-		};
-		84B8FC3819EC9753003D6DF6 /* observable */ = {
-			isa = PBXGroup;
-			children = (
-				8422FE1A1A09C12A002EB44E /* weight.h */,
-				8422FE191A09C12A002EB44E /* weight.cpp */,
-				8422FE181A09C12A002EB44E /* weight_specific.cpp */,
-				8422FE171A09C12A002EB44E /* weight_generic.cpp */,
-				8422FE141A09C12A002EB44E /* estimate.cpp */,
-				8422FE151A09C12A002EB44E /* estimate.h */,
-				8422FE161A09C12A002EB44E /* observable_test.cpp */,
-			);
-			name = observable;
 			sourceTree = "<group>";
 		};
 		84B8FC3919EC9763003D6DF6 /* markov */ = {
@@ -329,6 +339,7 @@
 				841D905B19E054900066116A /* test.cpp */,
 				84D4287819F208300051CE96 /* environment */,
 				8422FDED1A07D2BC002EB44E /* module */,
+				8422FE321A0A7E82002EB44E /* estimator */,
 				1CA5CF3C19ED6F5400212E20 /* lattice */,
 				612661D40BB91FC506C3E572 /* utility */,
 			);
@@ -393,8 +404,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				8422FE131A09C112002EB44E /* diagram.cpp in Sources */,
+				8422FE3B1A0A7ECA002EB44E /* weight_specific.cpp in Sources */,
 				8499DAD519F9EA3C00AABA1E /* fft.cpp in Sources */,
 				84FDE07419DDFC2F0092B441 /* main.cpp in Sources */,
+				8422FE3A1A0A7ECA002EB44E /* weight_generic.cpp in Sources */,
 				84681F6B19F9B4C700832DAD /* timer_test.cpp in Sources */,
 				84681F6C19F9B4C700832DAD /* timer.cpp in Sources */,
 				8422FE101A09C112002EB44E /* diagram_check.cpp in Sources */,
@@ -405,28 +418,28 @@
 				841D511319EB6DD900FDB7FF /* logger.cpp in Sources */,
 				8422FE0D1A09C112002EB44E /* component_bundle.cpp in Sources */,
 				1CA5CF3A19ED6F3F00212E20 /* lattice.cpp in Sources */,
-				8422FE1F1A09C12A002EB44E /* weight.cpp in Sources */,
 				84B8FC4A19EDA348003D6DF6 /* cnpy_test.cpp in Sources */,
 				8422FE261A09C13D002EB44E /* markov_test.cpp in Sources */,
 				841D905C19E054900066116A /* test.cpp in Sources */,
-				8422FE1C1A09C12A002EB44E /* observable_test.cpp in Sources */,
+				8422FE3E1A0A7F8D002EB44E /* estimator_test.cpp in Sources */,
 				84519AF219F33F22007CB81B /* complex.cpp in Sources */,
+				8422FE311A0A7E7E002EB44E /* estimator.cpp in Sources */,
 				84519AEF19F2C5B2007CB81B /* envDyson.cpp in Sources */,
-				8422FE1D1A09C12A002EB44E /* weight_generic.cpp in Sources */,
 				61266D7AEDBA61CFA3C84C6B /* rng.cpp in Sources */,
 				84681F6719F9AC0600832DAD /* crc32_test.cpp in Sources */,
 				84D7EFBC19F36361006B1CA5 /* array_test.cpp in Sources */,
-				8422FE1B1A09C12A002EB44E /* estimate.cpp in Sources */,
 				8422FE111A09C112002EB44E /* diagram_IO.cpp in Sources */,
 				8422FE271A09C13D002EB44E /* markov.cpp in Sources */,
 				8422FDFD1A09C0ED002EB44E /* job.cpp in Sources */,
 				84519AED19F2C57A007CB81B /* envMonteCarlo.cpp in Sources */,
+				8422FE391A0A7ECA002EB44E /* weight_test.cpp in Sources */,
 				8422FE0E1A09C112002EB44E /* component_IO.cpp in Sources */,
 				84519AEB19F2C554007CB81B /* environment.cpp in Sources */,
 				8422FDFE1A09C0ED002EB44E /* parameter.cpp in Sources */,
 				61266E5CDE0355C1306E9EBD /* rng_test.cpp in Sources */,
 				6126638BECC823E2FECDBE1A /* utility.cpp in Sources */,
 				84681F6519F9AAA600832DAD /* crc32.cpp in Sources */,
+				8422FE3C1A0A7ECA002EB44E /* weight.cpp in Sources */,
 				84B8FC4B19EDA348003D6DF6 /* cnpy.cpp in Sources */,
 				1CA5CF3819ED6F1B00212E20 /* lattice_test.cpp in Sources */,
 				8422FE0F1A09C112002EB44E /* component.cpp in Sources */,
@@ -435,7 +448,6 @@
 				8499DAD819F9ED2A00AABA1E /* fft_test.cpp in Sources */,
 				84D7EFC319F552F5006B1CA5 /* env_test.cpp in Sources */,
 				8422FE001A09C0ED002EB44E /* status.cpp in Sources */,
-				8422FE1E1A09C12A002EB44E /* weight_specific.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

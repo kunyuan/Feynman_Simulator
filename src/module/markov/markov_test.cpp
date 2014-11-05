@@ -9,7 +9,7 @@
 #include "markov.h"
 #include "utility/sput.h"
 #include "module/diagram/diagram.h"
-#include "module/observable/weight.h"
+#include "module/weight/weight.h"
 #include "module/parameter/parameter.h"
 using namespace std;
 using namespace mc;
