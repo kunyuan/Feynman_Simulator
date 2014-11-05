@@ -34,7 +34,7 @@ int RunTest()
     TEST(weight::TestWeight);
     TEST(mc::TestMarkov);
 
-    TEST(TestEstimator);
+    //    TEST(TestEstimator);
 
     //    TEST(TestCRC32);
     //    TEST(TestFFT);
