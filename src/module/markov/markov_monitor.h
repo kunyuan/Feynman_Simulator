@@ -14,7 +14,7 @@ namespace diag {
 class Diagram;
 }
 namespace para {
-class ParameterMC;
+class ParaMC;
 }
 
 namespace mc {
@@ -31,8 +31,8 @@ class MarkovMonitor {
     EstimatorBundle<real> DetailBalanceEstimator;
     Estimator<real> ZeroOrderWeight;
 
-    bool BuildNew(para::ParameterMC &, diag::Diagram &, weight::Weight &);
-    bool Load(const std::string &InputFile, para::ParameterMC &, diag::Diagram &, weight::Weight &);
+    bool BuildNew(para::ParaMC &, diag::Diagram &, weight::Weight &);
+    bool Load(const std::string &InputFile, para::ParaMC &, diag::Diagram &, weight::Weight &);
     void Save(const std::string &InputFile, const std::string &Mode = "a");
     void ReWeight();
 

@@ -9,14 +9,15 @@
 #ifndef __Feynman_Simulator__environment__
 #define __Feynman_Simulator__environment__
 
+#include "utility/rng.h"
+#include "utility/scopeguard.h"
+#include "lattice/lattice.h"
 #include "module/parameter/parameter.h"
 #include "module/diagram/diagram.h"
-#include "utility/rng.h"
 #include "module/observable/weight.h"
 #include "module/markov/markov_monitor.h"
 #include "module/markov/markov.h"
-#include "lattice/lattice.h"
-#include "utility/scopeguard.h"
+#include "module/dyson/dyson.h"
 
 class Environment {
   public:
@@ -37,7 +38,7 @@ class EnvMonteCarlo : public Environment {
     EnvMonteCarlo(int pid);
 
     //can be read from StateFile or InputFile
-    para::ParameterMC Para;
+    para::ParaMC Para;
     weight::Weight Weight;
     diag::Diagram Diag;
     mc::Markov Grasshopper;
@@ -59,8 +60,9 @@ class EnvDyson : public Environment {
   public:
     EnvDyson(int pid);
 
-    para::ParameterDyson Para;
+    para::ParaDyson Para;
     weight::Weight Weight;
+    dyson::Dyson Dyson;
 
     bool BuildNew(const std::string &InputFile, bool StartFromBare);
     bool CanBeLoad();

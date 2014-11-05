@@ -43,7 +43,7 @@ class Parameter {
     Vec<int> L;
 };
 
-class ParameterMC : public Parameter {
+class ParaMC : public Parameter {
   public:
     long long Counter;
     int Toss;
@@ -60,7 +60,7 @@ class ParameterMC : public Parameter {
     void SetTest();
 };
 
-class ParameterDyson : public Parameter {
+class ParaDyson : public Parameter {
   public:
     int OrderAccepted;
     int SleepTime;
