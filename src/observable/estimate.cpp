@@ -197,10 +197,10 @@ void Estimator<T>::SaveStatistics(const string &FileName, string Mode)
 {
     unsigned int shape[1];
     shape[0] = (unsigned int)_history.size();
-    cnpy::npz_save(cnpy::npz_name(FileName), Name, _history.data(), shape, 1, Mode);
+    cnpy::npz_save(FileName, Name, _history.data(), shape, 1, Mode);
     shape[0] = 1;
-    cnpy::npz_save(cnpy::npz_name(FileName), Name + "_Norm", &_norm, shape, 1, "a");
-    cnpy::npz_save(cnpy::npz_name(FileName), Name + "_Accu", &_accumulator, shape, 1, "a");
+    cnpy::npz_save(FileName, Name + "_Norm", &_norm, shape, 1, "a");
+    cnpy::npz_save(FileName, Name + "_Accu", &_accumulator, shape, 1, "a");
 }
 
 template class Estimator<real>;
@@ -251,7 +251,7 @@ int EstimatorBundle<T>::HowMany()
 template <typename T>
 bool EstimatorBundle<T>::LoadStatistics(const string &FileName)
 {
-    cnpy::npz_t NpzMap = cnpy::npz_load(cnpy::npz_name(FileName));
+    cnpy::npz_t NpzMap = cnpy::npz_load(FileName);
     ON_SCOPE_EXIT([&] {NpzMap.destruct(); });
     for (auto &vector : _EstimatorVector)
         vector.LoadStatistics(NpzMap);

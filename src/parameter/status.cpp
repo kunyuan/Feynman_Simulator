@@ -8,7 +8,7 @@
 
 #include "status.h"
 
-bool Status::Load()
+bool status::Load()
 {
     //do not abort if Status file does not exist
     if (_Para.ParseFile(_StatusFile, false)) {
@@ -22,7 +22,7 @@ bool Status::Load()
         return false;
 }
 
-void Status::Save()
+void status::Save()
 {
     _Para.clear();
     SetPara(_Para, Jcp);
@@ -30,4 +30,9 @@ void Status::Save()
     SetPara(_Para, Version);
     SetPara(_Para, OrderAccepted);
     _Para.SaveToFile(_StatusFile, "w");
+}
+
+std::string status::PrettyString()
+{
+    return _Para.PrettyString();
 }

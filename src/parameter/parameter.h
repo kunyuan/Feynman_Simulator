@@ -10,13 +10,14 @@
 #define __Feynman_Simulator__state__
 
 #include "../lattice/lattice.h"
+#include "status.h"
 #include "parser.h"
 #include "../utility/rng.h"
 #include <string>
 
 class Parameter {
   public:
-    int PID;
+    int Version;
     real Jcp;
     real InitialBeta;
     real DeltaBeta;
@@ -28,18 +29,20 @@ class Parameter {
     real T;
     Lattice Lat;
 
-    bool BuildNew(const std::string &InputFile);
-    bool Load(const std::string &InputFile);
-    void Save(const std::string &InputFile, std::string Mode = "a");
+    status GetStatus();
+    void SetStatus(const status &);
 
   protected:
+    bool _BuildNew(const std::string &InputFile);
+    bool _Load(const std::string &InputFile);
+    void _SavePreparation();
+
     SimpleParser _para;
     Vec<int> L;
 };
 
 class ParameterMC : public Parameter {
   public:
-    int Version;
     long long Counter;
     int Toss;
     int Sample;
@@ -55,4 +58,14 @@ class ParameterMC : public Parameter {
     void SetTest();
 };
 
+class ParameterDyson : public Parameter {
+  public:
+    int OrderAccepted;
+    int SleepTime;
+
+    bool BuildNew(const std::string &InputFile);
+    bool Load(const std::string &InputFile);
+    void Save(const std::string &InputFile, std::string Mode = "a");
+    void SetTest();
+};
 #endif /* defined(__Feynman_Simulator__state__) */

@@ -17,7 +17,6 @@
 #include "../markov/markov.h"
 #include "../lattice/lattice.h"
 #include "../utility/scopeguard.h"
-#include "../parameter/status.h"
 
 class Environment {
   public:
@@ -47,7 +46,10 @@ class EnvMonteCarlo : public Environment {
     bool BuildNew(const std::string &InputFile, bool StartFromBare);
     bool Load();
     void Save(); //Save everything in EnvMonteCarlo
-    void ReWeight(const Status &);
+    bool ReLoad();
+    void DeleteSavedFiles();
+    bool ReWeight();
+    bool CheckStatus();
 
   private:
     std::string _DiagramFile;
@@ -56,7 +58,14 @@ class EnvMonteCarlo : public Environment {
 class EnvDyson : public Environment {
   public:
     EnvDyson(int pid);
-    bool BuildNew(const std::string &InputFile);
+
+    ParameterDyson Para;
+    weight::Weight Weight;
+
+    bool BuildNew(const std::string &InputFile, bool StartFromBare);
+    bool CanBeLoad();
+    bool Load();
+    void Save();
 
   private:
 };

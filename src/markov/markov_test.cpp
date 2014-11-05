@@ -37,7 +37,7 @@ void Test_CreateWorm()
         markov.CreateWorm();
         if (markov.Diag->Worm.Exist) {
             total += 1;
-            markov.Diag->Save("diagram_template.config", "a");
+            //            markov.Diag->Save("diagram_template.config", "a");
         }
     }
     LOG_INFO("Update(Create Worm) are done!");
@@ -50,7 +50,7 @@ void Test_CreateWorm()
         markov.DeleteWorm();
         if (!markov.Diag->Worm.Exist) {
             total += 1;
-            markov.Diag->Save("diagram_template.config", "a");
+            //            markov.Diag->Save("diagram_template.config", "a");
         }
     }
     LOG_INFO("Update(Delete Worm) are done!");

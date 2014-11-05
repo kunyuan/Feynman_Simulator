@@ -7,14 +7,15 @@
 //
 
 #include "environment.h"
+#include "../parameter/status.h"
 
 using namespace std;
 EnvMonteCarlo::EnvMonteCarlo(int pid)
     : Environment(pid)
 {
     _ParameterFile = ToString(PID) + "_para.txt";
-    _GWweightFile = "GWweight";
-    _WeightFile = ToString(PID) + "_statistics";
+    _GWweightFile = "GWweight.npz";
+    _WeightFile = ToString(PID) + "_statistics.npz";
     _StatisticsFile = _WeightFile;
     _DiagramFile = ToString(PID) + "_diagram.txt";
 }
@@ -57,18 +58,32 @@ void EnvMonteCarlo::Save()
     Scarecrow.Save(_StatisticsFile, "a"); // Save to the same file now
     Diag.Save(_DiagramFile, "w");
 }
+void EnvMonteCarlo::DeleteSavedFiles()
+{
+    system(("rm " + _ParameterFile).c_str());
+    system(("rm " + _StatisticsFile).c_str());
+    system(("rm " + _WeightFile).c_str());
+    system(("rm " + _DiagramFile).c_str());
+}
 
 /**
 *  Adjust everything according to new parameters, like new Beta, Jcp
 */
-void EnvMonteCarlo::ReWeight(const Status &status)
+bool EnvMonteCarlo::ReLoad()
 {
-    if (Para.Version >= status.Version)
-        return;
-    Para.Jcp = status.Jcp;
-    Para.Beta = status.Beta;
-    Para.T = 1.0 / Para.Beta;
+    LOG_INFO("Start reweighting...");
+    status Status;
+    if (!Status.Load())
+        return false;
+    if (Para.Version >= Status.Version) {
+        LOG_INFO("Status has not been updated yet since the last reweighting!");
+        return false;
+    }
+    Para.SetStatus(Status);
+    Weight.Load(_GWweightFile, weight::GW, Para);
     Weight.ReWeight(weight::GW | weight::SigmaPolar, Para);
     Grasshopper.ReWeight(Para);
     Scarecrow.ReWeight();
+    LOG_INFO("Reweighted to:\n" << Status.PrettyString());
+    return true;
 }

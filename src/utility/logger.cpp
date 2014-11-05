@@ -69,12 +69,7 @@ void Logger::configure(const std::string &outputFile,
 
     // Compute a new file name, if needed
     if (outputFile != logFile_) {
-        std::ostringstream oss;
-        time_t currTime;
-        time(&currTime);
-        struct tm *currTm = localtime(&currTime);
-        oss << outputFile << "_" << currTm->tm_mday << "_" << currTm->tm_mon << "_" << (1900 + currTm->tm_year) << "_" << currTm->tm_hour << "-" << currTm->tm_min << "-" << currTm->tm_sec << ".log";
-        logFile_ = oss.str().c_str();
+        logFile_ = outputFile;
     }
 
     // Open a new stream, if needed
@@ -138,18 +133,23 @@ void Logger::print(const unsigned int verbosityLevel,
     gettimeofday(&currentTime, NULL);
     time_t _time = time(NULL);
     std::string str(ctime(&_time));
-    // rm /r/n
-    std::string time_str = "[" + str.substr(0, str.length() - 1) + "]";
+
+    std::ostringstream oss;
+    time_t currTime;
+    time(&currTime);
+    struct tm *currTm = localtime(&currTime);
+    oss << "[" << (currTm->tm_year - 100) << "/" << currTm->tm_mon << "/" << currTm->tm_mday << " " << currTm->tm_hour << ":" << currTm->tm_min << ":" << currTm->tm_sec << "]";
+    std::string time_str = oss.str();
     Logger::lock();
 
     if ((configuration_ & file_on) && (verbosityLevel >= fileVerbosityLevel_))
         out_ << loggerName_ << LOGSTR[verbosityLevel] << time_str << "\n"
              << "@[" << file << ":" << line << "]"
-             << "\n" << message << std::endl;
+             << "\n" << message << std::endl << std::endl;
 
     if ((configuration_ & screen_on) && (verbosityLevel >= screenVerbosityLevel_))
         std::cerr << loggerName_ << LOGSTR[verbosityLevel] << time_str << "\n"
                   << "@[" << file << ":" << line << "]"
-                  << "\n" << message << std::endl;
+                  << "\n" << message << std::endl << std::endl;
     Logger::unlock();
 }
