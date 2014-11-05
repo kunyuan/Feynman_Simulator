@@ -21,7 +21,7 @@ MarkovMonitor::MarkovMonitor()
     rEstimator.AddEstimator("1");
 }
 
-bool MarkovMonitor::BuildNew(ParameterMC &para, Diagram &diag, weight::Weight &weight)
+bool MarkovMonitor::BuildNew(ParaMC &para, Diagram &diag, weight::Weight &weight)
 {
     Para = &para;
     Diag = &diag;
@@ -37,7 +37,7 @@ void MarkovMonitor::ReWeight()
     //TODO: reweight Estimators here
 }
 
-bool MarkovMonitor::Load(const string &InputFile, ParameterMC &para, Diagram &diag, weight::Weight &weight)
+bool MarkovMonitor::Load(const string &InputFile, ParaMC &para, Diagram &diag, weight::Weight &weight)
 {
     Para = &para;
     Diag = &diag;

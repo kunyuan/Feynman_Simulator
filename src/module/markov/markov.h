@@ -24,7 +24,7 @@ class Polar;
 class Worm;
 }
 namespace para {
-class ParameterMC;
+class ParaMC;
 }
 class Lattice;
 class RandomFactory;
@@ -49,8 +49,8 @@ class Markov {
 
     diag::Diagram *Diag;
 
-    bool BuildNew(para::ParameterMC &, diag::Diagram &, weight::Weight &);
-    void ReWeight(para::ParameterMC &);
+    bool BuildNew(para::ParaMC &, diag::Diagram &, weight::Weight &);
+    void ReWeight(para::ParaMC &);
     void Hop(int);
     void CreateWorm();
     void DeleteWorm();

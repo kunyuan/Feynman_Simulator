@@ -25,7 +25,7 @@ int RandomPickDeltaSpin();
 bool CanNotMoveWorm(int dspin, spin sin, spin sout);
 bool CanNotMoveWorm(int dspin, spin sin, int dir);
 
-bool Markov::BuildNew(ParameterMC &para, Diagram &diag, weight::Weight &weight)
+bool Markov::BuildNew(ParaMC &para, Diagram &diag, weight::Weight &weight)
 {
     Beta = para.Beta;
     Lat = &para.Lat;
@@ -47,7 +47,7 @@ bool Markov::BuildNew(ParameterMC &para, Diagram &diag, weight::Weight &weight)
     return true;
 }
 
-void Markov::ReWeight(ParameterMC &para)
+void Markov::ReWeight(ParaMC &para)
 {
     Beta = para.Beta;
     OrderWeight = para.OrderReWeight;
