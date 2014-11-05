@@ -96,10 +96,8 @@ class G : public WeightNoMeasure {
 class W : public WeightNoMeasure {
   public:
     W(const Lattice &, real Beta, int order);
-    Complex Weight(const Site &, const Site &, real, real, spin *, spin *, bool, bool);
-    Complex Weight(int, const Site &, const Site &, real, real, spin *, spin *, bool, bool);
-    Complex WeightOfDelta(const Site &, const Site &, spin *, spin *, bool);
-    Complex WeightOfDelta(int, const Site &, const Site &, spin *, spin *, bool);
+    Complex Weight(const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool);
+    Complex Weight(int, const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool);
     Complex BareWeight(const Site &, const Site &, real, real, spin *, spin *);
     void InitialWithBare();
 };

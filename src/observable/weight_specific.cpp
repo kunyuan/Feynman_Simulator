@@ -107,11 +107,16 @@ W::W(const Lattice &lat, real beta, int order)
 {
 }
 
-Complex W::Weight(const Site &rin, const Site &rout, real tin, real tout, spin *SpinIn, spin *SpinOut, bool IsWorm, bool IsMeasure)
+Complex W::Weight(const Site &rin, const Site &rout, real tin, real tout, spin *SpinIn, spin *SpinOut, bool IsWorm, bool IsMeasure, bool IsDelta)
 {
     if (IsMeasure)
         //TODO: define the measuring weight of W
         return Complex(1.0, 0.0);
+    
+    if(IsDelta)
+        //TODO: define the delta function here! IsWorm==true and IsWorm==false
+        return Complex(1.0, 0.0);
+    
     else if (IsWorm)
         //define your fake function here
         return _Weight[SpinIndex(UP, UP)][_Lat.Dist(rin, rout).SublatIndex][_Lat.Dist(rin, rout).CoordiIndex][TauToBin(tout - tin)];
@@ -119,7 +124,7 @@ Complex W::Weight(const Site &rin, const Site &rout, real tin, real tout, spin *
         return _Weight[SpinIndex(SpinIn, SpinOut)][_Lat.Dist(rin, rout).SublatIndex][_Lat.Dist(rin, rout).CoordiIndex][TauToBin(tout - tin)];
 }
 
-Complex W::Weight(int dir, const Site &r1, const Site &r2, real t1, real t2, spin *Spin1, spin *Spin2, bool IsWorm, bool IsMeasure)
+Complex W::Weight(int dir, const Site &r1, const Site &r2, real t1, real t2, spin *Spin1, spin *Spin2, bool IsWorm, bool IsMeasure, bool IsDelta)
 {
     int spinindex, subindex, coordindex, tau;
     if (dir == IN) {
@@ -138,6 +143,10 @@ Complex W::Weight(int dir, const Site &r1, const Site &r2, real t1, real t2, spi
     if (IsMeasure)
         //TODO: define the measuring weight of W
         return Complex(1.0, 0.0);
+    
+    if(IsDelta)
+        //TODO: define the delta function here! IsWorm==true and IsWorm==false
+        return Complex(1.0, 0.0);
     else if (IsWorm)
         //define your fake function here
         return _Weight[SpinIndex(UP, UP)][subindex][coordindex][tau];
@@ -145,17 +154,6 @@ Complex W::Weight(int dir, const Site &r1, const Site &r2, real t1, real t2, spi
         return _Weight[spinindex][subindex][coordindex][tau];
 }
 
-Complex W::WeightOfDelta(const Site &rin, const Site &rout, spin *SpinIn, spin *SpinOut, bool IsWorm)
-{
-    //TODO: add Delta expression of W here, you may need to add new API to measure it
-    return Complex(1.0, 0.0);
-}
-
-Complex W::WeightOfDelta(int dir, const Site &r1, const Site &r2, spin *Spin1, spin *Spin2, bool IsWorm)
-{
-    //TODO: add Delta expression of W here, you may need to add new API to measure it
-    return Complex(1.0, 0.0);
-}
 
 Complex W::BareWeight(const Site &rin, const Site &rout, real tin, real tout, spin *SpinIn, spin *SpinOut)
 {
