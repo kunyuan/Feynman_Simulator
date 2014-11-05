@@ -11,7 +11,7 @@
 #include <unistd.h>
 #include "test.h"
 #include "environment/environment.h"
-#include "module/parameter/job.h"
+#include "job/job.h"
 using namespace std;
 using namespace para;
 
