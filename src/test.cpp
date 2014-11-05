@@ -8,12 +8,12 @@
 
 #include "test.h"
 #include "utility/crc32.h"
-#include "markov/markov.h"
-#include "diagram/diagram.h"
-#include "lattice/lattice.h"
-#include "observable/weight.h"
-#include "utility/fft.h"
 #include "environment/environment.h"
+#include "module/markov/markov.h"
+#include "module/diagram/diagram.h"
+#include "module/observable/weight.h"
+#include "lattice/lattice.h"
+#include "utility/fft.h"
 using namespace std;
 
 #define TEST(func)                  \
@@ -28,10 +28,10 @@ int RunTest()
     //    TestRNG();
     //    TestArray();
     TEST(TestEnvironment);
-    TEST(TestDiagram);
+    TEST(diag::TestDiagram);
     TEST(TestLattice);
-    TEST(TestObservable);
-    TEST(TestMarkov);
+    TEST(weight::TestObservable);
+    TEST(mc::TestMarkov);
 
     //    TEST(TestCRC32);
     //    TEST(TestFFT);
