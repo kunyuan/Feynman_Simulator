@@ -22,7 +22,7 @@ int main(int argc, const char *argv[])
     LOGGER_CONF("test.log", "test", Logger::file_on | Logger::screen_on, INFO, INFO);
     RunTest();
 
-    string InputFile = "infile/_in_DYSON_1";
+    string InputFile = "infile/_in_MC_2";
     para::Job Job(InputFile);
     LOGGER_CONF(ToString(Job.PID) + ".log", Job.Type, Logger::file_on | Logger::screen_on, INFO, INFO);
 
@@ -39,9 +39,9 @@ void MonteCarlo(const para::Job &Job)
 {
     EnvMonteCarlo PaddyField(Job.PID);
     if (Job.DoesLoad)
-        PaddyField.BuildNew(Job.InputFile, Job.StartFromBare);
-    else
         PaddyField.Load();
+    else
+        PaddyField.BuildNew(Job.InputFile, Job.StartFromBare);
 
     auto &Para = PaddyField.Para;
     auto &Grasshopper = PaddyField.Grasshopper;
@@ -70,9 +70,9 @@ void Dyson(const para::Job &Job)
 {
     EnvDyson env(Job.PID);
     if (Job.DoesLoad)
-        env.BuildNew(Job.InputFile, Job.StartFromBare);
-    else
         env.Load();
+    else
+        env.BuildNew(Job.InputFile, Job.StartFromBare);
     auto &Para = env.Para;
 
     while (true) {
