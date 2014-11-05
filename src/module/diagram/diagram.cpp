@@ -120,7 +120,7 @@ bool Diagram::FixDiagram()
         vout->nW = w;
         vout->Dir = OUT;
 
-        w->Weight = WWeight->Weight(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin(), vout->Spin(), w->IsWorm, w->IsMeasure);
+        w->Weight = WWeight->Weight(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin(), vout->Spin(), w->IsWorm, w->IsMeasure, w->IsDelta);
         Weight *= w->Weight;
     }
 
