@@ -7,8 +7,7 @@
 //
 
 #include "environment.h"
-#include "../utility/sput.h"
-#include "../utility/utility.h"
+#include "utility/sput.h"
 
 void Test_EnvMC();
 
