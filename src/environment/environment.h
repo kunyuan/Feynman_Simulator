@@ -9,15 +9,14 @@
 #ifndef __Feynman_Simulator__environment__
 #define __Feynman_Simulator__environment__
 
-#include "../parameter/parameter.h"
-#include "../diagram/diagram.h"
-#include "../utility/rng.h"
-#include "../observable/weight.h"
-#include "../markov/markov_monitor.h"
-#include "../markov/markov.h"
-#include "../lattice/lattice.h"
-#include "../utility/scopeguard.h"
-#include "../parameter/state.h"
+#include "module/parameter/parameter.h"
+#include "module/diagram/diagram.h"
+#include "utility/rng.h"
+#include "module/observable/weight.h"
+#include "module/markov/markov_monitor.h"
+#include "module/markov/markov.h"
+#include "lattice/lattice.h"
+#include "utility/scopeguard.h"
 
 class Environment {
   public:
@@ -26,40 +25,49 @@ class Environment {
                 OldGW };
 
   protected:
+    std::string _ParameterFile;
+    std::string _GWweightFile;
+    std::string _WeightFile;
+    std::string _StatisticsFile;
     Environment(int pid);
-    std::string _ParaFile();
-    std::string _ControlFile();
-    std::string _WeightFile();
-    std::string _StatisFile();
 };
 
 class EnvMonteCarlo : public Environment {
   public:
     EnvMonteCarlo(int pid);
-    //can be read from StateFile or InputFile
-    ParameterMC Para;
-    weight::Weight Weight;
-    Diagram Diag;
-    Markov Grasshopper;
-    MarkovMonitor Scarecrow;
 
-    bool BuildNew(const std::string &InputFile, bool StarFromBare);
+    //can be read from StateFile or InputFile
+    para::ParameterMC Para;
+    weight::Weight Weight;
+    diag::Diagram Diag;
+    mc::Markov Grasshopper;
+    mc::MarkovMonitor Scarecrow;
+
+    bool BuildNew(const std::string &InputFile, bool StartFromBare);
     bool Load();
     void Save(); //Save everything in EnvMonteCarlo
-    void ReWeight(const State &);
+    bool ReLoad();
+    void DeleteSavedFiles();
+    bool ReWeight();
+    bool CheckStatus();
 
   private:
-    std::string _ConfigFile();
+    std::string _DiagramFile;
 };
 
 class EnvDyson : public Environment {
   public:
     EnvDyson(int pid);
-    bool BuildNew(const std::string &InputFile);
+
+    para::ParameterDyson Para;
+    weight::Weight Weight;
+
+    bool BuildNew(const std::string &InputFile, bool StartFromBare);
+    bool CanBeLoad();
+    bool Load();
+    void Save();
 
   private:
-    std::string _FinalQuanFile();
-    std::string _FinalStatisFile();
 };
 
 int TestEnvironment();

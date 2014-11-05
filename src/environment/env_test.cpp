@@ -24,7 +24,7 @@ int TestEnvironment()
 void Test_EnvMC()
 {
     EnvMonteCarlo env(0);
-    string inputfile = "../src/parameter/_in_MC_test";
+    string inputfile = "../src/module/parameter/_in_MC_test";
     env.BuildNew(inputfile, true);
     sput_fail_unless(Equal(env.Para.OrderReWeight[3], 4.0), "check reading the job file");
 
@@ -39,4 +39,5 @@ void Test_EnvMC()
     new_env.Load();
     sput_fail_unless(Equal(new_env.Para.OrderReWeight[3], 4.1), "Check reading state file");
     sput_fail_unless(Equal(env.Para.RNG.urn(), new_env.Para.RNG.urn()), "Check reading RNG from state file");
+    new_env.DeleteSavedFiles();
 }

@@ -9,15 +9,6 @@
 #include <iomanip>
 #include "complex.h"
 
-std::string cnpy::npz_name(std::string file)
-{
-    return file + ".npz";
-}
-std::string cnpy::npy_name(std::string file)
-{
-    return file + ".npy";
-}
-
 char cnpy::BigEndianTest()
 {
     unsigned char x[] = {1, 0};
