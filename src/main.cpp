@@ -11,20 +11,19 @@
 #include <unistd.h>
 #include "test.h"
 #include "environment/environment.h"
-#include "parameter/job.h"
-#include "markov/markov.h"
-#include "markov/markov_monitor.h"
+#include "module/parameter/job.h"
 using namespace std;
+using namespace para;
 
-void MonteCarlo(const job &);
-void Dyson(const job &);
+void MonteCarlo(const Job &);
+void Dyson(const Job &);
 int main(int argc, const char *argv[])
 {
     LOGGER_CONF("test.log", "test", Logger::file_on | Logger::screen_on, INFO, INFO);
     RunTest();
 
     string InputFile = "infile/_in_DYSON_1";
-    job Job(InputFile);
+    para::Job Job(InputFile);
     LOGGER_CONF(ToString(Job.PID) + ".log", Job.Type, Logger::file_on | Logger::screen_on, INFO, INFO);
 
     if (Job.Type == "MC") {
@@ -36,7 +35,7 @@ int main(int argc, const char *argv[])
     return 0;
 }
 
-void MonteCarlo(const job &Job)
+void MonteCarlo(const para::Job &Job)
 {
     EnvMonteCarlo PaddyField(Job.PID);
     if (Job.DoesLoad)
@@ -67,7 +66,7 @@ void MonteCarlo(const job &Job)
     }
 }
 
-void Dyson(const job &Job)
+void Dyson(const para::Job &Job)
 {
     EnvDyson env(Job.PID);
     if (Job.DoesLoad)

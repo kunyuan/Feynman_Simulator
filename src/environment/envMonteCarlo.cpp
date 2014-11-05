@@ -7,9 +7,11 @@
 //
 
 #include "environment.h"
-#include "../parameter/status.h"
+#include "module/parameter/status.h"
 
 using namespace std;
+using namespace para;
+
 EnvMonteCarlo::EnvMonteCarlo(int pid)
     : Environment(pid)
 {

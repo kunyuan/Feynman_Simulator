@@ -24,7 +24,7 @@ int TestEnvironment()
 void Test_EnvMC()
 {
     EnvMonteCarlo env(0);
-    string inputfile = "../src/parameter/_in_MC_test";
+    string inputfile = "../src/module/parameter/_in_MC_test";
     env.BuildNew(inputfile, true);
     sput_fail_unless(Equal(env.Para.OrderReWeight[3], 4.0), "check reading the job file");
 
