@@ -11,6 +11,7 @@
 
 #include "utility/complex.h"
 #include "utility/convention.h"
+#include "utility/momentum.h"
 #include "lattice/lattice.h"
 
 namespace diag {
@@ -30,14 +31,16 @@ class GLine {
     name Name;
     bool IsMeasure;
     vertex nVer[2];
-    int K;
+    Momentum K;
     Complex Weight;
+    
     spin Spin();
     spin Spin(int dir);
     void FlipSpin();
     int Sublattice(int dir);
     vertex NeighVer(int dir);
     std::string PrettyString();
+    void SetGLine(Momentum, const Complex&, bool, vertex*);
 };
 
 class WLine {
@@ -47,13 +50,15 @@ class WLine {
     bool IsDelta;
     bool IsMeasure;
     vertex nVer[2];
-    int K;
+    Momentum K;
     Complex Weight;
+    
     spin Spin(int, int);
     void FlipSpin();
     int Sublattice(int dir);
     vertex NeighVer(int dir);
     std::string PrettyString();
+    void SetWLine(Momentum, const Complex&, bool, bool, bool, vertex*);
 };
 
 class Vertex {
@@ -65,6 +70,8 @@ class Vertex {
     spin _spin[2]; // IN/OUT spins
     double Tau;
     int Dir;
+    
+    void SetVertex(const Site&, const real&, spin*, int, gLine*, wLine);
     spin Spin(int);
     void SetSpin(spin *);
     spin *Spin();
@@ -78,7 +85,7 @@ class WormClass {
   public:
     bool Exist;
     vertex Ira, Masha; //extra line: Ira---"k,dSpin"--->Masha
-    int K;
+    Momentum K;
     int dSpin;
     real Weight;
 

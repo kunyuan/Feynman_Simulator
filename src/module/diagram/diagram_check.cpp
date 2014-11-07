@@ -8,6 +8,8 @@
 
 #include "diagram.h"
 #include "utility/abort.h"
+#include "module/observable/weight.h"
+
 using namespace std;
 using namespace diag;
 
@@ -48,6 +50,34 @@ bool Diagram::CheckVer()
 
 bool Diagram::CheckWeight()
 {
+    if (DEBUGMODE && (GWeight == nullptr || WWeight == nullptr))
+        ABORT("G and W weight are not defined yet!");
+    
+    Complex DiagWeight(1.0, 0.0);
+    Complex gWeight, wWeight;
+    vertex  vin, vout;
+    
+    for (int i = 0; i < G.HowMany(); i++) {
+        DiagWeight *= G(i)->Weight;
+        
+        vin = G(i)->NeighVer(IN);
+        vout = G(i)->NeighVer(OUT);
+        gWeight = GWeight->Weight(vin->R, vout->R, vin->Tau, vout->Tau,
+                                  vin->Spin(OUT), vout->Spin(IN), G(i)->IsMeasure);
+        if(!Equal(G(i)->Weight, gWeight)) return false;
+    }
+    for (int i = 0; i < W.HowMany(); i++) {
+        DiagWeight *= W(i)->Weight;
+        
+        vin = W(i)->NeighVer(IN);
+        vout = W(i)->NeighVer(OUT);
+        wWeight = WWeight->Weight(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin(),
+                                  vout->Spin(), W(i)->IsWorm,W(i)->IsMeasure, W(i)->IsDelta);
+        if(!Equal(W(i)->Weight, wWeight)) return false;
+    }
+    DiagWeight *= SignFermiLoop * (Order%2==0? 1:-1);
+    
+    if(!Equal(DiagWeight,Weight)) return false;
     return true;
 }
 
@@ -59,6 +89,8 @@ bool Diagram::CheckDiagram()
     if (!CheckW())
         return false;
     if (!CheckVer())
+        return false;
+    if (!CheckWeight())
         return false;
     return true;
 }

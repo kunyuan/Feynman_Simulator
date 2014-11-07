@@ -85,6 +85,8 @@ bool Diagram::_Load(istream &ifs)
         else if (head == 'i')
             //TODO read from Worm
             LoadConfig(ifs, Worm);
+        else if (head == 's')
+            ifs >> SignFermiLoop;
         else
             ABORT("Error in reading diagram! Get " + ToString(head) + " as the head!");
         head = COMMENT;

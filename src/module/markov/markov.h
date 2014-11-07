@@ -27,12 +27,15 @@ namespace para {
 class ParaMC;
 }
 class Lattice;
+class Site;
 class RandomFactory;
+class Momentum;
 
 namespace mc {
 class Markov {
   public:
     real Beta;
+    int Order;
     Lattice *Lat;
     real *OrderWeight;
     diag::WormClass *Worm;
@@ -43,7 +46,7 @@ class Markov {
     weight::Worm *WormWeight;
     RandomFactory *RNG;
 
-    const static int NUpdates = 4;
+    const static int NUpdates = 7;
     real ProbofCall[NUpdates];
     real SumofProbofCall[NUpdates] = {0.0};
 
@@ -52,15 +55,22 @@ class Markov {
     bool BuildNew(para::ParaMC &, diag::Diagram &, weight::Weight &);
     void ReWeight(para::ParaMC &);
     void Hop(int);
+    
     void CreateWorm();
     void DeleteWorm();
     void MoveWormOnG();
     void MoveWormOnW();
+    void Reconnect();
+    void AddInteraction();
+    void DeleteInteraction();
 
   private:
     int RandomPickDeltaSpin();
-    int RandomPickK();
+    Momentum RandomPickK();
     int RandomPickDir();
+    real RandomPickTau();
+    Site RandomPickSite();
+    bool RandomPickBool();
 };
 
 int TestMarkov();
