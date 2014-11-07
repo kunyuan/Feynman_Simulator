@@ -31,22 +31,10 @@ class Site {
     {
     }
 
-    bool operator==(const Site &v2)
-    {
-        if (Sublattice != v2.Sublattice)
-            return false;
-        if (Coordinate != v2.Coordinate)
-            return false;
-        return true;
-    }
-
-    bool operator!=(const Site &v2)
-    {
-        if (*this == v2)
-            return false;
-        return true;
-    }
 };
+
+bool operator==(const Site& v1, const Site &v2);
+bool operator!=(const Site& v1, const Site &v2);
 
 /**
  *  class Distance defines Site1-Site2 using the vector: Dr and sublattice of Site1 and Site2: Sublattice[0] and Sublattice[1].

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1CA021B91A0A897D00A18085 /* momentum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CA021B71A0A897D00A18085 /* momentum.cpp */; };
 		1CA5CF3819ED6F1B00212E20 /* lattice_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CA5CF3719ED6F1B00212E20 /* lattice_test.cpp */; };
 		1CA5CF3A19ED6F3F00212E20 /* lattice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CA5CF3919ED6F3F00212E20 /* lattice.cpp */; };
 		6126638BECC823E2FECDBE1A /* utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 612660FB5825D574D3D39D34 /* utility.cpp */; };
@@ -66,6 +67,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1CA021B71A0A897D00A18085 /* momentum.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = momentum.cpp; sourceTree = "<group>"; };
+		1CA021B81A0A897D00A18085 /* momentum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = momentum.h; sourceTree = "<group>"; };
 		1CA5CF3719ED6F1B00212E20 /* lattice_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lattice_test.cpp; path = lattice/lattice_test.cpp; sourceTree = "<group>"; };
 		1CA5CF3919ED6F3F00212E20 /* lattice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lattice.cpp; path = lattice/lattice.cpp; sourceTree = "<group>"; };
 		1CA5CF3B19ED6F4900212E20 /* lattice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lattice.h; path = lattice/lattice.h; sourceTree = "<group>"; };
@@ -203,6 +206,8 @@
 				84681F6319F9AAA600832DAD /* crc32.cpp */,
 				84681F6619F9AC0600832DAD /* crc32_test.cpp */,
 				8499DB0919FEECEC00AABA1E /* scopeguard.h */,
+				1CA021B71A0A897D00A18085 /* momentum.cpp */,
+				1CA021B81A0A897D00A18085 /* momentum.h */,
 			);
 			path = utility;
 			sourceTree = "<group>";
@@ -432,6 +437,7 @@
 				8422FE0F1A09C112002EB44E /* component.cpp in Sources */,
 				8422FE251A09C13D002EB44E /* markov_monitor.cpp in Sources */,
 				8422FE2B1A09C57B002EB44E /* dyson.cpp in Sources */,
+				1CA021B91A0A897D00A18085 /* momentum.cpp in Sources */,
 				8499DAD819F9ED2A00AABA1E /* fft_test.cpp in Sources */,
 				84D7EFC319F552F5006B1CA5 /* env_test.cpp in Sources */,
 				8422FE001A09C0ED002EB44E /* status.cpp in Sources */,

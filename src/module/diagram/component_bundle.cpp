@@ -34,6 +34,11 @@ T *Bundle<T>::Add()
     if (_available_space >= MAX_BUNDLE)
         ABORT("Too many objects >=" << MAX_BUNDLE);
     T *address = _component_name[_available_space];
+    
+    //need to be checked
+    address->Name = _available_space;
+    //////////
+
     _available_space++;
     return address;
 }

@@ -75,6 +75,20 @@ void Lattice::Initialize()
     //    SublatticeVec[1][1]=0.5;
 }
 
+bool operator==(const Site& v1, const Site &v2)
+{
+    if (v1.Sublattice != v2.Sublattice)
+        return false;
+    if (v1.Coordinate != v2.Coordinate)
+        return false;
+    return true;
+}
+
+bool operator!=(const Site& v1, const Site &v2)
+{
+    return !(v1==v2);
+}
+
 /**
  *  get a vector within system size L
  *
