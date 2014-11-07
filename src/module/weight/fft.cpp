@@ -32,41 +32,52 @@ void WeightNoMeasure::_ChangeSymmetry(fft::Dir direction)
             _Weight(i * _Shape[TAU] + j) *= PhaseFactor[j];
 }
 
-void WeightNoMeasure::_FFT(fft::Dir direction)
+void WeightNoMeasure::_FFT(fft::Dir direction, Mode mode)
 {
+    //mode==Spatial, all spatial elements of DoIt will be set to be true, so that fft would be performed on it
+    //same for mode==Time
+    bool DoIt[_Lat.Dimension + 1];
+    for (auto i : DoIt)
+        DoIt[i] = false;
+    if (mode & Spatial)
+        for (int i = 0; i < _Lat.Dimension; i++)
+            DoIt[i] = true;
+    if (mode & Time)
+        DoIt[_Lat.Dimension] = true;
+
     for (int sp = 0; sp < _Shape[SP]; sp++)
         for (int sub = 0; sub < _Shape[SUB]; sub++)
-            fft::fftnD((Complex *)_Weight[sp][sub](), (int *)_SpaceTimeShape, _Lat.Dimension + 1, direction);
+            fft::fftnD((Complex *)_Weight[sp][sub](), (int *)_SpaceTimeShape, _Lat.Dimension + 1, direction, DoIt);
 }
 
-void Sigma::FFT(fft::Dir direction)
+void Sigma::FFT(fft::Dir direction, Mode mode)
 {
-    if (direction == fft::FORTH)
+    if (mode & Time && direction == fft::FORTH)
         _ChangeSymmetry(direction);
 
-    _FFT(direction);
+    _FFT(direction, mode);
 
-    if (direction == fft::BACK)
-        _ChangeSymmetry(direction);
-}
-
-void Polar::FFT(fft::Dir direction)
-{
-    _FFT(direction);
-}
-
-void G::FFT(fft::Dir direction)
-{
-    if (direction == fft::FORTH)
-        _ChangeSymmetry(direction);
-
-    _FFT(direction);
-
-    if (direction == fft::BACK)
+    if (mode & Time && direction == fft::BACK)
         _ChangeSymmetry(direction);
 }
 
-void W::FFT(fft::Dir direction)
+void Polar::FFT(fft::Dir direction, Mode mode)
 {
-    _FFT(direction);
+    _FFT(direction, mode);
+}
+
+void G::FFT(fft::Dir direction, Mode mode)
+{
+    if (mode & Time && direction == fft::FORTH)
+        _ChangeSymmetry(direction);
+
+    _FFT(direction, mode);
+
+    if (mode & Time && direction == fft::BACK)
+        _ChangeSymmetry(direction);
+}
+
+void W::FFT(fft::Dir direction, Mode mode)
+{
+    _FFT(direction, mode);
 }
