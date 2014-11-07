@@ -90,11 +90,6 @@ class Distance {
 class Lattice {
   private:
     void Initialize();
-    int Vec2Index(const Vec<int> &) const;
-    Vec<int> Index2Vec(int) const;
-
-    int Sublat2Index(int, int) const;
-    int Index2Sublat(int, int direction) const;
 
     Vec<int> Shift(const Vec<int> &) const;
 
@@ -110,6 +105,13 @@ class Lattice {
 
     Lattice();
     Lattice(const Vec<int> &size);
+
+    int Vec2Index(const Vec<int> &) const;
+    Vec<int> Index2Vec(int) const;
+
+    int Sublat2Index(int, int) const;
+    int Index2Sublat(int, int direction) const;
+
     void Reset(const Vec<int> &size);
 
     Site GetSite(int name) const;

@@ -31,6 +31,19 @@ WeightNoMeasure::WeightNoMeasure(const Lattice &lat, real beta, int order, int S
 
     _Weight.Allocate((unsigned int *)(_Shape + SP));
     //use _Shape[SP] to _Shape[TAU] to construct array4
+
+    for (int i = 0; i < lat.Dimension; i++)
+        _SpaceTimeShape[i] = lat.Size[i];
+    _SpaceTimeShape[lat.Dimension] = MAX_BIN;
+    //Lx*Ly*Lz*Lt
+
+    if (!_CheckVec2Index()) {
+        string message = "The mapping between vector and index of \
+        the lattice should look like\n (i,j,k) -> k + n3*j + n2*n3*i; \
+        \n n1, n2, n3 : dimensions in three directions; \
+        which is required by fft on spatial dimensions";
+        ABORT(message);
+    }
 }
 
 void WeightNoMeasure::Reset(real beta)
@@ -91,6 +104,27 @@ bool WeightNoMeasure::Load(const std::string &FileName)
         ABORT("Can't find estimator " << _Name << " in .npz data file!");
     _Weight = reinterpret_cast<Complex *>(weight.data);
     //assignment here will copy data in weight.data into _Weight
+    return true;
+}
+/**
+*  Check if the mapping between vector and index of the lattice looks like
+*            (i,j,k) -> k + n3*j + n2*n3*i;
+*     n1, n2, n3 : dimensions in three directions;
+*   which is required by fft on spatial dimensions
+*/
+bool WeightNoMeasure::_CheckVec2Index()
+{
+    Vec<int> v;
+    for (int index = 0; index < _Lat.Vol; index++) {
+        int j = index;
+        for (int i = D-1; i > 0; i--) {
+            v[i] = j % _Lat.Size[i];
+            j /= _Lat.Size[i];
+        }
+        v[0] = j;
+        if (v != _Lat.Index2Vec(index))
+            return false;
+    }
     return true;
 }
 

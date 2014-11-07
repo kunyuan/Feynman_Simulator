@@ -10,12 +10,19 @@
 #define Feynman_Simulator_fft_h
 
 class Complex;
-void fft(Complex x[], int n, int flag);
-void fft2D(Complex x[], int n1, int n2, int flag);
-void fft3D(Complex x[], int n1, int n2, int n3, int flag);
-void fft4D(Complex x[], int n1, int n2, int n3, int n4, int flag);
+namespace fft {
+enum Dir {
+    FORTH,
+    BACK
+};
 
-void fft(Complex x[], int *size, int dim, int flag);
+void fft(Complex *x, int n, Dir, bool *Mask=nullptr);
+void fft2D(Complex *x, int n1, int n2, Dir, bool *Mask = nullptr);
+void fft3D(Complex *x, int n1, int n2, int n3, Dir, bool *Mask = nullptr);
+void fft4D(Complex *x, int n1, int n2, int n3, int n4, Dir, bool *Mask = nullptr);
+
+void fft(Complex *x, int *size, int dim, Dir, bool *Mask = nullptr);
+}
 
 int TestFFT();
 #endif
