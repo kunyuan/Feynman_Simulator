@@ -10,6 +10,7 @@
 #include "sput.h"
 #include "complex.h"
 #include <iostream>
+using namespace fft;
 
 void Test_fft1D();
 void Test_fft2D();
@@ -61,7 +62,7 @@ void Test_fft1D()
          {-4.000000000000000, -1.656854249492380},
          {-4.000000000000000, -4.000000000000000},
          {-3.999999999999999, -9.656854249492380}};
-    fft(in, 8, 1);
+    fft::fft(in, 8, FORTH);
     sput_fail_unless(CheckArray(in, out, 8), "Check fft 1d");
 }
 
@@ -77,11 +78,11 @@ void Test_fft3D()
         for (int j = 0; j < shape[1]; j++)
             for (int k = 0; k < shape[2]; k++)
                 in[i][j][k] = (i * i + j * j) * cos(k);
-    fft3D((Complex *)in, Nx, Ny, Nz, 1);
+    fft3D((Complex *)in, Nx, Ny, Nz, FORTH);
     extern Complex out3D[];
     sput_fail_unless(CheckArray((Complex *)in, (Complex *)out3D, Nx * Ny * Nz), "Check fft 3d");
-    fft4D((Complex *)in, 1, Nx, Ny, Nz, -1);
-    fft4D((Complex *)in, 1, Nx, Ny, Nz, 1);
+    fft4D((Complex *)in, 1, Nx, Ny, Nz, BACK);
+    fft4D((Complex *)in, 1, Nx, Ny, Nz, FORTH);
     sput_fail_unless(CheckArray((Complex *)in, (Complex *)out3D, Nx * Ny * Nz), "Check fft 4d");
 }
 

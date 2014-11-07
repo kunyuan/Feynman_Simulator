@@ -114,7 +114,6 @@
 		8422FE381A0A7ECA002EB44E /* weight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = weight.h; path = module/weight/weight.h; sourceTree = "<group>"; };
 		8422FE3D1A0A7F8D002EB44E /* estimator_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = estimator_test.cpp; path = estimator/estimator_test.cpp; sourceTree = "<group>"; };
 		8422FE3F1A0A82C5002EB44E /* fft.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fft.cpp; path = module/weight/fft.cpp; sourceTree = "<group>"; };
-		8422FE401A0A82C5002EB44E /* fft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fft.h; path = module/weight/fft.h; sourceTree = "<group>"; };
 		8422FE421A0A8444002EB44E /* parser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = parser.cpp; sourceTree = "<group>"; };
 		8422FE431A0A8444002EB44E /* parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = parser.h; sourceTree = "<group>"; };
 		8422FE4A1A0A85E7002EB44E /* _in_MC_test */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = _in_MC_test; path = job/_in_MC_test; sourceTree = "<group>"; };
@@ -263,9 +262,8 @@
 				8422FE371A0A7ECA002EB44E /* weight.cpp */,
 				8422FE351A0A7ECA002EB44E /* weight_base.cpp */,
 				8422FE361A0A7ECA002EB44E /* weight_inheritance.cpp */,
-				8422FE341A0A7ECA002EB44E /* weight_test.cpp */,
 				8422FE3F1A0A82C5002EB44E /* fft.cpp */,
-				8422FE401A0A82C5002EB44E /* fft.h */,
+				8422FE341A0A7ECA002EB44E /* weight_test.cpp */,
 			);
 			name = weight;
 			sourceTree = "<group>";

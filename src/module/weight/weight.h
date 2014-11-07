@@ -12,6 +12,7 @@
 #include "estimator/estimator.h"
 #include "utility/array.h"
 #include "lattice/lattice.h"
+#include "utility/fft.h"
 
 namespace para {
 class Parameter;
@@ -19,10 +20,14 @@ class Parameter;
 
 namespace weight {
 
+const int MAX_BIN = 32;
+
 class WeightNoMeasure {
   public:
-    unsigned int _Shape[5];
-    Array::array4<Complex> _Weight;
+    void SetTest();
+    void Save(const std::string &FileName, std::string Mode = "a");
+    bool Load(const std::string &);
+    void Reset(real Beta);
 
   protected:
     WeightNoMeasure(const Lattice &, real Beta, int Order, int SpinVol, std::string);
@@ -32,23 +37,22 @@ class WeightNoMeasure {
     real _dBetaInverse;
     int _Order;
     Lattice _Lat;
+    unsigned int _SpaceTimeShape[D + 1]; //store Lx,Ly,Lz,Lt
+    unsigned int _Shape[5];              //the shape of internal weight array
+    Array::array4<Complex> _Weight;
+    bool _CheckVec2Index();
+    void _FFT(fft::Dir);
+    void _ChangeSymmetry(fft::Dir);
 
     int SpinIndex(spin SpinIn, spin SpinOut);
     int SpinIndex(spin *TwoSpinIn, spin *TwoSpinOut);
     int TauToBin(real tau);
     real BinToTau(int Bin);
-    const int MAX_BIN = 32;
     enum Dim { ORDER,
                SP,
                SUB,
                VOL,
                TAU };
-
-  public:
-    void SetTest();
-    void Save(const std::string &FileName, std::string Mode = "a");
-    bool Load(const std::string &);
-    void Reset(real Beta);
 };
 
 class WeightNeedMeasure : public WeightNoMeasure {
@@ -81,6 +85,8 @@ class Sigma : public WeightNeedMeasure {
     Complex WeightOfDelta(spin, spin);
     void MeasureNorm(real weight);
     void Measure(const Site &, const Site &, real, real, spin, spin, int Order, const Complex &);
+    void FFT(fft::Dir);
+    void FFT(fft::Dir, bool SpatialOrTime);
 };
 
 class Polar : public WeightNeedMeasure {
@@ -88,6 +94,8 @@ class Polar : public WeightNeedMeasure {
     Polar(const Lattice &, real Beta, int order);
     Complex Weight(const Site &, const Site &, real, real, spin *, spin *);
     void Measure(const Site &, const Site &, real, real, spin *, spin *, int Order, const Complex &);
+    void FFT(fft::Dir);
+    void FFT(fft::Dir, bool SpatialOrTime);
 };
 
 class G : public WeightNoMeasure {
@@ -97,6 +105,8 @@ class G : public WeightNoMeasure {
     Complex Weight(int, const Site &, const Site &, real, real, spin, spin, bool);
     Complex BareWeight(const Site &, const Site &, real, real, spin, spin);
     void InitialWithBare();
+    void FFT(fft::Dir);
+    void FFT(fft::Dir, bool SpatialOrTime);
 };
 
 class W : public WeightNoMeasure {
@@ -106,6 +116,8 @@ class W : public WeightNoMeasure {
     Complex Weight(int, const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool);
     Complex BareWeight(const Site &, const Site &, real, real, spin *, spin *);
     void InitialWithBare();
+    void FFT(fft::Dir);
+    void FFT(fft::Dir, bool SpatialOrTime);
 };
 
 class Worm {

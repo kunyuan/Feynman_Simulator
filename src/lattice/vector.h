@@ -11,6 +11,7 @@
 
 #include <iosfwd>
 #include <sstream>
+#include <initializer_list>
 #include "../utility/convention.h"
 using namespace std;
 
@@ -24,6 +25,15 @@ class Vec {
     {
     }
 
+    Vec(std::initializer_list<T> list)
+    {
+        int i = 0;
+        for (auto p = list.begin(); p < list.end() && i < D; ++p) {
+            _Array[i] = *p;
+            i++;
+        }
+    }
+
     Vec(T value)
     {
         for (int j = 0; j < D; j++)
@@ -34,6 +44,12 @@ class Vec {
     {
         for (int j = 0; j < D; j++)
             _Array[j] = value[j];
+    }
+
+    void CopyToArray(T *target) const
+    {
+        for (int i = 0; i < D; i++)
+            target[i] = _Array[i];
     }
 
     T &operator[](int index)
@@ -102,7 +118,10 @@ class Vec {
     friend bool operator==(const Vec<int> &, const Vec<int> &);
     friend bool operator==(const Vec<real> &, const Vec<real> &);
     template <typename TT>
-    friend bool operator!=(const Vec<TT> &, const Vec<TT> &);
+    friend bool operator!=(const Vec<TT> &v1, const Vec<TT> &v2)
+    {
+        return !(v1 == v2);
+    }
 };
 
 template <typename T>

@@ -72,7 +72,7 @@
 #else
 #define M_PI 3.1415926535897932385E0
 #endif
-
+using namespace fft;
 /*----------------------------------------------------------------------*/
 /* Truncated Stockham algorithm for multi-column vector,
        X(n1,n2) <- F_n1 X(n1,n2)
@@ -196,15 +196,20 @@ void NormalizeArray(Complex array[], int num, int flag)
         *(array + i) /= real(num);
 }
 
+int GetFlag(Dir direction)
+{
+    return (direction == fft::FORTH) ? 1 : -1;
+}
+
 /* 1D Fourier transform: 
    Simply call stockham with proper arguments.  
    Allocated working space of size n dynamically.
 */
-void fft(Complex x[], int n, int flag)
+void fft::fft(Complex x[], int n, Dir direction)
 {
     Complex *y;
 
-    assert(1 == flag || -1 == flag);
+    int flag = GetFlag(direction);
     y = (Complex *)malloc(n * sizeof(Complex));
     assert(NULL != y);
     stockham(x, n, flag, 1, y);
@@ -222,12 +227,12 @@ void fft(Complex x[], int n, int flag)
    so we take a compromise of the two.
 */
 
-void fft2D(Complex x[], int n1, int n2, int flag)
+void fft::fft2D(Complex x[], int n1, int n2, Dir direction)
 {
     Complex *y;
     int i, n;
 
-    assert(1 == flag || -1 == flag);
+    int flag = GetFlag(direction);
     n = n1 * n2;
     y = (Complex *)malloc(n2 * sizeof(Complex));
     assert(NULL != y);
@@ -243,13 +248,13 @@ void fft2D(Complex x[], int n1, int n2, int flag)
 /**
 *  careful, fft3D will use an array of n2*n3 size in heap as a cache
 */
-void fft3D(Complex x[], int n1, int n2, int n3, int flag)
+void fft::fft3D(Complex x[], int n1, int n2, int n3, Dir direction)
 {
     static Complex *y = NULL;
     static int cn23 = 1;
     int i, n, n23;
 
-    assert(1 == flag || -1 == flag);
+    int flag = GetFlag(direction);
     n23 = n2 * n3;
     n = n1 * n23;
 
@@ -274,14 +279,13 @@ void fft3D(Complex x[], int n1, int n2, int n3, int flag)
 /**
 *  careful, fft4D will use an array of n2*n3*n4 size in heap as a cache
 */
-void fft4D(Complex x[], int n1, int n2, int n3, int n4, int flag)
+void fft::fft4D(Complex *x, int n1, int n2, int n3, int n4, Dir direction, bool *Mask)
 {
     static Complex *y = NULL;
     static int cn234 = 1;
     int i, n, n34, n234;
 
-    assert(1 == flag || -1 == flag);
-
+    int flag = GetFlag(direction);
     n34 = n3 * n4;
     n234 = n2 * n34;
     n = n1 * n234;
@@ -307,16 +311,16 @@ void fft4D(Complex x[], int n1, int n2, int n3, int n4, int flag)
     cn234 = n234;
 }
 
-void fft(Complex x[], int *size, int dim, int flag)
+void fft::fft(Complex *x, int *size, int dim, Dir direction, bool *Mask)
 {
     if (dim == 1)
-        fft(x, size[0], flag);
+        fft(x, size[0], direction, Mask);
     else if (dim == 2)
-        fft2D(x, size[0], size[1], flag);
+        fft2D(x, size[0], size[1], direction, Mask);
     else if (dim == 3)
-        fft3D(x, size[0], size[1], size[2], flag);
+        fft3D(x, size[0], size[1], size[2], direction, Mask);
     else if (dim == 4)
-        fft4D(x, size[0], size[1], size[2], size[3], flag);
+        fft4D(x, size[0], size[1], size[2], size[3], direction, Mask);
     else
         assert(true);
 }
