@@ -88,9 +88,9 @@ void Test_fft3D()
 
     fft3D((Complex *)in, Nx, Ny, Nz, FORTH);
     sput_fail_unless(CheckArray((Complex *)in, (Complex *)out3D, Nx * Ny * Nz), "Check fft 3d");
-    fft4D((Complex *)in, 1, Nx, Ny, Nz, BACK);
-    fft4D((Complex *)in, 1, Nx, Ny, Nz, FORTH);
-    sput_fail_unless(CheckArray((Complex *)in, (Complex *)out3D, Nx * Ny * Nz), "Check fft 4d");
+    fft3D((Complex *)in, Nx, Ny, Nz, BACK);
+    fft3D((Complex *)in, Nx, Ny, Nz, FORTH);
+    sput_fail_unless(CheckArray((Complex *)in, (Complex *)out3D, Nx * Ny * Nz), "Check fft 3d backforth");
 }
 
 void Test_fftnD()
@@ -116,6 +116,9 @@ void Test_fftnD()
 
     fftnD((Complex *)in, (int *)shape, 3, FORTH, (bool *)mask);
     sput_fail_unless(CheckArray((Complex *)in, (Complex *)out3D, Nx * Ny * Nz), "Check fft nd");
+    fftnD((Complex *)in, (int *)shape, 3, BACK, (bool *)mask);
+    fftnD((Complex *)in, (int *)shape, 3, FORTH, (bool *)mask);
+    sput_fail_unless(CheckArray((Complex *)in, (Complex *)out3D, Nx * Ny * Nz), "Check fft nd backforth");
 }
 
 void NaiveFFT3D(Complex *array, int X, int Y, int Z, bool DoItX, bool DoItY, bool DoItZ)

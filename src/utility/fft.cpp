@@ -59,7 +59,6 @@
 #include <math.h>
 #include <stdlib.h>
 #include <assert.h>
-#include <iostream>
 
 #define REALSIZE 8 /* in units of byte */
 
@@ -190,12 +189,12 @@ void cooley_tukey(Complex x[], int n, int flag, int n2)
     }
 }
 
-void NormalizeArray(Complex array[], int num, int flag)
+void NormalizeArray(Complex array[], int num, real norm, int flag)
 {
     if (flag == 1)
         return;
     for (int i = 0; i < num; i++)
-        *(array + i) /= real(num);
+        *(array + i) /= norm;
 }
 
 int GetFlag(Dir direction)
@@ -215,7 +214,7 @@ void fft::fft(Complex x[], int n, Dir direction)
     y = (Complex *)malloc(n * sizeof(Complex));
     assert(NULL != y);
     stockham(x, n, flag, 1, y);
-    NormalizeArray(x, n, flag);
+    NormalizeArray(x, n, n, flag);
     free(y);
 }
 
@@ -244,7 +243,7 @@ void fft::fft2D(Complex x[], int n1, int n2, Dir direction)
     }
     free(y);
     cooley_tukey(x, n, flag, n2); /* FFT in x */
-    NormalizeArray(x, n, flag);
+    NormalizeArray(x, n, n, flag);
 }
 
 /**
@@ -275,42 +274,8 @@ void fft::fft3D(Complex x[], int n1, int n2, int n3, Dir direction)
         stockham(x + i, n23, flag, n3, y);
     }
     cooley_tukey(x, n, flag, n23); /* FFT in x */
-    NormalizeArray(x, n, flag);
+    NormalizeArray(x, n, n, flag);
     cn23 = n23;
-}
-/**
-*  careful, fft4D will use an array of n2*n3*n4 size in heap as a cache
-*/
-void fft::fft4D(Complex *x, int n1, int n2, int n3, int n4, Dir direction)
-{
-    static Complex *y = NULL;
-    static int cn234 = 1;
-    int i, n, n34, n234;
-
-    int flag = GetFlag(direction);
-    n34 = n3 * n4;
-    n234 = n2 * n34;
-    n = n1 * n234;
-
-    if (cn234 != n234) {
-        if (y != NULL)
-            free(y);
-        y = (Complex *)malloc(n234 * sizeof(Complex));
-    }
-    assert(NULL != y);
-
-    for (i = 0; i < n; i += n4) { /* FFT in t */
-        stockham(x + i, n4, flag, 1, y);
-    }
-    for (i = 0; i < n; i += n34) { /* FFT in z */
-        stockham(x + i, n34, flag, n4, y);
-    }
-    for (i = 0; i < n; i += n234) { /* FFT in y */
-        stockham(x + i, n234, flag, n34, y);
-    }
-    cooley_tukey(x, n, flag, n234); /* FFT in x */
-    NormalizeArray(x, n, flag);
-    cn234 = n234;
 }
 
 void fft::fftnD(Complex *x, int *size, int dim, Dir direction, bool *DoIt)
@@ -332,13 +297,12 @@ void fft::fftnD(Complex *x, int *size, int dim, Dir direction, bool *DoIt)
         TempSize *= size[d];
         ArraySize[d] = TempSize;
     }
-    std::cout << ArraySize[0] << "," << ArraySize[1] << "," << ArraySize[2] << "," << ArraySize[3] << std::endl;
     for (d = dim - 1; d >= 0; d--) {
-        if (DoIt[d]) {
+        if (DoIt == nullptr || DoIt[d]) {
             normalize *= size[d];
             for (i = 0; i < ArraySize[0]; i += ArraySize[d])
                 cooley_tukey(x + i, ArraySize[d], flag, ArraySize[d + 1]);
         }
     }
-    NormalizeArray(x, normalize, flag);
+    NormalizeArray(x, ArraySize[0], normalize, flag);
 }
