@@ -313,14 +313,53 @@ void fft::fft4D(Complex *x, int n1, int n2, int n3, int n4, Dir direction, bool 
 
 void fft::fft(Complex *x, int *size, int dim, Dir direction, bool *Mask)
 {
-    if (dim == 1)
-        fft(x, size[0], direction, Mask);
-    else if (dim == 2)
-        fft2D(x, size[0], size[1], direction, Mask);
-    else if (dim == 3)
-        fft3D(x, size[0], size[1], size[2], direction, Mask);
-    else if (dim == 4)
-        fft4D(x, size[0], size[1], size[2], size[3], direction, Mask);
-    else
-        assert(true);
+    static Complex *y = NULL;
+    static size_t LastMemorySize = 1;
+    int i, n, n34, n234;
+    size_t CurrentMemorySize = 1;
+    size_t ArraySize[dim - 1];
+
+    int flag = GetFlag(direction);
+
+    //    n4
+    //    n34 = n3 * n4;
+    //    n234 = n2 * n34;
+    //    n1234 = n1 * n234;
+
+    for (int i = dim-1; i >=0; i--)
+    {
+        CurrentMemorySize *= size[i];
+        ArraySize[i]=CurrentMemorySize;
+    }
+    ArraySize[0] = CurrentMemorySize * size[0];
+
+    if (CurrentMemorySize != LastMemorySize) {
+        if (y != NULL)
+            free(y);
+        y = (Complex *)malloc(n234 * sizeof(Complex));
+    }
+    assert(NULL != y);
+
+    for (i = 0; i < n; i += n4) { /* FFT in t */
+        stockham(x + i, n4, flag, 1, y);
+    }
+    for (i = 0; i < n; i += n34) { /* FFT in z */
+        stockham(x + i, n34, flag, n4, y);
+    }
+    for (i = 0; i < n; i += n234) { /* FFT in y */
+        stockham(x + i, n234, flag, n34, y);
+    }
+    cooley_tukey(x, n, flag, n234); /* FFT in x */
+    NormalizeArray(x, n, flag);
+    cn234 = n234;
+    //    if (dim == 1)
+    //        fft(x, size[0], direction, Mask);
+    //    else if (dim == 2)
+    //        fft2D(x, size[0], size[1], direction, Mask);
+    //    else if (dim == 3)
+    //        fft3D(x, size[0], size[1], size[2], direction, Mask);
+    //    else if (dim == 4)
+    //        fft4D(x, size[0], size[1], size[2], size[3], direction, Mask);
+    //    else
+    //        assert(true);
 }
