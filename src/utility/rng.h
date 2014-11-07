@@ -11,9 +11,7 @@
 
 #include <random>
 #include <string>
-#ifndef real
-#define real double
-#endif
+typedef double real;
 
 class RandomFactory {
     friend std::ostream &operator<<(std::ostream &os, RandomFactory &r);

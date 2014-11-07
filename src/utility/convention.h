@@ -9,9 +9,7 @@
 #ifndef Feynman_Simulator_convention_h
 #define Feynman_Simulator_convention_h
 
-#ifndef real
-#define real double
-#endif
+typedef double real;
 //#define NDEBUG
 //turn off all assert
 

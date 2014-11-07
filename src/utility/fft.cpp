@@ -59,6 +59,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <iostream>
 
 #define REALSIZE 8 /* in units of byte */
 
@@ -82,8 +83,9 @@ using namespace fft;
    to be internal (static), not used by application.  Note that the 
    terminology of column or row respect to algorithms in the Loan's 
    book is reversed, because we use row major convention of C.
+   If n2=1, which means the number in array are stored successively in memory, stockham can be 30% faster then cooley_tukey method
 */
-static void stockham(Complex x[], int n, int flag, int n2, Complex y[])
+void stockham(Complex x[], int n, int flag, int n2, Complex y[])
 {
     Complex *y_orig, *tmp;
     int i, j, k, k2, Ls, r, jrs;
@@ -279,7 +281,7 @@ void fft::fft3D(Complex x[], int n1, int n2, int n3, Dir direction)
 /**
 *  careful, fft4D will use an array of n2*n3*n4 size in heap as a cache
 */
-void fft::fft4D(Complex *x, int n1, int n2, int n3, int n4, Dir direction, bool *Mask)
+void fft::fft4D(Complex *x, int n1, int n2, int n3, int n4, Dir direction)
 {
     static Complex *y = NULL;
     static int cn234 = 1;
@@ -311,13 +313,12 @@ void fft::fft4D(Complex *x, int n1, int n2, int n3, int n4, Dir direction, bool 
     cn234 = n234;
 }
 
-void fft::fft(Complex *x, int *size, int dim, Dir direction, bool *Mask)
+void fft::fftnD(Complex *x, int *size, int dim, Dir direction, bool *DoIt)
 {
-    static Complex *y = NULL;
-    static size_t LastMemorySize = 1;
-    int i, n, n34, n234;
-    size_t CurrentMemorySize = 1;
-    size_t ArraySize[dim - 1];
+    int i, d;
+    int TempSize = 1;
+    int ArraySize[dim];
+    int normalize = 1;
 
     int flag = GetFlag(direction);
 
@@ -326,40 +327,18 @@ void fft::fft(Complex *x, int *size, int dim, Dir direction, bool *Mask)
     //    n234 = n2 * n34;
     //    n1234 = n1 * n234;
 
-    for (int i = dim-1; i >=0; i--)
-    {
-        CurrentMemorySize *= size[i];
-        ArraySize[i]=CurrentMemorySize;
+    ArraySize[dim] = 1;
+    for (d = dim - 1; d >= 0; d--) {
+        TempSize *= size[d];
+        ArraySize[d] = TempSize;
     }
-    ArraySize[0] = CurrentMemorySize * size[0];
-
-    if (CurrentMemorySize != LastMemorySize) {
-        if (y != NULL)
-            free(y);
-        y = (Complex *)malloc(n234 * sizeof(Complex));
+    std::cout << ArraySize[0] << "," << ArraySize[1] << "," << ArraySize[2] << "," << ArraySize[3] << std::endl;
+    for (d = dim - 1; d >= 0; d--) {
+        if (DoIt[d]) {
+            normalize *= size[d];
+            for (i = 0; i < ArraySize[0]; i += ArraySize[d])
+                cooley_tukey(x + i, ArraySize[d], flag, ArraySize[d + 1]);
+        }
     }
-    assert(NULL != y);
-
-    for (i = 0; i < n; i += n4) { /* FFT in t */
-        stockham(x + i, n4, flag, 1, y);
-    }
-    for (i = 0; i < n; i += n34) { /* FFT in z */
-        stockham(x + i, n34, flag, n4, y);
-    }
-    for (i = 0; i < n; i += n234) { /* FFT in y */
-        stockham(x + i, n234, flag, n34, y);
-    }
-    cooley_tukey(x, n, flag, n234); /* FFT in x */
-    NormalizeArray(x, n, flag);
-    cn234 = n234;
-    //    if (dim == 1)
-    //        fft(x, size[0], direction, Mask);
-    //    else if (dim == 2)
-    //        fft2D(x, size[0], size[1], direction, Mask);
-    //    else if (dim == 3)
-    //        fft3D(x, size[0], size[1], size[2], direction, Mask);
-    //    else if (dim == 4)
-    //        fft4D(x, size[0], size[1], size[2], size[3], direction, Mask);
-    //    else
-    //        assert(true);
+    NormalizeArray(x, normalize, flag);
 }
