@@ -36,7 +36,7 @@ void WeightNoMeasure::_FFT(fft::Dir direction)
 {
     for (int sp = 0; sp < _Shape[SP]; sp++)
         for (int sub = 0; sub < _Shape[SUB]; sub++)
-            fft::fft((Complex *)_Weight[sp][sub](), (int *)_SpaceTimeShape, _Lat.Dimension + 1, direction);
+            fft::fftnD((Complex *)_Weight[sp][sub](), (int *)_SpaceTimeShape, _Lat.Dimension + 1, direction);
 }
 
 void Sigma::FFT(fft::Dir direction)

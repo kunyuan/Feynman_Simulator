@@ -15,18 +15,20 @@ using namespace fft;
 void Test_fft1D();
 void Test_fft2D();
 void Test_fft3D();
+void Test_fftnD();
+void NaiveFFT3D(Complex *array, int X, int Y, int Z, bool DoItX, bool DoItY, bool DotItZ);
 
 int TestFFT()
 {
     sput_start_testing();
-    sput_enter_suite("Test fft1D...");
+    sput_enter_suite("Test fft...");
     sput_run_test(Test_fft1D);
 
     //    sput_enter_suite("Test fft2D...");
     //    sput_run_test(Test_fft2D);
     //
-    sput_enter_suite("Test fft3D...");
     sput_run_test(Test_fft3D);
+    sput_run_test(Test_fftnD);
     sput_finish_testing();
     return sput_get_return_value();
     return 0;
@@ -36,6 +38,7 @@ bool CheckArray(Complex *source, Complex *target, int size)
 {
     for (int i = 0; i < size; i++) {
         if (!Equal(source[i], target[i], 1e-5)) {
+            std::cout << source[i] << "!=" << target[i] << std::endl;
             return false;
         }
     }
@@ -73,82 +76,84 @@ void Test_fft3D()
     const int Nz = 4;
     unsigned int shape[] = {Nx, Ny, Nz};
     Complex in[Nx][Ny][Nz];
+    Complex out3D[Nx][Ny][Nz];
     for (int i = 0;
          i < shape[0]; i++)
         for (int j = 0; j < shape[1]; j++)
-            for (int k = 0; k < shape[2]; k++)
+            for (int k = 0; k < shape[2]; k++) {
                 in[i][j][k] = (i * i + j * j) * cos(k);
+                out3D[i][j][k] = in[i][j][k];
+            }
+    NaiveFFT3D((Complex *)out3D, Nx, Ny, Nz, true, true, true);
+
     fft3D((Complex *)in, Nx, Ny, Nz, FORTH);
-    extern Complex out3D[];
     sput_fail_unless(CheckArray((Complex *)in, (Complex *)out3D, Nx * Ny * Nz), "Check fft 3d");
     fft4D((Complex *)in, 1, Nx, Ny, Nz, BACK);
     fft4D((Complex *)in, 1, Nx, Ny, Nz, FORTH);
     sput_fail_unless(CheckArray((Complex *)in, (Complex *)out3D, Nx * Ny * Nz), "Check fft 4d");
 }
 
-Complex out3D[] = {
-    {15.026252944701824, 0.000000000000000},
-    {158.608445693279975, -171.393017876481508},
-    {115.756855668738297, 0.000000000000000},
-    {158.608445693279975, 171.393017876481508},
-    {-2.146607563528832, 4.293215127057663},
-    {26.311084294240445, 69.801415609005915},
-    {-16.536693666962616, 33.073387333925226},
-    {-71.627783063749007, 20.831981930011203},
-    {-3.219911345293248, 0.000000000000000},
-    {-33.987524077131425, 36.727075259246050},
-    {-24.805040500443916, 0.000000000000000},
-    {-33.987524077131411, -36.727075259246050},
-    {-2.146607563528831, -4.293215127057663},
-    {-71.627783063749007, -20.831981930011196},
-    {-16.536693666962609, -33.073387333925226},
-    {26.311084294240452, -69.801415609005915},
-    {-2.146607563528832, 4.293215127057663},
-    {26.311084294240434, 69.801415609005929},
-    {-16.536693666962616, 33.073387333925218},
-    {-71.627783063748993, 20.831981930011192},
-    {-0.000000000000000, 0.000000000000002},
-    {0.000000000000004, 0.000000000000010},
-    {0.000000000000000, 0.000000000000000},
-    {-0.000000000000004, -0.000000000000004},
-    {-0.000000000000001, -0.000000000000001},
-    {-0.000000000000002, 0.000000000000000},
-    {0.000000000000000, -0.000000000000002},
-    {-0.000000000000002, -0.000000000000002},
-    {-0.000000000000000, 0.000000000000000},
-    {-0.000000000000004, -0.000000000000004},
-    {0.000000000000000, 0.000000000000000},
-    {0.000000000000004, 0.000000000000004},
-    {-3.219911345293249, 0.000000000000000},
-    {-33.987524077131440, 36.727075259246035},
-    {-24.805040500443916, 0.000000000000000},
-    {-33.987524077131425, -36.727075259246035},
-    {-0.000000000000001, -0.000000000000001},
-    {0.000000000000002, 0.000000000000000},
-    {0.000000000000000, 0.000000000000000},
-    {0.000000000000000, -0.000000000000002},
-    {0.000000000000002, 0.000000000000000},
-    {0.000000000000004, -0.000000000000004},
-    {0.000000000000002, 0.000000000000000},
-    {-0.000000000000004, 0.000000000000004},
-    {-0.000000000000001, 0.000000000000001},
-    {0.000000000000000, 0.000000000000005},
-    {0.000000000000000, 0.000000000000000},
-    {-0.000000000000002, -0.000000000000007},
-    {-2.146607563528831, -4.293215127057663},
-    {-71.627783063749007, -20.831981930011199},
-    {-16.536693666962609, -33.073387333925218},
-    {26.311084294240441, -69.801415609005915},
-    {0.000000000000000, 0.000000000000000},
-    {-0.000000000000004, -0.000000000000003},
-    {0.000000000000000, 0.000000000000000},
-    {0.000000000000004, 0.000000000000004},
-    {-0.000000000000001, 0.000000000000001},
-    {0.000000000000002, 0.000000000000007},
-    {-0.000000000000000, 0.000000000000002},
-    {-0.000000000000005, -0.000000000000005},
-    {0.000000000000000, -0.000000000000002},
-    {0.000000000000004, -0.000000000000004},
-    {0.000000000000000, 0.000000000000000},
-    {-0.000000000000004, -0.000000000000004},
-};
+void Test_fftnD()
+{
+    const int Nx = 4;
+    const int Ny = 8;
+    const int Nz = 16;
+    bool DoX = true;
+    bool DoY = false;
+    bool DoZ = true;
+    unsigned int shape[] = {Nx, Ny, Nz};
+    bool mask[3] = {DoX, DoY, DoZ};
+    Complex in[Nx][Ny][Nz];
+    Complex out3D[Nx][Ny][Nz];
+    for (int i = 0;
+         i < shape[0]; i++)
+        for (int j = 0; j < shape[1]; j++)
+            for (int k = 0; k < shape[2]; k++) {
+                in[i][j][k] = (i * i + j * j) * cos(k);
+                out3D[i][j][k] = in[i][j][k];
+            }
+    NaiveFFT3D((Complex *)out3D, Nx, Ny, Nz, DoX, DoY, DoZ);
+
+    fftnD((Complex *)in, (int *)shape, 3, FORTH, (bool *)mask);
+    sput_fail_unless(CheckArray((Complex *)in, (Complex *)out3D, Nx * Ny * Nz), "Check fft nd");
+}
+
+void NaiveFFT3D(Complex *array, int X, int Y, int Z, bool DoItX, bool DoItY, bool DoItZ)
+{
+    Complex *temp = new Complex[X * Y * Z];
+    int windex;
+    int index;
+
+    for (int i = 0; i < X * Y * Z; i++)
+        temp[i] = array[i];
+    for (int iw = 0; iw < X; iw++)
+        for (int jw = 0; jw < Y; jw++)
+            for (int kw = 0; kw < Z; kw++) {
+                windex = iw * Y * Z + jw * Z + kw;
+                array[windex] = 0.0;
+                Complex factorX;
+                Complex factorY;
+                Complex factorZ;
+                for (int i = 0; i < X; i++) {
+                    if (DoItX)
+                        factorX = exp(-2 * PI * Complex(0.0, iw * i) / X);
+                    else
+                        factorX = (i == iw ? 1.0 : 0.0);
+                    for (int j = 0; j < Y; j++) {
+                        if (DoItY)
+                            factorY = exp(-2 * PI * Complex(0.0, jw * j) / Y);
+                        else
+                            factorY = (j == jw ? 1.0 : 0.0);
+                        for (int k = 0; k < Z; k++) {
+                            if (DoItZ)
+                                factorZ = exp(-2 * PI * Complex(0.0, kw * k) / Z);
+                            else
+                                factorZ = (k == kw ? 1.0 : 0.0);
+                            index = i * Y * Z + j * Z + k;
+                            array[windex] += temp[index] * factorX * factorY * factorZ;
+                        }
+                    }
+                }
+            }
+    delete[] temp;
+}

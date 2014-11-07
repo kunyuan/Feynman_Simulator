@@ -29,8 +29,6 @@ class Complex {
     Complex(real re, real im = 0.0);
     Complex(const Complex &c); // Copy constructor
 
-    ~Complex(); // Destructor
-
     real Re; // real part
     real Im; // imaginary part
 
@@ -49,9 +47,23 @@ class Complex {
 
     friend std::ostream &operator<<(std::ostream &, const Complex &);
     friend std::istream &operator>>(std::istream &, Complex &);
-
-    friend bool IsZero(const Complex &c);
+    friend std::string ToString(const Complex &c);
 };
+
+inline bool Equal(const Complex &c1, const Complex &c2, real eps = eps0)
+{
+    return (fabs(c1.Re - c2.Re) < eps && fabs(c1.Im - c2.Im) < eps);
+}
+
+inline bool Equal(const Complex &c1, real r, real i, real eps = eps0)
+{
+    return (fabs(c1.Re - r) < eps && fabs(c1.Im - i) < eps);
+}
+
+inline bool IsZero(const Complex &c)
+{
+    return (c.Re == 0.0) && (c.Im == 0.0);
+}
 
 // Nonmember operators (to allow implicit conversion of the left operand)
 Complex operator+(const Complex &, const Complex &);
@@ -71,21 +83,77 @@ Complex operator/(const Complex &, real);
 // Complex library
 
 // mod2 = Re*Re + Im*Im
-real mod2(const Complex &c);
+inline real mod2(const Complex &c)
+{
+    return (c.Re * c.Re + c.Im * c.Im);
+}
 
 // sqrt(Re*Re + Im*Im)
-real mod(const Complex &c);
-Complex phase(const Complex &c);
+inline real mod(const Complex &c)
+{
+    return sqrt(mod2(c));
+}
 
-bool Equal(const Complex &c1, const Complex &c2, real eps = eps0);
+inline real arg(const Complex &c)
+{
+    return c.Im != 0.0 ? atan2(c.Im, c.Re) : 0.0;
+}
 
-bool Equal(const Complex &c1, real r, real i, real eps = eps0);
+inline Complex phase(const Complex &c)
+{
+    if (IsZero(c))
+        return 0.0;
+    return c / mod(c);
+}
 
-bool IsZero(const Complex &c);
+inline Complex exp(const Complex &c)
+{
+    return (exp(c.Re) * Complex(cos(c.Im), sin(c.Im)));
+}
 
-Complex exp(const Complex &c);
+// Return the principal branch of the square root (non-negative real part).
+inline Complex sqrt(const Complex &x)
+{
+    real mag = mod(x);
+    if (mag == 0.0)
+        return Complex(0.0, 0.0);
+    else if (x.Re > 0) {
+        real re = sqrt(0.5 * (mag + x.Re));
+        return Complex(re, 0.5 * x.Im / re);
+    }
+    else {
+        real im = sqrt(0.5 * (mag - x.Re));
+        if (x.Im < 0)
+            im = -im;
+        return Complex(0.5 * x.Im / im, im);
+    }
+}
 
-std::string ToString(const Complex &c);
-// More complex functions ...
+inline Complex polar(real r, real t)
+{
+    return Complex(r * cos(t), r * sin(t));
+}
+
+// Complex exponentiation
+inline Complex pow(const Complex &z, const Complex &w)
+{
+    real u = w.Re;
+    real v = w.Im;
+    if (IsZero(z))
+        return IsZero(w) ? 1.0 : 0.0;
+    real logr = 0.5 * log(mod2(z));
+    real th = (arg(z));
+    real phi = logr * v + th * u;
+    return exp(logr * u - th * v) * Complex(cos(phi), sin(phi));
+}
+
+inline Complex pow(const Complex &z, real u)
+{
+    if (IsZero(0.0))
+        return u == 0.0 ? 1.0 : 0.0;
+    real logr = 0.5 * log(mod2(z));
+    real theta = u * arg(z);
+    return exp(logr * u) * Complex(cos(theta), sin(theta));
+}
 
 #endif
