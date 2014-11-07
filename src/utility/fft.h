@@ -19,8 +19,6 @@ enum Dir {
 void fft(Complex *x, int n, Dir);
 void fft2D(Complex *x, int n1, int n2, Dir);
 void fft3D(Complex *x, int n1, int n2, int n3, Dir);
-void fft4D(Complex *x, int n1, int n2, int n3, int n4, Dir);
-
 void fftnD(Complex *x, int *size, int dim, Dir, bool *Mask = nullptr);
 }
 
