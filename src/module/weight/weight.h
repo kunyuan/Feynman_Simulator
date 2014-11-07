@@ -21,6 +21,9 @@ class Parameter;
 namespace weight {
 
 const int MAX_BIN = 32;
+typedef int Mode;
+const Mode Spatial = 1;
+const Mode Time = 2;
 
 class WeightNoMeasure {
   public:
@@ -41,7 +44,7 @@ class WeightNoMeasure {
     unsigned int _Shape[5];              //the shape of internal weight array
     Array::array4<Complex> _Weight;
     bool _CheckVec2Index();
-    void _FFT(fft::Dir);
+    void _FFT(fft::Dir, Mode);
     void _ChangeSymmetry(fft::Dir);
 
     int SpinIndex(spin SpinIn, spin SpinOut);
@@ -85,8 +88,7 @@ class Sigma : public WeightNeedMeasure {
     Complex WeightOfDelta(spin, spin);
     void MeasureNorm(real weight);
     void Measure(const Site &, const Site &, real, real, spin, spin, int Order, const Complex &);
-    void FFT(fft::Dir);
-    void FFT(fft::Dir, bool SpatialOrTime);
+    void FFT(fft::Dir, Mode);
 };
 
 class Polar : public WeightNeedMeasure {
@@ -94,8 +96,7 @@ class Polar : public WeightNeedMeasure {
     Polar(const Lattice &, real Beta, int order);
     Complex Weight(const Site &, const Site &, real, real, spin *, spin *);
     void Measure(const Site &, const Site &, real, real, spin *, spin *, int Order, const Complex &);
-    void FFT(fft::Dir);
-    void FFT(fft::Dir, bool SpatialOrTime);
+    void FFT(fft::Dir, Mode);
 };
 
 class G : public WeightNoMeasure {
@@ -105,8 +106,7 @@ class G : public WeightNoMeasure {
     Complex Weight(int, const Site &, const Site &, real, real, spin, spin, bool);
     Complex BareWeight(const Site &, const Site &, real, real, spin, spin);
     void InitialWithBare();
-    void FFT(fft::Dir);
-    void FFT(fft::Dir, bool SpatialOrTime);
+    void FFT(fft::Dir, Mode);
 };
 
 class W : public WeightNoMeasure {
@@ -116,8 +116,7 @@ class W : public WeightNoMeasure {
     Complex Weight(int, const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool);
     Complex BareWeight(const Site &, const Site &, real, real, spin *, spin *);
     void InitialWithBare();
-    void FFT(fft::Dir);
-    void FFT(fft::Dir, bool SpatialOrTime);
+    void FFT(fft::Dir, Mode);
 };
 
 class Worm {
