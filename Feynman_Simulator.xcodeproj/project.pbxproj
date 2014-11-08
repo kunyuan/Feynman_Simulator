@@ -119,6 +119,8 @@
 		8422FE4A1A0A85E7002EB44E /* _in_MC_test */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = _in_MC_test; path = job/_in_MC_test; sourceTree = "<group>"; };
 		8422FE4B1A0A85E7002EB44E /* job.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = job.cpp; path = job/job.cpp; sourceTree = "<group>"; };
 		8422FE4C1A0A85E7002EB44E /* job.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = job.h; path = job/job.h; sourceTree = "<group>"; };
+		8422FE4F1A0D7E6C002EB44E /* weight_base.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = weight_base.h; sourceTree = "<group>"; };
+		8422FE501A0D7EBC002EB44E /* weight_inheritance.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = weight_inheritance.h; sourceTree = "<group>"; };
 		8426667D19E2E6B800CF7B59 /* sput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sput.h; sourceTree = "<group>"; };
 		84519AE919F2C554007CB81B /* environment.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = environment.cpp; path = environment/environment.cpp; sourceTree = "<group>"; };
 		84519AEA19F2C554007CB81B /* environment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = environment.h; path = environment/environment.h; sourceTree = "<group>"; };
@@ -260,19 +262,14 @@
 			children = (
 				8422FE381A0A7ECA002EB44E /* weight.h */,
 				8422FE371A0A7ECA002EB44E /* weight.cpp */,
+				8422FE4F1A0D7E6C002EB44E /* weight_base.h */,
 				8422FE351A0A7ECA002EB44E /* weight_base.cpp */,
+				8422FE501A0D7EBC002EB44E /* weight_inheritance.h */,
 				8422FE361A0A7ECA002EB44E /* weight_inheritance.cpp */,
 				8422FE3F1A0A82C5002EB44E /* fft.cpp */,
 				8422FE341A0A7ECA002EB44E /* weight_test.cpp */,
 			);
 			name = weight;
-			sourceTree = "<group>";
-		};
-		8422FE481A0A8544002EB44E /* New Group */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "New Group";
 			sourceTree = "<group>";
 		};
 		8422FE491A0A8593002EB44E /* job */ = {
@@ -351,7 +348,6 @@
 		84FDE07219DDFC2F0092B441 /* Feynman_Simulator */ = {
 			isa = PBXGroup;
 			children = (
-				8422FE481A0A8544002EB44E /* New Group */,
 				84FDE07319DDFC2F0092B441 /* main.cpp */,
 				84B1D57919DEFC19004C3A89 /* test.h */,
 				841D905B19E054900066116A /* test.cpp */,

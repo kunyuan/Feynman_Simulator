@@ -151,6 +151,7 @@ bool ParaDyson::BuildNew(const string &InputFile)
 {
     Parameter::_BuildNew(InputFile);
     GetPara(_para, OrderAccepted);
+    GetPara(_para, ErrorThreshold);
     GetPara(_para, SleepTime);
     return true;
 }
@@ -159,6 +160,7 @@ bool ParaDyson::Load(const string &InputFile)
 {
     Parameter::_Load(InputFile);
     GetPara(_para, OrderAccepted);
+    GetPara(_para, ErrorThreshold);
     GetPara(_para, SleepTime);
     return true;
 }
@@ -167,6 +169,7 @@ void ParaDyson::Save(const std::string &OutputFile, string Mode)
 {
     Parameter::_SavePreparation();
     SetPara(_para, OrderAccepted);
+    SetPara(_para, ErrorThreshold);
     SetPara(_para, SleepTime);
     _para.SaveToFile(OutputFile, Mode);
 }

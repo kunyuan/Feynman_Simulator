@@ -13,119 +13,13 @@
 #include "utility/array.h"
 #include "lattice/lattice.h"
 #include "utility/fft.h"
+#include "weight_inheritance.h"
 
 namespace para {
 class Parameter;
 }
 
 namespace weight {
-
-const int MAX_BIN = 32;
-typedef int Mode;
-const Mode Spatial = 1;
-const Mode Time = 2;
-
-class WeightNoMeasure {
-  public:
-    void SetTest();
-    void Save(const std::string &FileName, std::string Mode = "a");
-    bool Load(const std::string &);
-    void Reset(real Beta);
-
-  protected:
-    WeightNoMeasure(const Lattice &, real Beta, int Order, int SpinVol, std::string);
-    std::string _Name;
-    real _Beta;
-    real _dBeta; //_Beta/MAX_TAU
-    real _dBetaInverse;
-    int _Order;
-    Lattice _Lat;
-    unsigned int _SpaceTimeShape[D + 1]; //store Lx,Ly,Lz,Lt
-    unsigned int _Shape[5];              //the shape of internal weight array
-    Array::array4<Complex> _Weight;
-    bool _CheckVec2Index();
-    void _FFT(fft::Dir, Mode);
-    void _ChangeSymmetry(fft::Dir);
-
-    int SpinIndex(spin SpinIn, spin SpinOut);
-    int SpinIndex(spin *TwoSpinIn, spin *TwoSpinOut);
-    int TauToBin(real tau);
-    real BinToTau(int Bin);
-    enum Dim { ORDER,
-               SP,
-               SUB,
-               VOL,
-               TAU };
-};
-
-class WeightNeedMeasure : public WeightNoMeasure {
-  protected:
-    real _Norm;
-    Array::array5<Complex> _WeightAccu;
-    EstimatorBundle<Complex> _Average;
-
-  public:
-    WeightNeedMeasure(const Lattice &, real Beta, int order, int Spine, std::string);
-
-    Estimate<Complex> WeightWithError(int order);
-
-    int OrderAcceptable(int StartFromOrder, real ErrorThreshold);
-    void UpdateWeight(int UpToOrder);
-
-    void AddStatistics();
-    void ClearStatistics();
-    void SqueezeStatistics(real factor);
-    //    std::string PrettyString();
-    void Save(const std::string &FileName, std::string Mode = "a");
-    bool Load(const std::string &);
-};
-
-//TODO: Add fitting function here
-class Sigma : public WeightNeedMeasure {
-  public:
-    Sigma(const Lattice &, real Beta, int order);
-    Complex Weight(const Site &, const Site &, real, real, spin, spin);
-    Complex WeightOfDelta(spin, spin);
-    void MeasureNorm(real weight);
-    void Measure(const Site &, const Site &, real, real, spin, spin, int Order, const Complex &);
-    void FFT(fft::Dir, Mode);
-};
-
-class Polar : public WeightNeedMeasure {
-  public:
-    Polar(const Lattice &, real Beta, int order);
-    Complex Weight(const Site &, const Site &, real, real, spin *, spin *);
-    void Measure(const Site &, const Site &, real, real, spin *, spin *, int Order, const Complex &);
-    void FFT(fft::Dir, Mode);
-};
-
-class G : public WeightNoMeasure {
-  public:
-    G(const Lattice &, real Beta, int order);
-    Complex Weight(const Site &, const Site &, real, real, spin, spin, bool);
-    Complex Weight(int, const Site &, const Site &, real, real, spin, spin, bool);
-    Complex BareWeight(const Site &, const Site &, real, real, spin, spin);
-    void InitialWithBare();
-    void FFT(fft::Dir, Mode);
-};
-
-class W : public WeightNoMeasure {
-  public:
-    W(const Lattice &, real Beta, int order);
-    Complex Weight(const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool);
-    Complex Weight(int, const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool);
-    Complex BareWeight(const Site &, const Site &, real, real, spin *, spin *);
-    void InitialWithBare();
-    void FFT(fft::Dir, Mode);
-};
-
-class Worm {
-  public:
-    inline real Weight(const Site &, const Site &, real, real)
-    {
-        return 1.0;
-    }
-};
 
 typedef const int flag;
 flag SigmaPolar = 1;
@@ -137,16 +31,16 @@ class Weight {
     ~Weight();
     Sigma *Sigma;
     Polar *Polar;
-    W *W;
     G *G;
+    W *W;
     Worm WormWeight;
 
     void SetTest(const para::Parameter &);
     bool BuildNew(flag, const para::Parameter &);
-    bool Load(const std::string &InputFile, flag);
     bool Load(const std::string &InputFile, flag, const para::Parameter &);
     void Save(const std::string &InputFile, flag, string Mode = "a");
     void ReWeight(flag, const para::Parameter &);
+    int UpdateSigmaPolarWeight(int OrderAccepted, real ErrorThreshold);
 
   private:
     void _AllocateGW(const Lattice &Lat, real Beta, int order);

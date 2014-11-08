@@ -61,7 +61,7 @@ void MonteCarlo(const para::Job &Job)
             PaddyField.Save();
         }
         if (Para.Counter % 20) {
-            Scarecrow.Annealing();
+            PaddyField.CheckStatus();
         }
     }
 }
@@ -69,15 +69,27 @@ void MonteCarlo(const para::Job &Job)
 void Dyson(const para::Job &Job)
 {
     EnvDyson env(Job.PID);
-    if (Job.DoesLoad)
+    if (Job.DoesLoad) {
         env.Load();
+        env.UpdateWeight();
+    }
     else
         env.BuildNew(Job.InputFile, Job.StartFromBare);
     auto &Para = env.Para;
 
-    while (true) {
+    do {
+        LOG_INFO("Start Dyson Version " << Para.Version << "...")
+        //TODO: do dyson
+
         Para.Version++;
-        LOG_INFO("Sleep");
-        sleep(Para.SleepTime);
-    }
+        env.Save();
+        LOG_INFO("Version " << Para.Version << " is done!")
+
+        if (Job.DoesLoad) {
+            LOG_INFO("Go to Sleep for " << Para.SleepTime << " sec...");
+            sleep(Para.SleepTime);
+            env.Load(); //Load new Sigma, Polar, and G, W, para will be loaded as well
+            env.UpdateWeight();
+        }
+    } while (Job.DoesLoad);
 }

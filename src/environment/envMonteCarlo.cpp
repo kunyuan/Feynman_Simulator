@@ -46,9 +46,9 @@ bool EnvMonteCarlo::Load()
 {
     Para.Load(_ParameterFile);
     Weight.Load(_StatisticsFile, weight::GW | weight::SigmaPolar, Para);
-    Scarecrow.Load(_StatisticsFile, Para, Diag, Weight);
     Diag.Load(_DiagramFile, Para.Lat, Para.RNG, Weight.G, Weight.W);
     Grasshopper.BuildNew(Para, Diag, Weight);
+    Scarecrow.Load(_StatisticsFile, Para, Diag, Weight);
     return true;
 }
 
@@ -56,8 +56,8 @@ void EnvMonteCarlo::Save()
 {
     Para.Save(_ParameterFile, "w");
     Weight.Save(_StatisticsFile, weight::GW | weight::SigmaPolar, "w");
-    Scarecrow.Save(_StatisticsFile, "a"); // Save to the same file now
     Diag.Save(_DiagramFile, "w");
+    Scarecrow.Save(_StatisticsFile, "a"); // Save to the same file now
 }
 void EnvMonteCarlo::DeleteSavedFiles()
 {
@@ -70,7 +70,7 @@ void EnvMonteCarlo::DeleteSavedFiles()
 /**
 *  Adjust everything according to new parameters, like new Beta, Jcp
 */
-bool EnvMonteCarlo::ReLoad()
+bool EnvMonteCarlo::CheckStatus()
 {
     LOG_INFO("Start reweighting...");
     status Status;

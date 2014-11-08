@@ -106,6 +106,16 @@ void weight::Weight::Save(const string &FileName, flag _flag, string Mode)
     }
 }
 
+int weight::Weight::UpdateSigmaPolarWeight(int OrderAccepted, real ErrorThreshold)
+{
+    int SigmaOrder = Sigma->OrderAcceptable(OrderAccepted, ErrorThreshold);
+    int PolarOrder = Polar->OrderAcceptable(OrderAccepted, ErrorThreshold);
+    int NewOrderAccepted = (SigmaOrder < PolarOrder ? SigmaOrder : PolarOrder);
+    Sigma->UpdateWeight(NewOrderAccepted);
+    Polar->UpdateWeight(NewOrderAccepted);
+    return NewOrderAccepted;
+}
+
 void weight::Weight::SetTest(const Parameter &para)
 {
     _AllocateGW(para.Lat, para.Beta, para.Order);
