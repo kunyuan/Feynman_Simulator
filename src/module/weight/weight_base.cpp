@@ -28,9 +28,19 @@ WeightNoMeasure::WeightNoMeasure(const Lattice &lat, real beta, int order, int S
     _Shape[SUB] = lat.SublatVol * lat.SublatVol;
     _Shape[VOL] = lat.Vol;
     _Shape[TAU] = MAX_BIN;
+    //if you want to change the order of _Shape, don't forget to take care of Dyson module
 
-    _Weight.Allocate((unsigned int *)(_Shape + SP));
+    _Weight.Allocate((unsigned int *)(Shape()));
+    _Weight = 0.0;
     //use _Shape[SP] to _Shape[TAU] to construct array4
+
+    _DeltaTWeight.Allocate((unsigned int *)(Shape()));
+    _DeltaTWeight = 0.0;
+    //use _Shape[SP] to _Shape[Vol] to construct array3
+
+    _BareWeight.Allocate((unsigned int *)(Shape()));
+    _BareWeight = 0.0;
+    //use _Shape[SP] to _Shape[Vol] to construct array3
 
     for (int i = 0; i < lat.Dimension; i++)
         _SpaceTimeShape[i] = lat.Size[i];
@@ -44,6 +54,11 @@ WeightNoMeasure::WeightNoMeasure(const Lattice &lat, real beta, int order, int S
         which is required by fft on spatial dimensions";
         ABORT(message);
     }
+}
+
+unsigned int *WeightNoMeasure::Shape()
+{
+    return _Shape + SP;
 }
 
 void WeightNoMeasure::Reset(real beta)
@@ -117,7 +132,7 @@ bool WeightNoMeasure::_CheckVec2Index()
     Vec<int> v;
     for (int index = 0; index < _Lat.Vol; index++) {
         int j = index;
-        for (int i = D-1; i > 0; i--) {
+        for (int i = D - 1; i > 0; i--) {
             v[i] = j % _Lat.Size[i];
             j /= _Lat.Size[i];
         }
@@ -134,10 +149,17 @@ WeightNeedMeasure::WeightNeedMeasure(const Lattice &lat, real beta, int order, i
     : WeightNoMeasure(lat, beta, order, SpinVol, name)
 {
     _WeightAccu.Allocate((unsigned int *)_Shape);
+    _WeightAccu = 0.0;
+
     //use _Shape[ORDER] to _Shape[TAU] to construct array5
     _Norm = _dBeta;
     for (int i = 1; i <= order; i++)
         _Average.AddEstimator(name + "_AvgofOrder" + ToString(i));
+}
+
+void WeightNeedMeasure::MeasureNorm() //weight=Beta/MAX_BIN/zeroth order weight
+{
+    _Norm += _dBeta / Norm::Weight();
 }
 
 Estimate<Complex> WeightNeedMeasure::WeightWithError(int order)

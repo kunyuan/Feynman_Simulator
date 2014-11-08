@@ -22,3 +22,8 @@ bool Dyson::BuildNew(para::ParaDyson &para, Weight &weight)
     Polar = weight.Polar;
     return true;
 }
+
+void Dyson::DeriveG()
+{
+    G->_Weight();
+}

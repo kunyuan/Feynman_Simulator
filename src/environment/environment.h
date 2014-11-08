@@ -47,9 +47,9 @@ class EnvMonteCarlo : public Environment {
     bool BuildNew(const std::string &InputFile, bool StartFromBare);
     bool Load();
     void Save(); //Save everything in EnvMonteCarlo
-    bool ReLoad();
     void DeleteSavedFiles();
     bool ReWeight();
+
     bool CheckStatus();
 
   private:
@@ -65,9 +65,10 @@ class EnvDyson : public Environment {
     dyson::Dyson Dyson;
 
     bool BuildNew(const std::string &InputFile, bool StartFromBare);
-    bool CanBeLoad();
     bool Load();
     void Save();
+    void UpdateWeight();
+    //Update the weight of Sigma and Polar according to Para.ErrorThreshold and Para.OrderAccepted
 
   private:
 };

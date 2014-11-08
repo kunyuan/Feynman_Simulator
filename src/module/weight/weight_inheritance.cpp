@@ -89,12 +89,6 @@ Complex G::Weight(int dir, const Site &r1, const Site &r2, real t1, real t2, spi
         return _Weight[SpinIndex(Spin2, Spin1)][_Lat.Dist(r2, r1).SublatIndex][_Lat.Dist(r2, r1).CoordiIndex][TauToBin(t1 - t2)];
 }
 
-Complex G::BareWeight(const Site &rin, const Site &rout, real tin, real tout, spin SpinIn, spin SpinOut)
-{
-    //TODO: add bare G expression here
-    return Complex(1.0, 0.0);
-}
-
 void G::InitialWithBare()
 {
     //TODO: add bare G initialization
@@ -109,19 +103,20 @@ W::W(const Lattice &lat, real beta, int order)
 
 Complex W::Weight(const Site &rin, const Site &rout, real tin, real tout, spin *SpinIn, spin *SpinOut, bool IsWorm, bool IsMeasure, bool IsDelta)
 {
+    auto distance = _Lat.Dist(rin, rout);
     if (IsMeasure)
         //TODO: define the measuring weight of W
         return Complex(1.0, 0.0);
-    
-    if(IsDelta)
+
+    if (IsDelta)
         //TODO: define the delta function here! IsWorm==true and IsWorm==false
-        return Complex(1.0, 0.0);
-    
+        return _DeltaTWeight[SpinIndex(SpinIn, SpinOut)][distance.SublatIndex][distance.CoordiIndex];
+
     else if (IsWorm)
         //define your fake function here
-        return _Weight[SpinIndex(UP, UP)][_Lat.Dist(rin, rout).SublatIndex][_Lat.Dist(rin, rout).CoordiIndex][TauToBin(tout - tin)];
+        return _Weight[SpinIndex(UP, UP)][distance.SublatIndex][distance.CoordiIndex][TauToBin(tout - tin)];
     else
-        return _Weight[SpinIndex(SpinIn, SpinOut)][_Lat.Dist(rin, rout).SublatIndex][_Lat.Dist(rin, rout).CoordiIndex][TauToBin(tout - tin)];
+        return _Weight[SpinIndex(SpinIn, SpinOut)][distance.SublatIndex][distance.CoordiIndex][TauToBin(tout - tin)];
 }
 
 Complex W::Weight(int dir, const Site &r1, const Site &r2, real t1, real t2, spin *Spin1, spin *Spin2, bool IsWorm, bool IsMeasure, bool IsDelta)
@@ -143,8 +138,8 @@ Complex W::Weight(int dir, const Site &r1, const Site &r2, real t1, real t2, spi
     if (IsMeasure)
         //TODO: define the measuring weight of W
         return Complex(1.0, 0.0);
-    
-    if(IsDelta)
+
+    if (IsDelta)
         //TODO: define the delta function here! IsWorm==true and IsWorm==false
         return Complex(1.0, 0.0);
     else if (IsWorm)
@@ -154,14 +149,9 @@ Complex W::Weight(int dir, const Site &r1, const Site &r2, real t1, real t2, spi
         return _Weight[spinindex][subindex][coordindex][tau];
 }
 
-
-Complex W::BareWeight(const Site &rin, const Site &rout, real tin, real tout, spin *SpinIn, spin *SpinOut)
-{
-    //TODO: add bare W expression here
-    return Complex(1.0, 0.0);
-}
-
 void W::InitialWithBare()
 {
+    _DeltaTWeight = 1.0;
+    _Weight = 0.0;
     //TODO: add bare W initialization
 }
