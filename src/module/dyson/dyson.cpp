@@ -25,5 +25,5 @@ bool Dyson::BuildNew(para::ParaDyson &para, Weight &weight)
 
 void Dyson::DeriveG()
 {
-    G->_Weight();
+    //    G->_Weight();
 }
