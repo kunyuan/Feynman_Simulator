@@ -44,6 +44,7 @@ sc_dict={
     "StartFromBare" : True,
     
     "OrderAccepted": 1,
+    "ErrorThreshold": 0.5,
     "SleepTime": 300
     }
 sc_dict.update(com_dict)

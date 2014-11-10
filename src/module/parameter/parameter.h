@@ -63,6 +63,7 @@ class ParaMC : public Parameter {
 class ParaDyson : public Parameter {
   public:
     int OrderAccepted;
+    real ErrorThreshold;
     int SleepTime;
 
     bool BuildNew(const std::string &InputFile);

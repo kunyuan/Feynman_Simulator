@@ -9,7 +9,7 @@
 #ifndef __Feynman_Simulator__job__
 #define __Feynman_Simulator__job__
 
-#include "parser.h"
+#include "utility/parser.h"
 #include <set>
 
 namespace para {

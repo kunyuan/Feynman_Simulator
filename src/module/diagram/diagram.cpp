@@ -9,7 +9,7 @@
 //TODO: G, W IsDelta, IsMeasure
 
 #include "diagram.h"
-#include "module/observable/weight.h"
+#include "module/weight/weight.h"
 #include "utility/rng.h"
 
 using namespace std;
