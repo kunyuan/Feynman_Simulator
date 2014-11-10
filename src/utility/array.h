@@ -715,16 +715,14 @@ class array2 : public array1<T> {
     array2<T> &operator+=(T a)
     {
         __checkSize();
-        unsigned int inc = ny + 1;
-        for (unsigned int i = 0; i < this->size; i += inc)
+        for (unsigned int i = 0; i < this->size; i++)
             this->v[i] += a;
         return *this;
     }
     array2<T> &operator-=(T a)
     {
         __checkSize();
-        unsigned int inc = ny + 1;
-        for (unsigned int i = 0; i < this->size; i += inc)
+        for (unsigned int i = 0; i < this->size; i++)
             this->v[i] -= a;
         return *this;
     }
@@ -748,8 +746,7 @@ class array2 : public array1<T> {
     {
         Load((T)0);
         __checkSize();
-        unsigned int inc = ny + 1;
-        for (unsigned int i = 0; i < this->size; i += inc)
+        for (unsigned int i = 0; i < this->size; i++)
             this->v[i] = (T)1;
     }
 };
@@ -903,24 +900,21 @@ class array3 : public array1<T> {
     array3<T> &operator+=(T a)
     {
         __checkSize();
-        unsigned int inc = nyz + nz + 1;
-        for (unsigned int i = 0; i < this->size; i += inc)
+        for (unsigned int i = 0; i < this->size; i++)
             this->v[i] += a;
         return *this;
     }
     array3<T> &operator-=(T a)
     {
         __checkSize();
-        unsigned int inc = nyz + nz + 1;
-        for (unsigned int i = 0; i < this->size; i += inc)
+        for (unsigned int i = 0; i < this->size; i++)
             this->v[i] -= a;
         return *this;
     }
     array3<T> &operator*=(T a)
     {
         __checkSize();
-        unsigned int inc = nyz + nz + 1;
-        for (unsigned int i = 0; i < this->size; i += inc)
+        for (unsigned int i = 0; i < this->size; i++)
             this->v[i] *= a;
         return *this;
     }
@@ -928,8 +922,7 @@ class array3 : public array1<T> {
     {
         __checkSize();
         T ainv = 1.0 / a;
-        unsigned int inc = nyz + nz + 1;
-        for (unsigned int i = 0; i < this->size; i += inc)
+        for (unsigned int i = 0; i < this->size; i++)
             this->v[i] *= ainv;
         return *this;
     }
@@ -1032,7 +1025,7 @@ class array4 : public array1<T> {
     }
     unsigned int Nz() const
     {
-        return ny;
+        return nz;
     }
     unsigned int N4() const
     {
@@ -1103,24 +1096,21 @@ class array4 : public array1<T> {
     array4<T> &operator+=(T a)
     {
         __checkSize();
-        unsigned int inc = nyzw + nzw + nw + 1;
-        for (unsigned int i = 0; i < this->size; i += inc)
+        for (unsigned int i = 0; i < this->size; i++)
             this->v[i] += a;
         return *this;
     }
     array4<T> &operator-=(T a)
     {
         __checkSize();
-        unsigned int inc = nyzw + nzw + nw + 1;
-        for (unsigned int i = 0; i < this->size; i += inc)
+        for (unsigned int i = 0; i < this->size; i++)
             this->v[i] -= a;
         return *this;
     }
     array4<T> &operator*=(T a)
     {
         __checkSize();
-        unsigned int inc = nyzw + nzw + nw + 1;
-        for (unsigned int i = 0; i < this->size; i += inc)
+        for (unsigned int i = 0; i < this->size; i++)
             this->v[i] *= a;
         return *this;
     }
@@ -1128,8 +1118,7 @@ class array4 : public array1<T> {
     {
         __checkSize();
         T ainv = 1.0 / a;
-        unsigned int inc = nyzw + nzw + nw + 1;
-        for (unsigned int i = 0; i < this->size; i += inc)
+        for (unsigned int i = 0; i < this->size; i++)
             this->v[i] *= ainv;
         return *this;
     }
@@ -1314,24 +1303,21 @@ class array5 : public array1<T> {
     array5<T> &operator+=(T a)
     {
         __checkSize();
-        unsigned int inc = nyzwv + nzwv + nwv + nv + 1;
-        for (unsigned int i = 0; i < this->size; i += inc)
+        for (unsigned int i = 0; i < this->size; i++)
             this->v[i] += a;
         return *this;
     }
     array5<T> &operator-=(T a)
     {
         __checkSize();
-        unsigned int inc = nyzwv + nzwv + nwv + nv + 1;
-        for (unsigned int i = 0; i < this->size; i += inc)
+        for (unsigned int i = 0; i < this->size; i++)
             this->v[i] -= a;
         return *this;
     }
     array5<T> &operator*=(T a)
     {
         __checkSize();
-        unsigned int inc = nyzwv + nzwv + nwv + nv + 1;
-        for (unsigned int i = 0; i < this->size; i += inc)
+        for (unsigned int i = 0; i < this->size; i++)
             this->v[i] *= a;
         return *this;
     }
@@ -1339,8 +1325,7 @@ class array5 : public array1<T> {
     {
         __checkSize();
         T ainv = 1.0 / a;
-        unsigned int inc = nyzwv + nzwv + nwv + nv + 1;
-        for (unsigned int i = 0; i < this->size; i += inc)
+        for (unsigned int i = 0; i < this->size; i++)
             this->v[i] *= ainv;
         return *this;
     }
