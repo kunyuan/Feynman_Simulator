@@ -35,35 +35,9 @@ void Test_CreateWorm()
     Diag.SetTest(Para.Lat, Para.RNG, Weight.G, Weight.W);
     Markov markov;
     markov.BuildNew(Para, Diag, Weight);
-
-    int total = 0;
-    for (int i = 0; i < 10; i++) {
-        markov.CreateWorm();
-        sput_fail_unless(markov.Diag->CheckDiagram(), "Weight check for the diagram");
-        if (markov.Diag->Worm.Exist) {
-            total += 1;
-            //            markov.Diag->Save("diagram_template.config", "a");
-        }
-    }
-    LOG_INFO("Update(Create Worm) are done!");
-    sput_fail_unless(total == 10, "The accept ratio of CreateWorm = 1.0");
-
-    Para.RNG.Reset(15);
-    total = 0;
-    for (int i = 0; i < 10; i++) {
-        markov.CreateWorm();
-        markov.DeleteWorm();
-        sput_fail_unless(markov.Diag->CheckDiagram(), "Weight check for DeleteWorm");
-        if (!markov.Diag->Worm.Exist) {
-            total += 1;
-            //            markov.Diag->Save("diagram_template.config", "a");
-        }
-    }
-    LOG_INFO("Update(Delete Worm) are done!");
-    sput_fail_unless(total == 3, "The accept ratio of DeleteWorm = 0.25");
     
     for (int i = 0; i < 10; i++) {
-        markov.Hop(10);
+        markov.Hop(50);
         sput_fail_unless(markov.Diag->CheckDiagram(), "Weight check for all the random steps");
     }
     LOG_INFO("Updates(Create,Delete, and Move Worm) are done!");
