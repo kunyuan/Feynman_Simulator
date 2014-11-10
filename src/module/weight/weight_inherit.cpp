@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Kun Chen. All rights reserved.
 //
 
-#include "weight.h"
+#include "weight_inherit.h"
 
 using namespace std;
 using namespace Array;
@@ -32,13 +32,12 @@ void Sigma::Measure(const Site &rin, const Site &rout, real tin, real tout, spin
 {
     if (DEBUGMODE && order <= 0)
         LOG_ERROR("Too small order=" << order);
+    int spin = SpinIndex(SpinIn, SpinOut);
     auto dist = _Lat.Dist(rin, rout);
-    _WeightAccu[order - 1]
-               [SpinIndex(SpinIn, SpinOut)]
-               [dist.SublatIndex]
-               [dist.CoordiIndex]
-               [TauToBin(tin, tout)] += weight;
-    _Average[order - 1].Measure(weight);
+    int tau = TauToBin(tin, tout);
+    _WeightAccu[order - 1][spin][dist.SublatIndex][dist.CoordiIndex][tau] += weight;
+    if (spin == 0 && dist.SublatIndex == 0 && dist.CoordiIndex == 0 && tau == 0)
+        _WeightErrorEstimator[order - 1].Measure(weight);
 }
 
 /************************   Polarization   *********************************/
@@ -57,13 +56,12 @@ void Polar::Measure(const Site &rin, const Site &rout, real tin, real tout, spin
 {
     if (DEBUGMODE && order <= 0)
         LOG_ERROR("Too small order=" << order);
+    int spin = SpinIndex(SpinIn, SpinOut);
     auto dist = _Lat.Dist(rin, rout);
-    _WeightAccu[order - 1]
-               [SpinIndex(SpinIn, SpinOut)]
-               [dist.SublatIndex]
-               [dist.CoordiIndex]
-               [TauToBin(tin, tout)] += weight;
-    _Average[order - 1].Measure(weight);
+    int tau = TauToBin(tin, tout);
+    _WeightAccu[order - 1][spin][dist.SublatIndex][dist.CoordiIndex][tau] += weight;
+    if (spin == 0 && dist.SublatIndex == 0 && dist.CoordiIndex == 0 && tau == 0)
+        _WeightErrorEstimator[order - 1].Measure(weight);
 }
 
 /***********************  G  **************************************/

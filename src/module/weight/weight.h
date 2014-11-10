@@ -9,11 +9,7 @@
 #ifndef __Feynman_Simulator__observable__
 #define __Feynman_Simulator__observable__
 
-#include "estimator/estimator.h"
-#include "utility/array.h"
-#include "lattice/lattice.h"
-#include "utility/fft.h"
-#include "weight_inheritance.h"
+#include "weight_inherit.h"
 
 namespace para {
 class Parameter;

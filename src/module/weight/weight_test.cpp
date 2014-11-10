@@ -15,8 +15,9 @@ using namespace weight;
 
 void TestDiagramObject();
 void TestWeightMeasuring();
+void WeightMeasuring(real Beta, int Num);
 void Sample(Sigma &, int num, Site in, Site out,
-            spin SpinIn, spin SpinOut, real Beta);
+            spin SpinIn, spin SpinOut, real Beta, int order, real *P);
 
 int weight::TestWeight()
 {
@@ -31,29 +32,49 @@ int weight::TestWeight()
 
 void TestWeightMeasuring()
 {
+    real Beta = 5.0;
+    int num = 100000;
+    WeightMeasuring(Beta, num);
+    WeightMeasuring(Beta, num * 10);
+    WeightMeasuring(Beta / 10, num);
+}
+
+void WeightMeasuring(real Beta, int Num)
+{
     //some initialization
     Lattice lat(Vec<int>(1));
-    real Beta = 1.0;
     weight::Sigma Sig(lat, Beta, 4);
     weight::Sigma Sig2(lat, Beta, 4);
     Site s1 = Site(0, 0);
     Site s2 = Site(0, 0);
     spin SpinIn = DOWN, SpinOut = DOWN;
+    real tau = Beta / 2;
+    int order = 4;
 
-    int Num = 1000000;
+    //provide order+1 real numbers, order=0 corresponds to the Norm term
+    real P[] = {16.0, 16.0, 4.0, 1.0, 1.0};
     //measure norm when set order=0
-    Sample(Sig, Num, s1, s2, SpinIn, SpinOut, Beta);
+    Sample(Sig, Num, s1, s2, SpinIn, SpinOut, Beta, order + 1, P);
 
-    LOG_INFO("Order 1: " << Sig.WeightWithError(1) << endl
-                         << "Order 2: " << Sig.WeightWithError(2) << endl
-                         << "Order 3: " << Sig.WeightWithError(3));
-    int order = Sig.OrderAcceptable(1, 500.0);
-    LOG_INFO("Accepted Order=" << order);
-    sput_fail_unless(order == 2, "Accepted order check.");
-    Sig.UpdateWeight(2);
-    LOG_INFO(Sig.Weight(s1, s2, 0.0, Beta / 2, SpinIn, SpinOut));
-    //since order=1 and order=2 are accepted, so the weight will be
-    //(P[1]+P[2])/P[0]*(average of each sample=0.5)=5/8
+    LOG_INFO("Order 1: " << Sig.RelativeError(1) << endl
+                         << "Order 2: " << Sig.RelativeError(2) << endl
+                         << "Order 3: " << Sig.RelativeError(3));
+    LOG_INFO("Accepted Order with Threshold 0.04=" << Sig.OrderAcceptable(1, 0.04));
+
+    Sig.UpdateWeight(2); //accept up to order 2
+    Complex weight = Sig.Weight(s1, s2, 0.0, tau, SpinIn, SpinOut);
+    real w = (P[1] + P[2]) / P[0] * 0.5 / Beta; //0.5 is the average <rng.urn()>
+    Complex realweight = Complex(w, w);
+    //2 standard deviation is allowd in the estimate
+    Complex relative_error = 2.0 * (Sig.RelativeError(1) + Sig.RelativeError(2));
+    Complex error(realweight.Re * relative_error.Re,
+                  realweight.Im * relative_error.Im);
+
+    LOG_INFO(weight);
+    sput_fail_unless(Equal(weight.Re, realweight.Re, error.Re),
+                     "Check real part of Weight and it's error");
+    sput_fail_unless(Equal(weight.Im, realweight.Im, error.Im),
+                     "Check imag part of Weight and it's error");
 
     //Weight class IO operation
     Sig.Save("test_weight.npz", "w");
@@ -65,25 +86,32 @@ void TestWeightMeasuring()
 }
 
 void Sample(Sigma &sigma, int num, Site in, Site out,
-            spin SpinIn, spin SpinOut, real Beta)
+            spin SpinIn, spin SpinOut, real Beta, int order, real *P)
 {
-    real P[4] = {16.0, 16.0, 4.0, 1.0};
-    real PSum = P[0] + P[1] + P[2] + P[3];
     RandomFactory rng(100);
+    real P_lower[order + 1];
+    real P_upper[order + 1];
+    P_lower[0] = 0.0;
+    P_upper[0] = P[0];
+    for (int i = 0; i < order; i++) {
+        P_lower[i + 1] = P_upper[i];
+        P_upper[i + 1] = P_lower[i + 1] + P[i + 1];
+    }
+    real PSum = P_upper[order];
+
     for (int i = 0; i < num; i++) {
-        if (i % 10 == 0)
+        if (i % 100 == 0)
             sigma.AddStatistics();
         real x = rng.urn() * PSum;
-        if (x <= P[0])
-            sigma.MeasureNorm();
-        else if (x > P[0] && x <= P[0] + P[1])
-            sigma.Measure(in, out, 0.0, rng.urn() * Beta,
-                          SpinIn, SpinOut, 1, Complex(rng.urn(), rng.urn()));
-        else if (x > P[0] + P[1] && x <= P[0] + P[1] + P[2])
-            sigma.Measure(in, out, 0.0, rng.urn() * Beta,
-                          SpinIn, SpinOut, 2, Complex(rng.urn(), rng.urn()));
-        else
-            sigma.Measure(in, out, 0.0, rng.urn() * Beta,
-                          SpinIn, SpinOut, 3, Complex(rng.urn(), rng.urn()));
+        for (int o = 0; o <= order; o++) {
+            if (x > P_lower[o] && x <= P_upper[o]) {
+                if (o == 0)
+                    sigma.MeasureNorm();
+                else
+                    sigma.Measure(in, out, 0.0, rng.urn() * Beta,
+                                  SpinIn, SpinOut, o, Complex(rng.urn(), rng.urn()));
+                break;
+            }
+        }
     }
 }
