@@ -56,12 +56,12 @@ int WeightNoMeasure::TauToBin(real tau)
     if (tau < 0) {
         if (DEBUGMODE && tau < -_Beta)
             LOG_ERROR("Beta=" << tau << " is too small!");
-        return int(tau * _dBetaInverse) + MAX_BIN;
+        return floor(tau * _dBetaInverse) + MAX_BIN;
     }
     else {
         if (DEBUGMODE && tau >= _Beta)
             LOG_ERROR("Beta=" << tau << " is too large!");
-        return int(tau * _dBetaInverse);
+        return floor(tau * _dBetaInverse);
     }
 }
 
@@ -74,7 +74,7 @@ real WeightNoMeasure::BinToTau(int Bin)
 void WeightNoMeasure::SetTest()
 {
     for (unsigned int i = 0; i < _Weight.Size(); i++) {
-        _Weight(i) = Complex(2.0, 0.0);
+        _Weight(i) = Complex(exp(-real(i)), 0.0);
     }
 }
 

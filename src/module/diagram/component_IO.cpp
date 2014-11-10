@@ -50,6 +50,12 @@ bool Diagram::LoadConfig(istream &is, gLine g)
     g->nVer[OUT] = Ver(g_out);
     READ(is, g->K);
     READ(is, g->IsMeasure);
+    if(g->IsMeasure)
+    {
+        MeasureGLine = true;
+        GMeasure = g;
+        WMeasure = nullptr;
+    }
     return true;
 }
 
@@ -69,6 +75,12 @@ bool Diagram::LoadConfig(istream &is, wLine w)
     READ(is, w->K);
     READ(is, w->IsDelta);
     READ(is, w->IsMeasure);
+    if(w->IsMeasure)
+    {
+        MeasureGLine = false;
+        GMeasure = nullptr;
+        WMeasure = w;
+    }
     return true;
 }
 
