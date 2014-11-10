@@ -36,6 +36,7 @@ class Diagram {
 
     int Order;
     Complex Phase, Weight;
+    real SignFermiLoop;
 
     Bundle<GLine> G;
     Bundle<WLine> W;
@@ -61,10 +62,6 @@ class Diagram {
     vertex RandomPickVer();
 
     //Diagram
-    vertex NeighVer(gLine, int);
-    vertex NeighVer(wLine, int);
-    gLine NeighG(vertex, int);
-    wLine NeighW(vertex);
     bool FixDiagram();
     void ClearDiagram();
 

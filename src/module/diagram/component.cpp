@@ -45,6 +45,15 @@ vertex GLine::NeighVer(int dir)
     return nVer[dir];
 }
 
+void GLine::SetGLine(Momentum k, const Complex& weight, bool ismeasure, vertex* nv)
+{
+    K = k;
+    Weight = weight;
+    IsMeasure = ismeasure;
+    nVer[IN] = nv[IN];
+    nVer[OUT] = nv[OUT];
+}
+
 string GLine::PrettyString()
 {
     stringstream os;
@@ -68,6 +77,17 @@ int WLine::Sublattice(int dir)
 vertex WLine::NeighVer(int dir)
 {
     return nVer[dir];
+}
+
+void WLine::SetWLine(Momentum k, const Complex& weight, bool isworm, bool ismeasure, bool isdelta, vertex* nv)
+{
+    K = k;
+    Weight = weight;
+    IsWorm = isworm;
+    IsMeasure = ismeasure;
+    IsDelta = isdelta;
+    nVer[IN] = nv[IN];
+    nVer[OUT] = nv[OUT];
 }
 
 string WLine::PrettyString()
@@ -111,6 +131,18 @@ gLine Vertex::NeighG(int dir)
 wLine Vertex::NeighW()
 {
     return nW;
+}
+
+void Vertex::SetVertex(const Site& site, const real& tau, spin* s, int dir, gLine* ng, wLine w)
+{
+    R = site;
+    Tau = tau;
+    _spin[IN] = s[IN];
+    _spin[OUT] = s[OUT];
+    Dir = dir;
+    nG[IN] = ng[IN];
+    nG[OUT] = ng[OUT];
+    nW = w;
 }
 
 string Vertex::PrettyString()
