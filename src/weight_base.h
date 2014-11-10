@@ -8,6 +8,12 @@
 
 #ifndef Feynman_Simulator_weight_base_h
 #define Feynman_Simulator_weight_base_h
+#include "utility/convention.h"
+#include "utility/array.h"
+#include "lattice/lattice.h"
+#include "utility/complex.h"
+#include "utility/fft.h"
+
 namespace dyson {
 class Dyson;
 }
@@ -26,9 +32,6 @@ enum Dim { ORDER,
            TAU };
 
 class WeightNoMeasure {
-    //dyson::Dyson does care abort the memroy structure of weight!!!
-    friend dyson::Dyson;
-
   public:
     void SetTest();
     void Save(const std::string &FileName, std::string Mode = "a");
@@ -66,41 +69,6 @@ class WeightNoMeasure {
     int TauToBin(real tau);
     int TauToBin(real t_in, real t_out);
     real BinToTau(int Bin);
-};
-
-class WeightNeedMeasure : public WeightNoMeasure {
-  public:
-    WeightNeedMeasure(const Lattice &, real Beta, int order,
-                      int Spine, std::string, real Norm);
-
-    unsigned int *Shape();
-
-    Estimate<Complex> WeightWithError(int order);
-
-    int OrderAcceptable(int StartFromOrder, real ErrorThreshold);
-    //update final weight density to WeightNoMeasure._Weight
-    void UpdateWeight(int UpToOrder);
-
-    //The internal _Beta will be changed, so do _WeightAccu, _DeltaWeightAccu and _NormAccu
-    //all changed will be done to make sure GetWeightArray returns the reweighted weight function
-    //(as for now, reweighted weight function is set to be the unreweighted weight function)
-    void ReWeight(real Beta);
-
-    void MeasureNorm();
-    void AddStatistics();
-    void ClearStatistics();
-    void SqueezeStatistics(real factor);
-    //    std::string PrettyString();
-    void Save(const std::string &FileName, std::string Mode = "a");
-    bool Load(const std::string &);
-
-  protected:
-    //final weight of each bin = _WeightAccu/_NormAccu*_Norm
-    //final weight function = (final weight of each bin)*MAX_BIN/Beta
-    real _Norm;     //The normalization factor
-    real _NormAccu; //The normalization accumulation
-    Array::array5<Complex> _WeightAccu;
-    EstimatorBundle<Complex> _Average;
 };
 }
 

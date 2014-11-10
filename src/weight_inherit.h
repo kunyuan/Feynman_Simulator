@@ -8,7 +8,7 @@
 
 #ifndef Feynman_Simulator_weight_inheritance_h
 #define Feynman_Simulator_weight_inheritance_h
-#include "weight_base.h"
+#include "weight_estimator.h"
 
 namespace weight {
 

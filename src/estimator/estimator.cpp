@@ -31,6 +31,16 @@ Estimate<T>::Estimate(const T &mean, const T &error)
     : Mean(mean), Error(error)
 {
 }
+template <>
+Complex Estimate<Complex>::RelativeError()
+{
+    return Complex(Error.Re / Mean.Re, Error.Im / Mean.Im);
+}
+template <>
+real Estimate<real>::RelativeError()
+{
+    return Error / Mean;
+}
 
 /**
 *  \brief Pretty output of Complex Estimate
