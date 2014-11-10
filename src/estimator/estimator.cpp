@@ -96,6 +96,8 @@ const real ThrowRatio = 1.0 / 3;
 template <>
 void Estimator<real>::_update()
 {
+    _value.Mean = _accumulator / _norm;
+
     int size = (int)_history.size();
     if (size == 0)
         return;
@@ -112,13 +114,14 @@ void Estimator<real>::_update()
         }
     }
     _value.Error = fabs(Max - Min) / 2.0;
-    _value.Mean = _accumulator / _norm;
     _ratio = (MaxIndex - MinIndex) / (real)size * (1.0 - ThrowRatio);
 }
 
 template <>
 void Estimator<Complex>::_update()
 {
+    _value.Mean = _accumulator / _norm;
+
     int size = (int)_history.size();
     if (size == 0)
         return;
@@ -143,7 +146,6 @@ void Estimator<Complex>::_update()
             MaxIndexIm = i;
         }
     }
-    _value.Mean = _accumulator / _norm;
     _value.Error.Re = fabs(Max.Re - Min.Re) / 2.0;
     _value.Error.Im = fabs(Max.Im - Min.Im) / 2.0;
     if (MaxIndexRe - MinIndexRe < MaxIndexIm - MinIndexIm)

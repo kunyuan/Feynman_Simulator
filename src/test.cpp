@@ -30,14 +30,14 @@ int RunTest()
     //    TestArray();
     TEST(TestEnvironment);
     TEST(diag::TestDiagram);
-    TEST(TestLattice);
     TEST(weight::TestWeight);
     TEST(mc::TestMarkov);
 
+    //    TEST(TestLattice);
     //    TEST(TestEstimator);
 
     //    TEST(TestCRC32);
-    TEST(TestFFT);
+    //    TEST(TestFFT);
 
     //    Testcnpy();
     return 0;

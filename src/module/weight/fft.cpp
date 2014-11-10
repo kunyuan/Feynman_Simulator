@@ -29,7 +29,7 @@ void WeightNoMeasure::_ChangeSymmetry(fft::Dir direction)
     int NumOfTimeSeries = _Shape[SP] * _Shape[SUB] * _Shape[VOL];
     for (int i = 0; i < NumOfTimeSeries; i += _Shape[TAU])
         for (int j = 0; j < _Shape[TAU]; j++)
-            _Weight(i * _Shape[TAU] + j) *= PhaseFactor[j];
+            SmoothWeight(i * _Shape[TAU] + j) *= PhaseFactor[j];
 }
 
 void WeightNoMeasure::_FFT(fft::Dir direction, Mode mode)
@@ -47,7 +47,7 @@ void WeightNoMeasure::_FFT(fft::Dir direction, Mode mode)
 
     for (int sp = 0; sp < _Shape[SP]; sp++)
         for (int sub = 0; sub < _Shape[SUB]; sub++)
-            fft::fftnD((Complex *)_Weight[sp][sub](), (int *)_SpaceTimeShape, _Lat.Dimension + 1, direction, DoIt);
+            fft::fftnD((Complex *)SmoothWeight[sp][sub](), (int *)_SpaceTimeShape, _Lat.Dimension + 1, direction, DoIt);
 }
 
 void Sigma::FFT(fft::Dir direction, Mode mode)
