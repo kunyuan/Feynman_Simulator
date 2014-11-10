@@ -44,6 +44,10 @@ class Diagram {
 
     WormClass Worm;
     bool IsWorm(vertex);
+    
+    bool MeasureGLine;
+    gLine GMeasure;
+    wLine WMeasure;
 
     spin Spin(gLine, int); ///For gline with different spins on two ends
 

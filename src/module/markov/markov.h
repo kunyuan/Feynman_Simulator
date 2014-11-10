@@ -46,7 +46,7 @@ class Markov {
     weight::Worm *WormWeight;
     RandomFactory *RNG;
 
-    const static int NUpdates = 7;
+    const static int NUpdates = 14;
     real ProbofCall[NUpdates];
     real SumofProbofCall[NUpdates] = {0.0};
 
@@ -63,6 +63,13 @@ class Markov {
     void Reconnect();
     void AddInteraction();
     void DeleteInteraction();
+    void ChangeTau();
+    void ChangeR();
+    void ChangeRLoop();
+    void ChangeMeasureFromGToW();
+    void ChangeMeasureFromWToG();
+    void ChangeDeltaToNotDelta();
+    void ChangeNotDeltaToDelta();
 
   private:
     int RandomPickDeltaSpin();
@@ -71,6 +78,7 @@ class Markov {
     real RandomPickTau();
     real ProbTau(real);
     Site RandomPickSite();
+    real ProbSite(const Site&);
     bool RandomPickBool();
 };
 
