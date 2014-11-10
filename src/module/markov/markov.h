@@ -69,6 +69,7 @@ class Markov {
     Momentum RandomPickK();
     int RandomPickDir();
     real RandomPickTau();
+    real ProbTau(real);
     Site RandomPickSite();
     bool RandomPickBool();
 };
