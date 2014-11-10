@@ -11,7 +11,7 @@
 
 #include "lattice/lattice.h"
 #include "status.h"
-#include "parser.h"
+#include "utility/parser.h"
 #include "utility/rng.h"
 #include <string>
 
