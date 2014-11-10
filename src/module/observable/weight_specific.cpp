@@ -83,8 +83,10 @@ Complex G::Weight(int dir, const Site &r1, const Site &r2, real t1, real t2, spi
     if (IsMeasure)
         //TODO: define the measuring weight for G
         return Complex(1.0, 0.0);
-    else if (dir == IN)
-        return _Weight[SpinIndex(Spin1, Spin2)][_Lat.Dist(r1, r2).SublatIndex][_Lat.Dist(r1, r2).CoordiIndex][TauToBin(t2 - t1)];
+    else if (dir == IN){
+        return _Weight[SpinIndex(Spin1, Spin2)][_Lat.Dist(r1, r2).SublatIndex]
+        [_Lat.Dist(r1, r2).CoordiIndex][TauToBin(t2 - t1)];
+    }
     else
         return _Weight[SpinIndex(Spin2, Spin1)][_Lat.Dist(r2, r1).SublatIndex][_Lat.Dist(r2, r1).CoordiIndex][TauToBin(t1 - t2)];
 }

@@ -384,6 +384,9 @@ void Markov::AddInteraction()
                           *GBDWeight/(GIC->Weight * GMD->Weight);
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
+    
+    prob *= OrderWeight[Diag->Order+1]*ProbofCall[6]/(ProbofCall[5]*OrderWeight[Diag->Order]*ProbTau(tauA)*ProbTau(tauB));
+    
     if (prob >= 1.0 || RNG->urn() < prob) {
         Diag->Order += 1;
         Diag->Phase *= sgn;
@@ -436,6 +439,63 @@ void Markov::DeleteInteraction()
         return;
     if(Diag->Order <= 1)
         return;
+    vertex Ira = Worm->Ira, Masha = Worm->Masha;
+    
+    int dir = RandomPickDir();
+    gLine GIA = Ira->NeighG(dir), GMB = Masha->NeighG(dir);
+    vertex vA = GIA->NeighVer(dir), vB = GMB->NeighVer(dir);
+    if(vA->Spin(IN)!=vA->Spin(OUT)) return;
+    if(vB->Spin(IN)!=vB->Spin(OUT)) return;
+    
+    if(vA->NeighW()!=vB->NeighW()) return;
+    wLine wAB = vA->NeighW();
+    if(wAB->IsDelta) return;
+    if(wAB->IsMeasure) return;
+    if(wAB->IsWorm) return;
+    
+    gLine GAC = vA->NeighG(dir), GBD = vB->NeighG(dir);
+    vertex vC = GAC->NeighVer(dir), vD = GBD->NeighVer(dir);
+    if(vA->R != vC->R) return;
+    if(vB->R != vD->R) return;
+    
+    Momentum kWorm = Worm->K + SIGN(vA->Dir) * wAB->K;
+    //TODO: Hash Check for kWorm
+    
+    Complex GICWeight = G->Weight(FLIP(dir), Ira->R, vC->R, Ira->Tau, vC->Tau,
+                                  Ira->Spin(dir), vC->Spin(FLIP(dir)), GAC->IsMeasure);
+    Complex GMDWeight = G->Weight(FLIP(dir), Masha->R, vD->R, Masha->Tau, vD->Tau,
+                                  Masha->Spin(dir), vD->Spin(FLIP(dir)), GBD->IsMeasure);
+    
+    Complex weightRatio = (-1) * GICWeight * GMDWeight/(GIA->Weight * GMB->Weight *GAC->Weight
+                                                        * GBD->Weight *wAB->Weight);
+    
+    real prob = mod(weightRatio);
+    Complex sgn = phase(weightRatio);
+    
+    prob *= OrderWeight[Diag->Order]*ProbofCall[5]*ProbTau(vA->Tau)*ProbTau(vB->Tau)
+            /(ProbofCall[6]*OrderWeight[Diag->Order+1]);
+    
+    if (prob >= 1.0 || RNG->urn() < prob) {
+        Diag->Order -= 1;
+        Diag->Phase *= sgn;
+        Diag->Weight *= weightRatio;
+        
+        Diag->Ver.Remove(vA);
+        Diag->Ver.Remove(vB);
+        Diag->G.Remove(GIA);
+        Diag->G.Remove(GMB);
+        Diag->W.Remove(wAB);
+        
+        Ira->nG[dir] = GAC;
+        Masha->nG[dir] = GBD;
+        GAC->nVer[FLIP(dir)] = Ira;
+        GBD->nVer[FLIP(dir)] = Masha;
+        
+        Worm->K = kWorm;
+        
+        GAC->Weight = GICWeight;
+        GBD->Weight = GMDWeight;
+    }
 }
 
 
@@ -458,6 +518,11 @@ int Markov::RandomPickDir()
 real Markov::RandomPickTau()
 {
     return RNG->urn()*Beta;
+}
+
+real Markov::ProbTau(real tau)
+{
+    return 1.0/Beta;
 }
 
 bool Markov::RandomPickBool()
