@@ -45,14 +45,6 @@ string Vec<T>::PrettyString()
     return "(" + ToString(*this) + ")";
 }
 
-template <typename T>
-bool operator!=(const Vec<T> &v1, const Vec<T> &v2)
-{
-    if (v1 == v2)
-        return false;
-    return true;
-}
-
 template class Vec<int>;
 template class Vec<real>;
 

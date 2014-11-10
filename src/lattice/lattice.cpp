@@ -47,10 +47,10 @@ void Lattice::Initialize()
     LatticeVec[1][0] = 0.0;
     LatticeVec[1][1] = 1.0;
 
-    ReciprocalLatticeVec[0][0] = 2.0 * Pi;
+    ReciprocalLatticeVec[0][0] = 2.0 * PI;
     ReciprocalLatticeVec[0][1] = 0.0;
     ReciprocalLatticeVec[1][0] = 0.0;
-    ReciprocalLatticeVec[1][1] = 2.0 * Pi;
+    ReciprocalLatticeVec[1][1] = 2.0 * PI;
 
     SublatticeVec[0][0] = 0.0;
     SublatticeVec[0][1] = 0.0;
@@ -94,8 +94,8 @@ Vec<int> Lattice::Shift(const Vec<int> &vec) const
 
 int Lattice::Vec2Index(const Vec<int> &vec) const
 {
-    int Index = vec[D - 1];
-    for (int i = D - 2; i >= 0; i--) {
+    int Index = vec[0];
+    for (int i = 1; i < D; i++) {
         Index = Index * Size[i] + vec[i];
     }
     return Index;
@@ -104,11 +104,11 @@ int Lattice::Vec2Index(const Vec<int> &vec) const
 Vec<int> Lattice::Index2Vec(int index) const
 {
     Vec<int> v(0);
-    for (int i = 0; i < D - 1; i++) {
+    for (int i = D-1; i > 0; i--) {
         v[i] = index % Size[i];
         index = index / Size[i];
     }
-    v[D - 1] = index;
+    v[0] = index;
     return v;
 }
 

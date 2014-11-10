@@ -32,11 +32,6 @@ bool EnvDyson::BuildNew(const string &InputFile, bool StartFromBare)
     return true;
 }
 
-bool EnvDyson::CanBeLoad()
-{
-    return DoesFileExist(_ParameterFile);
-}
-
 bool EnvDyson::Load()
 {
     LOG_INFO("Loading Dyson environment from " << _ParameterFile);
@@ -53,6 +48,14 @@ void EnvDyson::Save()
     Weight.Save(_GWweightFile, weight::GW, "w");
     Weight.Save(_WeightFile, weight::SigmaPolar, "w");
     Para.Version++;
-    LOG_INFO("Dyson Version becomes " << Para.Version);
+    LOG_INFO("Dyson Version is increased to " << Para.Version);
+    //TODO: annealing beta here ?
     Para.GetStatus().Save();
+}
+
+void EnvDyson::UpdateWeight()
+{
+    LOG_INFO("Update Sigma&Polar weight with ErrorThreshold=" << Para.ErrorThreshold);
+    Para.OrderAccepted = Weight.UpdateSigmaPolarWeight(Para.OrderAccepted, Para.ErrorThreshold);
+    LOG_INFO("Sigma&Polar weight is updated to Order=" << Para.OrderAccepted);
 }

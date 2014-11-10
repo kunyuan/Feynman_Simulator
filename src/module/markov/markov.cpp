@@ -8,7 +8,7 @@
 
 #include "markov.h"
 #include "math.h"
-#include "module/observable/weight.h"
+#include "module/weight/weight.h"
 #include "module/diagram/diagram.h"
 #include "module/parameter/parameter.h"
 

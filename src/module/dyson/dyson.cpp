@@ -8,7 +8,7 @@
 
 #include "dyson.h"
 #include "module/parameter/parameter.h"
-#include "module/observable/weight.h"
+#include "module/weight/weight.h"
 
 using namespace dyson;
 using namespace weight;
@@ -21,4 +21,9 @@ bool Dyson::BuildNew(para::ParaDyson &para, Weight &weight)
     Sigma = weight.Sigma;
     Polar = weight.Polar;
     return true;
+}
+
+void Dyson::DeriveG()
+{
+    //    G->_Weight();
 }
