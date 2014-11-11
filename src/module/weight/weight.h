@@ -23,8 +23,9 @@ flag GW = 2;
 
 class Weight {
   public:
-    Weight();
+    Weight(bool IsAllSymmetric=false);
     ~Weight();
+    bool _IsAllSymmetric;
     Sigma *Sigma;
     Polar *Polar;
     G *G;

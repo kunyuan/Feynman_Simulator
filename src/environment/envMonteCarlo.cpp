@@ -11,8 +11,8 @@
 using namespace std;
 using namespace para;
 
-EnvMonteCarlo::EnvMonteCarlo(int pid)
-    : Environment(pid)
+EnvMonteCarlo::EnvMonteCarlo(int pid, bool IsAllTauSymmetric)
+    : Environment(pid), Weight(IsAllTauSymmetric)
 {
     _ParameterFile = ToString(PID) + "_para.txt";
     _GWweightFile = "GWweight.npz";

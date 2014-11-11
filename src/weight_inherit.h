@@ -15,7 +15,7 @@ namespace weight {
 //TODO: Add fitting function here
 class Sigma : public WeightNeedMeasure {
   public:
-    Sigma(const Lattice &, real Beta, int order);
+    Sigma(const Lattice &, real Beta, int order, bool IsTauSymmetric = false);
     //Monte Carlo interface
     Complex Weight(const Site &, const Site &, real, real, spin, spin);
     Complex WeightOfDelta(spin, spin);
@@ -35,7 +35,7 @@ class Polar : public WeightNeedMeasure {
 };
 class G : public WeightNoMeasure {
   public:
-    G(const Lattice &, real Beta, int order);
+    G(const Lattice &, real Beta, int order, bool IsTauSymmetric = false);
     Array::array4<Complex> BareWeight;
     //Monte Carlo interface
     Complex Weight(const Site &, const Site &, real, real, spin, spin, bool);

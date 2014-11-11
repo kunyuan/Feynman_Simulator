@@ -16,9 +16,10 @@ using namespace weight;
 
 /**********************   Weight Needs measuring  **************************/
 
-WeightNeedMeasure::WeightNeedMeasure(const Lattice &lat, real beta,
-                                     int order, int SpinVol, string name, real Norm)
-    : WeightNoMeasure(lat, beta, order, SpinVol, name)
+WeightNeedMeasure::WeightNeedMeasure(const Lattice &lat, real beta, int order,
+                                     bool IsTauSymmetric, int SpinVol,
+                                     string name, real Norm)
+    : WeightNoMeasure(lat, beta, order, IsTauSymmetric, SpinVol, name)
 {
     _Norm = Norm;
     //use _Shape[ORDER] to _Shape[TAU] to construct array5

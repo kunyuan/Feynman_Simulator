@@ -44,9 +44,10 @@ class WeightNoMeasure {
     //No Time variable for this guy
     Array::array3<Complex> DeltaTWeight;
 
-
   protected:
-    WeightNoMeasure(const Lattice &, real Beta, int Order, int SpinVol, std::string);
+    WeightNoMeasure(const Lattice &, real Beta, int Order,
+                    bool IsTauSymmetric, int SpinVol, std::string);
+    bool _IsTauSymmetric;
     std::string _Name;
     real _Beta;
     real _dBeta; //_Beta/MAX_TAU

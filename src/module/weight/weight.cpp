@@ -12,8 +12,9 @@
 using namespace std;
 using namespace para;
 
-weight::Weight::Weight()
+weight::Weight::Weight(bool IsAllSymmetric)
 {
+    _IsAllSymmetric = IsAllSymmetric;
     Sigma = nullptr;
     Polar = nullptr;
     G = nullptr;
@@ -130,7 +131,7 @@ void weight::Weight::_AllocateGW(const Lattice &Lat, real Beta, int order)
 {
     //make sure old Sigma/Polar/G/W are released before assigning new memory
     delete G;
-    G = new weight::G(Lat, Beta, order);
+    G = new weight::G(Lat, Beta, order, _IsAllSymmetric);
     delete W;
     W = new weight::W(Lat, Beta, order);
 }
@@ -138,7 +139,7 @@ void weight::Weight::_AllocateGW(const Lattice &Lat, real Beta, int order)
 void weight::Weight::_AllocateSigmaPolar(const Lattice &Lat, real Beta, int order)
 {
     delete Sigma;
-    Sigma = new weight::Sigma(Lat, Beta, order);
+    Sigma = new weight::Sigma(Lat, Beta, order, _IsAllSymmetric);
     delete Polar;
     Polar = new weight::Polar(Lat, Beta, order);
 }

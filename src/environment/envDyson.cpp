@@ -8,8 +8,8 @@
 
 #include "environment.h"
 
-EnvDyson::EnvDyson(int pid)
-    : Environment(pid)
+EnvDyson::EnvDyson(int pid, bool IsAllTauSymmetric)
+    : Environment(pid), Weight(IsAllTauSymmetric)
 {
     _ParameterFile = ToString(PID) + "_para.txt";
     _GWweightFile = "GWweight.npz";
