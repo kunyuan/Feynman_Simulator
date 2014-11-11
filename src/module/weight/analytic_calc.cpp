@@ -7,13 +7,10 @@
 //
 
 #include "weight_inherit.h"
+using namespace weight;
 
-namespace weight {
-
-void G::InitialWithBare()
+void G::_InitialBare()
 {
-    DeltaTWeight = 0.0;
-    SmoothWeight = 0.0;
     BareWeight = 0.0;
     Complex mu = Complex(0.0, PI / 2.0 / _Beta);
     int spin_down = SpinIndex(DOWN, DOWN);
@@ -27,17 +24,22 @@ void G::InitialWithBare()
             BareWeight[spin_down][sub][coor][tau] = weight;
             BareWeight[spin_up][sub][coor][tau] = weight;
         }
-
-        BareWeight = 0.0;
-        //TODO: add bare G initialization
     }
 }
 
-void W::InitialWithBare()
+void G::StartWithBare()
 {
     DeltaTWeight = 0.0;
-    SmoothWeight = 0.0;
-    BareWeight = 0.0;
-    //TODO: add bare W initialization
+    SmoothWeight = BareWeight;
 }
+
+void W::_InitialBare()
+{
+    BareWeight = 1.0;
+}
+
+void W::StartWithBare()
+{
+    DeltaTWeight = BareWeight;
+    SmoothWeight = 0.0;
 }
