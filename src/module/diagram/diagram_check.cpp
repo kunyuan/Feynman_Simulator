@@ -14,8 +14,15 @@ using namespace std;
 using namespace diag;
 
 ///*************************   Diagram check    *************************/
-bool Diagram::CheckG()
+bool Diagram::CheckTopo()
 {
+    if(G.HowMany()!=2*Order)
+        ABORT("Number of G is wrong!");
+    if(W.HowMany()!=Order)
+        ABORT("Number of W is wrong!");
+    if(Ver.HowMany()!=2*Order)
+        ABORT("Number of Vertex is wrong!");
+    
     for (int i = 0; i < G.HowMany(); i++) {
         for (int dir = 0; i < 2; i++) {
             vertex v = G(i)->NeighVer(dir);
@@ -25,11 +32,7 @@ bool Diagram::CheckG()
                 ABORT("Neigh of G is incorrect!" + G(i)->PrettyString());
         }
     }
-    return true;
-}
-
-bool Diagram::CheckW()
-{
+    
     for (int i = 0; i < W.HowMany(); i++) {
         for (int dir = 0; i < 2; i++) {
             vertex v = W(i)->NeighVer(dir);
@@ -37,14 +40,54 @@ bool Diagram::CheckW()
                 ABORT("nVer not exists!" + v->PrettyString());
             if (W(i) != v->NeighW())
                 ABORT("Neigh of W is incorrect!" + W(i)->PrettyString());
+            if (v->Dir!=dir)
+                ABORT("Direction of Vertex is incorrect!" + v->PrettyString());
         }
     }
+    
     return true;
 }
 
-bool Diagram::CheckVer()
+bool Diagram::CheckStatus()
 {
-    //TODO: check more with vertex if you want!
+    int totalmeasure=0;
+    for( int i=0; i< G.HowMany(); i++)
+    {
+        if(G(i)->IsMeasure)
+            totalmeasure +=1;
+    }
+    if(totalmeasure!=(MeasureGLine?1:0))
+        ABORT("number of Measuring Gline is wrong!");
+    
+    totalmeasure = 0;
+    for( int i=0; i< W.HowMany(); i++)
+    {
+        if(W(i)->IsMeasure)
+            totalmeasure +=1;
+    }
+    if(totalmeasure!=(MeasureGLine?0:1))
+        ABORT("number of Measuring Wline is wrong!");
+    
+    return true;
+}
+
+bool Diagram::CheckK()
+{
+    return true;
+}
+
+bool Diagram::CheckSpin()
+{
+    return true;
+}
+
+bool Diagram::CheckSite()
+{
+    return true;
+}
+
+bool Diagram::CheckTau()
+{
     return true;
 }
 
@@ -84,11 +127,7 @@ bool Diagram::CheckWeight()
 bool Diagram::CheckDiagram()
 {
     //TODO: don't forget to check diagram weight
-    if (!CheckG())
-        return false;
-    if (!CheckW())
-        return false;
-    if (!CheckVer())
+    if (!CheckTopo())
         return false;
     if (!CheckWeight())
         return false;
