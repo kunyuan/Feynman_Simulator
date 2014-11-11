@@ -25,6 +25,7 @@ class Estimate {
     Estimate(const T &m, const T &e);
     T Mean;
     T Error;
+    T RelativeError();
     friend std::ostream &operator<<(std::ostream &, const Estimate &);
 };
 
@@ -80,5 +81,7 @@ class EstimatorBundle {
     void ClearStatistics();
     void SqueezeStatistics(real factor);
 };
+
+int TestEstimator();
 
 #endif /* defined(__Feynman_Simulator__Estimate__) */

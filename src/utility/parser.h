@@ -20,6 +20,12 @@
 #define GetParaArray(para, value, num) (para).get((#value), (value), (num));
 
 /**
+*  Parse configuration file with the format:
+*
+*  Value1          #key1
+*  Value2          #key2
+*  ......          #....
+*
 *  to use the set member function of the class, you have to overload ToString(T) method for your type T
 */
 class SimpleParser {

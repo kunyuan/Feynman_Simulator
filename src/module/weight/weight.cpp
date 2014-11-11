@@ -12,8 +12,9 @@
 using namespace std;
 using namespace para;
 
-weight::Weight::Weight()
+weight::Weight::Weight(bool IsAllSymmetric)
 {
+    _IsAllSymmetric = IsAllSymmetric;
     Sigma = nullptr;
     Polar = nullptr;
     G = nullptr;
@@ -106,6 +107,16 @@ void weight::Weight::Save(const string &FileName, flag _flag, string Mode)
     }
 }
 
+int weight::Weight::UpdateSigmaPolarWeight(int OrderAccepted, real ErrorThreshold)
+{
+    int SigmaOrder = Sigma->OrderAcceptable(OrderAccepted, ErrorThreshold);
+    int PolarOrder = Polar->OrderAcceptable(OrderAccepted, ErrorThreshold);
+    int NewOrderAccepted = (SigmaOrder < PolarOrder ? SigmaOrder : PolarOrder);
+    Sigma->UpdateWeight(NewOrderAccepted);
+    Polar->UpdateWeight(NewOrderAccepted);
+    return NewOrderAccepted;
+}
+
 void weight::Weight::SetTest(const Parameter &para)
 {
     _AllocateGW(para.Lat, para.Beta, para.Order);
@@ -120,7 +131,7 @@ void weight::Weight::_AllocateGW(const Lattice &Lat, real Beta, int order)
 {
     //make sure old Sigma/Polar/G/W are released before assigning new memory
     delete G;
-    G = new weight::G(Lat, Beta, order);
+    G = new weight::G(Lat, Beta, order, _IsAllSymmetric);
     delete W;
     W = new weight::W(Lat, Beta, order);
 }
@@ -128,7 +139,7 @@ void weight::Weight::_AllocateGW(const Lattice &Lat, real Beta, int order)
 void weight::Weight::_AllocateSigmaPolar(const Lattice &Lat, real Beta, int order)
 {
     delete Sigma;
-    Sigma = new weight::Sigma(Lat, Beta, order);
+    Sigma = new weight::Sigma(Lat, Beta, order, _IsAllSymmetric);
     delete Polar;
     Polar = new weight::Polar(Lat, Beta, order);
 }

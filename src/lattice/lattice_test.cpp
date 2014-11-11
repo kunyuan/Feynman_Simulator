@@ -32,6 +32,9 @@ int TestLattice()
 void Test_Lattice()
 {
     if (lattice.Dimension == 2) {
+        Vec<int> v0{1, 2};
+        sput_fail_unless(v0[0] == 1 && v0[1] == 2, "Vector:test initialization");
+
         Vec<int> v, v1, v2;
         v[0] = 2;
         v[1] = 1;
@@ -52,7 +55,7 @@ void Test_Lattice()
         s.Coordinate = v;
         s.Sublattice = 1;
 
-        sput_fail_unless(lattice.GetName(s) == NSublattice * (lattice.Size[0] * 7 + 5) + 1, "Site: name of site(B, 5, 7)");
+        sput_fail_unless(lattice.GetName(s) == NSublattice * (lattice.Size[1] * 5 + 7) + 1, "Site: name of site(B, 5, 7)");
 
         s1.Coordinate[0] = 3;
         s1.Coordinate[1] = 1;
@@ -66,7 +69,7 @@ void Test_Lattice()
 
         sput_fail_unless(lattice.GetSublat(dis, IN) == s1.Sublattice, "Distance: distance=site1-site2, sublattices");
         sput_fail_unless(lattice.GetSublat(dis, OUT) == s2.Sublattice, "Distance: distance=site1-site2, sublattices");
-        sput_fail_unless(dis.CoordiIndex == 2 * lattice.Size[0] + 1, "Distance: distance=site1-site2, Coordinates");
+        sput_fail_unless(dis.CoordiIndex == 1 * lattice.Size[1] + 2, "Distance: distance=site1-site2, Coordinates");
 
         sput_fail_unless(lattice.GetRealVec(s) == vec, "Lattice: real vector for Site");
         sput_fail_unless(lattice.GetRealVec(dis) == (lattice.GetRealVec(s2) - lattice.GetRealVec(s1)), "Lattice: real vector of distance");
