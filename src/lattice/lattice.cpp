@@ -9,7 +9,6 @@
 #include <math.h>
 #include <iostream>
 #include "../utility/convention.h"
-#include "../utility/cnpy.h"
 #include "../utility/abort.h"
 Lattice::Lattice()
 {
@@ -206,6 +205,11 @@ Vec<int> Lattice::GetVec(const class Distance &dis) const
     return Index2Vec(dis.CoordiIndex);
 }
 
+Vec<int> Lattice::GetVec(const class Site &site) const
+{
+    return site.Coordinate;
+}
+
 /**
  *  get the real vector for the distance between two sites
  *
@@ -225,14 +229,15 @@ Vec<real> Lattice::GetRealVec(const class Distance &dis) const
  */
 void Lattice::PlotLattice()
 {
+    ofstream os("lattice.py", ios::out);
     const unsigned int N = NSublattice * Vol;
-    //save it to file
-    const unsigned int shape[] = {N, (unsigned int)D};
-    real data[N * D];
+    os << "points=[" << endl;
     for (int i = 0; i < N; i++) {
-        Site s = GetSite(i);
-        for (int j = 0; j < D; j++)
-            data[i * D + j] = GetRealVec(s)[j];
+        auto site = GetSite(i);
+        os << "[" << i << "," << GetRealVec(site).PrettyString() << ","
+           << site.Coordinate.PrettyString() << "," << site.Sublattice
+           << "]," << endl;
     }
-    cnpy::npy_save("sq.npy", data, shape, 2, "w");
+    os << "]";
+    os.close();
 }

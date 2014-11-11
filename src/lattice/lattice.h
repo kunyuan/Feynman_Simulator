@@ -109,6 +109,7 @@ class Lattice {
     Distance Dist(const Site &, const Site &) const;
     int GetSublat(const Distance &, int direction) const;
     Vec<int> GetVec(const Distance &) const;
+    Vec<int> GetVec(const Site &) const;
 
     Vec<real> GetRealVec(const Site &) const;
     Vec<real> GetRealVec(const Distance &) const;

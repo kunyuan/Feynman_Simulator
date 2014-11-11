@@ -40,11 +40,18 @@ class G : public WeightNoMeasure {
     //Monte Carlo interface
     Complex Weight(const Site &, const Site &, real, real, spin, spin, bool);
     Complex Weight(int, const Site &, const Site &, real, real, spin, spin, bool);
-    void InitialWithBare();
+    void StartWithBare();
     //Dyson interface
     void FFT(fft::Dir, Mode);
+
+  protected:
+    void _InitialBare();
 };
 
+/**
+*  W is the interaction. An assumption is made here: translational and \emp{MIRROR} symmetry of the lattice (constructed by unit cells) are imposed on interaction.
+    The mirror symmetry is only required on the level of the whole lattice, not within a unit cell.
+*/
 class W : public WeightNoMeasure {
   public:
     W(const Lattice &, real Beta, int order);
@@ -52,9 +59,14 @@ class W : public WeightNoMeasure {
     //Monte Carlo interface
     Complex Weight(const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool);
     Complex Weight(int, const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool);
-    void InitialWithBare();
+    void StartWithBare();
     //Dyson interface
     void FFT(fft::Dir, Mode);
+    //DEBUG interface
+    void WriteBareToASCII();
+
+  protected:
+    void _InitialBare();
 };
 
 class Worm {
