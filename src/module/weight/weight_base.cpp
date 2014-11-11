@@ -15,11 +15,14 @@ using namespace Array;
 using namespace weight;
 
 WeightNoMeasure::WeightNoMeasure(const Lattice &lat, real beta,
-                                 int order, int SpinVol, string name)
+                                 int order, bool IsTauSymmetric_,
+                                 int SpinVol, string name)
     : _Lat(lat),
       _Beta(beta),
       _Order(order),
+      _IsTauSymmetric(IsTauSymmetric_),
       _Name(name)
+
 {
     _dBeta = beta / MAX_BIN;
     _dBetaInverse = 1.0 / _dBeta;
@@ -97,7 +100,7 @@ int WeightNoMeasure::TauToBin(real tau)
 
 int WeightNoMeasure::TauSymmetry(real t_in, real t_out)
 {
-    return t_out > t_in ? 1 : -1;
+    return (_IsTauSymmetric || t_out > t_in) ? 1 : -1;
 }
 
 int WeightNoMeasure::TauToBin(real t_in, real t_out)

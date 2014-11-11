@@ -29,13 +29,13 @@ void Test_CreateWorm()
 {
     para::ParaMC Para;
     Para.SetTest();
-    weight::Weight Weight;
+    weight::Weight Weight(true);
     Weight.SetTest(Para);
     diag::Diagram Diag;
     Diag.SetTest(Para.Lat, Para.RNG, Weight.G, Weight.W);
     Markov markov;
     markov.BuildNew(Para, Diag, Weight);
-    
+
     for (int i = 0; i < 10; i++) {
         markov.Hop(50);
         sput_fail_unless(markov.Diag->CheckDiagram(), "Weight check for all the random steps");

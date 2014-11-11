@@ -16,7 +16,7 @@ namespace weight {
 
 class WeightNeedMeasure : public WeightNoMeasure {
   public:
-    WeightNeedMeasure(const Lattice &, real Beta, int order,
+    WeightNeedMeasure(const Lattice &, real Beta, int order, bool IsTauSymmetric,
                       int Spine, std::string, real Norm);
 
     unsigned int *Shape();

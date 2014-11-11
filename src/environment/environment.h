@@ -35,7 +35,7 @@ class Environment {
 
 class EnvMonteCarlo : public Environment {
   public:
-    EnvMonteCarlo(int pid);
+    EnvMonteCarlo(int pid, bool IsAllTauSymmetric = false);
 
     //can be read from StateFile or InputFile
     para::ParaMC Para;
@@ -58,7 +58,7 @@ class EnvMonteCarlo : public Environment {
 
 class EnvDyson : public Environment {
   public:
-    EnvDyson(int pid);
+    EnvDyson(int pid, bool IsAllTauSymmetric = false);
 
     para::ParaDyson Para;
     weight::Weight Weight;

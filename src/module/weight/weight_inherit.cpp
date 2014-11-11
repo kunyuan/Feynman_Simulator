@@ -12,8 +12,9 @@ using namespace std;
 using namespace Array;
 using namespace weight;
 
-Sigma::Sigma(const Lattice &lat, real beta, int order)
-    : WeightNeedMeasure(lat, beta, order, SPIN2, "Sigma", Norm::Weight())
+Sigma::Sigma(const Lattice &lat, real beta, int order, bool IsTauSymmetric)
+    : WeightNeedMeasure(lat, beta, order,
+                        IsTauSymmetric, SPIN2, "Sigma", Norm::Weight())
 {
 }
 
@@ -49,7 +50,7 @@ void Sigma::Measure(const Site &rin, const Site &rout, real tin, real tout, spin
 /************************   Polarization   *********************************/
 //
 Polar::Polar(const Lattice &lat, real beta, int order)
-    : WeightNeedMeasure(lat, beta, order, SPIN4, "Polar", Norm::Weight())
+    : WeightNeedMeasure(lat, beta, order, false, SPIN4, "Polar", Norm::Weight())
 {
 }
 
@@ -76,8 +77,8 @@ void Polar::Measure(const Site &rin, const Site &rout, real tin, real tout, spin
 
 /***********************  G  **************************************/
 
-G::G(const Lattice &lat, real beta, int order)
-    : WeightNoMeasure(lat, beta, order, SPIN4, "G")
+G::G(const Lattice &lat, real beta, int order, bool IsTauSymmetric)
+    : WeightNoMeasure(lat, beta, order, IsTauSymmetric, SPIN4, "G")
 {
     BareWeight.Allocate(Shape());
     BareWeight = 0.0;
@@ -125,7 +126,7 @@ Complex G::Weight(int dir, const Site &r1, const Site &r2, real t1, real t2, spi
 /***********************  W  **************************************/
 
 W::W(const Lattice &lat, real beta, int order)
-    : WeightNoMeasure(lat, beta, order, SPIN4, "W")
+    : WeightNoMeasure(lat, beta, order, false, SPIN4, "W")
 {
     BareWeight.Allocate(Shape());
     BareWeight = 0.0;
