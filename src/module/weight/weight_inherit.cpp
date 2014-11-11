@@ -191,5 +191,5 @@ Complex W::Weight(int dir, const Site &r1, const Site &r2, real t1, real t2, spi
 
 void W::WriteBareToASCII()
 {
-    
+    _Lat.PlotLattice();
 }

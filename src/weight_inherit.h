@@ -49,7 +49,8 @@ class G : public WeightNoMeasure {
 };
 
 /**
-*  W is the interaction. An assumption is made here: 
+*  W is the interaction. An assumption is made here: translational and \emp{MIRROR} symmetry of the lattice (constructed by unit cells) are imposed on interaction.
+    The mirror symmetry is only required on the level of the whole lattice, not within a unit cell.
 */
 class W : public WeightNoMeasure {
   public:
