@@ -111,7 +111,7 @@ class Vec {
     string PrettyString();
 
     template <typename TT>
-    friend std::ostream &operator<<(std::ostream &os, Vec<TT> &);
+    friend std::ostream &operator<<(std::ostream &os, const Vec<TT> &);
     template <typename TT>
     friend std::istream &operator>>(std::istream &is, Vec<TT> &);
 

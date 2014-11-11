@@ -15,6 +15,7 @@ using namespace weight;
 
 void TestDiagramObject();
 void TestWeightMeasuring();
+void TestWeightW();
 void WeightMeasuring(real Beta, int Num);
 void Sample(Sigma &, int num, Site in, Site out,
             spin SpinIn, spin SpinOut, real Beta, int order, real *P);
@@ -26,6 +27,7 @@ int weight::TestWeight()
 
     //test diagram object weight, like sigma, G
     sput_run_test(TestWeightMeasuring);
+    sput_run_test(TestWeightW);
     sput_finish_testing();
     return sput_get_return_value();
 }
@@ -114,4 +116,12 @@ void Sample(Sigma &sigma, int num, Site in, Site out,
             }
         }
     }
+}
+
+void TestWeightW()
+{
+    Lattice lat(Vec<int>(8));
+    real Beta = 1.0;
+    weight::W W_(lat, Beta, 4);
+    W_.WriteBareToASCII();
 }
