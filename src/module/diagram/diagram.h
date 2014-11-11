@@ -74,8 +74,6 @@ class Diagram {
     bool CheckStatus();
     bool CheckK();
     bool CheckSpin();
-    bool CheckSite();
-    bool CheckTau();
     bool CheckWeight();
     
     bool CheckDiagram();

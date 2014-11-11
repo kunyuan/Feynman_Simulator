@@ -22,7 +22,7 @@ int main(int argc, const char *argv[])
     LOGGER_CONF("test.log", "test", Logger::file_on | Logger::screen_on, INFO, INFO);
     RunTest();
 
-    string InputFile = "infile/_in_DYSON_1";
+    string InputFile = "infile/_in_MC_2";
     para::Job Job(InputFile);
     LOGGER_CONF(ToString(Job.PID) + ".log", Job.Type, Logger::file_on | Logger::screen_on, INFO, INFO);
 
@@ -53,14 +53,14 @@ void MonteCarlo(const para::Job &Job)
 
         Scarecrow.Measure();
 
-        if (Para.Counter % 10) {
+        if (Para.Counter % 10==0) {
             //            Env.AddStatistics();
             Scarecrow.ReWeightEachOrder();
         }
-        if (Para.Counter % 100000) {
+        if (Para.Counter % 100000==0) {
             PaddyField.Save();
         }
-        if (Para.Counter % 20) {
+        if (Para.Counter % 20==0) {
             PaddyField.CheckStatus();
         }
     }
