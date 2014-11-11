@@ -72,7 +72,7 @@
 #else
 #define M_PI 3.1415926535897932385E0
 #endif
-
+using namespace fft;
 /*----------------------------------------------------------------------*/
 /* Truncated Stockham algorithm for multi-column vector,
        X(n1,n2) <- F_n1 X(n1,n2)
@@ -82,8 +82,9 @@
    to be internal (static), not used by application.  Note that the 
    terminology of column or row respect to algorithms in the Loan's 
    book is reversed, because we use row major convention of C.
+   If n2=1, which means the number in array are stored successively in memory, stockham can be 30% faster then cooley_tukey method
 */
-static void stockham(Complex x[], int n, int flag, int n2, Complex y[])
+void stockham(Complex x[], int n, int flag, int n2, Complex y[])
 {
     Complex *y_orig, *tmp;
     int i, j, k, k2, Ls, r, jrs;
@@ -188,27 +189,32 @@ void cooley_tukey(Complex x[], int n, int flag, int n2)
     }
 }
 
-void NormalizeArray(Complex array[], int num, int flag)
+void NormalizeArray(Complex array[], int num, real norm, int flag)
 {
     if (flag == 1)
         return;
     for (int i = 0; i < num; i++)
-        *(array + i) /= real(num);
+        *(array + i) /= norm;
+}
+
+int GetFlag(Dir direction)
+{
+    return (direction == fft::FORTH) ? 1 : -1;
 }
 
 /* 1D Fourier transform: 
    Simply call stockham with proper arguments.  
    Allocated working space of size n dynamically.
 */
-void fft(Complex x[], int n, int flag)
+void fft::fft(Complex x[], int n, Dir direction)
 {
     Complex *y;
 
-    assert(1 == flag || -1 == flag);
+    int flag = GetFlag(direction);
     y = (Complex *)malloc(n * sizeof(Complex));
     assert(NULL != y);
     stockham(x, n, flag, 1, y);
-    NormalizeArray(x, n, flag);
+    NormalizeArray(x, n, n, flag);
     free(y);
 }
 
@@ -222,12 +228,12 @@ void fft(Complex x[], int n, int flag)
    so we take a compromise of the two.
 */
 
-void fft2D(Complex x[], int n1, int n2, int flag)
+void fft::fft2D(Complex x[], int n1, int n2, Dir direction)
 {
     Complex *y;
     int i, n;
 
-    assert(1 == flag || -1 == flag);
+    int flag = GetFlag(direction);
     n = n1 * n2;
     y = (Complex *)malloc(n2 * sizeof(Complex));
     assert(NULL != y);
@@ -237,19 +243,19 @@ void fft2D(Complex x[], int n1, int n2, int flag)
     }
     free(y);
     cooley_tukey(x, n, flag, n2); /* FFT in x */
-    NormalizeArray(x, n, flag);
+    NormalizeArray(x, n, n, flag);
 }
 
 /**
 *  careful, fft3D will use an array of n2*n3 size in heap as a cache
 */
-void fft3D(Complex x[], int n1, int n2, int n3, int flag)
+void fft::fft3D(Complex x[], int n1, int n2, int n3, Dir direction)
 {
     static Complex *y = NULL;
     static int cn23 = 1;
     int i, n, n23;
 
-    assert(1 == flag || -1 == flag);
+    int flag = GetFlag(direction);
     n23 = n2 * n3;
     n = n1 * n23;
 
@@ -268,55 +274,35 @@ void fft3D(Complex x[], int n1, int n2, int n3, int flag)
         stockham(x + i, n23, flag, n3, y);
     }
     cooley_tukey(x, n, flag, n23); /* FFT in x */
-    NormalizeArray(x, n, flag);
+    NormalizeArray(x, n, n, flag);
     cn23 = n23;
 }
-/**
-*  careful, fft4D will use an array of n2*n3*n4 size in heap as a cache
-*/
-void fft4D(Complex x[], int n1, int n2, int n3, int n4, int flag)
+
+void fft::fftnD(Complex *x, int *size, int dim, Dir direction, bool *DoIt)
 {
-    static Complex *y = NULL;
-    static int cn234 = 1;
-    int i, n, n34, n234;
+    int i, d;
+    int TempSize = 1;
+    int ArraySize[dim];
+    int normalize = 1;
 
-    assert(1 == flag || -1 == flag);
+    int flag = GetFlag(direction);
 
-    n34 = n3 * n4;
-    n234 = n2 * n34;
-    n = n1 * n234;
+    //    n4
+    //    n34 = n3 * n4;
+    //    n234 = n2 * n34;
+    //    n1234 = n1 * n234;
 
-    if (cn234 != n234) {
-        if (y != NULL)
-            free(y);
-        y = (Complex *)malloc(n234 * sizeof(Complex));
+    ArraySize[dim] = 1;
+    for (d = dim - 1; d >= 0; d--) {
+        TempSize *= size[d];
+        ArraySize[d] = TempSize;
     }
-    assert(NULL != y);
-
-    for (i = 0; i < n; i += n4) { /* FFT in t */
-        stockham(x + i, n4, flag, 1, y);
+    for (d = dim - 1; d >= 0; d--) {
+        if (DoIt == nullptr || DoIt[d]) {
+            normalize *= size[d];
+            for (i = 0; i < ArraySize[0]; i += ArraySize[d])
+                cooley_tukey(x + i, ArraySize[d], flag, ArraySize[d + 1]);
+        }
     }
-    for (i = 0; i < n; i += n34) { /* FFT in z */
-        stockham(x + i, n34, flag, n4, y);
-    }
-    for (i = 0; i < n; i += n234) { /* FFT in y */
-        stockham(x + i, n234, flag, n34, y);
-    }
-    cooley_tukey(x, n, flag, n234); /* FFT in x */
-    NormalizeArray(x, n, flag);
-    cn234 = n234;
-}
-
-void fft(Complex x[], int *size, int dim, int flag)
-{
-    if (dim == 1)
-        fft(x, size[0], flag);
-    else if (dim == 2)
-        fft2D(x, size[0], size[1], flag);
-    else if (dim == 3)
-        fft3D(x, size[0], size[1], size[2], flag);
-    else if (dim == 4)
-        fft4D(x, size[0], size[1], size[2], size[3], flag);
-    else
-        assert(true);
+    NormalizeArray(x, ArraySize[0], normalize, flag);
 }

@@ -11,7 +11,7 @@
 
 #include "lattice/lattice.h"
 #include "status.h"
-#include "parser.h"
+#include "utility/parser.h"
 #include "utility/rng.h"
 #include <string>
 
@@ -63,6 +63,7 @@ class ParaMC : public Parameter {
 class ParaDyson : public Parameter {
   public:
     int OrderAccepted;
+    real ErrorThreshold;
     int SleepTime;
 
     bool BuildNew(const std::string &InputFile);

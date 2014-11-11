@@ -14,7 +14,7 @@
 #include "lattice/lattice.h"
 #include "module/parameter/parameter.h"
 #include "module/diagram/diagram.h"
-#include "module/observable/weight.h"
+#include "module/weight/weight.h"
 #include "module/markov/markov_monitor.h"
 #include "module/markov/markov.h"
 #include "module/dyson/dyson.h"
@@ -35,7 +35,7 @@ class Environment {
 
 class EnvMonteCarlo : public Environment {
   public:
-    EnvMonteCarlo(int pid);
+    EnvMonteCarlo(int pid, bool IsAllTauSymmetric = false);
 
     //can be read from StateFile or InputFile
     para::ParaMC Para;
@@ -47,9 +47,9 @@ class EnvMonteCarlo : public Environment {
     bool BuildNew(const std::string &InputFile, bool StartFromBare);
     bool Load();
     void Save(); //Save everything in EnvMonteCarlo
-    bool ReLoad();
     void DeleteSavedFiles();
     bool ReWeight();
+
     bool CheckStatus();
 
   private:
@@ -58,16 +58,17 @@ class EnvMonteCarlo : public Environment {
 
 class EnvDyson : public Environment {
   public:
-    EnvDyson(int pid);
+    EnvDyson(int pid, bool IsAllTauSymmetric = false);
 
     para::ParaDyson Para;
     weight::Weight Weight;
     dyson::Dyson Dyson;
 
     bool BuildNew(const std::string &InputFile, bool StartFromBare);
-    bool CanBeLoad();
     bool Load();
     void Save();
+    void UpdateWeight();
+    //Update the weight of Sigma and Polar according to Para.ErrorThreshold and Para.OrderAccepted
 
   private:
 };

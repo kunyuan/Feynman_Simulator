@@ -20,10 +20,6 @@ Complex::Complex(real re, real im)
     Im = im;
 }
 
-Complex::~Complex()
-{
-}
-
 Complex::Complex(const Complex &c)
 {
     Re = c.Re;
@@ -108,11 +104,6 @@ Complex &Complex::operator/=(const real &d)
     Re /= d;
     Im /= d;
     return (*this);
-}
-
-bool IsZero(const Complex &c)
-{
-    return (c.Re == 0.0) && (c.Im == 0.0);
 }
 
 // Prints out a complex with the form (a,b)
@@ -210,46 +201,6 @@ Complex operator/(const Complex &rhs, real lhs)
 }
 
 // Complex library
-
-real mod2(const Complex &c)
-{
-    return (c.Re * c.Re + c.Im * c.Im);
-}
-
-real mod(const Complex &c)
-{
-    return sqrt(mod2(c));
-}
-
-Complex phase(const Complex &c)
-{
-    return c / mod(c);
-}
-
-bool Equal(const Complex &c1, const Complex &c2, real eps)
-{
-    return (fabs(c1.Re - c2.Re) < eps && fabs(c1.Im - c2.Im) < eps);
-}
-
-bool Equal(const Complex &c1, real r, real i, real eps)
-{
-    return (fabs(c1.Re - r) < eps && fabs(c1.Im - i) < eps);
-}
-
-Complex exp(const Complex &c)
-{
-    return (exp(c.Re) * Complex(cos(c.Im), sin(c.Im)));
-}
-
-// result = sqrt(z), result.Re > 0
-Complex Csqrt(Complex z)
-{
-    Complex result;
-    result.Re = sqrt(abs(0.5 * (mod(z) + z.Re)));
-    result.Im = sqrt(abs(0.5 * (mod(z) - z.Re)));
-    return result;
-};
-
 string ToString(const Complex &c)
 {
     string s = ToString(c.Re);

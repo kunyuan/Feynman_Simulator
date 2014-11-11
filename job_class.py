@@ -115,6 +115,7 @@ class JobConsistLoop(Job):
         input_str = self.key_to_string("Type")
         input_str = input_str+Job.to_string(self, pid)
         input_str += self.key_to_string("OrderAccepted")
+        input_str += self.key_to_string("ErrorThreshold")
         input_str += self.key_to_string("SleepTime")
         return input_str
 

@@ -9,9 +9,7 @@
 #ifndef Feynman_Simulator_convention_h
 #define Feynman_Simulator_convention_h
 
-#ifndef real
-#define real double
-#endif
+typedef double real;
 //#define NDEBUG
 //turn off all assert
 
@@ -19,7 +17,7 @@ const bool DEBUGMODE = true;
 //#define NDEBUG
 //define NDEBUG will turn off debug checking, including the boundary check in array.h
 
-const real Pi = 3.14159265359;
+const real PI = 3.1415926535897932384626433832795;
 
 enum spin { DOWN,
             UP };
@@ -37,6 +35,7 @@ const int OUT = 1;
 #define INVERSE(x) (1 - x)
 
 //lattice information
+const int MAX_DIM = 4;
 const int D = 2;
 const int NSublattice = 2;
 const int NSublattice2 = NSublattice * NSublattice;
