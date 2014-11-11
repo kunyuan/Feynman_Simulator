@@ -16,34 +16,44 @@ namespace weight {
 class Sigma : public WeightNeedMeasure {
   public:
     Sigma(const Lattice &, real Beta, int order);
+    //Monte Carlo interface
     Complex Weight(const Site &, const Site &, real, real, spin, spin);
     Complex WeightOfDelta(spin, spin);
     void Measure(const Site &, const Site &, real, real, spin, spin, int Order, const Complex &);
+    //Dyson interface
     void FFT(fft::Dir, Mode);
 };
 
 class Polar : public WeightNeedMeasure {
   public:
     Polar(const Lattice &, real Beta, int order);
+    //Monte Carlo interface
     Complex Weight(const Site &, const Site &, real, real, spin *, spin *);
     void Measure(const Site &, const Site &, real, real, spin *, spin *, int Order, const Complex &);
+    //Dyson interface
     void FFT(fft::Dir, Mode);
 };
 class G : public WeightNoMeasure {
   public:
     G(const Lattice &, real Beta, int order);
+    Array::array4<Complex> BareWeight;
+    //Monte Carlo interface
     Complex Weight(const Site &, const Site &, real, real, spin, spin, bool);
     Complex Weight(int, const Site &, const Site &, real, real, spin, spin, bool);
     void InitialWithBare();
+    //Dyson interface
     void FFT(fft::Dir, Mode);
 };
 
 class W : public WeightNoMeasure {
   public:
     W(const Lattice &, real Beta, int order);
+    Array::array3<Complex> BareWeight;
+    //Monte Carlo interface
     Complex Weight(const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool);
     Complex Weight(int, const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool);
     void InitialWithBare();
+    //Dyson interface
     void FFT(fft::Dir, Mode);
 };
 

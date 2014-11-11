@@ -39,10 +39,6 @@ WeightNoMeasure::WeightNoMeasure(const Lattice &lat, real beta,
     DeltaTWeight = 0.0;
     //use _Shape[SP] to _Shape[Vol] to construct array3
 
-    BareWeight.Allocate(Shape());
-    BareWeight = 0.0;
-    //use _Shape[SP] to _Shape[Vol] to construct array3
-
     for (int i = 0; i < lat.Dimension; i++)
         _SpaceTimeShape[i] = lat.Size[i];
     _SpaceTimeShape[lat.Dimension] = MAX_BIN;
@@ -97,6 +93,11 @@ int WeightNoMeasure::TauToBin(real tau)
                         << 0 << "," << MAX_BIN << "]");
     }
     return bin;
+}
+
+int WeightNoMeasure::TauSymmetry(real t_in, real t_out)
+{
+    return t_out > t_in ? 1 : -1;
 }
 
 int WeightNoMeasure::TauToBin(real t_in, real t_out)
