@@ -19,7 +19,12 @@ Sigma::Sigma(const Lattice &lat, real beta, int order)
 
 Complex Sigma::Weight(const Site &rin, const Site &rout, real tin, real tout, spin SpinIn, spin SpinOut)
 {
-    return SmoothWeight[SpinIndex(SpinIn, SpinOut)][_Lat.Dist(rin, rout).SublatIndex][_Lat.Dist(rin, rout).CoordiIndex][TauToBin(tout - tin)];
+    auto dist = _Lat.Dist(rin, rout);
+    return TauSymmetry(tin, tout) *
+           SmoothWeight[SpinIndex(SpinIn, SpinOut)]
+                       [dist.SublatIndex]
+                       [dist.CoordiIndex]
+                       [TauToBin(tin, tout)];
 }
 
 Complex Sigma::WeightOfDelta(spin SpinIn, spin SpinOut)
@@ -35,9 +40,10 @@ void Sigma::Measure(const Site &rin, const Site &rout, real tin, real tout, spin
     int spin = SpinIndex(SpinIn, SpinOut);
     auto dist = _Lat.Dist(rin, rout);
     int tau = TauToBin(tin, tout);
-    _WeightAccu[order - 1][spin][dist.SublatIndex][dist.CoordiIndex][tau] += weight;
+    _WeightAccu[order - 1][spin][dist.SublatIndex]
+               [dist.CoordiIndex][tau] += weight * TauSymmetry(tin, tout);
     if (spin == 0 && dist.SublatIndex == 0 && dist.CoordiIndex == 0 && tau == 0)
-        _WeightErrorEstimator[order - 1].Measure(weight);
+        _WeightErrorEstimator[order - 1].Measure(weight * TauSymmetry(tin, tout));
 }
 
 /************************   Polarization   *********************************/
@@ -49,7 +55,11 @@ Polar::Polar(const Lattice &lat, real beta, int order)
 
 Complex Polar::Weight(const Site &rin, const Site &rout, real tin, real tout, spin *SpinIn, spin *SpinOut)
 {
-    return SmoothWeight[SpinIndex(SpinIn, SpinOut)][_Lat.Dist(rin, rout).SublatIndex][_Lat.Dist(rin, rout).CoordiIndex][TauToBin(tout - tin)];
+    auto dist = _Lat.Dist(rin, rout);
+    return SmoothWeight[SpinIndex(SpinIn, SpinOut)]
+                       [dist.SublatIndex]
+                       [dist.CoordiIndex]
+                       [TauToBin(tout - tin)];
 }
 
 void Polar::Measure(const Site &rin, const Site &rout, real tin, real tout, spin *SpinIn, spin *SpinOut, int order, const Complex &weight)
@@ -69,6 +79,9 @@ void Polar::Measure(const Site &rin, const Site &rout, real tin, real tout, spin
 G::G(const Lattice &lat, real beta, int order)
     : WeightNoMeasure(lat, beta, order, SPIN4, "G")
 {
+    BareWeight.Allocate(Shape());
+    BareWeight = 0.0;
+    //use _Shape[SP] to _Shape[TAU] to construct array3
 }
 
 Complex G::Weight(const Site &rin, const Site &rout, real tin, real tout, spin SpinIn, spin SpinOut, bool IsMeasure)
@@ -78,7 +91,8 @@ Complex G::Weight(const Site &rin, const Site &rout, real tin, real tout, spin S
         //TODO: define the measuring weight for G
         return Complex(1.0, 0.0);
     else
-        return SmoothWeight[SpinIndex(SpinIn, SpinOut)]
+        return TauSymmetry(tin, tout) *
+               SmoothWeight[SpinIndex(SpinIn, SpinOut)]
                            [dist.SublatIndex]
                            [dist.CoordiIndex]
                            [TauToBin(tin, tout)];
@@ -92,23 +106,20 @@ Complex G::Weight(int dir, const Site &r1, const Site &r2, real t1, real t2, spi
 
     else if (dir == IN) {
         auto dist = _Lat.Dist(r1, r2);
-        return SmoothWeight[SpinIndex(Spin1, Spin2)]
+        return TauSymmetry(t1, t2) *
+               SmoothWeight[SpinIndex(Spin1, Spin2)]
                            [dist.SublatIndex]
                            [dist.CoordiIndex]
                            [TauToBin(t1, t2)];
     }
     else {
         auto dist = _Lat.Dist(r2, r1);
-        return SmoothWeight[SpinIndex(Spin2, Spin1)]
+        return TauSymmetry(t2, t1) *
+               SmoothWeight[SpinIndex(Spin2, Spin1)]
                            [dist.SublatIndex]
                            [dist.CoordiIndex]
                            [TauToBin(t2, t1)];
     }
-}
-
-void G::InitialWithBare()
-{
-    //TODO: add bare G initialization
 }
 
 /***********************  W  **************************************/
@@ -116,6 +127,9 @@ void G::InitialWithBare()
 W::W(const Lattice &lat, real beta, int order)
     : WeightNoMeasure(lat, beta, order, SPIN4, "W")
 {
+    BareWeight.Allocate(Shape());
+    BareWeight = 0.0;
+    //use _Shape[SP] to _Shape[VOL] to construct array3
 }
 
 Complex W::Weight(const Site &rin, const Site &rout, real tin, real tout, spin *SpinIn, spin *SpinOut, bool IsWorm, bool IsMeasure, bool IsDelta)
@@ -172,11 +186,4 @@ Complex W::Weight(int dir, const Site &r1, const Site &r2, real t1, real t2, spi
         return SmoothWeight[SpinIndex(UP, UP)][subindex][coordindex][tau];
     else
         return SmoothWeight[spinindex][subindex][coordindex][tau];
-}
-
-void W::InitialWithBare()
-{
-    DeltaTWeight = 1.0;
-    SmoothWeight = 0.0;
-    //TODO: add bare W initialization
 }

@@ -30,11 +30,10 @@ class Site {
         : Sublattice(sub), Coordinate(vec)
     {
     }
-
 };
 
-bool operator==(const Site& v1, const Site &v2);
-bool operator!=(const Site& v1, const Site &v2);
+bool operator==(const Site &v1, const Site &v2);
+bool operator!=(const Site &v1, const Site &v2);
 
 /**
  *  class Distance defines Site1-Site2 using the vector: Dr and sublattice of Site1 and Site2: Sublattice[0] and Sublattice[1].
@@ -99,6 +98,8 @@ class Lattice {
 
     int Sublat2Index(int, int) const;
     int Index2Sublat(int, int direction) const;
+    //return true if the Index represent a pair between the same sublattice
+    bool IsLocal(int Index);
 
     void Reset(const Vec<int> &size);
 

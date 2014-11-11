@@ -44,10 +44,6 @@ class WeightNoMeasure {
     //No Time variable for this guy
     Array::array3<Complex> DeltaTWeight;
 
-    //No Time variable for this guy as well
-    //But you can not merge _BareWeight with _DeltaTWeight
-    //You will have to do all kinds of manipulation(like fft) on _BareWeight
-    Array::array3<Complex> BareWeight;
 
   protected:
     WeightNoMeasure(const Lattice &, real Beta, int Order, int SpinVol, std::string);
@@ -66,6 +62,7 @@ class WeightNoMeasure {
 
     int SpinIndex(spin SpinIn, spin SpinOut);
     int SpinIndex(spin *TwoSpinIn, spin *TwoSpinOut);
+    int TauSymmetry(real t_in, real t_out);
     int TauToBin(real tau);
     int TauToBin(real t_in, real t_out);
     real BinToTau(int Bin);

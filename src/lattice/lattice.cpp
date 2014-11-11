@@ -75,7 +75,7 @@ void Lattice::Initialize()
     //    SublatticeVec[1][1]=0.5;
 }
 
-bool operator==(const Site& v1, const Site &v2)
+bool operator==(const Site &v1, const Site &v2)
 {
     if (v1.Sublattice != v2.Sublattice)
         return false;
@@ -84,9 +84,9 @@ bool operator==(const Site& v1, const Site &v2)
     return true;
 }
 
-bool operator!=(const Site& v1, const Site &v2)
+bool operator!=(const Site &v1, const Site &v2)
 {
-    return !(v1==v2);
+    return !(v1 == v2);
 }
 
 /**
@@ -118,7 +118,7 @@ int Lattice::Vec2Index(const Vec<int> &vec) const
 Vec<int> Lattice::Index2Vec(int index) const
 {
     Vec<int> v(0);
-    for (int i = D-1; i > 0; i--) {
+    for (int i = D - 1; i > 0; i--) {
         v[i] = index % Size[i];
         index = index / Size[i];
     }
@@ -144,6 +144,12 @@ int Lattice::Index2Sublat(int index, int dir) const
         return index % NSublattice;
     else
         return index / NSublattice;
+}
+
+bool Lattice::IsLocal(int Index)
+{
+    return Index2Sublat(Index, IN) ==
+           Index2Sublat(Index, OUT);
 }
 
 /**
