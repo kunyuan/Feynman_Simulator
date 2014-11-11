@@ -41,8 +41,8 @@ bool weight::Weight::BuildNew(flag _flag, const Parameter &para)
 {
     if (_flag & weight::GW) {
         _AllocateGW(para.Lat, para.Beta, para.Order);
-        G->InitialWithBare();
-        W->InitialWithBare();
+        G->StartWithBare();
+        W->StartWithBare();
     }
     if (_flag & weight::SigmaPolar) {
         _AllocateSigmaPolar(para.Lat, para.Beta, para.Order);

@@ -13,7 +13,7 @@
 using namespace std;
 
 template <typename T>
-ostream &operator<<(ostream &os, Vec<T> &v)
+ostream &operator<<(ostream &os, const Vec<T> &v)
 {
     for (int i = 0; i < D - 1; i++)
         os << v[i] << SEP;
@@ -21,8 +21,8 @@ ostream &operator<<(ostream &os, Vec<T> &v)
     return os;
 }
 
-template ostream &operator<<(ostream &, Vec<int> &);
-template ostream &operator<<(ostream &, Vec<real> &);
+template ostream &operator<<(ostream &, const Vec<int> &);
+template ostream &operator<<(ostream &, const Vec<real> &);
 
 template <typename T>
 istream &operator>>(istream &is, Vec<T> &v)
