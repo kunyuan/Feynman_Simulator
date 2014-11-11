@@ -92,9 +92,9 @@ void Markov::Hop(int sweep)
         else if (x < SumofProbofCall[11])
             ChangeMeasureFromWToG();
         else if (x < SumofProbofCall[12])
-            ChangeDeltaToNotDelta();
+            ChangeDeltaToContinuous();
         else if (x < SumofProbofCall[13])
-            ChangeNotDeltaToDelta();
+            ChangeContinuousToDelta();
     }
 }
 
@@ -152,8 +152,8 @@ void Markov::DeleteWorm()
 {
     if (!Worm->Exist)
         return;
-    vertex Ira = Worm->Ira;
-    vertex Masha = Worm->Masha;
+    vertex &Ira = Worm->Ira;
+    vertex &Masha = Worm->Masha;
     
     wLine w = Ira->NeighW();
     if (!(w == Masha->NeighW()))
@@ -190,12 +190,11 @@ void Markov::MoveWormOnG()
     if (!Worm->Exist)
         return;
     
-    vertex Ira = Worm->Ira;
-    vertex Masha = Worm->Masha;
+    vertex &Ira = Worm->Ira;
+    vertex &Masha = Worm->Masha;
     
-    vertex v1 = Ira;
     int dir = RandomPickDir();
-    gLine g = v1->NeighG(dir);
+    gLine g = Ira->NeighG(dir);
     vertex v2 = g->NeighVer(dir);
 
     if (v2 == Ira || v2 == Masha || CanNotMoveWorm(Worm->dSpin, g->Spin(), dir))
@@ -204,18 +203,18 @@ void Markov::MoveWormOnG()
     //TODO: Hash check for G(knew)
     //    if(!IsKValidG(k)) return;
 
-    wLine w1 = v1->NeighW();
-    vertex vW1 = w1->NeighVer(INVERSE(v1->Dir));
+    wLine w1 = Ira->NeighW();
+    vertex vW1 = w1->NeighVer(INVERSE(Ira->Dir));
     bool isWormW1;
     if (vW1 == v2)
         isWormW1 = true;
     else
         isWormW1 = Diag->IsWorm(vW1);
 
-    spin spinV1[2] = {v1->Spin(0), v1->Spin(1)};
+    spin spinV1[2] = {Ira->Spin(0), Ira->Spin(1)};
     spinV1[dir] = FLIP(spinV1[dir]);
 
-    Complex w1Weight = W->Weight(v1->Dir, v1->R, vW1->R, v1->Tau, vW1->Tau,
+    Complex w1Weight = W->Weight(Ira->Dir, Ira->R, vW1->R, Ira->Tau, vW1->Tau,
                                  spinV1, vW1->Spin(), isWormW1, w1->IsMeasure, w1->IsDelta);
 
     wLine w2 = v2->NeighW();
@@ -227,7 +226,7 @@ void Markov::MoveWormOnG()
     Complex w2Weight = W->Weight(v2->Dir, v2->R, vW2->R, v2->Tau, vW2->Tau,
                                  spinV2, vW2->Spin(), true, w2->IsMeasure, w2->IsDelta);
 
-    Complex gWeight = G->Weight(INVERSE(dir), v1->R, v2->R, v1->Tau, v2->Tau,
+    Complex gWeight = G->Weight(INVERSE(dir), Ira->R, v2->R, Ira->Tau, v2->Tau,
                                 spinV1[dir], spinV2[INVERSE(dir)], g->IsMeasure);
 
     Complex weightRatio = w1Weight * w2Weight * gWeight / (g->Weight * w1->Weight * w2->Weight);
@@ -251,7 +250,7 @@ void Markov::MoveWormOnG()
         w2->Weight = w2Weight;
         w2->IsWorm = true;
 
-        v1->SetSpin(spinV1);
+        Ira->SetSpin(spinV1);
         v2->SetSpin(spinV2);
 
         Ira = v2;
@@ -267,18 +266,17 @@ void Markov::MoveWormOnW()
     if (!Worm->Exist)
         return;
     
-    vertex Ira = Worm->Ira;
-    vertex Masha = Worm->Masha;
+    vertex &Ira = Worm->Ira;
+    vertex &Masha = Worm->Masha;
     
-    vertex v1 = Ira;
-    wLine w = v1->NeighW();
-    vertex v2 = w->NeighVer(INVERSE(v1->Dir));
+    wLine w = Ira->NeighW();
+    vertex v2 = w->NeighVer(INVERSE(Ira->Dir));
     if (v2 == Ira || v2 == Masha)
         return;
-    Momentum k = w->K + SIGN(v1->Dir) * Worm->K;
+    Momentum k = w->K + SIGN(Ira->Dir) * Worm->K;
     //TODO: Check Hash for k
 
-    Complex wWeight = W->Weight(v1->Dir, v1->R, v2->R, v1->Tau, v2->Tau, v1->Spin(),
+    Complex wWeight = W->Weight(Ira->Dir, Ira->R, v2->R, Ira->Tau, v2->Tau, Ira->Spin(),
                                 v2->Spin(), w->IsWorm, w->IsMeasure, w->IsDelta);
 
     Complex weightRatio = wWeight / w->Weight;
@@ -351,6 +349,11 @@ void Markov::Reconnect()
     }
 }
 
+/**
+ *  add interaction
+ *  I---C  ===>  I---A---C
+ *  M---D  ===>  M---B---D
+ */
 void Markov::AddInteraction()
 {
     if(!Worm->Exist)
@@ -447,6 +450,11 @@ void Markov::AddInteraction()
     }
 }
 
+/**
+ *  delete interaction
+ *  I---A---C  ===>  I---C
+ *  M---B---D  ===>  M---D
+ */
 void Markov::DeleteInteraction()
 {
     if(!Worm->Exist)
@@ -512,6 +520,9 @@ void Markov::DeleteInteraction()
     }
 }
 
+/**
+ *  change Tau in a vertex
+ */
 void Markov::ChangeTau()
 {
     vertex ver = Diag->RandomPickVer();
@@ -558,6 +569,9 @@ void Markov::ChangeTau()
     }
 }
 
+/**
+ *  change R in a vertex
+ */
 void Markov::ChangeR()
 {
     vertex ver = Diag->RandomPickVer();
@@ -597,12 +611,18 @@ void Markov::ChangeR()
 }
 
 
+/**
+ *  change all R in a fermi loop
+ */
 void Markov::ChangeRLoop()
 {
     
 }
 
 
+/**
+ *  change measuring line from G to W
+ */
 void Markov::ChangeMeasureFromGToW()
 {
     if(!Diag->MeasureGLine) return;
@@ -642,6 +662,9 @@ void Markov::ChangeMeasureFromGToW()
     }
 }
 
+/**
+ *  change measuring line from W to G
+ */
 void Markov::ChangeMeasureFromWToG()
 {
     if(Diag->MeasureGLine) return;
@@ -681,7 +704,10 @@ void Markov::ChangeMeasureFromWToG()
 }
 
 
-void Markov::ChangeDeltaToNotDelta()
+/**
+ *  change a Wline from Delta to continuous
+ */
+void Markov::ChangeDeltaToContinuous()
 {
     wLine w = Diag->RandomPickW();
     vertex vin = w->NeighVer(IN), vout = w->NeighVer(OUT);
@@ -721,7 +747,10 @@ void Markov::ChangeDeltaToNotDelta()
 }
 
 
-void Markov::ChangeNotDeltaToDelta()
+/**
+ *  Change a Wline from continuous to Delta
+ */
+void Markov::ChangeContinuousToDelta()
 {
     wLine w = Diag->RandomPickW();
     if(w->IsDelta||w->IsMeasure) return;
@@ -763,7 +792,7 @@ void Markov::ChangeNotDeltaToDelta()
 
 Momentum Markov::RandomPickK()
 {
-    return (Momentum)(RNG->irn(-MAX_K, MAX_K - 1));
+    return (Momentum)(RNG->irn(-MAX_K + 1, MAX_K - 1));
 }
 
 int Markov::RandomPickDeltaSpin()

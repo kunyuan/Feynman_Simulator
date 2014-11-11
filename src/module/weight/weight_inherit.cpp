@@ -151,7 +151,7 @@ Complex W::Weight(const Site &rin, const Site &rout, real tin, real tout, spin *
         return SmoothWeight[SpinIndex(UP, UP)]
                            [distance.SublatIndex]
                            [distance.CoordiIndex]
-                           [TauToBin(tout - tin)];
+                           [TauToBin(tin, tout)];
     else
         return SmoothWeight[SpinIndex(SpinIn, SpinOut)]
                            [distance.SublatIndex]
@@ -176,12 +176,16 @@ Complex W::Weight(int dir, const Site &r1, const Site &r2, real t1, real t2, spi
         coordindex = dist.CoordiIndex;
         tau = TauToBin(t2, t1);
     }
+    
     if (IsMeasure)
         //TODO: define the measuring weight of W
         return Complex(1.0, 0.0);
+    
     if (IsDelta)
         //TODO: define the delta function here! IsWorm==true and IsWorm==false
-        return Complex(1.0, 0.0);
+        return DeltaTWeight[spinindex]
+                           [subindex]
+                           [coordindex];
     else if (IsWorm)
         //define your fake function here
         return SmoothWeight[SpinIndex(UP, UP)][subindex][coordindex][tau];

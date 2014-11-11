@@ -96,7 +96,7 @@ string WLine::PrettyString()
     os << "{V " << nVer[IN]->Name << "| " << ToString(Spin(IN, IN)) << "," << ToString(Spin(IN, OUT)) << "}~~~";
     os << "<W " << Name << ", K:" << K << ",Weight:" << Weight << ">";
     os << "~~~"
-       << "{" << ToString(Spin(OUT, IN)) << "," << ToString(Spin(OUT, OUT)) << "|W " << nVer[OUT]->Name << "}";
+       << "{" << ToString(Spin(OUT, IN)) << "," << ToString(Spin(OUT, OUT)) << "|V " << nVer[OUT]->Name << "}";
     return os.str();
 }
 

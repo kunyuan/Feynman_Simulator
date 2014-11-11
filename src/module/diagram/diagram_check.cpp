@@ -54,7 +54,11 @@ bool Diagram::CheckStatus()
     for( int i=0; i< G.HowMany(); i++)
     {
         if(G(i)->IsMeasure)
+        {
             totalmeasure +=1;
+            if(G(i)!=GMeasure)
+                ABORT("GMeasure error!"+G(i)->PrettyString());
+        }
     }
     if(totalmeasure!=(MeasureGLine?1:0))
         ABORT("number of Measuring Gline is wrong!");
@@ -64,6 +68,14 @@ bool Diagram::CheckStatus()
     {
         if(W(i)->IsMeasure)
             totalmeasure +=1;
+        if(W(i)->IsWorm && Worm.Ira->NeighW()!=W(i) && Worm.Masha->NeighW()!=W(i))
+            ABORT("W IsWorm status error! no worm!"+W(i)->PrettyString());
+        if(Worm.Exist)
+            if((!W(i)->IsWorm) && (Worm.Ira->NeighW()==W(i) || Worm.Masha->NeighW()==W(i)))
+                ABORT("W IsWorm status error! has worm!"+W(i)->PrettyString());
+        if(W(i)->IsDelta)
+            if(W(i)->NeighVer(IN)->Tau != W(i)->NeighVer(OUT)->Tau)
+                ABORT("W is delta function, tau error!"+W(i)->PrettyString());
     }
     if(totalmeasure!=(MeasureGLine?0:1))
         ABORT("number of Measuring Wline is wrong!");
@@ -73,21 +85,33 @@ bool Diagram::CheckStatus()
 
 bool Diagram::CheckK()
 {
+    Momentum totalk;
+    for( int i=0; i<Ver.HowMany(); i++)
+    {
+        totalk = Ver(i)->NeighG(IN)->K-Ver(i)->NeighG(OUT)->K;
+        if(Ver(i)->Dir==IN)
+            totalk -=Ver(i)->NeighW()->K;
+        else
+            totalk +=Ver(i)->NeighW()->K;
+        if(Worm.Exist && Ver(i)==Worm.Ira)
+            totalk -= Worm.K;
+        else if(Worm.Exist && Ver(i)==Worm.Masha)
+            totalk += Worm.K;
+        if(totalk!=0)
+            ABORT("K is not conserved!"+Ver(i)->PrettyString());
+    }
     return true;
 }
 
 bool Diagram::CheckSpin()
 {
-    return true;
-}
-
-bool Diagram::CheckSite()
-{
-    return true;
-}
-
-bool Diagram::CheckTau()
-{
+    
+    for(int i=0; i<G.HowMany();i++)
+    {
+        if(G(i)->NeighVer(IN)->Spin(OUT)!= G(i)->NeighVer(OUT)->Spin(IN))
+            ABORT("The spin on Gline is not the same"+G(i)->PrettyString());
+    }
+    //TODO: check Spin on W only when spin is conserved in W
     return true;
 }
 
@@ -129,8 +153,15 @@ bool Diagram::CheckWeight()
 
 bool Diagram::CheckDiagram()
 {
-    //TODO: don't forget to check diagram weight
+    if(!DEBUGMODE) return true;
+    
     if (!CheckTopo())
+        return false;
+    if (!CheckStatus())
+        return false;
+    if (!CheckK())
+        return false;
+    if (!CheckSpin())
         return false;
     if (!CheckWeight())
         return false;
