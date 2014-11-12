@@ -63,8 +63,8 @@ class Markov {
     void Reconnect();
     void AddInteraction();
     void DeleteInteraction();
-    void ChangeTau();
-    void ChangeR();
+    void ChangeTauOnVertex();
+    void ChangeROnVertex();
     void ChangeRLoop();
     void ChangeMeasureFromGToW();
     void ChangeMeasureFromWToG();

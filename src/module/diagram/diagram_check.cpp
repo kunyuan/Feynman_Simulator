@@ -148,6 +148,7 @@ bool Diagram::CheckWeight()
 
     if (!Equal(DiagWeight, Weight))
         return false;
+    
     return true;
 }
 
