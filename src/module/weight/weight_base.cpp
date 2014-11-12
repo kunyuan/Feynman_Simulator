@@ -117,7 +117,7 @@ real WeightNoMeasure::BinToTau(int Bin)
 void WeightNoMeasure::SetTest()
 {
     for (unsigned int i = 0; i < SmoothWeight.Size(); i++) {
-        SmoothWeight(i) = Complex(1.0, 0.0);
+        SmoothWeight(i) = Complex(cos(real(i)), sin(real(i)));
     }
 }
 
