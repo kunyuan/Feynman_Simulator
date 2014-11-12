@@ -123,6 +123,15 @@ Complex G::Weight(int dir, const Site &r1, const Site &r2, real t1, real t2, spi
     }
 }
 
+void G::SetTest()
+{
+    for (unsigned int i = 0; i < SmoothWeight.Size(); i++) {
+        SmoothWeight(i) = Complex(1.0, 0.0);
+    }
+    DeltaTWeight=0.0;
+    BareWeight=0.0;
+}
+
 /***********************  W  **************************************/
 
 W::W(const Lattice &lat, real beta, int order)
@@ -159,6 +168,15 @@ Complex W::Weight(const Site &rin, const Site &rout, real tin, real tout, spin *
                            [TauToBin(tin, tout)];
 }
 
+void W::SetTest()
+{
+    for (unsigned int i = 0; i < SmoothWeight.Size(); i++) {
+        SmoothWeight(i) = Complex(1.0, 0.0);
+    }
+    DeltaTWeight=0.0;
+    BareWeight=0.0;
+}
+
 Complex W::Weight(int dir, const Site &r1, const Site &r2, real t1, real t2, spin *Spin1, spin *Spin2, bool IsWorm, bool IsMeasure, bool IsDelta)
 {
     int spinindex, subindex, coordindex, tau;
@@ -176,11 +194,11 @@ Complex W::Weight(int dir, const Site &r1, const Site &r2, real t1, real t2, spi
         coordindex = dist.CoordiIndex;
         tau = TauToBin(t2, t1);
     }
-    
+
     if (IsMeasure)
         //TODO: define the measuring weight of W
         return Complex(1.0, 0.0);
-    
+
     if (IsDelta)
         //TODO: define the delta function here! IsWorm==true and IsWorm==false
         return DeltaTWeight[spinindex]
@@ -196,4 +214,24 @@ Complex W::Weight(int dir, const Site &r1, const Site &r2, real t1, real t2, spi
 void W::WriteBareToASCII()
 {
     _Lat.PlotLattice();
+    Vec<int> offset;
+    for (int i = 0; i < D; i++)
+        offset[i] = _Lat.Size[i] / 2 - 1;
+
+    ofstream os("interaction.py", ios::out);
+    int spin_index = SpinIndex(UP, UP);
+    os << "line=[" << endl;
+    for (int sub = 0; sub < _Shape[SUB]; sub++)
+        for (int coord = 0; coord < _Shape[VOL]; coord++) {
+            real bare_weight = mod(BareWeight[spin_index][sub][coord]);
+            if (!Zero(bare_weight)) {
+                Distance dis(sub, coord);
+                Site start = _Lat.GetSite(dis, IN);
+                Site end = _Lat.GetSite(dis, OUT);
+                os << "[" << _Lat.GetRealVec(start, offset).PrettyString() << ","
+                   << _Lat.GetRealVec(end, offset).PrettyString() << ","
+                   << start.Sublattice << "]," << endl;
+            }
+        }
+    os << "]" << endl;
 }

@@ -23,10 +23,9 @@ int iabs(int x)
 }
 // more functions ...
 
-//   if ( abs(x)> eps) return x; else return 0.0;
-real Zero(real x, real eps)
+bool Zero(real x, real eps)
 {
-    return ((abs(x) > eps) ? x : 0.0);
+    return (fabs(x) < eps);
 }
 
 // float equal

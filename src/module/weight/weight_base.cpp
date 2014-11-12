@@ -114,13 +114,6 @@ real WeightNoMeasure::BinToTau(int Bin)
     return Bin * _dBeta + _Beta / 2;
 }
 
-void WeightNoMeasure::SetTest()
-{
-    for (unsigned int i = 0; i < SmoothWeight.Size(); i++) {
-        SmoothWeight(i) = Complex(1.0, 0.0);
-    }
-}
-
 void WeightNoMeasure::Save(const std::string &FileName, std::string Mode)
 {
     cnpy::npz_save(FileName, _Name + ".Weight", SmoothWeight(), Shape(), 4, Mode);

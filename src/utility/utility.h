@@ -30,8 +30,8 @@ real abs(real x); // { return ( (x >= 0.0) ? x : -x); }
 int iabs(int x); // { return ( (x >= 0.0) ? x : -x); }
 // more functions ...
 
-//   if ( abs(x)> eps) return x; else return 0.0;
-real Zero(real x, real eps);
+//float iszero
+bool Zero(real x, real eps = eps0);
 
 // float equal
 bool Equal(real x1, real x2, real eps = eps0);
@@ -54,8 +54,6 @@ void AssignFromTo(T *source, T *target, int size)
 bool CleanFile(const std::string &FileName);
 
 bool DoesFileExist(const std::string &FileName);
-
-std::ofstream OpenFile(const std::string &FileName, const std::string &Mode = "a");
 
 #define CHECKNULL(source)                     \
     {                                         \

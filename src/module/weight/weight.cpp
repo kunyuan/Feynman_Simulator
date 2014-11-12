@@ -123,8 +123,6 @@ void weight::Weight::SetTest(const Parameter &para)
     _AllocateSigmaPolar(para.Lat, para.Beta, para.Order);
     G->SetTest();
     W->SetTest();
-    Sigma->SetTest();
-    Polar->SetTest();
 }
 
 void weight::Weight::_AllocateGW(const Lattice &Lat, real Beta, int order)

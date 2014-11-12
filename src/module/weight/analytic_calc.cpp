@@ -7,6 +7,7 @@
 //
 
 #include "weight_inherit.h"
+#include <vector>
 using namespace weight;
 
 void G::_InitialBare()
@@ -35,7 +36,26 @@ void G::StartWithBare()
 
 void W::_InitialBare()
 {
-    BareWeight = 1.0;
+    BareWeight = 0.0;
+    int Lx = _Lat.Size[0], Ly = _Lat.Size[1];
+    assert(Lx > 1 && Ly > 1 && D == 2);
+    int spinindex = SpinIndex(UP, UP);
+    int sublatA2B = _Lat.Sublat2Index(0, 1);
+    vector<initializer_list<int>> coord;
+    coord.push_back({0, 0});
+    coord.push_back({0, Ly - 1});
+    coord.push_back({Lx - 1, 0});
+    coord.push_back({Lx - 1, Ly - 1});
+    for (auto e : coord)
+        BareWeight[spinindex][sublatA2B][_Lat.Vec2Index(e)] = 1.0;
+    int sublatB2A = _Lat.Sublat2Index(1, 0);
+    coord.clear();
+    coord.push_back({0, 0});
+    coord.push_back({0, 1});
+    coord.push_back({1, 0});
+    coord.push_back({1, 1});
+    for (auto e : coord)
+        BareWeight[spinindex][sublatB2A][_Lat.Vec2Index(e)] = 1.0;
 }
 
 void W::StartWithBare()
