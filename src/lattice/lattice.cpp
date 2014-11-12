@@ -193,10 +193,12 @@ Vec<int> Lattice::GetVec(const class Site &site) const
 Vec<real> Lattice::GetRealVec(const class Distance &dis, Vec<int> offset) const
 {
     Vec<real> vec(0.0);
-    Vec<int> coordinate = Shift(GetVec(dis) + offset);
+    Site site_out = GetSite(dis, OUT);
+    Site site_in = GetSite(dis, IN);
+    Vec<int> coordinate = Shift(site_out.Coordinate + offset);
     for (int i = 0; i < D; i++)
         vec += LatticeVec[i] * coordinate[i];
-    vec += SublatticeVec[GetSublat(dis, OUT)] - SublatticeVec[GetSublat(dis, IN)];
+    vec += SublatticeVec[site_out.Sublattice] - SublatticeVec[site_in.Sublattice];
     return vec;
 }
 
