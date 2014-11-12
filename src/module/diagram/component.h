@@ -40,7 +40,7 @@ class GLine {
     int Sublattice(int dir);
     vertex NeighVer(int dir);
     std::string PrettyString();
-    void SetGLine(Momentum, const Complex&, bool, vertex*);
+    void SetGLine(Momentum, const Complex&, bool);
 };
 
 class WLine {
@@ -58,7 +58,7 @@ class WLine {
     int Sublattice(int dir);
     vertex NeighVer(int dir);
     std::string PrettyString();
-    void SetWLine(Momentum, const Complex&, bool, bool, bool, vertex*);
+    void SetWLine(Momentum, const Complex&, bool, bool, bool);
 };
 
 class Vertex {
@@ -71,7 +71,7 @@ class Vertex {
     double Tau;
     int Dir;
     
-    void SetVertex(const Site&, const real&, spin*, int, gLine*, wLine);
+    void SetVertex(const Site&, const real&, spin*, int);
     spin Spin(int);
     void SetSpin(spin *);
     spin *Spin();
