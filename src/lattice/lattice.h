@@ -75,11 +75,6 @@ class Distance {
  *  class Lattice includes three set of vectors: 1) LatticeVec (unit cell lattice vector); 2)ReLatticeVec (reciprocal lattice vector for k); 3) SublatticeVec (vectors between different sublattices in the same unit cell).
  */
 class Lattice {
-  private:
-    void Initialize();
-
-    Vec<int> Shift(const Vec<int> &) const;
-
   public:
     int Dimension;
     int Vol;
@@ -111,11 +106,18 @@ class Lattice {
     Vec<int> GetVec(const Distance &) const;
     Vec<int> GetVec(const Site &) const;
 
-    Vec<real> GetRealVec(const Site &) const;
+    //    Vec<real> GetRealVec(const Site &) const;
+    Vec<real> GetRealVec(const Site &, Vec<int> offset = Vec<int>(0)) const;
     Vec<real> GetRealVec(const Distance &) const;
 
     //TODO: lattice IO
     void PlotLattice();
+
+  private:
+    void Initialize();
+    Vec<int> Shift(const Vec<int> &) const;
+    void _Checkboard();
+    void _Honeycomb();
 };
 
 int TestLattice();

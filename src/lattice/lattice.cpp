@@ -29,49 +29,7 @@ void Lattice::Reset(const Vec<int> &size)
         Vol *= Size[i];
     }
     SublatVol = NSublattice;
-    Initialize();
-}
-
-/**
- *  initialize the lattice vectors
- */
-void Lattice::Initialize()
-{
-    //TODO: Simple Cubic Lattice with two sublattices
-
-    //Square Lattice with two sublattices
-    LatticeVec[0][0] = 1.0;
-    LatticeVec[0][1] = 0.0;
-
-    LatticeVec[1][0] = 0.0;
-    LatticeVec[1][1] = 1.0;
-
-    ReciprocalLatticeVec[0][0] = 2.0 * PI;
-    ReciprocalLatticeVec[0][1] = 0.0;
-    ReciprocalLatticeVec[1][0] = 0.0;
-    ReciprocalLatticeVec[1][1] = 2.0 * PI;
-
-    SublatticeVec[0][0] = 0.0;
-    SublatticeVec[0][1] = 0.0;
-    SublatticeVec[1][0] = 0.5;
-    SublatticeVec[1][1] = 0.5;
-
-    //Lattice Honeycomb
-    //    LatticeVec[0][0]=0.0;
-    //    LatticeVec[0][1]=1.0;
-    //
-    //    LatticeVec[1][0]=sqrt(3.0)/2.0;
-    //    LatticeVec[1][1]=-0.5;
-    //
-    //    ReciprocalLatticeVec[0][0]=2.0*Pi/sqrt(3.0);
-    //    ReciprocalLatticeVec[0][1]=2.0*Pi;
-    //    ReciprocalLatticeVec[1][0]=4.0*Pi/sqrt(3.0);
-    //    ReciprocalLatticeVec[1][1]=0.0;
-    //
-    //    SublatticeVec[0][0]=0.0;
-    //    SublatticeVec[0][1]=0.0;
-    //    SublatticeVec[1][0]=1.0/2.0/sqrt(3.0);
-    //    SublatticeVec[1][1]=0.5;
+    _Checkboard();
 }
 
 bool operator==(const Site &v1, const Site &v2)
@@ -101,6 +59,8 @@ Vec<int> Lattice::Shift(const Vec<int> &vec) const
     for (int i = 0; i < D; i++) {
         if (vec[i] < 0)
             newvec[i] = vec[i] + Size[i];
+        if (vec[i] >= Size[i])
+            newvec[i] = vec[i] - Size[i];
     }
     return newvec;
 }
@@ -178,11 +138,13 @@ int Lattice::GetName(const Site &site) const
  *
  *  @return a vector which defines the site's coordinate on the lattice
  */
-Vec<real> Lattice::GetRealVec(const Site &site) const
+Vec<real> Lattice::GetRealVec(const Site &site, Vec<int> offset) const
 {
     Vec<real> vec(0.0);
+    Vec<int> coordinate = site.Coordinate;
+    coordinate = Shift(coordinate + offset);
     for (int i = 0; i < D; i++)
-        vec += LatticeVec[i] * site.Coordinate[i];
+        vec += LatticeVec[i] * coordinate[i];
     vec += SublatticeVec[site.Sublattice];
     return vec;
 }
@@ -232,12 +194,58 @@ void Lattice::PlotLattice()
     ofstream os("lattice.py", ios::out);
     const unsigned int N = NSublattice * Vol;
     os << "points=[" << endl;
+    Vec<int> offset;
+    for (int i = 0; i < D; i++)
+        offset[i] = Size[i] / 2 - 1;
     for (int i = 0; i < N; i++) {
-        auto site = GetSite(i);
-        os << "[" << i << "," << GetRealVec(site).PrettyString() << ","
+        Site site = GetSite(i);
+        os << "[" << i << "," << GetRealVec(site, offset).PrettyString() << ","
            << site.Coordinate.PrettyString() << "," << site.Sublattice
            << "]," << endl;
     }
     os << "]";
     os.close();
+}
+
+/**
+ *  initialize the lattice vectors
+ */
+void Lattice::_Checkboard()
+{
+    //Square Lattice with two sublattices
+    LatticeVec[0][0] = 1.0;
+    LatticeVec[0][1] = 0.0;
+
+    LatticeVec[1][0] = 0.0;
+    LatticeVec[1][1] = 1.0;
+
+    ReciprocalLatticeVec[0][0] = 2.0 * PI;
+    ReciprocalLatticeVec[0][1] = 0.0;
+    ReciprocalLatticeVec[1][0] = 0.0;
+    ReciprocalLatticeVec[1][1] = 2.0 * PI;
+
+    SublatticeVec[0][0] = 0.0;
+    SublatticeVec[0][1] = 0.0;
+    SublatticeVec[1][0] = 0.5;
+    SublatticeVec[1][1] = 0.5;
+}
+
+void Lattice::_Honeycomb()
+{
+    //Lattice Honeycomb
+    LatticeVec[0][0] = 0.0;
+    LatticeVec[0][1] = 1.0;
+
+    LatticeVec[1][0] = sqrt(3.0) / 2.0;
+    LatticeVec[1][1] = -0.5;
+
+    ReciprocalLatticeVec[0][0] = 2.0 * PI / sqrt(3.0);
+    ReciprocalLatticeVec[0][1] = 2.0 * PI;
+    ReciprocalLatticeVec[1][0] = 4.0 * PI / sqrt(3.0);
+    ReciprocalLatticeVec[1][1] = 0.0;
+
+    SublatticeVec[0][0] = 0.0;
+    SublatticeVec[0][1] = 0.0;
+    SublatticeVec[1][0] = 1.0 / 2.0 / sqrt(3.0);
+    SublatticeVec[1][1] = 0.5;
 }
