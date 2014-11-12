@@ -74,6 +74,11 @@ int Lattice::Vec2Index(const Vec<int> &vec) const
     return Index;
 }
 
+int Lattice::Vec2Index(std::initializer_list<int> list) const
+{
+    return Vec2Index(Vec<int>(list));
+}
+
 Vec<int> Lattice::Index2Vec(int index) const
 {
     Vec<int> v(0);
@@ -155,12 +160,20 @@ Distance Lattice::Dist(const Site &SiteIn, const Site &SiteOut) const
                     Vec2Index(Shift(SiteOut.Coordinate - SiteIn.Coordinate)));
 }
 
+Site Lattice::GetSite(const Distance &dis, int direction) const
+{
+    if (direction == IN)
+        return Site(Index2Sublat(dis.SublatIndex, direction), Vec<int>(0));
+    else
+        return Site(Index2Sublat(dis.SublatIndex, direction), Index2Vec(dis.CoordiIndex));
+}
+
 int Lattice::GetSublat(const Distance &dis, int dir) const
 {
     return Index2Sublat(dis.SublatIndex, dir);
 }
 
-Vec<int> Lattice::GetVec(const class Distance &dis) const
+Vec<int> Lattice::GetVec(const Distance &dis) const
 {
     if (DEBUGMODE && (dis.CoordiIndex < 0 || dis.CoordiIndex >= Vol))
         ABORT("Wrong Coordinate index number!");
@@ -177,11 +190,12 @@ Vec<int> Lattice::GetVec(const class Site &site) const
  *
  *  @return a real vector $\vec{r_2}-\vec{r_1}$
  */
-Vec<real> Lattice::GetRealVec(const class Distance &dis) const
+Vec<real> Lattice::GetRealVec(const class Distance &dis, Vec<int> offset) const
 {
     Vec<real> vec(0.0);
+    Vec<int> coordinate = Shift(GetVec(dis) + offset);
     for (int i = 0; i < D; i++)
-        vec += LatticeVec[i] * GetVec(dis)[i];
+        vec += LatticeVec[i] * coordinate[i];
     vec += SublatticeVec[GetSublat(dis, OUT)] - SublatticeVec[GetSublat(dis, IN)];
     return vec;
 }

@@ -33,7 +33,6 @@ enum Dim { ORDER,
 
 class WeightNoMeasure {
   public:
-    void SetTest();
     void Save(const std::string &FileName, std::string Mode = "a");
     bool Load(const std::string &);
     void Reset(real Beta);

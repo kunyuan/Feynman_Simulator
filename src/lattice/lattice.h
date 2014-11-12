@@ -89,6 +89,7 @@ class Lattice {
     Lattice(const Vec<int> &size);
 
     int Vec2Index(const Vec<int> &) const;
+    int Vec2Index(std::initializer_list<int> list) const;
     Vec<int> Index2Vec(int) const;
 
     int Sublat2Index(int, int) const;
@@ -98,6 +99,7 @@ class Lattice {
 
     void Reset(const Vec<int> &size);
 
+    Site GetSite(const Distance &dis, int direction) const;
     Site GetSite(int name) const;
     int GetName(const Site &) const;
 
@@ -108,7 +110,7 @@ class Lattice {
 
     //    Vec<real> GetRealVec(const Site &) const;
     Vec<real> GetRealVec(const Site &, Vec<int> offset = Vec<int>(0)) const;
-    Vec<real> GetRealVec(const Distance &) const;
+    Vec<real> GetRealVec(const Distance &, Vec<int> offset = Vec<int>(0)) const;
 
     //TODO: lattice IO
     void PlotLattice();
