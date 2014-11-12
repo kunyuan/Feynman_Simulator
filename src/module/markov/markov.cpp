@@ -326,31 +326,32 @@ void Markov::Reconnect()
     //TODO: Hash check for k
 
     vertex vA = GIA->NeighVer(dir);
-    Complex GIAWeight = G->Weight(dir, Masha->R, vA->R, Masha->Tau, vA->Tau,
+    Complex GIAWeight = G->Weight(INVERSE(dir), Masha->R, vA->R, Masha->Tau, vA->Tau,
                                   Masha->Spin(dir), vA->Spin(INVERSE(dir)), GIA->IsMeasure);
 
     vertex vB = GMB->NeighVer(dir);
-    Complex GMBWeight = G->Weight(dir, Ira->R, vB->R, Ira->Tau, vB->Tau,
+    Complex GMBWeight = G->Weight(INVERSE(dir), Ira->R, vB->R, Ira->Tau, vB->Tau,
                                   Ira->Spin(dir), vB->Spin(INVERSE(dir)), GMB->IsMeasure);
 
     Complex weightRatio = (-1) * GIAWeight * GMBWeight / (GIA->Weight * GMB->Weight);
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
+    
     if (prob >= 1.0 || RNG->urn() < prob) {
         Diag->Phase *= sgn;
         Diag->Weight *= weightRatio;
         Diag->SignFermiLoop *= -1;
 
+        Worm->K = k;
+
+        GIA->Weight = GIAWeight;
+        GMB->Weight = GMBWeight;
+        
         Masha->nG[dir] = GIA;
         GIA->nVer[INVERSE(dir)] = Masha;
 
         Ira->nG[dir] = GMB;
         GMB->nVer[INVERSE(dir)] = Ira;
-
-        Worm->K = k;
-
-        GIA->Weight = GIAWeight;
-        GMB->Weight = GMBWeight;
     }
 }
 
@@ -598,7 +599,7 @@ void Markov::ChangeTauOnVertex()
             vW->Tau = tau;
 
         gin->Weight = ginWeight;
-        gout->Weight = goutWeight;
+        if(gout!=gin)   gout->Weight = goutWeight;
         w->Weight = wWeight;
     }
 }
@@ -610,6 +611,7 @@ void Markov::ChangeROnVertex()
 {
     if(Worm->Exist)
         return;
+    //TODO: Return if G is local
     vertex ver = Diag->RandomPickVer();
     Site site = RandomPickSite();
     gLine gin = ver->NeighG(IN), gout = ver->NeighG(OUT);
@@ -640,7 +642,7 @@ void Markov::ChangeROnVertex()
         ver->R = site;
 
         gin->Weight = ginWeight;
-        gout->Weight = goutWeight;
+        if(gout!=gin)   gout->Weight = goutWeight;
         w->Weight = wWeight;
     }
 }
@@ -662,11 +664,12 @@ void Markov::ChangeRLoop()
     v[0] = Diag->RandomPickVer();
     Site oldR = v[0]->R;
     
-    while(!flagVer[n])
+    while(!flagVer[v[n]->Name])
     {
-        flagVer[n]=true;
+        flagVer[v[n]->Name]=true;
         flagW[v[n]->NeighW()->Name] ++;
         v[n+1] = v[n]->NeighG(OUT)->NeighVer(OUT);
+        
         if(v[n+1]->R != oldR)
             return;
         n++;
