@@ -14,18 +14,18 @@
 using namespace std;
 using namespace mc;
 
-void Test_CreateWorm();
+void Test_Updates();
 
 int mc::TestMarkov()
 {
     sput_start_testing();
     sput_enter_suite("Test Updates:");
-    sput_run_test(Test_CreateWorm);
+    sput_run_test(Test_Updates);
     sput_finish_testing();
     return sput_get_return_value();
 }
 
-void Test_CreateWorm()
+void Test_Updates()
 {
     para::ParaMC Para;
     Para.SetTest();
@@ -37,7 +37,7 @@ void Test_CreateWorm()
     markov.BuildNew(Para, Diag, Weight);
 
     for (int i = 0; i < 10; i++) {
-        markov.Hop(50);
+        markov.Hop(100);
         sput_fail_unless(markov.Diag->CheckDiagram(), "Weight check for all the random steps");
     }
     LOG_INFO("Updates(Create,Delete, and Move Worm) are done!");

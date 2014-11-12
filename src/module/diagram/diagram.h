@@ -70,10 +70,12 @@ class Diagram {
     void ClearDiagram();
 
     //Diagram Check
-    bool CheckG();
-    bool CheckW();
-    bool CheckVer();
+    bool CheckTopo();
+    bool CheckStatus();
+    bool CheckK();
+    bool CheckSpin();
     bool CheckWeight();
+    
     bool CheckDiagram();
 
     //Diagram IO
