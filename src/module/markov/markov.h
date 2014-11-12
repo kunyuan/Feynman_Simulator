@@ -68,8 +68,8 @@ class Markov {
     void ChangeRLoop();
     void ChangeMeasureFromGToW();
     void ChangeMeasureFromWToG();
-    void ChangeDeltaToNotDelta();
-    void ChangeNotDeltaToDelta();
+    void ChangeDeltaToContinuous();
+    void ChangeContinuousToDelta();
 
   private:
     int RandomPickDeltaSpin();

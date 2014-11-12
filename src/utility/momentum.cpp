@@ -9,6 +9,8 @@
 #include "momentum.h"
 #include "utility/rng.h"
 
+int Shift(int);
+
 Momentum::Momentum():K(0)// Default constructor
 {
 }
@@ -33,64 +35,66 @@ Momentum& Momentum::operator=(const Momentum& m)
     return (*this);
 }
 
+int Shift(int k)
+{
+    if(k>=MAX_K) k-=(2*MAX_K-1);
+    if(k<=-MAX_K) k+=(2*MAX_K-1);
+    return k;
+}
 
 Momentum& Momentum::operator+=(int k)
 {
-    K += k;
-    if(K>=MAX_K) K -= MAX_K;
+    K = Shift(K+k);
     return (*this);
 }
 
 Momentum& Momentum::operator+=(const Momentum& m)
 {
-    K += m.K;
-    if(K>=MAX_K) K -= MAX_K;
+    K = Shift(K+m.K);
     return (*this);
 }
 
 Momentum& Momentum::operator-=(int k)
 {
-    K -= k;
-    if(K<-MAX_K) K += MAX_K;
+    K = Shift(K-k);
     return (*this);
 }
 
 Momentum& Momentum::operator-=(const Momentum& m)
 {
-    K -= m.K;
-    if(K<-MAX_K) K += MAX_K;
+    K = Shift(K-m.K);
     return (*this);
 }
 
 
 Momentum operator+(const Momentum & m1, int k)
 {
-    return (Momentum)(m1.K+k);
+    return (Momentum)(Shift(m1.K+k));
 }
 
 Momentum operator+(const Momentum & m1, const Momentum & m2)
 {
-    return m1+m2.K;
+    return (Momentum)(Shift(m1.K+m2.K));
 }
 
 Momentum operator+(int k, const Momentum & m1)
 {
-    return m1+k;
+    return (Momentum)(Shift(k+m1.K));
 }
 
 Momentum operator-(const Momentum & m1, int k)
 {
-    return (Momentum)(m1.K-k);
+    return (Momentum)(Shift(m1.K-k));
 }
 
 Momentum operator-(const Momentum & m1, const Momentum & m2)
 {
-    return m1-m2.K;
+    return (Momentum)(Shift(m1.K-m2.K));
 }
 
 Momentum operator-(int k, const Momentum & m1)
 {
-    return (Momentum)(k-m1.K);
+    return (Momentum)(Shift(k-m1.K));
 }
 
 Momentum operator*(int k, const Momentum & m1)
