@@ -564,27 +564,39 @@ void Markov::ChangeTauOnVertex()
     real tau = RandomPickTau();
 
     gLine gin = ver->NeighG(IN), gout = ver->NeighG(OUT);
-    Complex ginWeight = G->Weight(gin->NeighVer(IN)->R, ver->R,
-                                  gin->NeighVer(IN)->Tau, tau,
-                                  gin->NeighVer(IN)->Spin(OUT), ver->Spin(IN),
-                                  gin->IsMeasure);
-
-    Complex goutWeight = G->Weight(ver->R, gout->NeighVer(OUT)->R,
-                                   tau, gout->NeighVer(OUT)->Tau,
-                                   ver->Spin(OUT), gout->NeighVer(OUT)->Spin(IN),
-                                   gout->IsMeasure);
-
+    Complex ginWeight, goutWeight;
+    if(gin==gout){
+        ginWeight = G->Weight(gin->NeighVer(IN)->R, ver->R,
+                              tau, tau,
+                              gin->NeighVer(IN)->Spin(OUT), ver->Spin(IN),
+                              gin->IsMeasure);
+    }else{
+        ginWeight = G->Weight(gin->NeighVer(IN)->R, ver->R,
+                              gin->NeighVer(IN)->Tau, tau,
+                              gin->NeighVer(IN)->Spin(OUT), ver->Spin(IN),
+                              gin->IsMeasure);
+        goutWeight = G->Weight(ver->R, gout->NeighVer(OUT)->R,
+                              tau, gout->NeighVer(OUT)->Tau,
+                              ver->Spin(OUT), gout->NeighVer(OUT)->Spin(IN),
+                              gout->IsMeasure);
+    }
+    
     wLine w = ver->NeighW();
     vertex vW = w->NeighVer(INVERSE(ver->Dir));
     Complex wWeight;
-    if (w->IsDelta)
+    if(w->IsDelta || vW==ver)
         wWeight = W->Weight(ver->Dir, ver->R, vW->R, tau, tau, ver->Spin(), vW->Spin(),
                             w->IsWorm, w->IsMeasure, w->IsDelta);
     else
         wWeight = W->Weight(ver->Dir, ver->R, vW->R, tau, vW->Tau, ver->Spin(), vW->Spin(),
                             w->IsWorm, w->IsMeasure, w->IsDelta);
-
-    Complex weightRatio = ginWeight * goutWeight * wWeight / (gin->Weight * gout->Weight * w->Weight);
+    
+    Complex weightRatio = ginWeight * goutWeight *wWeight
+                        /(gin->Weight * gout->Weight * w->Weight);
+    
+    if(gin==gout)
+        weightRatio = ginWeight *wWeight/(gin->Weight * w->Weight);
+    
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
@@ -615,21 +627,40 @@ void Markov::ChangeROnVertex()
     vertex ver = Diag->RandomPickVer();
     Site site = RandomPickSite();
     gLine gin = ver->NeighG(IN), gout = ver->NeighG(OUT);
-    Complex ginWeight = G->Weight(gin->NeighVer(IN)->R, site,
-                                  gin->NeighVer(IN)->Tau, ver->Tau,
-                                  gin->NeighVer(IN)->Spin(OUT), ver->Spin(IN),
-                                  gin->IsMeasure);
-
-    Complex goutWeight = G->Weight(site, gout->NeighVer(OUT)->R,
-                                   ver->Tau, gout->NeighVer(OUT)->Tau,
-                                   ver->Spin(OUT), gout->NeighVer(OUT)->Spin(IN),
-                                   gout->IsMeasure);
+    
+    Complex ginWeight, goutWeight, wWeight;
+    if(gin==gout){
+        ginWeight = G->Weight(site, site,
+                              gin->NeighVer(IN)->Tau, ver->Tau,
+                              gin->NeighVer(IN)->Spin(OUT), ver->Spin(IN),
+                              gin->IsMeasure);
+    }else{
+        ginWeight = G->Weight(gin->NeighVer(IN)->R, site,
+                              gin->NeighVer(IN)->Tau, ver->Tau,
+                              gin->NeighVer(IN)->Spin(OUT), ver->Spin(IN),
+                              gin->IsMeasure);
+        goutWeight = G->Weight(site, gout->NeighVer(OUT)->R,
+                              ver->Tau, gout->NeighVer(OUT)->Tau,
+                              ver->Spin(OUT), gout->NeighVer(OUT)->Spin(IN),
+                              gout->IsMeasure);
+    }
+    
     wLine w = ver->NeighW();
     vertex vW = w->NeighVer(INVERSE(ver->Dir));
-    Complex wWeight = W->Weight(ver->Dir, site, vW->R, ver->Tau, vW->Tau, ver->Spin(), vW->Spin(),
-                                w->IsWorm, w->IsMeasure, w->IsDelta);
-
-    Complex weightRatio = ginWeight * goutWeight * wWeight / (gin->Weight * gout->Weight * w->Weight);
+    
+    if(vW==ver)
+        wWeight = W->Weight(ver->Dir, site, site, ver->Tau, vW->Tau, ver->Spin(), vW->Spin(),
+                        w->IsWorm, w->IsMeasure, w->IsDelta);
+    else
+        wWeight = W->Weight(ver->Dir, site, vW->R, ver->Tau, vW->Tau, ver->Spin(), vW->Spin(),
+                        w->IsWorm, w->IsMeasure, w->IsDelta);
+    
+    Complex weightRatio = ginWeight * goutWeight *wWeight
+                        /(gin->Weight * gout->Weight * w->Weight);
+    
+    if(gin==gout)
+        weightRatio = ginWeight *wWeight/(gin->Weight * w->Weight);
+    
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
