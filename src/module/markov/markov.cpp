@@ -150,9 +150,9 @@ void Markov::DeleteWorm()
 {
     if (!Worm->Exist)
         return;
-    vertex Ira = Worm->Ira;
-    vertex Masha = Worm->Masha;
-
+    vertex &Ira = Worm->Ira;
+    vertex &Masha = Worm->Masha;
+    
     wLine w = Ira->NeighW();
     if (!(w == Masha->NeighW()))
         return;
@@ -187,11 +187,10 @@ void Markov::MoveWormOnG()
 {
     if (!Worm->Exist)
         return;
-
-    vertex Ira = Worm->Ira;
-    vertex Masha = Worm->Masha;
-
-    vertex v1 = Ira;
+    
+    vertex &Ira = Worm->Ira;
+    vertex &Masha = Worm->Masha;
+    
     int dir = RandomPickDir();
     gLine g = Ira->NeighG(dir);
     vertex v2 = g->NeighVer(dir);
@@ -224,12 +223,11 @@ void Markov::MoveWormOnG()
 
     Complex w2Weight = W->Weight(v2->Dir, v2->R, vW2->R, v2->Tau, vW2->Tau,
                                  spinV2, vW2->Spin(), true, w2->IsMeasure, w2->IsDelta);
-    Complex gWeight = G->Weight(INVERSE(dir), v1->R, v2->R, v1->Tau, v2->Tau,
+
+    Complex gWeight = G->Weight(INVERSE(dir), Ira->R, v2->R, Ira->Tau, v2->Tau,
                                 spinV1[dir], spinV2[INVERSE(dir)], g->IsMeasure);
 
-    Complex weightRatio = w1Weight * w2Weight * gWeight /
-                          (g->Weight * w1->Weight * w2->Weight);
-
+    Complex weightRatio = w1Weight * w2Weight * gWeight / (g->Weight * w1->Weight * w2->Weight);
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
@@ -265,13 +263,12 @@ void Markov::MoveWormOnW()
 {
     if (!Worm->Exist)
         return;
-
-    vertex Ira = Worm->Ira;
-    vertex Masha = Worm->Masha;
-
-    vertex v1 = Ira;
-    wLine w = v1->NeighW();
-    vertex v2 = w->NeighVer(INVERSE(v1->Dir));
+    
+    vertex &Ira = Worm->Ira;
+    vertex &Masha = Worm->Masha;
+    
+    wLine w = Ira->NeighW();
+    vertex v2 = w->NeighVer(INVERSE(Ira->Dir));
     if (v2 == Ira || v2 == Masha)
         return;
     Momentum k = w->K + SIGN(Ira->Dir) * Worm->K;
@@ -389,16 +386,17 @@ void Markov::AddInteraction()
     Site RA = vC->R, RB = vD->R;
 
     Complex wWeight = W->Weight(dirW, RA, RB, tauA, tauB, spinA, spinB, false, false, isdelta);
-    Complex GIAWeight = G->Weight(FLIP(dir), Ira->R, RA, Ira->Tau, tauA,
-                                  Ira->Spin(dir), spinA[FLIP(dir)], false);
-    Complex GMBWeight = G->Weight(FLIP(dir), Masha->R, RB, Masha->Tau, tauB,
-                                  Masha->Spin(dir), spinB[FLIP(dir)], false);
-    Complex GACWeight = G->Weight(FLIP(dir), RA, vC->R, tauA, vC->Tau,
-                                  spinA[dir], vC->Spin(FLIP(dir)), GIC->IsMeasure);
-    Complex GBDWeight = G->Weight(FLIP(dir), RB, vD->R, tauB, vD->Tau,
-                                  spinB[dir], vD->Spin(FLIP(dir)), GMD->IsMeasure);
-
-    Complex weightRatio = (-1) * GIAWeight * GMBWeight * wWeight * GACWeight * GBDWeight / (GIC->Weight * GMD->Weight);
+    Complex GIAWeight = G->Weight(INVERSE(dir), Ira->R, RA, Ira->Tau, tauA,
+                                  Ira->Spin(dir), spinA[INVERSE(dir)], false);
+    Complex GMBWeight = G->Weight(INVERSE(dir), Masha->R, RB, Masha->Tau, tauB,
+                                  Masha->Spin(dir), spinB[INVERSE(dir)], false);
+    Complex GACWeight = G->Weight(INVERSE(dir), RA, vC->R, tauA, vC->Tau,
+                                  spinA[dir], vC->Spin(INVERSE(dir)), GIC->IsMeasure);
+    Complex GBDWeight = G->Weight(INVERSE(dir), RB, vD->R, tauB, vD->Tau,
+                                  spinB[dir], vD->Spin(INVERSE(dir)), GMD->IsMeasure);
+    
+    Complex weightRatio = (-1) * GIAWeight * GMBWeight *wWeight * GACWeight
+                          *GBDWeight/(GIC->Weight * GMD->Weight);
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
@@ -425,14 +423,14 @@ void Markov::AddInteraction()
         //        vA->nG[FLIP(dir)]=GIA;
 
         ng[dir] = GMD;
-        ng[FLIP(dir)] = GMB;
-        vB->SetVertex(RB, tauB, spinB, FLIP(dirW), ng, WAB);
-
-        nver[FLIP(dir)] = Ira;
+        ng[INVERSE(dir)] = GMB;
+        vB->SetVertex(RB, tauB, spinB, INVERSE(dirW), ng, WAB);
+        
+        nver[INVERSE(dir)] = Ira;
         nver[dir] = vA;
         GIA->SetGLine(kIA, GIAWeight, false, nver);
-
-        nver[FLIP(dir)] = Masha;
+        
+        nver[INVERSE(dir)] = Masha;
         nver[dir] = vB;
         GMB->SetGLine(kMB, GMBWeight, false, nver);
 
@@ -442,9 +440,9 @@ void Markov::AddInteraction()
 
         Ira->nG[dir] = GIA;
         Masha->nG[dir] = GMB;
-        GIC->nVer[FLIP(dir)] = vA;
-        GMD->nVer[FLIP(dir)] = vB;
-
+        GIC->nVer[INVERSE(dir)] = vA;
+        GMD->nVer[INVERSE(dir)] = vB;
+        
         Worm->K = kWorm;
 
         GIC->Weight = GACWeight;
@@ -492,14 +490,15 @@ void Markov::DeleteInteraction()
 
     Momentum kWorm = Worm->K + SIGN(vA->Dir) * wAB->K;
     //TODO: Hash Check for kWorm
-
-    Complex GICWeight = G->Weight(FLIP(dir), Ira->R, vC->R, Ira->Tau, vC->Tau,
-                                  Ira->Spin(dir), vC->Spin(FLIP(dir)), GAC->IsMeasure);
-    Complex GMDWeight = G->Weight(FLIP(dir), Masha->R, vD->R, Masha->Tau, vD->Tau,
-                                  Masha->Spin(dir), vD->Spin(FLIP(dir)), GBD->IsMeasure);
-
-    Complex weightRatio = (-1) * GICWeight * GMDWeight / (GIA->Weight * GMB->Weight * GAC->Weight * GBD->Weight * wAB->Weight);
-
+    
+    Complex GICWeight = G->Weight(INVERSE(dir), Ira->R, vC->R, Ira->Tau, vC->Tau,
+                                  Ira->Spin(dir), vC->Spin(INVERSE(dir)), GAC->IsMeasure);
+    Complex GMDWeight = G->Weight(INVERSE(dir), Masha->R, vD->R, Masha->Tau, vD->Tau,
+                                  Masha->Spin(dir), vD->Spin(INVERSE(dir)), GBD->IsMeasure);
+    
+    Complex weightRatio = (-1) * GICWeight * GMDWeight/(GIA->Weight * GMB->Weight *GAC->Weight
+                                                        * GBD->Weight *wAB->Weight);
+    
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
@@ -518,9 +517,9 @@ void Markov::DeleteInteraction()
 
         Ira->nG[dir] = GAC;
         Masha->nG[dir] = GBD;
-        GAC->nVer[FLIP(dir)] = Ira;
-        GBD->nVer[FLIP(dir)] = Masha;
-
+        GAC->nVer[INVERSE(dir)] = Ira;
+        GBD->nVer[INVERSE(dir)] = Masha;
+        
         Worm->K = kWorm;
 
         GAC->Weight = GICWeight;
@@ -617,10 +616,18 @@ void Markov::ChangeR()
     }
 }
 
+
+/**
+ *  change all R in a fermi loop
+ */
 void Markov::ChangeRLoop()
 {
 }
 
+
+/**
+ *  change measuring line from G to W
+ */
 void Markov::ChangeMeasureFromGToW()
 {
     if (!Diag->MeasureGLine)
@@ -702,7 +709,11 @@ void Markov::ChangeMeasureFromWToG()
     }
 }
 
-void Markov::ChangeDeltaToNotDelta()
+
+/**
+ *  change a Wline from Delta to continuous
+ */
+void Markov::ChangeDeltaToContinuous()
 {
     wLine w = Diag->RandomPickW();
     vertex vin = w->NeighVer(IN), vout = w->NeighVer(OUT);
@@ -741,7 +752,11 @@ void Markov::ChangeDeltaToNotDelta()
     }
 }
 
-void Markov::ChangeNotDeltaToDelta()
+
+/**
+ *  Change a Wline from continuous to Delta
+ */
+void Markov::ChangeContinuousToDelta()
 {
     wLine w = Diag->RandomPickW();
     if (w->IsDelta || w->IsMeasure)
