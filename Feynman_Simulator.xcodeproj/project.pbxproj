@@ -133,6 +133,12 @@
 		843D3FB51A11488E00DACC51 /* analytic_calc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = analytic_calc.cpp; path = module/weight/analytic_calc.cpp; sourceTree = "<group>"; };
 		843D3FB71A15119A00DACC51 /* model_para.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = model_para.cpp; path = module/parameter/model_para.cpp; sourceTree = "<group>"; };
 		843D3FB81A15119A00DACC51 /* model_para.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = model_para.h; path = module/parameter/model_para.h; sourceTree = "<group>"; };
+		843D3FBB1A155F5600DACC51 /* count.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = count.sh; path = tool/count.sh; sourceTree = SOURCE_ROOT; };
+		843D3FBC1A155F5600DACC51 /* mat2npz */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = mat2npz; path = tool/mat2npz; sourceTree = SOURCE_ROOT; };
+		843D3FBD1A155F5600DACC51 /* npy2mat */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = npy2mat; path = tool/npy2mat; sourceTree = SOURCE_ROOT; };
+		843D3FBE1A155F5600DACC51 /* npz2mat */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = npz2mat; path = tool/npz2mat; sourceTree = SOURCE_ROOT; };
+		843D3FBF1A155F5600DACC51 /* plot_model.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = plot_model.py; path = tool/plot_model.py; sourceTree = SOURCE_ROOT; };
+		843D3FC01A155F5600DACC51 /* read_data.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = read_data.py; path = tool/read_data.py; sourceTree = SOURCE_ROOT; };
 		84519AE919F2C554007CB81B /* environment.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = environment.cpp; path = environment/environment.cpp; sourceTree = "<group>"; };
 		84519AEA19F2C554007CB81B /* environment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = environment.h; path = environment/environment.h; sourceTree = "<group>"; };
 		84519AEC19F2C57A007CB81B /* envMonteCarlo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = envMonteCarlo.cpp; path = environment/envMonteCarlo.cpp; sourceTree = "<group>"; };
@@ -323,6 +329,28 @@
 			name = diagram;
 			sourceTree = "<group>";
 		};
+		843D3FBA1A155F2600DACC51 /* tool */ = {
+			isa = PBXGroup;
+			children = (
+				843D3FBB1A155F5600DACC51 /* count.sh */,
+				843D3FBC1A155F5600DACC51 /* mat2npz */,
+				843D3FBD1A155F5600DACC51 /* npy2mat */,
+				843D3FBE1A155F5600DACC51 /* npz2mat */,
+				843D3FBF1A155F5600DACC51 /* plot_model.py */,
+				843D3FC01A155F5600DACC51 /* read_data.py */,
+				843D3FC11A155F5600DACC51 /* timer */,
+			);
+			name = tool;
+			sourceTree = "<group>";
+		};
+		843D3FC11A155F5600DACC51 /* timer */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = timer;
+			path = tool/timer;
+			sourceTree = SOURCE_ROOT;
+		};
 		84B8FC3919EC9763003D6DF6 /* markov */ = {
 			isa = PBXGroup;
 			children = (
@@ -375,6 +403,7 @@
 				8422FE321A0A7E82002EB44E /* estimator */,
 				1CA5CF3C19ED6F5400212E20 /* lattice */,
 				612661D40BB91FC506C3E572 /* utility */,
+				843D3FBA1A155F2600DACC51 /* tool */,
 			);
 			name = Feynman_Simulator;
 			path = src;
