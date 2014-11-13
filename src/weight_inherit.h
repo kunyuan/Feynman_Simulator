@@ -41,7 +41,7 @@ class G : public WeightNoMeasure {
     Complex Weight(const Site &, const Site &, real, real, spin, spin, bool);
     Complex Weight(int, const Site &, const Site &, real, real, spin, spin, bool);
     void SetTest();
-    void StartWithBare();
+    void InitialWithBare();
     //Dyson interface
     void FFT(fft::Dir, Mode);
 
@@ -62,7 +62,7 @@ class W : public WeightNoMeasure {
     //Monte Carlo interface
     Complex Weight(const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool);
     Complex Weight(int, const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool);
-    void StartWithBare();
+    void InitialWithBare();
     void SetTest();
     //Dyson interface
     void FFT(fft::Dir, Mode);
