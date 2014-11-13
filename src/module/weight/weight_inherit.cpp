@@ -135,10 +135,11 @@ void G::SetTest()
 
 /***********************  W  **************************************/
 
-W::W(const Lattice &lat, real Beta, int order, real Interaction[], real ExternalField)
+W::W(const Lattice &lat, real Beta, int order,
+     const vector<real> &Interaction_, real ExternalField)
     : WeightNoMeasure(lat, Beta, order, false, SPIN4, "W")
 {
-    AssignFromTo(Interaction, _Interaction, MODEL_PARA_NUM);
+    _Interaction = Interaction_;
     _ExternalField = ExternalField;
     BareWeight.Allocate(Shape());
     //use _Shape[SP] to _Shape[VOL] to construct array3

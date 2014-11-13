@@ -21,7 +21,7 @@ namespace para {
 class Parameter {
   public:
     int Version;
-    real Interaction[MODEL_PARA_NUM];
+    std::vector<real> Interaction;
     real ExternalField;
     real InitialBeta;
     real DeltaBeta;

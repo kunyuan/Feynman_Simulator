@@ -12,7 +12,7 @@ bool para::Message::Load()
 {
     //do not abort if message file does not exist
     if (_Para.ParseFile(_MessageFile, false)) {
-        GetParaArray(_Para, Interaction, MODEL_PARA_NUM);
+        GetPara(_Para, Interaction);
         GetPara(_Para, ExternalField);
         GetPara(_Para, Beta);
         GetPara(_Para, Version);
@@ -25,7 +25,7 @@ bool para::Message::Load()
 void para::Message::Save()
 {
     _Para.clear();
-    SetParaArray(_Para, Interaction, MODEL_PARA_NUM);
+    SetPara(_Para, Interaction);
     SetPara(_Para, ExternalField);
     SetPara(_Para, Beta);
     SetPara(_Para, Version);

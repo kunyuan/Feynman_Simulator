@@ -11,10 +11,16 @@
 
 #include "logger.h"
 
-#define ABORT(msg)          \
-    {                       \
+#define ABORT(msg)      \
+    {                   \
         LOG_ERROR(msg); \
-        throw(-1); \
+        throw(-1);      \
+    }
+
+#define ASSERT_ALLWAYS(expression, msg)                   \
+    {                                                     \
+        if ((expression) == true)                         \
+            ABORT(#expression " does not hold! " << msg); \
     }
 
 #endif /* defined(__Fermion_Simulator__error_handler__) */
