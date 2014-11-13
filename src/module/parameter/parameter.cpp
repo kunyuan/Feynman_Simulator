@@ -9,20 +9,20 @@
 #include "parameter.h"
 using namespace para;
 
-status Parameter::GetStatus()
+Message Parameter::GenerateMessage()
 {
-    status Status;
-    Status.Version = Version;
-    Status.Jcp = Jcp;
-    Status.Beta = Beta;
-    return Status;
+    Message Message_;
+    Message_.Version = Version;
+    Message_.Jcp = Jcp;
+    Message_.Beta = Beta;
+    return Message_;
 }
 
-void Parameter::SetStatus(const status &Status)
+void Parameter::UpdateWithMessage(const Message &Message_)
 {
-    Version = Status.Version;
-    Jcp = Status.Jcp;
-    Beta = Status.Beta;
+    Version = Message_.Version;
+    Jcp = Message_.Jcp;
+    Beta = Message_.Beta;
     T = 1.0 / Beta;
 }
 

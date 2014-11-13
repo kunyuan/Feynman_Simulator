@@ -16,7 +16,7 @@
 		841D511319EB6DD900FDB7FF /* logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 841D511119EB6DD900FDB7FF /* logger.cpp */; };
 		841D905C19E054900066116A /* test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 841D905B19E054900066116A /* test.cpp */; };
 		8422FDFE1A09C0ED002EB44E /* parameter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FDF71A09C0ED002EB44E /* parameter.cpp */; };
-		8422FE001A09C0ED002EB44E /* status.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FDFB1A09C0ED002EB44E /* status.cpp */; };
+		8422FE001A09C0ED002EB44E /* message.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FDFB1A09C0ED002EB44E /* message.cpp */; };
 		8422FE0D1A09C112002EB44E /* component_bundle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FE011A09C112002EB44E /* component_bundle.cpp */; };
 		8422FE0E1A09C112002EB44E /* component_IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FE031A09C112002EB44E /* component_IO.cpp */; };
 		8422FE0F1A09C112002EB44E /* component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FE041A09C112002EB44E /* component.cpp */; };
@@ -89,8 +89,8 @@
 		841D905B19E054900066116A /* test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = test.cpp; sourceTree = "<group>"; };
 		8422FDF71A09C0ED002EB44E /* parameter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = parameter.cpp; path = module/parameter/parameter.cpp; sourceTree = "<group>"; };
 		8422FDF81A09C0ED002EB44E /* parameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = parameter.h; path = module/parameter/parameter.h; sourceTree = "<group>"; };
-		8422FDFB1A09C0ED002EB44E /* status.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = status.cpp; path = module/parameter/status.cpp; sourceTree = "<group>"; };
-		8422FDFC1A09C0ED002EB44E /* status.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = status.h; path = module/parameter/status.h; sourceTree = "<group>"; };
+		8422FDFB1A09C0ED002EB44E /* message.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = message.cpp; path = module/parameter/message.cpp; sourceTree = "<group>"; };
+		8422FDFC1A09C0ED002EB44E /* message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = message.h; path = module/parameter/message.h; sourceTree = "<group>"; };
 		8422FE011A09C112002EB44E /* component_bundle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = component_bundle.cpp; path = module/diagram/component_bundle.cpp; sourceTree = "<group>"; };
 		8422FE021A09C112002EB44E /* component_bundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = component_bundle.h; path = module/diagram/component_bundle.h; sourceTree = "<group>"; };
 		8422FE031A09C112002EB44E /* component_IO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = component_IO.cpp; path = module/diagram/component_IO.cpp; sourceTree = "<group>"; };
@@ -230,8 +230,8 @@
 			children = (
 				8422FDF71A09C0ED002EB44E /* parameter.cpp */,
 				8422FDF81A09C0ED002EB44E /* parameter.h */,
-				8422FDFB1A09C0ED002EB44E /* status.cpp */,
-				8422FDFC1A09C0ED002EB44E /* status.h */,
+				8422FDFB1A09C0ED002EB44E /* message.cpp */,
+				8422FDFC1A09C0ED002EB44E /* message.h */,
 			);
 			name = parameter;
 			sourceTree = "<group>";
@@ -479,7 +479,7 @@
 				8422FE411A0A82C5002EB44E /* fft.cpp in Sources */,
 				8499DAD819F9ED2A00AABA1E /* fft_test.cpp in Sources */,
 				84D7EFC319F552F5006B1CA5 /* env_test.cpp in Sources */,
-				8422FE001A09C0ED002EB44E /* status.cpp in Sources */,
+				8422FE001A09C0ED002EB44E /* message.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

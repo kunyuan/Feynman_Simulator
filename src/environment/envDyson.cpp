@@ -50,7 +50,7 @@ void EnvDyson::Save()
     Para.Version++;
     LOG_INFO("Dyson Version is increased to " << Para.Version);
     //TODO: annealing beta here ?
-    Para.GetStatus().Save();
+    Para.GenerateMessage().Save();
 }
 
 void EnvDyson::UpdateWeight()

@@ -70,21 +70,21 @@ void EnvMonteCarlo::DeleteSavedFiles()
 /**
 *  Adjust everything according to new parameters, like new Beta, Jcp
 */
-bool EnvMonteCarlo::CheckStatus()
+bool EnvMonteCarlo::ListenMessage()
 {
     LOG_INFO("Start reweighting...");
-    status Status;
-    if (!Status.Load())
+    Message Message_;
+    if (!Message_.Load())
         return false;
-    if (Para.Version >= Status.Version) {
+    if (Para.Version >= Message_.Version) {
         LOG_INFO("Status has not been updated yet since the last reweighting!");
         return false;
     }
-    Para.SetStatus(Status);
+    Para.UpdateWithMessage(Message_);
     Weight.Load(_GWweightFile, weight::GW, Para);
     Weight.ReWeight(weight::GW | weight::SigmaPolar, Para);
     Grasshopper.ReWeight(Para);
     Scarecrow.ReWeight();
-    LOG_INFO("Reweighted to:\n" << Status.PrettyString());
+    LOG_INFO("Reweighted to:\n" << Message_.PrettyString());
     return true;
 }
