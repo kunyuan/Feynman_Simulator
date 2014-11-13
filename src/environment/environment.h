@@ -50,7 +50,7 @@ class EnvMonteCarlo : public Environment {
     void DeleteSavedFiles();
     bool ReWeight();
 
-    bool CheckStatus();
+    bool ListenMessage();
 
   private:
     std::string _DiagramFile;

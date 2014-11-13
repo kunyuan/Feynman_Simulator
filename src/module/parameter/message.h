@@ -12,7 +12,7 @@
 #include "utility/parser.h"
 namespace para {
 
-class status {
+class Message {
   public:
     int Version;
     real Jcp;
@@ -24,7 +24,7 @@ class status {
     std::string PrettyString();
 
   private:
-    const std::string _StatusFile = "status.txt";
+    const std::string _MessageFile = "message.txt";
     SimpleParser _Para;
 };
 }

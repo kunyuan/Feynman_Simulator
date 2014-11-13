@@ -10,7 +10,7 @@
 #define __Feynman_Simulator__state__
 
 #include "lattice/lattice.h"
-#include "status.h"
+#include "message.h"
 #include "utility/parser.h"
 #include "utility/rng.h"
 #include <string>
@@ -31,8 +31,8 @@ class Parameter {
     real T;
     Lattice Lat;
 
-    status GetStatus();
-    void SetStatus(const status &);
+    Message GenerateMessage();
+    void UpdateWithMessage(const Message &);
 
   protected:
     bool _BuildNew(const std::string &InputFile);

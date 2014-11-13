@@ -6,12 +6,12 @@
 //  Copyright (c) 2014 Kun Chen. All rights reserved.
 //
 
-#include "status.h"
+#include "message.h"
 
-bool para::status::Load()
+bool para::Message::Load()
 {
-    //do not abort if Status file does not exist
-    if (_Para.ParseFile(_StatusFile, false)) {
+    //do not abort if message file does not exist
+    if (_Para.ParseFile(_MessageFile, false)) {
         GetPara(_Para, Jcp);
         GetPara(_Para, Beta);
         GetPara(_Para, Version);
@@ -22,17 +22,17 @@ bool para::status::Load()
         return false;
 }
 
-void para::status::Save()
+void para::Message::Save()
 {
     _Para.clear();
     SetPara(_Para, Jcp);
     SetPara(_Para, Beta);
     SetPara(_Para, Version);
     SetPara(_Para, OrderAccepted);
-    _Para.SaveToFile(_StatusFile, "w");
+    _Para.SaveToFile(_MessageFile, "w");
 }
 
-std::string para::status::PrettyString()
+std::string para::Message::PrettyString()
 {
     return _Para.PrettyString();
 }
