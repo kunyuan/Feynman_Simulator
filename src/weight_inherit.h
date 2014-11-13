@@ -46,8 +46,8 @@ class G : public WeightNoMeasure {
     void FFT(fft::Dir, Mode);
 
   protected:
+    void _InitialBareWeight();
     real _ExternalField;
-    void _InitialBare();
 };
 
 /**
@@ -70,7 +70,7 @@ class W : public WeightNoMeasure {
     void WriteBareToASCII();
 
   protected:
-    void _InitialBare();
+    void _InitialBareWeight();
     std::vector<real> _Interaction;
     real _ExternalField;
 };
