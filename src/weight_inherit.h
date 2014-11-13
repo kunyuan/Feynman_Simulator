@@ -56,7 +56,8 @@ class G : public WeightNoMeasure {
 */
 class W : public WeightNoMeasure {
   public:
-    W(const Lattice &, real Beta, int order, real *Interaction, real ExternalField);
+    W(const Lattice &, real Beta, int order,
+      const std::vector<real> &Interaction, real ExternalField);
     Array::array3<Complex> BareWeight;
     //Monte Carlo interface
     Complex Weight(const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool);
@@ -70,7 +71,7 @@ class W : public WeightNoMeasure {
 
   protected:
     void _InitialBare();
-    real _Interaction[MODEL_PARA_NUM];
+    std::vector<real> _Interaction;
     real _ExternalField;
 };
 

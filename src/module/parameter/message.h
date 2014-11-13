@@ -10,13 +10,14 @@
 #define __Feynman_Simulator__status__
 
 #include "utility/parser.h"
+#include <vector>
 namespace para {
 
 class Message {
   public:
     int Version;
     real Beta;
-    real Interaction[MODEL_PARA_NUM];
+    std::vector<real> Interaction;
     real ExternalField;
 
     bool Load();

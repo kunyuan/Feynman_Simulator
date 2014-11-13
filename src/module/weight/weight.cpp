@@ -134,7 +134,7 @@ void weight::Weight::_AllocateGW(const Parameter &para)
     G = new weight::G(para.Lat, para.Beta, para.Order, para.ExternalField, _IsAllSymmetric);
     delete W;
     W = new weight::W(para.Lat, para.Beta, para.Order,
-                      (real *)para.Interaction, para.ExternalField);
+                      para.Interaction, para.ExternalField);
 }
 
 void weight::Weight::_AllocateSigmaPolar(const Parameter &para)
