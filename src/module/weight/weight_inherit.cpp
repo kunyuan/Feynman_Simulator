@@ -77,9 +77,10 @@ void Polar::Measure(const Site &rin, const Site &rout, real tin, real tout, spin
 
 /***********************  G  **************************************/
 
-G::G(const Lattice &lat, real beta, int order, bool IsTauSymmetric)
+G::G(const Lattice &lat, real beta, int order, real ExternalField, bool IsTauSymmetric)
     : WeightNoMeasure(lat, beta, order, IsTauSymmetric, SPIN4, "G")
 {
+    _ExternalField = ExternalField;
     BareWeight.Allocate(Shape());
     //use _Shape[SP] to _Shape[TAU] to construct array3
     InitialWithBare();
@@ -128,8 +129,8 @@ void G::SetTest()
     for (unsigned int i = 0; i < SmoothWeight.Size(); i++) {
         SmoothWeight(i) = Complex(cos(real(i)), sin(real(i)));
     }
-    DeltaTWeight=0.0;
-    BareWeight=0.0;
+    DeltaTWeight = 0.0;
+    BareWeight = 0.0;
 }
 
 void G::InitialWithDiagCounter()
@@ -145,9 +146,12 @@ void G::InitialWithDiagCounter()
 
 /***********************  W  **************************************/
 
-W::W(const Lattice &lat, real beta, int order)
-    : WeightNoMeasure(lat, beta, order, false, SPIN4, "W")
+W::W(const Lattice &lat, real Beta, int order,
+     const vector<real> &Interaction_, real ExternalField)
+    : WeightNoMeasure(lat, Beta, order, false, SPIN4, "W")
 {
+    _Interaction = Interaction_;
+    _ExternalField = ExternalField;
     BareWeight.Allocate(Shape());
     //use _Shape[SP] to _Shape[VOL] to construct array3
     InitialWithBare();
@@ -184,8 +188,8 @@ void W::SetTest()
     for (unsigned int i = 0; i < SmoothWeight.Size(); i++) {
         SmoothWeight(i) = Complex(sin(real(i)), cos(real(i)));
     }
-    DeltaTWeight=0.0;
-    BareWeight=0.0;
+    DeltaTWeight = 0.0;
+    BareWeight = 0.0;
 }
 
 void W::InitialWithDiagCounter()

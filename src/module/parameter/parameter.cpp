@@ -9,20 +9,22 @@
 #include "parameter.h"
 using namespace para;
 
-status Parameter::GetStatus()
+Message Parameter::GenerateMessage()
 {
-    status Status;
-    Status.Version = Version;
-    Status.Jcp = Jcp;
-    Status.Beta = Beta;
-    return Status;
+    Message Message_;
+    Message_.Version = Version;
+    Message_.Interaction = Interaction;
+    Message_.ExternalField = ExternalField;
+    Message_.Beta = Beta;
+    return Message_;
 }
 
-void Parameter::SetStatus(const status &Status)
+void Parameter::UpdateWithMessage(const Message &Message_)
 {
-    Version = Status.Version;
-    Jcp = Status.Jcp;
-    Beta = Status.Beta;
+    Version = Message_.Version;
+    Interaction = Message_.Interaction;
+    ExternalField = Message_.ExternalField;
+    Beta = Message_.Beta;
     T = 1.0 / Beta;
 }
 
@@ -30,7 +32,8 @@ bool Parameter::_BuildNew(const std::string &InputFile)
 {
     _para.ParseFile(InputFile);
     GetPara(_para, L);
-    GetPara(_para, Jcp);
+    GetPara(_para, Interaction);
+    GetPara(_para, ExternalField);
     GetPara(_para, InitialBeta);
     GetPara(_para, DeltaBeta);
     GetPara(_para, FinalBeta);
@@ -50,7 +53,8 @@ bool Parameter::_Load(const std::string &InputFile)
     _para.ParseFile(InputFile);
     GetPara(_para, Version);
     GetPara(_para, L);
-    GetPara(_para, Jcp);
+    GetPara(_para, Interaction);
+    GetPara(_para, ExternalField);
     GetPara(_para, InitialBeta);
     GetPara(_para, DeltaBeta);
     GetPara(_para, FinalBeta);
@@ -73,7 +77,8 @@ void Parameter::_SavePreparation()
     _para.clear();
     SetPara(_para, Version);
     SetPara(_para, L);
-    SetPara(_para, Jcp);
+    SetPara(_para, Interaction);
+    SetPara(_para, ExternalField);
     SetPara(_para, InitialBeta);
     SetPara(_para, DeltaBeta);
     SetPara(_para, FinalBeta);
@@ -130,7 +135,8 @@ void ParaMC::SetTest()
     int size[2] = {8, 8};
     L = Vec<int>(size);
     Lat.Reset(L);
-    Jcp = 1.0;
+    Interaction.push_back(1.0);
+    ExternalField = 0.0;
     InitialBeta = 1.0;
     DeltaBeta = 0.0;
     FinalBeta = 1.0;
