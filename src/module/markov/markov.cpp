@@ -94,6 +94,8 @@ void Markov::Hop(int sweep)
             ChangeDeltaToContinuous();
         else if (x < SumofProbofCall[13])
             ChangeContinuousToDelta();
+//        else if (x < SumofProbofCall[14])
+//            ChangeSpinOnVertex();
     }
 }
 
@@ -613,6 +615,80 @@ void Markov::ChangeTauOnVertex()
         gin->Weight = ginWeight;
         if(gout!=gin)   gout->Weight = goutWeight;
         w->Weight = wWeight;
+    }
+}
+
+/**
+ *  change Spin in one of the two directions of a vertex
+ */
+void Markov::ChangeSpinOnVertex()
+{
+    //TODO: If W is spin conserved, return;
+    if(Worm->Exist)
+        return;
+    vertex v1 = Diag->RandomPickVer();
+    wLine w1 = v1->NeighW();
+    int dir = RandomPickDir();
+    gLine g = v1->NeighG(dir);
+    vertex v2 = g->NeighVer(dir);
+    wLine w2 = v2->NeighW();
+    
+    spin spinv1[2]={v1->Spin(IN), v1->Spin(OUT)};
+    spinv1[dir] = FLIP(spinv1[dir]);
+    
+    spin spinv2[2]={v2->Spin(IN), v2->Spin(OUT)};
+    spinv2[INVERSE(dir)] = FLIP(spinv2[INVERSE(dir)]);
+    
+    spin spinv[2];
+    spinv[dir] = spinv1[dir];
+    spinv[INVERSE(dir)] = spinv2[INVERSE(dir)];
+
+    Complex gWeight, w1Weight, w2Weight;
+    if(w1==w2){
+        
+        w1Weight = W->Weight(v1->Dir, v1->R, w1->NeighVer(INVERSE(v1->Dir))->R,
+                              v1->Tau, w1->NeighVer(INVERSE(v1->Dir))->Tau,
+                              spinv, w1->NeighVer(INVERSE(v1->Dir))->Spin(),
+                              w1->IsWorm, w1->IsMeasure, w1->IsDelta);
+        gWeight = G->Weight(dir, v2->R, v1->R, v2->Tau, v1->Tau,
+                            spinv[INVERSE(dir)], spinv[dir], g->IsMeasure);
+        
+    }else{
+        w1Weight = W->Weight(v1->Dir, v1->R, w1->NeighVer(INVERSE(v1->Dir))->R,
+                              v1->Tau, w1->NeighVer(INVERSE(v1->Dir))->Tau,
+                              spinv1, w1->NeighVer(INVERSE(v1->Dir))->Spin(),
+                              w1->IsWorm, w1->IsMeasure, w1->IsDelta);
+        
+        w2Weight = W->Weight(v2->Dir, v2->R, w2->NeighVer(INVERSE(v2->Dir))->R,
+                              v2->Tau, w2->NeighVer(INVERSE(v2->Dir))->Tau,
+                              spinv2, w2->NeighVer(INVERSE(v2->Dir))->Spin(),
+                              w2->IsWorm, w2->IsMeasure, w2->IsDelta);
+        
+        gWeight = G->Weight(dir, v2->R, v1->R, v2->Tau, v1->Tau,
+                            spinv2[INVERSE(dir)], spinv1[dir], g->IsMeasure);
+    }
+    
+    
+    Complex weightRatio = gWeight * w1Weight *w2Weight
+                        /(g->Weight * w1->Weight * w2->Weight);
+    
+    if(v1==v2)
+        weightRatio = gWeight *w1Weight/(g->Weight * w1->Weight);
+    
+    real prob = mod(weightRatio);
+    Complex sgn = phase(weightRatio);
+
+    if (prob >= 1.0 || RNG->urn() < prob) {
+        Diag->Phase *= sgn;
+        Diag->Weight *= weightRatio;
+        
+        v1->SetSpin(spinv1);
+        v2->SetSpin(spinv2);
+        if(v1==v2) v1->SetSpin(spinv);
+
+        g->Weight = gWeight;
+        w1->Weight = w1Weight;
+        if(w2!=w1)   w2->Weight = w2Weight;
     }
 }
 
