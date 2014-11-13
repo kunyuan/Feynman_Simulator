@@ -95,7 +95,7 @@ class Lattice {
     int Sublat2Index(int, int) const;
     int Index2Sublat(int, int direction) const;
     //return true if the Index represent a pair between the same sublattice
-    bool IsLocal(int Index);
+    bool IsOnSameSubLat(int Index);
 
     void Reset(const Vec<int> &size);
 
@@ -104,11 +104,7 @@ class Lattice {
     int GetName(const Site &) const;
 
     Distance Dist(const Site &, const Site &) const;
-    int GetSublat(const Distance &, int direction) const;
-    Vec<int> GetVec(const Distance &) const;
-    Vec<int> GetVec(const Site &) const;
 
-    //    Vec<real> GetRealVec(const Site &) const;
     Vec<real> GetRealVec(const Site &, Vec<int> offset = Vec<int>(0)) const;
     Vec<real> GetRealVec(const Distance &, Vec<int> offset = Vec<int>(0)) const;
 

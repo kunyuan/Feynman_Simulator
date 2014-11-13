@@ -36,9 +36,12 @@ void Test_Updates()
     Markov markov;
     markov.BuildNew(Para, Diag, Weight);
 
-    for (int i = 0; i < 10; i++) {
-        markov.Hop(100);
-        sput_fail_unless(markov.Diag->CheckDiagram(), "Weight check for all the random steps");
+//    Para.RNG.Reset(100);
+    for (int i = 0; i < 100; i++) {
+//        if(i==4237)
+//            cout  << i << endl;
+        markov.Hop(10000);
+        sput_fail_unless(markov.Diag->CheckDiagram(), "Check for all the random steps");
     }
-    LOG_INFO("Updates(Create,Delete, and Move Worm) are done!");
+    LOG_INFO("Updates Check are done!");
 }
