@@ -70,7 +70,7 @@ void EnvMonteCarlo::DeleteSavedFiles()
 /**
 *  Adjust everything according to new parameters, like new Beta, Jcp
 */
-bool EnvMonteCarlo::ListenMessage()
+bool EnvMonteCarlo::ListenToMessage()
 {
     LOG_INFO("Start reweighting...");
     Message Message_;

@@ -3,7 +3,8 @@ MC    #Type
 1     #StartFromBare
 1    #pid         
 8,8    #L       
-1.0    #Jcp   
+1.0,0.0    #Interaction
+0.0     #ExternalField
 1.0    #initialBeta    
 0.0    #deltaBeta    
 1.0    #finalBeta  

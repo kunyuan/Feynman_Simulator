@@ -77,9 +77,10 @@ void Polar::Measure(const Site &rin, const Site &rout, real tin, real tout, spin
 
 /***********************  G  **************************************/
 
-G::G(const Lattice &lat, real beta, int order, bool IsTauSymmetric)
+G::G(const Lattice &lat, real beta, int order, real ExternalField, bool IsTauSymmetric)
     : WeightNoMeasure(lat, beta, order, IsTauSymmetric, SPIN4, "G")
 {
+    _ExternalField = ExternalField;
     BareWeight.Allocate(Shape());
     //use _Shape[SP] to _Shape[TAU] to construct array3
     _InitialBare();
@@ -128,15 +129,17 @@ void G::SetTest()
     for (unsigned int i = 0; i < SmoothWeight.Size(); i++) {
         SmoothWeight(i) = Complex(cos(real(i)), sin(real(i)));
     }
-    DeltaTWeight=0.0;
-    BareWeight=0.0;
+    DeltaTWeight = 0.0;
+    BareWeight = 0.0;
 }
 
 /***********************  W  **************************************/
 
-W::W(const Lattice &lat, real beta, int order)
-    : WeightNoMeasure(lat, beta, order, false, SPIN4, "W")
+W::W(const Lattice &lat, real Beta, int order, real Interaction[], real ExternalField)
+    : WeightNoMeasure(lat, Beta, order, false, SPIN4, "W")
 {
+    AssignFromTo(Interaction, _Interaction, MODEL_PARA_NUM);
+    _ExternalField = ExternalField;
     BareWeight.Allocate(Shape());
     //use _Shape[SP] to _Shape[VOL] to construct array3
     _InitialBare();
@@ -173,8 +176,8 @@ void W::SetTest()
     for (unsigned int i = 0; i < SmoothWeight.Size(); i++) {
         SmoothWeight(i) = Complex(sin(real(i)), cos(real(i)));
     }
-    DeltaTWeight=0.0;
-    BareWeight=0.0;
+    DeltaTWeight = 0.0;
+    BareWeight = 0.0;
 }
 
 Complex W::Weight(int dir, const Site &r1, const Site &r2, real t1, real t2, spin *Spin1, spin *Spin2, bool IsWorm, bool IsMeasure, bool IsDelta)

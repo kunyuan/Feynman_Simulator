@@ -35,7 +35,7 @@ class Polar : public WeightNeedMeasure {
 };
 class G : public WeightNoMeasure {
   public:
-    G(const Lattice &, real Beta, int order, bool IsTauSymmetric = false);
+    G(const Lattice &, real Beta, int order, real ExternalField, bool IsTauSymmetric = false);
     Array::array4<Complex> BareWeight;
     //Monte Carlo interface
     Complex Weight(const Site &, const Site &, real, real, spin, spin, bool);
@@ -46,6 +46,7 @@ class G : public WeightNoMeasure {
     void FFT(fft::Dir, Mode);
 
   protected:
+    real _ExternalField;
     void _InitialBare();
 };
 
@@ -55,7 +56,7 @@ class G : public WeightNoMeasure {
 */
 class W : public WeightNoMeasure {
   public:
-    W(const Lattice &, real Beta, int order);
+    W(const Lattice &, real Beta, int order, real *Interaction, real ExternalField);
     Array::array3<Complex> BareWeight;
     //Monte Carlo interface
     Complex Weight(const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool);
@@ -69,6 +70,8 @@ class W : public WeightNoMeasure {
 
   protected:
     void _InitialBare();
+    real _Interaction[MODEL_PARA_NUM];
+    real _ExternalField;
 };
 
 class Worm {

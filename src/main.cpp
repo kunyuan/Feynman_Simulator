@@ -61,7 +61,7 @@ void MonteCarlo(const para::Job &Job)
             PaddyField.Save();
         }
         if (Para.Counter % 20 == 0) {
-            PaddyField.ListenMessage();
+            PaddyField.ListenToMessage();
         }
     }
 }
@@ -83,6 +83,7 @@ void Dyson(const para::Job &Job)
 
         Para.Version++;
         env.Save();
+        env.BroadcastMessage();
         LOG_INFO("Version " << Para.Version << " is done!")
 
         if (Job.DoesLoad) {
