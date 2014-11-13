@@ -16,7 +16,7 @@
 		841D511319EB6DD900FDB7FF /* logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 841D511119EB6DD900FDB7FF /* logger.cpp */; };
 		841D905C19E054900066116A /* test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 841D905B19E054900066116A /* test.cpp */; };
 		8422FDFE1A09C0ED002EB44E /* parameter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FDF71A09C0ED002EB44E /* parameter.cpp */; };
-		8422FE001A09C0ED002EB44E /* status.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FDFB1A09C0ED002EB44E /* status.cpp */; };
+		8422FE001A09C0ED002EB44E /* message.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FDFB1A09C0ED002EB44E /* message.cpp */; };
 		8422FE0D1A09C112002EB44E /* component_bundle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FE011A09C112002EB44E /* component_bundle.cpp */; };
 		8422FE0E1A09C112002EB44E /* component_IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FE031A09C112002EB44E /* component_IO.cpp */; };
 		8422FE0F1A09C112002EB44E /* component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FE041A09C112002EB44E /* component.cpp */; };
@@ -39,6 +39,7 @@
 		8422FE4D1A0A85E7002EB44E /* job.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FE4B1A0A85E7002EB44E /* job.cpp */; };
 		843D3FB41A1114FD00DACC51 /* weight_estimator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 843D3FB21A1114FD00DACC51 /* weight_estimator.cpp */; };
 		843D3FB61A11488E00DACC51 /* analytic_calc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 843D3FB51A11488E00DACC51 /* analytic_calc.cpp */; };
+		843D3FB91A15119A00DACC51 /* model_para.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 843D3FB71A15119A00DACC51 /* model_para.cpp */; };
 		84519AEB19F2C554007CB81B /* environment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84519AE919F2C554007CB81B /* environment.cpp */; };
 		84519AED19F2C57A007CB81B /* envMonteCarlo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84519AEC19F2C57A007CB81B /* envMonteCarlo.cpp */; };
 		84519AEF19F2C5B2007CB81B /* envDyson.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84519AEE19F2C5B2007CB81B /* envDyson.cpp */; };
@@ -89,8 +90,8 @@
 		841D905B19E054900066116A /* test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = test.cpp; sourceTree = "<group>"; };
 		8422FDF71A09C0ED002EB44E /* parameter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = parameter.cpp; path = module/parameter/parameter.cpp; sourceTree = "<group>"; };
 		8422FDF81A09C0ED002EB44E /* parameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = parameter.h; path = module/parameter/parameter.h; sourceTree = "<group>"; };
-		8422FDFB1A09C0ED002EB44E /* status.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = status.cpp; path = module/parameter/status.cpp; sourceTree = "<group>"; };
-		8422FDFC1A09C0ED002EB44E /* status.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = status.h; path = module/parameter/status.h; sourceTree = "<group>"; };
+		8422FDFB1A09C0ED002EB44E /* message.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = message.cpp; path = module/parameter/message.cpp; sourceTree = "<group>"; };
+		8422FDFC1A09C0ED002EB44E /* message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = message.h; path = module/parameter/message.h; sourceTree = "<group>"; };
 		8422FE011A09C112002EB44E /* component_bundle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = component_bundle.cpp; path = module/diagram/component_bundle.cpp; sourceTree = "<group>"; };
 		8422FE021A09C112002EB44E /* component_bundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = component_bundle.h; path = module/diagram/component_bundle.h; sourceTree = "<group>"; };
 		8422FE031A09C112002EB44E /* component_IO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = component_IO.cpp; path = module/diagram/component_IO.cpp; sourceTree = "<group>"; };
@@ -130,6 +131,8 @@
 		843D3FB21A1114FD00DACC51 /* weight_estimator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = weight_estimator.cpp; path = module/weight/weight_estimator.cpp; sourceTree = "<group>"; };
 		843D3FB31A1114FD00DACC51 /* weight_estimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = weight_estimator.h; path = module/weight/weight_estimator.h; sourceTree = "<group>"; };
 		843D3FB51A11488E00DACC51 /* analytic_calc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = analytic_calc.cpp; path = module/weight/analytic_calc.cpp; sourceTree = "<group>"; };
+		843D3FB71A15119A00DACC51 /* model_para.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = model_para.cpp; path = module/parameter/model_para.cpp; sourceTree = "<group>"; };
+		843D3FB81A15119A00DACC51 /* model_para.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = model_para.h; path = module/parameter/model_para.h; sourceTree = "<group>"; };
 		84519AE919F2C554007CB81B /* environment.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = environment.cpp; path = environment/environment.cpp; sourceTree = "<group>"; };
 		84519AEA19F2C554007CB81B /* environment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = environment.h; path = environment/environment.h; sourceTree = "<group>"; };
 		84519AEC19F2C57A007CB81B /* envMonteCarlo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = envMonteCarlo.cpp; path = environment/envMonteCarlo.cpp; sourceTree = "<group>"; };
@@ -230,8 +233,10 @@
 			children = (
 				8422FDF71A09C0ED002EB44E /* parameter.cpp */,
 				8422FDF81A09C0ED002EB44E /* parameter.h */,
-				8422FDFB1A09C0ED002EB44E /* status.cpp */,
-				8422FDFC1A09C0ED002EB44E /* status.h */,
+				8422FDFB1A09C0ED002EB44E /* message.cpp */,
+				8422FDFC1A09C0ED002EB44E /* message.h */,
+				843D3FB71A15119A00DACC51 /* model_para.cpp */,
+				843D3FB81A15119A00DACC51 /* model_para.h */,
 			);
 			name = parameter;
 			sourceTree = "<group>";
@@ -460,6 +465,7 @@
 				84D7EFBC19F36361006B1CA5 /* array_test.cpp in Sources */,
 				8422FE111A09C112002EB44E /* diagram_IO.cpp in Sources */,
 				8422FE271A09C13D002EB44E /* markov.cpp in Sources */,
+				843D3FB91A15119A00DACC51 /* model_para.cpp in Sources */,
 				84519AED19F2C57A007CB81B /* envMonteCarlo.cpp in Sources */,
 				8422FE391A0A7ECA002EB44E /* weight_test.cpp in Sources */,
 				8422FE0E1A09C112002EB44E /* component_IO.cpp in Sources */,
@@ -479,7 +485,7 @@
 				8422FE411A0A82C5002EB44E /* fft.cpp in Sources */,
 				8499DAD819F9ED2A00AABA1E /* fft_test.cpp in Sources */,
 				84D7EFC319F552F5006B1CA5 /* env_test.cpp in Sources */,
-				8422FE001A09C0ED002EB44E /* status.cpp in Sources */,
+				8422FE001A09C0ED002EB44E /* message.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

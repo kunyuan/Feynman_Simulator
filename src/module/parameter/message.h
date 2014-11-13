@@ -10,21 +10,22 @@
 #define __Feynman_Simulator__status__
 
 #include "utility/parser.h"
+#include <vector>
 namespace para {
 
-class status {
+class Message {
   public:
     int Version;
-    real Jcp;
     real Beta;
-    int OrderAccepted;
+    std::vector<real> Interaction;
+    real ExternalField;
 
     bool Load();
     void Save();
     std::string PrettyString();
 
   private:
-    const std::string _StatusFile = "status.txt";
+    const std::string _MessageFile = "message.txt";
     SimpleParser _Para;
 };
 }

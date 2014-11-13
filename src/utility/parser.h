@@ -11,6 +11,7 @@
 
 #include <map>
 #include <string>
+#include <vector>
 #include "utility/utility.h"
 #include "utility/abort.h"
 
@@ -24,6 +25,7 @@
 *
 *  Value1          #key1
 *  Value2          #key2
+*  ##Some comments
 *  ......          #....
 *
 *  to use the set member function of the class, you have to overload ToString(T) method for your type T
@@ -45,6 +47,15 @@ class SimpleParser {
         key = _ToUpper(key);
         _map[key] = ToString(value);
     }
+    template <typename T>
+    void set(std::string key, std::vector<T> value)
+    {
+        ASSERT_ALLWAYS(value.size() == 0, "vector should has element in it!");
+        key = _ToUpper(key);
+        _map[key] = ToString(value[0]);
+        for (auto iter = ++value.begin(); iter < value.end(); ++iter)
+            _map[key] += "," + ToString(*iter);
+    }
 
     template <typename T>
     void set(std::string key, T *value, int num)
@@ -65,6 +76,24 @@ class SimpleParser {
         ss >> value;
         if (ss.fail())
             ABORT("Fail to read " << key << "!");
+    }
+    template <typename T>
+    void get(std::string key, std::vector<T> &value, char sep = ',')
+    {
+        key = _ToUpper(key);
+        _MakeSureKeyExists(key);
+        std::stringstream ss(_map.at(key));
+        while (!ss.eof()) {
+            if (ss.peek() != sep) {
+                T elem;
+                ss >> elem;
+                if (ss.fail())
+                    ABORT("Fail to read " << key << "!");
+                value.push_back(elem);
+            }
+            else
+                ss.get();
+        }
     }
 
     template <typename T>
