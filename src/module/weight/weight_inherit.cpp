@@ -133,6 +133,17 @@ void G::SetTest()
     BareWeight = 0.0;
 }
 
+void G::InitialWithDiagCounter()
+{
+    for (unsigned int i = 0; i < SmoothWeight.Size(); i++) {
+        SmoothWeight(i) = Complex(0.0, 0.0);
+    }
+    //spin==UP,UP; dr==0; independent of tau
+    SmoothWeight[0][0][0] = Complex(1.0, 0.0);
+    DeltaTWeight=0.0;
+    BareWeight=0.0;
+}
+
 /***********************  W  **************************************/
 
 W::W(const Lattice &lat, real Beta, int order,
@@ -179,6 +190,17 @@ void W::SetTest()
     }
     DeltaTWeight = 0.0;
     BareWeight = 0.0;
+}
+
+void W::InitialWithDiagCounter()
+{
+    for (unsigned int i = 0; i < SmoothWeight.Size(); i++) {
+        SmoothWeight(i) = Complex(0.0, 0.0);
+    }
+    //spin==UP,UP,UP,UP; dr==0; independent of tau
+    SmoothWeight[0][0][0] = Complex(1.0, 0.0);
+    DeltaTWeight=0.0;
+    BareWeight=0.0;
 }
 
 Complex W::Weight(int dir, const Site &r1, const Site &r2, real t1, real t2, spin *Spin1, spin *Spin2, bool IsWorm, bool IsMeasure, bool IsDelta)

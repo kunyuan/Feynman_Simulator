@@ -70,6 +70,7 @@ class Markov {
     void ChangeMeasureFromWToG();
     void ChangeDeltaToContinuous();
     void ChangeContinuousToDelta();
+    void ChangeSpinOnVertex();
 
   private:
     int RandomPickDeltaSpin();
