@@ -17,7 +17,7 @@ void G::_InitialBare()
     int spin_down = SpinIndex(DOWN, DOWN);
     int spin_up = SpinIndex(UP, UP);
     for (int sub = 0; sub < _Shape[SUB]; sub++) {
-        if (_Lat.IsLocal(sub))
+        if (_Lat.IsOnSameSubLat(sub))
             continue;
         int coor = 0;
         for (int tau = 0; tau < _Shape[TAU]; tau++) {

@@ -110,7 +110,7 @@ int Lattice::Index2Sublat(int index, int dir) const
         return index / NSublattice;
 }
 
-bool Lattice::IsLocal(int Index)
+bool Lattice::IsOnSameSubLat(int Index)
 {
     return Index2Sublat(Index, IN) ==
            Index2Sublat(Index, OUT);
@@ -168,23 +168,6 @@ Site Lattice::GetSite(const Distance &dis, int direction) const
         return Site(Index2Sublat(dis.SublatIndex, direction), Index2Vec(dis.CoordiIndex));
 }
 
-int Lattice::GetSublat(const Distance &dis, int dir) const
-{
-    return Index2Sublat(dis.SublatIndex, dir);
-}
-
-Vec<int> Lattice::GetVec(const Distance &dis) const
-{
-    if (DEBUGMODE && (dis.CoordiIndex < 0 || dis.CoordiIndex >= Vol))
-        ABORT("Wrong Coordinate index number!");
-    return Index2Vec(dis.CoordiIndex);
-}
-
-Vec<int> Lattice::GetVec(const class Site &site) const
-{
-    return site.Coordinate;
-}
-
 /**
  *  get the real vector for the distance between two sites
  *
@@ -193,10 +176,12 @@ Vec<int> Lattice::GetVec(const class Site &site) const
 Vec<real> Lattice::GetRealVec(const class Distance &dis, Vec<int> offset) const
 {
     Vec<real> vec(0.0);
-    Vec<int> coordinate = Shift(GetVec(dis) + offset);
+    Site site_out = GetSite(dis, OUT);
+    Site site_in = GetSite(dis, IN);
+    Vec<int> coordinate = Shift(site_out.Coordinate + offset);
     for (int i = 0; i < D; i++)
         vec += LatticeVec[i] * coordinate[i];
-    vec += SublatticeVec[GetSublat(dis, OUT)] - SublatticeVec[GetSublat(dis, IN)];
+    vec += SublatticeVec[site_out.Sublattice] - SublatticeVec[site_in.Sublattice];
     return vec;
 }
 

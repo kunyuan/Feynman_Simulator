@@ -126,7 +126,7 @@ Complex G::Weight(int dir, const Site &r1, const Site &r2, real t1, real t2, spi
 void G::SetTest()
 {
     for (unsigned int i = 0; i < SmoothWeight.Size(); i++) {
-        SmoothWeight(i) = Complex(1.0, 0.0);
+        SmoothWeight(i) = Complex(cos(real(i)), sin(real(i)));
     }
     DeltaTWeight=0.0;
     BareWeight=0.0;
@@ -171,7 +171,7 @@ Complex W::Weight(const Site &rin, const Site &rout, real tin, real tout, spin *
 void W::SetTest()
 {
     for (unsigned int i = 0; i < SmoothWeight.Size(); i++) {
-        SmoothWeight(i) = Complex(1.0, 0.0);
+        SmoothWeight(i) = Complex(sin(real(i)), cos(real(i)));
     }
     DeltaTWeight=0.0;
     BareWeight=0.0;
