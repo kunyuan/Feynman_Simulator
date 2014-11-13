@@ -110,7 +110,7 @@ int Lattice::Index2Sublat(int index, int dir) const
         return index / NSublattice;
 }
 
-bool Lattice::IsLocal(int Index)
+bool Lattice::IsOnSameSubLat(int Index)
 {
     return Index2Sublat(Index, IN) ==
            Index2Sublat(Index, OUT);
@@ -166,23 +166,6 @@ Site Lattice::GetSite(const Distance &dis, int direction) const
         return Site(Index2Sublat(dis.SublatIndex, direction), Vec<int>(0));
     else
         return Site(Index2Sublat(dis.SublatIndex, direction), Index2Vec(dis.CoordiIndex));
-}
-
-int Lattice::GetSublat(const Distance &dis, int dir) const
-{
-    return Index2Sublat(dis.SublatIndex, dir);
-}
-
-Vec<int> Lattice::GetVec(const Distance &dis) const
-{
-    if (DEBUGMODE && (dis.CoordiIndex < 0 || dis.CoordiIndex >= Vol))
-        ABORT("Wrong Coordinate index number!");
-    return Index2Vec(dis.CoordiIndex);
-}
-
-Vec<int> Lattice::GetVec(const class Site &site) const
-{
-    return site.Coordinate;
 }
 
 /**
