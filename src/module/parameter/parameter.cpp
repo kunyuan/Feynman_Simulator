@@ -13,7 +13,8 @@ Message Parameter::GenerateMessage()
 {
     Message Message_;
     Message_.Version = Version;
-    Message_.Jcp = Jcp;
+    AssignFromTo(Interaction, Message_.Interaction, MODEL_PARA_NUM);
+    Message_.ExternalField = ExternalField;
     Message_.Beta = Beta;
     return Message_;
 }
@@ -21,7 +22,8 @@ Message Parameter::GenerateMessage()
 void Parameter::UpdateWithMessage(const Message &Message_)
 {
     Version = Message_.Version;
-    Jcp = Message_.Jcp;
+    AssignFromTo((real *)Message_.Interaction, Interaction, MODEL_PARA_NUM);
+    ExternalField = Message_.ExternalField;
     Beta = Message_.Beta;
     T = 1.0 / Beta;
 }
@@ -30,7 +32,8 @@ bool Parameter::_BuildNew(const std::string &InputFile)
 {
     _para.ParseFile(InputFile);
     GetPara(_para, L);
-    GetPara(_para, Jcp);
+    GetParaArray(_para, Interaction, MODEL_PARA_NUM);
+    GetPara(_para, ExternalField);
     GetPara(_para, InitialBeta);
     GetPara(_para, DeltaBeta);
     GetPara(_para, FinalBeta);
@@ -50,7 +53,8 @@ bool Parameter::_Load(const std::string &InputFile)
     _para.ParseFile(InputFile);
     GetPara(_para, Version);
     GetPara(_para, L);
-    GetPara(_para, Jcp);
+    GetParaArray(_para, Interaction, MODEL_PARA_NUM);
+    GetPara(_para, ExternalField);
     GetPara(_para, InitialBeta);
     GetPara(_para, DeltaBeta);
     GetPara(_para, FinalBeta);
@@ -73,7 +77,8 @@ void Parameter::_SavePreparation()
     _para.clear();
     SetPara(_para, Version);
     SetPara(_para, L);
-    SetPara(_para, Jcp);
+    SetParaArray(_para, Interaction, MODEL_PARA_NUM);
+    SetPara(_para, ExternalField);
     SetPara(_para, InitialBeta);
     SetPara(_para, DeltaBeta);
     SetPara(_para, FinalBeta);
@@ -130,7 +135,8 @@ void ParaMC::SetTest()
     int size[2] = {8, 8};
     L = Vec<int>(size);
     Lat.Reset(L);
-    Jcp = 1.0;
+    Interaction[0] = 1.0;
+    ExternalField = 0.0;
     InitialBeta = 1.0;
     DeltaBeta = 0.0;
     FinalBeta = 1.0;

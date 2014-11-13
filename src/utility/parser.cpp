@@ -12,7 +12,19 @@
 
 using namespace std;
 
-#define SEP "#"
+#define SEP '#'
+
+string trim(string s)
+{
+    if (s.empty()) {
+        return s;
+    }
+
+    s.erase(0, s.find_first_not_of(" "));
+    s.erase(s.find_last_not_of(" ") + 1);
+    return s;
+}
+
 /**
 *  Load all __existed__ keys from file
 *
@@ -35,6 +47,9 @@ bool SimpleParser::ParseFile(const std::string &InputFile, bool AbortIfFail)
     string temp;
     _map.clear();
     while (getline(ifs, temp)) {
+        string key = trim(temp);
+        if (temp[0] == SEP && temp[1] == SEP)
+            continue;
         _map.insert(make_pair(temp));
     }
     return true;
@@ -92,17 +107,6 @@ std::string SimpleParser::get(std::string key)
 {
     _MakeSureKeyExists(key);
     return _map[_ToUpper(key)];
-}
-
-string trim(string s)
-{
-    if (s.empty()) {
-        return s;
-    }
-
-    s.erase(0, s.find_first_not_of(" "));
-    s.erase(s.find_last_not_of(" ") + 1);
-    return s;
 }
 
 std::pair<string, string> SimpleParser::make_pair(string source)

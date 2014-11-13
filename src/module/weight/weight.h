@@ -40,8 +40,8 @@ class Weight {
     int UpdateSigmaPolarWeight(int OrderAccepted, real ErrorThreshold);
 
   private:
-    void _AllocateGW(const Lattice &Lat, real Beta, int order);
-    void _AllocateSigmaPolar(const Lattice &Lat, real Beta, int order);
+    void _AllocateGW(const para::Parameter &);
+    void _AllocateSigmaPolar(const para::Parameter &);
 };
 int TestWeight();
 }

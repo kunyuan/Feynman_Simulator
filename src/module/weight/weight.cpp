@@ -39,13 +39,15 @@ weight::Weight::~Weight()
 
 bool weight::Weight::BuildNew(flag _flag, const Parameter &para)
 {
+    if (para.Order == 0)
+        ABORT("Order can not be zero!!!");
     if (_flag & weight::GW) {
-        _AllocateGW(para.Lat, para.Beta, para.Order);
+        _AllocateGW(para);
         G->StartWithBare();
         W->StartWithBare();
     }
     if (_flag & weight::SigmaPolar) {
-        _AllocateSigmaPolar(para.Lat, para.Beta, para.Order);
+        _AllocateSigmaPolar(para);
         Sigma->ClearStatistics();
         Polar->ClearStatistics();
     }
@@ -75,12 +77,12 @@ void weight::Weight::ReWeight(flag _flag, const Parameter &para)
 bool weight::Weight::Load(const std::string &InputFile, flag _flag, const Parameter &para)
 {
     if (_flag & weight::GW) {
-        _AllocateGW(para.Lat, para.Beta, para.Order);
+        _AllocateGW(para);
         G->Load(InputFile);
         W->Load(InputFile);
     }
     if (_flag & weight::SigmaPolar) {
-        _AllocateSigmaPolar(para.Lat, para.Beta, para.Order);
+        _AllocateSigmaPolar(para);
         Sigma->Load(InputFile);
         Polar->Load(InputFile);
     }
@@ -119,25 +121,26 @@ int weight::Weight::UpdateSigmaPolarWeight(int OrderAccepted, real ErrorThreshol
 
 void weight::Weight::SetTest(const Parameter &para)
 {
-    _AllocateGW(para.Lat, para.Beta, para.Order);
-    _AllocateSigmaPolar(para.Lat, para.Beta, para.Order);
+    _AllocateGW(para);
+    _AllocateSigmaPolar(para);
     G->SetTest();
     W->SetTest();
 }
 
-void weight::Weight::_AllocateGW(const Lattice &Lat, real Beta, int order)
+void weight::Weight::_AllocateGW(const Parameter &para)
 {
     //make sure old Sigma/Polar/G/W are released before assigning new memory
     delete G;
-    G = new weight::G(Lat, Beta, order, _IsAllSymmetric);
+    G = new weight::G(para.Lat, para.Beta, para.Order, para.ExternalField, _IsAllSymmetric);
     delete W;
-    W = new weight::W(Lat, Beta, order);
+    W = new weight::W(para.Lat, para.Beta, para.Order,
+                      (real *)para.Interaction, para.ExternalField);
 }
 
-void weight::Weight::_AllocateSigmaPolar(const Lattice &Lat, real Beta, int order)
+void weight::Weight::_AllocateSigmaPolar(const Parameter &para)
 {
     delete Sigma;
-    Sigma = new weight::Sigma(Lat, Beta, order, _IsAllSymmetric);
+    Sigma = new weight::Sigma(para.Lat, para.Beta, para.Order, _IsAllSymmetric);
     delete Polar;
-    Polar = new weight::Polar(Lat, Beta, order);
+    Polar = new weight::Polar(para.Lat, para.Beta, para.Order);
 }

@@ -50,7 +50,7 @@ class EnvMonteCarlo : public Environment {
     void DeleteSavedFiles();
     bool ReWeight();
 
-    bool ListenMessage();
+    bool ListenToMessage();
 
   private:
     std::string _DiagramFile;
@@ -69,6 +69,7 @@ class EnvDyson : public Environment {
     void Save();
     void UpdateWeight();
     //Update the weight of Sigma and Polar according to Para.ErrorThreshold and Para.OrderAccepted
+    void BroadcastMessage();
 
   private:
 };

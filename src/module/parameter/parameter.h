@@ -13,6 +13,7 @@
 #include "message.h"
 #include "utility/parser.h"
 #include "utility/rng.h"
+#include "utility/convention.h"
 #include <string>
 
 namespace para {
@@ -20,7 +21,8 @@ namespace para {
 class Parameter {
   public:
     int Version;
-    real Jcp;
+    real Interaction[MODEL_PARA_NUM];
+    real ExternalField;
     real InitialBeta;
     real DeltaBeta;
     real FinalBeta;

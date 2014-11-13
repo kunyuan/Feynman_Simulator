@@ -50,7 +50,6 @@ void EnvDyson::Save()
     Para.Version++;
     LOG_INFO("Dyson Version is increased to " << Para.Version);
     //TODO: annealing beta here ?
-    Para.GenerateMessage().Save();
 }
 
 void EnvDyson::UpdateWeight()
@@ -58,4 +57,9 @@ void EnvDyson::UpdateWeight()
     LOG_INFO("Update Sigma&Polar weight with ErrorThreshold=" << Para.ErrorThreshold);
     Para.OrderAccepted = Weight.UpdateSigmaPolarWeight(Para.OrderAccepted, Para.ErrorThreshold);
     LOG_INFO("Sigma&Polar weight is updated to Order=" << Para.OrderAccepted);
+}
+
+void EnvDyson::BroadcastMessage()
+{
+    Para.GenerateMessage().Save();
 }

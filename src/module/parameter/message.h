@@ -15,9 +15,9 @@ namespace para {
 class Message {
   public:
     int Version;
-    real Jcp;
     real Beta;
-    int OrderAccepted;
+    real Interaction[MODEL_PARA_NUM];
+    real ExternalField;
 
     bool Load();
     void Save();

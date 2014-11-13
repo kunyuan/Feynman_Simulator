@@ -12,10 +12,10 @@ bool para::Message::Load()
 {
     //do not abort if message file does not exist
     if (_Para.ParseFile(_MessageFile, false)) {
-        GetPara(_Para, Jcp);
+        GetParaArray(_Para, Interaction, MODEL_PARA_NUM);
+        GetPara(_Para, ExternalField);
         GetPara(_Para, Beta);
         GetPara(_Para, Version);
-        GetPara(_Para, OrderAccepted);
         return true;
     }
     else
@@ -25,10 +25,10 @@ bool para::Message::Load()
 void para::Message::Save()
 {
     _Para.clear();
-    SetPara(_Para, Jcp);
+    SetParaArray(_Para, Interaction, MODEL_PARA_NUM);
+    SetPara(_Para, ExternalField);
     SetPara(_Para, Beta);
     SetPara(_Para, Version);
-    SetPara(_Para, OrderAccepted);
     _Para.SaveToFile(_MessageFile, "w");
 }
 

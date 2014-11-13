@@ -122,6 +122,7 @@ void TestWeightW()
 {
     Lattice lat(Vec<int>(8));
     real Beta = 1.0;
-    weight::W W_(lat, Beta, 4);
+    real Interaction[2] = {1.0, 0.0};
+    weight::W W_(lat, Beta, 4, Interaction, 0.0);
     W_.WriteBareToASCII();
 }

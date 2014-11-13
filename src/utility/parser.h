@@ -24,6 +24,7 @@
 *
 *  Value1          #key1
 *  Value2          #key2
+*  ##Some comments
 *  ......          #....
 *
 *  to use the set member function of the class, you have to overload ToString(T) method for your type T
