@@ -74,6 +74,12 @@ int WeightNoMeasure::SpinIndex(spin SpinIn, spin SpinOut)
     return SpinIn * SPIN + SpinOut;
 }
 
+int WeightNoMeasure::SpinIndex(spin SpinInIn, spin SpinInOut, spin SpinOutIn, spin SpinOutOut)
+{
+    return SpinInIn * SPIN3 + SpinInOut * SPIN2 +
+            SpinOutIn * SPIN + SpinOutOut;
+}
+
 int WeightNoMeasure::SpinIndex(spin *TwoSpinIn, spin *TwoSpinOut)
 {
     return TwoSpinIn[0] * SPIN3 + TwoSpinIn[1] * SPIN2 +

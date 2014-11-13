@@ -82,7 +82,7 @@ G::G(const Lattice &lat, real beta, int order, bool IsTauSymmetric)
 {
     BareWeight.Allocate(Shape());
     //use _Shape[SP] to _Shape[TAU] to construct array3
-    _InitialBare();
+    InitialWithBare();
 }
 
 Complex G::Weight(const Site &rin, const Site &rout, real tin, real tout, spin SpinIn, spin SpinOut, bool IsMeasure)
@@ -139,7 +139,7 @@ W::W(const Lattice &lat, real beta, int order)
 {
     BareWeight.Allocate(Shape());
     //use _Shape[SP] to _Shape[VOL] to construct array3
-    _InitialBare();
+    InitialWithBare();
 }
 
 Complex W::Weight(const Site &rin, const Site &rout, real tin, real tout, spin *SpinIn, spin *SpinOut, bool IsWorm, bool IsMeasure, bool IsDelta)
