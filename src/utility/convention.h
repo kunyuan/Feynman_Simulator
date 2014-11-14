@@ -42,7 +42,7 @@ const int NSublattice2 = NSublattice * NSublattice;
 
 const int MAX_ORDER = 10;
 
+#define SYSTEM SPIN
 #define MODEL J1J2
-#define MODEL_PARA_NUM 2
 
 #endif
