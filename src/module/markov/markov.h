@@ -46,7 +46,7 @@ class Markov {
     weight::Worm *WormWeight;
     RandomFactory *RNG;
 
-    const static int NUpdates = 14;
+    const static int NUpdates = 13;
     real ProbofCall[NUpdates];
     real SumofProbofCall[NUpdates] = {0.0};
 
