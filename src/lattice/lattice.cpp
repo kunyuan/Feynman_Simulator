@@ -192,13 +192,14 @@ void Lattice::PlotLattice()
 {
     ofstream os("lattice.py", ios::out);
     const unsigned int N = NSublattice * Vol;
+    os << "#[Real Vec tuple, Int Vec tuple, Sublattice]" << endl;
     os << "points=[" << endl;
     Vec<int> offset;
     for (int i = 0; i < D; i++)
         offset[i] = Size[i] / 2 - 1;
     for (int i = 0; i < N; i++) {
         Site site = GetSite(i);
-        os << "[" << i << "," << GetRealVec(site, offset).PrettyString() << ","
+        os << "[" << GetRealVec(site, offset).PrettyString() << ","
            << site.Coordinate.PrettyString() << "," << site.Sublattice
            << "]," << endl;
     }

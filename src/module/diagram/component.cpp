@@ -45,7 +45,7 @@ vertex GLine::NeighVer(int dir)
     return nVer[dir];
 }
 
-void GLine::SetGLine(Momentum k, const Complex& weight, bool ismeasure)
+void GLine::SetGLine(Momentum k, const Complex &weight, bool ismeasure)
 {
     K = k;
     Weight = weight;
@@ -77,7 +77,7 @@ vertex WLine::NeighVer(int dir)
     return nVer[dir];
 }
 
-void WLine::SetWLine(Momentum k, const Complex& weight, bool isworm, bool ismeasure, bool isdelta)
+void WLine::SetWLine(Momentum k, const Complex &weight, bool isworm, bool ismeasure, bool isdelta)
 {
     K = k;
     Weight = weight;
@@ -129,7 +129,7 @@ wLine Vertex::NeighW()
     return nW;
 }
 
-void Vertex::SetVertex(const Site& site, const real& tau, spin* s, int dir)
+void Vertex::SetVertex(const Site &site, const real &tau, spin *s, int dir)
 {
     R = site;
     Tau = tau;
@@ -145,5 +145,17 @@ string Vertex::PrettyString()
     os << "{V " << Name << ",r:" << ToString(R.Coordinate) << ",tau:" << Tau << "}";
     os << "-->-" << ToString(Spin(OUT)) << "-[G " << nG[OUT]->Name << "]-";
     os << "  /~~~<W " << nW->Name << ">";
+    return os.str();
+}
+
+string WormClass::PrettyString()
+{
+    if (!Exist)
+        return "Worm not exists.";
+    stringstream os;
+    os << "{Ira " << Ira->Name << "| " << ToString(Ira->Spin(IN)) << "," << ToString(Ira->Spin(OUT)) << "}~~~";
+    os << "dSpin" << dSpin << ",K:" << K << ",Weight:" << Weight << ">";
+    os << "~~~"
+       << "{" << ToString(Masha->Spin(IN)) << "," << ToString(Masha->Spin(OUT)) << "|Masha " << Masha->Name << "}";
     return os.str();
 }
