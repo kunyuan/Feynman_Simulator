@@ -33,18 +33,24 @@ void G::InitialWithBare()
     _InitialBareWeight();
     DeltaTWeight = 0.0;
     SmoothWeight = BareWeight;
+    MeasureWeight = Complex(1.0, 0.0);
 }
 
 void G::SetTest()
 {
     //Spin independent; dr==0; exp(i*tau)
     SmoothWeight = 0.0;
+    MeasureWeight = 0.0;
     int spin_down = SpinIndex(DOWN, DOWN);
     int spin_up = SpinIndex(UP, UP);
     for (int sub = 0; sub < _Shape[SUB]; sub++) {
         if (!_Lat.IsOnSameSubLat(sub))
             continue;
         int coor = _Lat.Vec2Index({0,0});
+        
+        MeasureWeight[spin_down][sub][coor] = Complex(1.0, 0.0);
+        MeasureWeight[spin_up][sub][coor] = Complex(1.0, 0.0);
+        
         for (int tau = 0; tau < _Shape[TAU]; tau++) {
             Complex weight = exp(Complex(0.0, BinToTau(tau)));
             SmoothWeight[spin_down][sub][coor][tau] = weight;
@@ -59,6 +65,7 @@ void G::SetTest()
 void G::InitialWithDiagCounter()
 {
     SmoothWeight = 0.0;
+    MeasureWeight = 0.0;
     int spin_down = SpinIndex(DOWN, DOWN);
     int spin_up = SpinIndex(UP, UP);
     
@@ -66,6 +73,7 @@ void G::InitialWithDiagCounter()
         if (!_Lat.IsOnSameSubLat(sub))
             continue;
         int coor = _Lat.Vec2Index({0,0});
+        MeasureWeight[spin_up][sub][coor] = Complex(1.0, 0.0);
         for (int tau = 0; tau < _Shape[TAU]; tau++) {
             Complex weight = Complex(1.0, 0.0);
             SmoothWeight[spin_down][sub][coor][tau] = weight;
@@ -129,12 +137,14 @@ void W::InitialWithBare()
     _InitialBareWeight();
     DeltaTWeight = BareWeight;
     SmoothWeight = 0.0;
+    MeasureWeight = Complex(1.0, 0.0);
 }
 
 void W::SetTest()
 {
     //spin conserved; dr==0; exp(-i*tau)
     SmoothWeight = 0.0;
+    MeasureWeight = 0.0;
     int Lx = _Lat.Size[0], Ly = _Lat.Size[1];
     assert(Lx > 1 && Ly > 1 && D == 2);
     int spin_up = SpinIndex(UP, //InOfW/InOfVertex
@@ -146,6 +156,9 @@ void W::SetTest()
         if (!_Lat.IsOnSameSubLat(sub))
             continue;
         int coor = _Lat.Vec2Index({0,0});
+        
+        MeasureWeight[spin_up][sub][coor] = Complex(1.0, 0.0);
+        
         for (int tau = 0; tau < _Shape[TAU]; tau++) {
             Complex weight = exp(Complex(0.0, -BinToTau(tau)));
             SmoothWeight[spin_up][sub][coor][tau] = weight;
@@ -160,12 +173,16 @@ void W::SetTest()
                 {
                     spinindex = SpinIndex(spin(sinin), spin(sinout), spin(soutin), spin(soutout));
                     SmoothWeight[spinindex] = SmoothWeight[spin_up];
+                    MeasureWeight[spinindex] = MeasureWeight[spin_up];
                     if(sinin==sinout && soutin==soutout){
                         if(sinin!=soutin)
+                        {
                             SmoothWeight[spinindex] *=-1.0;
+                            MeasureWeight[spinindex] *=-1.0;
+                        }
                     }else if(sinin+soutin==sinout+soutout){
                         SmoothWeight[spinindex] *= 2.0;
-                        
+                        MeasureWeight[spinindex] *=-1.0;
                     }
                 }
 
@@ -177,6 +194,7 @@ void W::InitialWithDiagCounter()
 {
     //spin==UP,UP,UP,UP; dr==0; independent of tau
     SmoothWeight = 0.0;
+    MeasureWeight = 0.0;
     int Lx = _Lat.Size[0], Ly = _Lat.Size[1];
     assert(Lx > 1 && Ly > 1 && D == 2);
     int spin_up = SpinIndex(UP, //InOfW/InOfVertex
@@ -188,6 +206,7 @@ void W::InitialWithDiagCounter()
         if (!_Lat.IsOnSameSubLat(sub))
             continue;
         int coor = _Lat.Vec2Index({0,0});
+        MeasureWeight[spin_up][sub][coor] = Complex(1.0, 0.0);
         for (int tau = 0; tau < _Shape[TAU]; tau++) {
             Complex weight = Complex(1.0, 0.0);
             SmoothWeight[spin_up][sub][coor][tau] = weight;

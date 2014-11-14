@@ -37,6 +37,7 @@ class G : public WeightNoMeasure {
   public:
     G(const Lattice &, real Beta, int order, real ExternalField, bool IsTauSymmetric = false);
     Array::array4<Complex> BareWeight;
+    Array::array3<Complex> MeasureWeight;
     //Monte Carlo interface
     Complex Weight(const Site &, const Site &, real, real, spin, spin, bool);
     Complex Weight(int, const Site &, const Site &, real, real, spin, spin, bool);
@@ -60,6 +61,7 @@ class W : public WeightNoMeasure {
     W(const Lattice &, real Beta, int order,
       const std::vector<real> &Interaction, real ExternalField);
     Array::array3<Complex> BareWeight;
+    Array::array3<Complex> MeasureWeight;
     //Monte Carlo interface
     Complex Weight(const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool);
     Complex Weight(int, const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool);

@@ -128,6 +128,7 @@ bool Diagram::FixDiagram()
         //TODO: Do something here if you want to fix vertex
     }
 
-    Phase = SignFermiLoop * (Order%2==0? 1:-1) *phase(Weight);
+    Weight *= SignFermiLoop *(Order%2==0? 1:-1);
+    Phase = phase(Weight);
     return true;
 }
