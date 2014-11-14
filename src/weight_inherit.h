@@ -36,7 +36,8 @@ class Polar : public WeightNeedMeasure {
 class G : public WeightNoMeasure {
   public:
     G(const Lattice &lat, real beta, int order,
-      const std::vector<real> &hopping = {0}, real RealChemicalPotential = 0.0,
+      const std::vector<real> &hopping = {0},
+      const std::vector<real> &RealChemicalPotential = {0.0, 0.0},
       real ExternalField = 0.0, bool IsTauSymmetric = false);
     Array::array4<Complex> BareWeight;
     //Monte Carlo interface
@@ -52,8 +53,8 @@ class G : public WeightNoMeasure {
     void _InitialBareSpin();
     void _InitialBareHubbard();
     std::vector<real> _Hopping;
+    std::vector<real> _RealChemicalPotential;
     real _ExternalField;
-    real _RealChemicalPotential;
 };
 
 /**

@@ -23,7 +23,8 @@ class Parameter {
     int Version;
     std::vector<real> Hopping;
     std::vector<real> Interaction;
-    real RealChemicalPotential;
+    //the first is the chemical potential for spin DOWN, the second is for spin UP
+    std::vector<real> RealChemicalPotential;
     real ExternalField;
     real InitialBeta;
     real DeltaBeta;
