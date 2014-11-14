@@ -34,6 +34,49 @@ void G::InitialWithBare()
     DeltaTWeight = 0.0;
     SmoothWeight = BareWeight;
 }
+
+void G::SetTest()
+{
+    //Spin independent; dr==0; exp(i*tau)
+    SmoothWeight = 0.0;
+    int spin_down = SpinIndex(DOWN, DOWN);
+    int spin_up = SpinIndex(UP, UP);
+    for (int sub = 0; sub < _Shape[SUB]; sub++) {
+        if (!_Lat.IsOnSameSubLat(sub))
+            continue;
+        int coor = _Lat.Vec2Index({0,0});
+        for (int tau = 0; tau < _Shape[TAU]; tau++) {
+            Complex weight = exp(Complex(0.0, BinToTau(tau)));
+            SmoothWeight[spin_down][sub][coor][tau] = weight;
+            SmoothWeight[spin_up][sub][coor][tau] = weight;
+        }
+    }
+    
+    DeltaTWeight = 0.0;
+    BareWeight = 0.0;
+}
+
+void G::InitialWithDiagCounter()
+{
+    SmoothWeight = 0.0;
+    int spin_down = SpinIndex(DOWN, DOWN);
+    int spin_up = SpinIndex(UP, UP);
+    
+    for (int sub = 0; sub < _Shape[SUB]; sub++) {
+        if (!_Lat.IsOnSameSubLat(sub))
+            continue;
+        int coor = _Lat.Vec2Index({0,0});
+        for (int tau = 0; tau < _Shape[TAU]; tau++) {
+            Complex weight = Complex(1.0, 0.0);
+            SmoothWeight[spin_down][sub][coor][tau] = weight;
+            SmoothWeight[spin_up][sub][coor][tau] = weight;
+        }
+    }
+    
+    DeltaTWeight=0.0;
+    BareWeight=0.0;
+}
+
 // interaction
 void W::_InitialBareWeight()
 {
