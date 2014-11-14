@@ -139,7 +139,9 @@ void weight::Weight::_AllocateGW(const Parameter &para)
 {
     //make sure old Sigma/Polar/G/W are released before assigning new memory
     delete G;
-    G = new weight::G(para.Lat, para.Beta, para.Order, para.ExternalField, _IsAllSymmetric);
+    G = new weight::G(para.Lat, para.Beta, para.Order,
+                      para.Hopping, para.ExternalField,
+                      para.RealChemicalPotential, _IsAllSymmetric);
     delete W;
     W = new weight::W(para.Lat, para.Beta, para.Order,
                       para.Interaction, para.ExternalField);

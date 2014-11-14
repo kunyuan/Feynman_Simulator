@@ -21,7 +21,9 @@ namespace para {
 class Parameter {
   public:
     int Version;
+    std::vector<real> Hopping;
     std::vector<real> Interaction;
+    real RealChemicalPotential;
     real ExternalField;
     real InitialBeta;
     real DeltaBeta;
