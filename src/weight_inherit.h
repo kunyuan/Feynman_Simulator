@@ -42,15 +42,15 @@ class G : public WeightNoMeasure {
     //Monte Carlo interface
     Complex Weight(const Site &, const Site &, real, real, spin, spin, bool);
     Complex Weight(int, const Site &, const Site &, real, real, spin, spin, bool);
-    void SetTest();
-    void InitialWithBare(model);
-    void InitialWithDiagCounter();
+    void Initial(model);
     //Dyson interface
     void FFT(fft::Dir, Mode);
 
   protected:
-    void _InitialBareOfSpinModel();
-    void _InitialBareOfHubbardModel();
+    void _InitialTest();
+    void _InitialDiagCounter();
+    void _InitialBareSpin();
+    void _InitialBareHubbard();
     std::vector<real> _Hopping;
     real _ExternalField;
     real _RealChemicalPotential;
@@ -69,16 +69,17 @@ class W : public WeightNoMeasure {
     Complex Weight(const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool);
     Complex Weight(int, const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool);
     void SetTest();
-    void InitialWithBare(model);
-    void InitialWithDiagCounter();
+    void Initial(model);
     //Dyson interface
     void FFT(fft::Dir, Mode);
     //DEBUG interface
     void WriteBareToASCII();
 
   protected:
-    void _InitialBareOfJ1J2();
-    void _InitialBareOfHubbardModel();
+    void _InitialTest();
+    void _InitialDiagCounter();
+    void _InitialBareJ1J2();
+    void _InitialBareHubbard();
     std::vector<real> _Interaction;
     real _ExternalField;
 };
