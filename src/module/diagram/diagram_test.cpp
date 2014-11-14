@@ -92,5 +92,5 @@ void Test_Diagram_IO()
     LOG_INFO(Diag.Ver(0)->PrettyString());
     sput_fail_unless(Diag.CheckDiagram(), "Check diagram G,W,Ver and Weight");
     //    Diag.Save("diagram_test.config", "w");
-    //    Diag.WriteDiagram2gv("./test.gv");
+    Diag.WriteDiagram2gv("./test.gv");
 }

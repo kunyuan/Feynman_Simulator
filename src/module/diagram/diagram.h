@@ -44,7 +44,7 @@ class Diagram {
 
     WormClass Worm;
     bool IsWorm(vertex);
-    
+
     bool MeasureGLine;
     gLine GMeasure;
     wLine WMeasure;
@@ -75,7 +75,7 @@ class Diagram {
     bool CheckK();
     bool CheckSpin();
     bool CheckWeight();
-    
+
     bool CheckDiagram();
 
     //Diagram IO
@@ -89,10 +89,6 @@ class Diagram {
   private:
     bool _Load(std::istream &);
 
-    std::ostream &Component2gv(std::ostream &, gLine);
-    std::ostream &Component2gv(std::ostream &, wLine);
-    std::ostream &Component2gv(std::ostream &, vertex);
-
     bool LoadConfig(std::istream &is, WormClass &);
     bool LoadConfig(std::istream &is, gLine);
     bool LoadConfig(std::istream &is, wLine);
@@ -102,9 +98,6 @@ class Diagram {
     void SaveConfig(std::ostream &is, gLine);
     void SaveConfig(std::ostream &is, wLine);
     void SaveConfig(std::ostream &is, vertex);
-
-    template <typename T>
-    std::ostream &Bundle2gv(std::ostream &, Bundle<T> &);
 };
 
 int TestDiagram();

@@ -36,12 +36,14 @@ void Test_Updates()
     Markov markov;
     markov.BuildNew(Para, Diag, Weight);
 
-//    Para.RNG.Reset(100);
+    //    Para.RNG.Reset(100);
+    system("mkdir diagram");
     for (int i = 0; i < 100; i++) {
-//        if(i==4237)
-//            cout  << i << endl;
+        //        if(i==4237)
+        //            cout  << i << endl;
         markov.Hop(10000);
         sput_fail_unless(markov.Diag->CheckDiagram(), "Check for all the random steps");
+        Diag.WriteDiagram2gv("diagram/" + ToString(i) + ".gv");
     }
     LOG_INFO("Updates Check are done!");
 }
