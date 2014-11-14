@@ -33,6 +33,7 @@ class Weight {
     Worm WormWeight;
 
     void SetTest(const para::Parameter &);
+    void SetDiagCounter(const para::Parameter &);
     bool BuildNew(flag, const para::Parameter &);
     bool Load(const std::string &InputFile, flag, const para::Parameter &);
     void Save(const std::string &InputFile, flag, string Mode = "a");

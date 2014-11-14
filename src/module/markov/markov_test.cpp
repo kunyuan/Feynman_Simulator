@@ -30,7 +30,7 @@ void Test_Updates()
     para::ParaMC Para;
     Para.SetTest();
     weight::Weight Weight(true);
-    Weight.SetTest(Para);
+    Weight.SetDiagCounter(Para);
     diag::Diagram Diag;
     Diag.SetTest(Para.Lat, Para.RNG, Weight.G, Weight.W);
     Markov markov;
@@ -41,7 +41,10 @@ void Test_Updates()
 //        if(i==4237)
 //            cout  << i << endl;
         markov.Hop(10000);
+        
         sput_fail_unless(markov.Diag->CheckDiagram(), "Check for all the random steps");
+        markov.Diag->Save("diagram_test.config", "w");
+        markov.Diag->WriteDiagram2gv("./test.gv");
     }
     LOG_INFO("Updates Check are done!");
 }
