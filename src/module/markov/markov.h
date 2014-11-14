@@ -84,5 +84,6 @@ class Markov {
 };
 
 int TestMarkov();
+int TestDiagCounter();
 }
 #endif /* defined(__Feynman_Simulator__markov__) */
