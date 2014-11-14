@@ -13,16 +13,33 @@
 using namespace std;
 using namespace diag;
 
-///*************************   Diagram check    *************************/
-bool Diagram::CheckTopo()
+bool Diagram::CheckDiagram()
 {
-    if(G.HowMany()!=2*Order)
+    if (!DEBUGMODE)
+        return true;
+
+    if (!_CheckTopo())
+        return false;
+    if (!_CheckStatus())
+        return false;
+    if (!_CheckK())
+        return false;
+    if (!_CheckSpin())
+        return false;
+    if (!_CheckWeight())
+        return false;
+    return true;
+}
+///*************************   Diagram check    *************************/
+bool Diagram::_CheckTopo()
+{
+    if (G.HowMany() != 2 * Order)
         ABORT("Number of G is wrong!");
-    if(W.HowMany()!=Order)
+    if (W.HowMany() != Order)
         ABORT("Number of W is wrong!");
-    if(Ver.HowMany()!=2*Order)
+    if (Ver.HowMany() != 2 * Order)
         ABORT("Number of Vertex is wrong!");
-    
+
     for (int i = 0; i < G.HowMany(); i++) {
         for (int dir = 0; i < 2; i++) {
             vertex v = G(i)->NeighVer(dir);
@@ -32,7 +49,7 @@ bool Diagram::CheckTopo()
                 ABORT("Neigh of G is incorrect!" + G(i)->PrettyString());
         }
     }
-    
+
     for (int i = 0; i < W.HowMany(); i++) {
         for (int dir = 0; i < 2; i++) {
             vertex v = W(i)->NeighVer(dir);
@@ -40,82 +57,77 @@ bool Diagram::CheckTopo()
                 ABORT("nVer not exists!" + v->PrettyString());
             if (W(i) != v->NeighW())
                 ABORT("Neigh of W is incorrect!" + W(i)->PrettyString());
-            if (v->Dir!=dir)
+            if (v->Dir != dir)
                 ABORT("Direction of Vertex is incorrect!" + v->PrettyString());
         }
     }
-    
+
     return true;
 }
 
-bool Diagram::CheckStatus()
+bool Diagram::_CheckStatus()
 {
-    int totalmeasure=0;
-    for( int i=0; i< G.HowMany(); i++)
-    {
-        if(G(i)->IsMeasure)
-        {
-            totalmeasure +=1;
-            if(G(i)!=GMeasure)
-                ABORT("GMeasure error!"+G(i)->PrettyString());
+    int totalmeasure = 0;
+    for (int i = 0; i < G.HowMany(); i++) {
+        if (G(i)->IsMeasure) {
+            totalmeasure += 1;
+            if (G(i) != GMeasure)
+                ABORT("GMeasure error!" + G(i)->PrettyString());
         }
     }
-    if(totalmeasure!=(MeasureGLine?1:0))
+    if (totalmeasure != (MeasureGLine ? 1 : 0))
         ABORT("number of Measuring Gline is wrong!");
-    
+
     totalmeasure = 0;
-    for( int i=0; i< W.HowMany(); i++)
-    {
-        if(W(i)->IsMeasure)
-            totalmeasure +=1;
-        if(W(i)->IsWorm && Worm.Ira->NeighW()!=W(i) && Worm.Masha->NeighW()!=W(i))
-            ABORT("W IsWorm status error! no worm!"+W(i)->PrettyString());
-        if(Worm.Exist)
-            if((!W(i)->IsWorm) && (Worm.Ira->NeighW()==W(i) || Worm.Masha->NeighW()==W(i)))
-                ABORT("W IsWorm status error! has worm!"+W(i)->PrettyString());
-        if(W(i)->IsDelta)
-            if(W(i)->NeighVer(IN)->Tau != W(i)->NeighVer(OUT)->Tau)
-                ABORT("W is delta function, tau error!"+W(i)->PrettyString());
+    for (int i = 0; i < W.HowMany(); i++) {
+        if (W(i)->IsMeasure)
+            totalmeasure += 1;
+        if (W(i)->IsWorm && Worm.Ira->NeighW() != W(i) && Worm.Masha->NeighW() != W(i))
+            ABORT("W IsWorm status error! no worm!" + W(i)->PrettyString());
+        if (Worm.Exist)
+            if ((!W(i)->IsWorm) && (Worm.Ira->NeighW() == W(i) || Worm.Masha->NeighW() == W(i)))
+                ABORT("W IsWorm status error! has worm!" + W(i)->PrettyString());
+        if (W(i)->IsDelta)
+            if (W(i)->NeighVer(IN)->Tau != W(i)->NeighVer(OUT)->Tau)
+                ABORT("W is delta function, tau error!" + W(i)->PrettyString());
     }
-    if(totalmeasure!=(MeasureGLine?0:1))
+    if (totalmeasure != (MeasureGLine ? 0 : 1))
         ABORT("number of Measuring Wline is wrong!");
-    
+
     return true;
 }
 
-bool Diagram::CheckK()
+bool Diagram::_CheckK()
 {
     Momentum totalk;
-    for( int i=0; i<Ver.HowMany(); i++)
-    {
-        totalk = Ver(i)->NeighG(IN)->K-Ver(i)->NeighG(OUT)->K;
-        if(Ver(i)->Dir==IN)
-            totalk -=Ver(i)->NeighW()->K;
+    for (int i = 0; i < Ver.HowMany(); i++) {
+        totalk = Ver(i)->NeighG(IN)->K - Ver(i)->NeighG(OUT)->K;
+        if (Ver(i)->Dir == IN)
+            totalk -= Ver(i)->NeighW()->K;
         else
-            totalk +=Ver(i)->NeighW()->K;
-        if(Worm.Exist && Ver(i)==Worm.Ira)
+            totalk += Ver(i)->NeighW()->K;
+        if (Worm.Exist && Ver(i) == Worm.Ira)
             totalk -= Worm.K;
-        else if(Worm.Exist && Ver(i)==Worm.Masha)
+        else if (Worm.Exist && Ver(i) == Worm.Masha)
             totalk += Worm.K;
-        if(totalk!=0)
-            ABORT("K is not conserved!"+Ver(i)->PrettyString());
+        if (totalk != 0)
+            ABORT("K is not conserved!" + Ver(i)->PrettyString());
     }
     return true;
 }
 
-bool Diagram::CheckSpin()
+bool Diagram::_CheckSpin()
 {
-    
-    for(int i=0; i<G.HowMany();i++)
-    {
-        if(G(i)->NeighVer(IN)->Spin(OUT)!= G(i)->NeighVer(OUT)->Spin(IN))
-            ABORT("The spin on Gline is not the same"+G(i)->PrettyString());
+
+    for (int i = 0; i < G.HowMany(); i++) {
+        if (G(i)->NeighVer(IN)->Spin(OUT) != G(i)->NeighVer(OUT)->Spin(IN))
+            ABORT("The spin on Gline is not the same" + G(i)->PrettyString());
     }
     //TODO: check Spin on W only when spin is conserved in W
     return true;
 }
 
-bool Diagram::CheckWeight()
+bool Diagram::_CheckWeight()
 {
     if (DEBUGMODE && (GWeight == nullptr || WWeight == nullptr))
         ABORT("G and W weight are not defined yet!");
@@ -148,23 +160,6 @@ bool Diagram::CheckWeight()
 
     if (!Equal(DiagWeight, Weight))
         return false;
-    
-    return true;
-}
 
-bool Diagram::CheckDiagram()
-{
-    if(!DEBUGMODE) return true;
-    
-    if (!CheckTopo())
-        return false;
-    if (!CheckStatus())
-        return false;
-    if (!CheckK())
-        return false;
-    if (!CheckSpin())
-        return false;
-    if (!CheckWeight())
-        return false;
     return true;
 }
