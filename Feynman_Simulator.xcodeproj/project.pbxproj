@@ -40,7 +40,6 @@
 		8422FE4D1A0A85E7002EB44E /* job.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FE4B1A0A85E7002EB44E /* job.cpp */; };
 		843D3FB41A1114FD00DACC51 /* weight_estimator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 843D3FB21A1114FD00DACC51 /* weight_estimator.cpp */; };
 		843D3FB61A11488E00DACC51 /* weight_initialization.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 843D3FB51A11488E00DACC51 /* weight_initialization.cpp */; };
-		843D3FB91A15119A00DACC51 /* model_para.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 843D3FB71A15119A00DACC51 /* model_para.cpp */; };
 		84519AEB19F2C554007CB81B /* environment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84519AE919F2C554007CB81B /* environment.cpp */; };
 		84519AED19F2C57A007CB81B /* envMonteCarlo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84519AEC19F2C57A007CB81B /* envMonteCarlo.cpp */; };
 		84519AEF19F2C5B2007CB81B /* envDyson.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84519AEE19F2C5B2007CB81B /* envDyson.cpp */; };
@@ -133,8 +132,6 @@
 		843D3FB21A1114FD00DACC51 /* weight_estimator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = weight_estimator.cpp; path = module/weight/weight_estimator.cpp; sourceTree = "<group>"; };
 		843D3FB31A1114FD00DACC51 /* weight_estimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = weight_estimator.h; path = module/weight/weight_estimator.h; sourceTree = "<group>"; };
 		843D3FB51A11488E00DACC51 /* weight_initialization.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = weight_initialization.cpp; path = module/weight/weight_initialization.cpp; sourceTree = "<group>"; };
-		843D3FB71A15119A00DACC51 /* model_para.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = model_para.cpp; path = module/parameter/model_para.cpp; sourceTree = "<group>"; };
-		843D3FB81A15119A00DACC51 /* model_para.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = model_para.h; path = module/parameter/model_para.h; sourceTree = "<group>"; };
 		843D3FBB1A155F5600DACC51 /* count.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = count.sh; path = tool/count.sh; sourceTree = SOURCE_ROOT; };
 		843D3FBC1A155F5600DACC51 /* mat2npz */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = mat2npz; path = tool/mat2npz; sourceTree = SOURCE_ROOT; };
 		843D3FBD1A155F5600DACC51 /* npy2mat */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = npy2mat; path = tool/npy2mat; sourceTree = SOURCE_ROOT; };
@@ -244,8 +241,6 @@
 				8422FDF81A09C0ED002EB44E /* parameter.h */,
 				8422FDFB1A09C0ED002EB44E /* message.cpp */,
 				8422FDFC1A09C0ED002EB44E /* message.h */,
-				843D3FB71A15119A00DACC51 /* model_para.cpp */,
-				843D3FB81A15119A00DACC51 /* model_para.h */,
 			);
 			name = parameter;
 			sourceTree = "<group>";
@@ -490,7 +485,6 @@
 				84D7EFBC19F36361006B1CA5 /* array_test.cpp in Sources */,
 				8422FE111A09C112002EB44E /* diagram_IO.cpp in Sources */,
 				8422FE271A09C13D002EB44E /* markov.cpp in Sources */,
-				843D3FB91A15119A00DACC51 /* model_para.cpp in Sources */,
 				84519AED19F2C57A007CB81B /* envMonteCarlo.cpp in Sources */,
 				8422FE391A0A7ECA002EB44E /* weight_test.cpp in Sources */,
 				8422FE0E1A09C112002EB44E /* component_IO.cpp in Sources */,
