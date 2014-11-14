@@ -10,6 +10,7 @@
 		1CA021B91A0A897D00A18085 /* momentum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CA021B71A0A897D00A18085 /* momentum.cpp */; };
 		1CA5CF3819ED6F1B00212E20 /* lattice_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CA5CF3719ED6F1B00212E20 /* lattice_test.cpp */; };
 		1CA5CF3A19ED6F3F00212E20 /* lattice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CA5CF3919ED6F3F00212E20 /* lattice.cpp */; };
+		1CFBB0B91A1668C500EE2E9E /* markov_diag_counter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CFBB0B81A1668C500EE2E9E /* markov_diag_counter.cpp */; };
 		6126638BECC823E2FECDBE1A /* utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 612660FB5825D574D3D39D34 /* utility.cpp */; };
 		61266D7AEDBA61CFA3C84C6B /* rng.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 612667B1A17242731ADAF002 /* rng.cpp */; };
 		61266E5CDE0355C1306E9EBD /* rng_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6126679998941F2D7A5DBE4E /* rng_test.cpp */; };
@@ -78,6 +79,7 @@
 		1CA5CF3919ED6F3F00212E20 /* lattice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lattice.cpp; path = lattice/lattice.cpp; sourceTree = "<group>"; };
 		1CA5CF3B19ED6F4900212E20 /* lattice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lattice.h; path = lattice/lattice.h; sourceTree = "<group>"; };
 		1CA5CF3E19ED6FD100212E20 /* vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vector.h; path = lattice/vector.h; sourceTree = "<group>"; };
+		1CFBB0B81A1668C500EE2E9E /* markov_diag_counter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = markov_diag_counter.cpp; path = module/markov/markov_diag_counter.cpp; sourceTree = "<group>"; };
 		612660FB5825D574D3D39D34 /* utility.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = utility.cpp; sourceTree = "<group>"; };
 		612664CF0EF6FC3F36675242 /* sput_tutorial.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sput_tutorial.txt; sourceTree = "<group>"; };
 		612665F3FD7F1A73D9E774F8 /* rng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rng.h; sourceTree = "<group>"; };
@@ -352,6 +354,7 @@
 				8422FE211A09C13D002EB44E /* markov_monitor.h */,
 				8422FE201A09C13D002EB44E /* markov_monitor.cpp */,
 				8422FE221A09C13D002EB44E /* markov_test.cpp */,
+				1CFBB0B81A1668C500EE2E9E /* markov_diag_counter.cpp */,
 			);
 			name = markov;
 			sourceTree = "<group>";
@@ -497,6 +500,7 @@
 				6126638BECC823E2FECDBE1A /* utility.cpp in Sources */,
 				84681F6519F9AAA600832DAD /* crc32.cpp in Sources */,
 				8422FE3C1A0A7ECA002EB44E /* weight.cpp in Sources */,
+				1CFBB0B91A1668C500EE2E9E /* markov_diag_counter.cpp in Sources */,
 				84B8FC4B19EDA348003D6DF6 /* cnpy.cpp in Sources */,
 				1CA5CF3819ED6F1B00212E20 /* lattice_test.cpp in Sources */,
 				8422FE0F1A09C112002EB44E /* component.cpp in Sources */,

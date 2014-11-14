@@ -17,7 +17,7 @@ using namespace diag;
 
 bool Diagram::IsWorm(vertex v)
 {
-    if (Worm.Ira == v || Worm.Masha == v)
+    if (Worm.Exist && (Worm.Ira == v || Worm.Masha == v))
         return true;
     else
         return false;
