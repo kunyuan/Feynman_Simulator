@@ -43,8 +43,8 @@ bool weight::Weight::BuildNew(flag _flag, const Parameter &para)
         ABORT("Order can not be zero!!!");
     if (_flag & weight::GW) {
         _AllocateGW(para);
-        G->InitialWithBare(MODEL);
-        W->InitialWithBare(MODEL);
+        G->Initial(MODEL);
+        W->Initial(MODEL);
     }
     if (_flag & weight::SigmaPolar) {
         _AllocateSigmaPolar(para);
@@ -123,16 +123,16 @@ void weight::Weight::SetTest(const Parameter &para)
 {
     _AllocateGW(para);
     _AllocateSigmaPolar(para);
-    G->SetTest();
-    W->SetTest();
+    G->Initial(model::TEST);
+    W->Initial(model::TEST);
 }
 
 void weight::Weight::SetDiagCounter(const Parameter &para)
 {
     _AllocateGW(para);
     _AllocateSigmaPolar(para);
-    G->InitialWithDiagCounter();
-    W->InitialWithDiagCounter();
+    G->Initial(model::DIAGRAMCOUNTER);
+    W->Initial(model::DIAGRAMCOUNTER);
 }
 
 void weight::Weight::_AllocateGW(const Parameter &para)

@@ -10,18 +10,21 @@
 #include <vector>
 using namespace weight;
 
-void G::InitialWithBare(model Model_)
+void G::Initial(model Model_)
 {
-    if (Model_ == J1J2)
-        _InitialBareOfSpinModel();
-    else if (Model_ == HUBBARD)
-        _InitialBareOfHubbardModel();
-
-    DeltaTWeight = 0.0;
-    SmoothWeight = BareWeight;
+    switch (Model_) {
+        case TEST:
+            _InitialTest();
+        case DIAGRAMCOUNTER:
+            _InitialDiagCounter();
+        case J1J2:
+            _InitialBareSpin();
+        case HUBBARD:
+            _InitialBareHubbard();
+    }
 }
 
-void G::SetTest()
+void G::_InitialTest()
 {
     //Spin independent; dr==0; exp(i*tau)
     SmoothWeight = 0.0;
@@ -42,7 +45,7 @@ void G::SetTest()
     BareWeight = 0.0;
 }
 
-void G::InitialWithDiagCounter()
+void G::_InitialDiagCounter()
 {
     SmoothWeight = 0.0;
     int spin_down = SpinIndex(DOWN, DOWN);
@@ -63,7 +66,7 @@ void G::InitialWithDiagCounter()
     BareWeight = 0.0;
 }
 
-void G::_InitialBareOfSpinModel()
+void G::_InitialBareSpin()
 {
     BareWeight = 0.0;
     Complex mu = Complex(0.0, PI / 2.0 / _Beta);
@@ -79,26 +82,33 @@ void G::_InitialBareOfSpinModel()
             BareWeight[spin_up][sub][coor][tau] = weight;
         }
     }
+    DeltaTWeight = 0.0;
+    SmoothWeight = BareWeight;
 }
 
-void G::_InitialBareOfHubbardModel()
+void G::_InitialBareHubbard()
 {
+    DeltaTWeight = 0.0;
+    SmoothWeight = BareWeight;
 }
 
 // interaction
 
-void W::InitialWithBare(model Model_)
+void W::Initial(model Model_)
 {
-    if (Model_ == J1J2)
-        _InitialBareOfJ1J2();
-    else if (Model_ == HUBBARD)
-        _InitialBareOfHubbardModel();
-
-    DeltaTWeight = BareWeight;
-    SmoothWeight = 0.0;
+    switch (Model_) {
+        case TEST:
+            _InitialTest();
+        case DIAGRAMCOUNTER:
+            _InitialDiagCounter();
+        case J1J2:
+            _InitialBareJ1J2();
+        case HUBBARD:
+            _InitialBareHubbard();
+    }
 }
 
-void W::SetTest()
+void W::_InitialTest()
 {
     //spin conserved; dr==0; exp(-i*tau)
     DeltaTWeight = 0.0;
@@ -135,7 +145,7 @@ void W::SetTest()
     }
 }
 
-void W::InitialWithDiagCounter()
+void W::_InitialDiagCounter()
 {
     //spin==UP,UP,UP,UP; dr==0; independent of tau
     SmoothWeight = 0.0;
@@ -155,12 +165,11 @@ void W::InitialWithDiagCounter()
             SmoothWeight[spin_up][sub][coor][tau] = weight;
         }
     }
-
     DeltaTWeight = 0.0;
     BareWeight = 0.0;
 }
 
-void W::_InitialBareOfJ1J2()
+void W::_InitialBareJ1J2()
 {
     BareWeight = 0.0;
     int Lx = _Lat.Size[0], Ly = _Lat.Size[1];
@@ -224,8 +233,12 @@ void W::_InitialBareOfJ1J2()
             BareWeight[i] *= 2.0;
         }
     }
+    DeltaTWeight = BareWeight;
+    SmoothWeight = 0.0;
 }
 
-void W::_InitialBareOfHubbardModel()
+void W::_InitialBareHubbard()
 {
+    DeltaTWeight = BareWeight;
+    SmoothWeight = 0.0;
 }
