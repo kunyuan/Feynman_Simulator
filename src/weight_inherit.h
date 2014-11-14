@@ -35,7 +35,9 @@ class Polar : public WeightNeedMeasure {
 };
 class G : public WeightNoMeasure {
   public:
-    G(const Lattice &, real Beta, int order, real ExternalField, bool IsTauSymmetric = false);
+    G(const Lattice &lat, real beta, int order,
+      const std::vector<real> &hopping = {0}, real RealChemicalPotential = 0.0,
+      real ExternalField = 0.0, bool IsTauSymmetric = false);
     Array::array4<Complex> BareWeight;
     //Monte Carlo interface
     Complex Weight(const Site &, const Site &, real, real, spin, spin, bool);
@@ -48,7 +50,9 @@ class G : public WeightNoMeasure {
 
   protected:
     void _InitialBareWeight();
+    std::vector<real> _Hopping;
     real _ExternalField;
+    real _RealChemicalPotential;
 };
 
 /**
@@ -58,7 +62,7 @@ class G : public WeightNoMeasure {
 class W : public WeightNoMeasure {
   public:
     W(const Lattice &, real Beta, int order,
-      const std::vector<real> &Interaction, real ExternalField);
+      const std::vector<real> &Interaction, real ExternalField = 0.0);
     Array::array3<Complex> BareWeight;
     //Monte Carlo interface
     Complex Weight(const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool);

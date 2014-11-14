@@ -31,9 +31,11 @@ void Parameter::UpdateWithMessage(const Message &Message_)
 bool Parameter::_BuildNew(const std::string &InputFile)
 {
     _para.ParseFile(InputFile);
-    GetPara(_para, L);
+    GetPara(_para, Hopping);
     GetPara(_para, Interaction);
+    GetPara(_para, RealChemicalPotential);
     GetPara(_para, ExternalField);
+    GetPara(_para, L);
     GetPara(_para, InitialBeta);
     GetPara(_para, DeltaBeta);
     GetPara(_para, FinalBeta);
@@ -52,9 +54,11 @@ bool Parameter::_Load(const std::string &InputFile)
 {
     _para.ParseFile(InputFile);
     GetPara(_para, Version);
-    GetPara(_para, L);
+    GetPara(_para, Hopping);
     GetPara(_para, Interaction);
+    GetPara(_para, RealChemicalPotential);
     GetPara(_para, ExternalField);
+    GetPara(_para, L);
     GetPara(_para, InitialBeta);
     GetPara(_para, DeltaBeta);
     GetPara(_para, FinalBeta);
@@ -76,9 +80,11 @@ void Parameter::_SavePreparation()
 {
     _para.clear();
     SetPara(_para, Version);
-    SetPara(_para, L);
+    SetPara(_para, Hopping);
     SetPara(_para, Interaction);
+    SetPara(_para, RealChemicalPotential);
     SetPara(_para, ExternalField);
+    SetPara(_para, L);
     SetPara(_para, InitialBeta);
     SetPara(_para, DeltaBeta);
     SetPara(_para, FinalBeta);
