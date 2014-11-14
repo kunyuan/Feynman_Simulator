@@ -153,8 +153,12 @@ string VertexStyle(bool IsWorm, int sublattice)
 *
 *  @param os ostream& as the target stream to output
 */
-void Diagram::WriteDiagram2gv(ostream &os)
+void Diagram::WriteDiagram2gv(string path)
 {
+    ofstream os(path, ios::out);
+    if (!os) {
+        ABORT("Cannot open " + path);
+    }
     string head = "digraph Feynman{\n";
     string tail = "}\n";
     string dpi = "graph[dpi=200];\n";
@@ -189,14 +193,4 @@ void Diagram::WriteDiagram2gv(ostream &os)
         os << " " << WLineStyle(W(i)->IsMeasure) << ";" << endl;
     }
     os << tail;
-}
-
-void Diagram::WriteDiagram2gv(string path)
-{
-    ofstream os(path, ios::out);
-    if (!os) {
-        ABORT("Cannot open " + path);
-    }
-    else
-        WriteDiagram2gv(os);
 }
