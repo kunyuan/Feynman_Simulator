@@ -115,14 +115,31 @@ bool Diagram::Load(const std::string &FileName, Lattice &lat, RandomFactory &rng
 }
 
 /************************   write component to gv ****************************************/
-string EdgeColor(spin in, spin out)
+string GLineStyle(bool IsMeasure, spin in, spin out)
 {
-    string str[2] = {"blue", "red"};
-    return "[color=\"" + str[in] + ":" + str[out] + ";0.5\"]";
+    string color = "";
+    if (IsMeasure)
+        color = "color=\"green\"";
+    else {
+        string str[2] = {"blue", "red"};
+        color = "color=\"" + str[in] + ":" + str[out] + ";0.5\"";
+    }
+    return "[" + color + "]";
 }
 
-string VertexColor(int sublattice)
+string WLineStyle(bool IsMeasure)
 {
+    string color = "";
+    if (IsMeasure)
+        color = "color=green,";
+    return "[" + color + "style=dashed arrowhead=none]";
+}
+
+string VertexStyle(bool IsWorm, int sublattice)
+{
+    string shape = "";
+    if (IsWorm)
+        shape = "shape=square,";
     string colorstr;
     if (sublattice == 0)
         colorstr = "grey";
@@ -130,48 +147,8 @@ string VertexColor(int sublattice)
         colorstr = "palegreen";
     else
         colorstr = "palegreen";
-    return "[fillcolor=" + colorstr + "]";
+    return "[" + shape + "fillcolor=" + colorstr + "]";
 }
-
-ostream &Diagram::Component2gv(ostream &os, gLine r)
-{
-    os << r->nVer[IN]->Name << "->" << r->nVer[OUT]->Name;
-    os << " " << EdgeColor(r->Spin(IN), r->Spin(OUT)) << ";";
-    os << "  //" << r->PrettyString() << endl;
-    return os;
-}
-
-ostream &Diagram::Component2gv(ostream &os, wLine r)
-{
-    os << r->nVer[IN]->Name << "->" << r->nVer[OUT]->Name;
-    os << " [style=dashed arrowhead=none]; ";
-    os << "  //" << r->PrettyString() << endl;
-    return os;
-}
-
-ostream &Diagram::Component2gv(ostream &os, vertex r)
-{
-    os << r->Name << " " << VertexColor(r->R.Sublattice) << ";";
-    os << "  //" << r->PrettyString() << endl;
-    return os;
-}
-
-/********************  write diagram to gv ********************/
-
-template <typename T>
-ostream &Diagram::Bundle2gv(ostream &os, Bundle<T> &r)
-{
-    os << "    //" << r.BundleName() << endl;
-    for (int index = 0; index < r.HowMany(); index++) {
-        Component2gv(os << "    ", r(index));
-    }
-    os << endl;
-    return os;
-}
-
-template ostream &Diagram::Bundle2gv(ostream &os, Bundle<GLine> &r);
-template ostream &Diagram::Bundle2gv(ostream &os, Bundle<WLine> &r);
-template ostream &Diagram::Bundle2gv(ostream &os, Bundle<Vertex> &r);
 
 /**
 *  write diagram object to .gv file so that it can be visualized by Graphviz
@@ -184,10 +161,35 @@ void Diagram::WriteDiagram2gv(ostream &os)
     string tail = "}\n";
     string dpi = "graph[dpi=200];\n";
     string node_attribute = "    node [margin=0.1 fillcolor=grey fontcolor=black fontsize=10 width=0.2 shape=circle style=filled fixedsize=true]\n";
+
+    os << "//Order=" << Order << ", Weight=" << Weight
+       << ", Sign=" << SignFermiLoop << ", WormExist=" << Worm.Exist << endl;
+    os << "//" << Worm.PrettyString() << endl;
+    for (int i = 0; i < Ver.HowMany(); i++)
+        os << "//" << Ver(i)->PrettyString() << endl;
+    for (int i = 0; i < G.HowMany(); i++)
+        os << "//" << G(i)->PrettyString() << endl;
+    for (int i = 0; i < W.HowMany(); i++)
+        os << "//" << W(i)->PrettyString() << endl;
+    os << endl;
+
     os << head << dpi << node_attribute << endl;
-    Bundle2gv(os, Ver);
-    Bundle2gv(os, G);
-    Bundle2gv(os, W);
+    os << "    //" << Ver.BundleName() << endl;
+    for (int index = 0; index < Ver.HowMany(); index++) {
+        os << "    " << Ver(index)->Name << " "
+           << VertexStyle(IsWorm(Ver(index)), Ver(index)->R.Sublattice) << ";" << endl;
+    }
+    os << "    //" << G.BundleName() << endl;
+    for (int i = 0; i < G.HowMany(); i++) {
+        os << "    " << G(i)->nVer[IN]->Name << "->" << G(i)->nVer[OUT]->Name;
+        os << " " << GLineStyle(G(i)->IsMeasure, G(i)->Spin(IN), G(i)->Spin(OUT))
+           << ";" << endl;
+    }
+    os << "    //" << W.BundleName() << endl;
+    for (int i = 0; i < W.HowMany(); i++) {
+        os << "    " << W(i)->nVer[IN]->Name << "->" << W(i)->nVer[OUT]->Name;
+        os << " " << WLineStyle(W(i)->IsMeasure) << ";" << endl;
+    }
     os << tail;
 }
 

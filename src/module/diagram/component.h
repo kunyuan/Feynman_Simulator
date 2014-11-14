@@ -33,14 +33,14 @@ class GLine {
     vertex nVer[2];
     Momentum K;
     Complex Weight;
-    
+
     spin Spin();
     spin Spin(int dir);
     void FlipSpin();
     int Sublattice(int dir);
     vertex NeighVer(int dir);
     std::string PrettyString();
-    void SetGLine(Momentum, const Complex&, bool);
+    void SetGLine(Momentum, const Complex &, bool);
 };
 
 class WLine {
@@ -52,13 +52,13 @@ class WLine {
     vertex nVer[2];
     Momentum K;
     Complex Weight;
-    
+
     spin Spin(int, int);
     void FlipSpin();
     int Sublattice(int dir);
     vertex NeighVer(int dir);
     std::string PrettyString();
-    void SetWLine(Momentum, const Complex&, bool, bool, bool);
+    void SetWLine(Momentum, const Complex &, bool, bool, bool);
 };
 
 class Vertex {
@@ -70,8 +70,8 @@ class Vertex {
     spin _spin[2]; // IN/OUT spins
     double Tau;
     int Dir;
-    
-    void SetVertex(const Site&, const real&, spin*, int);
+
+    void SetVertex(const Site &, const real &, spin *, int);
     spin Spin(int);
     void SetSpin(spin *);
     spin *Spin();
@@ -88,6 +88,7 @@ class WormClass {
     Momentum K;
     int dSpin;
     real Weight;
+    std::string PrettyString();
 
     WormClass()
         : Exist(false), Ira(nullptr), Masha(nullptr), K(0), dSpin(0)
