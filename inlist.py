@@ -9,7 +9,7 @@ TO_DO = []
 #common dictionary for all jobs
 com_dict={
     "L" :   [8,8],
-    "Interaction" :  [1.0,0.0],
+    "Interaction" :  [1.0,0.5],
     "ExternalField": 0.0,
     "initialBeta" :  1.00,
     "deltaBeta" :  0.00,
