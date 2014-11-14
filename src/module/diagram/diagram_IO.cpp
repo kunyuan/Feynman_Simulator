@@ -83,7 +83,6 @@ bool Diagram::_Load(istream &ifs)
         else if (head == 'v')
             LoadConfig(ifs, Ver.Add());
         else if (head == 'i')
-            //TODO read from Worm
             LoadConfig(ifs, Worm);
         else if (head == 's')
             ifs >> SignFermiLoop;
@@ -98,8 +97,7 @@ bool Diagram::_Load(istream &ifs)
 bool Diagram::Load(const std::string &FileName)
 {
 
-    ifstream ifs;
-    ifs.open(FileName, ios::in);
+    ifstream ifs(FileName, ios::in);
     ON_SCOPE_EXIT([&] {ifs.close(); });
     if (!ifs.is_open()) {
         ABORT("Cannot open " + FileName);
@@ -195,12 +193,10 @@ void Diagram::WriteDiagram2gv(ostream &os)
 
 void Diagram::WriteDiagram2gv(string path)
 {
-    ofstream os;
-    os.open(path, ios::out);
+    ofstream os(path, ios::out);
     if (!os) {
         ABORT("Cannot open " + path);
     }
-    else {
+    else
         WriteDiagram2gv(os);
-    }
 }
