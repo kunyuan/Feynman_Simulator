@@ -127,6 +127,14 @@ void weight::Weight::SetTest(const Parameter &para)
     W->SetTest();
 }
 
+void weight::Weight::SetDiagCounter(const Parameter &para)
+{
+    _AllocateGW(para);
+    _AllocateSigmaPolar(para);
+    G->InitialWithDiagCounter();
+    W->InitialWithDiagCounter();
+}
+
 void weight::Weight::_AllocateGW(const Parameter &para)
 {
     //make sure old Sigma/Polar/G/W are released before assigning new memory
