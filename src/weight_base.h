@@ -13,6 +13,7 @@
 #include "lattice/lattice.h"
 #include "utility/complex.h"
 #include "utility/fft.h"
+#include <vector>
 
 namespace dyson {
 class Dyson;
@@ -61,11 +62,16 @@ class WeightNoMeasure {
     void _ChangeSymmetry(fft::Dir);
 
     int SpinIndex(spin SpinIn, spin SpinOut);
-    
+
     //First In/Out: direction of WLine; Second In/Out: direction of Vertex
     int SpinIndex(spin SpinInIn, spin SpinInOut, spin SpinOutIn, spin SpinOutOut);
-    
     int SpinIndex(spin *TwoSpinIn, spin *TwoSpinOut);
+
+    enum SpinFilter { UpUp2UpUp,
+                      UpDown2UpDown,
+                      UpDown2DownUp };
+    std::vector<int> GetSpinIndexVector_FourSpinsFileter(SpinFilter);
+
     int TauSymmetry(real t_in, real t_out);
     int TauToBin(real tau);
     int TauToBin(real t_in, real t_out);

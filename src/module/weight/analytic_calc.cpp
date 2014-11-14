@@ -34,7 +34,7 @@ void G::InitialWithBare()
     DeltaTWeight = 0.0;
     SmoothWeight = BareWeight;
 }
-
+// interaction
 void W::_InitialBareWeight()
 {
     BareWeight = 0.0;
