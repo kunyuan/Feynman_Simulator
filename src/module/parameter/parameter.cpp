@@ -88,7 +88,6 @@ void Parameter::_SavePreparation()
     SetPara(_para, InitialBeta);
     SetPara(_para, DeltaBeta);
     SetPara(_para, FinalBeta);
-    //!!!Beta should be a part of state, so it will be stored
     SetPara(_para, Beta);
     SetPara(_para, Order);
 }
@@ -141,7 +140,10 @@ void ParaMC::SetTest()
     int size[2] = {8, 8};
     L = Vec<int>(size);
     Lat.Reset(L);
+    Hopping.push_back(0.0);
     Interaction.push_back(1.0);
+    RealChemicalPotential.push_back(0.0);
+    RealChemicalPotential.push_back(0.0);
     ExternalField = 0.0;
     InitialBeta = 1.0;
     DeltaBeta = 0.0;

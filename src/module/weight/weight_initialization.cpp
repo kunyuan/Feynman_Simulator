@@ -88,6 +88,20 @@ void G::_InitialBareSpin()
 
 void G::_InitialBareHubbard()
 {
+    BareWeight = 0.0;
+    //Initialize in momentum space first
+    int spin_down = SpinIndex(DOWN, DOWN);
+    int spin_up = SpinIndex(UP, UP);
+    for (int sub = 0; sub < _Shape[SUB]; sub++) {
+        if (_Lat.IsOnSameSubLat(sub))
+            continue;
+        int coor = 0;
+        for (int tau = 0; tau < _Shape[TAU]; tau++) {
+            //            BareWeight[spin_down][sub][coor][tau] = weight;
+            //            BareWeight[spin_up][sub][coor][tau] = weight;
+        }
+    }
+
     DeltaTWeight = 0.0;
     SmoothWeight = BareWeight;
 }

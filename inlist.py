@@ -12,7 +12,8 @@ com_dict={
     "Hopping": [0.0],
     "Interaction" :  [1.0,0.5],
     "ExternalField": 0.0,
-    "RealChemicalPotential": 0.0,
+    "RealChemicalPotential": [0.0,0.0],
+    #In the hubbard model, down spin and up spin may feel different mu
     "initialBeta" :  1.00,
     "deltaBeta" :  0.00,
     "finalBeta" :  1.00,
