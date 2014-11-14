@@ -42,7 +42,11 @@ const int NSublattice2 = NSublattice * NSublattice;
 
 const int MAX_ORDER = 10;
 
-#define SYSTEM SPIN
+//define the model you want to simualte here
+enum model { TEST,
+             DIAGRAMCOUNTER,
+             J1J2,
+             HUBBARD };
 #define MODEL J1J2
 
 #endif

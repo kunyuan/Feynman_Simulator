@@ -43,13 +43,14 @@ class G : public WeightNoMeasure {
     Complex Weight(const Site &, const Site &, real, real, spin, spin, bool);
     Complex Weight(int, const Site &, const Site &, real, real, spin, spin, bool);
     void SetTest();
-    void InitialWithBare();
+    void InitialWithBare(model);
     void InitialWithDiagCounter();
     //Dyson interface
     void FFT(fft::Dir, Mode);
 
   protected:
-    void _InitialBareWeight();
+    void _InitialBareOfSpinModel();
+    void _InitialBareOfHubbardModel();
     std::vector<real> _Hopping;
     real _ExternalField;
     real _RealChemicalPotential;
@@ -68,7 +69,7 @@ class W : public WeightNoMeasure {
     Complex Weight(const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool);
     Complex Weight(int, const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool);
     void SetTest();
-    void InitialWithBare();
+    void InitialWithBare(model);
     void InitialWithDiagCounter();
     //Dyson interface
     void FFT(fft::Dir, Mode);
@@ -76,7 +77,8 @@ class W : public WeightNoMeasure {
     void WriteBareToASCII();
 
   protected:
-    void _InitialBareWeight();
+    void _InitialBareOfJ1J2();
+    void _InitialBareOfHubbardModel();
     std::vector<real> _Interaction;
     real _ExternalField;
 };

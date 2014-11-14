@@ -10,9 +10,13 @@
 #include <vector>
 using namespace weight;
 
-void G::InitialWithBare()
+void G::InitialWithBare(model Model_)
 {
-    _InitialBareWeight();
+    if (Model_ == J1J2)
+        _InitialBareOfSpinModel();
+    else if (Model_ == HUBBARD)
+        _InitialBareOfHubbardModel();
+
     DeltaTWeight = 0.0;
     SmoothWeight = BareWeight;
 }
@@ -59,11 +63,37 @@ void G::InitialWithDiagCounter()
     BareWeight = 0.0;
 }
 
+void G::_InitialBareOfSpinModel()
+{
+    BareWeight = 0.0;
+    Complex mu = Complex(0.0, PI / 2.0 / _Beta);
+    int spin_down = SpinIndex(DOWN, DOWN);
+    int spin_up = SpinIndex(UP, UP);
+    for (int sub = 0; sub < _Shape[SUB]; sub++) {
+        if (_Lat.IsOnSameSubLat(sub))
+            continue;
+        int coor = 0;
+        for (int tau = 0; tau < _Shape[TAU]; tau++) {
+            Complex weight = exp(mu * BinToTau(tau)) / Complex(1.0, 1.0);
+            BareWeight[spin_down][sub][coor][tau] = weight;
+            BareWeight[spin_up][sub][coor][tau] = weight;
+        }
+    }
+}
+
+void G::_InitialBareOfHubbardModel()
+{
+}
+
 // interaction
 
-void W::InitialWithBare()
+void W::InitialWithBare(model Model_)
 {
-    _InitialBareWeight();
+    if (Model_ == J1J2)
+        _InitialBareOfJ1J2();
+    else if (Model_ == HUBBARD)
+        _InitialBareOfHubbardModel();
+
     DeltaTWeight = BareWeight;
     SmoothWeight = 0.0;
 }
@@ -130,28 +160,7 @@ void W::InitialWithDiagCounter()
     BareWeight = 0.0;
 }
 
-#if SYSTEM == SPIN
-void G::_InitialBareWeight()
-{
-    BareWeight = 0.0;
-    Complex mu = Complex(0.0, PI / 2.0 / _Beta);
-    int spin_down = SpinIndex(DOWN, DOWN);
-    int spin_up = SpinIndex(UP, UP);
-    for (int sub = 0; sub < _Shape[SUB]; sub++) {
-        if (_Lat.IsOnSameSubLat(sub))
-            continue;
-        int coor = 0;
-        for (int tau = 0; tau < _Shape[TAU]; tau++) {
-            Complex weight = exp(mu * BinToTau(tau)) / Complex(1.0, 1.0);
-            BareWeight[spin_down][sub][coor][tau] = weight;
-            BareWeight[spin_up][sub][coor][tau] = weight;
-        }
-    }
-}
-#endif
-
-#if SYSTEM == SPIN && MODEL == J1J2
-void W::_InitialBareWeight()
+void W::_InitialBareOfJ1J2()
 {
     BareWeight = 0.0;
     int Lx = _Lat.Size[0], Ly = _Lat.Size[1];
@@ -216,4 +225,7 @@ void W::_InitialBareWeight()
         }
     }
 }
-#endif
+
+void W::_InitialBareOfHubbardModel()
+{
+}
