@@ -46,7 +46,7 @@ class Markov {
     weight::Worm *WormWeight;
     RandomFactory *RNG;
 
-    const static int NUpdates = 14;
+    const static int NUpdates = 13;
     real ProbofCall[NUpdates];
     real SumofProbofCall[NUpdates] = {0.0};
 
@@ -84,5 +84,6 @@ class Markov {
 };
 
 int TestMarkov();
+int TestDiagCounter();
 }
 #endif /* defined(__Feynman_Simulator__markov__) */
