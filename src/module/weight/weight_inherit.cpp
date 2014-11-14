@@ -82,6 +82,7 @@ G::G(const Lattice &lat, real beta, int order, real ExternalField, bool IsTauSym
 {
     _ExternalField = ExternalField;
     BareWeight.Allocate(Shape());
+    MeasureWeight.Allocate(Shape());
     //use _Shape[SP] to _Shape[TAU] to construct array3
     InitialWithBare();
 }
@@ -90,8 +91,9 @@ Complex G::Weight(const Site &rin, const Site &rout, real tin, real tout, spin S
 {
     auto dist = _Lat.Dist(rin, rout);
     if (IsMeasure)
-        //TODO: define the measuring weight for G
-        return Complex(1.0, 0.0);
+        return MeasureWeight[SpinIndex(SpinIn, SpinOut)]
+                            [dist.SublatIndex]
+                            [dist.CoordiIndex];
     else
         return TauSymmetry(tin, tout) *
                SmoothWeight[SpinIndex(SpinIn, SpinOut)]
@@ -102,25 +104,34 @@ Complex G::Weight(const Site &rin, const Site &rout, real tin, real tout, spin S
 
 Complex G::Weight(int dir, const Site &r1, const Site &r2, real t1, real t2, spin Spin1, spin Spin2, bool IsMeasure)
 {
-    if (IsMeasure)
-        //TODO: define the measuring weight for G
-        return Complex(1.0, 0.0);
-
-    else if (dir == IN) {
+    if (dir == IN)
+    {
         auto dist = _Lat.Dist(r1, r2);
-        return TauSymmetry(t1, t2) *
-               SmoothWeight[SpinIndex(Spin1, Spin2)]
-                           [dist.SublatIndex]
-                           [dist.CoordiIndex]
-                           [TauToBin(t1, t2)];
-    }
-    else {
+        
+        if (IsMeasure)
+            return MeasureWeight[SpinIndex(Spin1, Spin2)]
+                                [dist.SublatIndex]
+                                [dist.CoordiIndex];
+
+        else
+            return TauSymmetry(t1, t2) *
+                   SmoothWeight[SpinIndex(Spin1, Spin2)]
+                               [dist.SublatIndex]
+                               [dist.CoordiIndex]
+                               [TauToBin(t1, t2)];
+    }else{
         auto dist = _Lat.Dist(r2, r1);
-        return TauSymmetry(t2, t1) *
-               SmoothWeight[SpinIndex(Spin2, Spin1)]
-                           [dist.SublatIndex]
-                           [dist.CoordiIndex]
-                           [TauToBin(t2, t1)];
+        if (IsMeasure)
+            return MeasureWeight[SpinIndex(Spin2, Spin1)]
+                                [dist.SublatIndex]
+                                [dist.CoordiIndex];
+
+        else
+            return TauSymmetry(t2, t1) *
+                   SmoothWeight[SpinIndex(Spin2, Spin1)]
+                               [dist.SublatIndex]
+                               [dist.CoordiIndex]
+                               [TauToBin(t2, t1)];
     }
 }
 
@@ -133,26 +144,32 @@ W::W(const Lattice &lat, real Beta, int order,
     _Interaction = Interaction_;
     _ExternalField = ExternalField;
     BareWeight.Allocate(Shape());
+    MeasureWeight.Allocate(Shape());
     //use _Shape[SP] to _Shape[VOL] to construct array3
     InitialWithBare();
 }
 
 Complex W::Weight(const Site &rin, const Site &rout, real tin, real tout, spin *SpinIn, spin *SpinOut, bool IsWorm, bool IsMeasure, bool IsDelta)
 {
-    if (IsMeasure)
-        //TODO: define the measuring weight of W
-        return Complex(1.0, 0.0);
 
     auto distance = _Lat.Dist(rin, rout);
+    
+    if (IsMeasure)
+        return MeasureWeight[SpinIndex(SpinIn, SpinOut)]
+                            [distance.SublatIndex]
+                            [distance.CoordiIndex];
     if (IsDelta)
-        //TODO: define the delta function here! IsWorm==true and IsWorm==false
-        return DeltaTWeight[SpinIndex(SpinIn, SpinOut)]
-                           [distance.SublatIndex]
-                           [distance.CoordiIndex];
+        if(IsWorm)
+            return DeltaTWeight[SpinIndex(UP,UP,UP,UP)]
+                               [distance.SublatIndex]
+                               [distance.CoordiIndex];
+        else
+            return DeltaTWeight[SpinIndex(SpinIn, SpinOut)]
+                               [distance.SublatIndex]
+                               [distance.CoordiIndex];
 
     else if (IsWorm)
-        //define your fake function here
-        return SmoothWeight[SpinIndex(UP, UP)]
+        return SmoothWeight[SpinIndex(UP,UP,UP,UP)]
                            [distance.SublatIndex]
                            [distance.CoordiIndex]
                            [TauToBin(tin, tout)];
@@ -182,17 +199,16 @@ Complex W::Weight(int dir, const Site &r1, const Site &r2, real t1, real t2, spi
     }
 
     if (IsMeasure)
-        //TODO: define the measuring weight of W
-        return Complex(1.0, 0.0);
+        return MeasureWeight[spinindex][subindex][coordindex];
 
     if (IsDelta)
-        //TODO: define the delta function here! IsWorm==true and IsWorm==false
-        return DeltaTWeight[spinindex]
-                           [subindex]
-                           [coordindex];
+        if(IsWorm)
+            return DeltaTWeight[SpinIndex(UP,UP,UP,UP)][subindex][coordindex];
+        else
+            return DeltaTWeight[spinindex][subindex][coordindex];
     else if (IsWorm)
         //define your fake function here
-        return SmoothWeight[SpinIndex(UP, UP)][subindex][coordindex][tau];
+        return SmoothWeight[SpinIndex(UP, UP, UP, UP)][subindex][coordindex][tau];
     else
         return SmoothWeight[spinindex][subindex][coordindex][tau];
 }
