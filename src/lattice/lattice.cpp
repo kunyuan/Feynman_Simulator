@@ -12,15 +12,14 @@
 #include "../utility/abort.h"
 Lattice::Lattice()
 {
-    Reset(Vec<int>());
+    Initialize(Vec<int>(4), LATTICE);
 }
-
-Lattice::Lattice(const Vec<int> &size)
+Lattice::Lattice(const Vec<int> &size, lattice _Lattice)
 {
-    Reset(size);
+    Initialize(size, _Lattice);
 }
 
-void Lattice::Reset(const Vec<int> &size)
+void Lattice::Initialize(const Vec<int> &size, lattice _Lattice)
 {
     Dimension = D;
     Vol = 1;
@@ -29,7 +28,19 @@ void Lattice::Reset(const Vec<int> &size)
         Vol *= Size[i];
     }
     SublatVol = NSublattice;
-    _Checkboard();
+    SublatVol2 = NSublattice * NSublattice;
+    switch (_Lattice) {
+        case SQUARE:
+            ABORT("square lattice has not been implemented yet!");
+        case CHECKBOARD:
+            _Checkboard();
+            break;
+        case HONEYCOMB:
+            _Honeycomb();
+            break;
+        case SIMPLE_CUBIC:
+            ABORT("simple cubic lattice has not been implemented yet!");
+    }
 }
 
 bool operator==(const Site &v1, const Site &v2)
@@ -212,6 +223,9 @@ void Lattice::PlotLattice()
  */
 void Lattice::_Checkboard()
 {
+    ASSERT_ALLWAYS(Dimension == 2 && SublatVol == 2,
+                   "Checkboard lattice has D=2 and Sublattice=2");
+    ASSERT_ALLWAYS(Size[0] > 1 && Size[1] > 1, "System size must be bigger than 1!");
     //Square Lattice with two sublattices
     LatticeVec[0][0] = 1.0;
     LatticeVec[0][1] = 0.0;

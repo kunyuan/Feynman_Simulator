@@ -80,7 +80,7 @@ void Test_Diagram_Component_Bundle()
 
 void Test_Diagram_IO()
 {
-    Lattice lat(Vec<int>(8));
+    Lattice lat(Vec<int>(8), CHECKBOARD);
     weight::G G(lat, 1.0, 1);
     weight::W W(lat, 1.0, 1, {1.0, 0.0}, 0.0);
     G.Initial(model::TEST);

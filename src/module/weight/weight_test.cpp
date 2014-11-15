@@ -44,7 +44,7 @@ void TestWeightMeasuring()
 void WeightMeasuring(real Beta, int Num)
 {
     //some initialization
-    Lattice lat(Vec<int>(1));
+    Lattice lat(Vec<int>(4), LATTICE);
     weight::Sigma Sig(lat, Beta, 4);
     weight::Sigma Sig2(lat, Beta, 4);
     Site s1 = Site(0, 0);
@@ -120,7 +120,7 @@ void Sample(Sigma &sigma, int num, Site in, Site out,
 
 void TestWeightW()
 {
-    Lattice lat(Vec<int>(8));
+    Lattice lat(Vec<int>(8), LATTICE);
     real Beta = 1.0;
     weight::W W_(lat, Beta, 4, {1.0, 0.5}, 0.0);
     W_.WriteBareToASCII();
