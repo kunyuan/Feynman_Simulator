@@ -80,6 +80,7 @@ class Lattice {
     int Vol;
     int SublatVol;
     int SublatVol2;
+    lattice LatticeType;
     Vec<int> Size;
     Vec<real> LatticeVec[D];
     Vec<real> ReciprocalLatticeVec[D];
