@@ -86,7 +86,8 @@ class Lattice {
     Vec<real> SublatticeVec[NSublattice];
 
     Lattice();
-    Lattice(const Vec<int> &size);
+    Lattice(const Vec<int> &size, lattice);
+    void Initialize(const Vec<int> &size, lattice);
 
     int Vec2Index(const Vec<int> &) const;
     int Vec2Index(std::initializer_list<int> list) const;
@@ -96,8 +97,6 @@ class Lattice {
     int Index2Sublat(int, int direction) const;
     //return true if the Index represent a pair between the same sublattice
     bool IsOnSameSubLat(int Index);
-
-    void Reset(const Vec<int> &size);
 
     Site GetSite(const Distance &dis, int direction) const;
     Site GetSite(int name) const;

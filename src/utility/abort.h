@@ -12,15 +12,15 @@
 #include "logger.h"
 
 #define ABORT(msg)      \
-    {                   \
+    do {                \
         LOG_ERROR(msg); \
         throw(-1);      \
-    }
+    } while (0)
 
 #define ASSERT_ALLWAYS(expression, msg)                   \
-    {                                                     \
-        if ((expression) == true)                         \
+    do {                                                  \
+        if ((expression) == false)                        \
             ABORT(#expression " does not hold! " << msg); \
-    }
+    } while (0)
 
 #endif /* defined(__Fermion_Simulator__error_handler__) */

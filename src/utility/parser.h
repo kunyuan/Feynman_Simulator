@@ -9,6 +9,7 @@
 #ifndef __Feynman_Simulator__parser__
 #define __Feynman_Simulator__parser__
 
+#include <iostream>
 #include <map>
 #include <string>
 #include <vector>
@@ -51,7 +52,7 @@ class SimpleParser {
     template <typename T>
     void set(std::string key, std::vector<T> value)
     {
-        ASSERT_ALLWAYS(value.size() == 0, "vector should has element in it!");
+        ASSERT_ALLWAYS(value.size() != 0, "vector should has element in it!");
         key = _ToUpper(key);
         _map[key] = ToString(value[0]);
         for (auto iter = ++value.begin(); iter < value.end(); ++iter)

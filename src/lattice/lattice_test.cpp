@@ -18,7 +18,7 @@ void Test_Lattice();
 int L[] = {16, 32};
 Vec<int> size(L);
 
-Lattice lattice(size);
+Lattice lattice(size, CHECKBOARD);
 
 int TestLattice()
 {

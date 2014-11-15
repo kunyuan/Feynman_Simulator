@@ -41,7 +41,7 @@ bool Parameter::_BuildNew(const std::string &InputFile)
     GetPara(_para, FinalBeta);
     GetPara(_para, Order);
 
-    Lat.Reset(L);
+    Lat.Initialize(L, LATTICE);
     Version = 0;
     Beta = InitialBeta;
     T = 1.0 / Beta;
@@ -66,7 +66,7 @@ bool Parameter::_Load(const std::string &InputFile)
     GetPara(_para, Beta);
     GetPara(_para, Order);
 
-    Lat.Reset(L);
+    Lat.Initialize(L, LATTICE);
     T = 1.0 / Beta;
     if (Order >= MAX_ORDER)
         ABORT("Order can not be bigger than " << MAX_ORDER);
@@ -139,7 +139,7 @@ void ParaMC::SetTest()
     Version = 0;
     int size[2] = {8, 8};
     L = Vec<int>(size);
-    Lat.Reset(L);
+    Lat = Lattice(L, CHECKBOARD);
     Hopping.push_back(0.0);
     Interaction.push_back(1.0);
     RealChemicalPotential.push_back(0.0);
