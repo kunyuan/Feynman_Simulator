@@ -7,6 +7,7 @@
 //
 
 #include "parameter.h"
+#include "utility.h"
 using namespace para;
 
 Message Parameter::GenerateMessage()
@@ -31,9 +32,11 @@ void Parameter::UpdateWithMessage(const Message &Message_)
 bool Parameter::_BuildNew(const std::string &InputFile)
 {
     _para.ParseFile(InputFile);
-    GetPara(_para, L);
+    GetPara(_para, Hopping);
     GetPara(_para, Interaction);
+    GetPara(_para, RealChemicalPotential);
     GetPara(_para, ExternalField);
+    GetPara(_para, L);
     GetPara(_para, InitialBeta);
     GetPara(_para, DeltaBeta);
     GetPara(_para, FinalBeta);
@@ -52,9 +55,11 @@ bool Parameter::_Load(const std::string &InputFile)
 {
     _para.ParseFile(InputFile);
     GetPara(_para, Version);
-    GetPara(_para, L);
+    GetPara(_para, Hopping);
     GetPara(_para, Interaction);
+    GetPara(_para, RealChemicalPotential);
     GetPara(_para, ExternalField);
+    GetPara(_para, L);
     GetPara(_para, InitialBeta);
     GetPara(_para, DeltaBeta);
     GetPara(_para, FinalBeta);
@@ -76,13 +81,14 @@ void Parameter::_SavePreparation()
 {
     _para.clear();
     SetPara(_para, Version);
-    SetPara(_para, L);
+    SetPara(_para, Hopping);
     SetPara(_para, Interaction);
+    SetPara(_para, RealChemicalPotential);
     SetPara(_para, ExternalField);
+    SetPara(_para, L);
     SetPara(_para, InitialBeta);
     SetPara(_para, DeltaBeta);
     SetPara(_para, FinalBeta);
-    //!!!Beta should be a part of state, so it will be stored
     SetPara(_para, Beta);
     SetPara(_para, Order);
 }
@@ -135,22 +141,21 @@ void ParaMC::SetTest()
     int size[2] = {8, 8};
     L = Vec<int>(size);
     Lat.Reset(L);
+    Hopping.push_back(0.0);
     Interaction.push_back(1.0);
+    RealChemicalPotential.push_back(0.0);
+    RealChemicalPotential.push_back(0.0);
     ExternalField = 0.0;
     InitialBeta = 1.0;
     DeltaBeta = 0.0;
     FinalBeta = 1.0;
     Beta = 1.0;
-    Order = 2;
+    Order = 3;
     Toss = 10000;
     Sample = 5000000;
     Seed = 519180543;
     WormSpaceReweight = 0.1;
-    OrderReWeight[0] = 1.0;
-    OrderReWeight[1] = 1.0;
-    OrderReWeight[2] = 1.0;
-    OrderReWeight[3] = 1.0;
-    OrderReWeight[4] = 1.0;
+    InitialArray(OrderReWeight, 1.0, 10);
     T = 1.0 / Beta;
     Counter = 0;
 }

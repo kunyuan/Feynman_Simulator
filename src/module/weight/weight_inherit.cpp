@@ -77,14 +77,18 @@ void Polar::Measure(const Site &rin, const Site &rout, real tin, real tout, spin
 
 /***********************  G  **************************************/
 
-G::G(const Lattice &lat, real beta, int order, real ExternalField, bool IsTauSymmetric)
+G::G(const Lattice &lat, real beta, int order,
+     const std::vector<real> &Hopping,
+     const std::vector<real> &RealChemicalPotential,
+     real ExternalField, bool IsTauSymmetric)
     : WeightNoMeasure(lat, beta, order, IsTauSymmetric, SPIN4, "G")
 {
+    _Hopping = Hopping;
     _ExternalField = ExternalField;
+    _RealChemicalPotential = RealChemicalPotential;
     BareWeight.Allocate(Shape());
     MeasureWeight.Allocate(Shape());
     //use _Shape[SP] to _Shape[TAU] to construct array3
-    InitialWithBare();
 }
 
 Complex G::Weight(const Site &rin, const Site &rout, real tin, real tout, spin SpinIn, spin SpinOut, bool IsMeasure)
@@ -146,7 +150,6 @@ W::W(const Lattice &lat, real Beta, int order,
     BareWeight.Allocate(Shape());
     MeasureWeight.Allocate(Shape());
     //use _Shape[SP] to _Shape[VOL] to construct array3
-    InitialWithBare();
 }
 
 Complex W::Weight(const Site &rin, const Site &rout, real tin, real tout, spin *SpinIn, spin *SpinOut, bool IsWorm, bool IsMeasure, bool IsDelta)

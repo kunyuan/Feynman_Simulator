@@ -48,7 +48,8 @@ bool SimpleParser::ParseFile(const std::string &InputFile, bool AbortIfFail)
     _map.clear();
     while (getline(ifs, temp)) {
         string key = trim(temp);
-        if (temp[0] == SEP && temp[1] == SEP)
+        if (temp.empty() || (temp[0] == SEP && temp[1] == SEP))
+            //empty line or comment line
             continue;
         _map.insert(make_pair(temp));
     }

@@ -57,7 +57,7 @@ void Test_Counter()
             Diag.WriteDiagram2gv("diagram/" + ToString(Para.Counter) + ".gv");
         }
     }
-    cout << "Number of different Order diagrams in 1000 samples: " << real(total[1])/
-                        real(total[2])<<endl;
+    cout << "Number of different Order diagrams in 1000 samples: " << 2.0*real(total[2])/
+                    real(total[1])<< " " << 2.0*real(total[3])/real(total[1])<<endl;
     LOG_INFO("Updates Check are done!");
 }

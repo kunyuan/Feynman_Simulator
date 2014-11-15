@@ -43,8 +43,8 @@ bool weight::Weight::BuildNew(flag _flag, const Parameter &para)
         ABORT("Order can not be zero!!!");
     if (_flag & weight::GW) {
         _AllocateGW(para);
-        G->InitialWithBare();
-        W->InitialWithBare();
+        G->Initial(MODEL);
+        W->Initial(MODEL);
     }
     if (_flag & weight::SigmaPolar) {
         _AllocateSigmaPolar(para);
@@ -123,23 +123,26 @@ void weight::Weight::SetTest(const Parameter &para)
 {
     _AllocateGW(para);
     _AllocateSigmaPolar(para);
-    G->SetTest();
-    W->SetTest();
+    G->Initial(model::TEST);
+    W->Initial(model::TEST);
 }
 
 void weight::Weight::SetDiagCounter(const Parameter &para)
 {
     _AllocateGW(para);
     _AllocateSigmaPolar(para);
-    G->InitialWithDiagCounter();
-    W->InitialWithDiagCounter();
+    G->Initial(model::DIAGRAMCOUNTER);
+    W->Initial(model::DIAGRAMCOUNTER);
 }
 
 void weight::Weight::_AllocateGW(const Parameter &para)
 {
     //make sure old Sigma/Polar/G/W are released before assigning new memory
     delete G;
-    G = new weight::G(para.Lat, para.Beta, para.Order, para.ExternalField, _IsAllSymmetric);
+    G = new weight::G(para.Lat, para.Beta, para.Order,
+                      para.Hopping,
+                      para.RealChemicalPotential,
+                      para.ExternalField, _IsAllSymmetric);
     delete W;
     W = new weight::W(para.Lat, para.Beta, para.Order,
                       para.Interaction, para.ExternalField);
