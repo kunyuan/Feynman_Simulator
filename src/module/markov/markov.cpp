@@ -28,6 +28,7 @@ bool Markov::BuildNew(ParaMC &para, Diagram &diag, weight::Weight &weight)
 {
     Beta = para.Beta;
     Order = para.Order;
+    Counter = &para.Counter;
     Lat = &para.Lat;
     OrderWeight = para.OrderReWeight;
     Diag = &diag;
@@ -97,6 +98,7 @@ void Markov::Hop(int sweep)
         //            ChangeROnVertex();
         //        else if (x < SumofProbofCall[14])
         //            ChangeSpinOnVertex();
+        (*Counter)++;
     }
 }
 
@@ -530,12 +532,14 @@ void Markov::DeleteInteraction()
     Complex sgn = phase(weightRatio);
 
     if (wAB->IsDelta)
-        prob *= OrderWeight[Diag->Order] * ProbofCall[5] * ProbTau(vA->Tau) / (ProbofCall[6] * OrderWeight[Diag->Order + 1]);
+        prob *= OrderWeight[Diag->Order -1] * ProbofCall[5] * ProbTau(vA->Tau) /
+                    (ProbofCall[6] * OrderWeight[Diag->Order]);
     else
-        prob *= OrderWeight[Diag->Order] * ProbofCall[5] * ProbTau(vA->Tau) * ProbTau(vB->Tau) / (ProbofCall[6] * OrderWeight[Diag->Order + 1]);
+        prob *= OrderWeight[Diag->Order-1] * ProbofCall[5] * ProbTau(vA->Tau)
+            * ProbTau(vB->Tau) / (ProbofCall[6] * OrderWeight[Diag->Order]);
 
     if (prob >= 1.0 || RNG->urn() < prob) {
-        Diag->Order -= 1;
+        Diag->Order--;
         Diag->Phase *= sgn;
         Diag->Weight *= weightRatio;
 
@@ -794,6 +798,7 @@ void Markov::ChangeRLoop()
 
     Complex oldWeight(1.0, 0.0);
     Complex newWeight(1.0, 0.0);
+    
     for (int i = 0; i < n; i++) {
         g = v[i]->NeighG(OUT);
         GWeight[i] = G->Weight(newR, newR, v[i]->Tau, g->NeighVer(OUT)->Tau,
@@ -803,7 +808,7 @@ void Markov::ChangeRLoop()
 
         w = v[i]->NeighW();
         if (flagW[w->Name] == 1) {
-            WWeight[i] *= W->Weight(v[i]->Dir, newR, w->NeighVer(INVERSE(v[i]->Dir))->R,
+            WWeight[i] = W->Weight(v[i]->Dir, newR, w->NeighVer(INVERSE(v[i]->Dir))->R,
                                     v[i]->Tau, w->NeighVer(INVERSE(v[i]->Dir))->Tau,
                                     v[i]->Spin(), w->NeighVer(INVERSE(v[i]->Dir))->Spin(),
                                     w->IsWorm, w->IsMeasure, w->IsDelta);
@@ -812,12 +817,17 @@ void Markov::ChangeRLoop()
         }
         else if (flagW[w->Name] == 2) {
             flagW[w->Name] = 0;
-            WWeight[i] *= W->Weight(v[i]->Dir, newR, newR,
+            WWeight[i] = W->Weight(v[i]->Dir, newR, newR,
                                     v[i]->Tau, w->NeighVer(INVERSE(v[i]->Dir))->Tau,
                                     v[i]->Spin(), w->NeighVer(INVERSE(v[i]->Dir))->Spin(),
                                     w->IsWorm, w->IsMeasure, w->IsDelta);
             newWeight *= WWeight[i];
             oldWeight *= w->Weight;
+        }else if(flagW[w->Name]==0) {
+            WWeight[i] = W->Weight(v[i]->Dir, newR, newR,
+                                    v[i]->Tau, w->NeighVer(INVERSE(v[i]->Dir))->Tau,
+                                    v[i]->Spin(), w->NeighVer(INVERSE(v[i]->Dir))->Spin(),
+                                    w->IsWorm, w->IsMeasure, w->IsDelta);
         }
     }
 

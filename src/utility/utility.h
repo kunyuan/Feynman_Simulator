@@ -51,6 +51,13 @@ void AssignFromTo(T *source, T *target, int size)
         source[i] = target[i];
 }
 
+template <typename T>
+void InitialArray(T *source, T t, int size)
+{
+    for (int i = 0; i < size; i++)
+        source[i] = t;
+}
+
 bool CleanFile(const std::string &FileName);
 
 bool DoesFileExist(const std::string &FileName);

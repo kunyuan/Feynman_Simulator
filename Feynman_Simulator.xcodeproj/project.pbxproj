@@ -11,6 +11,7 @@
 		1CA5CF3819ED6F1B00212E20 /* lattice_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CA5CF3719ED6F1B00212E20 /* lattice_test.cpp */; };
 		1CA5CF3A19ED6F3F00212E20 /* lattice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CA5CF3919ED6F3F00212E20 /* lattice.cpp */; };
 		1CFBB0B91A1668C500EE2E9E /* markov_diag_counter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CFBB0B81A1668C500EE2E9E /* markov_diag_counter.cpp */; };
+		1CFBB0BD1A16C1F900EE2E9E /* diagram_filter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CFBB0BC1A16C1F900EE2E9E /* diagram_filter.cpp */; };
 		6126638BECC823E2FECDBE1A /* utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 612660FB5825D574D3D39D34 /* utility.cpp */; };
 		61266D7AEDBA61CFA3C84C6B /* rng.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 612667B1A17242731ADAF002 /* rng.cpp */; };
 		61266E5CDE0355C1306E9EBD /* rng_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6126679998941F2D7A5DBE4E /* rng_test.cpp */; };
@@ -79,6 +80,7 @@
 		1CA5CF3B19ED6F4900212E20 /* lattice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lattice.h; path = lattice/lattice.h; sourceTree = "<group>"; };
 		1CA5CF3E19ED6FD100212E20 /* vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vector.h; path = lattice/vector.h; sourceTree = "<group>"; };
 		1CFBB0B81A1668C500EE2E9E /* markov_diag_counter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = markov_diag_counter.cpp; path = module/markov/markov_diag_counter.cpp; sourceTree = "<group>"; };
+		1CFBB0BC1A16C1F900EE2E9E /* diagram_filter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = diagram_filter.cpp; path = module/diagram/diagram_filter.cpp; sourceTree = "<group>"; };
 		612660FB5825D574D3D39D34 /* utility.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = utility.cpp; sourceTree = "<group>"; };
 		612664CF0EF6FC3F36675242 /* sput_tutorial.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sput_tutorial.txt; sourceTree = "<group>"; };
 		612665F3FD7F1A73D9E774F8 /* rng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rng.h; sourceTree = "<group>"; };
@@ -311,6 +313,7 @@
 		8426668419E445F000CF7B59 /* diagram */ = {
 			isa = PBXGroup;
 			children = (
+				1CFBB0BC1A16C1F900EE2E9E /* diagram_filter.cpp */,
 				8422FE0C1A09C112002EB44E /* diagram.h */,
 				8422FE0B1A09C112002EB44E /* diagram.cpp */,
 				8422FE081A09C112002EB44E /* diagram_IO.cpp */,
@@ -481,6 +484,7 @@
 				84519AEF19F2C5B2007CB81B /* envDyson.cpp in Sources */,
 				61266D7AEDBA61CFA3C84C6B /* rng.cpp in Sources */,
 				843D3FB41A1114FD00DACC51 /* weight_estimator.cpp in Sources */,
+				1CFBB0BD1A16C1F900EE2E9E /* diagram_filter.cpp in Sources */,
 				84681F6719F9AC0600832DAD /* crc32_test.cpp in Sources */,
 				84D7EFBC19F36361006B1CA5 /* array_test.cpp in Sources */,
 				8422FE111A09C112002EB44E /* diagram_IO.cpp in Sources */,

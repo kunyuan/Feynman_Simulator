@@ -51,7 +51,7 @@ bool Diagram::_CheckTopo()
     }
 
     for (int i = 0; i < W.HowMany(); i++) {
-        for (int dir = 0; i < 2; i++) {
+        for (int dir = 0; dir < 2; dir++) {
             vertex v = W(i)->NeighVer(dir);
             if (!Ver.Exist(v))
                 ABORT("nVer not exists!" + v->PrettyString());

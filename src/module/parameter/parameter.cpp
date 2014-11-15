@@ -7,6 +7,7 @@
 //
 
 #include "parameter.h"
+#include "utility.h"
 using namespace para;
 
 Message Parameter::GenerateMessage()
@@ -149,16 +150,14 @@ void ParaMC::SetTest()
     DeltaBeta = 0.0;
     FinalBeta = 1.0;
     Beta = 1.0;
-    Order = 4;
+    Order = 3;
     Toss = 10000;
     Sample = 5000000;
     Seed = 519180543;
     WormSpaceReweight = 0.1;
-    OrderReWeight[0] = 1.5;
-    OrderReWeight[1] = 1;
-    OrderReWeight[2] = 3.0;
-    OrderReWeight[3] = 4.0;
+    InitialArray(OrderReWeight, 1.0, 10);
     T = 1.0 / Beta;
+    Counter = 0;
 }
 
 bool ParaDyson::BuildNew(const string &InputFile)

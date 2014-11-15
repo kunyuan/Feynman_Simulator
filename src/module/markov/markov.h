@@ -34,6 +34,7 @@ class Momentum;
 namespace mc {
 class Markov {
   public:
+    long long *Counter;
     real Beta;
     int Order;
     Lattice *Lat;
