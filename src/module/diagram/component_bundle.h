@@ -14,7 +14,7 @@
 
 namespace diag {
 
-const int MAX_BUNDLE = 16;
+const int MAX_BUNDLE = 20;
 template <typename T>
 class Bundle {
   private:

@@ -166,7 +166,7 @@ void Diagram::WriteDiagram2gv(string path)
 
     //Prettystring
     os << "//Order=" << Order << ", Weight=" << Weight
-       << ", Sign=" << SignFermiLoop << ", WormExist=" << Worm.Exist << endl;
+       << ", FermiLoop=" << SignFermiLoop << ", WormExist=" << Worm.Exist << endl;
     os << "//" << Worm.PrettyString() << endl;
     for (int i = 0; i < Ver.HowMany(); i++)
         os << "//" << Ver(i)->PrettyString() << endl;

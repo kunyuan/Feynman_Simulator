@@ -15,12 +15,16 @@ void G::Initial(model Model_)
     switch (Model_) {
         case TEST:
             _InitialTest();
+            break;
         case DIAGRAMCOUNTER:
             _InitialDiagCounter();
+            break;
         case J1J2:
             _InitialBareSpin();
+            break;
         case HUBBARD:
             _InitialBareHubbard();
+            break;
     }
 }
 
@@ -28,12 +32,17 @@ void G::_InitialTest()
 {
     //Spin independent; dr==0; exp(i*tau)
     SmoothWeight = 0.0;
+    MeasureWeight = 0.0;
     int spin_down = SpinIndex(DOWN, DOWN);
     int spin_up = SpinIndex(UP, UP);
     for (int sub = 0; sub < _Shape[SUB]; sub++) {
         if (!_Lat.IsOnSameSubLat(sub))
             continue;
-        int coor = _Lat.Vec2Index({0, 0});
+        int coor = _Lat.Vec2Index({0,0});
+        
+        MeasureWeight[spin_down][sub][coor] = Complex(1.0, 0.0);
+        MeasureWeight[spin_up][sub][coor] = Complex(1.0, 0.0);
+        
         for (int tau = 0; tau < _Shape[TAU]; tau++) {
             Complex weight = exp(Complex(0.0, BinToTau(tau)));
             SmoothWeight[spin_down][sub][coor][tau] = weight;
@@ -48,6 +57,7 @@ void G::_InitialTest()
 void G::_InitialDiagCounter()
 {
     SmoothWeight = 0.0;
+    MeasureWeight = 0.0;
     int spin_down = SpinIndex(DOWN, DOWN);
     int spin_up = SpinIndex(UP, UP);
 
@@ -55,6 +65,7 @@ void G::_InitialDiagCounter()
         if (!_Lat.IsOnSameSubLat(sub))
             continue;
         int coor = _Lat.Vec2Index({0, 0});
+        MeasureWeight[spin_up][sub][coor] = Complex(1.0, 0.0);
         for (int tau = 0; tau < _Shape[TAU]; tau++) {
             Complex weight = Complex(1.0, 0.0);
             SmoothWeight[spin_down][sub][coor][tau] = weight;
@@ -84,6 +95,7 @@ void G::_InitialBareSpin()
     }
     DeltaTWeight = 0.0;
     SmoothWeight = BareWeight;
+    MeasureWeight = Complex(1.0, 0.0);
 }
 
 void G::_InitialBareHubbard()
@@ -113,12 +125,16 @@ void W::Initial(model Model_)
     switch (Model_) {
         case TEST:
             _InitialTest();
+            break;
         case DIAGRAMCOUNTER:
             _InitialDiagCounter();
+            break;
         case J1J2:
             _InitialBareJ1J2();
+            break;
         case HUBBARD:
             _InitialBareHubbard();
+            break;
     }
 }
 
@@ -127,8 +143,9 @@ void W::_InitialTest()
     //spin conserved; dr==0; exp(-i*tau)
     DeltaTWeight = 0.0;
     BareWeight = 0.0;
-    SmoothWeight = 0.0;
 
+    SmoothWeight = 0.0;
+    MeasureWeight = 0.0;
     int Lx = _Lat.Size[0], Ly = _Lat.Size[1];
     assert(Lx > 1 && Ly > 1 && D == 2);
     int spin_up = SpinIndex(UP,  //InOfW/InOfVertex
@@ -140,6 +157,9 @@ void W::_InitialTest()
         if (!_Lat.IsOnSameSubLat(sub))
             continue;
         int coor = _Lat.Vec2Index({0, 0});
+        
+        MeasureWeight[spin_up][sub][coor] = Complex(1.0, 0.0);
+        
         for (int tau = 0; tau < _Shape[TAU]; tau++) {
             Complex weight = exp(Complex(0.0, -BinToTau(tau)));
             SmoothWeight[spin_up][sub][coor][tau] = weight;
@@ -147,15 +167,15 @@ void W::_InitialTest()
     }
 
     for (auto i : GetSpinIndexVector_FourSpinsFileter(UpUp2UpUp))
-        BareWeight[i] = BareWeight[spin_up];
+        SmoothWeight[i] = SmoothWeight[spin_up];
 
     for (auto i : GetSpinIndexVector_FourSpinsFileter(UpDown2UpDown)) {
-        BareWeight[i] = BareWeight[spin_up];
-        BareWeight[i] *= -1.0;
+        SmoothWeight[i] = SmoothWeight[spin_up];
+        SmoothWeight[i] *= -1.0;
     }
     for (auto i : GetSpinIndexVector_FourSpinsFileter(UpDown2DownUp)) {
-        BareWeight[i] = BareWeight[spin_up];
-        BareWeight[i] *= 2.0;
+        SmoothWeight[i] = SmoothWeight[spin_up];
+        SmoothWeight[i] *= 2.0;
     }
 }
 
@@ -163,6 +183,7 @@ void W::_InitialDiagCounter()
 {
     //spin==UP,UP,UP,UP; dr==0; independent of tau
     SmoothWeight = 0.0;
+    MeasureWeight = 0.0;
     int Lx = _Lat.Size[0], Ly = _Lat.Size[1];
     assert(Lx > 1 && Ly > 1 && D == 2);
     int spin_up = SpinIndex(UP,  //InOfW/InOfVertex
@@ -174,11 +195,13 @@ void W::_InitialDiagCounter()
         if (!_Lat.IsOnSameSubLat(sub))
             continue;
         int coor = _Lat.Vec2Index({0, 0});
+        MeasureWeight[spin_up][sub][coor] = Complex(1.0, 0.0);
         for (int tau = 0; tau < _Shape[TAU]; tau++) {
             Complex weight = Complex(1.0, 0.0);
             SmoothWeight[spin_up][sub][coor][tau] = weight;
         }
     }
+
     DeltaTWeight = 0.0;
     BareWeight = 0.0;
 }
@@ -249,10 +272,12 @@ void W::_InitialBareJ1J2()
     }
     DeltaTWeight = BareWeight;
     SmoothWeight = 0.0;
+    MeasureWeight = Complex(1.0, 0.0);
 }
 
 void W::_InitialBareHubbard()
 {
     DeltaTWeight = BareWeight;
     SmoothWeight = 0.0;
+    MeasureWeight = Complex(1.0, 0.0);
 }

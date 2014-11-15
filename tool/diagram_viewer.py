@@ -7,6 +7,7 @@ from matplotlib.widgets import Button
 import matplotlib.image as mpimg
 
 path="../data/diagram"
+graphviz_engine="neato"
 f,ax = plt.subplots(1,2,figsize=(5,5))
 ax[0].axis('off')
 ax[1].axis('off')
@@ -45,7 +46,7 @@ def GetComment(filename):
 
 def GetImage(filename):
     imagefile=filename[:-2]+"png"
-    shellstr="dot -Tpng "+filename+" -o "+imagefile
+    shellstr=graphviz_engine+" -Tpng "+filename+" -o "+imagefile
     os.system(shellstr)
     return imagefile
     
