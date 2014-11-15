@@ -58,16 +58,23 @@ class Job:
                                  for elem in self.para[key]]), key)
         else:
             return "{0}    #{1}\n".format(self.para[key], key)
+    def comment(self, comment):
+        return "\n##{0}\n".format(comment)
 
     def to_string(self, pid=0):
         '''output the corresponding string of the job class'''
         self.para["pid"] = pid
-        input_str = self.key_to_string("DoesLoad")
+        input_str = self.comment("Job parameter")
+        input_str += self.key_to_string("DoesLoad")
         input_str += self.key_to_string("StartFromBare")
         input_str += self.key_to_string("pid")
-        input_str += self.key_to_string("L")
+        input_str += self.comment("Model parameter")
+        input_str += self.key_to_string("Hopping")
         input_str += self.key_to_string("Interaction")
+        input_str += self.key_to_string("RealChemicalPotential")
         input_str += self.key_to_string("ExternalField")
+        input_str += self.comment("General parameter")
+        input_str += self.key_to_string("L")
         input_str += self.key_to_string("initialBeta")
         input_str += self.key_to_string("deltaBeta")
         input_str += self.key_to_string("finalBeta")
@@ -95,6 +102,7 @@ class JobMonteCarlo(Job):
     def to_string(self, pid=0):
         input_str = self.key_to_string("Type")
         input_str = input_str+Job.to_string(self, pid)
+        input_str += self.comment("Monte Carlo parameter")
         input_str += self.key_to_string("Toss")
         input_str += self.key_to_string("Sample")
         input_str += self.key_to_string("Sweep")
@@ -115,6 +123,7 @@ class JobConsistLoop(Job):
     def to_string(self, pid=0):
         input_str = self.key_to_string("Type")
         input_str = input_str+Job.to_string(self, pid)
+        input_str += self.comment("Dyson parameter")
         input_str += self.key_to_string("OrderAccepted")
         input_str += self.key_to_string("ErrorThreshold")
         input_str += self.key_to_string("SleepTime")

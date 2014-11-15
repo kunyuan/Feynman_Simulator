@@ -1,14 +1,24 @@
-MC    #Type            
+MC    #Type
+
+##Job parameter
 0    #DoesLoad       
 1     #StartFromBare
-1    #pid         
-8,8    #L       
-1.0,0.0    #Interaction
+1    #pid
+
+##Model parameter
+0.0        #Hopping
+1.0,0.5    #Interaction
+0.0        #RealChemicalPotential
 0.0     #ExternalField
+
+##General parameter
+8,8    #L
 1.0    #initialBeta    
 0.0    #deltaBeta    
 1.0    #finalBeta  
-4    #Order      
+4    #Order
+
+##Monte Carlo paramter
 10000    #Toss       
 5000000    #Sample   
 10    #Sweep        

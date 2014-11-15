@@ -77,13 +77,37 @@ int WeightNoMeasure::SpinIndex(spin SpinIn, spin SpinOut)
 int WeightNoMeasure::SpinIndex(spin SpinInIn, spin SpinInOut, spin SpinOutIn, spin SpinOutOut)
 {
     return SpinInIn * SPIN3 + SpinInOut * SPIN2 +
-            SpinOutIn * SPIN + SpinOutOut;
+           SpinOutIn * SPIN + SpinOutOut;
 }
 
 int WeightNoMeasure::SpinIndex(spin *TwoSpinIn, spin *TwoSpinOut)
 {
     return TwoSpinIn[0] * SPIN3 + TwoSpinIn[1] * SPIN2 +
            TwoSpinOut[0] * SPIN + TwoSpinOut[1];
+}
+
+vector<int> WeightNoMeasure::GetSpinIndexVector_FourSpinsFileter(SpinFilter filter)
+{
+    vector<int> list;
+    for (int InIn = 0; InIn < 2; InIn++)
+        for (int InOut = 0; InOut < 2; InOut++)
+            for (int OutIn = 0; OutIn < 2; OutIn++)
+                for (int OutOut = 0; OutOut < 2; OutOut++) {
+                    bool flag = false;
+                    if (filter == UpUp2UpUp &&
+                        InIn == InOut && InIn == OutIn && InIn == OutOut)
+                        flag = true;
+                    if (filter == UpDown2UpDown &&
+                        InIn == InOut && OutIn == OutOut && InIn == FLIP(OutIn))
+                        flag = true;
+                    if (filter == UpDown2DownUp &&
+                        InIn == FLIP(InOut) && OutIn == FLIP(OutOut) && InIn == FLIP(OutIn))
+                        flag = true;
+                    if (flag)
+                        list.push_back(SpinIndex(spin(InIn), spin(InOut),
+                                                 spin(OutIn), spin(OutOut)));
+                }
+    return list;
 }
 
 int WeightNoMeasure::TauToBin(real tau)
