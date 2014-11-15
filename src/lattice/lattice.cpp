@@ -10,6 +10,7 @@
 #include <iostream>
 #include "../utility/convention.h"
 #include "../utility/abort.h"
+#include "../utility/utility.h"
 Lattice::Lattice()
 {
     Initialize(Vec<int>(4), LATTICE);
@@ -21,6 +22,7 @@ Lattice::Lattice(const Vec<int> &size, lattice _Lattice)
 
 void Lattice::Initialize(const Vec<int> &size, lattice _Lattice)
 {
+    LatticeType = _Lattice;
     Dimension = D;
     Vol = 1;
     Size = size;
@@ -223,6 +225,8 @@ void Lattice::PlotLattice()
  */
 void Lattice::_Checkboard()
 {
+    ASSERT_ALLWAYS(LatticeType == CHECKBOARD,
+                   ToString(int(LatticeType)) + " is not CheckBoard!");
     ASSERT_ALLWAYS(Dimension == 2 && SublatVol == 2,
                    "Checkboard lattice has D=2 and Sublattice=2");
     ASSERT_ALLWAYS(Size[0] > 1 && Size[1] > 1, "System size must be bigger than 1!");
@@ -246,6 +250,11 @@ void Lattice::_Checkboard()
 
 void Lattice::_Honeycomb()
 {
+    ASSERT_ALLWAYS(LatticeType == HONEYCOMB,
+                   ToString(int(LatticeType)) + " is not CheckBoard!");
+    ASSERT_ALLWAYS(Dimension == 2 && SublatVol == 2,
+                   "Checkboard lattice has D=2 and Sublattice=2");
+    ASSERT_ALLWAYS(Size[0] > 1 && Size[1] > 1, "System size must be bigger than 1!");
     //Lattice Honeycomb
     LatticeVec[0][0] = 0.0;
     LatticeVec[0][1] = 1.0;

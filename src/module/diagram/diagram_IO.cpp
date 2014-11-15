@@ -161,7 +161,7 @@ void Diagram::WriteDiagram2gv(string path)
     }
     string head = "digraph Feynman{\n";
     string tail = "}\n";
-    string dpi = "graph[dpi=200];\n";
+    string dpi = "graph[dpi=300];\n";
     string node_attribute = "    node [margin=0.1 fillcolor=grey fontcolor=black fontsize=10 width=0.2 shape=circle style=filled fixedsize=true]\n";
 
     //Prettystring

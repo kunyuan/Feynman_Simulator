@@ -51,19 +51,26 @@ enum lattice {
     HONEYCOMB,
     SIMPLE_CUBIC
 };
+#define LATTICE_INDEX 1
 
-//const int LATTICE = SQUARE;
-//const int D = 2;
-//const int NSublattice = 1;
+#if LATTICE_INDEX == 0
+const lattice LATTICE = SQUARE;
+const int D = 2;
+const int NSublattice = 1;
+#elif LATTICE_INDEX == 1
 const lattice LATTICE = CHECKBOARD;
 const int D = 2;
 const int NSublattice = 2;
-//const lattice LATTICE = HONEYCOMB;
-//const int D = 2;
-//const int NSublattice = 2;
-//const lattice LATTICE = SIMPLE_CUBIC;
-//const int D = 3;
-//const int NSublattice = 1;
+#elif LATTICE_INDEX == 2
+const lattice LATTICE = HONEYCOMB;
+const int D = 2;
+const int NSublattice = 2;
+#elif LATTICE_INDEX == 3
+const lattice LATTICE = SIMPLE_CUBIC;
+const int D = 3;
+const int NSublattice = 1;
+#endif
+
 const int NSublattice2 = NSublattice * NSublattice;
 
 #endif

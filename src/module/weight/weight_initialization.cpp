@@ -12,7 +12,8 @@ using namespace weight;
 
 void G::Initial(model Model_)
 {
-    switch (Model_) {
+    _Model = Model_;
+    switch (_Model) {
         case TEST:
             _InitialTest();
             break;
@@ -38,11 +39,11 @@ void G::_InitialTest()
     for (int sub = 0; sub < _Shape[SUB]; sub++) {
         if (!_Lat.IsOnSameSubLat(sub))
             continue;
-        int coor = _Lat.Vec2Index({0,0});
-        
+        int coor = _Lat.Vec2Index({0, 0});
+
         MeasureWeight[spin_down][sub][coor] = Complex(1.0, 0.0);
         MeasureWeight[spin_up][sub][coor] = Complex(1.0, 0.0);
-        
+
         for (int tau = 0; tau < _Shape[TAU]; tau++) {
             Complex weight = exp(Complex(0.0, BinToTau(tau)));
             SmoothWeight[spin_down][sub][coor][tau] = weight;
@@ -122,7 +123,8 @@ void G::_InitialBareHubbard()
 
 void W::Initial(model Model_)
 {
-    switch (Model_) {
+    _Model = Model_;
+    switch (_Model) {
         case TEST:
             _InitialTest();
             break;
@@ -147,7 +149,7 @@ void W::_InitialTest()
     SmoothWeight = 0.0;
     MeasureWeight = 0.0;
     int Lx = _Lat.Size[0], Ly = _Lat.Size[1];
-    assert(Lx > 1 && Ly > 1 && D == 2);
+    ASSERT_ALLWAYS(Lx > 1 && Ly > 1, "System size should be bigger than 1!");
     int spin_up = SpinIndex(UP,  //InOfW/InOfVertex
                             UP,  //InOfW/OutOfVertex
                             UP,  //OutOfW/InOfVertex
@@ -157,9 +159,9 @@ void W::_InitialTest()
         if (!_Lat.IsOnSameSubLat(sub))
             continue;
         int coor = _Lat.Vec2Index({0, 0});
-        
+
         MeasureWeight[spin_up][sub][coor] = Complex(1.0, 0.0);
-        
+
         for (int tau = 0; tau < _Shape[TAU]; tau++) {
             Complex weight = exp(Complex(0.0, -BinToTau(tau)));
             SmoothWeight[spin_up][sub][coor][tau] = weight;
@@ -185,7 +187,7 @@ void W::_InitialDiagCounter()
     SmoothWeight = 0.0;
     MeasureWeight = 0.0;
     int Lx = _Lat.Size[0], Ly = _Lat.Size[1];
-    assert(Lx > 1 && Ly > 1 && D == 2);
+    ASSERT_ALLWAYS(Lx > 1 && Ly > 1, "System size should be bigger than 1!");
     int spin_up = SpinIndex(UP,  //InOfW/InOfVertex
                             UP,  //InOfW/OutOfVertex
                             UP,  //OutOfW/InOfVertex
@@ -210,7 +212,9 @@ void W::_InitialBareJ1J2()
 {
     BareWeight = 0.0;
     int Lx = _Lat.Size[0], Ly = _Lat.Size[1];
-    assert(Lx > 1 && Ly > 1 && D == 2);
+    ASSERT_ALLWAYS(Lx > 1 && Ly > 1, "System size should be bigger than 1!");
+    ASSERT_ALLWAYS(_Lat.LatticeType == CHECKBOARD, "J1J2 lattice should be checkboard!");
+    ASSERT_ALLWAYS(_Model == J1J2, ToString(int(_Model)) + " is not J1J2 model!");
     int spinindex = SpinIndex(UP,  //InOfW/InOfVertex
                               UP,  //InOfW/OutOfVertex
                               UP,  //OutOfW/InOfVertex
@@ -277,6 +281,11 @@ void W::_InitialBareJ1J2()
 
 void W::_InitialBareHubbard()
 {
+    BareWeight = 0.0;
+    int Lx = _Lat.Size[0], Ly = _Lat.Size[1];
+    ASSERT_ALLWAYS(Lx > 1 && Ly > 1, "System size should be bigger than 1!");
+    ASSERT_ALLWAYS(_Lat.LatticeType == CHECKBOARD, "J1J2 lattice should be checkboard!");
+    ASSERT_ALLWAYS(_Model == J1J2, ToString(int(_Model)) + " is not J1J2 model!");
     DeltaTWeight = BareWeight;
     SmoothWeight = 0.0;
     MeasureWeight = Complex(1.0, 0.0);

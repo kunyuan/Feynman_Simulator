@@ -47,6 +47,7 @@ class WeightNoMeasure {
   protected:
     WeightNoMeasure(const Lattice &, real Beta, int Order,
                     bool IsTauSymmetric, int SpinVol, std::string);
+    model _Model;
     bool _IsTauSymmetric;
     std::string _Name;
     real _Beta;
