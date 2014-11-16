@@ -9,7 +9,9 @@
 #ifndef __Feynman_Simulator__observable__
 #define __Feynman_Simulator__observable__
 
-#include "weight_inherit.h"
+//#include "weight_inherit.h"
+#include <string>
+#include "utility/convention.h"
 
 namespace para {
 class Parameter;
@@ -20,23 +22,27 @@ namespace weight {
 typedef const int flag;
 flag SigmaPolar = 1;
 flag GW = 2;
+class Sigma;
+class Polar;
+class G;
+class W;
 
 class Weight {
+
   public:
-    Weight(bool IsAllSymmetric=false);
+    Weight(bool IsAllSymmetric = false);
     ~Weight();
     bool _IsAllSymmetric;
     Sigma *Sigma;
     Polar *Polar;
     G *G;
     W *W;
-    Worm WormWeight;
 
     void SetTest(const para::Parameter &);
     void SetDiagCounter(const para::Parameter &);
     bool BuildNew(flag, const para::Parameter &);
     bool Load(const std::string &InputFile, flag, const para::Parameter &);
-    void Save(const std::string &InputFile, flag, string Mode = "a");
+    void Save(const std::string &InputFile, flag, std::string Mode = "a");
     void ReWeight(flag, const para::Parameter &);
     int UpdateSigmaPolarWeight(int OrderAccepted, real ErrorThreshold);
 

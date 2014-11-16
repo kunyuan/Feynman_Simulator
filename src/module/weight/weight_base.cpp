@@ -6,7 +6,8 @@
 //  Copyright (c) 2014 Kun Chen. All rights reserved.
 //
 
-#include "weight.h"
+#include "weight_base.h"
+#include "utility/cnpy.h"
 #include "utility/abort.h"
 #include "utility/scopeguard.h"
 
