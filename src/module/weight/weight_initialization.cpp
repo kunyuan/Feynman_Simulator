@@ -10,6 +10,13 @@
 #include <vector>
 using namespace weight;
 
+string ErrorMessage(model _Model, const Lattice &_Lat)
+{
+    return "Model" + ToString((int)_Model) + " on Lattice " +
+           ToString((int)_Lat.LatticeType) +
+           " has not yet been implemented!";
+}
+
 void G::Initial(model Model_)
 {
     _Model = Model_;
@@ -24,8 +31,34 @@ void G::Initial(model Model_)
             _InitialBareSpin();
             break;
         case HUBBARD:
+            if (_Lat.LatticeType == SQUARE)
+                _InitialBareHubbardSquare();
+            else
+                ABORT(ErrorMessage(_Model, _Lat));
+            break;
+        default:
+            ABORT(ErrorMessage(_Model, _Lat));
+    }
+}
+
+void W::Initial(model Model_)
+{
+    _Model = Model_;
+    switch (_Model) {
+        case TEST:
+            _InitialTest();
+            break;
+        case DIAGRAMCOUNTER:
+            _InitialDiagCounter();
+            break;
+        case J1J2:
+            _InitialBareJ1J2();
+            break;
+        case HUBBARD:
             _InitialBareHubbard();
             break;
+        default:
+            ABORT(ErrorMessage(_Model, _Lat));
     }
 }
 
@@ -99,46 +132,26 @@ void G::_InitialBareSpin()
     MeasureWeight = Complex(1.0, 0.0);
 }
 
-void G::_InitialBareHubbard()
+void G::_InitialBareHubbardSquare()
 {
     BareWeight = 0.0;
+    int Lx = _Lat.Size[0], Ly = _Lat.Size[1];
+    ASSERT_ALLWAYS(Lx > 1 && Ly > 1, "System size should be bigger than 1!");
+    ASSERT_ALLWAYS(_Lat.LatticeType == SQUARE, "lattice should be square!");
+    ASSERT_ALLWAYS(_Model == HUBBARD, ToString(int(_Model)) + " is not Hubbard model!");
     //Initialize in momentum space first
-    //    int spin_down = SpinIndex(DOWN, DOWN);
-    //    int spin_up = SpinIndex(UP, UP);
-    //    for (int sub = 0; sub < _Shape[SUB]; sub++) {
-    //        if (_Lat.IsOnSameSubLat(sub))
-    //            continue;
-    //        int coor = 0;
-    //        for (int tau = 0; tau < _Shape[TAU]; tau++) {
-    //            //            BareWeight[spin_down][sub][coor][tau] = weight;
-    //            //            BareWeight[spin_up][sub][coor][tau] = weight;
-    //        }
-    //    }
+    int spin_down = SpinIndex(DOWN, DOWN);
+    int spin_up = SpinIndex(UP, UP);
+    int sub = _Lat.Sublat2Index(0, 0);
+
+    //            BareWeight[spin_down][sub][coor][tau] = weight;
+    //            BareWeight[spin_up][sub][coor][tau] = weight;
 
     DeltaTWeight = 0.0;
     SmoothWeight = BareWeight;
 }
 
 // interaction
-
-void W::Initial(model Model_)
-{
-    _Model = Model_;
-    switch (_Model) {
-        case TEST:
-            _InitialTest();
-            break;
-        case DIAGRAMCOUNTER:
-            _InitialDiagCounter();
-            break;
-        case J1J2:
-            _InitialBareJ1J2();
-            break;
-        case HUBBARD:
-            _InitialBareHubbard();
-            break;
-    }
-}
 
 void W::_InitialTest()
 {
@@ -283,9 +296,7 @@ void W::_InitialBareHubbard()
 {
     BareWeight = 0.0;
     int Lx = _Lat.Size[0], Ly = _Lat.Size[1];
-    ASSERT_ALLWAYS(Lx > 1 && Ly > 1, "System size should be bigger than 1!");
-    ASSERT_ALLWAYS(_Lat.LatticeType == CHECKBOARD, "J1J2 lattice should be checkboard!");
-    ASSERT_ALLWAYS(_Model == J1J2, ToString(int(_Model)) + " is not J1J2 model!");
+    ASSERT_ALLWAYS(_Model == HUBBARD, ToString(int(_Model)) + " is not Hubbard model!");
     DeltaTWeight = BareWeight;
     SmoothWeight = 0.0;
     MeasureWeight = Complex(1.0, 0.0);

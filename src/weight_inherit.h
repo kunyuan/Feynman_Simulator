@@ -52,7 +52,7 @@ class G : public WeightNoMeasure {
     void _InitialTest();
     void _InitialDiagCounter();
     void _InitialBareSpin();
-    void _InitialBareHubbard();
+    void _InitialBareHubbardSquare();
     std::vector<real> _Hopping;
     std::vector<real> _RealChemicalPotential;
     real _ExternalField;
