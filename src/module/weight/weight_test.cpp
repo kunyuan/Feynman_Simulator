@@ -7,6 +7,7 @@
 //
 
 #include "weight.h"
+#include "weight_inherit.h"
 #include "utility/sput.h"
 #include "utility/rng.h"
 

@@ -8,7 +8,7 @@
 
 #include "diagram.h"
 #include "utility/sput.h"
-#include "module/weight/weight.h"
+#include "module/weight/weight_inherit.h"
 using namespace std;
 using namespace diag;
 

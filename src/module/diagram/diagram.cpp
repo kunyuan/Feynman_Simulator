@@ -9,7 +9,7 @@
 //TODO: G, W IsDelta, IsMeasure
 
 #include "diagram.h"
-#include "module/weight/weight.h"
+#include "module/weight/weight_inherit.h"
 #include "utility/rng.h"
 
 using namespace std;
@@ -128,7 +128,7 @@ bool Diagram::FixDiagram()
         //TODO: Do something here if you want to fix vertex
     }
 
-    Weight *= SignFermiLoop *(Order%2==0? 1:-1);
+    Weight *= SignFermiLoop * (Order % 2 == 0 ? 1 : -1);
     Phase = phase(Weight);
     return true;
 }
