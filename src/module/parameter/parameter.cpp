@@ -150,12 +150,12 @@ void ParaMC::SetTest()
     DeltaBeta = 0.0;
     FinalBeta = 1.0;
     Beta = 1.0;
-    Order = 15;
+    Order = 3;
     Toss = 10000;
     Sample = 5000000;
     Seed = 519180543;
     WormSpaceReweight = 0.1;
-    InitialArray(OrderReWeight, 1.0, 10);
+    InitialArray(OrderReWeight, 1.0, Order+1);
     T = 1.0 / Beta;
     Counter = 0;
 }

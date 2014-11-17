@@ -31,7 +31,7 @@ int RunTest()
     TEST(TestEnvironment);
     TEST(diag::TestDiagram);
     TEST(weight::TestWeight);
-//    TEST(mc::TestMarkov);
+    TEST(mc::TestMarkov);
     TEST(mc::TestDiagCounter);
 
     //    TEST(TestLattice);
