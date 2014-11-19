@@ -41,35 +41,62 @@ int dyson::TestDyson()
 
 void TestMultiply()
 {
-    para::ParaDyson Para;
-    Para.SetTest();
-    Weight Weight(true);
-    Weight.SetTest(Para);
+    Complex mat1[40];
+    Complex mat2[40];
+    for(int i=0; i<10; i++)
+    {
+        mat1[0*10+i] = Complex(1.0, 0.0);
+        mat1[1*10+i] = Complex(2.0, 0.0);
+        mat1[2*10+i] = Complex(2.0, 0.0);
+        mat1[3*10+i] = Complex(3.0, 0.0);
+        
+        mat2[0*10+i] = Complex(3.0, 0.0);
+        mat2[1*10+i] = Complex(2.0, 0.0);
+        mat2[2*10+i] = Complex(2.0, 0.0);
+        mat2[3*10+i] = Complex(1.0, 0.0);
+    }
+    Complex mat3[40];
+    AssignFromTo(mat3, mat1, 40);
+    MatrixMultiply(mat3, mat2, 10);
     
-    unsigned int GShape[5];
-    AssignFromTo(&GShape[SP], Weight.G->Shape(), 4);
+    sput_fail_unless(Equal(mat3[0], Complex(7.0, 0.0)), "Check: matrix multiply");
+    sput_fail_unless(Equal(mat3[5], Complex(7.0, 0.0)), "Check: matrix multiply");
+    sput_fail_unless(Equal(mat3[10], Complex(4.0, 0.0)), "Check: matrix multiply");
     
-    unsigned int WShape[5];
-    AssignFromTo(&WShape[SP], Weight.W->Shape(), 4);
+    Complex mat4[4]={Complex(3.0, 0.0),
+                    Complex(2.0, 0.0),
+                    Complex(2.0, 0.0),
+                    Complex(1.0, 0.0)};
+    AssignFromTo(mat3, mat1, 40);
+    MatrixMultiply(mat3, mat4, 10, 1);
     
-    sput_fail_unless(GShape[SP]==4, "Check: dimension of spin of G");
-    sput_fail_unless(WShape[SP]==16, "Check: dimension of spin of W");
-    sput_fail_unless(GShape[SUB]==NSublattice2, "Check: dimension of sublattice of G");
-    sput_fail_unless(WShape[SUB]==NSublattice2, "Check: dimension of sublattice of W");
-    
-    int spin_up = Weight.G->SpinIndex(UP, UP);
-    int sub = Para.Lat.Sublat2Index(0, 0);
-    int corr = Para.Lat.Vec2Index({0,0});
-    int randomt = 8;
-    Complex oldvalue = Weight.G->SmoothWeight[spin_up][sub][corr][randomt];
-    MatrixInverse(Weight.G->SmoothWeight[spin_up], GShape[VOL]*GShape[TAU]);
-    sput_fail_unless(Equal(Weight.G->SmoothWeight[spin_up][sub][corr][randomt], 1.0/oldvalue),
-                     "Check: matrix inverse of G");
+    sput_fail_unless(Equal(mat3[0], Complex(7.0, 0.0)), "Check: matrix multiply");
+    sput_fail_unless(Equal(mat3[5], Complex(7.0, 0.0)), "Check: matrix multiply");
+    sput_fail_unless(Equal(mat3[10], Complex(4.0, 0.0)), "Check: matrix multiply");
+    sput_fail_unless(Equal(mat3[22], Complex(12.0, 0.0)), "Check: matrix multiply");
 }
 
 void TestInverse()
 {
+    Complex mat1[40];
+    for(int i=0; i<10; i++)
+    {
+        mat1[0*10+i] = Complex(1.0, 0.0);
+        mat1[1*10+i] = Complex(2.0, 0.0);
+        mat1[2*10+i] = Complex(2.0, 0.0);
+        mat1[3*10+i] = Complex(3.0, 0.0);
+        
+    }
+    Complex mat2[40];
+    AssignFromTo(mat2, mat1, 40);
+    MatrixInverse(mat2, 10);
+    MatrixMultiply(mat2, mat1, 10);
     
+    sput_fail_unless(Equal(mat2[0], Complex(1.0, 0.0)), "Check: matrix multiply");
+    sput_fail_unless(Equal(mat2[5], Complex(1.0, 0.0)), "Check: matrix multiply");
+    sput_fail_unless(Equal(mat2[10], Complex(0.0, 0.0)), "Check: matrix multiply");
+    sput_fail_unless(Equal(mat2[20], Complex(0.0, 0.0)), "Check: matrix multiply");
+    sput_fail_unless(Equal(mat2[30], Complex(1.0, 0.0)), "Check: matrix multiply");
 }
 
 void TestG()
