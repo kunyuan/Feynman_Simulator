@@ -19,8 +19,8 @@ bool Dyson::BuildNew(para::ParaDyson &para, Weight &weight)
 {
     Beta = para.Beta;
 
-    AssignFromTo(&GShape[SP], weight.G->Shape(), 4);
-    AssignFromTo(&WShape[SP], weight.W->Shape(), 4);
+    AssignFromTo(weight.G->Shape(), &GShape[SP], 4);
+    AssignFromTo(weight.W->Shape(), &WShape[SP], 4);
     G = weight.G;
     W = weight.W;
     Sigma = weight.Sigma;

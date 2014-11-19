@@ -56,7 +56,7 @@ void TestMultiply()
         mat2[3*10+i] = Complex(1.0, 0.0);
     }
     Complex mat3[40];
-    AssignFromTo(mat3, mat1, 40);
+    AssignFromTo(mat1, mat3, 40);
     MatrixMultiply(mat3, mat2, 10);
     
     sput_fail_unless(Equal(mat3[0], Complex(7.0, 0.0)), "Check: matrix multiply");
@@ -67,7 +67,7 @@ void TestMultiply()
                     Complex(2.0, 0.0),
                     Complex(2.0, 0.0),
                     Complex(1.0, 0.0)};
-    AssignFromTo(mat3, mat1, 40);
+    AssignFromTo(mat1, mat3, 40);
     MatrixMultiply(mat3, mat4, 10, 1);
     
     sput_fail_unless(Equal(mat3[0], Complex(7.0, 0.0)), "Check: matrix multiply");
@@ -88,7 +88,7 @@ void TestInverse()
         
     }
     Complex mat2[40];
-    AssignFromTo(mat2, mat1, 40);
+    AssignFromTo(mat1, mat2, 40);
     MatrixInverse(mat2, 10);
     MatrixMultiply(mat2, mat1, 10);
     
