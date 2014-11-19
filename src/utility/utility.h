@@ -48,14 +48,14 @@ template <typename T>
 void AssignFromTo(T *source, T *target, int size)
 {
     for (int i = 0; i < size; i++)
-        source[i] = target[i];
+        target[i] = source[i];
 }
 
 template <typename T>
-void InitialArray(T *source, T t, int size)
+void InitialArray(T *target, T t, int size)
 {
     for (int i = 0; i < size; i++)
-        source[i] = t;
+        target[i] = t;
 }
 
 bool CleanFile(const std::string &FileName);
