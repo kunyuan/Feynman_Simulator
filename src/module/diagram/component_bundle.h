@@ -14,7 +14,7 @@
 
 namespace diag {
 
-const int MAX_BUNDLE = 20;
+const int MAX_BUNDLE = 2 * MAX_ORDER;
 template <typename T>
 class Bundle {
   private:
@@ -39,6 +39,5 @@ class Bundle {
     T &RandomPick();
     bool Exist(T *target);
 };
-
 }
 #endif /* defined(__Fermion_Simulator__component_bundle__) */

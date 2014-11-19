@@ -59,6 +59,7 @@ WeightNoMeasure::WeightNoMeasure(const Lattice &lat, real beta,
 
 unsigned int *WeightNoMeasure::Shape()
 {
+    //start with _Shape[SP]
     return _Shape + SP;
 }
 

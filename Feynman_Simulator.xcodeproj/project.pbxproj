@@ -141,6 +141,7 @@
 		843D3FC21A15B36F00DACC51 /* diagram_viewer.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = diagram_viewer.py; path = tool/diagram_viewer.py; sourceTree = SOURCE_ROOT; };
 		843D3FC31A185FD300DACC51 /* weight_base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = weight_base.h; path = module/weight/weight_base.h; sourceTree = "<group>"; };
 		843D3FC41A185FD300DACC51 /* weight_inherit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = weight_inherit.h; path = module/weight/weight_inherit.h; sourceTree = "<group>"; };
+		843D3FC51A19017B00DACC51 /* qt_diagram.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = qt_diagram.py; path = tool/qt_diagram.py; sourceTree = SOURCE_ROOT; };
 		84519AE919F2C554007CB81B /* environment.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = environment.cpp; path = environment/environment.cpp; sourceTree = "<group>"; };
 		84519AEA19F2C554007CB81B /* environment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = environment.h; path = environment/environment.h; sourceTree = "<group>"; };
 		84519AEC19F2C57A007CB81B /* envMonteCarlo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = envMonteCarlo.cpp; path = environment/envMonteCarlo.cpp; sourceTree = "<group>"; };
@@ -333,6 +334,7 @@
 		843D3FBA1A155F2600DACC51 /* tool */ = {
 			isa = PBXGroup;
 			children = (
+				843D3FC51A19017B00DACC51 /* qt_diagram.py */,
 				843D3FC21A15B36F00DACC51 /* diagram_viewer.py */,
 				843D3FBB1A155F5600DACC51 /* count.sh */,
 				843D3FBC1A155F5600DACC51 /* mat2npz */,

@@ -155,7 +155,7 @@ void ParaMC::SetTest()
     Sample = 5000000;
     Seed = 519180543;
     WormSpaceReweight = 0.1;
-    InitialArray(OrderReWeight, 1.0, 10);
+    InitialArray(OrderReWeight, 1.0, 15);
     T = 1.0 / Beta;
     Counter = 0;
 }
