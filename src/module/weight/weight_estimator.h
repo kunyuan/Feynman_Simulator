@@ -19,7 +19,8 @@ class WeightNeedMeasure : public WeightNoMeasure {
     WeightNeedMeasure(const Lattice &, real Beta, int order, bool IsTauSymmetric,
                       int Spine, std::string, real Norm);
 
-    unsigned int *Shape();
+    //Shape including ORDER
+    unsigned int *ExtendedShape();
 
     //The normalization facto is not considered in _WeightErrorEstimator,
     //thus only relative error makes sense
@@ -46,11 +47,12 @@ class WeightNeedMeasure : public WeightNoMeasure {
     bool Load(const std::string &);
 
   protected:
-    //final weight of each bin = _WeightAccu/_NormAccu*_Norm
-    //final weight function = (final weight of each bin)*MAX_BIN/Beta
+    int _Order;
     real _Norm;     //The normalization factor
     real _NormAccu; //The normalization accumulation
-    Array::array5<Complex> _WeightAccu;
+    //final weight of each bin = _WeightAccu/_NormAccu*_Norm
+    //final weight function = (final weight of each bin)*MAX_BIN/Beta
+    Array::array5<Complex> _WeightAccu; //dim=0 is order, than follows WeightNoMeasure::Shape()
     EstimatorBundle<Complex> _WeightErrorEstimator;
 };
 }
