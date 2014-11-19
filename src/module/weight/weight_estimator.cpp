@@ -19,19 +19,18 @@ using namespace weight;
 WeightNeedMeasure::WeightNeedMeasure(const Lattice &lat, real beta, int order,
                                      bool IsTauSymmetric, int SpinVol,
                                      string name, real Norm)
-    : WeightNoMeasure(lat, beta, order, IsTauSymmetric, SpinVol, name)
+    : WeightNoMeasure(lat, beta, IsTauSymmetric, SpinVol, name)
 {
+    _Order = order;
     _Norm = Norm;
-    //use _Shape[ORDER] to _Shape[TAU] to construct array5
-    _WeightAccu.Allocate(Shape());
+    unsigned int _MeaShape[5];
+    _MeaShape[0] = _Order;
+    AssignFromTo(Shape(), &_MeaShape[1], 4);
+    //use _MeaShape[0] to _MeaShape[TAU] to construct array5
+    _WeightAccu.Allocate(_MeaShape);
     for (int i = 1; i <= order; i++)
         _WeightErrorEstimator.AddEstimator(name + "_AvgofOrder" + ToString(i));
     ClearStatistics();
-}
-
-unsigned int *WeightNeedMeasure::Shape()
-{
-    return _Shape;
 }
 
 void WeightNeedMeasure::ReWeight(real Beta)
@@ -88,7 +87,7 @@ void WeightNeedMeasure::UpdateWeight(int UpToOrder)
     for (order = 2; order <= UpToOrder; order++)
         SmoothWeight += _WeightAccu[order - 1];
     SmoothWeight *= NormFactor;
-    
+
     //TODO:Update DeltaTWeight for Sigma
 }
 

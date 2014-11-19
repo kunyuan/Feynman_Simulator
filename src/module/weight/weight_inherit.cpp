@@ -81,7 +81,7 @@ G::G(const Lattice &lat, real beta, int order,
      const std::vector<real> &Hopping,
      const std::vector<real> &RealChemicalPotential,
      real ExternalField, bool IsTauSymmetric)
-    : WeightNoMeasure(lat, beta, order, IsTauSymmetric, SPIN2, "G")
+    : WeightNoMeasure(lat, beta, IsTauSymmetric, SPIN2, "G")
 {
     _Hopping = Hopping;
     _ExternalField = ExternalField;
@@ -108,10 +108,9 @@ Complex G::Weight(const Site &rin, const Site &rout, real tin, real tout, spin S
 
 Complex G::Weight(int dir, const Site &r1, const Site &r2, real t1, real t2, spin Spin1, spin Spin2, bool IsMeasure)
 {
-    if (dir == IN)
-    {
+    if (dir == IN) {
         auto dist = _Lat.Dist(r1, r2);
-        
+
         if (IsMeasure)
             return MeasureWeight[SpinIndex(Spin1, Spin2)]
                                 [dist.SublatIndex]
@@ -123,7 +122,8 @@ Complex G::Weight(int dir, const Site &r1, const Site &r2, real t1, real t2, spi
                                [dist.SublatIndex]
                                [dist.CoordiIndex]
                                [TauToBin(t1, t2)];
-    }else{
+    }
+    else {
         auto dist = _Lat.Dist(r2, r1);
         if (IsMeasure)
             return MeasureWeight[SpinIndex(Spin2, Spin1)]
@@ -143,7 +143,7 @@ Complex G::Weight(int dir, const Site &r1, const Site &r2, real t1, real t2, spi
 
 W::W(const Lattice &lat, real Beta, int order,
      const vector<real> &Interaction_, real ExternalField)
-    : WeightNoMeasure(lat, Beta, order, false, SPIN4, "W")
+    : WeightNoMeasure(lat, Beta, false, SPIN4, "W")
 {
     _Interaction = Interaction_;
     _ExternalField = ExternalField;
@@ -156,14 +156,14 @@ Complex W::Weight(const Site &rin, const Site &rout, real tin, real tout, spin *
 {
 
     auto distance = _Lat.Dist(rin, rout);
-    
+
     if (IsMeasure)
         return MeasureWeight[SpinIndex(SpinIn, SpinOut)]
                             [distance.SublatIndex]
                             [distance.CoordiIndex];
     if (IsDelta)
-        if(IsWorm)
-            return DeltaTWeight[SpinIndex(UP,UP,UP,UP)]
+        if (IsWorm)
+            return DeltaTWeight[SpinIndex(UP, UP, UP, UP)]
                                [distance.SublatIndex]
                                [distance.CoordiIndex];
         else
@@ -172,7 +172,7 @@ Complex W::Weight(const Site &rin, const Site &rout, real tin, real tout, spin *
                                [distance.CoordiIndex];
 
     else if (IsWorm)
-        return SmoothWeight[SpinIndex(UP,UP,UP,UP)]
+        return SmoothWeight[SpinIndex(UP, UP, UP, UP)]
                            [distance.SublatIndex]
                            [distance.CoordiIndex]
                            [TauToBin(tin, tout)];
@@ -205,8 +205,8 @@ Complex W::Weight(int dir, const Site &r1, const Site &r2, real t1, real t2, spi
         return MeasureWeight[spinindex][subindex][coordindex];
 
     if (IsDelta)
-        if(IsWorm)
-            return DeltaTWeight[SpinIndex(UP,UP,UP,UP)][subindex][coordindex];
+        if (IsWorm)
+            return DeltaTWeight[SpinIndex(UP, UP, UP, UP)][subindex][coordindex];
         else
             return DeltaTWeight[spinindex][subindex][coordindex];
     else if (IsWorm)

@@ -26,11 +26,12 @@ typedef int Mode;
 const Mode Spatial = 1;
 const Mode Time = 2;
 
-enum Dim { ORDER,
-           SP,
-           SUB,
-           VOL,
-           TAU };
+enum Dim {
+    SP,
+    SUB,
+    VOL,
+    TAU,
+};
 
 class WeightNoMeasure {
   public:
@@ -43,22 +44,24 @@ class WeightNoMeasure {
 
     //No Time variable for this guy
     Array::array3<Complex> DeltaTWeight;
-    
+
     int SpinIndex(spin SpinIn, spin SpinOut);
     bool IsSameSpin(int spindex)
-    {return (spindex==0 ||spindex==2);}
+    {
+        return (spindex == 0 || spindex == 2);
+    }
 
     //First In/Out: direction of WLine; Second In/Out: direction of Vertex
     int SpinIndex(spin SpinInIn, spin SpinInOut, spin SpinOutIn, spin SpinOutOut);
     int SpinIndex(spin *TwoSpinIn, spin *TwoSpinOut);
-    
+
     enum SpinFilter { UpUp2UpUp,
                       UpDown2UpDown,
                       UpDown2DownUp };
     std::vector<int> GetSpinIndexVector_FourSpinsFileter(SpinFilter);
 
   protected:
-    WeightNoMeasure(const Lattice &, real Beta, int Order,
+    WeightNoMeasure(const Lattice &, real Beta,
                     bool IsTauSymmetric, int SpinVol, std::string);
     model _Model;
     bool _IsTauSymmetric;
@@ -66,15 +69,13 @@ class WeightNoMeasure {
     real _Beta;
     real _dBeta; //_Beta/MAX_TAU
     real _dBetaInverse;
-    int _Order;
     Lattice _Lat;
 
-    unsigned int _Shape[5];              //the shape of internal weight array
+    unsigned int _Shape[4];              //the shape of internal weight array
     unsigned int _SpaceTimeShape[D + 1]; //store Lx,Ly,Lz,Lt
     bool _CheckVec2Index();
     void _FFT(fft::Dir, Mode);
     void _ChangeSymmetry(fft::Dir);
-
 
     int TauSymmetry(real t_in, real t_out);
     int TauToBin(real tau);
