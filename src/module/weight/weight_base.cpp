@@ -16,11 +16,9 @@ using namespace Array;
 using namespace weight;
 
 WeightNoMeasure::WeightNoMeasure(const Lattice &lat, real beta,
-                                 int order, bool IsTauSymmetric_,
-                                 int SpinVol, string name)
+                                 bool IsTauSymmetric_, int SpinVol, string name)
     : _Lat(lat),
       _Beta(beta),
-      _Order(order),
       _IsTauSymmetric(IsTauSymmetric_),
       _Name(name)
 
@@ -28,7 +26,6 @@ WeightNoMeasure::WeightNoMeasure(const Lattice &lat, real beta,
     _dBeta = beta / MAX_BIN;
     _dBetaInverse = 1.0 / _dBeta;
 
-    _Shape[ORDER] = order;
     _Shape[SP] = SpinVol;
     _Shape[SUB] = lat.SublatVol * lat.SublatVol;
     _Shape[VOL] = lat.Vol;
@@ -60,7 +57,7 @@ WeightNoMeasure::WeightNoMeasure(const Lattice &lat, real beta,
 unsigned int *WeightNoMeasure::Shape()
 {
     //start with _Shape[SP]
-    return _Shape + SP;
+    return _Shape;
 }
 
 void WeightNoMeasure::Reset(real beta)
