@@ -34,7 +34,7 @@ const int IN = 0;
 const int OUT = 1;
 #define INVERSE(x) (1 - x)
 
-const int MAX_ORDER = 10;
+const int MAX_ORDER = 15;
 
 //define the model you want to simualte here
 enum model { TEST,

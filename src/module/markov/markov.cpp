@@ -9,10 +9,11 @@
 #include "markov.h"
 #include "math.h"
 #include "utility/momentum.h"
-#include "module/weight/weight.h"
 #include "module/diagram/diagram.h"
 #include "module/parameter/parameter.h"
 #include "lattice/lattice.h"
+#include "module/weight/weight.h"
+#include "module/weight/weight_inherit.h"
 
 using namespace std;
 using namespace diag;
@@ -37,7 +38,6 @@ bool Markov::BuildNew(ParaMC &para, Diagram &diag, weight::Weight &weight)
     Polar = weight.Polar;
     G = weight.G;
     W = weight.W;
-    WormWeight = &weight.WormWeight;
     RNG = &para.RNG;
 
     for (int i = 0; i < NUpdates; i++) {
@@ -130,7 +130,7 @@ void Markov::CreateWorm()
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    real wormWeight = WormWeight->Weight(vin->R, vout->R, vin->Tau, vout->Tau);
+    real wormWeight = weight::Worm::Weight(vin->R, vout->R, vin->Tau, vout->Tau);
 
     prob *= ProbofCall[1] / ProbofCall[0] * wormWeight * Diag->Order * 2.0;
 
@@ -243,7 +243,7 @@ void Markov::MoveWormOnG()
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    real wormWeight = WormWeight->Weight(v2->R, Masha->R, v2->Tau, Masha->Tau);
+    real wormWeight = weight::Worm::Weight(v2->R, Masha->R, v2->Tau, Masha->Tau);
 
     prob *= wormWeight / Worm->Weight;
 
@@ -293,7 +293,7 @@ void Markov::MoveWormOnW()
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    real wormWeight = WormWeight->Weight(v2->R, Masha->R, v2->Tau, Masha->Tau);
+    real wormWeight = weight::Worm::Weight(v2->R, Masha->R, v2->Tau, Masha->Tau);
     prob *= wormWeight / Worm->Weight;
 
     if (prob >= 1.0 || RNG->urn() < prob) {
@@ -532,11 +532,10 @@ void Markov::DeleteInteraction()
     Complex sgn = phase(weightRatio);
 
     if (wAB->IsDelta)
-        prob *= OrderWeight[Diag->Order -1] * ProbofCall[5] * ProbTau(vA->Tau) /
-                    (ProbofCall[6] * OrderWeight[Diag->Order]);
+        prob *= OrderWeight[Diag->Order - 1] * ProbofCall[5] * ProbTau(vA->Tau) /
+                (ProbofCall[6] * OrderWeight[Diag->Order]);
     else
-        prob *= OrderWeight[Diag->Order-1] * ProbofCall[5] * ProbTau(vA->Tau)
-            * ProbTau(vB->Tau) / (ProbofCall[6] * OrderWeight[Diag->Order]);
+        prob *= OrderWeight[Diag->Order - 1] * ProbofCall[5] * ProbTau(vA->Tau) * ProbTau(vB->Tau) / (ProbofCall[6] * OrderWeight[Diag->Order]);
 
     if (prob >= 1.0 || RNG->urn() < prob) {
         Diag->Order--;
@@ -770,7 +769,8 @@ void Markov::ChangeRLoop()
     if (Worm->Exist)
         return;
     //TODO: If G is not a local function, return;
-
+    //TODO: use key word 'static' here to save time
+    assert(Order <= MAX_ORDER);
     vertex v[2 * MAX_ORDER] = {nullptr};
     bool flagVer[2 * MAX_ORDER] = {false};
     int flagW[MAX_ORDER] = {0};
@@ -793,12 +793,13 @@ void Markov::ChangeRLoop()
     gLine g = nullptr;
     wLine w = nullptr;
 
+    //TODO: use key word 'static' here to save time
     Complex GWeight[2 * MAX_ORDER] = {Complex(1.0, 0.0)};
     Complex WWeight[2 * MAX_ORDER] = {Complex(1.0, 0.0)};
 
     Complex oldWeight(1.0, 0.0);
     Complex newWeight(1.0, 0.0);
-    
+
     for (int i = 0; i < n; i++) {
         g = v[i]->NeighG(OUT);
         GWeight[i] = G->Weight(newR, newR, v[i]->Tau, g->NeighVer(OUT)->Tau,
@@ -809,25 +810,26 @@ void Markov::ChangeRLoop()
         w = v[i]->NeighW();
         if (flagW[w->Name] == 1) {
             WWeight[i] = W->Weight(v[i]->Dir, newR, w->NeighVer(INVERSE(v[i]->Dir))->R,
-                                    v[i]->Tau, w->NeighVer(INVERSE(v[i]->Dir))->Tau,
-                                    v[i]->Spin(), w->NeighVer(INVERSE(v[i]->Dir))->Spin(),
-                                    w->IsWorm, w->IsMeasure, w->IsDelta);
+                                   v[i]->Tau, w->NeighVer(INVERSE(v[i]->Dir))->Tau,
+                                   v[i]->Spin(), w->NeighVer(INVERSE(v[i]->Dir))->Spin(),
+                                   w->IsWorm, w->IsMeasure, w->IsDelta);
             newWeight *= WWeight[i];
             oldWeight *= w->Weight;
         }
         else if (flagW[w->Name] == 2) {
             flagW[w->Name] = 0;
             WWeight[i] = W->Weight(v[i]->Dir, newR, newR,
-                                    v[i]->Tau, w->NeighVer(INVERSE(v[i]->Dir))->Tau,
-                                    v[i]->Spin(), w->NeighVer(INVERSE(v[i]->Dir))->Spin(),
-                                    w->IsWorm, w->IsMeasure, w->IsDelta);
+                                   v[i]->Tau, w->NeighVer(INVERSE(v[i]->Dir))->Tau,
+                                   v[i]->Spin(), w->NeighVer(INVERSE(v[i]->Dir))->Spin(),
+                                   w->IsWorm, w->IsMeasure, w->IsDelta);
             newWeight *= WWeight[i];
             oldWeight *= w->Weight;
-        }else if(flagW[w->Name]==0) {
+        }
+        else if (flagW[w->Name] == 0) {
             WWeight[i] = W->Weight(v[i]->Dir, newR, newR,
-                                    v[i]->Tau, w->NeighVer(INVERSE(v[i]->Dir))->Tau,
-                                    v[i]->Spin(), w->NeighVer(INVERSE(v[i]->Dir))->Spin(),
-                                    w->IsWorm, w->IsMeasure, w->IsDelta);
+                                   v[i]->Tau, w->NeighVer(INVERSE(v[i]->Dir))->Tau,
+                                   v[i]->Spin(), w->NeighVer(INVERSE(v[i]->Dir))->Spin(),
+                                   w->IsWorm, w->IsMeasure, w->IsDelta);
         }
     }
 

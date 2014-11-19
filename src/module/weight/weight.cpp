@@ -7,6 +7,7 @@
 //
 
 #include "weight.h"
+#include "weight_inherit.h"
 #include "module/parameter/parameter.h"
 
 using namespace std;

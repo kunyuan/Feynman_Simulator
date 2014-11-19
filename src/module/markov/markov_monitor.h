@@ -10,6 +10,7 @@
 #define __Feynman_Simulator__measure__
 
 #include "module/weight/weight.h"
+#include "estimator/estimator.h"
 namespace diag {
 class Diagram;
 }
