@@ -19,8 +19,6 @@ bool Dyson::BuildNew(para::ParaDyson &para, Weight &weight)
 {
     Beta = para.Beta;
 
-    AssignFromTo(weight.G->Shape(), &GShape[SP], 4);
-    AssignFromTo(weight.W->Shape(), &WShape[SP], 4);
     G = weight.G;
     W = weight.W;
     Sigma = weight.Sigma;
@@ -30,6 +28,7 @@ bool Dyson::BuildNew(para::ParaDyson &para, Weight &weight)
 
 void Dyson::DeriveG()
 {
+    unsigned int *GShape = G->Shape();
     Array::array4<Complex> &GSmooth = G->SmoothWeight;
     GSmooth = G->BareWeight; ///TODO: need test
     for (int sp = 0; sp < GShape[SP]; sp++)
@@ -49,6 +48,7 @@ void Dyson::DeriveG()
 
 void Dyson::DeriveW()
 {
+    unsigned int *WShape = W->Shape();
     Array::array4<Complex> &WSmooth = W->SmoothWeight;
     WSmooth = Polar->SmoothWeight;
     for (int sp = 0; sp < WShape[SP]; sp++) {
