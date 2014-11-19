@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include "dyson.h"
 #include "module/weight/weight.h"
+#include "module/weight/weight_inherit.h"
 #include "module/parameter/parameter.h"
 #include "environment/environment.h"
 #include "utility/sput.h"
