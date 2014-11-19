@@ -88,6 +88,8 @@ void WeightNeedMeasure::UpdateWeight(int UpToOrder)
     for (order = 2; order <= UpToOrder; order++)
         SmoothWeight += _WeightAccu[order - 1];
     SmoothWeight *= NormFactor;
+    
+    //TODO:Update DeltaTWeight for Sigma
 }
 
 void WeightNeedMeasure::MeasureNorm()

@@ -81,7 +81,7 @@ G::G(const Lattice &lat, real beta, int order,
      const std::vector<real> &Hopping,
      const std::vector<real> &RealChemicalPotential,
      real ExternalField, bool IsTauSymmetric)
-    : WeightNoMeasure(lat, beta, order, IsTauSymmetric, SPIN4, "G")
+    : WeightNoMeasure(lat, beta, order, IsTauSymmetric, SPIN2, "G")
 {
     _Hopping = Hopping;
     _ExternalField = ExternalField;
