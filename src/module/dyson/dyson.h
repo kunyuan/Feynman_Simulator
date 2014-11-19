@@ -33,8 +33,6 @@ class Dyson {
     weight::W *W;
     weight::Sigma *Sigma;
     weight::Polar *Polar;
-    unsigned int GShape[5];
-    unsigned int WShape[5];
     bool BuildNew(para::ParaDyson &, weight::Weight &);
     void DeriveG();
     void DeriveW();

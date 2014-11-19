@@ -23,7 +23,6 @@ WeightNeedMeasure::WeightNeedMeasure(const Lattice &lat, real beta, int order,
 {
     _Order = order;
     _Norm = Norm;
-    unsigned int _MeaShape[5];
     _MeaShape[0] = _Order;
     AssignFromTo(Shape(), &_MeaShape[1], 4);
     //use _MeaShape[0] to _MeaShape[TAU] to construct array5
@@ -124,7 +123,7 @@ void WeightNeedMeasure::Save(const std::string &FileName, std::string Mode)
     unsigned int shape[1] = {1};
     cnpy::npz_save(FileName, _Name + ".Norm", &_Norm, shape, 1, Mode);
     cnpy::npz_save(FileName, _Name + ".NormAccu", &_NormAccu, shape, 1, "a");
-    cnpy::npz_save(FileName, _Name + ".WeightAccu", _WeightAccu(), Shape(), 5, "a");
+    cnpy::npz_save(FileName, _Name + ".WeightAccu", _WeightAccu(), _MeaShape, 5, "a");
     WeightNoMeasure::Save(FileName);
     _WeightErrorEstimator.SaveStatistics(FileName, "a");
 }

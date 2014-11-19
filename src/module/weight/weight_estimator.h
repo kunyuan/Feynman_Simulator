@@ -47,6 +47,7 @@ class WeightNeedMeasure : public WeightNoMeasure {
     bool Load(const std::string &);
 
   protected:
+    unsigned int _MeaShape[5];
     int _Order;
     real _Norm;     //The normalization factor
     real _NormAccu; //The normalization accumulation
