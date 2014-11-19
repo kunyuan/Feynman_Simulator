@@ -9,6 +9,8 @@
 #include "markov_monitor.h"
 #include "module/diagram/diagram.h"
 #include "module/parameter/parameter.h"
+#include "module/weight/weight.h"
+#include "module/weight/weight_inherit.h"
 
 using namespace std;
 using namespace diag;

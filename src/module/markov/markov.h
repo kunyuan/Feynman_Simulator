@@ -21,7 +21,6 @@ class G;
 class W;
 class Sigma;
 class Polar;
-class Worm;
 }
 namespace para {
 class ParaMC;
@@ -39,24 +38,22 @@ class Markov {
     int Order;
     Lattice *Lat;
     real *OrderWeight;
+    diag::Diagram *Diag;
     diag::WormClass *Worm;
     weight::Sigma *Sigma;
     weight::Polar *Polar;
     weight::G *G;
     weight::W *W;
-    weight::Worm *WormWeight;
     RandomFactory *RNG;
 
     const static int NUpdates = 13;
     real ProbofCall[NUpdates];
     real SumofProbofCall[NUpdates] = {0.0};
 
-    diag::Diagram *Diag;
-
     bool BuildNew(para::ParaMC &, diag::Diagram &, weight::Weight &);
     void ReWeight(para::ParaMC &);
     void Hop(int);
-    
+
     void CreateWorm();
     void DeleteWorm();
     void MoveWormOnG();
@@ -80,7 +77,7 @@ class Markov {
     real RandomPickTau();
     real ProbTau(real);
     Site RandomPickSite();
-    real ProbSite(const Site&);
+    real ProbSite(const Site &);
     bool RandomPickBool();
 };
 

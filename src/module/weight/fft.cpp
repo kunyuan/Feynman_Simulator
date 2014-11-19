@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Kun Chen. All rights reserved.
 //
 
-#include "weight.h"
+#include "weight_inherit.h"
 
 using namespace weight;
 

@@ -6,7 +6,8 @@
 //  Copyright (c) 2014 Kun Chen. All rights reserved.
 //
 
-#include "weight.h"
+#include "weight_base.h"
+#include "utility/cnpy.h"
 #include "utility/abort.h"
 #include "utility/scopeguard.h"
 
@@ -58,6 +59,7 @@ WeightNoMeasure::WeightNoMeasure(const Lattice &lat, real beta,
 
 unsigned int *WeightNoMeasure::Shape()
 {
+    //start with _Shape[SP]
     return _Shape + SP;
 }
 

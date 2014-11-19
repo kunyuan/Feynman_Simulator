@@ -22,7 +22,7 @@ class WeightNeedMeasure : public WeightNoMeasure {
     unsigned int *Shape();
 
     //The normalization facto is not considered in _WeightErrorEstimator,
-    //thus only Relative Error makes sense
+    //thus only relative error makes sense
     Complex RelativeError(int order);
 
     int OrderAcceptable(int StartFromOrder, real ErrorThreshold);
@@ -37,7 +37,7 @@ class WeightNeedMeasure : public WeightNoMeasure {
     void MeasureNorm();
 
     //add statistics to the history of _WeightErrorEstimator, so that
-    //weight error can be estimated. !!!It consumes memory!!!
+    //weight error can be estimated. !!!It cosumes memory!!!
     void AddStatistics();
     void ClearStatistics();
     void SqueezeStatistics(real factor);
