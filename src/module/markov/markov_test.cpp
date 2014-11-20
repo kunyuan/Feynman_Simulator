@@ -10,7 +10,7 @@
 #include "utility/sput.h"
 #include "module/diagram/diagram.h"
 #include "module/weight/weight.h"
-#include "module/weight/weight_inherit.h"
+#include "module/weight/weight_component.h"
 #include "module/parameter/parameter.h"
 using namespace std;
 using namespace mc;

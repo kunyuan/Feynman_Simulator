@@ -17,7 +17,7 @@
 #include "module/weight/weight.h"
 #include "module/markov/markov_monitor.h"
 #include "module/markov/markov.h"
-#include "module/dyson/dyson.h"
+#include "module/calculator/calculator.h"
 
 class Environment {
   public:
@@ -62,7 +62,7 @@ class EnvDyson : public Environment {
 
     para::ParaDyson Para;
     weight::Weight Weight;
-    dyson::Dyson Dyson;
+    calc::Calculator Dyson;
 
     bool BuildNew(const std::string &InputFile, bool StartFromBare);
     bool Load();

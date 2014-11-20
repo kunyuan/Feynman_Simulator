@@ -6,10 +6,9 @@
 //  Copyright (c) 2014 Kun Chen. All rights reserved.
 //
 
-#include <stdio.h>
-#include "dyson.h"
+#include "calculator.h"
 #include "module/weight/weight.h"
-#include "module/weight/weight_inherit.h"
+#include "module/weight/weight_component.h"
 #include "module/parameter/parameter.h"
 #include "environment/environment.h"
 #include "utility/sput.h"
@@ -18,18 +17,18 @@
 
 using namespace std;
 using namespace weight;
-using namespace dyson;
+using namespace calc;
 
 void TestMultiply();
 void TestInverse();
 void TestG();
 void TestW();
 
-int dyson::TestDyson()
+int calc::TestCalculator()
 {
     sput_start_testing();
     sput_enter_suite("Test Dyson...");
-    
+
     sput_run_test(TestMultiply);
     sput_run_test(TestInverse);
     sput_run_test(TestG);
@@ -43,33 +42,32 @@ void TestMultiply()
 {
     Complex mat1[40];
     Complex mat2[40];
-    for(int i=0; i<10; i++)
-    {
-        mat1[0*10+i] = Complex(1.0, 0.0);
-        mat1[1*10+i] = Complex(2.0, 0.0);
-        mat1[2*10+i] = Complex(2.0, 0.0);
-        mat1[3*10+i] = Complex(3.0, 0.0);
-        
-        mat2[0*10+i] = Complex(3.0, 0.0);
-        mat2[1*10+i] = Complex(2.0, 0.0);
-        mat2[2*10+i] = Complex(2.0, 0.0);
-        mat2[3*10+i] = Complex(1.0, 0.0);
+    for (int i = 0; i < 10; i++) {
+        mat1[0 * 10 + i] = Complex(1.0, 0.0);
+        mat1[1 * 10 + i] = Complex(2.0, 0.0);
+        mat1[2 * 10 + i] = Complex(2.0, 0.0);
+        mat1[3 * 10 + i] = Complex(3.0, 0.0);
+
+        mat2[0 * 10 + i] = Complex(3.0, 0.0);
+        mat2[1 * 10 + i] = Complex(2.0, 0.0);
+        mat2[2 * 10 + i] = Complex(2.0, 0.0);
+        mat2[3 * 10 + i] = Complex(1.0, 0.0);
     }
     Complex mat3[40];
     AssignFromTo(mat1, mat3, 40);
-    MatrixMultiply(mat3, mat2, 10);
-    
+    calc::MatrixMultiply(mat3, mat2, 10);
+
     sput_fail_unless(Equal(mat3[0], Complex(7.0, 0.0)), "Check: matrix multiply");
     sput_fail_unless(Equal(mat3[5], Complex(7.0, 0.0)), "Check: matrix multiply");
     sput_fail_unless(Equal(mat3[10], Complex(4.0, 0.0)), "Check: matrix multiply");
-    
-    Complex mat4[4]={Complex(3.0, 0.0),
-                    Complex(2.0, 0.0),
-                    Complex(2.0, 0.0),
-                    Complex(1.0, 0.0)};
+
+    Complex mat4[4] = {Complex(3.0, 0.0),
+                       Complex(2.0, 0.0),
+                       Complex(2.0, 0.0),
+                       Complex(1.0, 0.0)};
     AssignFromTo(mat1, mat3, 40);
-    MatrixMultiply(mat3, mat4, 10, 1);
-    
+    calc::MatrixMultiply(mat3, mat4, 10, 1);
+
     sput_fail_unless(Equal(mat3[0], Complex(7.0, 0.0)), "Check: matrix multiply");
     sput_fail_unless(Equal(mat3[5], Complex(7.0, 0.0)), "Check: matrix multiply");
     sput_fail_unless(Equal(mat3[10], Complex(4.0, 0.0)), "Check: matrix multiply");
@@ -79,19 +77,17 @@ void TestMultiply()
 void TestInverse()
 {
     Complex mat1[40];
-    for(int i=0; i<10; i++)
-    {
-        mat1[0*10+i] = Complex(1.0, 0.0);
-        mat1[1*10+i] = Complex(2.0, 0.0);
-        mat1[2*10+i] = Complex(2.0, 0.0);
-        mat1[3*10+i] = Complex(3.0, 0.0);
-        
+    for (int i = 0; i < 10; i++) {
+        mat1[0 * 10 + i] = Complex(1.0, 0.0);
+        mat1[1 * 10 + i] = Complex(2.0, 0.0);
+        mat1[2 * 10 + i] = Complex(2.0, 0.0);
+        mat1[3 * 10 + i] = Complex(3.0, 0.0);
     }
     Complex mat2[40];
     AssignFromTo(mat1, mat2, 40);
-    MatrixInverse(mat2, 10);
-    MatrixMultiply(mat2, mat1, 10);
-    
+    calc::MatrixInverse(mat2, 10);
+    calc::MatrixMultiply(mat2, mat1, 10);
+
     sput_fail_unless(Equal(mat2[0], Complex(1.0, 0.0)), "Check: matrix multiply");
     sput_fail_unless(Equal(mat2[5], Complex(1.0, 0.0)), "Check: matrix multiply");
     sput_fail_unless(Equal(mat2[10], Complex(0.0, 0.0)), "Check: matrix multiply");
@@ -101,10 +97,8 @@ void TestInverse()
 
 void TestG()
 {
-    
 }
 
 void TestW()
 {
-    
 }

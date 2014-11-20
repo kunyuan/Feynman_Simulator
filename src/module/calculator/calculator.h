@@ -20,11 +20,12 @@ class Sigma;
 class Polar;
 }
 namespace para {
-class ParaDyson;
+class Parameter;
 }
 
-namespace dyson {
-class Dyson {
+namespace calc {
+class Calculator {
+
   public:
     real Beta;
     int Vol;
@@ -33,17 +34,17 @@ class Dyson {
     weight::W *W;
     weight::Sigma *Sigma;
     weight::Polar *Polar;
-    bool BuildNew(para::ParaDyson &, weight::Weight &);
+    bool BuildNew(para::Parameter &, weight::Weight &);
     void DeriveG();
     void DeriveW();
-    
+
+    //  protected:
 };
-    
+
 void MatrixInverse(Complex *, int);
 void MatrixMultiply(Complex *, Complex *, int);
 void MatrixMultiply(Complex *, Complex *, int, int);
-    
-int TestDyson();
+int TestCalculator();
 }
 
 #endif /* defined(__Feynman_Simulator__dyson__) */
