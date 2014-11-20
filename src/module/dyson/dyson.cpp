@@ -31,38 +31,45 @@ void Dyson::DeriveG()
     unsigned int *GShape = G->Shape();
     Array::array4<Complex> &GSmooth = G->SmoothWeight;
     GSmooth = G->BareWeight; ///TODO: need test
+    Array::array1<Complex> DiscretCorrection(GShape[TAU]);
+    for (int omega = 0; omega < GShape[TAU]; omega++)
+        DiscretCorrection[omega] = cos((omega + 0.5) * PI / GShape[TAU]);
+
     for (int sp = 0; sp < GShape[SP]; sp++)
         if (G->IsSameSpin(sp)) {
-            MatrixInverse(GSmooth[sp], GShape[VOL] * GShape[TAU]);
+            MatrixInverse(GSmooth[sp](), GShape[VOL] * GShape[TAU]);
+            GSmooth[sp] += Sigma->SmoothWeight[sp];
             for (int sub = 0; sub < GShape[SUB]; sub++)
                 for (int k = 0; k < GShape[VOL]; k++)
-                    for (int omega = 0; omega < GShape[TAU]; omega++) {
-                        GSmooth[sp][sub][k][omega] += Sigma->SmoothWeight[sp][sub][k][omega];
-                        GSmooth[sp][sub][k][omega] += Sigma->DeltaTWeight[sp][sub][k] * cos((omega + 0.5) * PI / GShape[TAU]);
-                    }
-            MatrixInverse(GSmooth[sp], GShape[VOL] * GShape[TAU]);
+                    GSmooth[sp][sub][k] += DiscretCorrection * Sigma->DeltaTWeight[sp][sub][k];
+            MatrixInverse(GSmooth[sp](), GShape[VOL] * GShape[TAU]);
         }
         else
             GSmooth[sp] = 0.0; ///TODO:need test
 }
 
+/**
+*  Polar's value is untouched!!!
+*/
 void Dyson::DeriveW()
 {
     unsigned int *WShape = W->Shape();
     Array::array4<Complex> &WSmooth = W->SmoothWeight;
     WSmooth = Polar->SmoothWeight;
+    Array::array1<Complex> DiscretCorrection(WShape[TAU]);
+    for (int omega = 0; omega < WShape[TAU]; omega++)
+        DiscretCorrection[omega] = cos((omega)*PI / WShape[TAU]);
+
+    int SpaceTimeVol = WShape[VOL] * WShape[TAU];
     for (int sp = 0; sp < WShape[SP]; sp++) {
-        MatrixMultiply(WSmooth[sp], W->BareWeight[sp],
-                       WShape[VOL] * WShape[TAU], WShape[VOL]); ///TODO: need test
-        MatrixInverse(WSmooth[sp], WShape[VOL] * WShape[TAU]);
+        MatrixMultiply(WSmooth[sp](), W->BareWeight[sp](), SpaceTimeVol, WShape[VOL]);
+        ///TODO: need test
+        MatrixInverse(WSmooth[sp](), WShape[VOL] * WShape[TAU]);
         for (int sub = 0; sub < WShape[SUB]; sub++)
             for (int k = 0; k < WShape[VOL]; k++)
-                for (int omega = 0; omega < WShape[TAU]; omega++) {
-                    WSmooth[sp][sub][k][omega] += cos((omega)*PI / WShape[TAU]);
-                }
-        MatrixInverse(WSmooth[sp], WShape[VOL] * WShape[TAU]);
-        MatrixMultiply(WSmooth[sp], W->BareWeight[sp], WShape[VOL] * WShape[TAU],
-                       WShape[TAU]);
+                WSmooth[sp][sub][k] -= DiscretCorrection;
+        MatrixInverse(WSmooth[sp](), WShape[VOL] * WShape[TAU]);
+        MatrixMultiply(WSmooth[sp](), W->BareWeight[sp](), SpaceTimeVol, WShape[VOL]);
     }
 }
 

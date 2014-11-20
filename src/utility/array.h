@@ -542,6 +542,52 @@ class array1 {
 };
 
 template <class T>
+array1<T> operator+(const array1<T> &t, const T &a)
+{
+    auto s = t;
+    s += a;
+    return s;
+}
+
+template <class T>
+array1<T> operator+(const T &a, const array1<T> &t)
+{
+    auto s = t;
+    s += a;
+    return s;
+}
+
+template <class T>
+array1<T> operator-(const array1<T> &t, const T &a)
+{
+    auto s = t;
+    s -= a;
+    return s;
+}
+
+template <class T>
+array1<T> operator*(const array1<T> &t, const T &a)
+{
+    auto s = t;
+    s *= a;
+    return s;
+}
+template <class T>
+array1<T> operator*(const T &a, const array1<T> &t)
+{
+    auto s = t;
+    s *= a;
+    return s;
+}
+template <class T>
+array1<T> operator/(const array1<T> &t, const T &a)
+{
+    auto s = t;
+    s /= a;
+    return s;
+}
+
+template <class T>
 void swaparray(T &A, T &B)
 {
     T C;
