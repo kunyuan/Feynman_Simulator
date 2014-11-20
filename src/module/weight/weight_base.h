@@ -77,6 +77,9 @@ class WeightNoMeasure {
     void _FFT(fft::Dir, Mode);
     void _ChangeSymmetry(fft::Dir);
 
+    /**
+    *  @return return 1 if weight is symmtric in tau, otherwise, return -1
+    */
     int TauSymmetry(real t_in, real t_out);
     int TauToBin(real tau);
     int TauToBin(real t_in, real t_out);

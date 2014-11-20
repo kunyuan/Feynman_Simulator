@@ -56,6 +56,7 @@
 		84B8FC4B19EDA348003D6DF6 /* cnpy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84B8FC4819EDA348003D6DF6 /* cnpy.cpp */; };
 		84C86DC51A1E4FDA002A3D8D /* calculator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84C86DC21A1E4FDA002A3D8D /* calculator.cpp */; };
 		84C86DC61A1E4FDA002A3D8D /* calculator_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84C86DC41A1E4FDA002A3D8D /* calculator_test.cpp */; };
+		84C86DCF1A1E5998002A3D8D /* dyson.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84C86DCD1A1E5998002A3D8D /* dyson.cpp */; };
 		84D7EFBC19F36361006B1CA5 /* array_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84D7EFBA19F36361006B1CA5 /* array_test.cpp */; };
 		84D7EFC319F552F5006B1CA5 /* env_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84D7EFC219F552F5006B1CA5 /* env_test.cpp */; };
 		84FDE07419DDFC2F0092B441 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84FDE07319DDFC2F0092B441 /* main.cpp */; };
@@ -170,6 +171,8 @@
 		84C86DC21A1E4FDA002A3D8D /* calculator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = calculator.cpp; sourceTree = "<group>"; };
 		84C86DC31A1E4FDA002A3D8D /* calculator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = calculator.h; sourceTree = "<group>"; };
 		84C86DC41A1E4FDA002A3D8D /* calculator_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = calculator_test.cpp; sourceTree = "<group>"; };
+		84C86DCD1A1E5998002A3D8D /* dyson.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dyson.cpp; sourceTree = "<group>"; };
+		84C86DCE1A1E5998002A3D8D /* dyson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dyson.h; sourceTree = "<group>"; };
 		84D7EFBA19F36361006B1CA5 /* array_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = array_test.cpp; sourceTree = "<group>"; };
 		84D7EFBB19F36361006B1CA5 /* array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = array.h; sourceTree = "<group>"; };
 		84D7EFC219F552F5006B1CA5 /* env_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = env_test.cpp; path = environment/env_test.cpp; sourceTree = "<group>"; };
@@ -358,6 +361,8 @@
 				84C86DC31A1E4FDA002A3D8D /* calculator.h */,
 				84C86DC21A1E4FDA002A3D8D /* calculator.cpp */,
 				84C86DC41A1E4FDA002A3D8D /* calculator_test.cpp */,
+				84C86DCE1A1E5998002A3D8D /* dyson.h */,
+				84C86DCD1A1E5998002A3D8D /* dyson.cpp */,
 			);
 			name = calculator;
 			path = module/calculator;
@@ -485,6 +490,7 @@
 				8422FE261A09C13D002EB44E /* markov_test.cpp in Sources */,
 				841D905C19E054900066116A /* test.cpp in Sources */,
 				8422FE3E1A0A7F8D002EB44E /* estimator_test.cpp in Sources */,
+				84C86DCF1A1E5998002A3D8D /* dyson.cpp in Sources */,
 				84519AF219F33F22007CB81B /* complex.cpp in Sources */,
 				843D3FB61A11488E00DACC51 /* weight_initialization.cpp in Sources */,
 				8422FE311A0A7E7E002EB44E /* estimator.cpp in Sources */,
