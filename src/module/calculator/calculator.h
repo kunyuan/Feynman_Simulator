@@ -25,7 +25,6 @@ class Parameter;
 
 namespace calc {
 class Calculator {
-
   public:
     real Beta;
     int Vol;
@@ -35,6 +34,8 @@ class Calculator {
     weight::Sigma *Sigma;
     weight::Polar *Polar;
     bool BuildNew(para::Parameter &, weight::Weight &);
+    void HatreeForSigma();
+    void FockForSigma();
     void DeriveG();
     void DeriveW();
 
