@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Kun Chen. All rights reserved.
 //
 
-#include "weight_inherit.h"
+#include "weight_component.h"
 #include <vector>
 using namespace weight;
 
@@ -140,9 +140,9 @@ void G::_InitialBareHubbardSquare()
     ASSERT_ALLWAYS(_Lat.LatticeType == SQUARE, "lattice should be square!");
     ASSERT_ALLWAYS(_Model == HUBBARD, ToString(int(_Model)) + " is not Hubbard model!");
     //Initialize in momentum space first
-//    int spin_down = SpinIndex(DOWN, DOWN);
-//    int spin_up = SpinIndex(UP, UP);
-//    int sub = _Lat.Sublat2Index(0, 0);
+    //    int spin_down = SpinIndex(DOWN, DOWN);
+    //    int spin_up = SpinIndex(UP, UP);
+    //    int sub = _Lat.Sublat2Index(0, 0);
 
     //            BareWeight[spin_down][sub][coor][tau] = weight;
     //            BareWeight[spin_up][sub][coor][tau] = weight;

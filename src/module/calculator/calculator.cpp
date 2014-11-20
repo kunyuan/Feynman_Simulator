@@ -6,16 +6,16 @@
 //  Copyright (c) 2014 Kun Chen. All rights reserved.
 //
 
-#include "dyson.h"
+#include "calculator.h"
 #include "module/parameter/parameter.h"
 #include "module/weight/weight.h"
-#include "module/weight/weight_inherit.h"
+#include "module/weight/weight_component.h"
 #include "utility/utility.h"
 
-using namespace dyson;
+using namespace calc;
 using namespace weight;
 
-bool Dyson::BuildNew(para::ParaDyson &para, Weight &weight)
+bool Calculator::BuildNew(para::Parameter &para, Weight &weight)
 {
     Beta = para.Beta;
 
@@ -26,7 +26,7 @@ bool Dyson::BuildNew(para::ParaDyson &para, Weight &weight)
     return true;
 }
 
-void Dyson::DeriveG()
+void Calculator::DeriveG()
 {
     unsigned int *GShape = G->Shape();
     Array::array4<Complex> &GSmooth = G->SmoothWeight;
@@ -51,7 +51,7 @@ void Dyson::DeriveG()
 /**
 *  Polar's value is untouched!!!
 */
-void Dyson::DeriveW()
+void Calculator::DeriveW()
 {
     unsigned int *WShape = W->Shape();
     Array::array4<Complex> &WSmooth = W->SmoothWeight;
@@ -85,7 +85,7 @@ void Dyson::DeriveW()
 #define POS1(x) (x)
 #define POS2(x) (x + x)
 #define POS3(x) (x + x + x)
-void dyson::MatrixInverse(Complex *matrix, int interval)
+void calc::MatrixInverse(Complex *matrix, int interval)
 {
     for (int i = 0; i < interval; i++) {
         Complex inverse_denominator = 1.0 / (matrix[i + POS0(interval)] * matrix[i + POS3(interval)] - matrix[i + POS1(interval)] * matrix[i + POS2(interval)]);
@@ -97,7 +97,7 @@ void dyson::MatrixInverse(Complex *matrix, int interval)
     }
 }
 
-void dyson::MatrixMultiply(Complex *matrix1, Complex *matrix2, int interval)
+void calc::MatrixMultiply(Complex *matrix1, Complex *matrix2, int interval)
 {
     Complex tmp[4];
     for (int i = 0; i < interval; i++) {
@@ -114,7 +114,7 @@ void dyson::MatrixMultiply(Complex *matrix1, Complex *matrix2, int interval)
 }
 
 //interval2 is smaller than interval1
-void dyson::MatrixMultiply(Complex *matrix1, Complex *matrix2, int interval1, int interval2)
+void calc::MatrixMultiply(Complex *matrix1, Complex *matrix2, int interval1, int interval2)
 {
     if (interval1 < interval2 || interval1 % interval2 != 0)
         return;

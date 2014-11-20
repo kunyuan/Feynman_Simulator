@@ -13,7 +13,7 @@
 #include "module/parameter/parameter.h"
 #include "lattice/lattice.h"
 #include "module/weight/weight.h"
-#include "module/weight/weight_inherit.h"
+#include "module/weight/weight_component.h"
 
 using namespace std;
 using namespace diag;

@@ -9,7 +9,7 @@
 #include "test.h"
 #include "utility/crc32.h"
 #include "environment/environment.h"
-#include "module/dyson/dyson.h"
+#include "module/calculator/calculator.h"
 #include "module/markov/markov.h"
 #include "module/diagram/diagram.h"
 #include "module/weight/weight.h"
@@ -32,9 +32,9 @@ int RunTest()
     TEST(TestEnvironment);
     TEST(diag::TestDiagram);
     TEST(weight::TestWeight);
-    TEST(dyson::TestDyson);
-//    TEST(mc::TestMarkov);
-//    TEST(mc::TestDiagCounter);
+    TEST(calc::TestCalculator);
+    //    TEST(mc::TestMarkov);
+    //    TEST(mc::TestDiagCounter);
 
     //    TEST(TestLattice);
     //    TEST(TestEstimator);

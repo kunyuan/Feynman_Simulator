@@ -9,7 +9,7 @@
 //TODO: G, W IsDelta, IsMeasure
 
 #include "diagram.h"
-#include "module/weight/weight_inherit.h"
+#include "module/weight/weight_component.h"
 #include "utility/rng.h"
 
 using namespace std;
