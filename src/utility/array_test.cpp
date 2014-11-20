@@ -9,7 +9,6 @@ using namespace std;
 int n = 2, m = 3, p = 4;
 
 typedef array1<double>::opt vector;
-typedef Array1<double>::opt Vector;
 
 using std::cout;
 
@@ -72,39 +71,6 @@ int TestArray()
     array2<int> temp;
     temp.Allocate(1, 2);
     //the technique may be used to save one destruction of the array data
-
-    vector x;
-    Allocate(x, 1);
-    x[0] = 1.0;
-    cout << h<double>(x) << endl;
-
-    cout << endl;
-
-    // Arrays with offsets:
-
-    const int offx = -1;
-    const int offy = -1;
-
-    Array1<double> B(n, offx); // B(offx)...B(n-1+offx)
-    Array2<double> C(n, m, offx, offy);
-    Array1<double> D(5); // Functionally equivalent to array1<double> D(n);
-
-    B = 1.0;
-    C = 2.0;
-    D = 3.0;
-
-    for (int i = offx; i < n + offx; i++)
-        cout << B[i] << endl;
-
-    cout << endl;
-
-    for (int i = offx; i < n + offx; i++) {
-        Vector Ci = C[i];
-        for (int j = offy; j < m + offy; j++)
-            cout << Ci[j] << endl;
-    }
-
-    cout << D << endl;
 
     return 0;
 }

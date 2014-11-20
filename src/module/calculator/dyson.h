@@ -11,9 +11,9 @@
 
 #include "calculator.h"
 namespace calc {
-class Calculator {
-class Dyson : public Calculator {
-};
+//class Calculator {
+//class Dyson : public Calculator {
+//};
 }
 
 #endif /* defined(__Feynman_Simulator__dyson__) */

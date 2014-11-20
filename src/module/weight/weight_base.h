@@ -41,7 +41,6 @@ class WeightNoMeasure {
     unsigned int *Shape();
 
     Array::array4<Complex> SmoothWeight;
-
     //No Time variable for this guy
     Array::array3<Complex> DeltaTWeight;
 
