@@ -52,6 +52,15 @@ class Vec {
             target[i] = _Array[i];
     }
 
+    T *begin()
+    {
+        return _Array;
+    }
+    T *end()
+    {
+        return _Array + D;
+    }
+
     T &operator[](int index)
     {
         return _Array[index];

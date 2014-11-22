@@ -12,8 +12,8 @@
 class Complex;
 namespace fft {
 enum Dir {
-    FORTH,
-    BACK
+    FORTH = 1,
+    BACK = -1
 };
 
 void fft(Complex *x, int n, Dir);
