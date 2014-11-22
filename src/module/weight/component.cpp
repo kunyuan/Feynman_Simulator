@@ -1,9 +1,9 @@
 //
-//  weight_array.cpp
+//  component.cpp
 //  Feynman_Simulator
 //
-//  Created by Kun Chen on 11/20/14.
+//  Created by Kun Chen on 11/22/14.
 //  Copyright (c) 2014 Kun Chen. All rights reserved.
 //
 
-#include "weight_array.h"
+#include "component.h"
