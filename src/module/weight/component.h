@@ -12,29 +12,35 @@
 #include "weight_basic.h"
 #include "weight_matrix.h"
 namespace weight {
+class Sigma;
+class GCalculator;
+class GMonteCarlo;
 
 class G : public Basic {
   public:
-    G(const Lattice &lat, real beta, int order,
+    G(model Model_, const Lattice &lat, real beta,
       const std::vector<real> &hopping = {0},
       const std::vector<real> &RealChemicalPotential = {0.0, 0.0},
       real ExternalField = 0.0, bool IsTauSymmetric = false);
-    Array::array4<Complex> BareWeight;
-    Array::array3<Complex> MeasureWeight;
-    //Monte Carlo interface
-    Complex Weight(const Site &, const Site &, real, real, spin, spin, bool);
-    Complex Weight(int, const Site &, const Site &, real, real, spin, spin, bool);
-    void Initial(model);
-    //Dyson interface
 
-  protected:
-    void _InitialTest();
-    void _InitialDiagCounter();
-    void _InitialBareSpin();
-    void _InitialBareHubbardSquare();
+    void BuildNew();
+    bool Load(const std::string &FileName);
+    void Save(const std::string &FileName, const std::string Mode = "a");
+    GCalculator getCalculator();
+    GMonteCarlo getMonteCarlo();
+
+  private:
     std::vector<real> _Hopping;
     std::vector<real> _RealChemicalPotential;
     real _ExternalField;
+
+    SmoothTMatrix _BareWeight;
+    SmoothTMatrix _SmoothTWeight;
+    SmoothTMatrix _MeasureWeight;
+
+    friend class GInitializer;
+    friend class GCalculator;
+    friend class GMonteCarlo;
 };
 }
 

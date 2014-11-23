@@ -11,7 +11,7 @@
 using namespace std;
 using namespace weight;
 
-vector<uint> GetShape(Lattice lat, SpinNum spin_num, bool HasTime)
+vector<uint> GetShape(const Lattice &lat, SpinNum spin_num, bool HasTime)
 {
     auto SpinVol = static_cast<uint>(pow(2, spin_num));
     vector<uint> shape({SpinVol, (uint)lat.SublatVol2, (uint)lat.Vol});
@@ -28,7 +28,7 @@ vector<uint> GetSpaceShape(Lattice lat)
     return shape;
 }
 
-vector<uint> GetSpaceTimeShape(Lattice lat)
+vector<uint> GetSpaceTimeShape(const Lattice &lat)
 {
     vector<uint> shape = GetSpaceShape(lat);
     shape.push_back(MAX_TAU_BIN);
@@ -36,24 +36,22 @@ vector<uint> GetSpaceTimeShape(Lattice lat)
 }
 
 /*********************************************************************/
-/*                          SmoothTWeight                             */
+/*                          SmoothTMatrix                             */
 /*********************************************************************/
-SmoothTWeight::SmoothTWeight(real Beta, Lattice lat, SpinNum spin_num, bool IsTauSymmetric,
+SmoothTMatrix::SmoothTMatrix(const Lattice &lat, SpinNum spin_num,
                              const std::string Name)
 {
     _Name = Name;
-    _Beta = Beta;
-    _IsTauSymmetric = IsTauSymmetric;
     Shape = GetShape(lat, spin_num, true);
     SpaceTimeShape = GetSpaceTimeShape(lat);
 }
 
-void SmoothTWeight::Activate()
+void SmoothTMatrix::Activate()
 {
     Allocate(Shape.data());
 }
 
-bool SmoothTWeight::Load(const std::string &FileName)
+bool SmoothTMatrix::Load(const std::string &FileName)
 {
     cnpy::NpyArray weight = cnpy::npz_load(FileName, _Name + ".Weight");
     if (weight.data == nullptr) {
@@ -65,7 +63,7 @@ bool SmoothTWeight::Load(const std::string &FileName)
     return true;
 }
 
-void SmoothTWeight::Save(const std::string &FileName, const std::string Mode)
+void SmoothTMatrix::Save(const std::string &FileName, const std::string Mode)
 {
     cnpy::npz_save(FileName, _Name + ".Weight", (*this)(), Shape.data(), 4, Mode);
 }
@@ -74,23 +72,23 @@ void SmoothTWeight::Save(const std::string &FileName, const std::string Mode)
 *  fft::FORTH would change antisymmetric _Weight to be symmetric, and always performed in Tau space
 *  fft::BACK would change symmetric _Weight to be antisymmetric, and always performed in Omega space
 */
-void SmoothTWeight::_ChangeSymmetry(fft::Dir direction)
-{
-    int sign = static_cast<int>(direction);
-    Complex PhaseFactor[MAX_TAU_BIN];
-    for (int i = 0; i < Shape[TAU]; i++)
-        PhaseFactor[i] = exp(Complex(0.0, sign * BinToTau(i) * PI));
-
-    int NumOfTimeSeries = Shape[SP] * Shape[SUB] * Shape[VOL];
-    for (int i = 0; i < NumOfTimeSeries; i += Shape[TAU])
-        for (int j = 0; j < Shape[TAU]; j++)
-            SmoothWeight(i * Shape[TAU] + j) *= PhaseFactor[j];
-}
+//void SmoothTMatrix::_ChangeSymmetry(fft::Dir direction)
+//{
+//    int sign = static_cast<int>(direction);
+//    Complex PhaseFactor[MAX_TAU_BIN];
+//    for (int i = 0; i < Shape[TAU]; i++)
+//        PhaseFactor[i] = exp(Complex(0.0, sign * BinToTau(i) * PI));
+//
+//    int NumOfTimeSeries = Shape[SP] * Shape[SUB] * Shape[VOL];
+//    for (int i = 0; i < NumOfTimeSeries; i += Shape[TAU])
+//        for (int j = 0; j < Shape[TAU]; j++)
+//            SmoothWeight(i * Shape[TAU] + j) *= PhaseFactor[j];
+//}
 
 /*********************************************************************/
-/*                          DeltaTWeight                             */
+/*                          DeltaTMatrix                             */
 /*********************************************************************/
-DeltaTWeight::DeltaTWeight(Lattice lat, SpinNum spin_num,
+DeltaTMatrix::DeltaTMatrix(const Lattice &lat, SpinNum spin_num,
                            const std::string Name)
 {
     _Name = Name;
@@ -98,12 +96,12 @@ DeltaTWeight::DeltaTWeight(Lattice lat, SpinNum spin_num,
     SpaceShape = GetSpaceShape(lat);
 }
 
-void DeltaTWeight::Activate()
+void DeltaTMatrix::Activate()
 {
     Allocate(Shape.data());
 }
 
-bool DeltaTWeight::Load(const std::string &FileName)
+bool DeltaTMatrix::Load(const std::string &FileName)
 {
     cnpy::NpyArray weight = cnpy::npz_load(FileName, _Name + ".Weight");
     if (weight.data == nullptr) {
@@ -115,7 +113,7 @@ bool DeltaTWeight::Load(const std::string &FileName)
     return true;
 }
 
-void DeltaTWeight::Save(const std::string &FileName, const std::string Mode)
+void DeltaTMatrix::Save(const std::string &FileName, const std::string Mode)
 {
     cnpy::npz_save(FileName, _Name + ".Weight", (*this)(), Shape.data(), 3, Mode);
 }

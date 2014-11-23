@@ -11,11 +11,11 @@
 
 #include "utility/array.h"
 #include "utility/complex.h"
-#include "lattice/lattice.h"
 #include "utility/fft.h"
 #include "weight_basic.h"
 #include <vector>
 
+class Lattice;
 namespace weight {
 const uint MAX_TAU_BIN = 32;
 enum FFT_Mode {
@@ -36,13 +36,12 @@ enum Dim {
 /**
 *  This is the weight function, not array of numbers, so you should take care of dBeta inside
 */
-class SmoothTWeight : public Array::array4<Complex> {
+class SmoothTMatrix : public Array::array4<Complex> {
   public:
     /**
     *  SoomthTWeight will not allocate memory!!!
     */
-    SmoothTWeight(real Beta, Lattice lat, SpinNum, bool IsTauSymmetric,
-                  const std::string Name);
+    SmoothTMatrix(const Lattice &lat, SpinNum, const std::string Name);
     /**
     *  SoomthTWeight will allocate memory after calling Activate(), but not initialize elements!!!
     */
@@ -57,15 +56,11 @@ class SmoothTWeight : public Array::array4<Complex> {
 
   private:
     std::string _Name;
-    real _Beta;
-    bool _IsTauSymmetric;
-    void _ChangeSymmetry(fft::Dir);
 };
 
-class DeltaTWeight : public Array::array3<Complex> {
+class DeltaTMatrix : public Array::array3<Complex> {
   public:
-    DeltaTWeight(Lattice lat, SpinNum,
-                 const std::string Name);
+    DeltaTMatrix(const Lattice &lat, SpinNum, const std::string Name);
     void Activate();
     vector<uint> Shape;
     vector<uint> SpaceShape;

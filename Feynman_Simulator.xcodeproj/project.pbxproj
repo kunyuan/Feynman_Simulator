@@ -60,6 +60,9 @@
 		84C86DD21A1E90EC002A3D8D /* weight_matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84C86DD01A1E90EC002A3D8D /* weight_matrix.cpp */; };
 		84C86DD51A1FD2B3002A3D8D /* weight_basic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84C86DD31A1FD2B3002A3D8D /* weight_basic.cpp */; };
 		84C86DDB1A214E33002A3D8D /* component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84C86DD91A214E33002A3D8D /* component.cpp */; };
+		84C86DDE1A217F1D002A3D8D /* weight_MonteCarlo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84C86DDC1A217F1D002A3D8D /* weight_MonteCarlo.cpp */; };
+		84C86DE11A217F56002A3D8D /* weight_calculator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84C86DDF1A217F56002A3D8D /* weight_calculator.cpp */; };
+		84C86DE41A217F9B002A3D8D /* weight_initializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84C86DE21A217F9B002A3D8D /* weight_initializer.cpp */; };
 		84D7EFBC19F36361006B1CA5 /* array_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84D7EFBA19F36361006B1CA5 /* array_test.cpp */; };
 		84D7EFC319F552F5006B1CA5 /* env_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84D7EFC219F552F5006B1CA5 /* env_test.cpp */; };
 		84FDE07419DDFC2F0092B441 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84FDE07319DDFC2F0092B441 /* main.cpp */; };
@@ -182,6 +185,12 @@
 		84C86DD41A1FD2B3002A3D8D /* weight_basic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = weight_basic.h; path = module/weight/weight_basic.h; sourceTree = "<group>"; };
 		84C86DD91A214E33002A3D8D /* component.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = component.cpp; path = module/weight/component.cpp; sourceTree = "<group>"; };
 		84C86DDA1A214E33002A3D8D /* component.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = component.h; path = module/weight/component.h; sourceTree = "<group>"; };
+		84C86DDC1A217F1D002A3D8D /* weight_MonteCarlo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = weight_MonteCarlo.cpp; path = module/weight/weight_MonteCarlo.cpp; sourceTree = "<group>"; };
+		84C86DDD1A217F1D002A3D8D /* weight_MonteCarlo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = weight_MonteCarlo.h; path = module/weight/weight_MonteCarlo.h; sourceTree = "<group>"; };
+		84C86DDF1A217F56002A3D8D /* weight_calculator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = weight_calculator.cpp; path = module/weight/weight_calculator.cpp; sourceTree = "<group>"; };
+		84C86DE01A217F56002A3D8D /* weight_calculator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = weight_calculator.h; path = module/weight/weight_calculator.h; sourceTree = "<group>"; };
+		84C86DE21A217F9B002A3D8D /* weight_initializer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = weight_initializer.cpp; path = module/weight/weight_initializer.cpp; sourceTree = "<group>"; };
+		84C86DE31A217F9B002A3D8D /* weight_initializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = weight_initializer.h; path = module/weight/weight_initializer.h; sourceTree = "<group>"; };
 		84D7EFBA19F36361006B1CA5 /* array_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = array_test.cpp; sourceTree = "<group>"; };
 		84D7EFBB19F36361006B1CA5 /* array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = array.h; sourceTree = "<group>"; };
 		84D7EFC219F552F5006B1CA5 /* env_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = env_test.cpp; path = environment/env_test.cpp; sourceTree = "<group>"; };
@@ -287,6 +296,9 @@
 		8422FE331A0A7EB9002EB44E /* weight */ = {
 			isa = PBXGroup;
 			children = (
+				84C86DE71A223F30002A3D8D /* initializer */,
+				84C86DE61A223F1C002A3D8D /* calculator */,
+				84C86DE51A223EFF002A3D8D /* MonteCarlo */,
 				8422FE381A0A7ECA002EB44E /* weight.h */,
 				8422FE371A0A7ECA002EB44E /* weight.cpp */,
 				843D3FC31A185FD300DACC51 /* weight_base.h */,
@@ -381,6 +393,33 @@
 			);
 			name = calculator;
 			path = module/calculator;
+			sourceTree = "<group>";
+		};
+		84C86DE51A223EFF002A3D8D /* MonteCarlo */ = {
+			isa = PBXGroup;
+			children = (
+				84C86DDC1A217F1D002A3D8D /* weight_MonteCarlo.cpp */,
+				84C86DDD1A217F1D002A3D8D /* weight_MonteCarlo.h */,
+			);
+			name = MonteCarlo;
+			sourceTree = "<group>";
+		};
+		84C86DE61A223F1C002A3D8D /* calculator */ = {
+			isa = PBXGroup;
+			children = (
+				84C86DDF1A217F56002A3D8D /* weight_calculator.cpp */,
+				84C86DE01A217F56002A3D8D /* weight_calculator.h */,
+			);
+			name = calculator;
+			sourceTree = "<group>";
+		};
+		84C86DE71A223F30002A3D8D /* initializer */ = {
+			isa = PBXGroup;
+			children = (
+				84C86DE31A217F9B002A3D8D /* weight_initializer.h */,
+				84C86DE21A217F9B002A3D8D /* weight_initializer.cpp */,
+			);
+			name = initializer;
 			sourceTree = "<group>";
 		};
 		84D4287819F208300051CE96 /* environment */ = {
@@ -504,6 +543,7 @@
 				8422FE4D1A0A85E7002EB44E /* job.cpp in Sources */,
 				1CA5CF3A19ED6F3F00212E20 /* lattice.cpp in Sources */,
 				84B8FC4A19EDA348003D6DF6 /* cnpy_test.cpp in Sources */,
+				84C86DE41A217F9B002A3D8D /* weight_initializer.cpp in Sources */,
 				8422FE261A09C13D002EB44E /* markov_test.cpp in Sources */,
 				841D905C19E054900066116A /* test.cpp in Sources */,
 				8422FE3E1A0A7F8D002EB44E /* estimator_test.cpp in Sources */,
@@ -528,7 +568,9 @@
 				61266E5CDE0355C1306E9EBD /* rng_test.cpp in Sources */,
 				6126638BECC823E2FECDBE1A /* utility.cpp in Sources */,
 				84681F6519F9AAA600832DAD /* crc32.cpp in Sources */,
+				84C86DDE1A217F1D002A3D8D /* weight_MonteCarlo.cpp in Sources */,
 				8422FE3C1A0A7ECA002EB44E /* weight.cpp in Sources */,
+				84C86DE11A217F56002A3D8D /* weight_calculator.cpp in Sources */,
 				1CFBB0B91A1668C500EE2E9E /* markov_diag_counter.cpp in Sources */,
 				84B8FC4B19EDA348003D6DF6 /* cnpy.cpp in Sources */,
 				84C86DC51A1E4FDA002A3D8D /* calculator.cpp in Sources */,
