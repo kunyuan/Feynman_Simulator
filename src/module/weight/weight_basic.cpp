@@ -15,6 +15,12 @@
 using namespace std;
 using namespace weight;
 
+/**
+*  Check if the mapping between vector and index of the lattice looks like
+*            (i,j,k) -> k + n3*j + n2*n3*i;
+*     n1, n2, n3 : dimensions in three directions;
+*   which is required by fft on spatial dimensions
+*/
 void CheckVec2Index(Lattice _Lat)
 {
     Vec<int> v;
@@ -130,26 +136,4 @@ void Basic::Reset(real beta)
     _dBeta = beta / MAX_TAU_BIN;
     _dBetaInverse = 1.0 / _dBeta;
     //TODO: please implement how to reset the weight here
-}
-
-/**
-*  Check if the mapping between vector and index of the lattice looks like
-*            (i,j,k) -> k + n3*j + n2*n3*i;
-*     n1, n2, n3 : dimensions in three directions;
-*   which is required by fft on spatial dimensions
-*/
-bool Basic::_CheckVec2Index()
-{
-    Vec<int> v;
-    for (int index = 0; index < _Lat.Vol; index++) {
-        int j = index;
-        for (int i = D - 1; i > 0; i--) {
-            v[i] = j % _Lat.Size[i];
-            j /= _Lat.Size[i];
-        }
-        v[0] = j;
-        if (v != _Lat.Index2Vec(index))
-            return false;
-    }
-    return true;
 }
