@@ -94,13 +94,13 @@ void GInitializer::_InitialBareSpin()
     int spin_down = _G.SpinIndex(DOWN, DOWN);
     int spin_up = _G.SpinIndex(UP, UP);
     for (int sub = 0; sub < _Shape[SUB]; sub++) {
-        if (_G._Lat.IsOnSameSubLat(sub))
-            continue;
-        int coor = 0;
-        for (int tau = 0; tau < _Shape[TAU]; tau++) {
-            Complex weight = exp(mu * _G.IndexToTau(tau)) / Complex(1.0, 1.0);
-            _G._BareWeight[spin_down][sub][coor][tau] = weight;
-            _G._BareWeight[spin_up][sub][coor][tau] = weight;
+        if (_G._Lat.IsOnSameSubLat(sub)) {
+            int coor = 0;
+            for (int tau = 0; tau < _Shape[TAU]; tau++) {
+                Complex weight = exp(mu * _G.IndexToTau(tau)) / Complex(1.0, 1.0);
+                _G._BareWeight[spin_down][sub][coor][tau] = weight;
+                _G._BareWeight[spin_up][sub][coor][tau] = weight;
+            }
         }
     }
     _G._SmoothTWeight = _G._BareWeight;

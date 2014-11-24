@@ -16,7 +16,7 @@ using namespace std;
 template <typename T>
 bool LoadMatrix(T &matrix, const string &FileName, const string &Name)
 {
-    cnpy::NpyArray weight = cnpy::npz_load(FileName, Name + ".Weight");
+    cnpy::NpyArray weight = cnpy::npz_load(FileName, Name);
     if (weight.data == nullptr) {
         ABORT("Can't find " << Name << ".Weight in .npz data file!");
         return false;
@@ -30,7 +30,7 @@ template <typename T>
 void SaveMatrix(T &matrix, const string &FileName, const std::string Mode,
                 const string &Name, const vector<uint> &Shape, int Dim)
 {
-    cnpy::npz_save(FileName, Name + ".Weight", matrix(), Shape.data(), Dim, Mode);
+    cnpy::npz_save(FileName, Name, matrix(), Shape.data(), Dim, Mode);
 }
 
 G::G(model Model, const Lattice &lat, real beta,
@@ -59,11 +59,22 @@ void G::BuildTest()
 
 bool G::Load(const std::string &FileName)
 {
-    return LoadMatrix(_SmoothTWeight, FileName, _Name) &&
-           LoadMatrix(_BareWeight, FileName, _Name);
+    return LoadMatrix(_SmoothTWeight, FileName, _Name + ".Smooth") &&
+           LoadMatrix(_BareWeight, FileName, _Name + ".Bare");
 }
 void G::Save(const std::string &FileName, const std::string Mode)
 {
-    SaveMatrix(_SmoothTWeight, FileName, Mode, _Name, GetShape(), 4);
-    SaveMatrix(_BareWeight, FileName, "a", _Name, GetShape(), 3);
+    SaveMatrix(_SmoothTWeight, FileName, Mode, _Name + ".Smooth", GetShape(), 4);
+    SaveMatrix(_BareWeight, FileName, "a", _Name + ".Bare", GetShape(), 3);
+}
+
+W::W(model Model, const Lattice &lat, real Beta,
+     const vector<real> &Interaction_, real ExternalField)
+    : weight0::BasicWithFourSpins(lat, Beta, Model, TauSymmetric, "W")
+{
+    _Interaction = Interaction_;
+    _ExternalField = ExternalField;
+    _BareWeight.Allocate(GetShape().data());
+    _SmoothTWeight.Allocate(GetShape().data());
+    //use _Shape[SP] to _Shape[VOL] to construct array3
 }

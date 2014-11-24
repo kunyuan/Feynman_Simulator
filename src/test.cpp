@@ -16,6 +16,8 @@
 #include "lattice/lattice.h"
 #include "utility/fft.h"
 #include "estimator/estimator.h"
+#include "module/weight/component.h"
+
 using namespace std;
 
 #define TEST(func)                  \
@@ -32,6 +34,7 @@ int RunTest()
     TEST(TestEnvironment);
     TEST(diag::TestDiagram);
     TEST(weight::TestWeight);
+    TEST(weight0::TestWeight);
     TEST(calc::TestCalculator);
     //    TEST(mc::TestMarkov);
     //    TEST(mc::TestDiagCounter);
