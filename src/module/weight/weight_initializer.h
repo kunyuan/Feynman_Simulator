@@ -9,15 +9,23 @@
 #ifndef __Feynman_Simulator__weight_builder__
 #define __Feynman_Simulator__weight_builder__
 
-namespace weight {
+namespace weight0 {
 class G;
 class GInitializer {
   public:
-    GInitializer(const G &G_);
+    GInitializer(G &G_)
+        : _G(G_)
+    {
+    }
     void BuildNew();
+    void BuildTest();
 
   private:
     G &_G;
+    void _InitialTest();
+    void _InitialDiagCounter();
+    void _InitialBareSpin();
+    void _InitialBareHubbardSquare();
 };
 }
 
