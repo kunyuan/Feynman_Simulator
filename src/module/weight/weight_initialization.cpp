@@ -138,7 +138,7 @@ void G::_InitialBareHubbardSquare()
     int Lx = _Lat.Size[0], Ly = _Lat.Size[1];
     ASSERT_ALLWAYS(Lx > 1 && Ly > 1, "System size should be bigger than 1!");
     ASSERT_ALLWAYS(_Lat.LatticeType == SQUARE, "lattice should be square!");
-    ASSERT_ALLWAYS(_Model == HUBBARD, ToString(int(_Model)) + " is not Hubbard model!");
+    ASSERT_ALLWAYS(_Model == HUBBARD, int(_Model) << " is not Hubbard model!");
     //Initialize in momentum space first
     //    int spin_down = SpinIndex(DOWN, DOWN);
     //    int spin_up = SpinIndex(UP, UP);

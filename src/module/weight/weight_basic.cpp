@@ -7,13 +7,12 @@
 //
 
 #include "weight_basic.h"
-#include "weight_matrix.h"
 #include <iostream>
 #include "utility/logger.h"
 #include <math.h>
 
 using namespace std;
-using namespace weight;
+using namespace weight0;
 
 /**
 *  Check if the mapping between vector and index of the lattice looks like
@@ -46,13 +45,14 @@ void CheckVec2Index(Lattice _Lat)
     }
 }
 
-Basic::Basic(const Lattice &lat, real beta, model Model,
-             bool IsTauSymmetric_, string name)
+Basic::Basic(const Lattice &lat, real beta, SpinNum spin_num, model Model,
+             TauSymmetry Symmetry, string name)
     : _Lat(lat),
       _Beta(beta),
-      _IsTauSymmetric(IsTauSymmetric_),
+      _TauSymmetryFactor(int(Symmetry)),
       _Name(name),
-      _Model(Model)
+      _Model(Model),
+      _SpinNum(int(spin_num))
 
 {
     _dBeta = beta / MAX_TAU_BIN;
@@ -60,24 +60,110 @@ Basic::Basic(const Lattice &lat, real beta, model Model,
     CheckVec2Index(lat);
 }
 
-int Basic::SpinIndex(spin SpinIn, spin SpinOut)
+vector<uint> Basic::GetShape()
+{
+    auto SpinVol = static_cast<uint>(pow(2, _SpinNum));
+    vector<uint> shape({SpinVol, (uint)_Lat.SublatVol2, (uint)_Lat.Vol});
+    shape.push_back(MAX_TAU_BIN);
+    return shape;
+}
+
+vector<uint> Basic::GetSpaceShape()
+{
+    vector<uint> shape;
+    for (auto e : _Lat.Size)
+        shape.push_back(e);
+    return shape;
+}
+
+vector<uint> Basic::GetSpaceTimeShape()
+{
+    vector<uint> shape = GetSpaceShape();
+    shape.push_back(MAX_TAU_BIN);
+    return shape;
+}
+
+void Basic::Reset(real beta)
+{
+    _Beta = beta;
+    _dBeta = beta / MAX_TAU_BIN;
+    _dBetaInverse = 1.0 / _dBeta;
+    //TODO: please implement how to reset the weight here
+}
+
+int Basic::SublatIndex(const Distance &dist)
+{
+    return dist.SublatIndex;
+}
+
+int Basic::CoordiIndex(const Distance &dist)
+{
+    return dist.CoordiIndex;
+}
+
+int Basic::TauIndex(real tau)
+{
+    if (DEBUGMODE && tau < -_Beta || tau >= _Beta)
+        LOG_INFO("tau=" << tau << " is out of the range ["
+                        << -_Beta << "," << _Beta << ")");
+    //TODO: mapping between tau and bin
+
+    int bin = tau < 0 ? floor(tau * _dBetaInverse) + MAX_TAU_BIN
+                      : floor(tau * _dBetaInverse);
+    if (DEBUGMODE && bin < 0 || tau >= MAX_TAU_BIN) {
+        LOG_INFO("tau=" << tau << " is out of the range ["
+                        << -_Beta << "," << _Beta << ")");
+        LOG_INFO("bin=" << bin << " is out of the range ["
+                        << 0 << "," << MAX_TAU_BIN << "]");
+    }
+    return bin;
+}
+
+int Basic::TauIndex(real t_in, real t_out)
+{
+    return TauIndex(t_out - t_in);
+}
+
+real Basic::IndexToTau(int Bin)
+{
+    //TODO: mapping between tau and bin
+    return Bin * _dBeta + _Beta / 2;
+}
+
+BasicWithTwoSpins::BasicWithTwoSpins(const Lattice &lat, real Beta, model Model,
+                                     TauSymmetry Symmetry, std::string Name)
+    : Basic(lat, Beta, TwoSpins, Model, Symmetry, Name)
+{
+}
+
+int BasicWithTwoSpins::SpinIndex(spin SpinIn, spin SpinOut)
 {
     return SpinIn * SPIN + SpinOut;
 }
 
-int Basic::SpinIndex(spin SpinInIn, spin SpinInOut, spin SpinOutIn, spin SpinOutOut)
+bool BasicWithTwoSpins::IsSameSpin(int spindex)
+{
+    return (spindex == 0 || spindex == 2);
+}
+
+BasicWithFourSpins::BasicWithFourSpins(const Lattice &lat, real Beta, model Model,
+                                       TauSymmetry Symmetry, std::string Name)
+    : Basic(lat, Beta, FourSpins, Model, Symmetry, Name)
+{
+}
+//First In/Out: direction of WLine; Second In/Out: direction of Vertex
+int BasicWithFourSpins::SpinIndex(spin SpinInIn, spin SpinInOut, spin SpinOutIn, spin SpinOutOut)
 {
     return SpinInIn * SPIN3 + SpinInOut * SPIN2 +
            SpinOutIn * SPIN + SpinOutOut;
 }
-
-int Basic::SpinIndex(spin *TwoSpinIn, spin *TwoSpinOut)
+int BasicWithFourSpins::SpinIndex(spin *TwoSpinIn, spin *TwoSpinOut)
 {
-    return TwoSpinIn[0] * SPIN3 + TwoSpinIn[1] * SPIN2 +
-           TwoSpinOut[0] * SPIN + TwoSpinOut[1];
+    return SpinIndex(TwoSpinIn[0], TwoSpinIn[1],
+                     TwoSpinOut[0], TwoSpinOut[1]);
 }
 
-vector<int> Basic::GetSpinIndexVector_FourSpinsFileter(SpinFilter filter)
+std::vector<int> BasicWithFourSpins::GetSpinIndexVector(SpinFilter filter)
 {
     vector<int> list;
     for (int InIn = 0; InIn < 2; InIn++)
@@ -99,41 +185,4 @@ vector<int> Basic::GetSpinIndexVector_FourSpinsFileter(SpinFilter filter)
                                                  spin(OutIn), spin(OutOut)));
                 }
     return list;
-}
-
-int Basic::TauToBin(real tau)
-{
-    if (DEBUGMODE && tau < -_Beta || tau >= _Beta)
-        LOG_INFO("tau=" << tau << " is out of the range ["
-                        << -_Beta << "," << _Beta << ")");
-    //TODO: mapping between tau and bin
-
-    int bin = tau < 0 ? floor(tau * _dBetaInverse) + MAX_TAU_BIN
-                      : floor(tau * _dBetaInverse);
-    if (DEBUGMODE && bin < 0 || tau >= MAX_TAU_BIN) {
-        LOG_INFO("tau=" << tau << " is out of the range ["
-                        << -_Beta << "," << _Beta << ")");
-        LOG_INFO("bin=" << bin << " is out of the range ["
-                        << 0 << "," << MAX_TAU_BIN << "]");
-    }
-    return bin;
-}
-
-int Basic::TauToBin(real t_in, real t_out)
-{
-    return TauToBin(t_out - t_in);
-}
-
-real Basic::BinToTau(int Bin)
-{
-    //TODO: mapping between tau and bin
-    return Bin * _dBeta + _Beta / 2;
-}
-
-void Basic::Reset(real beta)
-{
-    _Beta = beta;
-    _dBeta = beta / MAX_TAU_BIN;
-    _dBetaInverse = 1.0 / _dBeta;
-    //TODO: please implement how to reset the weight here
 }
