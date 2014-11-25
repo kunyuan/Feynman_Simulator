@@ -10,19 +10,19 @@
 #define __Feynman_Simulator__component__
 
 #include "weight_basic.h"
-#include "weight0_estimator.h"
+#include "weight_estimator.h"
 #include "utility/complex.h"
 
-namespace weight0 {
+namespace weight {
 class G : public Basic {
     friend class GInitializer;
 
   public:
-    G(model Model, const Lattice &lat, real beta,
+    G(const Lattice &lat, real beta,
       const std::vector<real> &Hopping = {0},
       const std::vector<real> &RealChemicalPotential = {0.0, 0.0},
       real ExternalField = 0.0, TauSymmetry TauSymmetry = TauAntiSymmetric);
-    void BuildNew();
+    void BuildNew(model Model);
     void BuildTest();
     void Reset(real Beta);
 
@@ -33,7 +33,7 @@ class G : public Basic {
     std::vector<real> _Hopping;
     std::vector<real> _RealChemicalPotential;
     real _ExternalField;
-    weight0::SmoothTMatrix _MeasureWeight;
+    weight::SmoothTMatrix _MeasureWeight;
     IndexMapSPIN2 _Map;
 };
 
@@ -45,9 +45,9 @@ class W : public Basic {
     friend class WInitializer;
 
   public:
-    W(model Model, const Lattice &lat, real Beta,
+    W(const Lattice &lat, real Beta,
       const std::vector<real> &Interaction, real ExternalField = 0.0);
-    void BuildNew();
+    void BuildNew(model Model);
     void BuildTest();
     void WriteBareToASCII();
     void Reset(real Beta);
@@ -58,13 +58,13 @@ class W : public Basic {
   protected:
     std::vector<real> _Interaction;
     real _ExternalField;
-    weight0::SmoothTMatrix _MeasureWeight;
+    weight::SmoothTMatrix _MeasureWeight;
     IndexMapSPIN4 _Map;
 };
 
 class Sigma : public Basic {
   public:
-    Sigma(model Model, const Lattice &, real Beta, int MaxOrder,
+    Sigma(const Lattice &, real Beta, int MaxOrder,
           TauSymmetry Symmetry = TauAntiSymmetric);
     void Reset(real Beta);
     bool Load(const std::string &FileName);
@@ -73,6 +73,7 @@ class Sigma : public Basic {
     Complex Weight(const Site &, const Site &, real, real, spin, spin);
     void Measure(const Site &, const Site &, real, real, spin, spin,
                  int Order, const Complex &);
+    void UpdateWeight(int order);
 
     WeightEstimator Estimator;
 
@@ -82,7 +83,7 @@ class Sigma : public Basic {
 
 class Polar : public Basic {
   public:
-    Polar(model Model, const Lattice &, real Beta, int MaxOrder);
+    Polar(const Lattice &, real Beta, int MaxOrder);
     void Reset(real Beta);
     bool Load(const std::string &FileName);
     void Save(const std::string &FileName, const std::string Mode = "a");
@@ -90,6 +91,7 @@ class Polar : public Basic {
     Complex Weight(const Site &, const Site &, real, real, spin *, spin *);
     void Measure(const Site &, const Site &, real, real, spin *, spin *,
                  int Order, const Complex &);
+    void UpdateWeight(int order);
 
     WeightEstimator Estimator;
 

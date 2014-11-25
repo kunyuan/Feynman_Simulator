@@ -7,18 +7,13 @@
 //
 
 #include "weight_initializer.h"
-using namespace weight0;
+using namespace weight;
 
 string InitialErrorMessage(model _Model, const Lattice &_Lat)
 {
     return "Model" + ToString((int)_Model) + " on Lattice " +
            ToString((int)_Lat.LatticeType) +
            " has not yet been implemented!";
-}
-
-void GInitializer::BuildTest()
-{
-    _InitialTest();
 }
 
 void GInitializer::BuildNew()
@@ -44,11 +39,6 @@ void GInitializer::BuildNew()
     }
 }
 // interaction
-
-void WInitializer::BuildTest()
-{
-    _InitialTest();
-}
 
 void WInitializer::BuildNew()
 {

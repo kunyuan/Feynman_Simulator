@@ -13,7 +13,7 @@
 #include "lattice/lattice.h"
 #include <vector>
 
-namespace weight0 {
+namespace weight {
 const uint MAX_TAU_BIN = 32;
 
 enum SPIN4Filter { UpUp2UpUp,

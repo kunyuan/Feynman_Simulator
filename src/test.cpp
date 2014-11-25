@@ -9,7 +9,6 @@
 #include "test.h"
 #include "utility/crc32.h"
 #include "environment/environment.h"
-#include "module/calculator/calculator.h"
 #include "module/markov/markov.h"
 #include "module/diagram/diagram.h"
 #include "module/weight/weight.h"
@@ -34,8 +33,6 @@ int RunTest()
     TEST(TestEnvironment);
     TEST(diag::TestDiagram);
     TEST(weight::TestWeight);
-    TEST(weight0::TestWeight);
-    TEST(calc::TestCalculator);
     //    TEST(mc::TestMarkov);
     //    TEST(mc::TestDiagCounter);
 

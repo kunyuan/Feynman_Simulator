@@ -14,7 +14,7 @@
 #include "utility/array.h"
 #include "index_map.h"
 
-namespace weight0 {
+namespace weight {
 
 enum TauSymmetry {
     TauSymmetric = 1,
@@ -45,13 +45,13 @@ class Basic {
     friend class WInitializer;
 
   public:
-    void BuildNew();
+    void BuildNew(model Model);
     void BuildTest();
     bool Load(const std::string &FileName);
     void Save(const std::string &FileName, const std::string Mode = "a");
 
   protected:
-    Basic(model Model, const Lattice &lat, real Beta, SpinNum,
+    Basic(const Lattice &lat, real Beta, SpinNum,
           TauSymmetry Symmetry, std::string);
 
     uint *GetShape();          //the shape of internal weight array
