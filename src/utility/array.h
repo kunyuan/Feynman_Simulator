@@ -22,6 +22,9 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. */
 
 // Defining NDEBUG improves optimization but disables argument checking.
 // Defining __NOARRAY2OPT inhibits special optimization of Array2[].
+// Constructor (including copy constructor, as array3 A=new array3())
+// always has reference sematic
+// Assignment always has deep copy sematic
 
 #include "abort.h"
 #include <sstream>

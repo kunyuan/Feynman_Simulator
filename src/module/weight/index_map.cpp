@@ -69,13 +69,31 @@ bool IndexMapSPIN2::IsSameSpin(int spindex)
     return (spindex == 0 || spindex == 2);
 }
 
+void IndexMapSPIN2::Map(uint *result, spin SpinIn, spin SpinOut,
+                        const Site &rin, const Site &rout, real tin, real tout)
+{
+    auto dis = _Lat.Dist(rin, rout);
+    result[0] = SpinIndex(SpinIn, SpinOut);
+    result[1] = dis.SublatIndex;
+    result[2] = dis.CoordiIndex;
+    result[3] = TauIndex(tin, tout);
+}
+void IndexMapSPIN2::MapDeltaT(uint *result, spin SpinIn, spin SpinOut,
+                              const Site &rin, const Site &rout)
+{
+    auto dis = _Lat.Dist(rin, rout);
+    result[0] = SpinIndex(SpinIn, SpinOut);
+    result[1] = dis.SublatIndex;
+    result[2] = dis.CoordiIndex;
+}
+
 //First In/Out: direction of WLine; Second In/Out: direction of Vertex
 int IndexMapSPIN4::SpinIndex(spin SpinInIn, spin SpinInOut, spin SpinOutIn, spin SpinOutOut)
 {
     return SpinInIn * SPIN3 + SpinInOut * SPIN2 +
            SpinOutIn * SPIN + SpinOutOut;
 }
-int IndexMapSPIN4::SpinIndex(spin *TwoSpinIn, spin *TwoSpinOut)
+int IndexMapSPIN4::SpinIndex(const spin *TwoSpinIn, const spin *TwoSpinOut)
 {
     return SpinIndex(TwoSpinIn[0], TwoSpinIn[1],
                      TwoSpinOut[0], TwoSpinOut[1]);
@@ -103,4 +121,22 @@ std::vector<int> IndexMapSPIN4::GetSpinIndexVector(SPIN4Filter filter)
                                                  spin(OutIn), spin(OutOut)));
                 }
     return list;
+}
+
+void IndexMapSPIN4::Map(uint *result, const spin *SpinIn, const spin *SpinOut,
+                        const Site &rin, const Site &rout, real tin, real tout)
+{
+    auto dis = _Lat.Dist(rin, rout);
+    result[0] = SpinIndex(SpinIn, SpinOut);
+    result[1] = dis.SublatIndex;
+    result[2] = dis.CoordiIndex;
+    result[3] = TauIndex(tin, tout);
+}
+void IndexMapSPIN4::MapDeltaT(uint *result, const spin *SpinIn, const spin *SpinOut,
+                              const Site &rin, const Site &rout)
+{
+    auto dis = _Lat.Dist(rin, rout);
+    result[0] = SpinIndex(SpinIn, SpinOut);
+    result[1] = dis.SublatIndex;
+    result[2] = dis.CoordiIndex;
 }

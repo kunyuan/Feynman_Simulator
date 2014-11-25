@@ -10,6 +10,7 @@
 #define __Feynman_Simulator__component__
 
 #include "weight_basic.h"
+#include "weight0_estimator.h"
 #include "utility/complex.h"
 
 namespace weight0 {
@@ -21,16 +22,18 @@ class G : public Basic {
       const std::vector<real> &Hopping = {0},
       const std::vector<real> &RealChemicalPotential = {0.0, 0.0},
       real ExternalField = 0.0, TauSymmetry TauSymmetry = TauAntiSymmetric);
-
     void BuildNew();
     void BuildTest();
     void Reset(real Beta);
 
-  protected:
+    Complex Weight(const Site &, const Site &, real, real, spin, spin, bool);
+    Complex Weight(int, const Site &, const Site &, real, real, spin, spin, bool);
+
+  private:
     std::vector<real> _Hopping;
     std::vector<real> _RealChemicalPotential;
     real _ExternalField;
-
+    weight0::SmoothTMatrix _MeasureWeight;
     IndexMapSPIN2 _Map;
 };
 
@@ -49,17 +52,29 @@ class W : public Basic {
     void WriteBareToASCII();
     void Reset(real Beta);
 
+    Complex Weight(const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool);
+    Complex Weight(int, const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool);
+
   protected:
     std::vector<real> _Interaction;
     real _ExternalField;
-
+    weight0::SmoothTMatrix _MeasureWeight;
     IndexMapSPIN4 _Map;
 };
 
 class Sigma : public Basic {
   public:
-    Sigma(model Model, const Lattice &, real Beta, TauSymmetry Symmetry = TauAntiSymmetric);
+    Sigma(model Model, const Lattice &, real Beta, int MaxOrder,
+          TauSymmetry Symmetry = TauAntiSymmetric);
     void Reset(real Beta);
+    bool Load(const std::string &FileName);
+    void Save(const std::string &FileName, const std::string Mode = "a");
+
+    Complex Weight(const Site &, const Site &, real, real, spin, spin);
+    void Measure(const Site &, const Site &, real, real, spin, spin,
+                 int Order, const Complex &);
+
+    WeightEstimator Estimator;
 
   protected:
     IndexMapSPIN2 _Map;
@@ -67,11 +82,35 @@ class Sigma : public Basic {
 
 class Polar : public Basic {
   public:
-    Polar(model Model, const Lattice &, real Beta);
+    Polar(model Model, const Lattice &, real Beta, int MaxOrder);
     void Reset(real Beta);
+    bool Load(const std::string &FileName);
+    void Save(const std::string &FileName, const std::string Mode = "a");
+
+    Complex Weight(const Site &, const Site &, real, real, spin *, spin *);
+    void Measure(const Site &, const Site &, real, real, spin *, spin *,
+                 int Order, const Complex &);
+
+    WeightEstimator Estimator;
 
   protected:
     IndexMapSPIN4 _Map;
+};
+
+class Worm {
+  public:
+    static real Weight(const Site &, const Site &, real, real)
+    {
+        return 1.0;
+    }
+};
+
+class Norm {
+  public:
+    static real Weight()
+    {
+        return 1.0;
+    }
 };
 
 int TestWeight();
