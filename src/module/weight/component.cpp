@@ -11,14 +11,14 @@
 #include "utility/cnpy.h"
 #include <tuple>
 
-using namespace weight0;
+using namespace weight;
 using namespace std;
 
-G::G(model Model, const Lattice &lat, real beta,
+G::G(const Lattice &lat, real beta,
      const std::vector<real> &Hopping,
      const std::vector<real> &RealChemicalPotential,
      real ExternalField, TauSymmetry Symmetry)
-    : weight0::Basic(Model, lat, beta, SPIN2, Symmetry, "G"),
+    : weight::Basic(lat, beta, SPIN2, Symmetry, "G"),
       _Map(IndexMapSPIN2(beta, lat))
 {
     _Hopping = Hopping;
@@ -30,14 +30,16 @@ G::G(model Model, const Lattice &lat, real beta,
     _MeasureWeight = Complex(1.0, 0.0);
 }
 
-void G::BuildNew()
+void G::BuildNew(model Model)
 {
+    Basic::BuildNew(Model);
     GInitializer(*this).BuildNew();
 }
 
 void G::BuildTest()
 {
-    GInitializer(*this).BuildTest();
+    Basic::BuildNew(model::TEST);
+    GInitializer(*this).BuildNew();
 }
 
 void G::Reset(real Beta)
@@ -46,9 +48,9 @@ void G::Reset(real Beta)
     _Map = IndexMapSPIN2(Beta, _Lat);
 }
 
-W::W(model Model, const Lattice &lat, real Beta,
+W::W(const Lattice &lat, real Beta,
      const vector<real> &Interaction_, real ExternalField)
-    : weight0::Basic(Model, lat, Beta, SPIN4, TauSymmetric, "W"),
+    : weight::Basic(lat, Beta, SPIN4, TauSymmetric, "W"),
       _Map(IndexMapSPIN4(Beta, lat))
 {
     _Interaction = Interaction_;
@@ -59,14 +61,16 @@ W::W(model Model, const Lattice &lat, real Beta,
     _MeasureWeight = Complex(1.0, 0.0);
 }
 
-void W::BuildNew()
+void W::BuildNew(model Model)
 {
+    Basic::BuildNew(Model);
     WInitializer(*this).BuildNew();
 }
 
 void W::BuildTest()
 {
-    WInitializer(*this).BuildTest();
+    Basic::BuildNew(model::TEST);
+    WInitializer(*this).BuildNew();
 }
 
 void W::Reset(real Beta)
@@ -99,8 +103,8 @@ void W::WriteBareToASCII()
     os << "]" << endl;
 }
 
-Sigma::Sigma(model Model, const Lattice &lat, real Beta, int MaxOrder, TauSymmetry Symmetry)
-    : weight0::Basic(Model, lat, Beta, SPIN2, Symmetry, "Sigma"),
+Sigma::Sigma(const Lattice &lat, real Beta, int MaxOrder, TauSymmetry Symmetry)
+    : weight::Basic(lat, Beta, SPIN2, Symmetry, "Sigma"),
       _Map(IndexMapSPIN2(Beta, lat)),
       Estimator(Beta, MaxOrder, "Sigma", Norm::Weight(), GetShape())
 {
@@ -124,8 +128,8 @@ void Sigma::Save(const std::string &FileName, const std::string Mode)
     Basic::Save(FileName, "a");
 }
 
-Polar::Polar(model Model, const Lattice &lat, real Beta, int MaxOrder)
-    : weight0::Basic(Model, lat, Beta, SPIN4, TauSymmetric, "Polar"),
+Polar::Polar(const Lattice &lat, real Beta, int MaxOrder)
+    : weight::Basic(lat, Beta, SPIN4, TauSymmetric, "Polar"),
       _Map(IndexMapSPIN4(Beta, lat)),
       Estimator(Beta, MaxOrder, "Polar", Norm::Weight(), GetShape())
 {

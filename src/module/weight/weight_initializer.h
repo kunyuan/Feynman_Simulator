@@ -11,7 +11,7 @@
 
 #include "module/weight/component.h"
 
-namespace weight0 {
+namespace weight {
 class G;
 class W;
 class GInitializer {
@@ -21,7 +21,6 @@ class GInitializer {
     {
     }
     void BuildNew();
-    void BuildTest();
 
   private:
     G &_G;
@@ -40,7 +39,6 @@ class WInitializer {
     {
     }
     void BuildNew();
-    void BuildTest();
 
   private:
     W &_W;

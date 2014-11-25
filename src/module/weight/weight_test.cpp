@@ -7,7 +7,7 @@
 //
 
 #include "weight.h"
-#include "weight_component.h"
+#include "component.h"
 #include "utility/sput.h"
 #include "utility/rng.h"
 
@@ -59,17 +59,18 @@ void WeightMeasuring(real Beta, int Num)
     //measure norm when set order=0
     Sample(Sig, Num, s1, s2, SpinIn, SpinOut, Beta, order + 1, P);
 
-    LOG_INFO("Order 1: " << Sig.RelativeError(1) << endl
-                         << "Order 2: " << Sig.RelativeError(2) << endl
-                         << "Order 3: " << Sig.RelativeError(3));
-    LOG_INFO("Accepted Order with Threshold 0.04=" << Sig.OrderAcceptable(1, 0.04));
+    LOG_INFO("Order 1: " << Sig.Estimator.RelativeError(1) << endl
+                         << "Order 2: " << Sig.Estimator.RelativeError(2) << endl
+                         << "Order 3: " << Sig.Estimator.RelativeError(3));
+    LOG_INFO("Accepted Order with Threshold 0.04=" << Sig.Estimator.OrderAcceptable(1, 0.04));
 
     Sig.UpdateWeight(2); //accept up to order 2
     Complex weight = Sig.Weight(s1, s2, 0.0, tau, SpinIn, SpinOut);
     real w = (P[1] + P[2]) / P[0] * 0.5 / Beta; //0.5 is the average <rng.urn()>
     Complex realweight = Complex(w, w);
     //2 standard deviation is allowd in the estimate
-    Complex relative_error = 2.0 * (Sig.RelativeError(1) + Sig.RelativeError(2));
+    Complex relative_error = 2.0 * (Sig.Estimator.RelativeError(1) +
+                                    Sig.Estimator.RelativeError(2));
     Complex error(realweight.Re * relative_error.Re,
                   realweight.Im * relative_error.Im);
 
@@ -104,12 +105,12 @@ void Sample(Sigma &sigma, int num, Site in, Site out,
 
     for (int i = 0; i < num; i++) {
         if (i % 100 == 0)
-            sigma.AddStatistics();
+            sigma.Estimator.AddStatistics();
         real x = rng.urn() * PSum;
         for (int o = 0; o <= order; o++) {
             if (x > P_lower[o] && x <= P_upper[o]) {
                 if (o == 0)
-                    sigma.MeasureNorm();
+                    sigma.Estimator.MeasureNorm();
                 else
                     sigma.Measure(in, out, 0.0, rng.urn() * Beta,
                                   SpinIn, SpinOut, o, Complex(rng.urn(), rng.urn()));
@@ -123,6 +124,7 @@ void TestWeightW()
 {
     Lattice lat(Vec<int>(8), LATTICE);
     real Beta = 1.0;
-    weight::W W_(lat, Beta, 4, {1.0, 0.5}, 0.0);
+    weight::W W_(lat, Beta, {1.0, 0.5}, 0.0);
+    W_.BuildNew(model::J1J2);
     W_.WriteBareToASCII();
 }

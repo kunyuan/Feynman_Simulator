@@ -15,7 +15,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "28"
             endingLineNumber = "28"
-            landmarkName = "WeightNeedMeasure::WeightNeedMeasure(const Lattice &amp;lat, real beta, int order, bool IsTauSymmetric, int SpinVol, string name, real Norm)"
+            landmarkName = "WeightEstimator::Load(const std::string &amp;FileName)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -111,7 +111,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "67"
             endingLineNumber = "67"
-            landmarkName = "Basic::Basic(model Model, const Lattice &amp;lat, real beta, SpinNum spin_num, TauSymmetry Symmetry, string name)"
+            landmarkName = "Basic::Basic(const Lattice &amp;lat, real beta, SpinNum spin_num, TauSymmetry Symmetry, string name)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -143,7 +143,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "25"
             endingLineNumber = "25"
-            landmarkName = "G::G(model Model, const Lattice &amp;lat, real beta, const std::vector&lt;real&gt; &amp;Hopping, const std::vector&lt;real&gt; &amp;RealChemicalPotential, real ExternalField, TauSymmetry Symmetry)"
+            landmarkName = "G::G(const Lattice &amp;lat, real beta, const std::vector&lt;real&gt; &amp;Hopping, const std::vector&lt;real&gt; &amp;RealChemicalPotential, real ExternalField, TauSymmetry Symmetry)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

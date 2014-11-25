@@ -10,7 +10,7 @@
 #include "utility/logger.h"
 #include <math.h>
 
-using namespace weight0;
+using namespace weight;
 
 IndexMap::IndexMap(real Beta, const Lattice &lat)
 {

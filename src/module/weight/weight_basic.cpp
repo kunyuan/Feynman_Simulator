@@ -12,7 +12,7 @@
 #include <math.h>
 
 using namespace std;
-using namespace weight0;
+using namespace weight;
 
 /**
 *  Check if the mapping between vector and index of the lattice looks like
@@ -45,13 +45,12 @@ void CheckVec2Index(Lattice _Lat)
     }
 }
 
-Basic::Basic(model Model, const Lattice &lat, real beta, SpinNum spin_num,
+Basic::Basic(const Lattice &lat, real beta, SpinNum spin_num,
              TauSymmetry Symmetry, string name)
     : _Lat(lat),
       _Beta(beta),
       _TauSymmetryFactor(int(Symmetry)),
       _Name(name),
-      _Model(Model),
       _SpinNum(int(spin_num))
 {
     _dBeta = beta / MAX_TAU_BIN;
@@ -89,6 +88,16 @@ void Basic::Reset(real beta)
 int Basic::GetTauSymmetryFactor(real t_in, real t_out)
 {
     return _TauSymmetryFactor * ((t_out > t_in) ? 1 : -1);
+}
+
+void Basic::BuildNew(model Model)
+{
+    _Model = Model;
+}
+
+void Basic::BuildTest()
+{
+    _Model = model::TEST;
 }
 
 const string SMOOTH = ".SmoothT";

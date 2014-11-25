@@ -8,7 +8,7 @@
 
 #include "component.h"
 
-using namespace weight0;
+using namespace weight;
 using namespace std;
 
 #define GetSmoothT(array, index) array[index[SP]][index[SUB]][index[VOL]][index[TAU]]
@@ -97,6 +97,11 @@ void Sigma::Measure(const Site &rin, const Site &rout, real tin, real tout, spin
     Estimator.Measure(index, order, weight * GetTauSymmetryFactor(tin, tout));
 }
 
+void Sigma::UpdateWeight(int order)
+{
+    Estimator.UpdateWeight(_SmoothTWeight, order);
+}
+
 Complex Polar::Weight(const Site &rin, const Site &rout, real tin, real tout, spin *SpinIn, spin *SpinOut)
 {
     static uint index[4];
@@ -109,4 +114,9 @@ void Polar::Measure(const Site &rin, const Site &rout, real tin, real tout, spin
     static uint index[4];
     _Map.Map(index, SpinIn, SpinOut, rin, rout, tin, tout);
     Estimator.Measure(index, order, weight);
+}
+
+void Polar::UpdateWeight(int order)
+{
+    Estimator.UpdateWeight(_SmoothTWeight, order);
 }

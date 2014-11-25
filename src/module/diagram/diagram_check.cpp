@@ -8,7 +8,7 @@
 
 #include "diagram.h"
 #include "utility/abort.h"
-#include "module/weight/weight_component.h"
+#include "module/weight/component.h"
 
 using namespace std;
 using namespace diag;
