@@ -123,6 +123,11 @@ int Lattice::Index2Sublat(int index, int dir) const
         return index / NSublattice;
 }
 
+std::tuple<int, int> Lattice::Index2Sublat(int index) const
+{
+    return std::make_tuple(index % NSublattice, index / NSublattice);
+}
+
 bool Lattice::IsOnSameSubLat(int Index)
 {
     return Index2Sublat(Index, IN) ==
@@ -171,6 +176,13 @@ Distance Lattice::Dist(const Site &SiteIn, const Site &SiteOut) const
 {
     return Distance(Sublat2Index(SiteIn.Sublattice, SiteOut.Sublattice),
                     Vec2Index(Shift(SiteOut.Coordinate - SiteIn.Coordinate)));
+}
+
+std::tuple<Site, Site> Lattice::GetSite(const Distance &dis) const
+{
+    return std::make_tuple(Site(Index2Sublat(dis.SublatIndex, IN), Vec<int>(0)),
+                           Site(Index2Sublat(dis.SublatIndex, OUT),
+                                Index2Vec(dis.CoordiIndex)));
 }
 
 Site Lattice::GetSite(const Distance &dis, int direction) const

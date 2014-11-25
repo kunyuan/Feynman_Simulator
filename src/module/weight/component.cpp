@@ -9,41 +9,21 @@
 #include "component.h"
 #include "weight_initializer.h"
 #include "utility/cnpy.h"
+#include <tuple>
 
 using namespace weight0;
 using namespace std;
-
-template <typename T>
-bool LoadMatrix(T &matrix, const string &FileName, const string &Name)
-{
-    cnpy::NpyArray weight = cnpy::npz_load(FileName, Name);
-    if (weight.data == nullptr) {
-        ABORT("Can't find " << Name << ".Weight in .npz data file!");
-        return false;
-    }
-    //assignment here will copy data in weight.data into *this
-    matrix = (reinterpret_cast<Complex *>(weight.data));
-    return true;
-}
-
-template <typename T>
-void SaveMatrix(T &matrix, const string &FileName, const std::string Mode,
-                const string &Name, const vector<uint> &Shape, int Dim)
-{
-    cnpy::npz_save(FileName, Name, matrix(), Shape.data(), Dim, Mode);
-}
 
 G::G(model Model, const Lattice &lat, real beta,
      const std::vector<real> &Hopping,
      const std::vector<real> &RealChemicalPotential,
      real ExternalField, TauSymmetry Symmetry)
-    : weight0::BasicWithTwoSpins(lat, beta, Model, Symmetry, "G")
+    : weight0::Basic(Model, lat, beta, SPIN2, Symmetry, "G"),
+      _Map(IndexMapSPIN2(beta, lat))
 {
     _Hopping = Hopping;
     _ExternalField = ExternalField;
     _RealChemicalPotential = RealChemicalPotential;
-    _SmoothTWeight.Allocate(GetShape().data());
-    _BareWeight.Allocate(GetShape().data());
     //use _Shape[SP] to _Shape[TAU] to construct array3
 }
 
@@ -57,24 +37,82 @@ void G::BuildTest()
     GInitializer(*this).BuildTest();
 }
 
-bool G::Load(const std::string &FileName)
+void G::Reset(real Beta)
 {
-    return LoadMatrix(_SmoothTWeight, FileName, _Name + ".Smooth") &&
-           LoadMatrix(_BareWeight, FileName, _Name + ".Bare");
-}
-void G::Save(const std::string &FileName, const std::string Mode)
-{
-    SaveMatrix(_SmoothTWeight, FileName, Mode, _Name + ".Smooth", GetShape(), 4);
-    SaveMatrix(_BareWeight, FileName, "a", _Name + ".Bare", GetShape(), 3);
+    Basic::Reset(Beta);
+    _Map = IndexMapSPIN2(Beta, _Lat);
 }
 
 W::W(model Model, const Lattice &lat, real Beta,
      const vector<real> &Interaction_, real ExternalField)
-    : weight0::BasicWithFourSpins(lat, Beta, Model, TauSymmetric, "W")
+    : weight0::Basic(Model, lat, Beta, SPIN4, TauSymmetric, "W"),
+      _Map(IndexMapSPIN4(Beta, lat))
 {
     _Interaction = Interaction_;
     _ExternalField = ExternalField;
-    _BareWeight.Allocate(GetShape().data());
-    _SmoothTWeight.Allocate(GetShape().data());
     //use _Shape[SP] to _Shape[VOL] to construct array3
+}
+
+void W::BuildNew()
+{
+    WInitializer(*this).BuildNew();
+}
+
+void W::BuildTest()
+{
+    WInitializer(*this).BuildTest();
+}
+
+void W::Reset(real Beta)
+{
+    Basic::Reset(Beta);
+    _Map = IndexMapSPIN4(Beta, _Lat);
+}
+
+void W::WriteBareToASCII()
+{
+    _Lat.PlotLattice();
+    Vec<int> offset;
+    for (int i = 0; i < D; i++)
+        offset[i] = _Lat.Size[i] / 2 - 1;
+    auto Shape = GetShape();
+    ofstream os("interaction.py", ios::out);
+    int spin_index = _Map.SpinIndex(UP, UP, UP, UP);
+    os << "line=[" << endl;
+    for (int sub = 0; sub < Shape[SUB]; sub++)
+        for (int coord = 0; coord < Shape[VOL]; coord++) {
+            real bare_weight = mod(_DeltaTWeight[spin_index][sub][coord]);
+            if (!Zero(bare_weight)) {
+                Site start, end;
+                tie(start, end) = _Lat.GetSite(Distance(sub, coord));
+                os << "[" << _Lat.GetRealVec(start, offset).PrettyString() << ","
+                   << _Lat.GetRealVec(end, offset).PrettyString() << ","
+                   << start.Sublattice << "]," << endl;
+            }
+        }
+    os << "]" << endl;
+}
+
+Sigma::Sigma(model Model, const Lattice &lat, real Beta, TauSymmetry Symmetry)
+    : weight0::Basic(Model, lat, Beta, SPIN2, Symmetry, "Sigma"),
+      _Map(IndexMapSPIN2(Beta, lat))
+{
+}
+
+void Sigma::Reset(real Beta)
+{
+    Basic::Reset(Beta);
+    _Map = IndexMapSPIN2(Beta, _Lat);
+}
+
+Polar::Polar(model Model, const Lattice &lat, real Beta)
+    : weight0::Basic(Model, lat, Beta, SPIN4, TauSymmetric, "Polar"),
+      _Map(IndexMapSPIN4(Beta, lat))
+{
+}
+
+void Polar::Reset(real Beta)
+{
+    Basic::Reset(Beta);
+    _Map = IndexMapSPIN4(Beta, _Lat);
 }

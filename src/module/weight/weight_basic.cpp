@@ -7,8 +7,8 @@
 //
 
 #include "weight_basic.h"
-#include <iostream>
 #include "utility/logger.h"
+#include "utility/cnpy.h"
 #include <math.h>
 
 using namespace std;
@@ -45,7 +45,7 @@ void CheckVec2Index(Lattice _Lat)
     }
 }
 
-Basic::Basic(const Lattice &lat, real beta, SpinNum spin_num, model Model,
+Basic::Basic(model Model, const Lattice &lat, real beta, SpinNum spin_num,
              TauSymmetry Symmetry, string name)
     : _Lat(lat),
       _Beta(beta),
@@ -53,34 +53,29 @@ Basic::Basic(const Lattice &lat, real beta, SpinNum spin_num, model Model,
       _Name(name),
       _Model(Model),
       _SpinNum(int(spin_num))
-
 {
     _dBeta = beta / MAX_TAU_BIN;
     _dBetaInverse = 1.0 / _dBeta;
     CheckVec2Index(lat);
-}
 
-vector<uint> Basic::GetShape()
-{
     auto SpinVol = static_cast<uint>(pow(2, _SpinNum));
-    vector<uint> shape({SpinVol, (uint)_Lat.SublatVol2, (uint)_Lat.Vol});
-    shape.push_back(MAX_TAU_BIN);
-    return shape;
-}
-
-vector<uint> Basic::GetSpaceShape()
-{
-    vector<uint> shape;
+    _Shape = vector<uint>({SpinVol, (uint)_Lat.SublatVol2, (uint)_Lat.Vol, MAX_TAU_BIN});
     for (auto e : _Lat.Size)
-        shape.push_back(e);
-    return shape;
+        _SpaceTimeShape.push_back(e);
+    _SpaceTimeShape.push_back(MAX_TAU_BIN);
+
+    _SmoothTWeight.Allocate(GetShape());
+    _DeltaTWeight.Allocate(GetShape());
 }
 
-vector<uint> Basic::GetSpaceTimeShape()
+uint *Basic::GetShape()
 {
-    vector<uint> shape = GetSpaceShape();
-    shape.push_back(MAX_TAU_BIN);
-    return shape;
+    return _Shape.data();
+}
+
+uint *Basic::GetSpaceTimeShape()
+{
+    return _SpaceTimeShape.data();
 }
 
 void Basic::Reset(real beta)
@@ -91,98 +86,36 @@ void Basic::Reset(real beta)
     //TODO: please implement how to reset the weight here
 }
 
-int Basic::SublatIndex(const Distance &dist)
-{
-    return dist.SublatIndex;
-}
+const string SMOOTH = ".SmoothT";
+const string DELTA = ".DeltaT";
 
-int Basic::CoordiIndex(const Distance &dist)
+template <typename T>
+bool LoadMatrix(T &matrix, const string &FileName, const string &Name)
 {
-    return dist.CoordiIndex;
-}
-
-int Basic::TauIndex(real tau)
-{
-    if (DEBUGMODE && tau < -_Beta || tau >= _Beta)
-        LOG_INFO("tau=" << tau << " is out of the range ["
-                        << -_Beta << "," << _Beta << ")");
-    //TODO: mapping between tau and bin
-
-    int bin = tau < 0 ? floor(tau * _dBetaInverse) + MAX_TAU_BIN
-                      : floor(tau * _dBetaInverse);
-    if (DEBUGMODE && bin < 0 || tau >= MAX_TAU_BIN) {
-        LOG_INFO("tau=" << tau << " is out of the range ["
-                        << -_Beta << "," << _Beta << ")");
-        LOG_INFO("bin=" << bin << " is out of the range ["
-                        << 0 << "," << MAX_TAU_BIN << "]");
+    cnpy::NpyArray weight = cnpy::npz_load(FileName, Name);
+    if (weight.data == nullptr) {
+        ABORT("Can't find " << Name << ".Weight in .npz data file!");
+        return false;
     }
-    return bin;
+    //assignment here will copy data in weight.data into *this
+    matrix = (reinterpret_cast<Complex *>(weight.data));
+    return true;
 }
 
-int Basic::TauIndex(real t_in, real t_out)
+template <typename T>
+void SaveMatrix(T &matrix, const string &FileName, const std::string Mode,
+                const string &Name, uint *Shape, int Dim)
 {
-    return TauIndex(t_out - t_in);
+    cnpy::npz_save(FileName, Name, matrix(), Shape, Dim, Mode);
 }
 
-real Basic::IndexToTau(int Bin)
+bool Basic::Load(const std::string &FileName)
 {
-    //TODO: mapping between tau and bin
-    return Bin * _dBeta + _Beta / 2;
+    return LoadMatrix(_SmoothTWeight, FileName, _Name + SMOOTH) &&
+           LoadMatrix(_DeltaTWeight, FileName, _Name + DELTA);
 }
-
-BasicWithTwoSpins::BasicWithTwoSpins(const Lattice &lat, real Beta, model Model,
-                                     TauSymmetry Symmetry, std::string Name)
-    : Basic(lat, Beta, TwoSpins, Model, Symmetry, Name)
+void Basic::Save(const std::string &FileName, const std::string Mode)
 {
-}
-
-int BasicWithTwoSpins::SpinIndex(spin SpinIn, spin SpinOut)
-{
-    return SpinIn * SPIN + SpinOut;
-}
-
-bool BasicWithTwoSpins::IsSameSpin(int spindex)
-{
-    return (spindex == 0 || spindex == 2);
-}
-
-BasicWithFourSpins::BasicWithFourSpins(const Lattice &lat, real Beta, model Model,
-                                       TauSymmetry Symmetry, std::string Name)
-    : Basic(lat, Beta, FourSpins, Model, Symmetry, Name)
-{
-}
-//First In/Out: direction of WLine; Second In/Out: direction of Vertex
-int BasicWithFourSpins::SpinIndex(spin SpinInIn, spin SpinInOut, spin SpinOutIn, spin SpinOutOut)
-{
-    return SpinInIn * SPIN3 + SpinInOut * SPIN2 +
-           SpinOutIn * SPIN + SpinOutOut;
-}
-int BasicWithFourSpins::SpinIndex(spin *TwoSpinIn, spin *TwoSpinOut)
-{
-    return SpinIndex(TwoSpinIn[0], TwoSpinIn[1],
-                     TwoSpinOut[0], TwoSpinOut[1]);
-}
-
-std::vector<int> BasicWithFourSpins::GetSpinIndexVector(SpinFilter filter)
-{
-    vector<int> list;
-    for (int InIn = 0; InIn < 2; InIn++)
-        for (int InOut = 0; InOut < 2; InOut++)
-            for (int OutIn = 0; OutIn < 2; OutIn++)
-                for (int OutOut = 0; OutOut < 2; OutOut++) {
-                    bool flag = false;
-                    if (filter == UpUp2UpUp &&
-                        InIn == InOut && InIn == OutIn && InIn == OutOut)
-                        flag = true;
-                    if (filter == UpDown2UpDown &&
-                        InIn == InOut && OutIn == OutOut && InIn == FLIP(OutIn))
-                        flag = true;
-                    if (filter == UpDown2DownUp &&
-                        InIn == FLIP(InOut) && OutIn == FLIP(OutOut) && InIn == FLIP(OutIn))
-                        flag = true;
-                    if (flag)
-                        list.push_back(SpinIndex(spin(InIn), spin(InOut),
-                                                 spin(OutIn), spin(OutOut)));
-                }
-    return list;
+    SaveMatrix(_SmoothTWeight, FileName, Mode, _Name + SMOOTH, GetShape(), 4);
+    SaveMatrix(_DeltaTWeight, FileName, "a", _Name + DELTA, GetShape(), 3);
 }
