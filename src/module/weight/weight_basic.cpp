@@ -86,6 +86,11 @@ void Basic::Reset(real beta)
     //TODO: please implement how to reset the weight here
 }
 
+int Basic::GetTauSymmetryFactor(real t_in, real t_out)
+{
+    return _TauSymmetryFactor * ((t_out > t_in) ? 1 : -1);
+}
+
 const string SMOOTH = ".SmoothT";
 const string DELTA = ".DeltaT";
 

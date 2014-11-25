@@ -30,7 +30,7 @@ class IndexMap {
     int SublatIndex(const Distance &dist);
     int CoordiIndex(const Distance &dist);
 
-  private:
+  protected:
     real _Beta;
     real _dBeta;
     real _dBetaInverse;
@@ -42,6 +42,9 @@ class IndexMapSPIN2 : public IndexMap {
     using IndexMap::IndexMap;
     static int SpinIndex(spin SpinIn, spin SpinOut);
     static bool IsSameSpin(int spindex);
+    void Map(uint *result, spin in, spin out,
+             const Site &rin, const Site &rout, real tin, real tout);
+    void MapDeltaT(uint *result, spin in, spin out, const Site &rin, const Site &rout);
 };
 
 class IndexMapSPIN4 : public IndexMap {
@@ -49,8 +52,12 @@ class IndexMapSPIN4 : public IndexMap {
     using IndexMap::IndexMap;
     //First In/Out: direction of WLine; Second In/Out: direction of Vertex
     static int SpinIndex(spin SpinInIn, spin SpinInOut, spin SpinOutIn, spin SpinOutOut);
-    static int SpinIndex(spin *TwoSpinIn, spin *TwoSpinOut);
+    static int SpinIndex(const spin *TwoSpinIn, const spin *TwoSpinOut);
     static std::vector<int> GetSpinIndexVector(SPIN4Filter filter);
+    void Map(uint *result, const spin *in, const spin *out,
+             const Site &rin, const Site &rout, real tin, real tout);
+    void MapDeltaT(uint *result, const spin *in, const spin *out,
+                   const Site &rin, const Site &rout);
 };
 }
 

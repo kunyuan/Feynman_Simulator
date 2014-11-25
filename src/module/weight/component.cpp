@@ -25,6 +25,9 @@ G::G(model Model, const Lattice &lat, real beta,
     _ExternalField = ExternalField;
     _RealChemicalPotential = RealChemicalPotential;
     //use _Shape[SP] to _Shape[TAU] to construct array3
+    _MeasureWeight.Allocate(GetShape());
+    //initialize _MeasureWeight to an unit function
+    _MeasureWeight = Complex(1.0, 0.0);
 }
 
 void G::BuildNew()
@@ -51,6 +54,9 @@ W::W(model Model, const Lattice &lat, real Beta,
     _Interaction = Interaction_;
     _ExternalField = ExternalField;
     //use _Shape[SP] to _Shape[VOL] to construct array3
+    _MeasureWeight.Allocate(GetShape());
+    //initialize _MeasureWeight to an unit function
+    _MeasureWeight = Complex(1.0, 0.0);
 }
 
 void W::BuildNew()
@@ -93,9 +99,10 @@ void W::WriteBareToASCII()
     os << "]" << endl;
 }
 
-Sigma::Sigma(model Model, const Lattice &lat, real Beta, TauSymmetry Symmetry)
+Sigma::Sigma(model Model, const Lattice &lat, real Beta, int MaxOrder, TauSymmetry Symmetry)
     : weight0::Basic(Model, lat, Beta, SPIN2, Symmetry, "Sigma"),
-      _Map(IndexMapSPIN2(Beta, lat))
+      _Map(IndexMapSPIN2(Beta, lat)),
+      Estimator(Beta, MaxOrder, "Sigma", Norm::Weight(), GetShape())
 {
 }
 
@@ -103,11 +110,24 @@ void Sigma::Reset(real Beta)
 {
     Basic::Reset(Beta);
     _Map = IndexMapSPIN2(Beta, _Lat);
+    Estimator.ReWeight(Beta);
 }
 
-Polar::Polar(model Model, const Lattice &lat, real Beta)
+bool Sigma::Load(const std::string &FileName)
+{
+    return Estimator.Load(FileName) &&
+           Basic::Load(FileName);
+}
+void Sigma::Save(const std::string &FileName, const std::string Mode)
+{
+    Estimator.Save(FileName, Mode);
+    Basic::Save(FileName, "a");
+}
+
+Polar::Polar(model Model, const Lattice &lat, real Beta, int MaxOrder)
     : weight0::Basic(Model, lat, Beta, SPIN4, TauSymmetric, "Polar"),
-      _Map(IndexMapSPIN4(Beta, lat))
+      _Map(IndexMapSPIN4(Beta, lat)),
+      Estimator(Beta, MaxOrder, "Polar", Norm::Weight(), GetShape())
 {
 }
 
@@ -115,4 +135,16 @@ void Polar::Reset(real Beta)
 {
     Basic::Reset(Beta);
     _Map = IndexMapSPIN4(Beta, _Lat);
+    Estimator.ReWeight(Beta);
+}
+
+bool Polar::Load(const std::string &FileName)
+{
+    return Estimator.Load(FileName) &&
+           Basic::Load(FileName);
+}
+void Polar::Save(const std::string &FileName, const std::string Mode)
+{
+    Estimator.Save(FileName, Mode);
+    Basic::Save(FileName, "a");
 }
