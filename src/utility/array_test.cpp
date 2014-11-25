@@ -46,6 +46,7 @@ int TestArray()
 
         // The following statements are equivalent, but the first one optimizes better.
         array2<double> Ai = A[i];
+        //Ai is just an array with temporary state, the ownwer of data is still A
         //        array2<double> Ai;
         //        Ai = A[i];
         //    array2<double> Ai(m,p); Ai=A[i]; // This does an extra memory copy.

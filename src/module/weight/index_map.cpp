@@ -1,0 +1,106 @@
+//
+//  index_map.cpp
+//  Feynman_Simulator
+//
+//  Created by Kun Chen on 11/24/14.
+//  Copyright (c) 2014 Kun Chen. All rights reserved.
+//
+
+#include "index_map.h"
+#include "utility/logger.h"
+#include <math.h>
+
+using namespace weight0;
+
+IndexMap::IndexMap(real Beta, const Lattice &lat)
+{
+    _Beta = Beta;
+    _dBeta = Beta / MAX_TAU_BIN;
+    _dBetaInverse = 1.0 / _dBeta;
+    _Lat = lat;
+}
+
+int IndexMap::SublatIndex(const Distance &dist)
+{
+    return dist.SublatIndex;
+}
+
+int IndexMap::CoordiIndex(const Distance &dist)
+{
+    return dist.CoordiIndex;
+}
+
+int IndexMap::TauIndex(real tau)
+{
+    if (DEBUGMODE && tau < -_Beta || tau >= _Beta)
+        LOG_INFO("tau=" << tau << " is out of the range ["
+                        << -_Beta << "," << _Beta << ")");
+    //TODO: mapping between tau and bin
+
+    int bin = tau < 0 ? floor(tau * _dBetaInverse) + MAX_TAU_BIN
+                      : floor(tau * _dBetaInverse);
+    if (DEBUGMODE && bin < 0 || tau >= MAX_TAU_BIN) {
+        LOG_INFO("tau=" << tau << " is out of the range ["
+                        << -_Beta << "," << _Beta << ")");
+        LOG_INFO("bin=" << bin << " is out of the range ["
+                        << 0 << "," << MAX_TAU_BIN << "]");
+    }
+    return bin;
+}
+
+int IndexMap::TauIndex(real t_in, real t_out)
+{
+    return TauIndex(t_out - t_in);
+}
+
+real IndexMap::IndexToTau(int Bin)
+{
+    //TODO: mapping between tau and bin
+    return Bin * _dBeta + _Beta / 2;
+}
+
+int IndexMapSPIN2::SpinIndex(spin SpinIn, spin SpinOut)
+{
+    return SpinIn * SPIN + SpinOut;
+}
+
+bool IndexMapSPIN2::IsSameSpin(int spindex)
+{
+    return (spindex == 0 || spindex == 2);
+}
+
+//First In/Out: direction of WLine; Second In/Out: direction of Vertex
+int IndexMapSPIN4::SpinIndex(spin SpinInIn, spin SpinInOut, spin SpinOutIn, spin SpinOutOut)
+{
+    return SpinInIn * SPIN3 + SpinInOut * SPIN2 +
+           SpinOutIn * SPIN + SpinOutOut;
+}
+int IndexMapSPIN4::SpinIndex(spin *TwoSpinIn, spin *TwoSpinOut)
+{
+    return SpinIndex(TwoSpinIn[0], TwoSpinIn[1],
+                     TwoSpinOut[0], TwoSpinOut[1]);
+}
+
+std::vector<int> IndexMapSPIN4::GetSpinIndexVector(SPIN4Filter filter)
+{
+    vector<int> list;
+    for (int InIn = 0; InIn < 2; InIn++)
+        for (int InOut = 0; InOut < 2; InOut++)
+            for (int OutIn = 0; OutIn < 2; OutIn++)
+                for (int OutOut = 0; OutOut < 2; OutOut++) {
+                    bool flag = false;
+                    if (filter == UpUp2UpUp &&
+                        InIn == InOut && InIn == OutIn && InIn == OutOut)
+                        flag = true;
+                    if (filter == UpDown2UpDown &&
+                        InIn == InOut && OutIn == OutOut && InIn == FLIP(OutIn))
+                        flag = true;
+                    if (filter == UpDown2DownUp &&
+                        InIn == FLIP(InOut) && OutIn == FLIP(OutOut) && InIn == FLIP(OutIn))
+                        flag = true;
+                    if (flag)
+                        list.push_back(SpinIndex(spin(InIn), spin(InOut),
+                                                 spin(OutIn), spin(OutOut)));
+                }
+    return list;
+}

@@ -9,14 +9,12 @@
 #ifndef __Feynman_Simulator__weight_basic__
 #define __Feynman_Simulator__weight_basic__
 
-#include "utility/convention.h"
-#include "lattice/lattice.h"
 #include "utility/complex.h"
 #include "utility/fft.h"
-#include <vector>
-namespace weight0 {
+#include "utility/array.h"
+#include "index_map.h"
 
-const uint MAX_TAU_BIN = 32;
+namespace weight0 {
 
 enum TauSymmetry {
     TauSymmetric = 1,
@@ -24,8 +22,8 @@ enum TauSymmetry {
 };
 
 enum SpinNum {
-    TwoSpins = 2,
-    FourSpins = 4
+    SPIN2 = 2,
+    SPIN4 = 4
 };
 
 enum FFT_Mode {
@@ -39,23 +37,27 @@ enum Dim {
     VOL,
     TAU,
 };
+typedef Array::array3<Complex> DeltaTMatrix;
+typedef Array::array4<Complex> SmoothTMatrix;
 
 class Basic {
+    friend class GInitializer;
+    friend class WInitializer;
+
+  public:
+    void BuildNew();
+    void BuildTest();
+    bool Load(const std::string &FileName);
+    void Save(const std::string &FileName, const std::string Mode = "a");
+
   protected:
-    Basic(const Lattice &lat, real Beta, SpinNum, model Model,
+    Basic(model Model, const Lattice &lat, real Beta, SpinNum,
           TauSymmetry Symmetry, std::string);
 
-    vector<uint> GetShape();          //the shape of internal weight array
-    vector<uint> GetSpaceShape();     //store Lx,Ly,Lz
-    vector<uint> GetSpaceTimeShape(); //store Lx,Ly,Lz,Lt
+    uint *GetShape();          //the shape of internal weight array
+    uint *GetSpaceShape();     //store Lx,Ly,Lz
+    uint *GetSpaceTimeShape(); //store Lx,Ly,Lz,Lt
     void Reset(real beta);
-
-    int TauIndex(real tau);
-    int TauIndex(real t_in, real t_out);
-    real IndexToTau(int TauIndex);
-
-    int SublatIndex(const Distance &dist);
-    int CoordiIndex(const Distance &dist);
 
     model _Model;
     int _TauSymmetryFactor;
@@ -65,27 +67,11 @@ class Basic {
     real _dBetaInverse;
     Lattice _Lat;
     int _SpinNum;
-};
+    vector<uint> _Shape;
+    vector<uint> _SpaceTimeShape;
 
-class BasicWithTwoSpins : public Basic {
-  protected:
-    BasicWithTwoSpins(const Lattice &lat, real Beta, model Model,
-                      TauSymmetry Symmetry, std::string Name);
-    static int SpinIndex(spin SpinIn, spin SpinOut);
-    static bool IsSameSpin(int spindex);
-};
-
-class BasicWithFourSpins : public Basic {
-  protected:
-    BasicWithFourSpins(const Lattice &lat, real Beta, model Model,
-                       TauSymmetry Symmetry, std::string Name);
-    //First In/Out: direction of WLine; Second In/Out: direction of Vertex
-    static int SpinIndex(spin SpinInIn, spin SpinInOut, spin SpinOutIn, spin SpinOutOut);
-    static int SpinIndex(spin *TwoSpinIn, spin *TwoSpinOut);
-    enum SpinFilter { UpUp2UpUp,
-                      UpDown2UpDown,
-                      UpDown2DownUp };
-    static std::vector<int> GetSpinIndexVector(SpinFilter filter);
+    DeltaTMatrix _DeltaTWeight;
+    SmoothTMatrix _SmoothTWeight;
 };
 }
 
