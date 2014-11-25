@@ -34,7 +34,7 @@ Estimate<T>::Estimate(const T &mean, const T &error)
 template <>
 Complex Estimate<Complex>::RelativeError()
 {
-    return Complex(Error.Re / Mean.Re, Error.Im / Mean.Im);
+    return Complex(fabs(Error.Re / Mean.Re), fabs(Error.Im / Mean.Im));
 }
 template <>
 real Estimate<real>::RelativeError()
