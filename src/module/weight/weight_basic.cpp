@@ -87,7 +87,7 @@ void Basic::Reset(real beta)
 
 int Basic::GetTauSymmetryFactor(real t_in, real t_out)
 {
-    return _TauSymmetryFactor * ((t_out > t_in) ? 1 : -1);
+    return (t_out > t_in) ? 1 : _TauSymmetryFactor;
 }
 
 void Basic::BuildNew(model Model)
