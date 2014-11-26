@@ -169,6 +169,7 @@
 		84C86DF81A24310F002A3D8D /* component_MC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = component_MC.cpp; path = module/weight/component_MC.cpp; sourceTree = "<group>"; };
 		84C86DFB1A24E463002A3D8D /* weight_estimator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = weight_estimator.cpp; path = module/weight/weight_estimator.cpp; sourceTree = "<group>"; };
 		84C86DFC1A24E463002A3D8D /* weight_estimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = weight_estimator.h; path = module/weight/weight_estimator.h; sourceTree = "<group>"; };
+		84C86DFE1A2673BE002A3D8D /* model.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = model.py; sourceTree = SOURCE_ROOT; };
 		84D7EFBA19F36361006B1CA5 /* array_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = array_test.cpp; sourceTree = "<group>"; };
 		84D7EFBB19F36361006B1CA5 /* array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = array.h; sourceTree = "<group>"; };
 		84D7EFC219F552F5006B1CA5 /* env_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = env_test.cpp; path = environment/env_test.cpp; sourceTree = "<group>"; };
@@ -273,6 +274,8 @@
 		8422FE331A0A7EB9002EB44E /* weight */ = {
 			isa = PBXGroup;
 			children = (
+				8422FE381A0A7ECA002EB44E /* weight.h */,
+				8422FE371A0A7ECA002EB44E /* weight.cpp */,
 				84C86DD41A1FD2B3002A3D8D /* weight_basic.h */,
 				84C86DD31A1FD2B3002A3D8D /* weight_basic.cpp */,
 				84C86DDA1A214E33002A3D8D /* component.h */,
@@ -284,8 +287,6 @@
 				84C86DF31A23D9FD002A3D8D /* index_map.cpp */,
 				84C86DE31A217F9B002A3D8D /* weight_initializer.h */,
 				84C86DE21A217F9B002A3D8D /* weight_initializer.cpp */,
-				8422FE381A0A7ECA002EB44E /* weight.h */,
-				8422FE371A0A7ECA002EB44E /* weight.cpp */,
 				8422FE341A0A7ECA002EB44E /* weight_test.cpp */,
 			);
 			name = weight;
@@ -294,6 +295,7 @@
 		8422FE491A0A8593002EB44E /* job */ = {
 			isa = PBXGroup;
 			children = (
+				84C86DFE1A2673BE002A3D8D /* model.py */,
 				8422FE4C1A0A85E7002EB44E /* job.h */,
 				8422FE4B1A0A85E7002EB44E /* job.cpp */,
 				845C92C919F835590066B590 /* job_class.py */,

@@ -14,31 +14,31 @@
 using namespace weight;
 using namespace std;
 
-G::G(const Lattice &lat, real beta,
-     const std::vector<real> &Hopping,
-     const std::vector<real> &RealChemicalPotential,
-     real ExternalField, TauSymmetry Symmetry)
+G::G(const Lattice &lat, real beta, TauSymmetry Symmetry)
     : weight::Basic(lat, beta, SPIN2, Symmetry, "G"),
       _Map(IndexMapSPIN2(beta, lat))
 {
-    _Hopping = Hopping;
-    _ExternalField = ExternalField;
-    _RealChemicalPotential = RealChemicalPotential;
     //use _Shape[SP] to _Shape[TAU] to construct array3
     _MeasureWeight.Allocate(GetShape());
     //initialize _MeasureWeight to an unit function
     _MeasureWeight = Complex(1.0, 0.0);
 }
 
-void G::BuildNew(model Model)
+void G::BuildNew(model Model,
+                 const std::vector<real> &Hopping,
+                 const std::vector<Complex> &ChemicalPotential,
+                 real ExternalField)
 {
-    Basic::BuildNew(Model);
+    _Hopping = Hopping;
+    _ExternalField = ExternalField;
+    _ChemicalPotential = ChemicalPotential;
+    _Model = Model;
     GInitializer(*this).BuildNew();
 }
 
 void G::BuildTest()
 {
-    Basic::BuildNew(model::TEST);
+    _Model = model::TEST;
     GInitializer(*this).BuildNew();
 }
 
@@ -48,28 +48,27 @@ void G::Reset(real Beta)
     _Map = IndexMapSPIN2(Beta, _Lat);
 }
 
-W::W(const Lattice &lat, real Beta,
-     const vector<real> &Interaction_, real ExternalField)
+W::W(const Lattice &lat, real Beta)
     : weight::Basic(lat, Beta, SPIN4, TauSymmetric, "W"),
       _Map(IndexMapSPIN4(Beta, lat))
 {
-    _Interaction = Interaction_;
-    _ExternalField = ExternalField;
     //use _Shape[SP] to _Shape[VOL] to construct array3
     _MeasureWeight.Allocate(GetShape());
     //initialize _MeasureWeight to an unit function
     _MeasureWeight = Complex(1.0, 0.0);
 }
 
-void W::BuildNew(model Model)
+void W::BuildNew(model Model, const vector<real> &Interaction_, real ExternalField)
 {
-    Basic::BuildNew(Model);
+    _Interaction = Interaction_;
+    _ExternalField = ExternalField;
+    _Model = Model;
     WInitializer(*this).BuildNew();
 }
 
 void W::BuildTest()
 {
-    Basic::BuildNew(model::TEST);
+    _Model = model::TEST;
     WInitializer(*this).BuildNew();
 }
 
@@ -110,6 +109,18 @@ Sigma::Sigma(const Lattice &lat, real Beta, int MaxOrder, TauSymmetry Symmetry)
 {
 }
 
+void Sigma::BuildNew(model Model)
+{
+    _Model = Model;
+    Estimator.ClearStatistics();
+}
+
+void Sigma::BuildTest()
+{
+    _Model = model::TEST;
+    Estimator.ClearStatistics();
+}
+
 void Sigma::Reset(real Beta)
 {
     Basic::Reset(Beta);
@@ -133,6 +144,18 @@ Polar::Polar(const Lattice &lat, real Beta, int MaxOrder)
       _Map(IndexMapSPIN4(Beta, lat)),
       Estimator(Beta, MaxOrder, "Polar", Norm::Weight(), GetShape())
 {
+}
+
+void Polar::BuildNew(model Model)
+{
+    _Model = Model;
+    Estimator.ClearStatistics();
+}
+
+void Polar::BuildTest()
+{
+    _Model = model::TEST;
+    Estimator.ClearStatistics();
 }
 
 void Polar::Reset(real Beta)

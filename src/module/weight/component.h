@@ -18,11 +18,11 @@ class G : public Basic {
     friend class GInitializer;
 
   public:
-    G(const Lattice &lat, real beta,
-      const std::vector<real> &Hopping = {0},
-      const std::vector<real> &RealChemicalPotential = {0.0, 0.0},
-      real ExternalField = 0.0, TauSymmetry TauSymmetry = TauAntiSymmetric);
-    void BuildNew(model Model);
+    G(const Lattice &lat, real beta, TauSymmetry TauSymmetry = TauAntiSymmetric);
+    void BuildNew(model Model,
+                  const std::vector<real> &Hopping = {0.0},
+                  const std::vector<Complex> &ChemicalPotential = {0.0, 0.0},
+                  real ExternalField = 0.0);
     void BuildTest();
     void Reset(real Beta);
 
@@ -31,7 +31,7 @@ class G : public Basic {
 
   private:
     std::vector<real> _Hopping;
-    std::vector<real> _RealChemicalPotential;
+    std::vector<Complex> _ChemicalPotential;
     real _ExternalField;
     weight::SmoothTMatrix _MeasureWeight;
     IndexMapSPIN2 _Map;
@@ -45,9 +45,10 @@ class W : public Basic {
     friend class WInitializer;
 
   public:
-    W(const Lattice &lat, real Beta,
-      const std::vector<real> &Interaction, real ExternalField = 0.0);
-    void BuildNew(model Model);
+    W(const Lattice &lat, real Beta);
+    void BuildNew(model Model,
+                  const std::vector<real> &Interaction = {0.0},
+                  real ExternalField = 0.0);
     void BuildTest();
     void WriteBareToASCII();
     void Reset(real Beta);
@@ -66,6 +67,9 @@ class Sigma : public Basic {
   public:
     Sigma(const Lattice &, real Beta, int MaxOrder,
           TauSymmetry Symmetry = TauAntiSymmetric);
+    void BuildNew(model Model);
+    void BuildTest();
+
     void Reset(real Beta);
     bool Load(const std::string &FileName);
     void Save(const std::string &FileName, const std::string Mode = "a");
@@ -84,6 +88,9 @@ class Sigma : public Basic {
 class Polar : public Basic {
   public:
     Polar(const Lattice &, real Beta, int MaxOrder);
+    void BuildNew(model Model);
+    void BuildTest();
+
     void Reset(real Beta);
     bool Load(const std::string &FileName);
     void Save(const std::string &FileName, const std::string Mode = "a");

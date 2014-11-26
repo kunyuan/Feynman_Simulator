@@ -46,6 +46,8 @@ class Job:
 
     def key_to_string(self, key):
         '''change a key in the parameter dictionary into a string'''
+        if self.para[key]==None:
+            return "default\n"
         if type(self.para[key])==bool:
             if self.para[key]:
                 return "1    #{0}\n".format(key)
@@ -53,25 +55,32 @@ class Job:
                 return "0    #{0}\n".format(key)
         elif type(self.para[key])==str:
             return self.para[key]+"    #{0}\n".format(key)
-        elif type(self.para[key])==list:
+        elif type(self.para[key])==list or type(self.para[key])==tuple:
             return "{0}    #{1}\n".format(",".join([str(elem)
                                  for elem in self.para[key]]), key)
         else:
             return "{0}    #{1}\n".format(self.para[key], key)
     def comment(self, comment):
         return "\n##{0}\n".format(comment)
+    
+    def ChemicalPotential(self):
+        key="ChemicalPotential"
+        mu=self.para[key]
+        return "({0},{1}),({2},{3})   #{4}\n".format(mu[0].real,mu[0].imag,mu[1].real,mu[1].imag,key)
 
     def to_string(self, pid=0):
         '''output the corresponding string of the job class'''
         self.para["pid"] = pid
-        input_str = self.comment("Job parameter")
+        input_str = self.comment("Model: "+self.para["Model"])
+        input_str += self.key_to_string("Type")
+        input_str += self.comment("Job parameter")
         input_str += self.key_to_string("DoesLoad")
         input_str += self.key_to_string("StartFromBare")
         input_str += self.key_to_string("pid")
         input_str += self.comment("Model parameter")
         input_str += self.key_to_string("Hopping")
         input_str += self.key_to_string("Interaction")
-        input_str += self.key_to_string("RealChemicalPotential")
+        input_str += self.ChemicalPotential()
         input_str += self.key_to_string("ExternalField")
         input_str += self.comment("General parameter")
         input_str += self.key_to_string("L")
@@ -100,8 +109,7 @@ class JobMonteCarlo(Job):
             return False
 
     def to_string(self, pid=0):
-        input_str = self.key_to_string("Type")
-        input_str = input_str+Job.to_string(self, pid)
+        input_str = Job.to_string(self, pid)
         input_str += self.comment("Monte Carlo parameter")
         input_str += self.key_to_string("Toss")
         input_str += self.key_to_string("Sample")
@@ -121,8 +129,7 @@ class JobConsistLoop(Job):
         self.name = "DYSON"
 
     def to_string(self, pid=0):
-        input_str = self.key_to_string("Type")
-        input_str = input_str+Job.to_string(self, pid)
+        input_str = Job.to_string(self, pid)
         input_str += self.comment("Dyson parameter")
         input_str += self.key_to_string("OrderAccepted")
         input_str += self.key_to_string("ErrorThreshold")

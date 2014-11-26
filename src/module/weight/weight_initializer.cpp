@@ -100,8 +100,12 @@ void GInitializer::_InitialDiagCounter()
 
 void GInitializer::_InitialBareSpin()
 {
-    _G._SmoothTWeight = 0.0;
+    ASSERT_ALLWAYS(_G._Hopping.size() == 1 && Equal(_G._Hopping[0], 0.0),
+                   "Hopping should be zero!");
     Complex mu = Complex(0.0, PI / 2.0 / _G._Beta);
+    _G._Hopping = {0.0};
+    _G._ChemicalPotential = {0.0, mu};
+    _G._SmoothTWeight = 0.0;
     int spin_down = _Map.SpinIndex(DOWN, DOWN);
     int spin_up = _Map.SpinIndex(UP, UP);
     for (int sub = 0; sub < _Shape[SUB]; sub++) {

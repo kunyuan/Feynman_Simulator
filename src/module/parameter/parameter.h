@@ -13,6 +13,7 @@
 #include "message.h"
 #include "utility/parser.h"
 #include "utility/rng.h"
+#include "utility/complex.h"
 #include "utility/convention.h"
 #include <string>
 
@@ -24,7 +25,7 @@ class Parameter {
     std::vector<real> Hopping;
     std::vector<real> Interaction;
     //the first is the chemical potential for spin DOWN, the second is for spin UP
-    std::vector<real> RealChemicalPotential;
+    std::vector<Complex> ChemicalPotential;
     real ExternalField;
     real InitialBeta;
     real DeltaBeta;
