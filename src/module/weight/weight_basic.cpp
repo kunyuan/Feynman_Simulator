@@ -90,16 +90,6 @@ int Basic::GetTauSymmetryFactor(real t_in, real t_out)
     return (t_out > t_in) ? 1 : _TauSymmetryFactor;
 }
 
-void Basic::BuildNew(model Model)
-{
-    _Model = Model;
-}
-
-void Basic::BuildTest()
-{
-    _Model = model::TEST;
-}
-
 const string SMOOTH = ".SmoothT";
 const string DELTA = ".DeltaT";
 

@@ -44,13 +44,18 @@ bool weight::Weight::BuildNew(flag _flag, const Parameter &para)
         ABORT("Order can not be zero!!!");
     if (_flag & weight::GW) {
         _AllocateGW(para);
-        G->BuildNew(MODEL);
-        W->BuildNew(MODEL);
+        G->BuildNew(MODEL,
+                    para.Hopping,
+                    para.ChemicalPotential,
+                    para.ExternalField);
+        W->BuildNew(MODEL,
+                    para.Interaction,
+                    para.ExternalField);
     }
     if (_flag & weight::SigmaPolar) {
         _AllocateSigmaPolar(para);
-        Sigma->Estimator.ClearStatistics();
-        Polar->Estimator.ClearStatistics();
+        Sigma->BuildNew(MODEL);
+        Polar->BuildNew(MODEL);
     }
     return true;
 }
@@ -141,13 +146,9 @@ void weight::Weight::_AllocateGW(const Parameter &para)
     //make sure old Sigma/Polar/G/W are released before assigning new memory
     delete G;
     auto symmetry = _IsAllSymmetric ? TauSymmetric : TauAntiSymmetric;
-    G = new weight::G(para.Lat, para.Beta,
-                      para.Hopping,
-                      para.RealChemicalPotential,
-                      para.ExternalField, symmetry);
+    G = new weight::G(para.Lat, para.Beta, symmetry);
     delete W;
-    W = new weight::W(para.Lat, para.Beta,
-                      para.Interaction, para.ExternalField);
+    W = new weight::W(para.Lat, para.Beta);
 }
 
 void weight::Weight::_AllocateSigmaPolar(const Parameter &para)

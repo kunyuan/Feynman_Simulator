@@ -8,7 +8,7 @@ MC    #Type
 ##Model parameter
 0.0        #Hopping
 1.0,0.5    #Interaction
-0.0        #RealChemicalPotential
+(0.0,0.0),(0.0,1.0)     #ChemicalPotential
 0.0     #ExternalField
 
 ##General parameter

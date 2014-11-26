@@ -82,9 +82,9 @@ void Test_Diagram_IO()
 {
     Lattice lat(Vec<int>(8), CHECKBOARD);
     weight::G G(lat, 1.0);
-    weight::W W(lat, 1.0, {1.0, 0.0}, 0.0);
+    weight::W W(lat, 1.0);
     G.BuildTest();
-    G.BuildTest();
+    W.BuildTest();
     Diagram Diag;
     RandomFactory rng;
 

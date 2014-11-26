@@ -85,12 +85,13 @@ class SimpleParser {
         key = _ToUpper(key);
         _MakeSureKeyExists(key);
         std::stringstream ss(_map.at(key));
-        while (!ss.eof()) {
+        while (ss.peek() != EOF) {
             if (ss.peek() != sep) {
                 T elem;
                 ss >> elem;
                 if (ss.fail())
-                    ABORT("Fail to read " << key << "!");
+                    ABORT("Fail to read "
+                          << "," << key << "!");
                 value.push_back(elem);
             }
             else
