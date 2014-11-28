@@ -23,12 +23,12 @@ enum SPIN4Filter { UpUp2UpUp,
 class IndexMap {
   public:
     IndexMap(real Beta, const Lattice &Lat);
-    int TauIndex(real tau);
-    int TauIndex(real t_in, real t_out);
-    real IndexToTau(int TauIndex);
+    int TauIndex(real tau) const;
+    int TauIndex(real t_in, real t_out) const;
+    real IndexToTau(int TauIndex) const;
 
-    int SublatIndex(const Distance &dist);
-    int CoordiIndex(const Distance &dist);
+    int SublatIndex(const Distance &dist) const;
+    int CoordiIndex(const Distance &dist) const;
 
   protected:
     real _Beta;
@@ -43,8 +43,8 @@ class IndexMapSPIN2 : public IndexMap {
     static int SpinIndex(spin SpinIn, spin SpinOut);
     static bool IsSameSpin(int spindex);
     void Map(uint *result, spin in, spin out,
-             const Site &rin, const Site &rout, real tin, real tout);
-    void MapDeltaT(uint *result, spin in, spin out, const Site &rin, const Site &rout);
+             const Site &rin, const Site &rout, real tin, real tout) const;
+    void MapDeltaT(uint *result, spin in, spin out, const Site &rin, const Site &rout) const;
 };
 
 class IndexMapSPIN4 : public IndexMap {
@@ -55,9 +55,9 @@ class IndexMapSPIN4 : public IndexMap {
     static int SpinIndex(const spin *TwoSpinIn, const spin *TwoSpinOut);
     static std::vector<int> GetSpinIndexVector(SPIN4Filter filter);
     void Map(uint *result, const spin *in, const spin *out,
-             const Site &rin, const Site &rout, real tin, real tout);
+             const Site &rin, const Site &rout, real tin, real tout) const;
     void MapDeltaT(uint *result, const spin *in, const spin *out,
-                   const Site &rin, const Site &rout);
+                   const Site &rin, const Site &rout) const;
 };
 }
 

@@ -10,11 +10,12 @@
 #define __Fermion_Simulator__error_handler__
 
 #include "logger.h"
+#include "convention.h"
 
-#define ABORT(msg)      \
-    do {                \
-        LOG_ERROR(msg); \
-        throw(-1);      \
+#define ABORT(msg)          \
+    do {                    \
+        LOG_ERROR(msg);     \
+        throw(ERR_GENERAL); \
     } while (0)
 
 #define ASSERT_ALLWAYS(expression, msg)                   \

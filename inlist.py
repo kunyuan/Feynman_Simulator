@@ -2,7 +2,6 @@
    You have to add new job objects to TO_DO list
    if you want to run simulation.'''
 import job_class as job
-import model
 CPU = 4
 SLEEP = 5    #check job status for every SLEEP seconds
 TO_DO = []
@@ -11,17 +10,14 @@ TO_DO = []
 beta=1.0
 com_dict={
     "L" :   [8,8],
-    "initialBeta" :  beta,
-    "deltaBeta" :  0.00,
-    "finalBeta" :  beta,
+    "InitialBeta" :  beta,
+    "DeltaBeta" :  0.00,
+    "FinalBeta" :  beta,
     "Order" :  4,
-    }
-
-hamiltonian_dict={
+    "Model" : "J1J2",
     "Interaction" : [1.0,0.5],
     "ExternalField": 0.0,
 }
-hamiltonian_dict.update(model.J1J2(beta))
 
 # monte carlo job defintion
 mc_dict={
@@ -32,14 +28,14 @@ mc_dict={
     "DoesLoad" : False,
     "StartFromBare" : True,
     
-    "OrderReweight" : [1.5, 1.0, 3.0,4.0],
+#Start from order 0, so that OrderReWeight has Order+1 elements
+    "OrderReWeight" : [1.0, 1.0, 3.0,4.0,1.0],
     "Sample" :  5000000,
     "Sweep" : 10,
     "Toss" : 10000,
     "WormSpaceReweight" : 0.100
     }
 mc_dict.update(com_dict)
-mc_dict.update(hamiltonian_dict)
 TO_DO.append(job.JobMonteCarlo(mc_dict))
 
 # self consist loop job definition
@@ -56,7 +52,6 @@ sc_dict={
     "SleepTime": 300
     }
 sc_dict.update(com_dict)
-sc_dict.update(hamiltonian_dict)
 TO_DO.append(job.JobConsistLoop(sc_dict))
 
 if __name__ == "__main__":

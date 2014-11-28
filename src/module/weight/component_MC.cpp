@@ -15,7 +15,7 @@ using namespace std;
 #define GetDeltaT(array, index) array[index[SP]][index[SUB]][index[TAU]]
 const spin SPINUPUP[2] = {UP, UP};
 
-Complex G::Weight(const Site &rin, const Site &rout, real tin, real tout, spin SpinIn, spin SpinOut, bool IsMeasure)
+Complex G::Weight(const Site &rin, const Site &rout, real tin, real tout, spin SpinIn, spin SpinOut, bool IsMeasure) const
 {
     static uint index[4];
     _Map.Map(index, SpinIn, SpinOut, rin, rout, tin, tout);
@@ -25,7 +25,7 @@ Complex G::Weight(const Site &rin, const Site &rout, real tin, real tout, spin S
         return GetTauSymmetryFactor(tin, tout) * GetSmoothT(_SmoothTWeight, index);
 }
 
-Complex G::Weight(int dir, const Site &r1, const Site &r2, real t1, real t2, spin Spin1, spin Spin2, bool IsMeasure)
+Complex G::Weight(int dir, const Site &r1, const Site &r2, real t1, real t2, spin Spin1, spin Spin2, bool IsMeasure) const
 {
     static uint index[4];
     int symmetryfactor;
@@ -44,7 +44,7 @@ Complex G::Weight(int dir, const Site &r1, const Site &r2, real t1, real t2, spi
         return symmetryfactor * GetSmoothT(_SmoothTWeight, index);
 }
 
-Complex W::Weight(const Site &rin, const Site &rout, real tin, real tout, spin *SpinIn, spin *SpinOut, bool IsWorm, bool IsMeasure, bool IsDelta)
+Complex W::Weight(const Site &rin, const Site &rout, real tin, real tout, spin *SpinIn, spin *SpinOut, bool IsWorm, bool IsMeasure, bool IsDelta) const
 {
     static uint index[4];
     if (IsWorm) {
@@ -63,7 +63,7 @@ Complex W::Weight(const Site &rin, const Site &rout, real tin, real tout, spin *
         return GetSmoothT(_SmoothTWeight, index);
 }
 
-Complex W::Weight(int dir, const Site &r1, const Site &r2, real t1, real t2, spin *Spin1, spin *Spin2, bool IsWorm, bool IsMeasure, bool IsDelta)
+Complex W::Weight(int dir, const Site &r1, const Site &r2, real t1, real t2, spin *Spin1, spin *Spin2, bool IsWorm, bool IsMeasure, bool IsDelta) const
 {
     static uint index[4];
     if (IsWorm) {
@@ -88,7 +88,7 @@ Complex W::Weight(int dir, const Site &r1, const Site &r2, real t1, real t2, spi
         return GetSmoothT(_SmoothTWeight, index);
 }
 
-Complex Sigma::Weight(const Site &rin, const Site &rout, real tin, real tout, spin SpinIn, spin SpinOut)
+Complex Sigma::Weight(const Site &rin, const Site &rout, real tin, real tout, spin SpinIn, spin SpinOut) const
 {
     static uint index[4];
     _Map.Map(index, SpinIn, SpinOut, rin, rout, tin, tout);
@@ -107,7 +107,7 @@ void Sigma::UpdateWeight(int order)
     Estimator.UpdateWeight(_SmoothTWeight, order);
 }
 
-Complex Polar::Weight(const Site &rin, const Site &rout, real tin, real tout, spin *SpinIn, spin *SpinOut)
+Complex Polar::Weight(const Site &rin, const Site &rout, real tin, real tout, spin *SpinIn, spin *SpinOut) const
 {
     static uint index[4];
     _Map.Map(index, SpinIn, SpinOut, rin, rout, tin, tout);

@@ -26,8 +26,8 @@ class G : public Basic {
     void BuildTest();
     void Reset(real Beta);
 
-    Complex Weight(const Site &, const Site &, real, real, spin, spin, bool);
-    Complex Weight(int, const Site &, const Site &, real, real, spin, spin, bool);
+    Complex Weight(const Site &, const Site &, real, real, spin, spin, bool) const;
+    Complex Weight(int, const Site &, const Site &, real, real, spin, spin, bool) const;
 
   private:
     std::vector<real> _Hopping;
@@ -53,8 +53,8 @@ class W : public Basic {
     void WriteBareToASCII();
     void Reset(real Beta);
 
-    Complex Weight(const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool);
-    Complex Weight(int, const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool);
+    Complex Weight(const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool) const;
+    Complex Weight(int, const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool) const;
 
   protected:
     std::vector<real> _Interaction;
@@ -74,7 +74,7 @@ class Sigma : public Basic {
     bool Load(const std::string &FileName);
     void Save(const std::string &FileName, const std::string Mode = "a");
 
-    Complex Weight(const Site &, const Site &, real, real, spin, spin);
+    Complex Weight(const Site &, const Site &, real, real, spin, spin) const;
     void Measure(const Site &, const Site &, real, real, spin, spin,
                  int Order, const Complex &);
     void UpdateWeight(int order);
@@ -95,7 +95,7 @@ class Polar : public Basic {
     bool Load(const std::string &FileName);
     void Save(const std::string &FileName, const std::string Mode = "a");
 
-    Complex Weight(const Site &, const Site &, real, real, spin *, spin *);
+    Complex Weight(const Site &, const Site &, real, real, spin *, spin *) const;
     void Measure(const Site &, const Site &, real, real, spin *, spin *,
                  int Order, const Complex &);
     void UpdateWeight(int order);

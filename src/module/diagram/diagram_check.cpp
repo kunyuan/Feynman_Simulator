@@ -129,9 +129,6 @@ bool Diagram::_CheckSpin()
 
 bool Diagram::_CheckWeight()
 {
-    if (DEBUGMODE && (GWeight == nullptr || WWeight == nullptr))
-        ABORT("G and W weight are not defined yet!");
-
     Complex DiagWeight(1.0, 0.0);
     Complex gWeight, wWeight;
     vertex vin, vout;

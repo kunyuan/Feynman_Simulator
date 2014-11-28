@@ -101,8 +101,9 @@ bool ParaMC::BuildNew(const std::string &InputFile)
     GetPara(_para, Sweep);
     GetPara(_para, Seed);
     GetPara(_para, WormSpaceReweight);
-    GetParaArray(_para, OrderReWeight, Order);
+    GetPara(_para, OrderReWeight);
 
+    ASSERT_ALLWAYS(OrderReWeight.size() == Order + 1, "OrderReWeight should have Order+1 elementes!");
     Counter = 0;
     this->RNG.Reset(Seed);
     return true;
@@ -116,7 +117,7 @@ bool ParaMC::Load(const std::string &InputFile)
     GetPara(_para, Sample);
     GetPara(_para, Sweep);
     GetPara(_para, WormSpaceReweight);
-    GetParaArray(_para, OrderReWeight, Order);
+    GetPara(_para, OrderReWeight);
     GetPara(_para, RNG);
     return true;
 }
@@ -129,8 +130,9 @@ void ParaMC::Save(const std::string &OutputFile, string Mode)
     SetPara(_para, Sample);
     SetPara(_para, Sweep);
     SetPara(_para, WormSpaceReweight);
-    SetParaArray(_para, OrderReWeight, Order);
+    SetPara(_para, OrderReWeight);
     SetPara(_para, RNG);
+    ASSERT_ALLWAYS(OrderReWeight.size() == Order + 1, "OrderReWeight should have Order+1 elementes!");
     _para.SaveToFile(OutputFile, Mode);
     //save with append mode, so that it will not overwrite stuff wroten by Parameter:SaveParameter
 }
@@ -155,7 +157,7 @@ void ParaMC::SetTest()
     Sample = 5000000;
     Seed = 519180543;
     WormSpaceReweight = 0.1;
-    InitialArray(OrderReWeight, 1.0, Order + 1);
+    OrderReWeight = {1, 1, 1, 1};
     T = 1.0 / Beta;
     Counter = 0;
 }
