@@ -106,9 +106,10 @@ bool Diagram::Load(const std::string &FileName)
     return _Load(ifs);
 }
 
-bool Diagram::Load(const std::string &FileName, Lattice &lat, RandomFactory &rng, weight::G *g, weight::W *w)
+bool Diagram::Load(const std::string &FileName, Lattice &lat,
+                   weight::G &g, weight::W &w)
 {
-    Reset(lat, rng, g, w);
+    Reset(lat, g, w);
     return Load(FileName);
 }
 

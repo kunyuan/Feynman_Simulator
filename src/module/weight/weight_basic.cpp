@@ -85,7 +85,7 @@ void Basic::Reset(real beta)
     //TODO: please implement how to reset the weight here
 }
 
-int Basic::GetTauSymmetryFactor(real t_in, real t_out)
+int Basic::GetTauSymmetryFactor(real t_in, real t_out) const
 {
     return (t_out > t_in) ? 1 : _TauSymmetryFactor;
 }

@@ -58,7 +58,7 @@ class ParaMC : public Parameter {
     int Seed;
     RandomFactory RNG;
     real WormSpaceReweight;
-    real OrderReWeight[MAX_ORDER];
+    std::vector<real> OrderReWeight;
 
     bool BuildNew(const std::string &InputFile);
     bool Load(const std::string &InputFile);

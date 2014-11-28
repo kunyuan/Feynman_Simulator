@@ -20,17 +20,17 @@ IndexMap::IndexMap(real Beta, const Lattice &lat)
     _Lat = lat;
 }
 
-int IndexMap::SublatIndex(const Distance &dist)
+int IndexMap::SublatIndex(const Distance &dist) const
 {
     return dist.SublatIndex;
 }
 
-int IndexMap::CoordiIndex(const Distance &dist)
+int IndexMap::CoordiIndex(const Distance &dist) const
 {
     return dist.CoordiIndex;
 }
 
-int IndexMap::TauIndex(real tau)
+int IndexMap::TauIndex(real tau) const
 {
     if (DEBUGMODE && tau < -_Beta || tau >= _Beta)
         LOG_INFO("tau=" << tau << " is out of the range ["
@@ -48,12 +48,12 @@ int IndexMap::TauIndex(real tau)
     return bin;
 }
 
-int IndexMap::TauIndex(real t_in, real t_out)
+int IndexMap::TauIndex(real t_in, real t_out) const
 {
     return TauIndex(t_out - t_in);
 }
 
-real IndexMap::IndexToTau(int Bin)
+real IndexMap::IndexToTau(int Bin) const
 {
     //TODO: mapping between tau and bin
     return Bin * _dBeta + _Beta / 2;
@@ -70,7 +70,7 @@ bool IndexMapSPIN2::IsSameSpin(int spindex)
 }
 
 void IndexMapSPIN2::Map(uint *result, spin SpinIn, spin SpinOut,
-                        const Site &rin, const Site &rout, real tin, real tout)
+                        const Site &rin, const Site &rout, real tin, real tout) const
 {
     auto dis = _Lat.Dist(rin, rout);
     result[0] = SpinIndex(SpinIn, SpinOut);
@@ -79,7 +79,7 @@ void IndexMapSPIN2::Map(uint *result, spin SpinIn, spin SpinOut,
     result[3] = TauIndex(tin, tout);
 }
 void IndexMapSPIN2::MapDeltaT(uint *result, spin SpinIn, spin SpinOut,
-                              const Site &rin, const Site &rout)
+                              const Site &rin, const Site &rout) const
 {
     auto dis = _Lat.Dist(rin, rout);
     result[0] = SpinIndex(SpinIn, SpinOut);
@@ -124,7 +124,7 @@ std::vector<int> IndexMapSPIN4::GetSpinIndexVector(SPIN4Filter filter)
 }
 
 void IndexMapSPIN4::Map(uint *result, const spin *SpinIn, const spin *SpinOut,
-                        const Site &rin, const Site &rout, real tin, real tout)
+                        const Site &rin, const Site &rout, real tin, real tout) const
 {
     auto dis = _Lat.Dist(rin, rout);
     result[0] = SpinIndex(SpinIn, SpinOut);
@@ -133,7 +133,7 @@ void IndexMapSPIN4::Map(uint *result, const spin *SpinIn, const spin *SpinOut,
     result[3] = TauIndex(tin, tout);
 }
 void IndexMapSPIN4::MapDeltaT(uint *result, const spin *SpinIn, const spin *SpinOut,
-                              const Site &rin, const Site &rout)
+                              const Site &rin, const Site &rout) const
 {
     auto dis = _Lat.Dist(rin, rout);
     result[0] = SpinIndex(SpinIn, SpinOut);

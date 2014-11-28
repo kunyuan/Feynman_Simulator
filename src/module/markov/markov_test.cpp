@@ -33,7 +33,7 @@ void Test_Updates()
     weight::Weight Weight(true);
     Weight.SetTest(Para);
     diag::Diagram Diag;
-    Diag.SetTest(Para.Lat, Para.RNG, Weight.G, Weight.W);
+    Diag.SetTest(Para.Lat, *Weight.G, *Weight.W);
     Markov markov;
     markov.BuildNew(Para, Diag, Weight);
 

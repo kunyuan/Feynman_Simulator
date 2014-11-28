@@ -56,7 +56,7 @@ class Basic {
     uint *GetSpaceShape();     //store Lx,Ly,Lz
     uint *GetSpaceTimeShape(); //store Lx,Ly,Lz,Lt
     void Reset(real beta);
-    int GetTauSymmetryFactor(real t_in, real t_out);
+    int GetTauSymmetryFactor(real t_in, real t_out) const;
 
     model _Model;
     int _TauSymmetryFactor;

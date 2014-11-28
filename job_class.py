@@ -32,8 +32,18 @@ class Job:
         self.auto_run = para.pop("__AutoRun")
         self.keep_cpu_busy = True
         self.pid = 0
-        self.para = para
         self.name = ""
+        self.para = para
+        self.__set_model_specific__()
+
+    def to_string(self, pid=0):
+        '''output the corresponding string of the job class'''
+        self.para["PID"] = pid
+        for (k,v) in self.para.items():
+            if type(v) is bool:
+                self.para[k]=int(v)
+        input_str="\n".join([k+" : "+str(v) for (k,v) in self.para.items()])
+        return input_str
 
     def __check_parameters__(self, para):
         if para["__Execute"] is "":
@@ -43,52 +53,13 @@ class Job:
             print "DoesLoad should be a bool!"
             return False
         return True
-
-    def key_to_string(self, key):
-        '''change a key in the parameter dictionary into a string'''
-        if self.para[key]==None:
-            return "default\n"
-        if type(self.para[key])==bool:
-            if self.para[key]:
-                return "1    #{0}\n".format(key)
-            else:
-                return "0    #{0}\n".format(key)
-        elif type(self.para[key])==str:
-            return self.para[key]+"    #{0}\n".format(key)
-        elif type(self.para[key])==list or type(self.para[key])==tuple:
-            return "{0}    #{1}\n".format(",".join([str(elem)
-                                 for elem in self.para[key]]), key)
-        else:
-            return "{0}    #{1}\n".format(self.para[key], key)
-    def comment(self, comment):
-        return "\n##{0}\n".format(comment)
     
-    def ChemicalPotential(self):
-        key="ChemicalPotential"
-        mu=self.para[key]
-        return "({0},{1}),({2},{3})   #{4}\n".format(mu[0].real,mu[0].imag,mu[1].real,mu[1].imag,key)
-
-    def to_string(self, pid=0):
-        '''output the corresponding string of the job class'''
-        self.para["pid"] = pid
-        input_str = self.comment("Model: "+self.para["Model"])
-        input_str += self.key_to_string("Type")
-        input_str += self.comment("Job parameter")
-        input_str += self.key_to_string("DoesLoad")
-        input_str += self.key_to_string("StartFromBare")
-        input_str += self.key_to_string("pid")
-        input_str += self.comment("Model parameter")
-        input_str += self.key_to_string("Hopping")
-        input_str += self.key_to_string("Interaction")
-        input_str += self.ChemicalPotential()
-        input_str += self.key_to_string("ExternalField")
-        input_str += self.comment("General parameter")
-        input_str += self.key_to_string("L")
-        input_str += self.key_to_string("initialBeta")
-        input_str += self.key_to_string("deltaBeta")
-        input_str += self.key_to_string("finalBeta")
-        input_str += self.key_to_string("Order")
-        return input_str
+    def __set_model_specific__(self):
+        PI=3.141592653589793238
+        if self.para["Model"]=="J1J2":
+            self.para["Hopping"]=[0.0,]
+            mu=(0,PI/2.0/self.para["InitialBeta"])
+            self.para["ChemicalPotential"]=[mu,mu]
 
 class JobMonteCarlo(Job):
     '''job subclass for monte carlo jobs'''
@@ -101,24 +72,17 @@ class JobMonteCarlo(Job):
     def __check_parameters__(self, para):
         if Job.__check_parameters__(self, para) is False:
             return False
-        if type(para["OrderReweight"]) is not list:
+        if type(para["OrderReWeight"]) is not list:
             print "The Reweight should be a list!"
             return False
-        if para["Order"] is not len(para["OrderReweight"]):
+        if para["Order"]+1 is not len(para["OrderReWeight"]):
             print "The Reweight numbers should be equal to Order!"
             return False
 
     def to_string(self, pid=0):
-        input_str = Job.to_string(self, pid)
-        input_str += self.comment("Monte Carlo parameter")
-        input_str += self.key_to_string("Toss")
-        input_str += self.key_to_string("Sample")
-        input_str += self.key_to_string("Sweep")
-        self.para["Seed"] = -int(random.random()*2**30)
-        input_str += self.key_to_string("Seed")
-        input_str += self.key_to_string("WormSpaceReweight")
-        input_str += self.key_to_string("OrderReweight")
-        return input_str
+        #set Seed here so that each job has it own rng seed
+        self.para["Seed"] = int(random.random()*2**30)
+        return Job.to_string(self, pid)
 
 class JobConsistLoop(Job):
     '''job subclass for self consistent loop jobs'''
@@ -129,12 +93,7 @@ class JobConsistLoop(Job):
         self.name = "DYSON"
 
     def to_string(self, pid=0):
-        input_str = Job.to_string(self, pid)
-        input_str += self.comment("Dyson parameter")
-        input_str += self.key_to_string("OrderAccepted")
-        input_str += self.key_to_string("ErrorThreshold")
-        input_str += self.key_to_string("SleepTime")
-        return input_str
+        return Job.to_string(self, pid)
 
 if __name__ == "__main__":
     A = JobMonteCarlo({
@@ -151,12 +110,11 @@ if __name__ == "__main__":
         "Lx" :  4,
         "Ly" :  4,
         "Jcp" :  1.0,
-        "iniBeta" :  0.5,
-        "dBeta" :  0.05,
-        "finalBeta" :  0.9,
+        "InitialBeta" :  0.5,
+        "DeltaBeta" :  0.05,
+        "FinalBeta" :  0.9,
         "Order" :  2,
-        "Reweight" : [1,5],
-        #"ReadFile" : "0.90_1_coll",
+        "OrderReWeight" : [1,5],
         "WormSpaceReweight" : 0.5
     })
     print A.to_string(1)

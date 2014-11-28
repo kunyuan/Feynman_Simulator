@@ -22,17 +22,19 @@ class Diagram {
   public:
     Diagram();
 
-    void BuildNew(Lattice &, RandomFactory &, weight::G *, weight::W *);
-    bool Load(const std::string &FileName, Lattice &, RandomFactory &, weight::G *, weight::W *);
+    void BuildNew(Lattice &, weight::G &, weight::W &);
+    bool Load(const std::string &FileName, Lattice &,
+              weight::G &, weight::W &);
     bool Load(const std::string &FileName);
     void Save(const std::string &FileName, std::string Mode = "a");
-    void Reset(Lattice &, RandomFactory &, weight::G *, weight::W *);
-    void SetTest(Lattice &, RandomFactory &, weight::G *, weight::W *);
+    void Reset(Lattice &, weight::G &, weight::W &);
+    void SetTest(Lattice &, weight::G &, weight::W &);
+    bool CheckDiagram();
+    bool FixDiagram();
 
+    Lattice *Lat;
     weight::G *GWeight;
     weight::W *WWeight;
-    Lattice *Lat;
-    RandomFactory *RNG;
 
     int Order;
     Complex Phase, Weight;
@@ -49,17 +51,10 @@ class Diagram {
     gLine GMeasure;
     wLine WMeasure;
 
-    //Randomly Pick
-    gLine RandomPickG();
-    wLine RandomPickW();
-    vertex RandomPickVer();
-
     //Diagram
-    bool FixDiagram();
     void ClearDiagram();
 
     //Diagram Check
-    bool CheckDiagram();
 
     void WriteDiagram2gv(std::string);
 

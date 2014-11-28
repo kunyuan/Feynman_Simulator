@@ -11,15 +11,19 @@
 bool para::Message::Load()
 {
     //do not abort if message file does not exist
-    if (_Para.ParseFile(_MessageFile, false)) {
-        GetPara(_Para, Interaction);
-        GetPara(_Para, ExternalField);
-        GetPara(_Para, Beta);
-        GetPara(_Para, Version);
-        return true;
+    try {
+        _Para.ParseFile(_MessageFile);
     }
-    else
+    catch (ERRORCODE e) {
+        if (e != ERR_FILE_NOT_FIND)
+            throw e;
         return false;
+    }
+    GetPara(_Para, Interaction);
+    GetPara(_Para, ExternalField);
+    GetPara(_Para, Beta);
+    GetPara(_Para, Version);
+    return true;
 }
 
 void para::Message::Save()
