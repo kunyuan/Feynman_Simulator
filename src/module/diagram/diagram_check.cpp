@@ -41,7 +41,7 @@ bool Diagram::_CheckTopo()
         ABORT("Number of Vertex is wrong!");
 
     for (int i = 0; i < G.HowMany(); i++) {
-        for (int dir = 0; i < 2; i++) {
+        for (int dir = 0; dir < 2; dir++) {
             vertex v = G(i)->NeighVer(dir);
             if (!Ver.Exist(v))
                 ABORT("nVer not exists!" + v->PrettyString());
