@@ -43,6 +43,17 @@ class SimpleParser {
     {
         _map[key] = ToString(value);
     }
+    void Set(std::string key, std::string value)
+    {
+        _map[key] = "'" + value + "'";
+    }
+    void Set(std::string key, bool value)
+    {
+        if (value)
+            _map[key] = "True";
+        else
+            _map[key] = "False";
+    }
     template <typename T>
     void Set(std::string key, std::vector<T> value)
     {
@@ -66,6 +77,26 @@ class SimpleParser {
         if (ss.fail())
             ABORT("Fail to read " << key << "!");
     }
+
+    void Get(std::string key, bool &value)
+    {
+        _MakeSureKeyExists(key);
+        if (_map.at(key) == "True")
+            value = true;
+        else if (_map.at(key) == "False")
+            value = false;
+        else
+            ABORT("Fail to read " << key << "!");
+    }
+
+    void Get(std::string key, std::string &value)
+    {
+        _MakeSureKeyExists(key);
+        std::string str = _map.at(key);
+        if ((str[0] != '\'' && str[0] != '"') || (str.back() != '\'' && str.back() != '\"'))
+            ABORT("String format of " << key << "=" << str << " is wrong!");
+        value = str.substr(1, str.length() - 2);
+    }
     template <typename T>
     void Get(std::string key, std::vector<T> &value, char sep = ',')
     {
@@ -78,9 +109,6 @@ class SimpleParser {
         while (ss.peek() != EOF && ss.peek() != ']') {
             if (ss.peek() != sep) {
                 T elem;
-                //                std::string temp;
-                //                ss >> temp;
-                //                std::cout << temp << std::endl;
                 ss >> elem;
                 if (ss.fail())
                     ABORT("Fail to read "

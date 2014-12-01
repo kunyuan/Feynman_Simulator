@@ -39,11 +39,13 @@ class Job:
     def to_string(self, pid=0):
         '''output the corresponding string of the job class'''
         self.para["PID"] = pid
-        for (k,v) in self.para.items():
-            if type(v) is bool:
-                self.para[k]=int(v)
-        input_str="\n".join([k+" : "+str(v) for (k,v) in self.para.items()])
-        return input_str
+        return self.__formator__(self.para)
+
+    def __formator__(self,para):
+        for (k,v) in para.items():
+            if type(v) is str:
+                para[k]="'"+v+"'"
+        return "\n".join([k+" = "+str(v) for (k,v) in para.items()])
 
     def __check_parameters__(self, para):
         if para["__Execute"] is "":

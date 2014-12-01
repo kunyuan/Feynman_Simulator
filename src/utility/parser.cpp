@@ -12,7 +12,7 @@
 
 using namespace std;
 
-#define SEP ':'
+#define SEP '='
 #define COMMENT '#'
 
 string trim(string s)
