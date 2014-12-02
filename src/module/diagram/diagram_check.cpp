@@ -8,7 +8,7 @@
 
 #include "diagram.h"
 #include "utility/abort.h"
-#include "module/weight/weight_inherit.h"
+#include "module/weight/component.h"
 
 using namespace std;
 using namespace diag;
@@ -41,7 +41,7 @@ bool Diagram::_CheckTopo()
         ABORT("Number of Vertex is wrong!");
 
     for (int i = 0; i < G.HowMany(); i++) {
-        for (int dir = 0; i < 2; i++) {
+        for (int dir = 0; dir < 2; dir++) {
             vertex v = G(i)->NeighVer(dir);
             if (!Ver.Exist(v))
                 ABORT("nVer not exists!" + v->PrettyString());
@@ -129,9 +129,6 @@ bool Diagram::_CheckSpin()
 
 bool Diagram::_CheckWeight()
 {
-    if (DEBUGMODE && (GWeight == nullptr || WWeight == nullptr))
-        ABORT("G and W weight are not defined yet!");
-
     Complex DiagWeight(1.0, 0.0);
     Complex gWeight, wWeight;
     vertex vin, vout;

@@ -32,11 +32,11 @@ void Test_EnvMC()
     env.Para.OrderReWeight[3] = 4.1;
     //then save the state
     env.Save();
-
-    EnvMonteCarlo new_env(0);
-    new_env.BuildNew(inputfile, true);
-    new_env.Load();
-    sput_fail_unless(Equal(new_env.Para.OrderReWeight[3], 4.1), "Check reading state file");
-    sput_fail_unless(Equal(env.Para.RNG.urn(), new_env.Para.RNG.urn()), "Check reading RNG from state file");
-    new_env.DeleteSavedFiles();
+    //
+    //    EnvMonteCarlo new_env(0);
+    //    new_env.BuildNew(inputfile, true);
+    //    new_env.Load();
+    //    sput_fail_unless(Equal(new_env.Para.OrderReWeight[3], 4.1), "Check reading state file");
+    //    sput_fail_unless(Equal(env.Para.RNG.urn(), new_env.Para.RNG.urn()), "Check reading RNG from state file");
+    //    new_env.DeleteSavedFiles();
 }

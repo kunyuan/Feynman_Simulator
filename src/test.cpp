@@ -9,13 +9,14 @@
 #include "test.h"
 #include "utility/crc32.h"
 #include "environment/environment.h"
-#include "module/dyson/dyson.h"
 #include "module/markov/markov.h"
 #include "module/diagram/diagram.h"
 #include "module/weight/weight.h"
 #include "lattice/lattice.h"
 #include "utility/fft.h"
 #include "estimator/estimator.h"
+#include "module/weight/component.h"
+
 using namespace std;
 
 #define TEST(func)                  \
@@ -32,9 +33,8 @@ int RunTest()
     TEST(TestEnvironment);
     TEST(diag::TestDiagram);
     TEST(weight::TestWeight);
-    TEST(dyson::TestDyson);
-//    TEST(mc::TestMarkov);
-//    TEST(mc::TestDiagCounter);
+    TEST(mc::TestMarkov);
+    //    TEST(mc::TestDiagCounter);
 
     //    TEST(TestLattice);
     //    TEST(TestEstimator);

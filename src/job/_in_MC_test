@@ -1,27 +1,28 @@
-MC    #Type
+Type = "MC"
+Model = "J1J2"
 
-##Job parameter
-0    #DoesLoad       
-1     #StartFromBare
-1    #pid
+#Job parameter
+DoesLoad = False
+StartFromBare = True
+PID = 1
 
-##Model parameter
-0.0        #Hopping
-1.0,0.5    #Interaction
-0.0        #RealChemicalPotential
-0.0     #ExternalField
+#Model parameter
+Hopping = [0.0,]
+Interaction = [1.0,0.5]
+ChemicalPotential = [(0.0,0.0),(0.0,1.0)]
+ExternalField = [0.0]
 
-##General parameter
-8,8    #L
-1.0    #initialBeta    
-0.0    #deltaBeta    
-1.0    #finalBeta  
-4    #Order
+#General parameter
+L = [8,8]
+InitialBeta = 1.0
+DeltaBeta = 0.0
+FinalBeta = 1.0
+Order = 4
 
-##Monte Carlo paramter
-10000    #Toss       
-5000000    #Sample   
-10    #Sweep        
--519180543    #Seed   
-0.1    #WormSpaceReweight
-1.5,1.0,3.0,4.0    #OrderReweight
+#Monte Carlo paramter
+Toss = 10000
+Sample = 5000000
+Sweep=10
+Seed =-519180543
+WormSpaceReweight = 0.1
+OrderReWeight = [1.5,1.0,3.0,4.0,1.0]

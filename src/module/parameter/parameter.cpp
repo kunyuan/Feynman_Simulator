@@ -34,7 +34,7 @@ bool Parameter::_BuildNew(const std::string &InputFile)
     _para.ParseFile(InputFile);
     GetPara(_para, Hopping);
     GetPara(_para, Interaction);
-    GetPara(_para, RealChemicalPotential);
+    GetPara(_para, ChemicalPotential);
     GetPara(_para, ExternalField);
     GetPara(_para, L);
     GetPara(_para, InitialBeta);
@@ -57,7 +57,7 @@ bool Parameter::_Load(const std::string &InputFile)
     GetPara(_para, Version);
     GetPara(_para, Hopping);
     GetPara(_para, Interaction);
-    GetPara(_para, RealChemicalPotential);
+    GetPara(_para, ChemicalPotential);
     GetPara(_para, ExternalField);
     GetPara(_para, L);
     GetPara(_para, InitialBeta);
@@ -83,7 +83,7 @@ void Parameter::_SavePreparation()
     SetPara(_para, Version);
     SetPara(_para, Hopping);
     SetPara(_para, Interaction);
-    SetPara(_para, RealChemicalPotential);
+    SetPara(_para, ChemicalPotential);
     SetPara(_para, ExternalField);
     SetPara(_para, L);
     SetPara(_para, InitialBeta);
@@ -101,8 +101,9 @@ bool ParaMC::BuildNew(const std::string &InputFile)
     GetPara(_para, Sweep);
     GetPara(_para, Seed);
     GetPara(_para, WormSpaceReweight);
-    GetParaArray(_para, OrderReWeight, Order);
+    GetPara(_para, OrderReWeight);
 
+    ASSERT_ALLWAYS(OrderReWeight.size() == Order + 1, "OrderReWeight should have Order+1 elementes!");
     Counter = 0;
     this->RNG.Reset(Seed);
     return true;
@@ -116,7 +117,7 @@ bool ParaMC::Load(const std::string &InputFile)
     GetPara(_para, Sample);
     GetPara(_para, Sweep);
     GetPara(_para, WormSpaceReweight);
-    GetParaArray(_para, OrderReWeight, Order);
+    GetPara(_para, OrderReWeight);
     GetPara(_para, RNG);
     return true;
 }
@@ -129,8 +130,9 @@ void ParaMC::Save(const std::string &OutputFile, string Mode)
     SetPara(_para, Sample);
     SetPara(_para, Sweep);
     SetPara(_para, WormSpaceReweight);
-    SetParaArray(_para, OrderReWeight, Order);
+    SetPara(_para, OrderReWeight);
     SetPara(_para, RNG);
+    ASSERT_ALLWAYS(OrderReWeight.size() == Order + 1, "OrderReWeight should have Order+1 elementes!");
     _para.SaveToFile(OutputFile, Mode);
     //save with append mode, so that it will not overwrite stuff wroten by Parameter:SaveParameter
 }
@@ -143,8 +145,8 @@ void ParaMC::SetTest()
     Lat = Lattice(L, CHECKBOARD);
     Hopping.push_back(0.0);
     Interaction.push_back(1.0);
-    RealChemicalPotential.push_back(0.0);
-    RealChemicalPotential.push_back(0.0);
+    ChemicalPotential.push_back(0.0);
+    ChemicalPotential.push_back(0.0);
     ExternalField = 0.0;
     InitialBeta = 1.0;
     DeltaBeta = 0.0;
@@ -155,7 +157,7 @@ void ParaMC::SetTest()
     Sample = 5000000;
     Seed = 519180543;
     WormSpaceReweight = 0.1;
-    InitialArray(OrderReWeight, 1.0, Order+1);
+    OrderReWeight = {1, 1, 1, 1};
     T = 1.0 / Beta;
     Counter = 0;
 }
@@ -195,8 +197,8 @@ void ParaDyson::SetTest()
     Lat = Lattice(L, CHECKBOARD);
     Hopping.push_back(0.0);
     Interaction.push_back(1.0);
-    RealChemicalPotential.push_back(0.0);
-    RealChemicalPotential.push_back(0.0);
+    ChemicalPotential.push_back(0.0);
+    ChemicalPotential.push_back(0.0);
     ExternalField = 0.0;
     InitialBeta = 1.0;
     DeltaBeta = 0.0;

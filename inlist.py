@@ -7,18 +7,17 @@ SLEEP = 5    #check job status for every SLEEP seconds
 TO_DO = []
 
 #common dictionary for all jobs
+beta=1.0
 com_dict={
     "L" :   [8,8],
-    "Hopping": [0.0],
-    "Interaction" :  [1.0,0.5],
-    "ExternalField": 0.0,
-    "RealChemicalPotential": [0.0,0.0],
-    #In the hubbard model, down spin and up spin may feel different mu
-    "initialBeta" :  1.00,
-    "deltaBeta" :  0.00,
-    "finalBeta" :  1.00,
+    "InitialBeta" :  beta,
+    "DeltaBeta" :  0.00,
+    "FinalBeta" :  beta,
     "Order" :  4,
-    }
+    "Model" : "J1J2",
+    "Interaction" : [1.0,0.5],
+    "ExternalField": 0.0,
+}
 
 # monte carlo job defintion
 mc_dict={
@@ -29,7 +28,8 @@ mc_dict={
     "DoesLoad" : False,
     "StartFromBare" : True,
     
-    "OrderReweight" : [1.5, 1.0, 3.0,4.0],
+#Start from order 0, so that OrderReWeight has Order+1 elements
+    "OrderReWeight" : [1.0, 1.0, 3.0,4.0,1.0],
     "Sample" :  5000000,
     "Sweep" : 10,
     "Toss" : 10000,

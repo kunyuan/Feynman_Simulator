@@ -10,12 +10,17 @@
 #define Feynman_Simulator_convention_h
 
 typedef double real;
+typedef unsigned int uint;
+
 //#define NDEBUG
 //turn off all assert
-
 const bool DEBUGMODE = true;
 //#define NDEBUG
 //define NDEBUG will turn off debug checking, including the boundary check in array.h
+enum ERRORCODE {
+    ERR_GENERAL = 0,
+    ERR_FILE_NOT_FIND
+};
 
 const real PI = 3.1415926535897932384626433832795;
 

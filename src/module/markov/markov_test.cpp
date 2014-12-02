@@ -10,7 +10,7 @@
 #include "utility/sput.h"
 #include "module/diagram/diagram.h"
 #include "module/weight/weight.h"
-#include "module/weight/weight_inherit.h"
+#include "module/weight/component.h"
 #include "module/parameter/parameter.h"
 using namespace std;
 using namespace mc;
@@ -33,7 +33,7 @@ void Test_Updates()
     weight::Weight Weight(true);
     Weight.SetTest(Para);
     diag::Diagram Diag;
-    Diag.SetTest(Para.Lat, Para.RNG, Weight.G, Weight.W);
+    Diag.SetTest(Para.Lat, *Weight.G, *Weight.W);
     Markov markov;
     markov.BuildNew(Para, Diag, Weight);
 

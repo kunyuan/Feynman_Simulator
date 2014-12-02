@@ -1,8 +1,8 @@
 //
-//  weightEstimator.cpp
+//  weight_estimator.cpp
 //  Feynman_Simulator
 //
-//  Created by Kun Chen on 11/10/14.
+//  Created by Kun Chen on 11/25/14.
 //  Copyright (c) 2014 Kun Chen. All rights reserved.
 //
 
@@ -16,15 +16,16 @@ using namespace weight;
 
 /**********************   Weight Needs measuring  **************************/
 
-WeightNeedMeasure::WeightNeedMeasure(const Lattice &lat, real beta, int order,
-                                     bool IsTauSymmetric, int SpinVol,
-                                     string name, real Norm)
-    : WeightNoMeasure(lat, beta, IsTauSymmetric, SpinVol, name)
+WeightEstimator::WeightEstimator(real beta, int order, string name, real Norm, const uint *Shape)
 {
+    _Beta = beta;
+    _dBeta = beta / MAX_TAU_BIN;
+    _dBetaInverse = 1.0 / _dBeta;
     _Order = order;
     _Norm = Norm;
+    _Name = name;
     _MeaShape[0] = _Order;
-    AssignFromTo(Shape(), &_MeaShape[1], 4);
+    std::copy(Shape, Shape + 4, &_MeaShape[1]);
     //use _MeaShape[0] to _MeaShape[TAU] to construct array5
     _WeightAccu.Allocate(_MeaShape);
     for (int i = 1; i <= order; i++)
@@ -32,7 +33,7 @@ WeightNeedMeasure::WeightNeedMeasure(const Lattice &lat, real beta, int order,
     ClearStatistics();
 }
 
-void WeightNeedMeasure::ReWeight(real Beta)
+void WeightEstimator::ReWeight(real Beta)
 {
     //make sure
     //real NormFactor = 1.0 / _NormAccu * _Norm * MAX_BIN / _Beta;
@@ -40,11 +41,11 @@ void WeightNeedMeasure::ReWeight(real Beta)
     //so that GetWeightArray will give a same weight function
     _NormAccu *= _Beta / Beta;
     _Beta = Beta;
-    _dBeta = Beta / MAX_BIN;
+    _dBeta = Beta / MAX_TAU_BIN;
     _dBetaInverse = 1.0 / _dBeta;
 }
 
-Complex WeightNeedMeasure::RelativeError(int order)
+Complex WeightEstimator::RelativeError(int order)
 {
     return _WeightErrorEstimator[order - 1].Estimate().RelativeError();
 }
@@ -57,7 +58,7 @@ Complex WeightNeedMeasure::RelativeError(int order)
 *
 *  @return return the maxium order with acceptable errors
 */
-int WeightNeedMeasure::OrderAcceptable(int StartFromOrder, real ErrorThreshold)
+int WeightEstimator::OrderAcceptable(int StartFromOrder, real ErrorThreshold)
 {
     int order = StartFromOrder;
     for (; order <= _Order; order++) {
@@ -74,33 +75,43 @@ int WeightNeedMeasure::OrderAcceptable(int StartFromOrder, real ErrorThreshold)
 *  @param UpToOrder the upper limit of orders to accept
 */
 
-void WeightNeedMeasure::UpdateWeight(int UpToOrder)
+void WeightEstimator::UpdateWeight(SmoothTMatrix &target, int UpToOrder)
 {
     //WeightEstimator and the corresponding WeightArray
     //share the same memory structure from _Shape[SP]  to _Shape[TAU]
     int order = 1;
-    real NormFactor = 1.0 / _NormAccu * _Norm * MAX_BIN / _Beta;
+    real NormFactor = 1.0 / _NormAccu * _Norm * MAX_TAU_BIN / _Beta;
 
-    SmoothWeight = _WeightAccu[order - 1];
+    target = _WeightAccu[order - 1];
     //add order>1 on _Weight
     for (order = 2; order <= UpToOrder; order++)
-        SmoothWeight += _WeightAccu[order - 1];
-    SmoothWeight *= NormFactor;
+        target += _WeightAccu[order - 1];
+    target *= NormFactor;
 
     //TODO:Update DeltaTWeight for Sigma
 }
 
-void WeightNeedMeasure::MeasureNorm()
+void WeightEstimator::MeasureNorm()
 {
     _NormAccu += 1.0;
 }
 
-void WeightNeedMeasure::AddStatistics()
+void WeightEstimator::Measure(uint *Index, int Order, Complex Weight)
+{
+    if (DEBUGMODE && Order < 1)
+        LOG_ERROR("Too small order=" << Order);
+    _WeightAccu[Order - 1][Index[SP]][Index[SUB]]
+               [Index[VOL]][Index[TAU]] += Weight;
+    if (Index[SP] == 0 && Index[SUB] == 0 && Index[VOL] == 0 && Index[TAU] == 0)
+        _WeightErrorEstimator[Order - 1].Measure(Weight);
+}
+
+void WeightEstimator::AddStatistics()
 {
     _WeightErrorEstimator.AddStatistics();
 }
 
-void WeightNeedMeasure::ClearStatistics()
+void WeightEstimator::ClearStatistics()
 {
     _NormAccu = 1.0;
     _WeightAccu = 0.0;
@@ -108,7 +119,7 @@ void WeightNeedMeasure::ClearStatistics()
 }
 //TODO: you may have to replace int with size_t here
 
-void WeightNeedMeasure::SqueezeStatistics(real factor)
+void WeightEstimator::SqueezeStatistics(real factor)
 {
     if (DEBUGMODE && factor <= 0.0)
         ABORT("factor=" << factor << "<=0!");
@@ -118,20 +129,18 @@ void WeightNeedMeasure::SqueezeStatistics(real factor)
 }
 
 /**********************   Weight IO ****************************************/
-void WeightNeedMeasure::Save(const std::string &FileName, std::string Mode)
+void WeightEstimator::Save(const std::string &FileName, const std::string &Mode)
 {
     unsigned int shape[1] = {1};
     cnpy::npz_save(FileName, _Name + ".Norm", &_Norm, shape, 1, Mode);
     cnpy::npz_save(FileName, _Name + ".NormAccu", &_NormAccu, shape, 1, "a");
     cnpy::npz_save(FileName, _Name + ".WeightAccu", _WeightAccu(), _MeaShape, 5, "a");
-    WeightNoMeasure::Save(FileName);
     _WeightErrorEstimator.SaveStatistics(FileName, "a");
 }
 
-bool WeightNeedMeasure::Load(const std::string &FileName)
+bool WeightEstimator::Load(const std::string &FileName)
 {
     _WeightErrorEstimator.LoadStatistics(FileName);
-    WeightNoMeasure::Load(FileName);
 
     cnpy::npz_t NpzMap = cnpy::npz_load(FileName);
     ON_SCOPE_EXIT([&] {NpzMap.destruct(); });

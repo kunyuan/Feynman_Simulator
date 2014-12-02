@@ -7,7 +7,7 @@
 //
 
 #include "weight.h"
-#include "weight_inherit.h"
+#include "component.h"
 #include "module/parameter/parameter.h"
 
 using namespace std;
@@ -44,13 +44,18 @@ bool weight::Weight::BuildNew(flag _flag, const Parameter &para)
         ABORT("Order can not be zero!!!");
     if (_flag & weight::GW) {
         _AllocateGW(para);
-        G->Initial(MODEL);
-        W->Initial(MODEL);
+        G->BuildNew(MODEL,
+                    para.Hopping,
+                    para.ChemicalPotential,
+                    para.ExternalField);
+        W->BuildNew(MODEL,
+                    para.Interaction,
+                    para.ExternalField);
     }
     if (_flag & weight::SigmaPolar) {
         _AllocateSigmaPolar(para);
-        Sigma->ClearStatistics();
-        Polar->ClearStatistics();
+        Sigma->BuildNew(MODEL);
+        Polar->BuildNew(MODEL);
     }
     return true;
 }
@@ -112,8 +117,8 @@ void weight::Weight::Save(const string &FileName, flag _flag, string Mode)
 
 int weight::Weight::UpdateSigmaPolarWeight(int OrderAccepted, real ErrorThreshold)
 {
-    int SigmaOrder = Sigma->OrderAcceptable(OrderAccepted, ErrorThreshold);
-    int PolarOrder = Polar->OrderAcceptable(OrderAccepted, ErrorThreshold);
+    int SigmaOrder = Sigma->Estimator.OrderAcceptable(OrderAccepted, ErrorThreshold);
+    int PolarOrder = Polar->Estimator.OrderAcceptable(OrderAccepted, ErrorThreshold);
     int NewOrderAccepted = (SigmaOrder < PolarOrder ? SigmaOrder : PolarOrder);
     Sigma->UpdateWeight(NewOrderAccepted);
     Polar->UpdateWeight(NewOrderAccepted);
@@ -124,35 +129,33 @@ void weight::Weight::SetTest(const Parameter &para)
 {
     _AllocateGW(para);
     _AllocateSigmaPolar(para);
-    G->Initial(model::TEST);
-    W->Initial(model::TEST);
+    G->BuildTest();
+    W->BuildTest();
 }
 
 void weight::Weight::SetDiagCounter(const Parameter &para)
 {
     _AllocateGW(para);
     _AllocateSigmaPolar(para);
-    G->Initial(model::DIAGRAMCOUNTER);
-    W->Initial(model::DIAGRAMCOUNTER);
+    G->BuildNew(model::DIAGRAMCOUNTER);
+    W->BuildNew(model::DIAGRAMCOUNTER);
 }
 
 void weight::Weight::_AllocateGW(const Parameter &para)
 {
     //make sure old Sigma/Polar/G/W are released before assigning new memory
     delete G;
-    G = new weight::G(para.Lat, para.Beta, para.Order,
-                      para.Hopping,
-                      para.RealChemicalPotential,
-                      para.ExternalField, _IsAllSymmetric);
+    auto symmetry = _IsAllSymmetric ? TauSymmetric : TauAntiSymmetric;
+    G = new weight::G(para.Lat, para.Beta, symmetry);
     delete W;
-    W = new weight::W(para.Lat, para.Beta, para.Order,
-                      para.Interaction, para.ExternalField);
+    W = new weight::W(para.Lat, para.Beta);
 }
 
 void weight::Weight::_AllocateSigmaPolar(const Parameter &para)
 {
+    auto symmetry = _IsAllSymmetric ? TauSymmetric : TauAntiSymmetric;
     delete Sigma;
-    Sigma = new weight::Sigma(para.Lat, para.Beta, para.Order, _IsAllSymmetric);
+    Sigma = new weight::Sigma(para.Lat, para.Beta, para.Order, symmetry);
     delete Polar;
     Polar = new weight::Polar(para.Lat, para.Beta, para.Order);
 }

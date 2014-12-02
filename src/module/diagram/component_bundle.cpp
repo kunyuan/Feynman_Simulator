@@ -8,6 +8,7 @@
 
 #include "component_bundle.h"
 #include "utility/abort.h"
+#include "utility/rng.h"
 using namespace std;
 using namespace diag;
 
@@ -34,7 +35,7 @@ T *Bundle<T>::Add()
     if (_available_space > MAX_BUNDLE)
         ABORT("Too many objects >=" << MAX_BUNDLE);
     T *address = _component_name[_available_space];
-    
+
     //need to be checked
     address->Name = _available_space;
     //////////
@@ -128,6 +129,12 @@ bool Bundle<T>::Exist(T *target)
         return true;
     else
         return false;
+}
+
+template <typename T>
+T *Bundle<T>::RandomPick(RandomFactory &RNG)
+{
+    return _component_name[RNG.irn(0, _available_space - 1)];
 }
 
 namespace diag {
