@@ -11,28 +11,7 @@
 #include "weight_estimator.h"
 
 namespace weight {
-
-//TODO: Add fitting function here
-class Sigma : public WeightNeedMeasure {
-  public:
-    Sigma(const Lattice &, real Beta, int order, bool IsTauSymmetric = false);
-    //Monte Carlo interface
-    Complex Weight(const Site &, const Site &, real, real, spin, spin);
-    Complex WeightOfDelta(spin, spin);
-    void Measure(const Site &, const Site &, real, real, spin, spin, int Order, const Complex &);
-    //Dyson interface
-    void FFT(fft::Dir, Mode);
-};
-
-class Polar : public WeightNeedMeasure {
-  public:
-    Polar(const Lattice &, real Beta, int order);
-    //Monte Carlo interface
-    Complex Weight(const Site &, const Site &, real, real, spin *, spin *);
-    void Measure(const Site &, const Site &, real, real, spin *, spin *, int Order, const Complex &);
-    //Dyson interface
-    void FFT(fft::Dir, Mode);
-};
+    
 class G : public WeightNoMeasure {
   public:
     G(const Lattice &lat, real beta, int order,
@@ -87,6 +66,37 @@ class W : public WeightNoMeasure {
     real _ExternalField;
 };
 
+//TODO: Add fitting function here
+class Sigma : public WeightNeedMeasure {
+  public:
+    Sigma(const Lattice &, real Beta, int order, bool IsTauSymmetric = false);
+    //Monte Carlo interface
+    Complex Weight(const Site &, const Site &, real, real, spin, spin);
+    Complex WeightOfDelta(spin, spin);
+    void Measure(const Site &, const Site &, real, real, spin, spin, int Order, const Complex &);
+    //Dyson interface
+    void Initial();
+    void FFT(fft::Dir, Mode);
+    
+  protected:
+    void _InitialFirstOrder(const G&, const W&);
+    
+};
+
+class Polar : public WeightNeedMeasure {
+  public:
+    Polar(const Lattice &, real Beta, int order);
+    //Monte Carlo interface
+    Complex Weight(const Site &, const Site &, real, real, spin *, spin *);
+    void Measure(const Site &, const Site &, real, real, spin *, spin *, int Order, const Complex &);
+    //Dyson interface
+    void Initial();
+    void FFT(fft::Dir, Mode);
+    
+  protected:
+    void _InitialFirstOrder(const G&, const W&);
+};
+    
 class Worm {
   public:
     static real Weight(const Site &, const Site &, real, real)

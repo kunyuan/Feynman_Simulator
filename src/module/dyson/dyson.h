@@ -36,12 +36,17 @@ class Dyson {
     bool BuildNew(para::ParaDyson &, weight::Weight &);
     void DeriveG();
     void DeriveW();
+    void DeriveChi();
     
 };
     
-void MatrixInverse(Complex *, int);
-void MatrixMultiply(Complex *, Complex *, int);
-void MatrixMultiply(Complex *, Complex *, int, int);
+void MatrixInverseSUB(Complex *, int);
+void MatrixMultiplySUB(Complex *, Complex *, int);
+void MatrixMultiplySUB(Complex *, Complex *, int, int);
+    
+void MatrixInverseSP(Complex *, int);
+void MatrixMultiplySP(Complex *, Complex *, int);
+void MatrixMultiplySP(Complex *, Complex *, int, int);
     
 int TestDyson();
 }
