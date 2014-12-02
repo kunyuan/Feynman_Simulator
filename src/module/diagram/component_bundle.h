@@ -12,6 +12,7 @@
 #include "component.h"
 #include <string>
 
+class RandomFactory;
 namespace diag {
 
 const int MAX_BUNDLE = 2 * MAX_ORDER;
@@ -36,7 +37,7 @@ class Bundle {
     T &operator[](name);
     T *operator()(name);
     int HowMany();
-    T &RandomPick();
+    T *RandomPick(RandomFactory &RNG);
     bool Exist(T *target);
 };
 }

@@ -8,7 +8,7 @@
 
 #include "diagram.h"
 #include "utility/sput.h"
-#include "module/weight/weight_inherit.h"
+#include "module/weight/component.h"
 using namespace std;
 using namespace diag;
 
@@ -81,14 +81,13 @@ void Test_Diagram_Component_Bundle()
 void Test_Diagram_IO()
 {
     Lattice lat(Vec<int>(8), CHECKBOARD);
-    weight::G G(lat, 1.0, 1);
-    weight::W W(lat, 1.0, 1, {1.0, 0.0}, 0.0);
-    G.Initial(model::TEST);
-    W.Initial(model::TEST);
+    weight::G G(lat, 1.0);
+    weight::W W(lat, 1.0);
+    G.BuildTest();
+    W.BuildTest();
     Diagram Diag;
-    RandomFactory rng;
 
-    Diag.SetTest(lat, rng, &G, &W);
+    Diag.SetTest(lat, G, W);
     LOG_INFO(Diag.Ver(0)->PrettyString());
     sput_fail_unless(Diag.CheckDiagram(), "Check diagram G,W,Ver and Weight");
     //    Diag.Save("diagram_test.config", "w");

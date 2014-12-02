@@ -200,14 +200,3 @@ Complex operator/(const Complex &rhs, real lhs)
     return Complex(rhs) /= lhs;
 }
 
-// Complex library
-string ToString(const Complex &c)
-{
-    string s = ToString(c.Re);
-    if (c.Im > 0.0)
-        s += "+" + ToString(c.Im) + "j";
-    else if (c.Im < 0.0)
-        s += ToString(c.Im) + "j";
-
-    return s;
-}

@@ -35,6 +35,7 @@ class JobAtom():
         self.auto_run = bundle.auto_run
         self.keep_cpu_busy = bundle.keep_cpu_busy
         self.name = bundle.name
+        self.para = bundle.para
         self.input_str = bundle.to_string(pid)
         return
 
@@ -95,14 +96,16 @@ def submit_job(job_atom):
     jobname = homedir.split("/")[-1]+"."+job_atom.name
 
     infile = INFILEPATH+"/_in_{0}_{1}".format(job_atom.name, job_atom.pid)
+    infile_py = infile+".py"
     outfile = OUTFILEPATH+"/out_{0}_{1}.txt".format(
         job_atom.name, job_atom.pid)
     jobfile = os.path.abspath(workdir+"/_job_{0}_{1}.sh".format(
         job_atom.name, job_atom.pid))
     #write input file into ./infile folder
-    f_job = open(infile, "w")
-    f_job.write(job_atom.input_str)
-    f_job.close()
+    with open(infile, "w") as f:
+        f.write(job_atom.input_str)
+    with open(infile_py, "w") as f:
+        f.write(str(job_atom.para))
     f_allinput = open(os.path.abspath(workdir+"/all_input.log"), "a")
     f_allinput.write("Job ID: {0}, Job name: {1}\n".format(
             job_atom.pid, job_atom.name))

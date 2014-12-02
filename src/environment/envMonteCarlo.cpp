@@ -32,7 +32,7 @@ bool EnvMonteCarlo::BuildNew(const std::string &InputFile, bool StartFromBare)
         Weight.Load(_GWweightFile, weight::GW, Para);
         Weight.BuildNew(weight::SigmaPolar, Para);
     }
-    Diag.BuildNew(Para.Lat, Para.RNG, Weight.G, Weight.W);
+    Diag.BuildNew(Para.Lat, *Weight.G, *Weight.W);
     Grasshopper.BuildNew(Para, Diag, Weight);
     Scarecrow.BuildNew(Para, Diag, Weight);
     return true;
@@ -46,7 +46,7 @@ bool EnvMonteCarlo::Load()
 {
     Para.Load(_ParameterFile);
     Weight.Load(_StatisticsFile, weight::GW | weight::SigmaPolar, Para);
-    Diag.Load(_DiagramFile, Para.Lat, Para.RNG, Weight.G, Weight.W);
+    Diag.Load(_DiagramFile, Para.Lat, *Weight.G, *Weight.W);
     Grasshopper.BuildNew(Para, Diag, Weight);
     Scarecrow.Load(_StatisticsFile, Para, Diag, Weight);
     return true;

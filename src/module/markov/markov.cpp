@@ -13,7 +13,7 @@
 #include "module/parameter/parameter.h"
 #include "lattice/lattice.h"
 #include "module/weight/weight.h"
-#include "module/weight/weight_inherit.h"
+#include "module/weight/component.h"
 
 using namespace std;
 using namespace diag;
@@ -31,7 +31,7 @@ bool Markov::BuildNew(ParaMC &para, Diagram &diag, weight::Weight &weight)
     Order = para.Order;
     Counter = &para.Counter;
     Lat = &para.Lat;
-    OrderWeight = para.OrderReWeight;
+    OrderWeight = para.OrderReWeight.data();
     Diag = &diag;
     Worm = &diag.Worm;
     Sigma = weight.Sigma;
@@ -51,7 +51,7 @@ bool Markov::BuildNew(ParaMC &para, Diagram &diag, weight::Weight &weight)
 void Markov::ReWeight(ParaMC &para)
 {
     Beta = para.Beta;
-    OrderWeight = para.OrderReWeight;
+    OrderWeight = para.OrderReWeight.data();
 
     for (int i = 0; i < NUpdates; i++)
         ProbofCall[i] = 1.0 / real(NUpdates);
@@ -110,7 +110,7 @@ void Markov::CreateWorm()
     if (Worm->Exist)
         return;
 
-    wLine w = Diag->RandomPickW();
+    wLine w = Diag->W.RandomPick(*RNG);
     vertex vin = w->NeighVer(IN);
     vertex vout = w->NeighVer(OUT);
 
@@ -567,7 +567,7 @@ void Markov::ChangeTauOnVertex()
 {
     if (Worm->Exist)
         return;
-    vertex ver = Diag->RandomPickVer();
+    vertex ver = Diag->Ver.RandomPick(*RNG);
     real tau = RandomPickTau();
 
     gLine gin = ver->NeighG(IN), gout = ver->NeighG(OUT);
@@ -632,7 +632,7 @@ void Markov::ChangeSpinOnVertex()
     //TODO: If W is spin conserved, return;
     if (Worm->Exist)
         return;
-    vertex v1 = Diag->RandomPickVer();
+    vertex v1 = Diag->Ver.RandomPick(*RNG);
     wLine w1 = v1->NeighW();
     int dir = RandomPickDir();
     gLine g = v1->NeighG(dir);
@@ -706,7 +706,7 @@ void Markov::ChangeROnVertex()
     if (Worm->Exist)
         return;
     //TODO: Return if G is local
-    vertex ver = Diag->RandomPickVer();
+    vertex ver = Diag->Ver.RandomPick(*RNG);
     Site site = RandomPickSite();
     gLine gin = ver->NeighG(IN), gout = ver->NeighG(OUT);
 
@@ -775,7 +775,7 @@ void Markov::ChangeRLoop()
     bool flagVer[2 * MAX_ORDER] = {false};
     int flagW[MAX_ORDER] = {0};
     int n = 0;
-    v[0] = Diag->RandomPickVer();
+    v[0] = Diag->Ver.RandomPick(*RNG);
     Site oldR = v[0]->R;
 
     while (!flagVer[v[n]->Name]) {
@@ -859,7 +859,7 @@ void Markov::ChangeMeasureFromGToW()
     if (!Diag->MeasureGLine)
         return;
 
-    wLine w = Diag->RandomPickW();
+    wLine w = Diag->W.RandomPick(*RNG);
     if (w->IsDelta)
         return;
 
@@ -906,7 +906,7 @@ void Markov::ChangeMeasureFromWToG()
     if (Diag->MeasureGLine)
         return;
 
-    gLine g = Diag->RandomPickG();
+    gLine g = Diag->G.RandomPick(*RNG);
 
     wLine w = Diag->WMeasure;
     Complex gWeight = G->Weight(g->NeighVer(IN)->R, g->NeighVer(OUT)->R,
@@ -948,7 +948,7 @@ void Markov::ChangeMeasureFromWToG()
  */
 void Markov::ChangeDeltaToContinuous()
 {
-    wLine w = Diag->RandomPickW();
+    wLine w = Diag->W.RandomPick(*RNG);
     vertex vin = w->NeighVer(IN), vout = w->NeighVer(OUT);
     gLine G1 = vout->NeighG(IN), G2 = vout->NeighG(OUT);
     if (!w->IsDelta)
@@ -992,7 +992,7 @@ void Markov::ChangeDeltaToContinuous()
  */
 void Markov::ChangeContinuousToDelta()
 {
-    wLine w = Diag->RandomPickW();
+    wLine w = Diag->W.RandomPick(*RNG);
     if (w->IsDelta || w->IsMeasure)
         return;
 

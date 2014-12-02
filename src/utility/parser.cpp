@@ -12,14 +12,14 @@
 
 using namespace std;
 
-#define SEP '#'
+#define SEP '='
+#define COMMENT '#'
 
 string trim(string s)
 {
     if (s.empty()) {
         return s;
     }
-
     s.erase(0, s.find_first_not_of(" "));
     s.erase(s.find_last_not_of(" ") + 1);
     return s;
@@ -30,25 +30,21 @@ string trim(string s)
 *
 *  @param InputFile Input file name
 */
-bool SimpleParser::ParseFile(const std::string &InputFile, bool AbortIfFail)
+bool SimpleParser::ParseFile(const std::string &InputFile)
 {
     clear();
     ifstream ifs(InputFile, ios::in);
     ON_SCOPE_EXIT([&] {ifs.close(); });
     if (!ifs.is_open()) {
-        if (AbortIfFail) {
-            ABORT("Fail to open input file " << InputFile);
-        }
-        else {
-            LOG_WARNING(InputFile << " does not exist!");
-            return false;
-        }
+        LOG_WARNING(InputFile << " does not exist!");
+        throw(ERR_FILE_NOT_FIND);
+        return false;
     }
     string temp;
     _map.clear();
     while (getline(ifs, temp)) {
         string key = trim(temp);
-        if (temp.empty() || (temp[0] == SEP && temp[1] == SEP))
+        if (temp.empty() || temp[0] == COMMENT)
             //empty line or comment line
             continue;
         _map.insert(make_pair(temp));
@@ -76,7 +72,7 @@ void SimpleParser::SaveToFile(const std::string &OutputFile, string Mode)
         ABORT("Fail to open file " << OutputFile);
     for (auto &kv : _map)
         if (kv.second != "")
-            ofs << kv.second << "    #" << kv.first << std::endl;
+            ofs << kv.first << ":" << kv.second << std::endl;
 }
 
 string SimpleParser::PrettyString()
@@ -93,42 +89,17 @@ void SimpleParser::clear()
     _map.clear();
 }
 
-void SimpleParser::addKey(std::string key)
-{
-    _map.at(_ToUpper(key)) = "";
-}
-
-void SimpleParser::eraseKey(std::string key)
-{
-    if (_DoesKeyExist(key))
-        _map.erase(_ToUpper(key));
-}
-
-std::string SimpleParser::get(std::string key)
-{
-    _MakeSureKeyExists(key);
-    return _map[_ToUpper(key)];
-}
-
 std::pair<string, string> SimpleParser::make_pair(string source)
 {
     auto pos = source.find(SEP);
     if (pos == string::npos)
         ABORT("Are you sure the separator is " << SEP << "?");
-    string key = trim(source.substr(pos + 1, source.size()));
-    return pair<string, string>(_ToUpper(key),
-                                trim(source.substr(0, pos)));
-}
-string SimpleParser::_ToUpper(string source)
-{
-    for (auto &c : source)
-        c = toupper(c);
-    return source;
+    string key = trim(source.substr(0, pos));
+    return pair<string, string>(key, trim(source.substr(pos + 1, source.size())));
 }
 
 bool SimpleParser::_DoesKeyExist(string key)
 {
-    key = _ToUpper(key);
     if (_map.find(key) == _map.end())
         return false;
     else
@@ -136,7 +107,6 @@ bool SimpleParser::_DoesKeyExist(string key)
 }
 bool SimpleParser::_MakeSureKeyExists(string key)
 {
-    key = _ToUpper(key);
     if (_map.find(key) == _map.end()) {
         ABORT("Can not find the key " << key);
         return false;

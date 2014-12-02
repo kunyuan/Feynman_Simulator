@@ -9,7 +9,7 @@
 //TODO: G, W IsDelta, IsMeasure
 
 #include "diagram.h"
-#include "module/weight/weight_inherit.h"
+#include "module/weight/component.h"
 #include "utility/rng.h"
 
 using namespace std;
@@ -27,51 +27,33 @@ Diagram::Diagram()
     : Order(0), Phase(Complex(1.0, 0.0)), Weight(Complex(1.0, 0.0)), G("GLine"), W("WLine"), Ver("nVer")
 {
     Lat = nullptr;
-    GWeight = nullptr;
-    WWeight = nullptr;
 }
 
 #include "diagram_initialize.config"
-void Diagram::BuildNew(Lattice &lat, RandomFactory &rng, weight::G *g, weight::W *w)
+void Diagram::BuildNew(Lattice &lat, weight::G &g, weight::W &w)
 {
-    Reset(lat, rng, g, w);
+    Reset(lat, g, w);
     stringstream ss(InitialDiagram);
     _Load(ss);
     FixDiagram();
 }
 
-void Diagram::Reset(Lattice &lat, RandomFactory &rng, weight::G *g, weight::W *w)
+void Diagram::Reset(Lattice &lat, weight::G &g, weight::W &w)
 {
     Lat = &lat;
-    RNG = &rng;
-    GWeight = g;
-    WWeight = w;
+    GWeight = &g;
+    WWeight = &w;
     FixDiagram();
     //TODO: maybe you have to do more to reset
 }
 
 #include "diagram_template.config"
-void Diagram::SetTest(Lattice &lat, RandomFactory &rng, weight::G *g, weight::W *w)
+void Diagram::SetTest(Lattice &lat, weight::G &g, weight::W &w)
 {
-    Reset(lat, rng, g, w);
+    Reset(lat, g, w);
     stringstream ss(TestDiagramString);
     _Load(ss);
     FixDiagram();
-}
-
-gLine Diagram::RandomPickG()
-{
-    return &G[RNG->irn(0, G.HowMany() - 1)];
-}
-
-wLine Diagram::RandomPickW()
-{
-    return &W[RNG->irn(0, W.HowMany() - 1)];
-}
-
-vertex Diagram::RandomPickVer()
-{
-    return &Ver[RNG->irn(0, Ver.HowMany() - 1)];
 }
 
 void Diagram::ClearDiagram()
@@ -85,10 +67,8 @@ void Diagram::ClearDiagram()
 }
 bool Diagram::FixDiagram()
 {
-    if (DEBUGMODE && Lat == nullptr)
-        ABORT("Lattice is not defined yet!");
-    if (DEBUGMODE && (GWeight == nullptr || WWeight == nullptr))
-        ABORT("G and W weight are not defined yet!");
+    ASSERT_ALLWAYS(Lat != nullptr, "Lattice is not defined yet!");
+    ASSERT_ALLWAYS(GWeight != nullptr && WWeight != nullptr, "G and W have been initialized yet!");
 
     Order = W.HowMany();
     Worm.Exist = false;

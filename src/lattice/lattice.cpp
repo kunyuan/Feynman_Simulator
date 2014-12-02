@@ -78,6 +78,9 @@ Vec<int> Lattice::Shift(const Vec<int> &vec) const
     return newvec;
 }
 
+/**
+ * return vec[0]*L1*L2+vec[1]*L2+vec[2]
+ * */
 int Lattice::Vec2Index(const Vec<int> &vec) const
 {
     int Index = vec[0];
@@ -110,17 +113,22 @@ Vec<int> Lattice::Index2Vec(int index) const
  *
  *  @return [0, NSublattice**2-1]
  */
-int Lattice::Sublat2Index(int In, int Out) const
+int Lattice::Sublat2Index(int InSub, int OutSub) const
 {
-    return Out * NSublattice + In;
+    return InSub * NSublattice + OutSub;
 }
 
 int Lattice::Index2Sublat(int index, int dir) const
 {
     if (dir == IN)
-        return index % NSublattice;
-    else
         return index / NSublattice;
+    else
+        return index % NSublattice;
+}
+
+std::tuple<int, int> Lattice::Index2Sublat(int index) const
+{
+    return std::make_tuple(index / NSublattice, index % NSublattice);
 }
 
 bool Lattice::IsOnSameSubLat(int Index)
@@ -169,8 +177,16 @@ Vec<real> Lattice::GetRealVec(const Site &site, Vec<int> offset) const
 
 Distance Lattice::Dist(const Site &SiteIn, const Site &SiteOut) const
 {
-    return Distance(Sublat2Index(SiteIn.Sublattice, SiteOut.Sublattice),
-                    Vec2Index(Shift(SiteOut.Coordinate - SiteIn.Coordinate)));
+    int sub = Sublat2Index(SiteIn.Sublattice, SiteOut.Sublattice);
+    int coord = Vec2Index(Shift(SiteOut.Coordinate - SiteIn.Coordinate));
+    return Distance(sub, coord);
+}
+
+std::tuple<Site, Site> Lattice::GetSite(const Distance &dis) const
+{
+    return std::make_tuple(Site(Index2Sublat(dis.SublatIndex, IN), Vec<int>(0)),
+                           Site(Index2Sublat(dis.SublatIndex, OUT),
+                                Index2Vec(dis.CoordiIndex)));
 }
 
 Site Lattice::GetSite(const Distance &dis, int direction) const
