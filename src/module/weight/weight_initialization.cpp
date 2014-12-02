@@ -144,8 +144,8 @@ void G::_InitialBareHubbardSquare()
 //    int spin_up = SpinIndex(UP, UP);
 //    int sub = _Lat.Sublat2Index(0, 0);
 
-    //            BareWeight[spin_down][sub][coor][tau] = weight;
-    //            BareWeight[spin_up][sub][coor][tau] = weight;
+//            BareWeight[spin_down][sub][coor][tau] = weight;
+//            BareWeight[spin_up][sub][coor][tau] = weight;
 
     DeltaTWeight = 0.0;
     SmoothWeight = BareWeight;
@@ -295,9 +295,30 @@ void W::_InitialBareJ1J2()
 void W::_InitialBareHubbard()
 {
     BareWeight = 0.0;
-    int Lx = _Lat.Size[0], Ly = _Lat.Size[1];
     ASSERT_ALLWAYS(_Model == HUBBARD, ToString(int(_Model)) + " is not Hubbard model!");
     DeltaTWeight = BareWeight;
     SmoothWeight = 0.0;
     MeasureWeight = Complex(1.0, 0.0);
+}
+
+void Sigma::Initial()
+{
+//    _InitialFirstOrder();
+    return;
+}
+
+void Sigma::_InitialFirstOrder(const G& g, const W& w)
+{
+    return;
+}
+
+void Polar::Initial()
+{
+//    _InitialFirstOrder();
+    return;
+}
+
+void Polar::_InitialFirstOrder(const G& g, const W& w)
+{
+    return;
 }

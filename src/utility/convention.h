@@ -43,6 +43,12 @@ enum model { TEST,
              HUBBARD };
 const model MODEL = J1J2;
 
+//define analytic Sigma diagram here
+enum diagram { HATREE,
+             FOCK,
+             HATREEFOCK};
+const diagram DIAGRAM = FOCK;
+
 //define your lattice here
 
 enum lattice {

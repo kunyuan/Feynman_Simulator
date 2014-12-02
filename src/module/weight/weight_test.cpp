@@ -85,7 +85,7 @@ void WeightMeasuring(real Beta, int Num)
     sput_fail_unless(Equal(Sig.Weight(s1, s2, 0.0, Beta / 2, SpinIn, SpinOut),
                            Sig2.Weight(s1, s2, 0.0, Beta / 2, SpinIn, SpinOut)),
                      "Weight class IO check.");
-    system("rm test_weight.npz");
+//    system("rm test_weight.npz");
 }
 
 void Sample(Sigma &sigma, int num, Site in, Site out,
