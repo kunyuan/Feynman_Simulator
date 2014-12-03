@@ -14,3 +14,8 @@ ch.setFormatter(formatter)
 fh.setFormatter(formatter)
 log.addHandler(ch)
 log.addHandler(fh)
+
+def Assert(condition, info):
+    if not condition:
+        log.error(info)
+        raise AssertionError
