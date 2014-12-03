@@ -1,0 +1,405 @@
+
+[calc][14/12/02 19:34:36][INFO]:
+Loading G Matrix...
+
+[calc][14/12/02 19:34:36][ERROR]:
+../data/GW.npz fails to read!
+
+[calc][14/12/02 19:36:11][INFO]:
+Loading G Matrix...
+
+[calc][14/12/02 19:36:11][INFO]:
+Load G.SmoothT
+
+[calc][14/12/02 19:37:07][INFO]:
+Loading G Matrix...
+
+[calc][14/12/02 19:37:07][INFO]:
+Load G.SmoothT
+
+[calc][14/12/02 19:50:49][INFO]:
+Loading G Matrix...
+
+[calc][14/12/02 19:50:49][INFO]:
+Load G.SmoothT
+
+[calc][14/12/02 19:51:01][INFO]:
+Loading G Matrix...
+
+[calc][14/12/02 19:51:01][INFO]:
+Load G.SmoothT
+
+[calc][14/12/02 19:51:16][INFO]:
+Loading G Matrix...
+
+[calc][14/12/02 19:51:16][INFO]:
+Load G.SmoothT
+
+[calc][14/12/02 19:51:16][INFO]:
+Load G.DeltaT
+
+[calc][14/12/02 19:51:52][INFO]:
+Loading G Matrix...
+
+[calc][14/12/02 19:51:52][INFO]:
+Load G.SmoothT
+
+[calc][14/12/02 19:52:04][INFO]:
+Loading G Matrix...
+
+[calc][14/12/02 19:52:04][INFO]:
+Load G.SmoothT
+
+[calc][14/12/02 19:52:14][INFO]:
+Loading G Matrix...
+
+[calc][14/12/02 19:52:14][INFO]:
+Load G.SmoothT
+
+[calc][14/12/02 19:52:37][INFO]:
+Loading G Matrix...
+
+[calc][14/12/02 19:52:37][INFO]:
+Load G.SmoothT
+
+[calc][14/12/02 19:53:28][INFO]:
+Loading G Matrix...
+
+[calc][14/12/02 19:53:28][INFO]:
+Load G.SmoothT
+
+[calc][14/12/02 19:56:48][INFO]:
+Loading G Matrix...
+
+[calc][14/12/02 19:56:48][INFO]:
+Load G.SmoothT
+
+[calc][14/12/02 19:56:49][INFO]:
+Load G.DeltaT
+
+[calc][14/12/02 19:56:49][INFO]:
+Saving G Matrix...
+
+[calc][14/12/02 21:04:12][INFO]:
+Loading G Matrix...
+
+[calc][14/12/02 21:04:12][INFO]:
+Load G.SmoothT
+
+[calc][14/12/02 21:04:12][INFO]:
+Load G.DeltaT
+
+[calc][14/12/02 21:04:12][INFO]:
+Saving G Matrix...
+
+[calc][14/12/02 21:04:18][INFO]:
+Saving G Matrix...
+
+[calc][14/12/02 21:04:18][INFO]:
+Saving W Matrix...
+
+[calc][14/12/02 21:04:55][INFO]:
+Saving G Matrix...
+
+[calc][14/12/02 21:04:55][INFO]:
+Saving W Matrix...
+
+[calc][14/12/02 21:05:15][INFO]:
+Saving G Matrix...
+
+[calc][14/12/02 21:05:15][INFO]:
+Saving W Matrix...
+
+[calc][14/12/02 21:05:15][INFO]:
+Loading W Matrix...
+
+[calc][14/12/02 21:05:15][INFO]:
+Load W.DeltaT
+
+[calc][14/12/02 22:49:32][INFO]:
+Saving G Matrix...
+
+[calc][14/12/02 22:49:32][INFO]:
+Saving W Matrix...
+
+[calc][14/12/02 22:49:32][INFO]:
+Loading W Matrix...
+
+[calc][14/12/02 22:49:32][INFO]:
+Load W.DeltaT
+
+[calc][14/12/02 23:00:08][INFO]:
+Saving G Matrix...
+
+[calc][14/12/02 23:00:08][INFO]:
+Saving W Matrix...
+
+[calc][14/12/02 23:00:08][INFO]:
+Loading W Matrix...
+
+[calc][14/12/02 23:00:08][INFO]:
+Load W.DeltaT
+
+[calc][14/12/02 23:00:18][INFO]:
+Saving G Matrix...
+
+[calc][14/12/02 23:00:18][INFO]:
+Saving W Matrix...
+
+[calc][14/12/02 23:00:18][INFO]:
+Loading W Matrix...
+
+[calc][14/12/02 23:00:18][INFO]:
+Load W.DeltaT
+
+[calc][14/12/02 23:00:29][INFO]:
+Saving G Matrix...
+
+[calc][14/12/02 23:00:29][INFO]:
+Saving W Matrix...
+
+[calc][14/12/02 23:00:29][INFO]:
+Loading W Matrix...
+
+[calc][14/12/02 23:00:29][INFO]:
+Load W.DeltaT
+
+[calc][14/12/02 23:01:42][INFO]:
+Saving G Matrix...
+
+[calc][14/12/02 23:01:42][INFO]:
+Saving W Matrix...
+
+[calc][14/12/02 23:01:42][INFO]:
+Loading W Matrix...
+
+[calc][14/12/02 23:01:42][INFO]:
+Load W.DeltaT
+
+[calc][14/12/02 23:01:59][INFO]:
+Saving G Matrix...
+
+[calc][14/12/02 23:01:59][INFO]:
+Saving W Matrix...
+
+[calc][14/12/02 23:01:59][INFO]:
+Loading W Matrix...
+
+[calc][14/12/02 23:01:59][INFO]:
+Load W.DeltaT
+
+[calc][14/12/02 23:02:54][INFO]:
+Saving G Matrix...
+
+[calc][14/12/02 23:02:54][INFO]:
+Saving W Matrix...
+
+[calc][14/12/02 23:02:54][INFO]:
+Loading W Matrix...
+
+[calc][14/12/02 23:02:54][INFO]:
+Load W.DeltaT
+
+[calc][14/12/02 23:03:23][INFO]:
+Saving G Matrix...
+
+[calc][14/12/02 23:03:23][INFO]:
+Saving W Matrix...
+
+[calc][14/12/02 23:03:23][INFO]:
+Loading W Matrix...
+
+[calc][14/12/02 23:03:23][INFO]:
+Load W.DeltaT
+
+[calc][14/12/02 23:03:57][INFO]:
+Saving G Matrix...
+
+[calc][14/12/02 23:03:57][INFO]:
+Saving W Matrix...
+
+[calc][14/12/02 23:03:57][INFO]:
+Loading W Matrix...
+
+[calc][14/12/02 23:03:57][INFO]:
+Load W.DeltaT
+
+[calc][14/12/02 23:04:51][INFO]:
+Saving G Matrix...
+
+[calc][14/12/02 23:04:51][INFO]:
+Saving W Matrix...
+
+[calc][14/12/02 23:04:51][INFO]:
+Loading W Matrix...
+
+[calc][14/12/02 23:04:51][INFO]:
+Load W.DeltaT
+
+[calc][14/12/02 23:06:30][INFO]:
+Saving G Matrix...
+
+[calc][14/12/02 23:06:30][INFO]:
+Saving W Matrix...
+
+[calc][14/12/02 23:06:30][INFO]:
+Loading W Matrix...
+
+[calc][14/12/02 23:06:30][INFO]:
+Load W.DeltaT
+
+[calc][14/12/02 23:10:51][INFO]:
+Saving G Matrix...
+
+[calc][14/12/02 23:10:51][INFO]:
+Saving W Matrix...
+
+[calc][14/12/02 23:10:51][INFO]:
+Loading W Matrix...
+
+[calc][14/12/02 23:10:51][INFO]:
+Load W.DeltaT
+
+[calc][14/12/02 23:11:35][INFO]:
+Saving G Matrix...
+
+[calc][14/12/02 23:11:35][INFO]:
+Saving W Matrix...
+
+[calc][14/12/02 23:11:35][INFO]:
+Loading W Matrix...
+
+[calc][14/12/02 23:11:35][INFO]:
+Load W.DeltaT
+
+[calc][14/12/02 23:12:26][INFO]:
+Saving G Matrix...
+
+[calc][14/12/02 23:12:26][INFO]:
+Saving W Matrix...
+
+[calc][14/12/02 23:12:26][INFO]:
+Loading W Matrix...
+
+[calc][14/12/02 23:12:26][INFO]:
+Load W.DeltaT
+
+[calc][14/12/02 23:12:33][INFO]:
+Saving G Matrix...
+
+[calc][14/12/02 23:12:33][INFO]:
+Saving W Matrix...
+
+[calc][14/12/02 23:12:33][INFO]:
+Loading W Matrix...
+
+[calc][14/12/02 23:12:33][INFO]:
+Load W.DeltaT
+
+[calc][14/12/02 23:13:01][INFO]:
+Saving G Matrix...
+
+[calc][14/12/02 23:13:01][INFO]:
+Saving W Matrix...
+
+[calc][14/12/02 23:13:01][INFO]:
+Loading W Matrix...
+
+[calc][14/12/02 23:13:01][INFO]:
+Load W.DeltaT
+
+[calc][14/12/02 23:13:40][INFO]:
+Saving G Matrix...
+
+[calc][14/12/02 23:13:40][INFO]:
+Saving W Matrix...
+
+[calc][14/12/02 23:13:40][INFO]:
+Loading W Matrix...
+
+[calc][14/12/02 23:13:40][INFO]:
+Load W.DeltaT
+
+[calc][14/12/02 23:14:08][INFO]:
+Saving G Matrix...
+
+[calc][14/12/02 23:14:08][INFO]:
+Saving W Matrix...
+
+[calc][14/12/02 23:14:08][INFO]:
+Loading W Matrix...
+
+[calc][14/12/02 23:14:08][INFO]:
+Load W.DeltaT
+
+[calc][14/12/02 23:24:46][INFO]:
+Saving G Matrix...
+
+[calc][14/12/02 23:24:46][INFO]:
+Saving W Matrix...
+
+[calc][14/12/02 23:24:46][INFO]:
+Loading W Matrix...
+
+[calc][14/12/02 23:24:46][INFO]:
+Load W.DeltaT
+
+[calc][14/12/02 23:25:25][INFO]:
+Saving G Matrix...
+
+[calc][14/12/02 23:25:25][INFO]:
+Saving W Matrix...
+
+[calc][14/12/02 23:25:25][INFO]:
+Loading W Matrix...
+
+[calc][14/12/02 23:25:25][INFO]:
+Load W.DeltaT
+
+[calc][14/12/02 23:30:35][INFO]:
+Saving G Matrix...
+
+[calc][14/12/02 23:30:35][INFO]:
+Saving W Matrix...
+
+[calc][14/12/02 23:30:35][INFO]:
+Loading W Matrix...
+
+[calc][14/12/02 23:30:35][INFO]:
+Load W.DeltaT
+
+[calc][14/12/02 23:31:07][INFO]:
+Saving G Matrix...
+
+[calc][14/12/02 23:31:07][INFO]:
+Saving W Matrix...
+
+[calc][14/12/02 23:31:07][INFO]:
+Loading W Matrix...
+
+[calc][14/12/02 23:31:07][INFO]:
+Load W.DeltaT
+
+[calc][14/12/02 23:32:51][INFO]:
+Saving G Matrix...
+
+[calc][14/12/02 23:32:51][INFO]:
+Saving W Matrix...
+
+[calc][14/12/02 23:32:51][INFO]:
+Loading W Matrix...
+
+[calc][14/12/02 23:32:51][INFO]:
+Load W.DeltaT
+
+[calc][14/12/02 23:33:54][INFO]:
+Saving G Matrix...
+
+[calc][14/12/02 23:33:54][INFO]:
+Saving W Matrix...
+
+[calc][14/12/02 23:33:54][INFO]:
+Loading W Matrix...
+
+[calc][14/12/02 23:33:54][INFO]:
+Load W.DeltaT
