@@ -92,7 +92,6 @@ class Weight:
     def fftSpace(self,BackForth):
         self.SmoothT=self.__fftSpace(self.SmoothT, BackForth)
         self.DeltaT=self.__fftSpace(self.DeltaT, BackForth)
-
     def __fftSpace(self, array, BackForth):
         if array is None:
             return None
@@ -104,12 +103,26 @@ class Weight:
         elif BackForth==-1:
             temp=np.fft.ifftn(temp, axes=Axis)   
         return temp.reshape(OldShape)
-    
     def __SpatialShape(self,shape):
         InsertPos=VOL
         shape=list(shape)
         SpatialShape=shape[0:InsertPos]+self.__L+shape[InsertPos+1:]
         return range(InsertPos, InsertPos+len(self.__L)), SpatialShape
+
+    def InverseSublat(self):
+        OldShape=self.SmoothT.shape
+        NSublat=math.sqrt(OldShape[SUB])
+        temp=self.SmoothT.reshape(OldShape[SP],NSublat,NSublat,OldShape[VOL]*OldShape[TAU])
+        copy=temp.copy()
+        for i in [0,3]:
+            for j in range(temp.shape[3]):
+                try:
+                    temp[i,:,:,j] = np.linalg.inv(temp[i,:,:,j])
+                except:
+                    print i,j
+                    print temp[i,:,:,j]
+        print temp[0,:,:,0]*copy[0,:,:,0]
+        print temp[0,:,:,0]
 
     def __LoadNpz(self, FileName):
         try:
@@ -197,6 +210,8 @@ class TestWeightFFT(unittest.TestCase):
 if __name__=="__main__":
     G=Weight("G", 1.0,[8,8], False);
     G.Load("../data/GW.npz");
+    G.fftSpace(1)
+    G.InverseSublat()
     G.Save("../data/GW_new.npz");
     print G.SmoothT.shape
 
