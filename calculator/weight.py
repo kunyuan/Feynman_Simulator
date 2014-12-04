@@ -10,9 +10,8 @@ SPIN,SPIN2,SPIN3=2,4,8
 IN,OUT=0,1
 DOWN,UP=0,1
 SP,SUB,VOL,TAU=0,1,2,3
-NSublattice=2
 
-SHAPE={SUB: NSublattice**2, VOL: None, TAU : None}
+SHAPE={SUB: None, VOL: None, TAU : None}
 def CheckShape(shape_):
     for e in SHAPE:
         if e>=len(shape_):
@@ -23,22 +22,24 @@ def CheckShape(shape_):
             Assert(SHAPE[e]==shape_[e], "Shape {0} does not match {1} at the {2}rd element!".format(SHAPE, shape_,e))
 
 class IndexMap:
-    def __init__(self,Beta, L_):
+    def __init__(self,Beta, L_, Shape):
+        self.__MaxTauBin=Shape[TAU]
         self.__Beta=Beta
-        self.__dBeta=Beta/SHAPE[TAU]
+        self.__dBeta=Beta/self.__MaxTauBin
         self.__dBetaInverse=1.0/self.__dBeta
         self.__L=L_
+        self.__NSublattice=int(math.sqrt(Shape[SUB]))
 
     def TauIndex(self, In, Out):
         tau=Out-In
         Index=math.floor(tau*self.__dBetaInverse)
-        return Index if tau>=0 else Index+SHAPE[TAU]
+        return Index if tau>=0 else Index+self.__MaxTauBin
 
     def IndexToTau(self, Index):
         return (Index+0.5)*self.__dBeta
 
     def SublatIndex(self, In, Out):
-        return In*NSublattice+Out
+        return In*self.__NSublattice+Out
     def CoordiIndex(self,In, Out):
         #Out[0]*L1*L2+Out[1]*L2+Out[2] with In=(0,0,0)
         Index=Out[0]-In[0]
@@ -63,7 +64,7 @@ class Weight:
         self.SmoothT=None
         self.DeltaT=None
     def GetMap(self):
-        return IndexMap(self.__Beta, self.__L)
+        return IndexMap(self.__Beta, self.__L, SHAPE)
 
     def fftTime(self,BackForth):
         if BackForth==1:
@@ -89,26 +90,24 @@ class Weight:
             self.SmoothT*=PhaseFactor
 
     def fftSpace(self,BackForth):
-        OldShape=self.SmoothT.shape
-        Axis, NewShape=self.__SpatialShape(OldShape)
-        self.SmoothT.reshape(NewShape)
-        if BackForth==1:
-            self.SmoothT=np.fft.fftn(self.SmoothT, axis=Axis)   
-        elif BackForth==-1:
-            self.SmoothT=np.fft.ifftn(self.SmoothT, axis=Axis)   
-        self.SmoothT.reshape(OldShape)
+        self.SmoothT=self.__fftSpace(self.SmoothT, BackForth)
+        self.DeltaT=self.__fftSpace(self.DeltaT, BackForth)
 
-        OldShape=self.DeltaT.shape
+    def __fftSpace(self, array, BackForth):
+        if array is None:
+            return None
+        OldShape=array.shape
         Axis, NewShape=self.__SpatialShape(OldShape)
-        self.DeltaT.reshape(NewShape)
+        temp=array.reshape(NewShape)
         if BackForth==1:
-            self.DeltaT=np.fft.fftn(self.DeltaT, axis=Axis)   
+            temp=np.fft.fftn(temp, axes=Axis)   
         elif BackForth==-1:
-            self.DeltaT=np.fft.ifftn(self.DeltaT, axis=Axis)   
-        self.DeltaT.reshape(OldShape)
+            temp=np.fft.ifftn(temp, axes=Axis)   
+        return temp.reshape(OldShape)
     
     def __SpatialShape(self,shape):
         InsertPos=VOL
+        shape=list(shape)
         SpatialShape=shape[0:InsertPos]+self.__L+shape[InsertPos+1:]
         return range(InsertPos, InsertPos+len(self.__L)), SpatialShape
 
@@ -166,6 +165,7 @@ class TestWeightFFT(unittest.TestCase):
     def setUp(self):
         self.L=[8,8]
         self.Beta=1.0
+        SHAPE[SUB]=4
         SHAPE[VOL]=self.L[0]*self.L[1]
         SHAPE[TAU]=64
         self.G=Weight("G", self.Beta, self.L, False)
@@ -173,19 +173,26 @@ class TestWeightFFT(unittest.TestCase):
         Map=self.G.GetMap()
         TauGrid=np.linspace(0.0, self.Beta, SHAPE[TAU], endpoint=False)/self.Beta
         #last point<self.Beta!!!
-        #print TauGrid
-        self.gTau=np.exp(TauGrid)+np.exp(1.0-TauGrid)
-        self.G.SmoothT+=self.gTau
+        self.gTau=np.exp(TauGrid)
+        xx,yy=np.meshgrid(range(self.L[0]),range(self.L[1]))
+        zz=np.exp(xx+yy)
+        self.z=zz[:,:, np.newaxis]*self.gTau
+        self.G.SmoothT+=self.z.reshape(SHAPE[VOL],SHAPE[TAU])
     def test_fft_backforth(self):
         self.G.fftTime(1)
         self.G.fftTime(-1)
-        self.assertTrue(np.allclose(self.G.SmoothT[0,0,0,:], self.gTau))
+        self.assertTrue(np.allclose(self.G.SmoothT[0,0,:,:], self.z.reshape(SHAPE[VOL],SHAPE[TAU])))
     def test_fft_symmetry(self):
         self.G.ChangeSymmetry(-1)
         self.G.fftTime(1) #fftTime(1) will call ChangeSymmetry(1)
         self.assertTrue(np.allclose(self.G.SmoothT[0,0,0,:], np.fft.fft(self.gTau)))
         self.G.fftTime(-1)
         self.G.ChangeSymmetry(1)
+    def test_fft_spatial(self):
+        self.G.fftSpace(1)
+        zzz=np.fft.fftn(self.z, axes=(0,1))
+        self.assertTrue(np.allclose(self.G.SmoothT[0,0,:,:], zzz.reshape(SHAPE[VOL],SHAPE[TAU])))
+        self.G.fftSpace(-1)
 
 if __name__=="__main__":
     G=Weight("G", 1.0,[8,8], False);
