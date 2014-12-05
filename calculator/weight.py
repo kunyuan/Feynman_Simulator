@@ -43,13 +43,26 @@ class IndexMap:
     def Spin4Index(self, InTuple, OutTuple):
         return InTuple[IN]*SPIN3+InTuple[OUT]*SPIN2+ \
                 OutTuple[IN]*SPIN+OutTuple[OUT]
+
+    def IsLegal(self, SpinNum, SpinTuple):
+        if SpinNum==2:
+            return (SpinTuple[IN]==SpinTuple[OUT])
+        if SpinNum==4:
+            return (SpinTuple[IN][IN]+SpinTuple[OUT][IN]==SpinTuple[IN][OUT]+SpinTuple[OUT][OUT])
+
     def GetLegalSpinIndexs(self, SpinNum):
         if SpinNum==2:
-            return [self.Spin2Index(DOWN,DOWN),self.Spin2Index(UP,UP)]
+            return [self.Spin2Index(*s) for s in self.GetLegalSpinTuple(SpinNum)]
         if SpinNum==4:
-            return [self.Spin4Index(DOWN,DOWN,DOWN,DOWN),self.Spin4Index(UP,UP,UP,UP), \
-                    self.Spin4Index(UP,UP,DOWN,DOWN),    self.Spin4Index(DOWN,DOWN,UP,UP), \
-                    self.Spin4Index(UP,DOWN,DOWN,UP),    self.Spin4Index(DOWN,UP,DOWN,UP)]
+            return [self.Spin4Index(*s) for s in self.GetLegalSpinTuple(SpinNum)]
+
+    def GetLegalSpinTuple(self, SpinNum):
+        if SpinNum==2:
+            return [(DOWN,DOWN),(UP,UP)]
+        if SpinNum==4:
+            return [((DOWN,DOWN),(DOWN,DOWN)),((UP,UP),(UP,UP)), \
+                    ((UP,UP),(DOWN,DOWN)),((DOWN,DOWN),(UP,UP)), \
+                    ((UP,DOWN),(DOWN,UP)),((DOWN,UP),(UP,DOWN))]
 
 class Weight:
     def __init__(self, Name, Beta, L, IsSymmetric=True):
@@ -168,6 +181,19 @@ class Weight:
             log.error(FileName+" fails to read!")
             sys.exit(0)
         return data
+
+class TestIndexMap(unittest.TestCase):
+    def setUp(self):
+        self.L=[8,8]
+        self.Beta=1.0
+        self.shape=[4, 4, self.L[0]*self.L[1], 64]
+        self.Map=IndexMap(self.Beta, self.L, self.shape)
+
+    def test_legal_spin_filter(self):
+        for s in self.Map.GetLegalSpinTuple(2):
+            self.assertTrue(s[IN]==s[OUT])
+        for s in self.Map.GetLegalSpinTuple(4):
+            self.assertTrue(s[IN][IN]+s[OUT][IN]==s[OUT][OUT]+s[IN][OUT])
 
 class TestWeightFFT(unittest.TestCase):
     def setUp(self):
