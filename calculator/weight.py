@@ -5,6 +5,7 @@ import sys
 import os.path
 import unittest
 from logger import *
+
 MAX_TAU_BIN=128
 SublatVol=2
 D=2
@@ -40,6 +41,7 @@ class IndexMap:
 
     def Spin2Index(self, In, Out):
         return In*SPIN+Out
+
     def Spin4Index(self, InTuple, OutTuple):
         return InTuple[IN]*SPIN3+InTuple[OUT]*SPIN2+ \
                 OutTuple[IN]*SPIN+OutTuple[OUT]

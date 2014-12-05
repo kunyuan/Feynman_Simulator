@@ -56,7 +56,7 @@ int IndexMap::TauIndex(real t_in, real t_out) const
 real IndexMap::IndexToTau(int Bin) const
 {
     //TODO: mapping between tau and bin
-    return Bin * _dBeta + _Beta / 2;
+    return Bin * _dBeta + _dBeta / 2;
 }
 
 int IndexMapSPIN2::SpinIndex(spin SpinIn, spin SpinOut)
