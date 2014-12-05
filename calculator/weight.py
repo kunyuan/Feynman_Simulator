@@ -151,6 +151,7 @@ class Weight:
         NewShape1=(SpinNum,SpinNum,NSublat,NSublat,OldShape[VOL]*OldShape[TAU])
         temp=array.reshape(NewShape1).swapaxes(1,2)
         NewShape2=temp.shape
+        #NewShape2=(SpinNum,NSublat,SpinNum,NSublat,OldShape[VOL]*OldShape[TAU])
         temp=temp.reshape(SpinNum*NSublat, SpinNum*NSublat, NewShape2[-1])
         for j in range(temp.shape[-1]):
             try:
@@ -224,10 +225,12 @@ class TestWeightFFT(unittest.TestCase):
         self.G.fftTime(-1)
         self.G.ChangeSymmetry(1)
     def test_fft_spatial(self):
+        old=self.G.SmoothT
         self.G.fftSpace(1)
         zzz=np.fft.fftn(self.z, axes=(0,1))
         self.assertTrue(np.allclose(self.G.SmoothT[0,0,:,:], zzz.reshape(self.shape[VOL:])))
         self.G.fftSpace(-1)
+        self.assertTrue(np.allclose(self.G.SmoothT, old))
 
 if __name__=="__main__":
     G=Weight("G", 1.0,[8,8], False);
