@@ -123,7 +123,7 @@ class Weight:
         if self.__SpinNum==2:
             self.SmoothT=self.__InverseSublat(self.SmoothT)
             self.DeltaT=self.__InverseSublat(self.DeltaT)
-        else
+        else:
             print "not implemented yet!"
     def __InverseSublat(self, array):
         OldShape=array.shape
