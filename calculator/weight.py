@@ -118,9 +118,12 @@ class Weight:
         SpatialShape=shape[0:InsertPos]+self.__L+shape[InsertPos+1:]
         return range(InsertPos, InsertPos+len(self.__L)), SpatialShape
 
-    def InverseSublat(self):
-        self.SmoothT=self.__InverseSublat(self.SmoothT)
-        self.DeltaT=self.__InverseSublat(self.DeltaT)
+    def Inverse(self):
+        if self.__SpinNum==2:
+            self.SmoothT=self.__InverseSublat(self.SmoothT)
+            self.DeltaT=self.__InverseSublat(self.DeltaT)
+        else
+            print "not implemented yet!"
     def __InverseSublat(self, array):
         OldShape=array.shape
         NSublat=self.__NSublattice
@@ -208,7 +211,7 @@ if __name__=="__main__":
     G=Weight("G", 1.0,[8,8], False);
     G.Load("../data/GW.npz");
     G.fftSpace(1)
-    G.InverseSublat()
+    G.Inverse()
     G.Save("../data/GW_new.npz");
     print G.SmoothT.shape
 
