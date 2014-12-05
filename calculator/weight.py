@@ -11,14 +11,16 @@ IN,OUT=0,1
 DOWN,UP=0,1
 SP,SUB,VOL,TAU=0,1,2,3
 
+### Shape: [SP][SUB][VOL][TAU], the TAU dimension may be missing
+
 class IndexMap:
-    def __init__(self,Beta, L_, Shape):
-        self.__MaxTauBin=Shape[TAU]
+    def __init__(self, Beta, L_, NSublattice, MAX_TAU_BIN):
+        self.__MaxTauBin=MAX_TAU_BIN
         self.__Beta=Beta
         self.__dBeta=Beta/self.__MaxTauBin
         self.__dBetaInverse=1.0/self.__dBeta
         self.__L=L_
-        self.__NSublattice=int(math.sqrt(Shape[SUB]))
+        self.__NSublattice=NSublattice
 
     def TauIndex(self, In, Out):
         tau=Out-In
@@ -30,6 +32,7 @@ class IndexMap:
 
     def SublatIndex(self, In, Out):
         return In*self.__NSublattice+Out
+
     def CoordiIndex(self,In, Out):
         #Out[0]*L1*L2+Out[1]*L2+Out[2] with In=(0,0,0)
         Index=Out[0]-In[0]
@@ -37,9 +40,13 @@ class IndexMap:
             Index=Index*self.__L[i]+(Out[i]-In[i])
         return Index
 
+    def SpinIndex(self, In, Out, SpinNum):
+        if SpinNum==2:
+            self.Spin2Index(In, Out)
+        elif SpinNum==4:
+            self.Spin4Index(In, Out)
     def Spin2Index(self, In, Out):
         return In*SPIN+Out
-
     def Spin4Index(self, InTuple, OutTuple):
         return InTuple[IN]*SPIN3+InTuple[OUT]*SPIN2+ \
                 OutTuple[IN]*SPIN+OutTuple[OUT]
@@ -87,7 +94,7 @@ class Weight:
         self.__SpinNum=int(math.sqrt(self.__Shape[SP]))
         self.__NSublattice=int(math.sqrt(self.__Shape[SUB]))
     def GetMap(self):
-        return IndexMap(self.__Beta, self.__L, self.__Shape)
+        return IndexMap(self.__Beta, self.__L, self.__NSublattice, self.__Shape[TAU])
 
     def fftTime(self,BackForth):
         if BackForth==1:
@@ -136,19 +143,30 @@ class Weight:
         if self.__SpinNum==2:
             self.SmoothT=self.__InverseSublat(self.SmoothT)
             self.DeltaT=self.__InverseSublat(self.DeltaT)
-        else:
-            print "not implemented yet!"
+        elif self.__SpinNum==4:
+            self.SmoothT=self.__InverseSpinAndSublat(self.SmoothT)
+            self.DeltaT=self.__InverseSpinAndSublat(self.DeltaT)
     def __InverseSublat(self, array):
         OldShape=array.shape
         NSublat=self.__NSublattice
         temp=array.reshape(OldShape[SP],NSublat,NSublat,OldShape[VOL]*OldShape[TAU])
-        print self.GetMap(), self.__SpinNum
         for i in self.GetMap().GetLegalSpinIndexs(self.__SpinNum):
-            for j in range(temp.shape[3]):
+            for j in range(temp.shape[-1]):
                 try:
                     temp[i,:,:,j] = np.linalg.inv(temp[i,:,:,j])
                 except:
                     log.error("Fail to inverse matrix {0},:,:,{1}\n{2}".format(i,j, temp[i,:,:,j]))
+        return temp.reshape(OldShape)
+    def __InverseSpinAndSublat(self, array):
+        OldShape=array.shape
+        NSublat=self.__NSublattice
+        SpinNum=self.__SpinNum
+        temp=array.reshape(SpinNum,SpinNum,NSublat,NSublat,OldShape[VOL]*OldShape[TAU])
+        for j in range(temp.shape[-1]):
+            try:
+                temp[:,:,:,:,j] = np.linalg.tensorinv(temp[:,:,:,:,j])
+            except:
+                log.error("Fail to inverse matrix :,:,:,:,{1}\n{2}".format(j, temp[:,:,:,:,j]))
         return temp.reshape(OldShape)
 
     def Load(self, FileName):
