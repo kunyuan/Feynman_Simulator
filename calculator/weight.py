@@ -2,36 +2,34 @@
 import math
 import numpy as np
 import sys
-import os.path
+import os
 import unittest
 from logger import *
 
-MAX_TAU_BIN=128
-SublatVol=2
-D=2
-SPIN=2
-SPIN2=4
-SPIN3=8
-IN=0
-OUT=1
-DOWN=0
-UP=1
+SPIN,SPIN2,SPIN3=2,4,8
+IN,OUT=0,1
+DOWN,UP=0,1
+SP,SUB,VOL,TAU=0,1,2,3
 
 class IndexMap:
-    def __init__(self,Beta, L):
+    def __init__(self,Beta, L_, Shape):
+        self.__MaxTauBin=Shape[TAU]
         self.__Beta=Beta
-        self.__dBeta=1.0/Beta
+        self.__dBeta=Beta/self.__MaxTauBin
         self.__dBetaInverse=1.0/self.__dBeta
-        self.__L=L
+        self.__L=L_
+        self.__NSublattice=int(math.sqrt(Shape[SUB]))
 
     def TauIndex(self, In, Out):
-        Index=math.floor((Out-In)*self.__dBetaInverse)
-        return Index if tau>=0 else Index+MAX_TAU_BIN
+        tau=Out-In
+        Index=math.floor(tau*self.__dBetaInverse)
+        return Index if tau>=0 else Index+self.__MaxTauBin
+
     def IndexToTau(self, Index):
         return (Index+0.5)*self.__dBeta
 
     def SublatIndex(self, In, Out):
-        return In*SublatVol+Out
+        return In*self.__NSublattice+Out
     def CoordiIndex(self,In, Out):
         #Out[0]*L1*L2+Out[1]*L2+Out[2] with In=(0,0,0)
         Index=Out[0]-In[0]
@@ -45,24 +43,100 @@ class IndexMap:
     def Spin4Index(self, InTuple, OutTuple):
         return InTuple[IN]*SPIN3+InTuple[OUT]*SPIN2+ \
                 OutTuple[IN]*SPIN+OutTuple[OUT]
+    def GetLegalSpinIndexs(self, SpinNum):
+        if SpinNum==2:
+            return [self.Spin2Index(DOWN,DOWN),self.Spin2Index(UP,UP)]
+        if SpinNum==4:
+            return [self.Spin4Index(DOWN,DOWN,DOWN,DOWN),self.Spin4Index(UP,UP,UP,UP), \
+                    self.Spin4Index(UP,UP,DOWN,DOWN),    self.Spin4Index(DOWN,DOWN,UP,UP), \
+                    self.Spin4Index(UP,DOWN,DOWN,UP),    self.Spin4Index(DOWN,UP,DOWN,UP)]
 
 class Weight:
-    def __init__(self, Name, Beta, IsSymmetric=True):
+    def __init__(self, Name, Beta, L, IsSymmetric=True):
         self.__Name=Name
         self.__SmoothTName="{0}.SmoothT".format(Name)
         self.__DeltaTName="{0}.DeltaT".format(Name)
         self.__Beta=Beta
+        self.__L=L
         self.__IsSymmetric=IsSymmetric
+        self.__Shape=[None,]*4
         self.SmoothT=None
         self.DeltaT=None
-    
-    def __LoadNpz(self, FileName):
-        try:
-            data=np.load(FileName)
-        except IOError:
-            log.error(FileName+" fails to read!")
-            sys.exit(0)
-        return data
+    def SetShape(self, shape_):
+        for e in range(len(self.__Shape)):
+            if e>=len(shape_):
+                pass
+            elif self.__Shape[e] is None:
+                self.__Shape[e]=shape_[e]
+            else:
+                Assert(self.__Shape[e]==shape_[e], \
+                        "Shape {0} does not match {1} at the {2}rd element!".format(self.__Shape, shape_,e))
+        self.__SpinNum=int(math.sqrt(self.__Shape[SP]))
+        self.__NSublattice=int(math.sqrt(self.__Shape[SUB]))
+    def GetMap(self):
+        return IndexMap(self.__Beta, self.__L, self.__Shape)
+
+    def fftTime(self,BackForth):
+        if BackForth==1:
+            self.ChangeSymmetry(1)
+            if self.SmoothT is not None:
+                self.SmoothT=np.fft.fft(self.SmoothT, axis=TAU)
+        if BackForth==-1:
+            if self.SmoothT is not None:
+                self.SmoothT=np.fft.ifft(self.SmoothT, axis=TAU)
+            self.ChangeSymmetry(-1)
+    def ChangeSymmetry(self,BackForth):
+        ''' the transformation has to be done in continuous tau representation, namely using  
+        exp(i*Pi*Tau_n/Beta)(e.g. exp(i*Pi*(n+1/2)/N)) as the phase factor
+        otherwise, if you use exp(i*Pi*n/N)) as the phase factor here, you'll have to take care of 
+        an extra coeffecient exp(-i*Pi/(2N)) for each function (G0, Sigma, G) in the integral.
+        '''
+        if self.__IsSymmetric:
+            return
+        Map=self.GetMap()
+        tau=np.array([Map.IndexToTau(e) for e in range(self.__Shape[TAU])])
+        PhaseFactor=np.exp(1j*BackForth*np.pi*tau/self.__Beta)
+        if self.SmoothT is not None:
+            self.SmoothT*=PhaseFactor
+
+    def fftSpace(self,BackForth):
+        self.SmoothT=self.__fftSpace(self.SmoothT, BackForth)
+        self.DeltaT=self.__fftSpace(self.DeltaT, BackForth)
+    def __fftSpace(self, array, BackForth):
+        if array is None:
+            return None
+        OldShape=array.shape
+        Axis, NewShape=self.__SpatialShape(OldShape)
+        temp=array.reshape(NewShape)
+        if BackForth==1:
+            temp=np.fft.fftn(temp, axes=Axis)   
+        elif BackForth==-1:
+            temp=np.fft.ifftn(temp, axes=Axis)   
+        return temp.reshape(OldShape)
+    def __SpatialShape(self, shape):
+        InsertPos=VOL
+        shape=list(shape)
+        SpatialShape=shape[0:InsertPos]+self.__L+shape[InsertPos+1:]
+        return range(InsertPos, InsertPos+len(self.__L)), SpatialShape
+
+    def Inverse(self):
+        if self.__SpinNum==2:
+            self.SmoothT=self.__InverseSublat(self.SmoothT)
+            self.DeltaT=self.__InverseSublat(self.DeltaT)
+        else
+            print "not implemented yet!"
+    def __InverseSublat(self, array):
+        OldShape=array.shape
+        NSublat=self.__NSublattice
+        temp=array.reshape(OldShape[SP],NSublat,NSublat,OldShape[VOL]*OldShape[TAU])
+        print self.GetMap(), self.__SpinNum
+        for i in self.GetMap().GetLegalSpinIndexs(self.__SpinNum):
+            for j in range(temp.shape[3]):
+                try:
+                    temp[i,:,:,j] = np.linalg.inv(temp[i,:,:,j])
+                except:
+                    log.error("Fail to inverse matrix {0},:,:,{1}\n{2}".format(i,j, temp[i,:,:,j]))
+        return temp.reshape(OldShape)
 
     def Load(self, FileName):
         log.info("Loading {0} Matrix...".format(self.__Name));
@@ -70,9 +144,11 @@ class Weight:
         if self.__SmoothTName in data.files:
             log.info("Load {0}".format(self.__SmoothTName))
             self.SmoothT=data[self.__SmoothTName]
+            self.SetShape(self.SmoothT.shape)
         if self.__DeltaTName in data.files:
             log.info("Load {0}".format(self.__DeltaTName))
             self.DeltaT=data[self.__DeltaTName]
+            self.SetShape(self.DeltaT.shape)
     def Save(self, FileName, Mode="a"):
         log.info("Saving {0} Matrix...".format(self.__Name));
         data={}
@@ -85,24 +161,58 @@ class Weight:
         if self.SmoothT is not None:
             data[self.__SmoothTName]=self.SmoothT
         np.savez(FileName, **data)
+    def __LoadNpz(self, FileName):
+        try:
+            data=np.load(FileName)
+        except IOError:
+            log.error(FileName+" fails to read!")
+            sys.exit(0)
+        return data
 
-class TestWeight(unittest.TestCase):
+class TestWeightFFT(unittest.TestCase):
     def setUp(self):
-        self.G=Weight("G", 1.0)
-        self.G.SmoothT=np.array([1.0, 2.0])
-        self.W=Weight("W", 1.0)
-        self.W.DeltaT=np.array([2.0, 3.0])
+        self.L=[8,8]
+        self.Beta=1.0
+        self.G=Weight("G", self.Beta, self.L, False)
+        self.shape=[4, 4, self.L[0]*self.L[1], 64]
+        self.G.SmoothT=np.zeros(self.shape)+0j
+        self.G.SetShape(self.shape) 
+        Map=self.G.GetMap()
+        TauGrid=np.linspace(0.0, self.Beta, self.shape[TAU], endpoint=False)/self.Beta
+        #last point<self.Beta!!!
+        self.gTau=np.exp(TauGrid)
+        xx,yy=np.meshgrid(range(self.L[0]),range(self.L[1]))
+        zz=np.exp(xx+yy)
+        self.z=zz[:,:, np.newaxis]*self.gTau
+        self.G.SmoothT+=self.z.reshape(self.shape[VOL:])
     def test_matrix_IO(self):
         FileName="test.npz"
         self.G.Save(FileName)
-        self.W.Save(FileName, "a")
-        newW=Weight("W",1.0)
-        newW.Load(FileName)
-        self.assertTrue(np.allclose(self.W.DeltaT,newW.DeltaT))
+        newG=Weight("G", self.Beta, self.L, False)
+        newG.Load(FileName)
+        self.assertTrue(np.allclose(self.G.SmoothT,newG.SmoothT))
+        os.system("rm "+FileName)
+    def test_fft_backforth(self):
+        self.G.fftTime(1)
+        self.G.fftTime(-1)
+        self.assertTrue(np.allclose(self.G.SmoothT[0,0,:,:], self.z.reshape(self.shape[VOL:])))
+    def test_fft_symmetry(self):
+        self.G.ChangeSymmetry(-1)
+        self.G.fftTime(1) #fftTime(1) will call ChangeSymmetry(1)
+        self.assertTrue(np.allclose(self.G.SmoothT[0,0,0,:], np.fft.fft(self.gTau)))
+        self.G.fftTime(-1)
+        self.G.ChangeSymmetry(1)
+    def test_fft_spatial(self):
+        self.G.fftSpace(1)
+        zzz=np.fft.fftn(self.z, axes=(0,1))
+        self.assertTrue(np.allclose(self.G.SmoothT[0,0,:,:], zzz.reshape(self.shape[VOL:])))
+        self.G.fftSpace(-1)
 
 if __name__=="__main__":
-    G=Weight("G", 1.0, False);
+    G=Weight("G", 1.0,[8,8], False);
     G.Load("../data/GW.npz");
+    G.fftSpace(1)
+    G.Inverse()
     G.Save("../data/GW_new.npz");
     print G.SmoothT.shape
 
