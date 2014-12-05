@@ -26,6 +26,7 @@ if __name__=="__main__":
     p.Load("../data/infile/_in_DYSON_1")
     p.Save("test.txt","w")
     print p.Order
+    print p.Beta
 
 
 
