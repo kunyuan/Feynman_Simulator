@@ -28,7 +28,17 @@ def Calculate_Polar_First_Order(G, Polar):
 
 
 def Calculate_W_First_Order(W0, Polar, W):
-    W.SmoothT[:,:,:,:] = 0.0
+    map = W0.GetMap()
+    NSublat = 2 ########
+    Ntau = Polar.SmoothT.shape[TAU]
+    for spW in map.GetLegalSpinTuple(4):
+        for spPolar in map.GetLegalSpinTuple(4):
+            spW0L=(spW[IN], spPolar[IN])
+            spW0R=(spPolar[OUT], spW[IN])
+            if (not map.IsLegal(4, spW0L)) or (not map.IsLegal(4, spW0R)):
+                continue
+
+
 
 def Calculate_Sigma_First_Order(G0, W, Sigma):
     Sigma.SmoothT[:,:,:,:] = 0.0
@@ -53,6 +63,7 @@ Polar=weight.Weight("Polar", Beta, True)
 Polar.SmoothT = np.zeros(W.SmoothT.shape, dtype=complex)
 
 Calculate_Polar_First_Order(G0, Polar)
+
 map = G0.GetMap()
 print G0.SmoothT[map.Spin2Index(UP,UP), map.SublatIndex(1,1),0,:]
 print G0.SmoothT[map.Spin2Index(DOWN,DOWN), map.SublatIndex(1,1),0,::-1]
