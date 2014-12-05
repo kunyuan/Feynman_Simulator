@@ -148,13 +148,16 @@ class Weight:
         OldShape=array.shape
         NSublat=self.__NSublattice
         SpinNum=self.__SpinNum
-        temp=array.reshape(SpinNum,SpinNum,NSublat,NSublat,OldShape[VOL]*OldShape[TAU])
+        NewShape1=(SpinNum,SpinNum,NSublat,NSublat,OldShape[VOL]*OldShape[TAU])
+        temp=array.reshape(NewShape1).swapaxes(1,2)
+        NewShape2=temp.shape
+        temp=temp.reshape(SpinNum*NSublat, SpinNum*NSublat, NewShape2[-1])
         for j in range(temp.shape[-1]):
             try:
-                temp[:,:,:,:,j] = np.linalg.tensorinv(temp[:,:,:,:,j])
+                temp[:,:,j] = np.linalg.tensorinv(temp[:,:,j])
             except:
                 log.error("Fail to inverse matrix :,:,:,:,{1}\n{2}".format(j, temp[:,:,:,:,j]))
-        return temp.reshape(OldShape)
+        return temp.reshape(NewShape2).swapaxes(1,2).reshape(OldShape)
 
     def Load(self, FileName):
         log.info("Loading {0} Matrix...".format(self.__Name));
