@@ -1,26 +1,27 @@
 #!usr/bin/env python
 import numpy as np
 import parameter as para
-from weight import UP,DOWN,IN,OUT,SublatVol
+from weight import UP,DOWN,IN,OUT,TAU,SP,SUB,VOL
 import weight
 
 para = para.Parameter()
 para.Load("../data/infile/_in_DYSON_1")
 Beta = para.InitialBeta
 
-index = weight.IndexMap(Beta, para.L)
 
 def Calculate_Polar_First_Order(G, Polar):
-    Ntau = G.SmoothT.shape[-1]
+    map = G.GetMap()
+    NSublat = 2   ######
+    Ntau = G.SmoothT.shape[TAU]
     for spin1 in range(2):
         for spin2 in range(2):
-            spinPolar = index.Spin4Index((spin1,spin2),(spin2,spin1))
-            spinG1 = index.Spin2Index(spin1, spin1)
-            spinG2 = index.Spin2Index(spin2, spin2)
-            for subA in range(SublatVol):
-                for subB in range(SublatVol):
-                    subA2B = index.SublatIndex(subA, subB)
-                    subB2A = index.SublatIndex(subB, subA)
+            spinPolar = map.Spin4Index((spin1,spin2),(spin2,spin1))
+            spinG1 = map.Spin2Index(spin1, spin1)
+            spinG2 = map.Spin2Index(spin2, spin2)
+            for subA in range(NSublat):
+                for subB in range(NSublat):
+                    subA2B = map.SublatIndex(subA, subB)
+                    subB2A = map.SublatIndex(subB, subA)
                     Polar.SmoothT[spinPolar, subA2B, :, :]  \
                             = (-1.0)*G.SmoothT[spinG1, subB2A, :, ::-1]\
                             *G.SmoothT[spinG2, subA2B, :, :]
@@ -52,9 +53,10 @@ Polar=weight.Weight("Polar", Beta, True)
 Polar.SmoothT = np.zeros(W.SmoothT.shape, dtype=complex)
 
 Calculate_Polar_First_Order(G0, Polar)
-print G0.SmoothT[index.Spin2Index(UP,UP), index.SublatIndex(1,1),0,:]
-print G0.SmoothT[index.Spin2Index(DOWN,DOWN), index.SublatIndex(1,1),0,::-1]
-print Polar.SmoothT[index.Spin4Index((DOWN,UP),(UP,DOWN)), index.SublatIndex(1,1),0,:]
+map = G0.GetMap()
+print G0.SmoothT[map.Spin2Index(UP,UP), map.SublatIndex(1,1),0,:]
+print G0.SmoothT[map.Spin2Index(DOWN,DOWN), map.SublatIndex(1,1),0,::-1]
+print Polar.SmoothT[map.Spin4Index((DOWN,UP),(UP,DOWN)), map.SublatIndex(1,1),0,:]
 
 Calculate_W_First_Order(W0, Polar, W) 
 
