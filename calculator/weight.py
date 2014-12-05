@@ -2,7 +2,7 @@
 import math
 import numpy as np
 import sys
-import os.path
+import os
 import unittest
 from logger import *
 
@@ -10,16 +10,6 @@ SPIN,SPIN2,SPIN3=2,4,8
 IN,OUT=0,1
 DOWN,UP=0,1
 SP,SUB,VOL,TAU=0,1,2,3
-
-SHAPE={SUB: None, VOL: None, TAU : None}
-def CheckShape(shape_):
-    for e in SHAPE:
-        if e>=len(shape_):
-            pass
-        elif SHAPE[e] is None:
-            SHAPE[e]=shape_[e]
-        else:
-            Assert(SHAPE[e]==shape_[e], "Shape {0} does not match {1} at the {2}rd element!".format(SHAPE, shape_,e))
 
 class IndexMap:
     def __init__(self,Beta, L_, Shape):
@@ -52,6 +42,13 @@ class IndexMap:
     def Spin4Index(self, InTuple, OutTuple):
         return InTuple[IN]*SPIN3+InTuple[OUT]*SPIN2+ \
                 OutTuple[IN]*SPIN+OutTuple[OUT]
+    def GetLegalSpinIndexs(self, SpinNum):
+        if SpinNum==2:
+            return [self.Spin2Index(DOWN,DOWN),self.Spin2Index(UP,UP)]
+        if SpinNum==4:
+            return [self.Spin4Index(DOWN,DOWN,DOWN,DOWN),self.Spin4Index(UP,UP,UP,UP), \
+                    self.Spin4Index(UP,UP,DOWN,DOWN),    self.Spin4Index(DOWN,DOWN,UP,UP), \
+                    self.Spin4Index(UP,DOWN,DOWN,UP),    self.Spin4Index(DOWN,UP,DOWN,UP)]
 
 class Weight:
     def __init__(self, Name, Beta, L, IsSymmetric=True):
@@ -61,10 +58,22 @@ class Weight:
         self.__Beta=Beta
         self.__L=L
         self.__IsSymmetric=IsSymmetric
+        self.__Shape=[None,]*4
         self.SmoothT=None
         self.DeltaT=None
+    def SetShape(self, shape_):
+        for e in range(len(self.__Shape)):
+            if e>=len(shape_):
+                pass
+            elif self.__Shape[e] is None:
+                self.__Shape[e]=shape_[e]
+            else:
+                Assert(self.__Shape[e]==shape_[e], \
+                        "Shape {0} does not match {1} at the {2}rd element!".format(self.__Shape, shape_,e))
+        self.__SpinNum=int(math.sqrt(self.__Shape[SP]))
+        self.__NSublattice=int(math.sqrt(self.__Shape[SUB]))
     def GetMap(self):
-        return IndexMap(self.__Beta, self.__L, SHAPE)
+        return IndexMap(self.__Beta, self.__L, self.__Shape)
 
     def fftTime(self,BackForth):
         if BackForth==1:
@@ -84,7 +93,7 @@ class Weight:
         if self.__IsSymmetric:
             return
         Map=self.GetMap()
-        tau=np.array([Map.IndexToTau(e) for e in range(SHAPE[TAU])])
+        tau=np.array([Map.IndexToTau(e) for e in range(self.__Shape[TAU])])
         PhaseFactor=np.exp(1j*BackForth*np.pi*tau/self.__Beta)
         if self.SmoothT is not None:
             self.SmoothT*=PhaseFactor
@@ -103,34 +112,27 @@ class Weight:
         elif BackForth==-1:
             temp=np.fft.ifftn(temp, axes=Axis)   
         return temp.reshape(OldShape)
-    def __SpatialShape(self,shape):
+    def __SpatialShape(self, shape):
         InsertPos=VOL
         shape=list(shape)
         SpatialShape=shape[0:InsertPos]+self.__L+shape[InsertPos+1:]
         return range(InsertPos, InsertPos+len(self.__L)), SpatialShape
 
     def InverseSublat(self):
-        OldShape=self.SmoothT.shape
-        NSublat=math.sqrt(OldShape[SUB])
-        temp=self.SmoothT.reshape(OldShape[SP],NSublat,NSublat,OldShape[VOL]*OldShape[TAU])
-        copy=temp.copy()
-        for i in [0,3]:
+        self.SmoothT=self.__InverseSublat(self.SmoothT)
+        self.DeltaT=self.__InverseSublat(self.DeltaT)
+    def __InverseSublat(self, array):
+        OldShape=array.shape
+        NSublat=self.__NSublattice
+        temp=array.reshape(OldShape[SP],NSublat,NSublat,OldShape[VOL]*OldShape[TAU])
+        print self.GetMap(), self.__SpinNum
+        for i in self.GetMap().GetLegalSpinIndexs(self.__SpinNum):
             for j in range(temp.shape[3]):
                 try:
                     temp[i,:,:,j] = np.linalg.inv(temp[i,:,:,j])
                 except:
-                    print i,j
-                    print temp[i,:,:,j]
-        print temp[0,:,:,0]*copy[0,:,:,0]
-        print temp[0,:,:,0]
-
-    def __LoadNpz(self, FileName):
-        try:
-            data=np.load(FileName)
-        except IOError:
-            log.error(FileName+" fails to read!")
-            sys.exit(0)
-        return data
+                    log.error("Fail to inverse matrix {0},:,:,{1}\n{2}".format(i,j, temp[i,:,:,j]))
+        return temp.reshape(OldShape)
 
     def Load(self, FileName):
         log.info("Loading {0} Matrix...".format(self.__Name));
@@ -138,12 +140,11 @@ class Weight:
         if self.__SmoothTName in data.files:
             log.info("Load {0}".format(self.__SmoothTName))
             self.SmoothT=data[self.__SmoothTName]
-            CheckShape(self.SmoothT.shape)
+            self.SetShape(self.SmoothT.shape)
         if self.__DeltaTName in data.files:
             log.info("Load {0}".format(self.__DeltaTName))
             self.DeltaT=data[self.__DeltaTName]
-            CheckShape(self.DeltaT.shape)
-
+            self.SetShape(self.DeltaT.shape)
     def Save(self, FileName, Mode="a"):
         log.info("Saving {0} Matrix...".format(self.__Name));
         data={}
@@ -156,45 +157,41 @@ class Weight:
         if self.SmoothT is not None:
             data[self.__SmoothTName]=self.SmoothT
         np.savez(FileName, **data)
-
-class TestWeight(unittest.TestCase):
-    def setUp(self):
-        self.L=[8,8]
-        self.Beta=1.0
-        self.G=Weight("G", self.Beta, self.L)
-        self.G.SmoothT=np.array([1.0, 2.0])
-        self.W=Weight("W", self.Beta, self.L)
-        self.W.DeltaT=np.array([2.0, 3.0])
-
-    def test_matrix_IO(self):
-        FileName="test.npz"
-        self.G.Save(FileName)
-        self.W.Save(FileName, "a")
-        newW=Weight("W", self.Beta, self.L)
-        newW.Load(FileName)
-        self.assertTrue(np.allclose(self.W.DeltaT,newW.DeltaT))
+    def __LoadNpz(self, FileName):
+        try:
+            data=np.load(FileName)
+        except IOError:
+            log.error(FileName+" fails to read!")
+            sys.exit(0)
+        return data
 
 class TestWeightFFT(unittest.TestCase):
     def setUp(self):
         self.L=[8,8]
         self.Beta=1.0
-        SHAPE[SUB]=4
-        SHAPE[VOL]=self.L[0]*self.L[1]
-        SHAPE[TAU]=64
         self.G=Weight("G", self.Beta, self.L, False)
-        self.G.SmoothT=np.zeros([4, SHAPE[SUB], SHAPE[VOL], SHAPE[TAU]])+0j
+        self.shape=[4, 4, self.L[0]*self.L[1], 64]
+        self.G.SmoothT=np.zeros(self.shape)+0j
+        self.G.SetShape(self.shape) 
         Map=self.G.GetMap()
-        TauGrid=np.linspace(0.0, self.Beta, SHAPE[TAU], endpoint=False)/self.Beta
+        TauGrid=np.linspace(0.0, self.Beta, self.shape[TAU], endpoint=False)/self.Beta
         #last point<self.Beta!!!
         self.gTau=np.exp(TauGrid)
         xx,yy=np.meshgrid(range(self.L[0]),range(self.L[1]))
         zz=np.exp(xx+yy)
         self.z=zz[:,:, np.newaxis]*self.gTau
-        self.G.SmoothT+=self.z.reshape(SHAPE[VOL],SHAPE[TAU])
+        self.G.SmoothT+=self.z.reshape(self.shape[VOL:])
+    def test_matrix_IO(self):
+        FileName="test.npz"
+        self.G.Save(FileName)
+        newG=Weight("G", self.Beta, self.L, False)
+        newG.Load(FileName)
+        self.assertTrue(np.allclose(self.G.SmoothT,newG.SmoothT))
+        os.system("rm "+FileName)
     def test_fft_backforth(self):
         self.G.fftTime(1)
         self.G.fftTime(-1)
-        self.assertTrue(np.allclose(self.G.SmoothT[0,0,:,:], self.z.reshape(SHAPE[VOL],SHAPE[TAU])))
+        self.assertTrue(np.allclose(self.G.SmoothT[0,0,:,:], self.z.reshape(self.shape[VOL:])))
     def test_fft_symmetry(self):
         self.G.ChangeSymmetry(-1)
         self.G.fftTime(1) #fftTime(1) will call ChangeSymmetry(1)
@@ -204,7 +201,7 @@ class TestWeightFFT(unittest.TestCase):
     def test_fft_spatial(self):
         self.G.fftSpace(1)
         zzz=np.fft.fftn(self.z, axes=(0,1))
-        self.assertTrue(np.allclose(self.G.SmoothT[0,0,:,:], zzz.reshape(SHAPE[VOL],SHAPE[TAU])))
+        self.assertTrue(np.allclose(self.G.SmoothT[0,0,:,:], zzz.reshape(self.shape[VOL:])))
         self.G.fftSpace(-1)
 
 if __name__=="__main__":
