@@ -27,6 +27,7 @@
 
 # Data
 *.dat
+*.log
 
 # Figure
 *.png
