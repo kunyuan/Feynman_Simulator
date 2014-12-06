@@ -86,7 +86,7 @@ void WeightMeasuring(real Beta, int Num)
     sput_fail_unless(Equal(Sig.Weight(s1, s2, 0.0, Beta / 2, SpinIn, SpinOut),
                            Sig2.Weight(s1, s2, 0.0, Beta / 2, SpinIn, SpinOut)),
                      "Weight class IO check.");
-//    system("rm test_weight.npz");
+    //    system("rm test_weight.npz");
 }
 
 void Sample(Sigma &sigma, int num, Site in, Site out,
@@ -125,7 +125,7 @@ void TestWeightGW()
     Lattice lat(Vec<int>(8), LATTICE);
     real Beta = 1.0;
     weight::W W_(lat, Beta);
-    W_.BuildNew(model::J1J2, {1.0, 0.5});
+    W_.BuildNew(model::J1J2, {1.0, 0.0});
     W_.WriteBareToASCII();
     weight::G G_(lat, Beta);
     G_.BuildNew(model::J1J2);
