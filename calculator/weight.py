@@ -146,6 +146,7 @@ class Weight:
         elif self.__SpinNum==4:
             self.SmoothT=self.__InverseSpinAndSublat(self.SmoothT)
             self.DeltaT=self.__InverseSpinAndSublat(self.DeltaT)
+
     def __InverseSublat(self, array):
         OldShape=array.shape
         NSublat=self.__NSublattice
@@ -157,6 +158,7 @@ class Weight:
                 except:
                     log.error("Fail to inverse matrix {0},:,:,{1}\n{2}".format(i,j, temp[i,:,:,j]))
         return temp.reshape(OldShape)
+
     def __InverseSpinAndSublat(self, array):
         OldShape=array.shape
         NSublat=self.__NSublattice

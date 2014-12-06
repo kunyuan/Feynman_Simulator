@@ -15,7 +15,7 @@ com_dict={
     "FinalBeta" :  beta,
     "Order" :  4,
     "Model" : "J1J2",
-    "Interaction" : [1.0,0.5],
+    "Interaction" : [1.0,0.0],
     "ExternalField": 0.0,
 }
 
