@@ -2,22 +2,20 @@
 import numpy as np
 import parameter as para
 import calculator as calc
-from weight import UP,DOWN,IN,OUT,TAU,SP,SUB,VOL,OneSpin,TwoSpin,Symmetric,AntiSymmetric
+from weight import UP,DOWN,IN,OUT,TAU,SP,SUB,VOL
 import weight
 from logger import *
 
 para = para.Parameter()
 para.Load("../data/infile/_in_DYSON_1")
 Beta = para.InitialBeta
-DeltaTPara={"NSublat":2, "L":para.L}
-SmoothTPara=DeltaTPara.copy()
-SmoothTPara.update({"Beta": Beta, "MaxTauBin": 32})
-map=weight.IndexMap(**SmoothTPara)
+Para={"NSublat":2, "L":para.L, "Beta": Beta, "MaxTauBin": 32}
+map=weight.IndexMap(**Para)
 
-G0=weight.Weight("G", OneSpin, SmoothTPara, AntiSymmetric)
+G0=weight.Weight("G.SmoothT", map, "OneSpin", "AntiSymmetric")
 G0.Load("../data/GW.npz")
 
-W0=weight.Weight("W", TwoSpin, DeltaTPara, Symmetric)
+W0=weight.Weight("W.DeltaT", map, "TwoSpins", "Symmetric")
 W0.Load("../data/GW.npz")
 
 Polar=calc.Polar_FirstOrder(G0, map)

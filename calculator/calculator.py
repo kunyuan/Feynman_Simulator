@@ -1,7 +1,7 @@
 #!usr/bin/env python
 import numpy as np
 import parameter as para
-from weight import UP,DOWN,IN,OUT,TAU,SP,SUB,VOL,OneSpin,TwoSpin,Symmetric,AntiSymmetric
+from weight import UP,DOWN,IN,OUT,TAU,SP,SUB,VOL
 import weight
 from logger import *
 
@@ -12,7 +12,7 @@ def PlotTime(array, Beta):
     plt.show()
 
 def Polar_FirstOrder(G, map):
-    Polar=weight.Weight("Polar", TwoSpin, G.Para, Symmetric)
+    Polar=weight.Weight("Polar.SmoothT", map, "TwoSpins","Symmetric")
     NSublat = G.NSublat
     SubList=[(map.SublatIndex(a,b),map.SublatIndex(b,a)) for a in range(NSublat) for b in range(NSublat)]
     for spin1 in range(2):
@@ -27,7 +27,7 @@ def Polar_FirstOrder(G, map):
     return Polar
 
 def W_Dyson(W0,Polar,map):
-    W=weight.Weight("W", TwoSpin, Polar.Para, Symmetric)
+    W=weight.Weight("W.SmoothT", map, "TwoSpins", "Symmetric")
     W0.FFT(1, "Space")
     Polar.FFT(1, "Space", "Time")
 
@@ -37,26 +37,24 @@ def W_Dyson(W0,Polar,map):
     Polar.Reshape("SPSUBSPSUB")
     JP=np.einsum("ijv,jkvt->ikvt",W0.Data, Polar.Data)
     #JP shape: NSpin*NSub,NSpin*NSub,Vol,Tau
-    for i in range(NSub):
-        I=np.eye(NSpin*NSub)
+    I=np.eye(NSpin*NSub)
     W.Data=I[...,np.newaxis,np.newaxis]-JP
     W.Inverse();
-    W.Data=np.einsum('ijv,jkvt->ikvt', W0.Data,W.Data)-W0.Data[...,np.newaxis]
+    W.Data=np.einsum('ijvt,jkv->ikvt', W.Data,W0.Data)-W0.Data[...,np.newaxis]
     W.Reshape("SP2SUB2")
     W0.Reshape("SP2SUB2")
     Polar.Reshape("SP2SUB2")
     W.FFT(-1, "Space", "Time")
     Polar.FFT(-1, "Space", "Time")
     W0.FFT(-1, "Space")
-    #print W.Data[map.Spin4Index((0,0),(0,0)),map.SublatIndex(0,0),:,0].reshape(W.L)
-    #PlotTime(W.Data[map.Spin4Index((0,0),(0,0)),map.SublatIndex(0,0),0,:], Polar.Beta)
+    #print W.Data[map.Spin4Index((0,0),(0,0)),map.SublatIndex(0,0),0,:]
 
 def Sigma_FirstOrder(G0, W, map):
-    Sigma=weight.Weight("Sigma", OneSpin, W.Para, weight.AntiSymmetric)
+    Sigma=weight.Weight("Sigma.SmoothT", map, "OneSpins", "AntiSymmetric")
     return Sigma
 
 def W_FirstOrder(W0, Polar, map):
-    W=weight.Weight("W", TwoSpin, Polar.Para, Symmetric)
+    W=weight.Weight("W.SmoothT", map, "TwoSpins", "Symmetric")
     TauRange = range(W.Shape[TAU])
     SubRange=range(W.NSublat)
     SubList=[(a,b,c,d) for a in SubRange for b in SubRange for c in SubRange for d in SubRange]
