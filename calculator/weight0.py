@@ -7,23 +7,28 @@ import unittest
 from logger import *
 
 SPIN,SPIN2,SPIN3=2,4,8
+OneSpin,TwoSpin=2,4
 IN,OUT=0,1
 DOWN,UP=0,1
 SP,SUB,VOL,TAU=0,1,2,3
+Symmetric, AntiSymmetric=True, False
+SmoothT, DeltaT=1,2
 
 ### Shape: [SP][SUB][VOL][TAU], the TAU dimension may be missing
 
 class IndexMap:
-    def __init__(self, Beta, L, NSublat, MaxTauBin):
-        self.__MaxTauBin=MaxTauBin
+    def __init__(self, Beta, L_, NSublattice, MAX_TAU_BIN):
+        self.__MaxTauBin=MAX_TAU_BIN
         self.__Beta=Beta
         self.__dBeta=Beta/self.__MaxTauBin
         self.__dBetaInverse=1.0/self.__dBeta
-        self.__L=L
-        self.__NSublattice=NSublat
-    def GetPara(self):
-        return {"L":self.__L, "NSublat":self.__NSublattice, \
-                "Beta":self.__Beta, "MaxTauBin": self.__MaxTauBin}
+        self.__L=L_
+        self.__NSublattice=NSublattice
+    def GetShape(self, SpinNum):
+        v=1;
+        for e in self.__L:
+            v*=e
+        return (SpinNum**2, self.__NSublattice**2,v,self.__MaxTauBin)
 
     def TauIndex(self, In, Out):
         tau=Out-In
@@ -75,47 +80,28 @@ class IndexMap:
                     ((UP,DOWN),(DOWN,UP)),((DOWN,UP),(UP,DOWN))]
 
 class Weight():
-    def __init__(self, Name, Map, NSpin, Symmetry=None):
-        """Name: end with '.SmoothT' or '.DeltaT'
-           NSpin: 'OneSpin' or 'TwoSpin'
-           Symmetry: 'Symmetric' or 'AntiSymmetric', only be checked if TauDep is 'SmoothT'
-        """
-        self.Map=Map
-        Para=Map.GetPara()
-        self.Name=Name
-        self.NSublat=Para["NSublat"]
-        self.L=Para["L"]
-        if NSpin is "OneSpin":
-            self.NSpin=2
-        elif NSpin is "TwoSpins":
-            self.NSpin=4
-        else:
-            Assert(False, "Only accept OneSpin or TwoSpins, not {0}".format(NSpin))
-
+    def __init__(self, Name, NSpin, ParaDict, IsSymmetric):
+        self.Para=ParaDict
+        self.NSpin=self.NSpin
+        self.NSublat=self.Para["NSublat"]
+        self.L=self.Para["L"]
+        self.IsSymmetric=IsSymmetric
         self.Shape=[self.NSpin**2, self.NSublat**2]
         v=1
         for e in self.L:
             v*=e
         self.Shape.append(v)
-        if ".SmoothT" in Name:
-            self.Beta=Para["Beta"]
-            self.Shape.append(Para["MaxTauBin"])
+        if "Beta" in self.Para:
+            self.Beta=self.Para["Beta"]
+            self.Shape.append(self.Para["MaxTauBin"])
             self.__HasTau=True
-            self.__SpaceTimeIndex=[[k,v] for k in range(self.Shape[VOL]) for v in range(self.Shape[TAU])]
-            if Symmetry is "Symmetric":
-                self.IsSymmetric=True
-            elif Symmetry is "AntiSymmetric":
-                self.IsSymmetric=False
-            else:
-                Assert(False, "Should be either Symmetric or AntiSymmetric, not {0}".format(Symmetry))
-        elif ".DeltaT" in Name:
-            self.__HasTau=False
-            self.__SpaceTimeIndex=[[k,] for k in range(self.Shape[VOL])]
+            self.Name=Name+".SmoothT"
         else:
-            Assert(False, "Should be either .SmoothT or .DeltaT in Name, not {0}".format(Name))
-
+            self.__HasTau=False
+            self.Name=Name+".DeltaT"
         self.Data=np.zeros(self.Shape, dtype=complex)
-        self.__OriginShape=list(self.Shape) #get a copy of self.Shape
+    def GetMap(self):
+        return IndexMap(self.Beta, self.L, self.NSublat, self.Shape[TAU])
 
     def FFT(self, BackForth, *SpaceOrTime):
         if "Space" in SpaceOrTime:
@@ -140,13 +126,13 @@ class Weight():
         '''
         if self.IsSymmetric or not self.__HasTau:
             return
-        tau=np.array([self.Map.IndexToTau(e) for e in range(self.Shape[TAU])])
+        Map=self.GetMap()
+        tau=np.array([Map.IndexToTau(e) for e in range(self.Shape[TAU])])
         PhaseFactor=np.exp(1j*BackForth*np.pi*tau/self.Beta)
         self.Data*=PhaseFactor
 
     def __fftSpace(self, BackForth):
-        OldShape=self.__OriginShape
-        self.__AssertShape(self.Shape, OldShape)
+        OldShape=self.Shape
         Axis, NewShape=self.__SpatialShape(OldShape)
         self.Data=self.Data.reshape(NewShape)
         if BackForth==1:
@@ -160,46 +146,48 @@ class Weight():
         SpatialShape=shape[0:InsertPos]+self.L+shape[InsertPos+1:]
         return range(InsertPos, InsertPos+len(self.L)), SpatialShape
 
-    def Reshape(self, ShapeMode):
-        OriginShape=self.__OriginShape
-        MidShape1=[self.NSpin, self.NSpin,self.NSublat,self.NSublat]+self.__OriginShape[VOL:]
-        MidShape2=[self.NSpin, self.NSublat, self.NSpin, self.NSublat]+self.__OriginShape[VOL:]
-        NewShape=[self.NSpin*self.NSublat, self.NSpin*self.NSublat]+self.__OriginShape[VOL:]
-        if ShapeMode is "SP2SUB2":
-            self.__AssertShape(self.Shape, NewShape)
-            self.Data=self.Data.reshape(MidShape2).swapaxes(1,2).reshape(OriginShape)
-            self.Shape=OriginShape
-        elif ShapeMode is "SPSUBSPSUB":
-            self.__AssertShape(self.Shape, OriginShape)
-            self.Data=self.Data.reshape(MidShape1).swapaxes(1,2).reshape(NewShape)
-            self.Shape=NewShape
+    def ReshapeSpinAndSublat(self, NewShape):
+        NewShape=list(NewShape)
+        s=1
+        for e in NewShape:
+            s*=e
+        total=self.Shape[SP]*self.Shape[SUB]
+        Assert(len(NewShape)<=4, "{0} has too many dimensions!".format(NewShape)) 
+        Assert(s==total, "The elements should be {0} in total!".format(total)) 
+        self.Data=self.Data.reshape(NewShape+self.Shape[VOL:])
 
     def Inverse(self):
-        if self.NSpin==2:
-            self.__InverseSublat()
-        elif self.NSpin==4:
-            self.__InverseSpinAndSublat()
+        if self.SpinNum==2:
+            self.Data=self.__InverseSublat()
+        elif self.SpinNum==4:
+            self.Data=self.__InverseSpinAndSublat()
     def __InverseSublat(self):
-        OldShape=self.__OriginShape
-        self.__AssertShape(self.Shape, OldShape)
+        OldShape=self.Shape
         NSublat=self.NSublattice
-        self.Data=self.Data.reshape(OldShape[SP],NSublat,NSublat,OldShape[VOL:])
-        for i in self.Map.GetConservedSpinIndexs(self.SpinNum):
-            for j in self.__SpaceTimeIndex:
-                index=[i,Ellipsis]+j
+        LastDimension=self.Shape[VOL]*self.Shape[TAU] if self.__HasTau else self.Shape[VOL]
+        self.Data=self.Data.reshape(OldShape[SP],NSublat,NSublat,LastDimension)
+        for i in self.GetMap().GetConservedSpinIndexs(self.SpinNum):
+            for j in range(LastDimension):
                 try:
-                    self.Data[index] = np.linalg.inv(self.Data[index])
+                    self.Data[i,:,:,j] = np.linalg.inv(self.Data[i,:,:,j])
                 except:
-                    log.error("Fail to inverse matrix {0},:,:,{1}\n{2}".format(i,j, self.Data[index]))
+                    log.error("Fail to inverse matrix {0},:,:,{1}\n{2}".format(i,j, self.Data[i,:,:,j]))
         self.Data=self.Data.reshape(OldShape)
     def __InverseSpinAndSublat(self):
-        for j in self.__SpaceTimeIndex:
-            index=[Ellipsis,]+j
+        NSublat=self.NSublattice
+        SpinNum=self.SpinNum
+        OldShape=self.Shape
+        LastDimension=self.Shape[VOL]*self.Shape[TAU] if self.__HasTau else self.Shape[VOL]
+        MidShape1=(SpinNum,SpinNum,NSublat,NSublat,LastDimension)
+        MidShape2=(SpinNum,NSublat,SpinNum,NSublat,LastDimension)
+        NewShape=(SpinNum*NSublat,SpinNum*NSublat,LastDimension)
+        self.Data=self.Data.reshape(MidShape1).swapaxes(1,2).reshape(NewShape)
+        for j in range(LastDimension):
             try:
-                self.Data[index] = np.linalg.inv(self.Data[index])
+                self.Data[:,:,j] = np.linalg.inv(self.Data[:,:,j])
             except:
-                log.error("Fail to inverse matrix :,:,{0}\n{1}".format(index, self.Data[index].shape))
-                sys.exit(0)
+                log.error("Fail to inverse matrix :,:,{0}\n{1}".format(j, self.Data[:,:,j]))
+        self.Data=self.Data.reshape(MidShape2).swapaxes(1,2).reshape(OldShape)
 
     def Load(self, FileName):
         log.info("Loading {0} Matrix...".format(self.Name));
@@ -208,8 +196,6 @@ class Weight():
             log.info("Load {0}".format(self.Name))
             self.__AssertShape(self.Shape, data[self.Name].shape)
             self.Data=data[self.Name]
-        else:
-            Assert(False, "{0} not found!").format(self.Name)
     def Save(self, FileName, Mode="a"):
         log.info("Saving {0} Matrix...".format(self.Name));
         data={}
@@ -234,7 +220,7 @@ class TestIndexMap(unittest.TestCase):
     def setUp(self):
         self.L=[8,8]
         self.Beta=1.0
-        self.Map=IndexMap(self.Beta, self.L, NSublat=2, MaxTauBin=64)
+        self.Map=IndexMap(self.Beta, self.L, NSublattice=2, MAX_TAU_BIN=64)
     def test_conserved_spin_filter(self):
         for s in self.Map.GetConservedSpinTuple(2):
             self.assertTrue(s[IN]==s[OUT])
@@ -243,8 +229,9 @@ class TestIndexMap(unittest.TestCase):
 
 class TestWeightFFT(unittest.TestCase):
     def setUp(self):
-        self.Map=IndexMap(Beta=1.0, L=[8,8], NSublat=2, MaxTauBin=64)
-        self.G=Weight("G.SmoothT", self.Map, "OneSpin", "AntiSymmetric")
+        self.Para={"L":[8,8], "Beta": 1.0, "NSublat":2, "MaxTauBin": 64}
+        self.G=Weight("G", OneSpin, self.Para, AntiSymmetric)
+        Map=self.G.GetMap()
         TauGrid=np.linspace(0.0, self.G.Beta, self.G.Shape[TAU], endpoint=False)/self.G.Beta
         #last point<self.Beta!!!
         self.gTau=np.exp(TauGrid)
@@ -255,7 +242,7 @@ class TestWeightFFT(unittest.TestCase):
     def test_matrix_IO(self):
         FileName="test.npz"
         self.G.Save(FileName)
-        newG=Weight("G.SmoothT", self.Map, "OneSpin", "AntiSymmetric")
+        newG=Weight("G", OneSpin, self.Para, AntiSymmetric)
         newG.Load(FileName)
         self.assertTrue(np.allclose(self.G.Data,newG.Data))
         os.system("rm "+FileName)
