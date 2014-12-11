@@ -31,5 +31,7 @@ W=calc.W_FirstOrder(W0, Polar)
 print W.SmoothT[map.Spin4Index((DOWN,DOWN),(DOWN,DOWN)), 0,0,:]
 print W.SmoothT[map.Spin4Index((UP,UP),(UP,UP)), 0,0,:]
 
-Sigma=calc.Sigma_FirstOrder(G0, W, weight.AntiSymmetric)
+Sigma=calc.Sigma_FirstOrder(G0, W0, W, weight.AntiSymmetric)
+print Sigma.SmoothT[map.Spin2Index(UP,UP), map.SublatIndex(1,1),0,:]
+print Sigma.DeltaT[map.Spin2Index(UP,UP), map.SublatIndex(1,1),0]
 
