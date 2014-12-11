@@ -17,13 +17,13 @@ SmoothT, DeltaT=1,2
 ### Shape: [SP][SUB][VOL][TAU], the TAU dimension may be missing
 
 class IndexMap:
-    def __init__(self, Beta, L, NSublat, MaxTauBin):
-        self.__MaxTauBin=MaxTauBin
+    def __init__(self, Beta, L_, NSublattice, MAX_TAU_BIN):
+        self.__MaxTauBin=MAX_TAU_BIN
         self.__Beta=Beta
         self.__dBeta=Beta/self.__MaxTauBin
         self.__dBetaInverse=1.0/self.__dBeta
-        self.__L=L
-        self.__NSublattice=NSublat
+        self.__L=L_
+        self.__NSublattice=NSublattice
     def GetShape(self, SpinNum):
         v=1;
         for e in self.__L:
@@ -82,7 +82,7 @@ class IndexMap:
 class Weight():
     def __init__(self, Name, NSpin, ParaDict, IsSymmetric):
         self.Para=ParaDict
-        self.NSpin=NSpin
+        self.NSpin=self.NSpin
         self.NSublat=self.Para["NSublat"]
         self.L=self.Para["L"]
         self.IsSymmetric=IsSymmetric
@@ -96,14 +96,10 @@ class Weight():
             self.Shape.append(self.Para["MaxTauBin"])
             self.__HasTau=True
             self.Name=Name+".SmoothT"
-            self.__SpaceTimeIndex=[[k,v] for k in range(self.Shape[VOL]) for v in range(self.Shape[TAU])]
         else:
             self.__HasTau=False
             self.Name=Name+".DeltaT"
-            self.__SpaceTimeIndex=[[k,] for k in range(self.Shape[VOL])]
         self.Data=np.zeros(self.Shape, dtype=complex)
-        self.__OriginShape=list(self.Shape) #get a copy of self.Shape
-
     def GetMap(self):
         return IndexMap(self.Beta, self.L, self.NSublat, self.Shape[TAU])
 
@@ -136,8 +132,7 @@ class Weight():
         self.Data*=PhaseFactor
 
     def __fftSpace(self, BackForth):
-        OldShape=self.__OriginShape
-        self.__AssertShape(self.Shape, OldShape)
+        OldShape=self.Shape
         Axis, NewShape=self.__SpatialShape(OldShape)
         self.Data=self.Data.reshape(NewShape)
         if BackForth==1:
@@ -151,46 +146,48 @@ class Weight():
         SpatialShape=shape[0:InsertPos]+self.L+shape[InsertPos+1:]
         return range(InsertPos, InsertPos+len(self.L)), SpatialShape
 
-    def Reshape(self, ShapeMode):
-        OriginShape=self.__OriginShape
-        MidShape1=[self.NSpin, self.NSpin,self.NSublat,self.NSublat]+self.__OriginShape[VOL:]
-        MidShape2=[self.NSpin, self.NSublat, self.NSpin, self.NSublat]+self.__OriginShape[VOL:]
-        NewShape=[self.NSpin*self.NSublat, self.NSpin*self.NSublat]+self.__OriginShape[VOL:]
-        if ShapeMode is "SP2SUB2":
-            self.__AssertShape(self.Shape, NewShape)
-            self.Data=self.Data.reshape(MidShape2).swapaxes(1,2).reshape(OriginShape)
-            self.Shape=OriginShape
-        elif ShapeMode is "SPSUBSPSUB":
-            self.__AssertShape(self.Shape, OriginShape)
-            self.Data=self.Data.reshape(MidShape1).swapaxes(1,2).reshape(NewShape)
-            self.Shape=NewShape
+    def ReshapeSpinAndSublat(self, NewShape):
+        NewShape=list(NewShape)
+        s=1
+        for e in NewShape:
+            s*=e
+        total=self.Shape[SP]*self.Shape[SUB]
+        Assert(len(NewShape)<=4, "{0} has too many dimensions!".format(NewShape)) 
+        Assert(s==total, "The elements should be {0} in total!".format(total)) 
+        self.Data=self.Data.reshape(NewShape+self.Shape[VOL:])
 
     def Inverse(self):
-        if self.NSpin==2:
-            self.__InverseSublat()
-        elif self.NSpin==4:
-            self.__InverseSpinAndSublat()
+        if self.SpinNum==2:
+            self.Data=self.__InverseSublat()
+        elif self.SpinNum==4:
+            self.Data=self.__InverseSpinAndSublat()
     def __InverseSublat(self):
-        OldShape=self.__OriginShape
-        self.__AssertShape(self.Shape, OldShape)
+        OldShape=self.Shape
         NSublat=self.NSublattice
-        self.Data=self.Data.reshape(OldShape[SP],NSublat,NSublat,OldShape[VOL:])
+        LastDimension=self.Shape[VOL]*self.Shape[TAU] if self.__HasTau else self.Shape[VOL]
+        self.Data=self.Data.reshape(OldShape[SP],NSublat,NSublat,LastDimension)
         for i in self.GetMap().GetConservedSpinIndexs(self.SpinNum):
-            for j in self.__SpaceTimeIndex:
-                index=[i,Ellipsis]+j
+            for j in range(LastDimension):
                 try:
-                    self.Data[index] = np.linalg.inv(self.Data[index])
+                    self.Data[i,:,:,j] = np.linalg.inv(self.Data[i,:,:,j])
                 except:
-                    log.error("Fail to inverse matrix {0},:,:,{1}\n{2}".format(i,j, self.Data[index]))
+                    log.error("Fail to inverse matrix {0},:,:,{1}\n{2}".format(i,j, self.Data[i,:,:,j]))
         self.Data=self.Data.reshape(OldShape)
     def __InverseSpinAndSublat(self):
-        for j in self.__SpaceTimeIndex:
-            index=[Ellipsis,]+j
+        NSublat=self.NSublattice
+        SpinNum=self.SpinNum
+        OldShape=self.Shape
+        LastDimension=self.Shape[VOL]*self.Shape[TAU] if self.__HasTau else self.Shape[VOL]
+        MidShape1=(SpinNum,SpinNum,NSublat,NSublat,LastDimension)
+        MidShape2=(SpinNum,NSublat,SpinNum,NSublat,LastDimension)
+        NewShape=(SpinNum*NSublat,SpinNum*NSublat,LastDimension)
+        self.Data=self.Data.reshape(MidShape1).swapaxes(1,2).reshape(NewShape)
+        for j in range(LastDimension):
             try:
-                self.Data[index] = np.linalg.inv(self.Data[index])
+                self.Data[:,:,j] = np.linalg.inv(self.Data[:,:,j])
             except:
-                log.error("Fail to inverse matrix :,:,{0}\n{1}".format(index, self.Data[index].shape))
-                sys.exit(0)
+                log.error("Fail to inverse matrix :,:,{0}\n{1}".format(j, self.Data[:,:,j]))
+        self.Data=self.Data.reshape(MidShape2).swapaxes(1,2).reshape(OldShape)
 
     def Load(self, FileName):
         log.info("Loading {0} Matrix...".format(self.Name));
@@ -223,7 +220,7 @@ class TestIndexMap(unittest.TestCase):
     def setUp(self):
         self.L=[8,8]
         self.Beta=1.0
-        self.Map=IndexMap(self.Beta, self.L, NSublat=2, MaxTauBin=64)
+        self.Map=IndexMap(self.Beta, self.L, NSublattice=2, MAX_TAU_BIN=64)
     def test_conserved_spin_filter(self):
         for s in self.Map.GetConservedSpinTuple(2):
             self.assertTrue(s[IN]==s[OUT])
