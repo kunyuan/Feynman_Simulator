@@ -7,12 +7,9 @@ import unittest
 from logger import *
 
 SPIN,SPIN2,SPIN3=2,4,8
-OneSpin,TwoSpin=2,4
 IN,OUT=0,1
 DOWN,UP=0,1
 SP,SUB,VOL,TAU=0,1,2,3
-Symmetric, AntiSymmetric=True, False
-SmoothT, DeltaT=1,2
 
 ### Shape: [SP][SUB][VOL][TAU], the TAU dimension may be missing
 
@@ -24,11 +21,9 @@ class IndexMap:
         self.__dBetaInverse=1.0/self.__dBeta
         self.__L=L
         self.__NSublattice=NSublat
-    def GetShape(self, SpinNum):
-        v=1;
-        for e in self.__L:
-            v*=e
-        return (SpinNum**2, self.__NSublattice**2,v,self.__MaxTauBin)
+    def GetPara(self):
+        return {"L":self.__L, "NSublat":self.__NSublattice, \
+                "Beta":self.__Beta, "MaxTauBin": self.__MaxTauBin}
 
     def TauIndex(self, In, Out):
         tau=Out-In
@@ -80,32 +75,47 @@ class IndexMap:
                     ((UP,DOWN),(DOWN,UP)),((DOWN,UP),(UP,DOWN))]
 
 class Weight():
-    def __init__(self, Name, NSpin, ParaDict, IsSymmetric):
-        self.Para=ParaDict
-        self.NSpin=NSpin
-        self.NSublat=self.Para["NSublat"]
-        self.L=self.Para["L"]
-        self.IsSymmetric=IsSymmetric
+    def __init__(self, Name, Map, NSpin, Symmetry=None):
+        """Name: end with '.SmoothT' or '.DeltaT'
+           NSpin: 'OneSpin' or 'TwoSpin'
+           Symmetry: 'Symmetric' or 'AntiSymmetric', only be checked if TauDep is 'SmoothT'
+        """
+        self.Map=Map
+        Para=Map.GetPara()
+        self.Name=Name
+        self.NSublat=Para["NSublat"]
+        self.L=Para["L"]
+        if NSpin is "OneSpin":
+            self.NSpin=2
+        elif NSpin is "TwoSpins":
+            self.NSpin=4
+        else:
+            Assert(False, "Only accept OneSpin or TwoSpins, not {0}".format(NSpin))
+
         self.Shape=[self.NSpin**2, self.NSublat**2]
         v=1
         for e in self.L:
             v*=e
         self.Shape.append(v)
-        if "Beta" in self.Para:
-            self.Beta=self.Para["Beta"]
-            self.Shape.append(self.Para["MaxTauBin"])
+        if ".SmoothT" in Name:
+            self.Beta=Para["Beta"]
+            self.Shape.append(Para["MaxTauBin"])
             self.__HasTau=True
-            self.Name=Name+".SmoothT"
             self.__SpaceTimeIndex=[[k,v] for k in range(self.Shape[VOL]) for v in range(self.Shape[TAU])]
-        else:
+            if Symmetry is "Symmetric":
+                self.IsSymmetric=True
+            elif Symmetry is "AntiSymmetric":
+                self.IsSymmetric=False
+            else:
+                Assert(False, "Should be either Symmetric or AntiSymmetric, not {0}".format(Symmetry))
+        elif ".DeltaT" in Name:
             self.__HasTau=False
-            self.Name=Name+".DeltaT"
             self.__SpaceTimeIndex=[[k,] for k in range(self.Shape[VOL])]
+        else:
+            Assert(False, "Should be either .SmoothT or .DeltaT in Name, not {0}".format(Name))
+
         self.Data=np.zeros(self.Shape, dtype=complex)
         self.__OriginShape=list(self.Shape) #get a copy of self.Shape
-
-    def GetMap(self):
-        return IndexMap(self.Beta, self.L, self.NSublat, self.Shape[TAU])
 
     def FFT(self, BackForth, *SpaceOrTime):
         if "Space" in SpaceOrTime:
@@ -130,8 +140,7 @@ class Weight():
         '''
         if self.IsSymmetric or not self.__HasTau:
             return
-        Map=self.GetMap()
-        tau=np.array([Map.IndexToTau(e) for e in range(self.Shape[TAU])])
+        tau=np.array([self.Map.IndexToTau(e) for e in range(self.Shape[TAU])])
         PhaseFactor=np.exp(1j*BackForth*np.pi*tau/self.Beta)
         self.Data*=PhaseFactor
 
@@ -175,7 +184,7 @@ class Weight():
         self.__AssertShape(self.Shape, OldShape)
         NSublat=self.NSublattice
         self.Data=self.Data.reshape(OldShape[SP],NSublat,NSublat,OldShape[VOL:])
-        for i in self.GetMap().GetConservedSpinIndexs(self.SpinNum):
+        for i in self.Map.GetConservedSpinIndexs(self.SpinNum):
             for j in self.__SpaceTimeIndex:
                 index=[i,Ellipsis]+j
                 try:
@@ -199,6 +208,8 @@ class Weight():
             log.info("Load {0}".format(self.Name))
             self.__AssertShape(self.Shape, data[self.Name].shape)
             self.Data=data[self.Name]
+        else:
+            Assert(False, "{0} not found!").format(self.Name)
     def Save(self, FileName, Mode="a"):
         log.info("Saving {0} Matrix...".format(self.Name));
         data={}
@@ -232,9 +243,8 @@ class TestIndexMap(unittest.TestCase):
 
 class TestWeightFFT(unittest.TestCase):
     def setUp(self):
-        self.Para={"L":[8,8], "Beta": 1.0, "NSublat":2, "MaxTauBin": 64}
-        self.G=Weight("G", OneSpin, self.Para, AntiSymmetric)
-        Map=self.G.GetMap()
+        self.Map=IndexMap(Beta=1.0, L=[8,8], NSublat=2, MaxTauBin=64)
+        self.G=Weight("G.SmoothT", self.Map, "OneSpin", "AntiSymmetric")
         TauGrid=np.linspace(0.0, self.G.Beta, self.G.Shape[TAU], endpoint=False)/self.G.Beta
         #last point<self.Beta!!!
         self.gTau=np.exp(TauGrid)
@@ -245,7 +255,7 @@ class TestWeightFFT(unittest.TestCase):
     def test_matrix_IO(self):
         FileName="test.npz"
         self.G.Save(FileName)
-        newG=Weight("G", OneSpin, self.Para, AntiSymmetric)
+        newG=Weight("G.SmoothT", self.Map, "OneSpin", "AntiSymmetric")
         newG.Load(FileName)
         self.assertTrue(np.allclose(self.G.Data,newG.Data))
         os.system("rm "+FileName)
