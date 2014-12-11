@@ -12,7 +12,8 @@ def Polar_FirstOrder(G):
     Polar.SetShape(map.GetShape(4))
     Polar.SetZeros("SmoothT")
     NSublat = G.NSublattice
-    SubList=[(map.SublatIndex(a,b),map.SublatIndex(b,a)) for a in range(NSublat) for b in range(NSublat)]
+    SubList=[(map.SublatIndex(a,b),map.SublatIndex(b,a)) for a in range(NSublat) 
+                                                         for b in range(NSublat)]
     for spin1 in range(2):
         for spin2 in range(2):
             spinPolar = map.Spin4Index((spin1,spin2),(spin2,spin1))
@@ -34,7 +35,8 @@ def W_FirstOrder(W0, Polar):
     SubList=[(a,b,c,d) for a in SubRange for b in SubRange for c in SubRange for d in SubRange]
     SpinList=[(Wtuple,Polartuple) for Wtuple in map.GetLegalSpinTuple(4) \
                                   for Polartuple in map.GetLegalSpinTuple(4) \
-                                  if map.IsLegal(4, (Wtuple[IN], Polartuple[IN]))] #make sure spin conservation on W0
+                                  if map.IsLegal(4, (Wtuple[IN], Polartuple[IN]))] 
+    #make sure spin conservation on W0
     print "\n".join([str(e) for e in SpinList])
 
     W0.fftSpace(1)
@@ -98,19 +100,22 @@ def G_Dyson(G0, Sigma, IsSymmetric=weight.AntiSymmetric):
     G.SetShape(map.GetShape(2))  ## 2 is spinNum
     G.SetZeros("SmoothT")
 
-    TauRange = range(G.TauBinMax)
-    SubRange=range(W0.NSublattice)
-    SubList=[(a,b,c,d) for a in SubRange for b in SubRange for c in SubRange for d in SubRange]
-    SpinList=[(Wtuple,Polartuple) for Wtuple in map.GetLegalSpinTuple(4) \
-                                  for Polartuple in map.GetLegalSpinTuple(4) \
-                                  if map.IsLegal(4, (Wtuple[IN], Polartuple[IN]))] 
-    #make sure spin conservation on W0
-
     G0.fftSpace(1)
     Sigma.fftSpace(1)
     G.fftSpace(1)
-
-
     
+       #reshape
+    np.einsum('ijvt,jkvt->ikvt', G0.SmoothT, Sigma.SmoothT, G1)
+    np.einsum('ijvt,jkv->ikvt', G0.SmoothT, Sigma.DeltaT, G2)
+       #multiply a correction term
+    a = np.eye()-(G1 + G2)
+       #reshape
+    b = np.linalg.inv(a)
+       #reshape
+    G.SmoothT = np.dot(G0.SmoothT, b)
+
+    return G
+
+
 
 
