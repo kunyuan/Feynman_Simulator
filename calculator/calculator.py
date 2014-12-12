@@ -32,18 +32,18 @@ def W_Dyson(W0,Polar,map):
     Polar.FFT(1, "Space", "Time")
 
     NSpin, NSub=W.NSpin, W.NSublat
-    W0.Reshape("SPSUBSPSUB")
-    W.Reshape("SPSUBSPSUB")
-    Polar.Reshape("SPSUBSPSUB")
+    W0.Reshape("SPSUB,SPSUB")
+    W.Reshape("SPSUB,SPSUB")
+    Polar.Reshape("SPSUB,SPSUB")
     JP=np.einsum("ijv,jkvt->ikvt",W0.Data, Polar.Data)
     #JP shape: NSpin*NSub,NSpin*NSub,Vol,Tau
     I=np.eye(NSpin*NSub)
     W.Data=I[...,np.newaxis,np.newaxis]-JP
     W.Inverse();
     W.Data=np.einsum('ijvt,jkv->ikvt', W.Data,W0.Data)-W0.Data[...,np.newaxis]
-    W.Reshape("SP2SUB2")
-    W0.Reshape("SP2SUB2")
-    Polar.Reshape("SP2SUB2")
+    W.Reshape("SP2,SUB2")
+    W0.Reshape("SP2,SUB2")
+    Polar.Reshape("SP2,SUB2")
     W.FFT(-1, "Space", "Time")
     Polar.FFT(-1, "Space", "Time")
     W0.FFT(-1, "Space")

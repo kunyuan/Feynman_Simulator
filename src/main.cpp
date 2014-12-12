@@ -15,9 +15,8 @@
 using namespace std;
 using namespace para;
 
-void MonteCarlo(const Job &);
-void Dyson(const Job &);
-int main(int argc, const char *argv[])
+void MonteCarlo(const Job&);
+int main(int argc, const char* argv[])
 {
     LOGGER_CONF("test.log", "test", Logger::file_on | Logger::screen_on, INFO, INFO);
     RunTest();
@@ -30,12 +29,12 @@ int main(int argc, const char *argv[])
         MonteCarlo(Job);
     }
     else if (Job.Type == "DYSON") {
-        Dyson(Job);
+        cout<<"Not Defined"<<endl;
     }
     return 0;
 }
 
-void MonteCarlo(const para::Job &Job)
+void MonteCarlo(const para::Job& Job)
 {
     EnvMonteCarlo PaddyField(Job.PID);
     if (Job.DoesLoad)
@@ -43,9 +42,9 @@ void MonteCarlo(const para::Job &Job)
     else
         PaddyField.BuildNew(Job.InputFile, Job.StartFromBare);
 
-    auto &Para = PaddyField.Para;
-    auto &Grasshopper = PaddyField.Grasshopper;
-    auto &Scarecrow = PaddyField.Scarecrow;
+    auto& Para = PaddyField.Para;
+    auto& Grasshopper = PaddyField.Grasshopper;
+    auto& Scarecrow = PaddyField.Scarecrow;
 
     while (Para.Counter < 10) {
         Para.Counter++;
@@ -64,33 +63,4 @@ void MonteCarlo(const para::Job &Job)
             PaddyField.ListenToMessage();
         }
     }
-}
-
-void Dyson(const para::Job &Job)
-{
-    EnvDyson env(Job.PID);
-    if (Job.DoesLoad) {
-        env.Load();
-        env.UpdateWeight();
-    }
-    else
-        env.BuildNew(Job.InputFile, Job.StartFromBare);
-    auto &Para = env.Para;
-
-    do {
-        LOG_INFO("Start Dyson Version " << Para.Version << "...")
-        //TODO: do dyson
-
-        Para.Version++;
-        env.Save();
-        env.BroadcastMessage();
-        LOG_INFO("Version " << Para.Version << " is done!")
-
-        if (Job.DoesLoad) {
-            LOG_INFO("Go to Sleep for " << Para.SleepTime << " sec...");
-            sleep(Para.SleepTime);
-            env.Load(); //Load new Sigma, Polar, and G, W, para will be loaded as well
-            env.UpdateWeight();
-        }
-    } while (Job.DoesLoad);
 }

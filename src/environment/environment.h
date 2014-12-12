@@ -19,12 +19,12 @@
 #include "module/markov/markov.h"
 
 class Environment {
-  public:
+public:
     int PID;
     enum flag { Bare,
                 OldGW };
 
-  protected:
+protected:
     std::string _ParameterFile;
     std::string _GWweightFile;
     std::string _WeightFile;
@@ -33,7 +33,7 @@ class Environment {
 };
 
 class EnvMonteCarlo : public Environment {
-  public:
+public:
     EnvMonteCarlo(int pid, bool IsAllTauSymmetric = false);
 
     //can be read from StateFile or InputFile
@@ -43,7 +43,7 @@ class EnvMonteCarlo : public Environment {
     mc::Markov Grasshopper;
     mc::MarkovMonitor Scarecrow;
 
-    bool BuildNew(const std::string &InputFile, bool StartFromBare);
+    bool BuildNew(const std::string& InputFile, bool StartFromBare);
     bool Load();
     void Save(); //Save everything in EnvMonteCarlo
     void DeleteSavedFiles();
@@ -51,25 +51,8 @@ class EnvMonteCarlo : public Environment {
 
     bool ListenToMessage();
 
-  private:
+private:
     std::string _DiagramFile;
-};
-
-class EnvDyson : public Environment {
-  public:
-    EnvDyson(int pid, bool IsAllTauSymmetric = false);
-
-    para::ParaDyson Para;
-    weight::Weight Weight;
-
-    bool BuildNew(const std::string &InputFile, bool StartFromBare);
-    bool Load();
-    void Save();
-    void UpdateWeight();
-    //Update the weight of Sigma and Polar according to Para.ErrorThreshold and Para.OrderAccepted
-    void BroadcastMessage();
-
-  private:
 };
 
 int TestEnvironment();

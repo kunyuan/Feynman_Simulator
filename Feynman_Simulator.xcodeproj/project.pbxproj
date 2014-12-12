@@ -35,17 +35,14 @@
 		8422FE3E1A0A7F8D002EB44E /* estimator_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FE3D1A0A7F8D002EB44E /* estimator_test.cpp */; };
 		8422FE441A0A8444002EB44E /* parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FE421A0A8444002EB44E /* parser.cpp */; };
 		8422FE4D1A0A85E7002EB44E /* job.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FE4B1A0A85E7002EB44E /* job.cpp */; };
+		843DBB3E1A3B535A009DB448 /* timer_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 843DBB3B1A3B535A009DB448 /* timer_test.cpp */; };
+		843DBB3F1A3B535A009DB448 /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 843DBB3C1A3B535A009DB448 /* timer.cpp */; };
 		84519AEB19F2C554007CB81B /* environment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84519AE919F2C554007CB81B /* environment.cpp */; };
 		84519AED19F2C57A007CB81B /* envMonteCarlo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84519AEC19F2C57A007CB81B /* envMonteCarlo.cpp */; };
-		84519AEF19F2C5B2007CB81B /* envDyson.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84519AEE19F2C5B2007CB81B /* envDyson.cpp */; };
 		84519AF219F33F22007CB81B /* complex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84519AF019F33F22007CB81B /* complex.cpp */; };
 		845C92C119F75B340066B590 /* vector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 845C92C019F75B340066B590 /* vector.cpp */; };
 		84681F6519F9AAA600832DAD /* crc32.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84681F6319F9AAA600832DAD /* crc32.cpp */; };
 		84681F6719F9AC0600832DAD /* crc32_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84681F6619F9AC0600832DAD /* crc32_test.cpp */; };
-		84681F6B19F9B4C700832DAD /* timer_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84681F6819F9B4C700832DAD /* timer_test.cpp */; };
-		84681F6C19F9B4C700832DAD /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84681F6919F9B4C700832DAD /* timer.cpp */; };
-		8499DAD519F9EA3C00AABA1E /* fft.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8499DAD419F9EA3C00AABA1E /* fft.cpp */; };
-		8499DAD819F9ED2A00AABA1E /* fft_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8499DAD719F9ED2A00AABA1E /* fft_test.cpp */; };
 		84B1D57A19DEFC19004C3A89 /* test.h in Sources */ = {isa = PBXBuildFile; fileRef = 84B1D57919DEFC19004C3A89 /* test.h */; };
 		84B8FC4A19EDA348003D6DF6 /* cnpy_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84B8FC4719EDA348003D6DF6 /* cnpy_test.cpp */; };
 		84B8FC4B19EDA348003D6DF6 /* cnpy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84B8FC4819EDA348003D6DF6 /* cnpy.cpp */; };
@@ -131,11 +128,12 @@
 		843D3FBF1A155F5600DACC51 /* plot_model.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = plot_model.py; path = tool/plot_model.py; sourceTree = SOURCE_ROOT; };
 		843D3FC01A155F5600DACC51 /* read_data.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = read_data.py; path = tool/read_data.py; sourceTree = SOURCE_ROOT; };
 		843D3FC21A15B36F00DACC51 /* diagram_viewer.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = diagram_viewer.py; path = tool/diagram_viewer.py; sourceTree = SOURCE_ROOT; };
-		843D3FC51A19017B00DACC51 /* qt_diagram.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = qt_diagram.py; path = tool/qt_diagram.py; sourceTree = SOURCE_ROOT; };
+		843DBB3B1A3B535A009DB448 /* timer_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = timer_test.cpp; sourceTree = "<group>"; };
+		843DBB3C1A3B535A009DB448 /* timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = timer.cpp; sourceTree = "<group>"; };
+		843DBB3D1A3B535A009DB448 /* timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = timer.h; sourceTree = "<group>"; };
 		84519AE919F2C554007CB81B /* environment.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = environment.cpp; path = environment/environment.cpp; sourceTree = "<group>"; };
 		84519AEA19F2C554007CB81B /* environment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = environment.h; path = environment/environment.h; sourceTree = "<group>"; };
 		84519AEC19F2C57A007CB81B /* envMonteCarlo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = envMonteCarlo.cpp; path = environment/envMonteCarlo.cpp; sourceTree = "<group>"; };
-		84519AEE19F2C5B2007CB81B /* envDyson.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = envDyson.cpp; path = environment/envDyson.cpp; sourceTree = "<group>"; };
 		84519AF019F33F22007CB81B /* complex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = complex.cpp; sourceTree = "<group>"; };
 		84519AF119F33F22007CB81B /* complex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = complex.h; sourceTree = "<group>"; };
 		845C92C019F75B340066B590 /* vector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = vector.cpp; path = lattice/vector.cpp; sourceTree = "<group>"; };
@@ -146,12 +144,6 @@
 		84681F6319F9AAA600832DAD /* crc32.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = crc32.cpp; sourceTree = "<group>"; };
 		84681F6419F9AAA600832DAD /* crc32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crc32.h; sourceTree = "<group>"; };
 		84681F6619F9AC0600832DAD /* crc32_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = crc32_test.cpp; sourceTree = "<group>"; };
-		84681F6819F9B4C700832DAD /* timer_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = timer_test.cpp; sourceTree = "<group>"; };
-		84681F6919F9B4C700832DAD /* timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = timer.cpp; sourceTree = "<group>"; };
-		84681F6A19F9B4C700832DAD /* timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = timer.h; sourceTree = "<group>"; };
-		8499DAD419F9EA3C00AABA1E /* fft.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fft.cpp; sourceTree = "<group>"; };
-		8499DAD619F9ECD700AABA1E /* fft.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = fft.h; sourceTree = "<group>"; };
-		8499DAD719F9ED2A00AABA1E /* fft_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fft_test.cpp; sourceTree = "<group>"; };
 		8499DB0919FEECEC00AABA1E /* scopeguard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = scopeguard.h; sourceTree = "<group>"; };
 		84B1D57919DEFC19004C3A89 /* test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = test.h; sourceTree = "<group>"; };
 		84B8FC3E19ECA449003D6DF6 /* convention.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = convention.h; sourceTree = "<group>"; };
@@ -202,14 +194,11 @@
 		612661D40BB91FC506C3E572 /* utility */ = {
 			isa = PBXGroup;
 			children = (
+				843DBB3B1A3B535A009DB448 /* timer_test.cpp */,
+				843DBB3C1A3B535A009DB448 /* timer.cpp */,
+				843DBB3D1A3B535A009DB448 /* timer.h */,
 				8422FE431A0A8444002EB44E /* parser.h */,
 				8422FE421A0A8444002EB44E /* parser.cpp */,
-				8499DAD619F9ECD700AABA1E /* fft.h */,
-				8499DAD419F9EA3C00AABA1E /* fft.cpp */,
-				8499DAD719F9ED2A00AABA1E /* fft_test.cpp */,
-				84681F6A19F9B4C700832DAD /* timer.h */,
-				84681F6919F9B4C700832DAD /* timer.cpp */,
-				84681F6819F9B4C700832DAD /* timer_test.cpp */,
 				84D7EFBB19F36361006B1CA5 /* array.h */,
 				84D7EFBA19F36361006B1CA5 /* array_test.cpp */,
 				84519AF119F33F22007CB81B /* complex.h */,
@@ -328,7 +317,6 @@
 		843D3FBA1A155F2600DACC51 /* tool */ = {
 			isa = PBXGroup;
 			children = (
-				843D3FC51A19017B00DACC51 /* qt_diagram.py */,
 				843D3FC21A15B36F00DACC51 /* diagram_viewer.py */,
 				843D3FBB1A155F5600DACC51 /* count.sh */,
 				843D3FBC1A155F5600DACC51 /* mat2npz */,
@@ -359,7 +347,6 @@
 				84519AEA19F2C554007CB81B /* environment.h */,
 				84519AE919F2C554007CB81B /* environment.cpp */,
 				84519AEC19F2C57A007CB81B /* envMonteCarlo.cpp */,
-				84519AEE19F2C5B2007CB81B /* envDyson.cpp */,
 				84D7EFC219F552F5006B1CA5 /* env_test.cpp */,
 			);
 			name = environment;
@@ -458,10 +445,7 @@
 				8422FE131A09C112002EB44E /* diagram.cpp in Sources */,
 				84C86DDB1A214E33002A3D8D /* component.cpp in Sources */,
 				84C86DFA1A24310F002A3D8D /* component_MC.cpp in Sources */,
-				8499DAD519F9EA3C00AABA1E /* fft.cpp in Sources */,
 				84FDE07419DDFC2F0092B441 /* main.cpp in Sources */,
-				84681F6B19F9B4C700832DAD /* timer_test.cpp in Sources */,
-				84681F6C19F9B4C700832DAD /* timer.cpp in Sources */,
 				8422FE101A09C112002EB44E /* diagram_check.cpp in Sources */,
 				8422FE121A09C112002EB44E /* diagram_test.cpp in Sources */,
 				84B1D57A19DEFC19004C3A89 /* test.h in Sources */,
@@ -469,16 +453,17 @@
 				845C92C119F75B340066B590 /* vector.cpp in Sources */,
 				841D511319EB6DD900FDB7FF /* logger.cpp in Sources */,
 				8422FE0D1A09C112002EB44E /* component_bundle.cpp in Sources */,
+				843DBB3F1A3B535A009DB448 /* timer.cpp in Sources */,
 				8422FE4D1A0A85E7002EB44E /* job.cpp in Sources */,
 				1CA5CF3A19ED6F3F00212E20 /* lattice.cpp in Sources */,
 				84B8FC4A19EDA348003D6DF6 /* cnpy_test.cpp in Sources */,
+				843DBB3E1A3B535A009DB448 /* timer_test.cpp in Sources */,
 				84C86DE41A217F9B002A3D8D /* weight_initializer.cpp in Sources */,
 				8422FE261A09C13D002EB44E /* markov_test.cpp in Sources */,
 				841D905C19E054900066116A /* test.cpp in Sources */,
 				8422FE3E1A0A7F8D002EB44E /* estimator_test.cpp in Sources */,
 				84519AF219F33F22007CB81B /* complex.cpp in Sources */,
 				8422FE311A0A7E7E002EB44E /* estimator.cpp in Sources */,
-				84519AEF19F2C5B2007CB81B /* envDyson.cpp in Sources */,
 				61266D7AEDBA61CFA3C84C6B /* rng.cpp in Sources */,
 				1CFBB0BD1A16C1F900EE2E9E /* diagram_filter.cpp in Sources */,
 				84681F6719F9AC0600832DAD /* crc32_test.cpp in Sources */,
@@ -503,7 +488,6 @@
 				8422FE251A09C13D002EB44E /* markov_monitor.cpp in Sources */,
 				1CA021B91A0A897D00A18085 /* momentum.cpp in Sources */,
 				8422FE441A0A8444002EB44E /* parser.cpp in Sources */,
-				8499DAD819F9ED2A00AABA1E /* fft_test.cpp in Sources */,
 				84D7EFC319F552F5006B1CA5 /* env_test.cpp in Sources */,
 				8422FE001A09C0ED002EB44E /* message.cpp in Sources */,
 			);
