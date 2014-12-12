@@ -175,23 +175,8 @@ class Weight():
             self.Shape=NewShape
 
     def Inverse(self):
-        if self.NSpin==2:
-            self.__InverseSublat()
-        elif self.NSpin==4:
-            self.__InverseSpinAndSublat()
-    def __InverseSublat(self):
-        OldShape=self.__OriginShape
-        self.__AssertShape(self.Shape, OldShape)
-        NSublat=self.NSublattice
-        self.Data=self.Data.reshape(OldShape[SP],NSublat,NSublat,OldShape[VOL:])
-        for i in self.Map.GetConservedSpinIndexs(self.SpinNum):
-            for j in self.__SpaceTimeIndex:
-                index=[i,Ellipsis]+j
-                try:
-                    self.Data[index] = np.linalg.inv(self.Data[index])
-                except:
-                    log.error("Fail to inverse matrix {0},:,:,{1}\n{2}".format(i,j, self.Data[index]))
-        self.Data=self.Data.reshape(OldShape)
+        self.__InverseSpinAndSublat()
+
     def __InverseSpinAndSublat(self):
         for j in self.__SpaceTimeIndex:
             index=[Ellipsis,]+j

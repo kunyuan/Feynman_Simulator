@@ -14,6 +14,7 @@ map=weight.IndexMap(**Para)
 
 G0=weight.Weight("G.SmoothT", map, "OneSpin", "AntiSymmetric")
 G0.Load("../data/GW.npz")
+print G0.NSublat
 
 W0=weight.Weight("W.DeltaT", map, "TwoSpins", "Symmetric")
 W0.Load("../data/GW.npz")
@@ -26,16 +27,17 @@ Polar=calc.Polar_FirstOrder(G0, map)
 #print Polar.Data[map.Spin4Index((UP,UP),(UP,UP)), map.SublatIndex(1,1),0,:]
 
 W=calc.W_FirstOrder(W0, Polar,map) 
-#print W.Data[map.Spin4Index((DOWN,DOWN),(DOWN,DOWN)), 0,0,:]
+print Beta/(W.Shape[TAU])**2.0 *W.Data[map.Spin4Index((DOWN,DOWN),(DOWN,DOWN)), 0,0,:]
 #print W.Data[map.Spin4Index((UP,UP),(UP,UP)), 0,0,:]
 
-W=calc.W_FirstOrder(W0, Polar) 
-print W.SmoothT[map.Spin4Index((DOWN,DOWN),(DOWN,DOWN)), 0,0,:]
-print W.SmoothT[map.Spin4Index((UP,UP),(UP,UP)), 0,0,:]
+Sigma=calc.Sigma_FirstOrder(G0, W, map)
+Sigma0=calc.Sigma0_FirstOrder(G0, W0, map)
+#print Sigma.Data[map.Spin2Index(UP,UP), map.SublatIndex(1,1),0,:]
+#print Sigma0.Data[map.Spin2Index(UP,UP), map.SublatIndex(1,1),0]
 
-Sigma=calc.Sigma_FirstOrder(G0, W0, W, weight.AntiSymmetric)
-print Sigma.SmoothT[map.Spin2Index(UP,UP), map.SublatIndex(1,1),0,:]
-print Sigma.DeltaT[map.Spin2Index(UP,UP), map.SublatIndex(1,1),0]
+W=calc.W_Dyson(Beta, W0,Polar,map)
+print W.Data[map.Spin4Index((DOWN,DOWN),(DOWN,DOWN)), 0,0,:]
 
-W=calc.W_Dyson(W0,Polar,map)
+G=calc.G_Dyson(Beta, G0,Sigma0, Sigma, map)
+#print G.Data[map.Spin2Index(UP,UP), 0,0,:]
 
