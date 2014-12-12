@@ -13,7 +13,6 @@
 #include "module/diagram/diagram.h"
 #include "module/weight/weight.h"
 #include "lattice/lattice.h"
-#include "utility/fft.h"
 #include "estimator/estimator.h"
 #include "module/weight/component.h"
 

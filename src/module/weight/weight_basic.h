@@ -10,7 +10,6 @@
 #define __Feynman_Simulator__weight_basic__
 
 #include "utility/complex.h"
-#include "utility/fft.h"
 #include "utility/array.h"
 #include "index_map.h"
 
