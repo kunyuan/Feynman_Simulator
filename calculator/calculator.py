@@ -28,30 +28,6 @@ def Polar_FirstOrder(G, map):
                         *G.Data[spinG2, subA2B, :, :]
     return Polar
 
-def W_Dyson(W0,Polar,map):
-    W=weight.Weight("W.SmoothT", map, "TwoSpins", "Symmetric")
-    W0.FFT(1, "Space")
-    Polar.FFT(1, "Space", "Time")
-
-    NSpin, NSub=W.NSpin, W.NSublat
-    W0.Reshape("SPSUBSPSUB")
-    W.Reshape("SPSUBSPSUB")
-    Polar.Reshape("SPSUBSPSUB")
-    JP=np.einsum("ijv,jkvt->ikvt",W0.Data, Polar.Data)
-    #JP shape: NSpin*NSub,NSpin*NSub,Vol,Tau
-    I=np.eye(NSpin*NSub)
-    W.Data=I[...,np.newaxis,np.newaxis]-JP
-    W.Inverse();
-    W.Data=np.einsum('ijvt,jkv->ikvt', W.Data,W0.Data)-W0.Data[...,np.newaxis]
-    W.Reshape("SP2SUB2")
-    W0.Reshape("SP2SUB2")
-    Polar.Reshape("SP2SUB2")
-    W.FFT(-1, "Space", "Time")
-    Polar.FFT(-1, "Space", "Time")
-    W0.FFT(-1, "Space")
-    #print W.Data[map.Spin4Index((0,0),(0,0)),map.SublatIndex(0,0),0,:]
-
-
 def W_FirstOrder(W0, Polar, map):
     W=weight.Weight("W.SmoothT", map, "TwoSpins", "Symmetric")
     TauRange = range(W.Shape[TAU])
@@ -82,74 +58,107 @@ def W_FirstOrder(W0, Polar, map):
     return W
 
 
-def Sigma_FirstOrder(G, W, map, IsSymmetric=weight.AntiSymmetric):
-    if G.IsSymmetric!= IsSymmetric:
-        print "G IsSymmetric different with the input variable!"
-        sys.exit(0)
+def Sigma_FirstOrder(G, W, map):
+    Sigma=weight.Weight("Sigma.SmoothT", map, "OneSpin", "AntiSymmetric")
 
-    Sigma=weight.Weight("Sigma.SmoothT", map, "OneSpins", IsSymmetric)
-
-    TauRange = range(G.TauBinMax)
+    TauRange = range(G.Shape[TAU])
 
     for spin1 in range(2):
         for spin2 in range(2):
             spinW = map.Spin4Index((spin1,spin2),(spin2,spin1))
             spinG = map.Spin2Index(spin2, spin2)
             spinSigma = map.Spin2Index(spin1, spin1)
-            Sigma[spinSigma, :, :, :]  \
-                    = G.SmoothT[spinG, :, :, :]\
-                    *W.SmoothT[spinW, :, :, :]
+            Sigma.Data[spinSigma, :, :, :]  \
+                    = G.Data[spinG, :, :, :]\
+                    *W.Data[spinW, :, :, :]
 
     return Sigma
 
-def Sigma0_FirstOrder(G, W0, map, IsSymmetric=weight.AntiSymmetric):
-    if G.IsSymmetric!= IsSymmetric:
-        print "G IsSymmetric different with the input variable!"
-        sys.exit(0)
+def Sigma0_FirstOrder(G, W0, map):
 
-    Sigma0=weight.Weight("Sigma.DeltaT", map, "OneSpins", IsSymmetric)
+    Sigma0=weight.Weight("Sigma.DeltaT", map, "OneSpin", "AntiSymmetric")
 
-    TauRange = range(G.TauBinMax)
+    TauRange = range(G.Shape[TAU])
     for spin1 in range(2):
         for spin2 in range(2):
             spinW = map.Spin4Index((spin1,spin2),(spin2,spin1))
             spinG = map.Spin2Index(spin2, spin2)
             spinSigma = map.Spin2Index(spin1, spin1)
             for tau in TauRange:
-                Sigma0[spinSigma, :, :]  \
-                        = G.SmoothT[spinG, :, :, tau]\
-                        *W0.DeltaT[spinW, :, :]
+                Sigma0.Data[spinSigma, :, :]  \
+                        = G.Data[spinG, :, :, tau]\
+                        *W0.Data[spinW, :, :]
     return Sigma0
 
-def G_Dyson(G0, Sigma, IsSymmetric=weight.AntiSymmetric):
-    map = G.GetMap()
-    if G0.IsSymmetric!= IsSymmetric:
-        print "G0 IsSymmetric different with the input variable!"
-        sys.exit(0)
-    if Sigma.IsSymmetric!= IsSymmetric:
-        print "Sigma IsSymmetric different with the input variable!"
-        sys.exit(0)
 
-    G=weight.Weight("G", G0.Beta, G0.L, IsSymmetric)
-    G.SetShape(map.GetShape(2))  ## 2 is spinNum
-    G.SetZeros("SmoothT")
+def W_Dyson(Beta, W0,Polar,map):
+    W=weight.Weight("W.SmoothT", map, "TwoSpins", "Symmetric")
+    W0.FFT(1, "Space")
+    Polar.FFT(1, "Space", "Time")
 
-    G0.fftSpace(1)
-    Sigma.fftSpace(1)
-    G.fftSpace(1)
-    
-       #reshape
-    np.einsum('ijvt,jkvt->ikvt', G0.SmoothT, Sigma.SmoothT, G1)
-    np.einsum('ijvt,jkv->ikvt', G0.SmoothT, Sigma.DeltaT, G2)
-       #multiply a correction term
-    a = np.eye()-(G1 + G2)
-       #reshape
-    b = np.linalg.inv(a)
-       #reshape
-    G.SmoothT = np.dot(G0.SmoothT, b)
+    NSpin, NSub=W.NSpin, W.NSublat
+    W0.Reshape("SPSUBSPSUB")
+    W.Reshape("SPSUBSPSUB")
+    Polar.Reshape("SPSUBSPSUB")
 
+    JP=np.einsum("ijv,jkvt->ikvt",W0.Data, Polar.Data)
+    #JP shape: NSpin*NSub,NSpin*NSub,Vol,Tau
+
+    JP=(Beta/(W.Shape[TAU])**2.0) * JP
+    for tau in range(W.Shape[TAU]):
+        JP[:,:,:,tau] = JP[:,:,:,tau] * np.cos(tau*np.pi/W.Shape[TAU])
+
+    I=np.eye(NSpin*NSub)
+    W.Data=I[...,np.newaxis,np.newaxis]-JP
+    W.Inverse();
+    W.Data=np.einsum('ijvt,jkv->ikvt', W.Data,W0.Data)-W0.Data[...,np.newaxis]
+
+    W.Reshape("SP2SUB2")
+    W0.Reshape("SP2SUB2")
+    Polar.Reshape("SP2SUB2")
+
+    W.FFT(-1, "Space", "Time")
+    Polar.FFT(-1, "Space", "Time")
+    W0.FFT(-1, "Space")
+    #print W.Data[map.Spin4Index((0,0),(0,0)),map.SublatIndex(0,0),0,:]
+    return W
+
+def G_Dyson(Beta, G0, Sigma0, Sigma, map):
+    G=weight.Weight("G.SmoothT", map, "OneSpin", "AntiSymmetric")
+    G0.FFT(1, "Space", "Time")
+    Sigma0.FFT(1, "Space")
+    Sigma.FFT(1, "Space", "Time")
+
+    NSpin, NSub=G.NSpin, G.NSublat
+
+    G0.Reshape("SPSUBSPSUB")
+    G.Reshape("SPSUBSPSUB")
+    Sigma0.Reshape("SPSUBSPSUB")
+    Sigma.Reshape("SPSUBSPSUB")
+
+    G0Sigma0=np.einsum("ijvt,jkv->ikvt",G0.Data, Sigma0.Data)
+    ####correction term
+    for tau in range(G.Shape[TAU]):
+        G0Sigma0[:,:,:,tau] = G0Sigma0[:,:,:,tau]*np.cos((tau+0.5)*np.pi/G.Shape[TAU])
+
+    G0Sigma=np.einsum("ijvt,jkvt->ikvt",G0.Data, Sigma.Data)
+    GS=(Beta/(G.Shape[VOL]*(G.Shape[TAU])**2.0)) * (G0Sigma0+G0Sigma)
+    #GS shape: NSpin*NSub,NSpin*NSub,Vol,Tau
+
+    I=np.eye(NSpin*NSub)
+    G.Data=I[...,np.newaxis,np.newaxis]-GS
+    G.Inverse();
+    G.Data=np.einsum('ijvt,jkvt->ikvt', G.Data,G0.Data)
+
+    G.Reshape("SP2SUB2")
+    G0.Reshape("SP2SUB2")
+    Sigma0.Reshape("SP2SUB2")
+    Sigma.Reshape("SP2SUB2")
+
+    G.FFT(-1, "Space", "Time")
+    Sigma0.FFT(-1, "Space")
+    Sigma.FFT(-1, "Space", "Time")
+    G0.FFT(-1, "Space","Time")
     return G
-
-
 
 
