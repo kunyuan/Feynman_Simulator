@@ -43,17 +43,17 @@ class Basic {
     friend class GInitializer;
     friend class WInitializer;
 
-  public:
-    bool Load(const std::string &FileName);
-    void Save(const std::string &FileName, const std::string Mode = "a");
+public:
+    bool Load(const std::string& FileName);
+    void Save(const std::string& FileName, const std::string Mode = "a");
 
-  protected:
-    Basic(const Lattice &lat, real Beta, SpinNum,
+protected:
+    Basic(const Lattice& lat, real Beta, SpinNum,
           TauSymmetry Symmetry, std::string);
 
-    uint *GetShape();          //the shape of internal weight array
-    uint *GetSpaceShape();     //store Lx,Ly,Lz
-    uint *GetSpaceTimeShape(); //store Lx,Ly,Lz,Lt
+    uint* GetShape(); //the shape of internal weight array
+    uint* GetSpaceShape(); //store Lx,Ly,Lz
+    uint* GetSpaceTimeShape(); //store Lx,Ly,Lz,Lt
     void Reset(real beta);
     int GetTauSymmetryFactor(real t_in, real t_out) const;
 
