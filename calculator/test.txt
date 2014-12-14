@@ -1,0 +1,17 @@
+Interaction = [1.0, 0.5]
+Hopping = [0.0]
+L = [8, 8]
+ExternalField = 0.0
+ChemicalPotential = [(0, 1.5707963267948966), (0, 1.5707963267948966)]
+DeltaBeta = 0.0
+InitialBeta = 1.0
+Model = 'J1J2'
+DoesLoad = True
+Type = 'DYSON'
+Order = 4
+OrderAccepted = 1
+SleepTime = 300
+FinalBeta = 1.0
+PID = 1
+ErrorThreshold = 0.5
+StartFromBare = True
