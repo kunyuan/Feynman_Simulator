@@ -5,6 +5,7 @@ import calculator as calc
 from weight import UP,DOWN,IN,OUT,TAU,SP,SUB,VOL
 import weight
 import model
+import lattice as lat
 from logger import *
 
 prefix="../data/"
@@ -12,7 +13,8 @@ para = para.Parameter()
 para.Load("../data/infile/_in_DYSON_1")
 Assert(para.Type=="DYSON", "The job type should be DYSON, not {0}".format(para.Type))
 Beta = para.InitialBeta
-WeightPara={"NSublat":2, "L":para.L, "Beta": Beta, "MaxTauBin": 32}
+Lat=lat.Lattice(para.Lattice, para.L)
+WeightPara={"NSublat":Lat.NSublat, "L":para.L, "Beta": Beta, "MaxTauBin": 32}
 map=weight.IndexMap(**WeightPara)
 
 if para.StartFromBare is True:

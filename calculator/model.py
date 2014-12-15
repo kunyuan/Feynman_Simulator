@@ -17,7 +17,7 @@ class BareFactory:
         self.BareW=weight.Weight("W.DeltaT", self.__Map, "FourSpins", "Symmetric")
 
     def Build(self, Model, LatName):
-        self.Lat=lat.Lattice(LatName, self.__Map)
+        self.Lat=lat.Lattice(LatName, self.__Map.L)
         if Model=="J1J2" and LatName=="Checkboard":
             self.__J1J2onCheckborad()
         elif Model=="J1J2" and LatName=="Square":
@@ -102,7 +102,7 @@ class BareFactory:
     def Plot(self):
         import matplotlib.pyplot as plt
         color=('r','g','b')
-        points=self.Lat.GetSitesList()
+        points=self.Lat.GetSitesList(self.__Map)
         for coord, label, sub in points:
             x,y=coord;
             plt.scatter(x,y,s=100,c=color[sub])
