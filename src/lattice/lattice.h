@@ -127,6 +127,7 @@ class Lattice {
   private:
     void Initialize();
     Vec<int> Shift(const Vec<int> &) const;
+    void _Square();
     void _Checkboard();
     void _Honeycomb();
 };

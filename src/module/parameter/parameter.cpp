@@ -142,7 +142,7 @@ void ParaMC::SetTest()
     Version = 0;
     int size[2] = {8, 8};
     L = Vec<int>(size);
-    Lat = Lattice(L, CHECKBOARD);
+    Lat = Lattice(L, LATTICE);
     Hopping.push_back(0.0);
     Interaction.push_back(1.0);
     ChemicalPotential.push_back(0.0);
@@ -194,7 +194,7 @@ void ParaDyson::SetTest()
     Version = 0;
     int size[2] = {8, 8};
     L = Vec<int>(size);
-    Lat = Lattice(L, CHECKBOARD);
+    Lat = Lattice(L, LATTICE);
     Hopping.push_back(0.0);
     Interaction.push_back(1.0);
     ChemicalPotential.push_back(0.0);

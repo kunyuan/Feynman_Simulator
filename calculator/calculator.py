@@ -28,7 +28,7 @@ def Polar_FirstOrder(G, map):
                         *G.Data[spinG2, subA2B, :, :]
     return Polar
 
-def W_FirstOrder(W0, Polar, map):
+def W_FirstOrder(Beta,W0, Polar, map):
     W=weight.Weight("W.SmoothT", map, "TwoSpins", "Symmetric")
     TauRange = range(W.Shape[TAU])
     SubRange=range(W.NSublat)
@@ -52,10 +52,44 @@ def W_FirstOrder(W0, Polar, map):
             for tau in TauRange:
                 W.Data[spW,subW,:,tau]+=W0.Data[spW0L,subW0L,:] \
                     *Polar.Data[spPolar,subPolar,:,tau]*W0.Data[spW0R,subW0R,:]
+    
+    W.Data[:,:,:,:] *= (Beta/(W.Shape[TAU]**2.0))
     W0.FFT(-1, "Space")
     Polar.FFT(-1, "Space")
     W.FFT(-1, "Space")
     return W
+
+def G_FirstOrder(Beta,G0, Sigma0, Sigma, map):
+    G=weight.Weight("G.SmoothT", map, "OneSpin", "AntiSymmetric")
+    TauRange = range(G.Shape[TAU])
+    SubRange=range(G.NSublat)
+    SubList=[(a,b,c,d) for a in SubRange for b in SubRange for c in SubRange for d in SubRange]
+
+    #make sure spin conservation on W0
+    G0.FFT(1, "Space","Time")
+    Sigma.FFT(1, "Space","Time")
+    Sigma0.FFT(1, "Space")
+    SpinList = [map.Spin2Index(UP,UP), map.Spin2Index(DOWN,DOWN)]
+    for spG in SpinList:
+        for e in SubList:
+            subG0L = map.SublatIndex(e[0], e[1])
+            subSigma0 = map.SublatIndex(e[1], e[2])
+            subSigma = map.SublatIndex(e[1], e[2])
+            subG0R = map.SublatIndex(e[2], e[3])
+            subG = map.SublatIndex(e[0], e[3])
+            G.Data[spG,subG,:,:]+=G0.Data[spG,subG0L,:,:] \
+                    *Sigma.Data[spG,subSigma,:,:]*G0.Data[spG,subG0R,:,:]
+            for tau in TauRange:
+                G.Data[spG,subG,:,tau]+=G0.Data[spG,subG0L,:,tau] \
+                        *Sigma0.Data[spG,subSigma,:]*G0.Data[spG,subG0R,:,tau]
+
+    G.Data[:,:,:,:] *= (Beta/G.Shape[VOL]/(G.Shape[TAU]**2.0))
+
+    G0.FFT(-1, "Space","Time")
+    Sigma.FFT(-1, "Space","Time")
+    Sigma0.FFT(-1, "Space")
+    G.FFT(-1, "Space","Time")
+    return G
 
 
 def Sigma_FirstOrder(G, W, map):

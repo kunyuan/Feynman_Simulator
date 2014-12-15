@@ -201,72 +201,109 @@ void WInitializer::_InitialBareJ1J2()
     _W._SmoothTWeight = 0.0;
     int Lx = _W._Lat.Size[0], Ly = _W._Lat.Size[1];
     ASSERT_ALLWAYS(Lx > 1 && Ly > 1, "System size should be bigger than 1!");
-    ASSERT_ALLWAYS(_W._Lat.LatticeType == CHECKBOARD, "J1J2 lattice should be checkboard!");
+    ASSERT_ALLWAYS(_W._Lat.LatticeType == CHECKBOARD ||_W._Lat.LatticeType == SQUARE, "J1J2 lattice should be checkboard or SQUARE!");
     ASSERT_ALLWAYS(_W._Model == J1J2, ToString(int(_W._Model)) + " is not J1J2 model!");
+    
     int spinindex = _Map.SpinIndex(UP,  //InOfW/InOfVertex
                                    UP,  //InOfW/OutOfVertex
                                    UP,  //OutOfW/InOfVertex
                                    UP); //OutOfW/OutOfVertex
 
     vector<initializer_list<int>> coord;
-    int sublatA2B = _W._Lat.Sublat2Index(0, 1);
-    int sublatA2A = _W._Lat.Sublat2Index(0, 0);
+    if(_W._Lat.LatticeType==CHECKBOARD)
     {
-        //J1 interaction A-->B
-        coord.push_back({0, 0});
-        coord.push_back({0, Ly - 1});
-        coord.push_back({Lx - 1, 0});
-        coord.push_back({Lx - 1, Ly - 1});
-        for (auto e : coord)
-            _W._DeltaTWeight[spinindex][sublatA2B][_W._Lat.Vec2Index(e)] = _W._Interaction[0];
-        //J2 interaction A-->A
-        coord.clear();
-        coord.push_back({0, 1});
-        coord.push_back({1, 0});
-        coord.push_back({0, Ly - 1});
-        coord.push_back({Lx - 1, 0});
-        for (auto e : coord)
-            _W._DeltaTWeight[spinindex][sublatA2A][_W._Lat.Vec2Index(e)] = _W._Interaction[1];
-    }
-    int sublatB2A = _W._Lat.Sublat2Index(1, 0);
-    int sublatB2B = _W._Lat.Sublat2Index(1, 1);
-    {
-        //J1 interaction B-->A
-        coord.clear();
-        coord.push_back({0, 0});
-        coord.push_back({0, 1});
-        coord.push_back({1, 0});
-        coord.push_back({1, 1});
-        for (auto e : coord)
-            _W._DeltaTWeight[spinindex][sublatB2A][_W._Lat.Vec2Index(e)] = _W._Interaction[0];
-        //J2 interaction B-->B
-        coord.clear();
-        coord.push_back({0, 1});
-        coord.push_back({1, 0});
-        coord.push_back({0, Ly - 1});
-        coord.push_back({Lx - 1, 0});
-        for (auto e : coord)
-            _W._DeltaTWeight[spinindex][sublatB2B][_W._Lat.Vec2Index(e)] = _W._Interaction[1];
-    }
-    //Generate other non-zero spin configuration
-    {
-        for (auto i : _Map.GetSpinIndexVector(UpUp2UpUp))
-            _W._DeltaTWeight[i] = _W._DeltaTWeight[spinindex];
+        int sublatA2B = _W._Lat.Sublat2Index(0, 1);
+        int sublatA2A = _W._Lat.Sublat2Index(0, 0);
+        {
+            //J1 interaction A-->B
+            coord.push_back({0, 0});
+            coord.push_back({0, Ly - 1});
+            coord.push_back({Lx - 1, 0});
+            coord.push_back({Lx - 1, Ly - 1});
+            for (auto e : coord)
+                _W._DeltaTWeight[spinindex][sublatA2B][_W._Lat.Vec2Index(e)] = _W._Interaction[0];
+            //J2 interaction A-->A
+            coord.clear();
+            coord.push_back({0, 1});
+            coord.push_back({1, 0});
+            coord.push_back({0, Ly - 1});
+            coord.push_back({Lx - 1, 0});
+            for (auto e : coord)
+                _W._DeltaTWeight[spinindex][sublatA2A][_W._Lat.Vec2Index(e)] = _W._Interaction[1];
+        }
+        int sublatB2A = _W._Lat.Sublat2Index(1, 0);
+        int sublatB2B = _W._Lat.Sublat2Index(1, 1);
+        {
+            //J1 interaction B-->A
+            coord.clear();
+            coord.push_back({0, 0});
+            coord.push_back({0, 1});
+            coord.push_back({1, 0});
+            coord.push_back({1, 1});
+            for (auto e : coord)
+                _W._DeltaTWeight[spinindex][sublatB2A][_W._Lat.Vec2Index(e)] = _W._Interaction[0];
+            //J2 interaction B-->B
+            coord.clear();
+            coord.push_back({0, 1});
+            coord.push_back({1, 0});
+            coord.push_back({0, Ly - 1});
+            coord.push_back({Lx - 1, 0});
+            for (auto e : coord)
+                _W._DeltaTWeight[spinindex][sublatB2B][_W._Lat.Vec2Index(e)] = _W._Interaction[1];
+        }
+        //Generate other non-zero spin configuration
+        {
+            for (auto i : _Map.GetSpinIndexVector(UpUp2UpUp))
+                _W._DeltaTWeight[i] = _W._DeltaTWeight[spinindex];
 
-        for (auto i : _Map.GetSpinIndexVector(UpDown2UpDown)) {
-            _W._DeltaTWeight[i] = _W._DeltaTWeight[spinindex];
-            _W._DeltaTWeight[i] *= -1.0;
+            for (auto i : _Map.GetSpinIndexVector(UpDown2UpDown)) {
+                _W._DeltaTWeight[i] = _W._DeltaTWeight[spinindex];
+                _W._DeltaTWeight[i] *= -1.0;
+            }
+            for (auto i : _Map.GetSpinIndexVector(UpDown2DownUp)) {
+                _W._DeltaTWeight[i] = _W._DeltaTWeight[spinindex];
+                _W._DeltaTWeight[i] *= 2.0;
+            }
         }
-        for (auto i : _Map.GetSpinIndexVector(UpDown2DownUp)) {
-            _W._DeltaTWeight[i] = _W._DeltaTWeight[spinindex];
-            _W._DeltaTWeight[i] *= 2.0;
+    }else
+    {
+        {
+            //J1 interaction A-->A
+            coord.push_back({0, 1});
+            coord.push_back({1, 0});
+            coord.push_back({Lx - 1, 0});
+            coord.push_back({0, Ly - 1});
+            for (auto e : coord)
+                _W._DeltaTWeight[spinindex][0][_W._Lat.Vec2Index(e)] = _W._Interaction[0];
+            //J2 interaction A-->A
+            coord.clear();
+            coord.push_back({1, 1});
+            coord.push_back({1, Ly-1});
+            coord.push_back({Lx-1, Ly-1});
+            coord.push_back({Lx-1, 1});
+            for (auto e : coord)
+                _W._DeltaTWeight[spinindex][0][_W._Lat.Vec2Index(e)] = _W._Interaction[1];
         }
+        //Generate other non-zero spin configuration
+        {
+            for (auto i : _Map.GetSpinIndexVector(UpUp2UpUp))
+                _W._DeltaTWeight[i] = _W._DeltaTWeight[spinindex];
+
+            for (auto i : _Map.GetSpinIndexVector(UpDown2UpDown)) {
+                _W._DeltaTWeight[i] = _W._DeltaTWeight[spinindex];
+                _W._DeltaTWeight[i] *= -1.0;
+            }
+            for (auto i : _Map.GetSpinIndexVector(UpDown2DownUp)) {
+                _W._DeltaTWeight[i] = _W._DeltaTWeight[spinindex];
+                _W._DeltaTWeight[i] *= 2.0;
+            }
+        }
+        
     }
 }
 
 void WInitializer::_InitialBareHubbard()
 {
-    int Lx = _W._Lat.Size[0], Ly = _W._Lat.Size[1];
     ASSERT_ALLWAYS(_W._Model == HUBBARD, int(_W._Model) << " is not Hubbard model!");
     _W._DeltaTWeight = 0.0;
     _W._SmoothTWeight = 0.0;

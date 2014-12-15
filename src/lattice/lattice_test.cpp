@@ -9,6 +9,7 @@
 #include "lattice.h"
 #include <iostream>
 #include "../utility/sput.h"
+#include "../utility/convention.h"
 
 using std::cout;
 using std::endl;
@@ -18,7 +19,8 @@ void Test_Lattice();
 int L[] = {16, 32};
 Vec<int> size(L);
 
-Lattice lattice(size, CHECKBOARD);
+Lattice lattice(size, LATTICE);
+
 
 int TestLattice()
 {
@@ -31,7 +33,7 @@ int TestLattice()
 
 void Test_Lattice()
 {
-    if (lattice.Dimension == 2) {
+    if (lattice.Dimension == 2 && LATTICE == CHECKBOARD) {
         Vec<int> v0{1, 2};
         sput_fail_unless(v0[0] == 1 && v0[1] == 2, "Vector:test initialization");
 
@@ -74,7 +76,7 @@ void Test_Lattice()
         sput_fail_unless(lattice.GetRealVec(s) == vec, "Lattice: real vector for Site");
         sput_fail_unless(lattice.GetRealVec(dis) == (lattice.GetRealVec(s2) - lattice.GetRealVec(s1)), "Lattice: real vector of distance");
     }
-    else if (lattice.Dimension == 3) {
+    else if (lattice.Dimension == 3 && LATTICE == CHECKBOARD) {
         Vec<int> v, v1, v2;
         v[0] = 2;
         v[1] = 1;

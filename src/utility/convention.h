@@ -62,7 +62,7 @@ enum lattice {
     HONEYCOMB,
     SIMPLE_CUBIC
 };
-#define LATTICE_INDEX 1
+#define LATTICE_INDEX 0
 
 #if LATTICE_INDEX == 0
 const lattice LATTICE = SQUARE;
