@@ -14,7 +14,7 @@ def PlotTime(array, Beta):
 
 
 def Polar_FirstOrder(G, map):
-    Polar=weight.Weight("Polar.SmoothT", map, "TwoSpins","Symmetric")
+    Polar=weight.Weight("Polar.SmoothT", map, "FourSpins","Symmetric")
     NSublat = G.NSublat
     SubList=[(map.SublatIndex(a,b),map.SublatIndex(b,a)) for a in range(NSublat) for b in range(NSublat)]
     for spin1 in range(2):
@@ -29,7 +29,7 @@ def Polar_FirstOrder(G, map):
     return Polar
 
 def W_Dyson(W0,Polar,map):
-    W=weight.Weight("W.SmoothT", map, "TwoSpins", "Symmetric")
+    W=weight.Weight("W.SmoothT", map, "FourSpins", "Symmetric")
     W0.FFT(1, "Space")
     Polar.FFT(1, "Space", "Time")
 
@@ -52,18 +52,19 @@ def W_Dyson(W0,Polar,map):
     #print W.Data[map.Spin4Index((0,0),(0,0)),map.SublatIndex(0,0),0,:]
 
 def Sigma_FirstOrder(G0, W, map):
-    Sigma=weight.Weight("Sigma.SmoothT", map, "OneSpins", "AntiSymmetric")
+    Sigma=weight.Weight("Sigma.SmoothT", map, "TwoSpins", "AntiSymmetric")
     return Sigma
 
 def W_FirstOrder(Beta,W0, Polar, map):
-    W=weight.Weight("W.SmoothT", map, "TwoSpins", "Symmetric")
+    W=weight.Weight("W.SmoothT", map, "FourSpins", "Symmetric")
     TauRange = range(W.Shape[TAU])
     SubRange=range(W.NSublat)
     SubList=[(a,b,c,d) for a in SubRange for b in SubRange for c in SubRange for d in SubRange]
-    SpinList=[(Wtuple,Polartuple) for Wtuple in map.GetConservedSpinTuple(4) \
-                                  for Polartuple in map.GetConservedSpinTuple(4) \
+    SpinList=[(Wtuple,Polartuple) for Wtuple in map.GetConservedSpinTuple("FourSpins") \
+                                  for Polartuple in map.GetConservedSpinTuple("FourSpins") \
                                   if map.IsConserved(4, (Wtuple[IN], Polartuple[IN]))] 
     #make sure spin conservation on W0
+
     W0.FFT(1, "Space")
     Polar.FFT(1, "Space")
     for spWt,spPolart in SpinList:
@@ -87,7 +88,7 @@ def W_FirstOrder(Beta,W0, Polar, map):
     return W
 
 def G_FirstOrder(Beta,G0, Sigma0, Sigma, map):
-    G=weight.Weight("G.SmoothT", map, "OneSpin", "AntiSymmetric")
+    G=weight.Weight("G.SmoothT", map, "TwoSpins", "AntiSymmetric")
     TauRange = range(G.Shape[TAU])
     SubRange=range(G.NSublat)
     SubList=[(a,b,c,d) for a in SubRange for b in SubRange for c in SubRange for d in SubRange]
@@ -120,7 +121,7 @@ def G_FirstOrder(Beta,G0, Sigma0, Sigma, map):
 
 
 def Sigma_FirstOrder(G, W, map):
-    Sigma=weight.Weight("Sigma.SmoothT", map, "OneSpin", "AntiSymmetric")
+    Sigma=weight.Weight("Sigma.SmoothT", map, "TwoSpins", "AntiSymmetric")
 
     TauRange = range(G.Shape[TAU])
 
@@ -137,7 +138,7 @@ def Sigma_FirstOrder(G, W, map):
 
 def Sigma0_FirstOrder(G, W0, map):
 
-    Sigma0=weight.Weight("Sigma.DeltaT", map, "OneSpin", "AntiSymmetric")
+    Sigma0=weight.Weight("Sigma.DeltaT", map, "TwoSpins", "AntiSymmetric")
 
     TauRange = range(G.Shape[TAU])
     for spin1 in range(2):
@@ -153,7 +154,7 @@ def Sigma0_FirstOrder(G, W0, map):
 
 
 def W_Dyson(Beta, W0,Polar,map):
-    W=weight.Weight("W.SmoothT", map, "TwoSpins", "Symmetric")
+    W=weight.Weight("W.SmoothT", map, "FourSpins", "Symmetric")
     W0.FFT(1, "Space")
     Polar.FFT(1, "Space", "Time")
 
@@ -185,7 +186,7 @@ def W_Dyson(Beta, W0,Polar,map):
     return W
 
 def G_Dyson(Beta, G0, Sigma0, Sigma, map):
-    G=weight.Weight("G.SmoothT", map, "OneSpin", "AntiSymmetric")
+    G=weight.Weight("G.SmoothT", map, "TwoSpins", "AntiSymmetric")
     G0.FFT(1, "Space", "Time")
     Sigma0.FFT(1, "Space")
     Sigma.FFT(1, "Space", "Time")

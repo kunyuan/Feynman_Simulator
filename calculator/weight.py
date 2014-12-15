@@ -15,33 +15,49 @@ SP,SUB,VOL,TAU=0,1,2,3
 
 class IndexMap:
     def __init__(self, Beta, L, NSublat, MaxTauBin):
-        self.__MaxTauBin=MaxTauBin
-        self.__Beta=Beta
-        self.__dBeta=Beta/self.__MaxTauBin
+        self.MaxTauBin=MaxTauBin
+        self.Beta=Beta
+        self.L=L
+        self.Vol=1
+        for e in self.L:
+            self.Vol*=e
+        self.NSublat=NSublat
+        self.__dBeta=Beta/self.MaxTauBin
         self.__dBetaInverse=1.0/self.__dBeta
-        self.__L=L
-        self.__NSublattice=NSublat
     def GetPara(self):
-        return {"L":self.__L, "NSublat":self.__NSublattice, \
-                "Beta":self.__Beta, "MaxTauBin": self.__MaxTauBin}
+        return {"L":self.L, "NSublat":self.NSublat, \
+                "Beta":self.Beta, "MaxTauBin": self.MaxTauBin}
 
     def TauIndex(self, In, Out):
         tau=Out-In
         Index=math.floor(tau*self.__dBetaInverse)
-        return Index if tau>=0 else Index+self.__MaxTauBin
+        return Index if tau>=0 else Index+self.MaxTauBin
 
     def IndexToTau(self, Index):
         return (Index+0.5)*self.__dBeta
 
     def SublatIndex(self, In, Out):
-        return In*self.__NSublattice+Out
+        return In*self.NSublat+Out
+    def GetAllSublat(self):
+        return ((i,j) for i in range(self.NSublat) for j in range(self.NSublat))
+    def GetLocalSublatIndexs(self):
+        return (self.SublatIndex(i,i) for i in range(self.NSublat))
 
-    def CoordiIndex(self,In, Out):
+    def CoordiIndex(self, Out):
         #Out[0]*L1*L2+Out[1]*L2+Out[2] with In=(0,0,0)
-        Index=Out[0]-In[0]
-        for i in range(1,len(Vec)):
-            Index=Index*self.__L[i]+(Out[i]-In[i])
+        Index=Out[0]
+        for i in range(1,len(Out)):
+            Index=Index*self.L[i]+Out[i]
         return Index
+    def GetAllCoordi(self):
+        if len(self.L)==2:
+            return ((i,j) for i in range(self.L[0]) for j in range(self.L[1]))
+        elif len(self.L)==3:
+            return ((i,j,k) for i in range(self.L[0]) 
+                            for j in range(self.L[1])
+                            for k in range(self.L[2]))
+        else:
+            Assert(False, "Dimension {0} has been implemented!".format(len(self.L)))
 
     def SpinIndex(self, In, Out, SpinNum):
         if SpinNum==2:
@@ -61,18 +77,34 @@ class IndexMap:
             return (SpinTuple[IN][IN]+SpinTuple[OUT][IN]==SpinTuple[IN][OUT]+SpinTuple[OUT][OUT])
 
     def GetConservedSpinIndexs(self, SpinNum):
-        if SpinNum==2:
+        if SpinNum=="TwoSpins":
             return [self.Spin2Index(*s) for s in self.GetConservedSpinTuple(SpinNum)]
-        if SpinNum==4:
+        if SpinNum=="FourSpins":
             return [self.Spin4Index(*s) for s in self.GetConservedSpinTuple(SpinNum)]
 
     def GetConservedSpinTuple(self, SpinNum):
-        if SpinNum==2:
+        if SpinNum=="TwoSpins":
             return [(DOWN,DOWN),(UP,UP)]
-        if SpinNum==4:
-            return [((DOWN,DOWN),(DOWN,DOWN)),((UP,UP),(UP,UP)), \
-                    ((UP,UP),(DOWN,DOWN)),((DOWN,DOWN),(UP,UP)), \
-                    ((UP,DOWN),(DOWN,UP)),((DOWN,UP),(UP,DOWN))]
+        if SpinNum=="FourSpins":
+            return self.GetSpin4SimilarTuples((UP,UP),(UP,UP))+ \
+                   self.GetSpin4SimilarTuples((UP,UP),(DOWN,DOWN))+ \
+                   self.GetSpin4SimilarTuples((DOWN,UP),(UP,DOWN))
+    def GetSpin4SimilarTuples(self, InTuple, OutTuple):
+        if InTuple==OutTuple:
+            if InTuple[IN]==InTuple[OUT]:
+                return [((DOWN,DOWN),(DOWN,DOWN)),((UP,UP),(UP,UP))]
+            else:
+                return [((DOWN,UP),(DOWN,UP)),((UP,DOWN),(UP,DOWN))]
+        else:
+            if InTuple[IN]==InTuple[OUT] and OutTuple[IN]==OutTuple[OUT]:
+                return [((DOWN,DOWN),(UP,UP)),((UP,UP),(DOWN,DOWN))]
+            elif InTuple[IN]!=InTuple[OUT] and OutTuple[IN]!=OutTuple[OUT]:
+                return [((DOWN,UP),(UP,DOWN)),((UP,DOWN),(DOWN,UP))]
+            else:
+                return [((DOWN,UP),(UP,UP)),((UP,DOWN),(UP,UP)),
+                        ((DOWN,UP),(DOWN,DOWN)),((UP,DOWN),(DOWN,DOWN)),
+                        ((UP,UP),(DOWN,UP)),((UP,UP),(UP,DOWN)),
+                        ((DOWN,DOWN),(DOWN,UP)),((DOWN,DOWN),(UP,DOWN))]
 
 class Weight():
     def __init__(self, Name, Map, NSpin, Symmetry=None):
@@ -81,25 +113,20 @@ class Weight():
            Symmetry: 'Symmetric' or 'AntiSymmetric', only be checked if TauDep is 'SmoothT'
         """
         self.Map=Map
-        Para=Map.GetPara()
         self.Name=Name
-        self.NSublat=Para["NSublat"]
-        self.L=Para["L"]
-        if NSpin is "OneSpin":
+        self.NSublat=self.Map.NSublat
+        self.L=self.Map.L
+        if NSpin is "TwoSpins":
             self.NSpin=2
-        elif NSpin is "TwoSpins":
+        elif NSpin is "FourSpins":
             self.NSpin=4
         else:
             Assert(False, "Only accept OneSpin or TwoSpins, not {0}".format(NSpin))
 
-        self.Shape=[self.NSpin**2, self.NSublat**2]
-        v=1
-        for e in self.L:
-            v*=e
-        self.Shape.append(v)
+        self.Shape=[self.NSpin**2, self.NSublat**2, self.Map.Vol]
         if ".SmoothT" in Name:
-            self.Beta=Para["Beta"]
-            self.Shape.append(Para["MaxTauBin"])
+            self.Beta=self.Map.Beta
+            self.Shape.append(self.Map.MaxTauBin)
             self.__HasTau=True
             self.__SpaceTimeIndex=[[k,v] for k in range(self.Shape[VOL]) for v in range(self.Shape[TAU])]
             if Symmetry is "Symmetric":
@@ -221,15 +248,15 @@ class TestIndexMap(unittest.TestCase):
         self.Beta=1.0
         self.Map=IndexMap(self.Beta, self.L, NSublat=2, MaxTauBin=64)
     def test_conserved_spin_filter(self):
-        for s in self.Map.GetConservedSpinTuple(2):
+        for s in self.Map.GetConservedSpinTuple("TwoSpins"):
             self.assertTrue(s[IN]==s[OUT])
-        for s in self.Map.GetConservedSpinTuple(4):
+        for s in self.Map.GetConservedSpinTuple("FourSpins"):
             self.assertTrue(s[IN][IN]+s[OUT][IN]==s[OUT][OUT]+s[IN][OUT])
 
 class TestWeightFFT(unittest.TestCase):
     def setUp(self):
         self.Map=IndexMap(Beta=1.0, L=[8,8], NSublat=2, MaxTauBin=64)
-        self.G=Weight("G.SmoothT", self.Map, "OneSpin", "AntiSymmetric")
+        self.G=Weight("G.SmoothT", self.Map, "TwoSpins", "AntiSymmetric")
         TauGrid=np.linspace(0.0, self.G.Beta, self.G.Shape[TAU], endpoint=False)/self.G.Beta
         #last point<self.Beta!!!
         self.gTau=np.exp(TauGrid)
@@ -240,7 +267,7 @@ class TestWeightFFT(unittest.TestCase):
     def test_matrix_IO(self):
         FileName="test.npz"
         self.G.Save(FileName)
-        newG=Weight("G.SmoothT", self.Map, "OneSpin", "AntiSymmetric")
+        newG=Weight("G.SmoothT", self.Map, "TwoSpins", "AntiSymmetric")
         newG.Load(FileName)
         self.assertTrue(np.allclose(self.G.Data,newG.Data))
         os.system("rm "+FileName)
