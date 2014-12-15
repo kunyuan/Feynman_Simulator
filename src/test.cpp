@@ -33,7 +33,7 @@ int RunTest()
     TEST(diag::TestDiagram);
     TEST(weight::TestWeight);
     TEST(mc::TestMarkov);
-    //    TEST(mc::TestDiagCounter);
+    TEST(mc::TestDiagCounter);
 
     //    TEST(TestLattice);
     //    TEST(TestEstimator);

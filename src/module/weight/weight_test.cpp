@@ -16,10 +16,9 @@ using namespace weight;
 
 void TestDiagramObject();
 void TestWeightMeasuring();
-void TestWeightGW();
 void WeightMeasuring(real Beta, int Num);
-void Sample(Sigma &, int num, Site in, Site out,
-            spin SpinIn, spin SpinOut, real Beta, int order, real *P);
+void Sample(Sigma&, int num, Site in, Site out,
+            spin SpinIn, spin SpinOut, real Beta, int order, real* P);
 
 int weight::TestWeight()
 {
@@ -28,7 +27,6 @@ int weight::TestWeight()
 
     //test diagram object weight, like sigma, G
     sput_run_test(TestWeightMeasuring);
-    sput_run_test(TestWeightGW);
     sput_finish_testing();
     return sput_get_return_value();
 }
@@ -55,7 +53,7 @@ void WeightMeasuring(real Beta, int Num)
     int order = 4;
 
     //provide order+1 real numbers, order=0 corresponds to the Norm term
-    real P[] = {16.0, 16.0, 4.0, 1.0, 1.0};
+    real P[] = { 16.0, 16.0, 4.0, 1.0, 1.0 };
     //measure norm when set order=0
     Sample(Sig, Num, s1, s2, SpinIn, SpinOut, Beta, order + 1, P);
 
@@ -69,8 +67,7 @@ void WeightMeasuring(real Beta, int Num)
     real w = (P[1] + P[2]) / P[0] * 0.5 / Beta; //0.5 is the average <rng.urn()>
     Complex realweight = Complex(w, w);
     //2 standard deviation is allowd in the estimate
-    Complex relative_error = 2.0 * (Sig.Estimator.RelativeError(1) +
-                                    Sig.Estimator.RelativeError(2));
+    Complex relative_error = 2.0 * (Sig.Estimator.RelativeError(1) + Sig.Estimator.RelativeError(2));
     Complex error(realweight.Re * relative_error.Re,
                   realweight.Im * relative_error.Im);
 
@@ -89,8 +86,8 @@ void WeightMeasuring(real Beta, int Num)
     //    system("rm test_weight.npz");
 }
 
-void Sample(Sigma &sigma, int num, Site in, Site out,
-            spin SpinIn, spin SpinOut, real Beta, int order, real *P)
+void Sample(Sigma& sigma, int num, Site in, Site out,
+            spin SpinIn, spin SpinOut, real Beta, int order, real* P)
 {
     RandomFactory rng(100);
     real P_lower[order + 1];
@@ -118,17 +115,4 @@ void Sample(Sigma &sigma, int num, Site in, Site out,
             }
         }
     }
-}
-
-void TestWeightGW()
-{
-    Lattice lat(Vec<int>(8), LATTICE);
-    real Beta = 1.0;
-    weight::W W_(lat, Beta);
-    W_.BuildNew(model::J1J2, {1.0, 0.0});
-    W_.WriteBareToASCII();
-    weight::G G_(lat, Beta);
-    G_.BuildNew(model::J1J2);
-    G_.Save("GW.npz");
-    W_.Save("GW.npz", "a");
 }
