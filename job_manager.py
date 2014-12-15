@@ -96,7 +96,6 @@ def submit_job(job_atom):
     jobname = homedir.split("/")[-1]+"."+job_atom.name
 
     infile = INFILEPATH+"/_in_{0}_{1}".format(job_atom.name, job_atom.pid)
-    infile_py = infile+".py"
     outfile = OUTFILEPATH+"/out_{0}_{1}.txt".format(
         job_atom.name, job_atom.pid)
     jobfile = os.path.abspath(workdir+"/_job_{0}_{1}.sh".format(
@@ -104,8 +103,6 @@ def submit_job(job_atom):
     #write input file into ./infile folder
     with open(infile, "w") as f:
         f.write(job_atom.input_str)
-    with open(infile_py, "w") as f:
-        f.write(str(job_atom.para))
     f_allinput = open(os.path.abspath(workdir+"/all_input.log"), "a")
     f_allinput.write("Job ID: {0}, Job name: {1}\n".format(
             job_atom.pid, job_atom.name))

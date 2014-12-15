@@ -17,33 +17,21 @@
 #include "module/weight/weight.h"
 #include "module/markov/markov_monitor.h"
 #include "module/markov/markov.h"
+#include "job/job.h"
 
-class Environment {
+class EnvMonteCarlo {
 public:
-    int PID;
-    enum flag { Bare,
-                OldGW };
-
-protected:
-    std::string _ParameterFile;
-    std::string _GWweightFile;
-    std::string _WeightFile;
-    std::string _StatisticsFile;
-    Environment(int pid);
-};
-
-class EnvMonteCarlo : public Environment {
-public:
-    EnvMonteCarlo(int pid, bool IsAllTauSymmetric = false);
+    EnvMonteCarlo(const para::Job& job, bool IsAllTauSymmetric = false);
 
     //can be read from StateFile or InputFile
+    para::Job Job;
     para::ParaMC Para;
     weight::Weight Weight;
     diag::Diagram Diag;
     mc::Markov Grasshopper;
     mc::MarkovMonitor Scarecrow;
 
-    bool BuildNew(const std::string& InputFile, bool StartFromBare);
+    bool BuildNew();
     bool Load();
     void Save(); //Save everything in EnvMonteCarlo
     void DeleteSavedFiles();

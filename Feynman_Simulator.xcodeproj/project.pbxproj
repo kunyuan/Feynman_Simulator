@@ -37,7 +37,6 @@
 		8422FE4D1A0A85E7002EB44E /* job.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FE4B1A0A85E7002EB44E /* job.cpp */; };
 		843DBB3E1A3B535A009DB448 /* timer_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 843DBB3B1A3B535A009DB448 /* timer_test.cpp */; };
 		843DBB3F1A3B535A009DB448 /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 843DBB3C1A3B535A009DB448 /* timer.cpp */; };
-		84519AEB19F2C554007CB81B /* environment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84519AE919F2C554007CB81B /* environment.cpp */; };
 		84519AED19F2C57A007CB81B /* envMonteCarlo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84519AEC19F2C57A007CB81B /* envMonteCarlo.cpp */; };
 		84519AF219F33F22007CB81B /* complex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84519AF019F33F22007CB81B /* complex.cpp */; };
 		845C92C119F75B340066B590 /* vector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 845C92C019F75B340066B590 /* vector.cpp */; };
@@ -48,7 +47,6 @@
 		84B8FC4B19EDA348003D6DF6 /* cnpy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84B8FC4819EDA348003D6DF6 /* cnpy.cpp */; };
 		84C86DD51A1FD2B3002A3D8D /* weight_basic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84C86DD31A1FD2B3002A3D8D /* weight_basic.cpp */; };
 		84C86DDB1A214E33002A3D8D /* component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84C86DD91A214E33002A3D8D /* component.cpp */; };
-		84C86DE41A217F9B002A3D8D /* weight_initializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84C86DE21A217F9B002A3D8D /* weight_initializer.cpp */; };
 		84C86DF51A23D9FD002A3D8D /* index_map.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84C86DF31A23D9FD002A3D8D /* index_map.cpp */; };
 		84C86DFA1A24310F002A3D8D /* component_MC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84C86DF81A24310F002A3D8D /* component_MC.cpp */; };
 		84C86DFD1A24E463002A3D8D /* weight_estimator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84C86DFB1A24E463002A3D8D /* weight_estimator.cpp */; };
@@ -131,7 +129,14 @@
 		843DBB3B1A3B535A009DB448 /* timer_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = timer_test.cpp; sourceTree = "<group>"; };
 		843DBB3C1A3B535A009DB448 /* timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = timer.cpp; sourceTree = "<group>"; };
 		843DBB3D1A3B535A009DB448 /* timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = timer.h; sourceTree = "<group>"; };
-		84519AE919F2C554007CB81B /* environment.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = environment.cpp; path = environment/environment.cpp; sourceTree = "<group>"; };
+		843DBB411A3E96BD009DB448 /* calculator.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = calculator.py; sourceTree = "<group>"; };
+		843DBB431A3E96BD009DB448 /* lattice.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = lattice.py; sourceTree = "<group>"; };
+		843DBB451A3E96BD009DB448 /* logger.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = logger.py; sourceTree = "<group>"; };
+		843DBB471A3E96BD009DB448 /* main.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = main.py; sourceTree = "<group>"; };
+		843DBB491A3E96BD009DB448 /* model.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = model.py; sourceTree = "<group>"; };
+		843DBB4B1A3E96BD009DB448 /* parameter.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = parameter.py; sourceTree = "<group>"; };
+		843DBB4E1A3E96BD009DB448 /* test.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = test.py; sourceTree = "<group>"; };
+		843DBB501A3E96BD009DB448 /* weight.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = weight.py; sourceTree = "<group>"; };
 		84519AEA19F2C554007CB81B /* environment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = environment.h; path = environment/environment.h; sourceTree = "<group>"; };
 		84519AEC19F2C57A007CB81B /* envMonteCarlo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = envMonteCarlo.cpp; path = environment/envMonteCarlo.cpp; sourceTree = "<group>"; };
 		84519AF019F33F22007CB81B /* complex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = complex.cpp; sourceTree = "<group>"; };
@@ -154,8 +159,6 @@
 		84C86DD41A1FD2B3002A3D8D /* weight_basic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = weight_basic.h; path = module/weight/weight_basic.h; sourceTree = "<group>"; };
 		84C86DD91A214E33002A3D8D /* component.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = component.cpp; path = module/weight/component.cpp; sourceTree = "<group>"; };
 		84C86DDA1A214E33002A3D8D /* component.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = component.h; path = module/weight/component.h; sourceTree = "<group>"; };
-		84C86DE21A217F9B002A3D8D /* weight_initializer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = weight_initializer.cpp; path = module/weight/weight_initializer.cpp; sourceTree = "<group>"; };
-		84C86DE31A217F9B002A3D8D /* weight_initializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = weight_initializer.h; path = module/weight/weight_initializer.h; sourceTree = "<group>"; };
 		84C86DF31A23D9FD002A3D8D /* index_map.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = index_map.cpp; path = module/weight/index_map.cpp; sourceTree = "<group>"; };
 		84C86DF41A23D9FD002A3D8D /* index_map.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = index_map.h; path = module/weight/index_map.h; sourceTree = "<group>"; };
 		84C86DF81A24310F002A3D8D /* component_MC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = component_MC.cpp; path = module/weight/component_MC.cpp; sourceTree = "<group>"; };
@@ -273,8 +276,6 @@
 				84C86DFC1A24E463002A3D8D /* weight_estimator.h */,
 				84C86DF41A23D9FD002A3D8D /* index_map.h */,
 				84C86DF31A23D9FD002A3D8D /* index_map.cpp */,
-				84C86DE31A217F9B002A3D8D /* weight_initializer.h */,
-				84C86DE21A217F9B002A3D8D /* weight_initializer.cpp */,
 				8422FE341A0A7ECA002EB44E /* weight_test.cpp */,
 			);
 			name = weight;
@@ -328,6 +329,21 @@
 			name = tool;
 			sourceTree = "<group>";
 		};
+		843DBB401A3E96BD009DB448 /* calculator */ = {
+			isa = PBXGroup;
+			children = (
+				843DBB411A3E96BD009DB448 /* calculator.py */,
+				843DBB431A3E96BD009DB448 /* lattice.py */,
+				843DBB451A3E96BD009DB448 /* logger.py */,
+				843DBB471A3E96BD009DB448 /* main.py */,
+				843DBB491A3E96BD009DB448 /* model.py */,
+				843DBB4B1A3E96BD009DB448 /* parameter.py */,
+				843DBB4E1A3E96BD009DB448 /* test.py */,
+				843DBB501A3E96BD009DB448 /* weight.py */,
+			);
+			path = calculator;
+			sourceTree = SOURCE_ROOT;
+		};
 		84B8FC3919EC9763003D6DF6 /* markov */ = {
 			isa = PBXGroup;
 			children = (
@@ -345,7 +361,6 @@
 			isa = PBXGroup;
 			children = (
 				84519AEA19F2C554007CB81B /* environment.h */,
-				84519AE919F2C554007CB81B /* environment.cpp */,
 				84519AEC19F2C57A007CB81B /* envMonteCarlo.cpp */,
 				84D7EFC219F552F5006B1CA5 /* env_test.cpp */,
 			);
@@ -380,6 +395,7 @@
 				8422FE321A0A7E82002EB44E /* estimator */,
 				1CA5CF3C19ED6F5400212E20 /* lattice */,
 				612661D40BB91FC506C3E572 /* utility */,
+				843DBB401A3E96BD009DB448 /* calculator */,
 				843D3FBA1A155F2600DACC51 /* tool */,
 			);
 			name = Feynman_Simulator;
@@ -458,7 +474,6 @@
 				1CA5CF3A19ED6F3F00212E20 /* lattice.cpp in Sources */,
 				84B8FC4A19EDA348003D6DF6 /* cnpy_test.cpp in Sources */,
 				843DBB3E1A3B535A009DB448 /* timer_test.cpp in Sources */,
-				84C86DE41A217F9B002A3D8D /* weight_initializer.cpp in Sources */,
 				8422FE261A09C13D002EB44E /* markov_test.cpp in Sources */,
 				841D905C19E054900066116A /* test.cpp in Sources */,
 				8422FE3E1A0A7F8D002EB44E /* estimator_test.cpp in Sources */,
@@ -473,7 +488,6 @@
 				84519AED19F2C57A007CB81B /* envMonteCarlo.cpp in Sources */,
 				8422FE391A0A7ECA002EB44E /* weight_test.cpp in Sources */,
 				8422FE0E1A09C112002EB44E /* component_IO.cpp in Sources */,
-				84519AEB19F2C554007CB81B /* environment.cpp in Sources */,
 				8422FDFE1A09C0ED002EB44E /* parameter.cpp in Sources */,
 				61266E5CDE0355C1306E9EBD /* rng_test.cpp in Sources */,
 				6126638BECC823E2FECDBE1A /* utility.cpp in Sources */,

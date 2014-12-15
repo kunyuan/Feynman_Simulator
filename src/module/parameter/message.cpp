@@ -15,7 +15,7 @@ bool para::Message::Load()
         _Para.ParseFile(_MessageFile);
     }
     catch (ERRORCODE e) {
-        if (e != ERR_FILE_NOT_FIND)
+        if (e != ERR_FILE_NOT_FOUND)
             throw e;
         return false;
     }

@@ -30,14 +30,14 @@ string trim(string s)
 *
 *  @param InputFile Input file name
 */
-bool SimpleParser::ParseFile(const std::string &InputFile)
+bool SimpleParser::ParseFile(const std::string& InputFile)
 {
     clear();
     ifstream ifs(InputFile, ios::in);
     ON_SCOPE_EXIT([&] {ifs.close(); });
     if (!ifs.is_open()) {
         LOG_WARNING(InputFile << " does not exist!");
-        throw(ERR_FILE_NOT_FIND);
+        throw(ERR_FILE_NOT_FOUND);
         return false;
     }
     string temp;
@@ -58,7 +58,7 @@ bool SimpleParser::ParseFile(const std::string &InputFile)
 *  @param Mode       "w" to write/"a" to append
 *
 */
-void SimpleParser::SaveToFile(const std::string &OutputFile, string Mode)
+void SimpleParser::SaveToFile(const std::string& OutputFile, string Mode)
 {
     auto mode = ios::out;
     if ((Mode) == "a")
@@ -70,15 +70,15 @@ void SimpleParser::SaveToFile(const std::string &OutputFile, string Mode)
     ON_SCOPE_EXIT([&] {ofs.close(); });
     if (!ofs.is_open())
         ABORT("Fail to open file " << OutputFile);
-    for (auto &kv : _map)
+    for (auto& kv : _map)
         if (kv.second != "")
-            ofs << kv.first << ":" << kv.second << std::endl;
+            ofs << kv.first << " = " << kv.second << std::endl;
 }
 
 string SimpleParser::PrettyString()
 {
     stringstream ss;
-    for (auto &kv : _map)
+    for (auto& kv : _map)
         if (kv.second != "")
             ss << kv.first << "=" << kv.second << std::endl;
     return ss.str();

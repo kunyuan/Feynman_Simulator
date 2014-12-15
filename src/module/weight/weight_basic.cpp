@@ -45,34 +45,36 @@ void CheckVec2Index(Lattice _Lat)
     }
 }
 
-Basic::Basic(const Lattice &lat, real beta, SpinNum spin_num,
+Basic::Basic(const Lattice& lat, real beta, SpinNum spin_num,
              TauSymmetry Symmetry, string name)
-    : _Lat(lat),
-      _Beta(beta),
-      _TauSymmetryFactor(int(Symmetry)),
-      _Name(name),
-      _SpinNum(int(spin_num))
+    : _Lat(lat)
+    , _Beta(beta)
+    , _TauSymmetryFactor(int(Symmetry))
+    , _Name(name)
+    , _SpinNum(int(spin_num))
 {
     _dBeta = beta / MAX_TAU_BIN;
     _dBetaInverse = 1.0 / _dBeta;
     CheckVec2Index(lat);
 
     auto SpinVol = static_cast<uint>(pow(2, _SpinNum));
-    _Shape = vector<uint>({SpinVol, (uint)_Lat.SublatVol2, (uint)_Lat.Vol, MAX_TAU_BIN});
+    _Shape = vector<uint>({ SpinVol, (uint)_Lat.SublatVol2, (uint)_Lat.Vol, MAX_TAU_BIN });
     for (auto e : _Lat.Size)
         _SpaceTimeShape.push_back(e);
     _SpaceTimeShape.push_back(MAX_TAU_BIN);
 
     _SmoothTWeight.Allocate(GetShape());
+    _SmoothTWeight = Complex(0.0, 0.0);
     _DeltaTWeight.Allocate(GetShape());
+    _DeltaTWeight = Complex(0.0, 0.0);
 }
 
-uint *Basic::GetShape()
+uint* Basic::GetShape()
 {
     return _Shape.data();
 }
 
-uint *Basic::GetSpaceTimeShape()
+uint* Basic::GetSpaceTimeShape()
 {
     return _SpaceTimeShape.data();
 }
@@ -94,31 +96,37 @@ const string SMOOTH = ".SmoothT";
 const string DELTA = ".DeltaT";
 
 template <typename T>
-bool LoadMatrix(T &matrix, const string &FileName, const string &Name)
+bool LoadMatrix(T& matrix, const string& FileName, const string& Name)
 {
-    cnpy::NpyArray weight = cnpy::npz_load(FileName, Name);
-    if (weight.data == nullptr) {
-        ABORT("Can't find " << Name << ".Weight in .npz data file!");
+    try {
+        cnpy::NpyArray weight = cnpy::npz_load(FileName, Name);
+        matrix = (reinterpret_cast<Complex*>(weight.data));
+        //assignment here will copy data in weight.data into *this
+        return true;
+    }
+    catch (ERRORCODE e) {
+        LOG_WARNING(Name << " is not found in " << FileName << ", so it is set to zero!");
+        if (e != ERR_VALUE_NOT_FOUND)
+            throw e;
         return false;
     }
-    //assignment here will copy data in weight.data into *this
-    matrix = (reinterpret_cast<Complex *>(weight.data));
-    return true;
 }
 
 template <typename T>
-void SaveMatrix(T &matrix, const string &FileName, const std::string Mode,
-                const string &Name, uint *Shape, int Dim)
+void SaveMatrix(T& matrix, const string& FileName, const std::string Mode,
+                const string& Name, uint* Shape, int Dim)
 {
     cnpy::npz_save(FileName, Name, matrix(), Shape, Dim, Mode);
 }
 
-bool Basic::Load(const std::string &FileName)
+bool Basic::Load(const std::string& FileName)
 {
-    return LoadMatrix(_SmoothTWeight, FileName, _Name + SMOOTH) &&
-           LoadMatrix(_DeltaTWeight, FileName, _Name + DELTA);
+    bool flag1 = LoadMatrix(_SmoothTWeight, FileName, _Name + SMOOTH);
+    bool flag2 = LoadMatrix(_DeltaTWeight, FileName, _Name + DELTA);
+    ASSERT_ALLWAYS(flag1 || flag2, "Come on! Neither .SmoothT nor .DeltaT exist!");
+    return true;
 }
-void Basic::Save(const std::string &FileName, const std::string Mode)
+void Basic::Save(const std::string& FileName, const std::string Mode)
 {
     SaveMatrix(_SmoothTWeight, FileName, Mode, _Name + SMOOTH, GetShape(), 4);
     SaveMatrix(_DeltaTWeight, FileName, "a", _Name + DELTA, GetShape(), 3);

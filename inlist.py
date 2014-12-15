@@ -15,6 +15,7 @@ com_dict={
     "FinalBeta" :  beta,
     "Order" :  4,
     "Model" : "J1J2",
+    "Lattice" : "Square",
     "Interaction" : [1.0,0.0],
     "ExternalField": 0.0,
 }
@@ -22,13 +23,11 @@ com_dict={
 # monte carlo job defintion
 mc_dict={
     "__Execute" : "./gamma3.exe",
-    "__Duplicate" : 1,
+    "__Duplicate" : 0,
     "__IsCluster" : False,
     "__AutoRun" : True,
     "DoesLoad" : False,
-    "StartFromBare" : True,
-    
-#Start from order 0, so that OrderReWeight has Order+1 elements
+    #Start from order 0, so that OrderReWeight has Order+1 elements
     "OrderReWeight" : [1.0, 1.0, 3.0,4.0,1.0],
     "Sample" :  5000000,
     "Sweep" : 10,
@@ -53,6 +52,21 @@ sc_dict={
     }
 sc_dict.update(com_dict)
 TO_DO.append(job.JobConsistLoop(sc_dict))
+
+#diagram counter job definition
+#diagcount_dict{
+    #"__Execute" : "./gamma3.exe",
+    #"__Duplicate" : 1,
+    #"__IsCluster" : False,
+    #"__AutoRun" : True,
+    #"DoesLoad" : False,
+    #Start from order 0, so that OrderReWeight has Order+1 elements
+    #"OrderReWeight" : [1.0, 1.0, 3.0,4.0,1.0],
+    #"Sample" :  5000000,
+    #"Sweep" : 10,
+    #"Toss" : 10000,
+    #"WormSpaceReweight" : 0.100
+#}
 
 if __name__ == "__main__":
     for e in TO_DO:

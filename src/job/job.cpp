@@ -19,7 +19,12 @@ para::Job::Job(string inputfile)
         ABORT("I don't know what is Job Type " << Type << "?");
 
     GetPara(_Para, DoesLoad);
-    GetPara(_Para, StartFromBare);
     GetPara(_Para, PID);
+    GetPara(_Para, WeightFile);
+    GetPara(_Para, MessageFile);
+    ParaFile = ToString(PID) + "_para.txt";
+    StatisticsFile = ToString(PID) + "_statistics.npz";
+    ConfigFile = ToString(PID) + "_config.txt";
+    LogFile = ToString(PID) + ".log";
     InputFile = inputfile;
 }

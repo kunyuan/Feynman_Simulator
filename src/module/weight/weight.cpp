@@ -38,20 +38,11 @@ weight::Weight::~Weight()
 *  @param order     order
 */
 
-bool weight::Weight::BuildNew(flag _flag, const Parameter &para)
+bool weight::Weight::BuildNew(flag _flag, const Parameter& para)
 {
     if (para.Order == 0)
         ABORT("Order can not be zero!!!");
-    if (_flag & weight::GW) {
-        _AllocateGW(para);
-        G->BuildNew(MODEL,
-                    para.Hopping,
-                    para.ChemicalPotential,
-                    para.ExternalField);
-        W->BuildNew(MODEL,
-                    para.Interaction,
-                    para.ExternalField);
-    }
+    //GW can only be loaded
     if (_flag & weight::SigmaPolar) {
         _AllocateSigmaPolar(para);
         Sigma->BuildNew(MODEL);
@@ -60,7 +51,7 @@ bool weight::Weight::BuildNew(flag _flag, const Parameter &para)
     return true;
 }
 
-void weight::Weight::ReWeight(flag _flag, const Parameter &para)
+void weight::Weight::ReWeight(flag _flag, const Parameter& para)
 {
     if (_flag & weight::GW) {
         //TODO: reweight G, W
@@ -80,7 +71,7 @@ void weight::Weight::ReWeight(flag _flag, const Parameter &para)
 *
 *  @return alway true for now
 */
-bool weight::Weight::Load(const std::string &InputFile, flag _flag, const Parameter &para)
+bool weight::Weight::Load(const std::string& InputFile, flag _flag, const Parameter& para)
 {
     if (_flag & weight::GW) {
         _AllocateGW(para);
@@ -101,13 +92,9 @@ bool weight::Weight::Load(const std::string &InputFile, flag _flag, const Parame
 *  @param _flag     weight::GW|weight::SigmaPolar
 *  @param Mode      "a" or "w"
 */
-void weight::Weight::Save(const string &FileName, flag _flag, string Mode)
+void weight::Weight::Save(const string& FileName, flag _flag, string Mode)
 {
-    if (_flag & weight::GW) {
-        G->Save(FileName, Mode);
-        W->Save(FileName, "a");
-        Mode = "a";
-    }
+    //GW never saved here
     if (_flag & weight::SigmaPolar) {
         Sigma->Save(FileName, Mode);
         Polar->Save(FileName, "a");
@@ -125,7 +112,7 @@ int weight::Weight::UpdateSigmaPolarWeight(int OrderAccepted, real ErrorThreshol
     return NewOrderAccepted;
 }
 
-void weight::Weight::SetTest(const Parameter &para)
+void weight::Weight::SetTest(const Parameter& para)
 {
     _AllocateGW(para);
     _AllocateSigmaPolar(para);
@@ -133,7 +120,7 @@ void weight::Weight::SetTest(const Parameter &para)
     W->BuildTest();
 }
 
-void weight::Weight::SetDiagCounter(const Parameter &para)
+void weight::Weight::SetDiagCounter(const Parameter& para)
 {
     _AllocateGW(para);
     _AllocateSigmaPolar(para);
@@ -141,7 +128,7 @@ void weight::Weight::SetDiagCounter(const Parameter &para)
     W->BuildNew(model::DIAGRAMCOUNTER);
 }
 
-void weight::Weight::_AllocateGW(const Parameter &para)
+void weight::Weight::_AllocateGW(const Parameter& para)
 {
     //make sure old Sigma/Polar/G/W are released before assigning new memory
     delete G;
@@ -151,7 +138,7 @@ void weight::Weight::_AllocateGW(const Parameter &para)
     W = new weight::W(para.Lat, para.Beta);
 }
 
-void weight::Weight::_AllocateSigmaPolar(const Parameter &para)
+void weight::Weight::_AllocateSigmaPolar(const Parameter& para)
 {
     auto symmetry = _IsAllSymmetric ? TauSymmetric : TauAntiSymmetric;
     delete Sigma;
