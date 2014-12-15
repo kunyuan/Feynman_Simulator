@@ -9,7 +9,7 @@ from logger import *
 para = para.Parameter()
 para.Load("../data/infile/_in_DYSON_1")
 Beta = para.InitialBeta
-Para={"NSublat":2, "L":para.L, "Beta": Beta, "MaxTauBin": 32}
+Para={"NSublat":1, "L":para.L, "Beta": Beta, "MaxTauBin": 32}
 map=weight.IndexMap(**Para)
 
 G0=weight.Weight("G.SmoothT", map, "OneSpin", "AntiSymmetric")
@@ -26,8 +26,8 @@ Polar=calc.Polar_FirstOrder(G0, map)
 #print Polar.Data[map.Spin4Index((DOWN,UP),(UP,DOWN)), map.SublatIndex(1,1),0,:]
 #print Polar.Data[map.Spin4Index((UP,UP),(UP,UP)), map.SublatIndex(1,1),0,:]
 
-W=calc.W_FirstOrder(W0, Polar,map) 
-print Beta/(W.Shape[TAU])**2.0 *W.Data[map.Spin4Index((DOWN,DOWN),(DOWN,DOWN)), 0,0,:]
+W=calc.W_FirstOrder(Beta, W0, Polar,map) 
+print W.Data[map.Spin4Index((DOWN,DOWN),(DOWN,DOWN)), 0,0,:]
 #print W.Data[map.Spin4Index((UP,UP),(UP,UP)), 0,0,:]
 
 Sigma=calc.Sigma_FirstOrder(G0, W, map)
@@ -35,9 +35,12 @@ Sigma0=calc.Sigma0_FirstOrder(G0, W0, map)
 #print Sigma.Data[map.Spin2Index(UP,UP), map.SublatIndex(1,1),0,:]
 #print Sigma0.Data[map.Spin2Index(UP,UP), map.SublatIndex(1,1),0]
 
-W=calc.W_Dyson(Beta, W0,Polar,map)
+W = calc.W_Dyson(Beta, W0,Polar,map)
 print W.Data[map.Spin4Index((DOWN,DOWN),(DOWN,DOWN)), 0,0,:]
 
-G=calc.G_Dyson(Beta, G0,Sigma0, Sigma, map)
-#print G.Data[map.Spin2Index(UP,UP), 0,0,:]
+G = calc.G_FirstOrder(Beta,G0, Sigma0, Sigma, map) 
+print G0.Data[map.Spin2Index(UP,UP),0,0,:]+G.Data[map.Spin2Index(UP,UP), 0,0,:]
+
+G = calc.G_Dyson(Beta, G0, Sigma0, Sigma, map)
+print G.Data[map.Spin2Index(UP,UP), 0,0,:]
 

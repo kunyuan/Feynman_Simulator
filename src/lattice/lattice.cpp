@@ -33,7 +33,8 @@ void Lattice::Initialize(const Vec<int> &size, lattice _Lattice)
     SublatVol2 = NSublattice * NSublattice;
     switch (_Lattice) {
         case SQUARE:
-            ABORT("square lattice has not been implemented yet!");
+            _Square();
+            break;
         case CHECKBOARD:
             _Checkboard();
             break;
@@ -262,6 +263,30 @@ void Lattice::_Checkboard()
     SublatticeVec[0][1] = 0.0;
     SublatticeVec[1][0] = 0.5;
     SublatticeVec[1][1] = 0.5;
+}
+
+void Lattice::_Square()
+{
+    ASSERT_ALLWAYS(LatticeType == SQUARE,
+                   ToString(int(LatticeType)) + " is not SQUARE!");
+    ASSERT_ALLWAYS(Dimension == 2 && SublatVol == 1,
+                   "Square lattice has D=2 and Sublattice=1");
+    ASSERT_ALLWAYS(Size[0] > 1 && Size[1] > 1, "System size must be bigger than 1!");
+    
+    //Square Lattice with one sublattices
+    LatticeVec[0][0] = 1.0;
+    LatticeVec[0][1] = 0.0;
+    
+    LatticeVec[1][0] = 0.0;
+    LatticeVec[1][1] = 1.0;
+
+    ReciprocalLatticeVec[0][0] = 2.0 * PI;
+    ReciprocalLatticeVec[0][1] = 0.0;
+    ReciprocalLatticeVec[1][0] = 0.0;
+    ReciprocalLatticeVec[1][1] = 2.0 * PI;
+
+    SublatticeVec[0][0] = 0.0;
+    SublatticeVec[0][1] = 0.0;
 }
 
 void Lattice::_Honeycomb()
