@@ -1,28 +1,23 @@
-Type = "MC"
-Model = "J1J2"
 
-#Job parameter
-DoesLoad = False
-StartFromBare = True
-PID = 1
-
-#Model parameter
-Hopping = [0.0,]
-Interaction = [1.0,0.5]
-ChemicalPotential = [(0.0,0.0),(0.0,1.0)]
-ExternalField = [0.0]
-
-#General parameter
-L = [8,8]
-InitialBeta = 1.0
+Interaction = [1.0, 0.0]
+Hopping = [0.0]
+Seed = 759588578
+L = [8, 8]
+ExternalField = 0.0
+Lattice = 'Checkboard'
+ChemicalPotential = [(0, 1.5707963267948966), (0, 1.5707963267948966)]
 DeltaBeta = 0.0
-FinalBeta = 1.0
+WeightFile = 'Weight.npz'
+Model = 'J1J2'
+DoesLoad = False
+Type = 'MC'
 Order = 4
-
-#Monte Carlo paramter
+FinalBeta = 1.0
+MessageFile = 'Message.txt'
 Toss = 10000
+OrderReWeight = [1.0, 1.0, 3.0, 4.0, 1.0]
+PID = 2
+Sweep = 10
 Sample = 5000000
-Sweep=10
-Seed =-519180543
 WormSpaceReweight = 0.1
-OrderReWeight = [1.5,1.0,3.0,4.0,1.0]
+InitialBeta = 1.0

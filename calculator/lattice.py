@@ -8,10 +8,13 @@ class Lattice:
         self.__Map=Map
         self.L=np.array(Map.L)
         self.Name=Name
+        print Name
         if Name=="Checkboard":
             self.__Checkboard()
         elif Name=="Honeycomb":
             self.__Honeycomb()
+        elif Name=="Square":
+            self.__Square()
         else:
             Assert(False, "Not implemented!")
 
@@ -27,6 +30,15 @@ class Lattice:
                               [0.0,1.0]])
         self.SubLatVec=np.array([[0.0,0.0],
                                  [0.5,0.5]])
+        self.ReciprocalLatVec =np.array([[2.0 * np.pi, 0.0],
+                                         [0.0, 2.0 * np.pi]])
+    def __Square(self):
+        self.Dim=2
+        self.__AssertDim()
+        self.NSublat=1
+        self.LatVec=np.array([[1.0,0.0],
+                              [0.0,1.0]])
+        self.SubLatVec=np.array([[0.0,0.0]])
         self.ReciprocalLatVec =np.array([[2.0 * np.pi, 0.0],
                                          [0.0, 2.0 * np.pi]])
     def __Honeycomb(self):

@@ -22,18 +22,23 @@
 /**
 *  Parse configuration file with the format:
 *
-*  Value1          #key1
-*  Value2          #key2
+*  key1 = Value1
+*  key2 = Value2
 *  ##Some comments
-*  Value3          #key3
-*  ......          #....
+*  key3 = Value3
+*  ......
+*  Special types format:
+*  ThisIsBool = True/False
+*  ThisIsString = 'I am String'
+*  ThisIsVector<T> = [A, B, C]
+*  #A,B,C has type T
 *
 *  to use the set member function of the class, you have to overload ToString(T) method for your type T
 */
 class SimpleParser {
-  public:
-    bool ParseFile(const std::string &);
-    void SaveToFile(const std::string &, std::string Mode = "a");
+public:
+    bool ParseFile(const std::string&);
+    void SaveToFile(const std::string&, std::string Mode = "a");
     std::string PrettyString();
 
     void clear();
@@ -65,7 +70,7 @@ class SimpleParser {
     }
 
     template <typename T>
-    void Get(std::string key, T &value)
+    void Get(std::string key, T& value)
     {
         _MakeSureKeyExists(key);
         std::stringstream ss(_map.at(key));
@@ -78,7 +83,7 @@ class SimpleParser {
             ABORT("Fail to read " << key << "!");
     }
 
-    void Get(std::string key, bool &value)
+    void Get(std::string key, bool& value)
     {
         _MakeSureKeyExists(key);
         if (_map.at(key) == "True")
@@ -89,7 +94,7 @@ class SimpleParser {
             ABORT("Fail to read " << key << "!");
     }
 
-    void Get(std::string key, std::string &value)
+    void Get(std::string key, std::string& value)
     {
         _MakeSureKeyExists(key);
         std::string str = _map.at(key);
@@ -98,7 +103,7 @@ class SimpleParser {
         value = str.substr(1, str.length() - 2);
     }
     template <typename T>
-    void Get(std::string key, std::vector<T> &value, char sep = ',')
+    void Get(std::string key, std::vector<T>& value, char sep = ',')
     {
         _MakeSureKeyExists(key);
         std::stringstream ss(_map.at(key));
@@ -122,7 +127,7 @@ class SimpleParser {
 
     std::pair<std::string, std::string> make_pair(std::string);
 
-  private:
+private:
     std::map<std::string, std::string> _map;
     bool _MakeSureKeyExists(std::string name);
     bool _DoesKeyExist(std::string name);

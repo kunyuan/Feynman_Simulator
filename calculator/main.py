@@ -7,18 +7,21 @@ import weight
 import model
 from logger import *
 
+prefix="../data/"
 para = para.Parameter()
 para.Load("../data/infile/_in_DYSON_1")
 Assert(para.Type=="DYSON", "The job type should be DYSON, not {0}".format(para.Type))
 Beta = para.InitialBeta
-Para={"NSublat":2, "L":para.L, "Beta": Beta, "MaxTauBin": 32}
-map=weight.IndexMap(**Para)
+WeightPara={"NSublat":2, "L":para.L, "Beta": Beta, "MaxTauBin": 32}
+map=weight.IndexMap(**WeightPara)
 
 if para.StartFromBare is True:
     Factory=model.BareFactory(map, para.Hopping, para.Interaction, 
                               para.ChemicalPotential, para.ExternalField)
-    G0,W0=Factory.Build(para.Model, "Checkboard")
-    #Factory.PlotModel()
+    G0,W0=Factory.Build(para.Model, para.Lattice)
+    G0.Save(prefix+para.WeightFile,"w")
+    W0.Save(prefix+para.WeightFile,"a")
+    Factory.Plot()
 else:
     G0=weight.Weight("G.SmoothT", map, "TwoSpins", "AntiSymmetric")
     G0.Load("../data/GW.npz")
@@ -26,8 +29,7 @@ else:
     W0.Load("../data/GW.npz")
 
 Polar=calc.Polar_FirstOrder(G0, map)
-
-print "Polar", Polar.Data[map.Spin4Index((DOWN,UP),(UP,DOWN)), map.SublatIndex(1,1),0,:]
+print "Polar", Polar.Data[map.Spin4Index((DOWN,UP),(UP,DOWN)), 0,0,:]
 
 W=calc.W_FirstOrder(Beta, W0, Polar,map) 
 print W.Data[map.Spin4Index((DOWN,DOWN),(DOWN,DOWN)), 0,0,:]

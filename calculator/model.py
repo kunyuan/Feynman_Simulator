@@ -20,14 +20,15 @@ class BareFactory:
         self.Lat=lat.Lattice(LatName, self.__Map)
         if Model=="J1J2" and LatName=="Checkboard":
             self.__J1J2onCheckborad()
+        elif Model=="J1J2" and LatName=="Square":
+            self.__J1J2onSquare()
         return (self.BareG,self.BareW)
 
     def __J1J2onCheckborad(self):
+        Lx,Ly=self.__Map.L
         #Dimension: 2
         #NSublat: 2
         #Bare G
-        Lx,Ly=self.__Map.L
-        J1,J2=self.__Interaction[0:2]
         self.__Mu=1j*np.pi/2.0/self.__Map.Beta
         self.__Hopping=[0.0]
         log.info("set Mu={0}, Hopping={1}, and SmoothT Bare G".format(self.__Mu, self.__Hopping))
@@ -37,6 +38,7 @@ class BareFactory:
             for sub in self.__Map.GetLocalSublatIndexs():
                 self.BareG.Data[sp][sub][0][:]=TauWeight[:]
         #Bare W
+        J1,J2=self.__Interaction[0:2]
         spinindex=self.__Map.Spin4Index((UP,UP),(UP,UP))
         subA2B=self.__Map.SublatIndex(0,1)
         subB2A=self.__Map.SublatIndex(1,0)
@@ -63,7 +65,41 @@ class BareFactory:
             self.BareW.Data[self.__Map.Spin4Index(*e),...]=-1.0*self.BareW.Data[spinindex,...]
         for e in self.__Map.GetSpin4SimilarTuples((DOWN,UP),(UP,DOWN)):
             self.BareW.Data[self.__Map.Spin4Index(*e),...]=2.0*self.BareW.Data[spinindex,...]
-    def PlotModel(self):
+
+    def __J1J2onSquare(self):
+        Lx,Ly=self.__Map.L
+        #Dimension: 2
+        #NSublat: 2
+        #Bare G
+        self.__Mu=1j*np.pi/2.0/self.__Map.Beta
+        self.__Hopping=[0.0]
+        log.info("set Mu={0}, Hopping={1}, and SmoothT Bare G".format(self.__Mu, self.__Hopping))
+        TauGrid=np.array([self.__Map.IndexToTau(t) for t in range(self.__MaxTauBin)])
+        TauWeight=np.exp(self.__Mu*TauGrid)/(1.0+1.0*1j)
+        for sp in self.__Map.GetConservedSpinIndexs("TwoSpins"):
+            for sub in self.__Map.GetLocalSublatIndexs():
+                self.BareG.Data[sp][sub][0][:]=TauWeight[:]
+        #Bare W
+        J1,J2=self.__Interaction[0:2]
+        spinindex=self.__Map.Spin4Index((UP,UP),(UP,UP))
+        sub=self.__Map.SublatIndex(0,0)
+        coordnn=[(0,1),(1,0),(Lx-1,0),(0,Ly-1)]
+        coordnnn=[(1,1),(Lx-1,1),(1,Ly-1),(Lx-1,Ly-1)]
+        #J1 interaction on nearest neighbors
+        for i in coordnn:
+            self.BareW.Data[spinindex,sub,self.__Map.CoordiIndex(i)] = J1;
+        #J2 interaction on next nearest neighbors
+        for i in coordnnn:
+            self.BareW.Data[spinindex,sub,self.__Map.CoordiIndex(i)] = J2;
+        #Generate other non-zero spin configuration
+        for e in self.__Map.GetSpin4SimilarTuples((UP,UP),(UP,UP)):
+            self.BareW.Data[self.__Map.Spin4Index(*e),...]=self.BareW.Data[spinindex,...]
+        for e in self.__Map.GetSpin4SimilarTuples((DOWN,DOWN),(UP,UP)):
+            self.BareW.Data[self.__Map.Spin4Index(*e),...]=-1.0*self.BareW.Data[spinindex,...]
+        for e in self.__Map.GetSpin4SimilarTuples((DOWN,UP),(UP,DOWN)):
+            self.BareW.Data[self.__Map.Spin4Index(*e),...]=2.0*self.BareW.Data[spinindex,...]
+
+    def Plot(self):
         import matplotlib.pyplot as plt
         color=('r','g','b')
         points=self.Lat.GetSitesList()

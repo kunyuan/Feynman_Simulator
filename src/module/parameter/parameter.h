@@ -20,7 +20,7 @@
 namespace para {
 
 class Parameter {
-  public:
+public:
     int Version;
     std::vector<real> Hopping;
     std::vector<real> Interaction;
@@ -38,11 +38,11 @@ class Parameter {
     Lattice Lat;
 
     Message GenerateMessage();
-    void UpdateWithMessage(const Message &);
+    void UpdateWithMessage(const Message&);
 
-  protected:
-    bool _BuildNew(const std::string &InputFile);
-    bool _Load(const std::string &InputFile);
+protected:
+    bool _BuildNew(const std::string& InputFile);
+    bool _Load(const std::string& InputFile);
     void _SavePreparation();
 
     SimpleParser _para;
@@ -50,7 +50,7 @@ class Parameter {
 };
 
 class ParaMC : public Parameter {
-  public:
+public:
     long long Counter;
     int Toss;
     int Sample;
@@ -60,21 +60,9 @@ class ParaMC : public Parameter {
     real WormSpaceReweight;
     std::vector<real> OrderReWeight;
 
-    bool BuildNew(const std::string &InputFile);
-    bool Load(const std::string &InputFile);
-    void Save(const std::string &InputFile, std::string Mode = "a");
-    void SetTest();
-};
-
-class ParaDyson : public Parameter {
-  public:
-    int OrderAccepted;
-    real ErrorThreshold;
-    int SleepTime;
-
-    bool BuildNew(const std::string &InputFile);
-    bool Load(const std::string &InputFile);
-    void Save(const std::string &InputFile, std::string Mode = "a");
+    bool BuildNew(const std::string& InputFile);
+    bool Load(const std::string& InputFile);
+    void Save(const std::string& InputFile, std::string Mode = "a");
     void SetTest();
 };
 }

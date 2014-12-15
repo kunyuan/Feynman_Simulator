@@ -19,7 +19,8 @@ const bool DEBUGMODE = true;
 //define NDEBUG will turn off debug checking, including the boundary check in array.h
 enum ERRORCODE {
     ERR_GENERAL = 0,
-    ERR_FILE_NOT_FIND
+    ERR_FILE_NOT_FOUND,
+    ERR_VALUE_NOT_FOUND
 };
 
 const real PI = 3.1415926535897932384626433832795;
@@ -50,8 +51,8 @@ const model MODEL = J1J2;
 
 //define analytic Sigma diagram here
 enum diagram { HATREE,
-             FOCK,
-             HATREEFOCK};
+               FOCK,
+               HATREEFOCK };
 const diagram DIAGRAM = FOCK;
 
 //define your lattice here
