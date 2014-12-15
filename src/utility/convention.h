@@ -42,19 +42,6 @@ const int OUT = 1;
 
 const int MAX_ORDER = 15;
 
-//define the model you want to simualte here
-enum model { TEST,
-             DIAGRAMCOUNTER,
-             J1J2,
-             HUBBARD };
-const model MODEL = J1J2;
-
-//define analytic Sigma diagram here
-enum diagram { HATREE,
-               FOCK,
-               HATREEFOCK };
-const diagram DIAGRAM = FOCK;
-
 //define your lattice here
 
 enum lattice {

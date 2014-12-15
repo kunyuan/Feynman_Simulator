@@ -57,7 +57,6 @@ protected:
     void Reset(real beta);
     int GetTauSymmetryFactor(real t_in, real t_out) const;
 
-    model _Model;
     int _TauSymmetryFactor;
     std::string _Name;
     real _Beta;

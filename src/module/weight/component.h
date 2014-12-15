@@ -29,9 +29,6 @@ public:
     Complex Weight(int, const Site&, const Site&, real, real, spin, spin, bool) const;
 
 private:
-    std::vector<real> _Hopping;
-    std::vector<Complex> _ChemicalPotential;
-    real _ExternalField;
     weight::SmoothTMatrix _MeasureWeight;
     IndexMapSPIN2 _Map;
 };
@@ -53,8 +50,6 @@ public:
     Complex Weight(int, const Site&, const Site&, real, real, spin*, spin*, bool, bool, bool) const;
 
 protected:
-    std::vector<real> _Interaction;
-    real _ExternalField;
     weight::SmoothTMatrix _MeasureWeight;
     IndexMapSPIN4 _Map;
 };
