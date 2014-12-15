@@ -23,7 +23,7 @@ com_dict={
 # monte carlo job defintion
 mc_dict={
     "__Execute" : "./gamma3.exe",
-    "__Duplicate" : 1,
+    "__Duplicate" : 0,
     "__IsCluster" : False,
     "__AutoRun" : True,
     "DoesLoad" : False,
@@ -40,7 +40,7 @@ TO_DO.append(job.JobMonteCarlo(mc_dict))
 # self consist loop job definition
 sc_dict={
     "__Execute" : ["python", "./run_loop.py"],
-    "__Duplicate" : 1,
+    "__Duplicate" : 0,
     "__IsCluster" : False,
     "__AutoRun" : False, 
     "DoesLoad" : True,
@@ -52,6 +52,21 @@ sc_dict={
     }
 sc_dict.update(com_dict)
 TO_DO.append(job.JobConsistLoop(sc_dict))
+
+#diagram counter job definition
+diagcount_dict{
+    "__Execute" : "./gamma3.exe",
+    "__Duplicate" : 1,
+    "__IsCluster" : False,
+    "__AutoRun" : True,
+    "DoesLoad" : False,
+    #Start from order 0, so that OrderReWeight has Order+1 elements
+    "OrderReWeight" : [1.0, 1.0, 3.0,4.0,1.0],
+    "Sample" :  5000000,
+    "Sweep" : 10,
+    "Toss" : 10000,
+    "WormSpaceReweight" : 0.100
+}
 
 if __name__ == "__main__":
     for e in TO_DO:
