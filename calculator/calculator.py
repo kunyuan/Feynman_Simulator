@@ -28,6 +28,33 @@ def Polar_FirstOrder(G, map):
                         *G.Data[spinG2, subA2B, :, :]
     return Polar
 
+def W_Dyson(W0,Polar,map):
+    W=weight.Weight("W.SmoothT", map, "TwoSpins", "Symmetric")
+    W0.FFT(1, "Space")
+    Polar.FFT(1, "Space", "Time")
+
+    NSpin, NSub=W.NSpin, W.NSublat
+    W0.Reshape("SPSUB,SPSUB")
+    W.Reshape("SPSUB,SPSUB")
+    Polar.Reshape("SPSUB,SPSUB")
+    JP=np.einsum("ijv,jkvt->ikvt",W0.Data, Polar.Data)
+    #JP shape: NSpin*NSub,NSpin*NSub,Vol,Tau
+    I=np.eye(NSpin*NSub)
+    W.Data=I[...,np.newaxis,np.newaxis]-JP
+    W.Inverse();
+    W.Data=np.einsum('ijvt,jkv->ikvt', W.Data,W0.Data)-W0.Data[...,np.newaxis]
+    W.Reshape("SP2,SUB2")
+    W0.Reshape("SP2,SUB2")
+    Polar.Reshape("SP2,SUB2")
+    W.FFT(-1, "Space", "Time")
+    Polar.FFT(-1, "Space", "Time")
+    W0.FFT(-1, "Space")
+    #print W.Data[map.Spin4Index((0,0),(0,0)),map.SublatIndex(0,0),0,:]
+
+def Sigma_FirstOrder(G0, W, map):
+    Sigma=weight.Weight("Sigma.SmoothT", map, "OneSpins", "AntiSymmetric")
+    return Sigma
+
 def W_FirstOrder(Beta,W0, Polar, map):
     W=weight.Weight("W.SmoothT", map, "TwoSpins", "Symmetric")
     TauRange = range(W.Shape[TAU])
