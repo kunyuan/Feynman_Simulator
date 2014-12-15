@@ -261,6 +261,3 @@ class TestWeightFFT(unittest.TestCase):
         self.assertTrue(np.allclose(self.G.Data[0,0,:,:], zzz.reshape(self.G.Shape[VOL:])))
         self.G.FFT(-1, "Space")
         self.assertTrue(np.allclose(self.G.Data, old))
-
-if __name__=="__main__":
-    pass
