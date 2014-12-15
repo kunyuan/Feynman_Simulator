@@ -23,46 +23,38 @@ G::G(const Lattice& lat, real beta, TauSymmetry Symmetry)
     _MeasureWeight = Complex(1.0, 0.0);
 }
 
-void G::BuildNew(model Model,
-                 const std::vector<real>& Hopping,
-                 const std::vector<Complex>& ChemicalPotential,
-                 real ExternalField)
+void G::BuildTest(weight::model Model)
 {
-    _Hopping = Hopping;
-    _ExternalField = ExternalField;
-    _ChemicalPotential = ChemicalPotential;
-    _Model = Model;
-    _SmoothTWeight = 0.0;
-    int spin_down = _Map.SpinIndex(DOWN, DOWN);
-    int spin_up = _Map.SpinIndex(UP, UP);
-
-    for (int sub = 0; sub < _Shape[SUB]; sub++) {
-        if (!_Lat.IsOnSameSubLat(sub))
-            continue;
-        int coor = _Lat.Vec2Index({ 0, 0 });
-        //        MeasureWeight[spin_up][sub][coor] = Complex(1.0, 0.0);
-        for (int tau = 0; tau < _Shape[TAU]; tau++) {
-            Complex weight = Complex(1.0, 0.0);
-            _SmoothTWeight[spin_down][sub][coor][tau] = weight;
-            _SmoothTWeight[spin_up][sub][coor][tau] = weight;
+    if (Model == weight::Trivial) {
+        _SmoothTWeight = 0.0;
+        int spin_down = _Map.SpinIndex(DOWN, DOWN);
+        int spin_up = _Map.SpinIndex(UP, UP);
+        for (int sub = 0; sub < GetShape()[SUB]; sub++) {
+            if (!_Lat.IsOnSameSubLat(sub))
+                continue;
+            int coor = _Lat.Vec2Index({ 0, 0 });
+            for (int tau = 0; tau < _Shape[TAU]; tau++) {
+                Complex weight = exp(Complex(0.0, _Map.IndexToTau(tau)));
+                _SmoothTWeight[spin_down][sub][coor][tau] = weight;
+                _SmoothTWeight[spin_up][sub][coor][tau] = weight;
+            }
         }
     }
-}
+    else if (Model == weight::DiagCount) {
+        _SmoothTWeight = 0.0;
+        int spin_down = _Map.SpinIndex(DOWN, DOWN);
+        int spin_up = _Map.SpinIndex(UP, UP);
 
-void G::BuildTest()
-{
-    _Model = model::TEST;
-    _SmoothTWeight = 0.0;
-    int spin_down = _Map.SpinIndex(DOWN, DOWN);
-    int spin_up = _Map.SpinIndex(UP, UP);
-    for (int sub = 0; sub < GetShape()[SUB]; sub++) {
-        if (!_Lat.IsOnSameSubLat(sub))
-            continue;
-        int coor = _Lat.Vec2Index({ 0, 0 });
-        for (int tau = 0; tau < _Shape[TAU]; tau++) {
-            Complex weight = exp(Complex(0.0, _Map.IndexToTau(tau)));
-            _SmoothTWeight[spin_down][sub][coor][tau] = weight;
-            _SmoothTWeight[spin_up][sub][coor][tau] = weight;
+        for (int sub = 0; sub < _Shape[SUB]; sub++) {
+            if (!_Lat.IsOnSameSubLat(sub))
+                continue;
+            int coor = _Lat.Vec2Index({ 0, 0 });
+            //        MeasureWeight[spin_up][sub][coor] = Complex(1.0, 0.0);
+            for (int tau = 0; tau < _Shape[TAU]; tau++) {
+                Complex weight = Complex(1.0, 0.0);
+                _SmoothTWeight[spin_down][sub][coor][tau] = weight;
+                _SmoothTWeight[spin_up][sub][coor][tau] = weight;
+            }
         }
     }
 }
@@ -83,64 +75,58 @@ W::W(const Lattice& lat, real Beta)
     _MeasureWeight = Complex(1.0, 0.0);
 }
 
-void W::BuildNew(model Model, const vector<real>& Interaction_, real ExternalField)
+void W::BuildTest(weight::model Model)
 {
-    _Interaction = Interaction_;
-    _ExternalField = ExternalField;
-    _Model = Model;
-    _DeltaTWeight = 0.0;
-    _SmoothTWeight = 0.0;
-    int Lx = _Lat.Size[0], Ly = _Lat.Size[1];
-    ASSERT_ALLWAYS(Lx > 1 && Ly > 1, "System size should be bigger than 1!");
-    int spin_up = _Map.SpinIndex(UP, //InOfW/InOfVertex
-                                 UP, //InOfW/OutOfVertex
-                                 UP, //OutOfW/InOfVertex
-                                 UP); //OutOfW/OutOfVertex
+    if (Model == Trivial) {
+        int Lx = _Lat.Size[0], Ly = _Lat.Size[1];
+        ASSERT_ALLWAYS(Lx > 1 && Ly > 1, "System size should be bigger than 1!");
+        int spin_up = _Map.SpinIndex(UP, //InOfW/InOfVertex
+                                     UP, //InOfW/OutOfVertex
+                                     UP, //OutOfW/InOfVertex
+                                     UP); //OutOfW/OutOfVertex
 
-    for (int sub = 0; sub < _Shape[SUB]; sub++) {
-        if (!_Lat.IsOnSameSubLat(sub))
-            continue;
-        int coor = _Lat.Vec2Index({ 0, 0 });
-        for (int tau = 0; tau < _Shape[TAU]; tau++) {
-            Complex weight = Complex(1.0, 0.0);
-            _SmoothTWeight[spin_up][sub][coor][tau] = weight;
+        for (int sub = 0; sub < _Shape[SUB]; sub++) {
+            if (!_Lat.IsOnSameSubLat(sub))
+                continue;
+            int coor = _Lat.Vec2Index({ 0, 0 });
+
+            for (int tau = 0; tau < _Shape[TAU]; tau++) {
+                Complex weight = exp(Complex(0.0, -_Map.IndexToTau(tau)));
+                _SmoothTWeight[spin_up][sub][coor][tau] = weight;
+            }
+        }
+
+        for (auto i : _Map.GetSpinIndexVector(UpUp2UpUp))
+            _SmoothTWeight[i] = _SmoothTWeight[spin_up];
+
+        for (auto i : _Map.GetSpinIndexVector(UpDown2UpDown)) {
+            _SmoothTWeight[i] = _SmoothTWeight[spin_up];
+            _SmoothTWeight[i] *= -1.0;
+        }
+        for (auto i : _Map.GetSpinIndexVector(UpDown2DownUp)) {
+            _SmoothTWeight[i] = _SmoothTWeight[spin_up];
+            _SmoothTWeight[i] *= 2.0;
         }
     }
-}
+    else if (Model == weight::DiagCount) {
+        _DeltaTWeight = 0.0;
+        _SmoothTWeight = 0.0;
+        int Lx = _Lat.Size[0], Ly = _Lat.Size[1];
+        ASSERT_ALLWAYS(Lx > 1 && Ly > 1, "System size should be bigger than 1!");
+        int spin_up = _Map.SpinIndex(UP, //InOfW/InOfVertex
+                                     UP, //InOfW/OutOfVertex
+                                     UP, //OutOfW/InOfVertex
+                                     UP); //OutOfW/OutOfVertex
 
-void W::BuildTest()
-{
-    _Model = model::TEST;
-    _DeltaTWeight = 0.0;
-    _SmoothTWeight = 0.0;
-    int Lx = _Lat.Size[0], Ly = _Lat.Size[1];
-    ASSERT_ALLWAYS(Lx > 1 && Ly > 1, "System size should be bigger than 1!");
-    int spin_up = _Map.SpinIndex(UP, //InOfW/InOfVertex
-                                 UP, //InOfW/OutOfVertex
-                                 UP, //OutOfW/InOfVertex
-                                 UP); //OutOfW/OutOfVertex
-
-    for (int sub = 0; sub < _Shape[SUB]; sub++) {
-        if (!_Lat.IsOnSameSubLat(sub))
-            continue;
-        int coor = _Lat.Vec2Index({ 0, 0 });
-
-        for (int tau = 0; tau < _Shape[TAU]; tau++) {
-            Complex weight = exp(Complex(0.0, -_Map.IndexToTau(tau)));
-            _SmoothTWeight[spin_up][sub][coor][tau] = weight;
+        for (int sub = 0; sub < _Shape[SUB]; sub++) {
+            if (!_Lat.IsOnSameSubLat(sub))
+                continue;
+            int coor = _Lat.Vec2Index({ 0, 0 });
+            for (int tau = 0; tau < _Shape[TAU]; tau++) {
+                Complex weight = Complex(1.0, 0.0);
+                _SmoothTWeight[spin_up][sub][coor][tau] = weight;
+            }
         }
-    }
-
-    for (auto i : _Map.GetSpinIndexVector(UpUp2UpUp))
-        _SmoothTWeight[i] = _SmoothTWeight[spin_up];
-
-    for (auto i : _Map.GetSpinIndexVector(UpDown2UpDown)) {
-        _SmoothTWeight[i] = _SmoothTWeight[spin_up];
-        _SmoothTWeight[i] *= -1.0;
-    }
-    for (auto i : _Map.GetSpinIndexVector(UpDown2DownUp)) {
-        _SmoothTWeight[i] = _SmoothTWeight[spin_up];
-        _SmoothTWeight[i] *= 2.0;
     }
 }
 
@@ -181,15 +167,13 @@ Sigma::Sigma(const Lattice& lat, real Beta, int MaxOrder, TauSymmetry Symmetry)
 {
 }
 
-void Sigma::BuildNew(model Model)
+void Sigma::BuildNew()
 {
-    _Model = Model;
     Estimator.ClearStatistics();
 }
 
 void Sigma::BuildTest()
 {
-    _Model = model::TEST;
     Estimator.ClearStatistics();
 }
 
@@ -217,15 +201,13 @@ Polar::Polar(const Lattice& lat, real Beta, int MaxOrder)
 {
 }
 
-void Polar::BuildNew(model Model)
+void Polar::BuildNew()
 {
-    _Model = Model;
     Estimator.ClearStatistics();
 }
 
 void Polar::BuildTest()
 {
-    _Model = model::TEST;
     Estimator.ClearStatistics();
 }
 

@@ -45,8 +45,8 @@ bool weight::Weight::BuildNew(flag _flag, const Parameter& para)
     //GW can only be loaded
     if (_flag & weight::SigmaPolar) {
         _AllocateSigmaPolar(para);
-        Sigma->BuildNew(MODEL);
-        Polar->BuildNew(MODEL);
+        Sigma->BuildNew();
+        Polar->BuildNew();
     }
     return true;
 }
@@ -116,16 +116,16 @@ void weight::Weight::SetTest(const Parameter& para)
 {
     _AllocateGW(para);
     _AllocateSigmaPolar(para);
-    G->BuildTest();
-    W->BuildTest();
+    G->BuildTest(model::Trivial);
+    W->BuildTest(model::Trivial);
 }
 
 void weight::Weight::SetDiagCounter(const Parameter& para)
 {
     _AllocateGW(para);
     _AllocateSigmaPolar(para);
-    G->BuildNew(model::DIAGRAMCOUNTER);
-    W->BuildNew(model::DIAGRAMCOUNTER);
+    G->BuildTest(model::DiagCount);
+    W->BuildTest(model::DiagCount);
 }
 
 void weight::Weight::_AllocateGW(const Parameter& para)
