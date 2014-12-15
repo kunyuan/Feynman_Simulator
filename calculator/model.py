@@ -63,6 +63,7 @@ class BareFactory:
             self.BareW.Data[self.__Map.Spin4Index(*e),...]=-1.0*self.BareW.Data[spinindex,...]
         for e in self.__Map.GetSpin4SimilarTuples((DOWN,UP),(UP,DOWN)):
             self.BareW.Data[self.__Map.Spin4Index(*e),...]=2.0*self.BareW.Data[spinindex,...]
+
     def PlotModel(self):
         import matplotlib.pyplot as plt
         color=('r','g','b')
@@ -75,6 +76,7 @@ class BareFactory:
                     xy = (x, y), xytext = (15, 10),
                     textcoords = 'offset points', ha = 'right', va = 'bottom',
                     arrowprops = dict(arrowstyle = '->', connectionstyle = 'arc3,rad=0'))
+        if self.BareW
         lines=self.__GetBareWList()
         for start,end, sub in lines:
             x,y=zip(start,end)
