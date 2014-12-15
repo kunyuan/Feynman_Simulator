@@ -4,9 +4,8 @@ import math
 from logger import *
 
 class Lattice:
-    def __init__(self, Name, Map):
-        self.__Map=Map
-        self.L=np.array(Map.L)
+    def __init__(self, Name, L):
+        self.L=np.array(L)
         self.Name=Name
         print Name
         if Name=="Checkboard":
@@ -64,11 +63,11 @@ class Lattice:
     def GetRealVec(self, Coordi, SubLat, offset):
         v=self.__Shift(Coordi+offset)
         return np.einsum("ij,i->j",self.LatVec,v)+self.SubLatVec[SubLat]
-    def GetSitesList(self):
+    def GetSitesList(self, Map):
         offset=self.L/2-1
         Points=[]
         for sub in range(self.NSublat):
-            for coord in self.__Map.GetAllCoordi():
+            for coord in Map.GetAllCoordi():
                 Points.append([tuple(self.GetRealVec(coord,sub,offset)),coord,sub])
         return Points
 
