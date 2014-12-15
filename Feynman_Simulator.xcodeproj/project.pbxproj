@@ -135,7 +135,6 @@
 		843DBB471A3E96BD009DB448 /* main.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = main.py; sourceTree = "<group>"; };
 		843DBB491A3E96BD009DB448 /* model.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = model.py; sourceTree = "<group>"; };
 		843DBB4B1A3E96BD009DB448 /* parameter.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = parameter.py; sourceTree = "<group>"; };
-		843DBB4D1A3E96BD009DB448 /* project.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = project.log; sourceTree = "<group>"; };
 		843DBB4E1A3E96BD009DB448 /* test.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = test.py; sourceTree = "<group>"; };
 		843DBB501A3E96BD009DB448 /* weight.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = weight.py; sourceTree = "<group>"; };
 		84519AEA19F2C554007CB81B /* environment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = environment.h; path = environment/environment.h; sourceTree = "<group>"; };
@@ -339,7 +338,6 @@
 				843DBB471A3E96BD009DB448 /* main.py */,
 				843DBB491A3E96BD009DB448 /* model.py */,
 				843DBB4B1A3E96BD009DB448 /* parameter.py */,
-				843DBB4D1A3E96BD009DB448 /* project.log */,
 				843DBB4E1A3E96BD009DB448 /* test.py */,
 				843DBB501A3E96BD009DB448 /* weight.py */,
 			);
