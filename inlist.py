@@ -15,6 +15,7 @@ com_dict={
     "FinalBeta" :  beta,
     "Order" :  4,
     "Model" : "J1J2",
+    "Lattice" : "Checkboard",
     "Interaction" : [1.0,0.0],
     "ExternalField": 0.0,
 }
@@ -26,9 +27,7 @@ mc_dict={
     "__IsCluster" : False,
     "__AutoRun" : True,
     "DoesLoad" : False,
-    "StartFromBare" : True,
-    
-#Start from order 0, so that OrderReWeight has Order+1 elements
+    #Start from order 0, so that OrderReWeight has Order+1 elements
     "OrderReWeight" : [1.0, 1.0, 3.0,4.0,1.0],
     "Sample" :  5000000,
     "Sweep" : 10,

@@ -11,27 +11,21 @@
 using namespace std;
 using namespace para;
 
-EnvMonteCarlo::EnvMonteCarlo(int pid, bool IsAllTauSymmetric)
-    : Environment(pid), Weight(IsAllTauSymmetric)
+EnvMonteCarlo::EnvMonteCarlo(const para::Job& job, bool IsAllTauSymmetric)
+    : Job(job)
+    , Weight(IsAllTauSymmetric)
 {
-    _ParameterFile = ToString(PID) + "_para.txt";
-    _GWweightFile = "GWweight.npz";
-    _WeightFile = ToString(PID) + "_statistics.npz";
-    _StatisticsFile = _WeightFile;
-    _DiagramFile = ToString(PID) + "_diagram.txt";
 }
 
-bool EnvMonteCarlo::BuildNew(const std::string &InputFile, bool StartFromBare)
+bool EnvMonteCarlo::BuildNew()
 {
+    LOGGER_CONF(Job.LogFile, Job.Type, Logger::file_on | Logger::screen_on, INFO, INFO);
     //Read more stuff for the state of MC only
-    Para.BuildNew(InputFile);
-    if (StartFromBare)
-        Weight.BuildNew(weight::GW | weight::SigmaPolar, Para);
-    else {
-        //Load GW weight from a global file shared by other MC processes
-        Weight.Load(_GWweightFile, weight::GW, Para);
-        Weight.BuildNew(weight::SigmaPolar, Para);
-    }
+    Para.BuildNew(Job.InputFile);
+    Para.Save(Job.InputFile, "w"); //save a copy of new para file
+    //Load GW weight from a global file shared by other MC processes
+    Weight.Load(Job.WeightFile, weight::GW, Para);
+    Weight.BuildNew(weight::SigmaPolar, Para);
     Diag.BuildNew(Para.Lat, *Weight.G, *Weight.W);
     Grasshopper.BuildNew(Para, Diag, Weight);
     Scarecrow.BuildNew(Para, Diag, Weight);
@@ -44,27 +38,28 @@ bool EnvMonteCarlo::BuildNew(const std::string &InputFile, bool StartFromBare)
 */
 bool EnvMonteCarlo::Load()
 {
-    Para.Load(_ParameterFile);
-    Weight.Load(_StatisticsFile, weight::GW | weight::SigmaPolar, Para);
-    Diag.Load(_DiagramFile, Para.Lat, *Weight.G, *Weight.W);
+    LOGGER_CONF(Job.LogFile, Job.Type, Logger::file_on | Logger::screen_on, INFO, INFO);
+    Para.Load(Job.ParaFile);
+    Weight.Load(Job.StatisticsFile, weight::GW | weight::SigmaPolar, Para);
+    Diag.Load(Job.ConfigFile, Para.Lat, *Weight.G, *Weight.W);
     Grasshopper.BuildNew(Para, Diag, Weight);
-    Scarecrow.Load(_StatisticsFile, Para, Diag, Weight);
+    Scarecrow.Load(Job.StatisticsFile, Para, Diag, Weight);
     return true;
 }
 
 void EnvMonteCarlo::Save()
 {
-    Para.Save(_ParameterFile, "w");
-    Weight.Save(_StatisticsFile, weight::GW | weight::SigmaPolar, "w");
-    Diag.Save(_DiagramFile, "w");
-    Scarecrow.Save(_StatisticsFile, "a"); // Save to the same file now
+    Para.Save(Job.ParaFile, "w");
+    Weight.Save(Job.StatisticsFile, weight::GW | weight::SigmaPolar, "w");
+    Diag.Save(Job.ConfigFile, "w");
+    Scarecrow.Save(Job.StatisticsFile, "a"); // Save to the same statis file as weight
 }
 void EnvMonteCarlo::DeleteSavedFiles()
 {
-    system(("rm " + _ParameterFile).c_str());
-    system(("rm " + _StatisticsFile).c_str());
-    system(("rm " + _WeightFile).c_str());
-    system(("rm " + _DiagramFile).c_str());
+    system(("rm " + Job.ParaFile).c_str());
+    system(("rm " + Job.StatisticsFile).c_str());
+    system(("rm " + Job.WeightFile).c_str());
+    system(("rm " + Job.ConfigFile).c_str());
 }
 
 /**
@@ -81,7 +76,7 @@ bool EnvMonteCarlo::ListenToMessage()
         return false;
     }
     Para.UpdateWithMessage(Message_);
-    Weight.Load(_GWweightFile, weight::GW, Para);
+    Weight.Load(Job.WeightFile, weight::GW, Para);
     Weight.ReWeight(weight::GW | weight::SigmaPolar, Para);
     Grasshopper.ReWeight(Para);
     Scarecrow.ReWeight();

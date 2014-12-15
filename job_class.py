@@ -34,11 +34,13 @@ class Job:
         self.pid = 0
         self.name = ""
         self.para = para
-        self.__set_model_specific__()
 
     def to_string(self, pid=0):
         '''output the corresponding string of the job class'''
         self.para["PID"] = pid
+        self.para["WeightFile"]="Weight.npz"
+        self.para["MessageFile"]="Message.txt"
+        self.__set_model_specific__()
         return self.__formator__(self.para)
 
     def __formator__(self,para):
@@ -51,11 +53,7 @@ class Job:
         if para["__Execute"] is "":
             print "Please specify the executive file name!"
             return False
-        if type(para["DoesLoad"]) is not bool:
-            print "DoesLoad should be a bool!"
-            return False
-        return True
-    
+
     def __set_model_specific__(self):
         PI=3.141592653589793238
         if self.para["Model"]=="J1J2":

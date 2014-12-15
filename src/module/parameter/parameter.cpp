@@ -20,7 +20,7 @@ Message Parameter::GenerateMessage()
     return Message_;
 }
 
-void Parameter::UpdateWithMessage(const Message &Message_)
+void Parameter::UpdateWithMessage(const Message& Message_)
 {
     Version = Message_.Version;
     Interaction = Message_.Interaction;
@@ -29,7 +29,7 @@ void Parameter::UpdateWithMessage(const Message &Message_)
     T = 1.0 / Beta;
 }
 
-bool Parameter::_BuildNew(const std::string &InputFile)
+bool Parameter::_BuildNew(const std::string& InputFile)
 {
     _para.ParseFile(InputFile);
     GetPara(_para, Hopping);
@@ -51,7 +51,7 @@ bool Parameter::_BuildNew(const std::string &InputFile)
     return true;
 }
 
-bool Parameter::_Load(const std::string &InputFile)
+bool Parameter::_Load(const std::string& InputFile)
 {
     _para.ParseFile(InputFile);
     GetPara(_para, Version);
@@ -93,7 +93,7 @@ void Parameter::_SavePreparation()
     SetPara(_para, Order);
 }
 
-bool ParaMC::BuildNew(const std::string &InputFile)
+bool ParaMC::BuildNew(const std::string& InputFile)
 {
     Parameter::_BuildNew(InputFile);
     GetPara(_para, Toss);
@@ -109,7 +109,7 @@ bool ParaMC::BuildNew(const std::string &InputFile)
     return true;
 }
 
-bool ParaMC::Load(const std::string &InputFile)
+bool ParaMC::Load(const std::string& InputFile)
 {
     Parameter::_Load(InputFile);
     GetPara(_para, Counter);
@@ -122,7 +122,7 @@ bool ParaMC::Load(const std::string &InputFile)
     return true;
 }
 
-void ParaMC::Save(const std::string &OutputFile, string Mode)
+void ParaMC::Save(const std::string& OutputFile, string Mode)
 {
     Parameter::_SavePreparation();
     SetPara(_para, Counter);
@@ -140,7 +140,7 @@ void ParaMC::Save(const std::string &OutputFile, string Mode)
 void ParaMC::SetTest()
 {
     Version = 0;
-    int size[2] = {8, 8};
+    int size[2] = { 8, 8 };
     L = Vec<int>(size);
     Lat = Lattice(L, CHECKBOARD);
     Hopping.push_back(0.0);
@@ -157,56 +157,7 @@ void ParaMC::SetTest()
     Sample = 5000000;
     Seed = 519180543;
     WormSpaceReweight = 0.1;
-    OrderReWeight = {1, 1, 1, 1};
+    OrderReWeight = { 1, 1, 1, 1 };
     T = 1.0 / Beta;
     Counter = 0;
-}
-
-bool ParaDyson::BuildNew(const string &InputFile)
-{
-    Parameter::_BuildNew(InputFile);
-    GetPara(_para, OrderAccepted);
-    GetPara(_para, ErrorThreshold);
-    GetPara(_para, SleepTime);
-    return true;
-}
-
-bool ParaDyson::Load(const string &InputFile)
-{
-    Parameter::_Load(InputFile);
-    GetPara(_para, OrderAccepted);
-    GetPara(_para, ErrorThreshold);
-    GetPara(_para, SleepTime);
-    return true;
-}
-
-void ParaDyson::Save(const std::string &OutputFile, string Mode)
-{
-    Parameter::_SavePreparation();
-    SetPara(_para, OrderAccepted);
-    SetPara(_para, ErrorThreshold);
-    SetPara(_para, SleepTime);
-    _para.SaveToFile(OutputFile, Mode);
-}
-
-void ParaDyson::SetTest()
-{
-    Version = 0;
-    int size[2] = {8, 8};
-    L = Vec<int>(size);
-    Lat = Lattice(L, CHECKBOARD);
-    Hopping.push_back(0.0);
-    Interaction.push_back(1.0);
-    ChemicalPotential.push_back(0.0);
-    ChemicalPotential.push_back(0.0);
-    ExternalField = 0.0;
-    InitialBeta = 1.0;
-    DeltaBeta = 0.0;
-    FinalBeta = 1.0;
-    Beta = 1.0;
-    Order = 3;
-    T = 1.0 / Beta;
-    OrderAccepted = 3;
-    ErrorThreshold = 0.05;
-    SleepTime = 300;
 }
