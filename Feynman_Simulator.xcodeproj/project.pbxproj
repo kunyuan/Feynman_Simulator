@@ -47,7 +47,6 @@
 		84B8FC4B19EDA348003D6DF6 /* cnpy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84B8FC4819EDA348003D6DF6 /* cnpy.cpp */; };
 		84C86DD51A1FD2B3002A3D8D /* weight_basic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84C86DD31A1FD2B3002A3D8D /* weight_basic.cpp */; };
 		84C86DDB1A214E33002A3D8D /* component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84C86DD91A214E33002A3D8D /* component.cpp */; };
-		84C86DE41A217F9B002A3D8D /* weight_initializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84C86DE21A217F9B002A3D8D /* weight_initializer.cpp */; };
 		84C86DF51A23D9FD002A3D8D /* index_map.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84C86DF31A23D9FD002A3D8D /* index_map.cpp */; };
 		84C86DFA1A24310F002A3D8D /* component_MC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84C86DF81A24310F002A3D8D /* component_MC.cpp */; };
 		84C86DFD1A24E463002A3D8D /* weight_estimator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84C86DFB1A24E463002A3D8D /* weight_estimator.cpp */; };
@@ -161,8 +160,6 @@
 		84C86DD41A1FD2B3002A3D8D /* weight_basic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = weight_basic.h; path = module/weight/weight_basic.h; sourceTree = "<group>"; };
 		84C86DD91A214E33002A3D8D /* component.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = component.cpp; path = module/weight/component.cpp; sourceTree = "<group>"; };
 		84C86DDA1A214E33002A3D8D /* component.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = component.h; path = module/weight/component.h; sourceTree = "<group>"; };
-		84C86DE21A217F9B002A3D8D /* weight_initializer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = weight_initializer.cpp; path = module/weight/weight_initializer.cpp; sourceTree = "<group>"; };
-		84C86DE31A217F9B002A3D8D /* weight_initializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = weight_initializer.h; path = module/weight/weight_initializer.h; sourceTree = "<group>"; };
 		84C86DF31A23D9FD002A3D8D /* index_map.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = index_map.cpp; path = module/weight/index_map.cpp; sourceTree = "<group>"; };
 		84C86DF41A23D9FD002A3D8D /* index_map.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = index_map.h; path = module/weight/index_map.h; sourceTree = "<group>"; };
 		84C86DF81A24310F002A3D8D /* component_MC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = component_MC.cpp; path = module/weight/component_MC.cpp; sourceTree = "<group>"; };
@@ -280,8 +277,6 @@
 				84C86DFC1A24E463002A3D8D /* weight_estimator.h */,
 				84C86DF41A23D9FD002A3D8D /* index_map.h */,
 				84C86DF31A23D9FD002A3D8D /* index_map.cpp */,
-				84C86DE31A217F9B002A3D8D /* weight_initializer.h */,
-				84C86DE21A217F9B002A3D8D /* weight_initializer.cpp */,
 				8422FE341A0A7ECA002EB44E /* weight_test.cpp */,
 			);
 			name = weight;
@@ -481,7 +476,6 @@
 				1CA5CF3A19ED6F3F00212E20 /* lattice.cpp in Sources */,
 				84B8FC4A19EDA348003D6DF6 /* cnpy_test.cpp in Sources */,
 				843DBB3E1A3B535A009DB448 /* timer_test.cpp in Sources */,
-				84C86DE41A217F9B002A3D8D /* weight_initializer.cpp in Sources */,
 				8422FE261A09C13D002EB44E /* markov_test.cpp in Sources */,
 				841D905C19E054900066116A /* test.cpp in Sources */,
 				8422FE3E1A0A7F8D002EB44E /* estimator_test.cpp in Sources */,
