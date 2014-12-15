@@ -22,7 +22,7 @@ bool EnvMonteCarlo::BuildNew()
     LOGGER_CONF(Job.LogFile, Job.Type, Logger::file_on | Logger::screen_on, INFO, INFO);
     //Read more stuff for the state of MC only
     Para.BuildNew(Job.InputFile);
-    Para.Save(Job.InputFile, "w"); //save a copy of new para file
+    Para.Save(Job.ParaFile, "w"); //save a copy of new para file
     //Load GW weight from a global file shared by other MC processes
     Weight.Load(Job.WeightFile, weight::GW, Para);
     Weight.BuildNew(weight::SigmaPolar, Para);
