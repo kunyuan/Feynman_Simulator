@@ -17,8 +17,8 @@ map=weight.IndexMap(**Para)
 if para.StartFromBare is True:
     Factory=model.BareFactory(map, para.Hopping, para.Interaction, 
                               para.ChemicalPotential, para.ExternalField)
-    G0,W0=Factory.Build(para.Model, "Checkboard")
-    #Factory.PlotModel()
+    G0,W0=Factory.Build(para.Model, para.Lattice)
+    Factory.Plot()
 else:
     G0=weight.Weight("G.SmoothT", map, "TwoSpins", "AntiSymmetric")
     G0.Load("../data/GW.npz")

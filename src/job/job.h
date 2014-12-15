@@ -14,20 +14,25 @@
 
 namespace para {
 class Job {
-  public:
+public:
     typedef std::string type;
-    std::set<std::string> TypeName = {"MC", "DYSON"};
+    std::set<std::string> TypeName = { "MC", "DiagCount" };
 
     Job(std::string inputfile);
     Job(type, bool, bool, int);
 
     type Type;
     bool DoesLoad;
-    bool StartFromBare;
     int PID;
+    std::string WeightFile;
+    std::string MessageFile;
+    std::string StatisticsFile;
+    std::string ParaFile;
+    std::string LogFile;
+    std::string ConfigFile;
     std::string InputFile;
 
-  private:
+private:
     SimpleParser _Para;
 };
 }

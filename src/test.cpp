@@ -25,7 +25,7 @@ using namespace std;
     }
 int RunTest()
 {
-
+    LOGGER_CONF("test.log", "test", Logger::file_on | Logger::screen_on, INFO, INFO);
     //    TestTimer();  //Test the timer
     //    TestRNG();
     //    TestArray();

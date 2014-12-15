@@ -18,29 +18,26 @@ using namespace para;
 void MonteCarlo(const Job&);
 int main(int argc, const char* argv[])
 {
-    LOGGER_CONF("test.log", "test", Logger::file_on | Logger::screen_on, INFO, INFO);
     RunTest();
-
     string InputFile = "infile/_in_MC_2";
     para::Job Job(InputFile);
-    LOGGER_CONF(ToString(Job.PID) + ".log", Job.Type, Logger::file_on | Logger::screen_on, INFO, INFO);
 
     if (Job.Type == "MC") {
         MonteCarlo(Job);
     }
     else if (Job.Type == "DYSON") {
-        cout<<"Not Defined"<<endl;
+        cout << "Not Defined" << endl;
     }
     return 0;
 }
 
 void MonteCarlo(const para::Job& Job)
 {
-    EnvMonteCarlo PaddyField(Job.PID);
+    EnvMonteCarlo PaddyField(Job);
     if (Job.DoesLoad)
         PaddyField.Load();
     else
-        PaddyField.BuildNew(Job.InputFile, Job.StartFromBare);
+        PaddyField.BuildNew();
 
     auto& Para = PaddyField.Para;
     auto& Grasshopper = PaddyField.Grasshopper;
