@@ -22,15 +22,11 @@ namespace para {
 class Parameter {
 public:
     int Version;
-    std::vector<real> Hopping;
-    std::vector<real> Interaction;
-    //the first is the chemical potential for spin DOWN, the second is for spin UP
-    std::vector<Complex> ChemicalPotential;
-    real ExternalField;
     real InitialBeta;
     real DeltaBeta;
     real FinalBeta;
     int Order;
+    int NSublat;
 
     //derived
     real Beta;
@@ -52,6 +48,7 @@ protected:
 class ParaMC : public Parameter {
 public:
     long long Counter;
+    uint MaxTauBin;
     int Toss;
     int Sample;
     int Sweep;

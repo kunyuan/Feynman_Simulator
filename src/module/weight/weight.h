@@ -14,7 +14,7 @@
 #include "utility/convention.h"
 
 namespace para {
-class Parameter;
+class ParaMC;
 }
 
 namespace weight {
@@ -38,17 +38,17 @@ class Weight {
     G *G;
     W *W;
 
-    void SetTest(const para::Parameter &);
-    void SetDiagCounter(const para::Parameter &);
-    bool BuildNew(flag, const para::Parameter &);
-    bool Load(const std::string &InputFile, flag, const para::Parameter &);
+    void SetTest(const para::ParaMC &);
+    void SetDiagCounter(const para::ParaMC &);
+    bool BuildNew(flag, const para::ParaMC &);
+    bool Load(const std::string &InputFile, flag, const para::ParaMC &);
     void Save(const std::string &InputFile, flag, std::string Mode = "a");
-    void ReWeight(flag, const para::Parameter &);
+    void ReWeight(flag, const para::ParaMC &);
     int UpdateSigmaPolarWeight(int OrderAccepted, real ErrorThreshold);
 
   private:
-    void _AllocateGW(const para::Parameter &);
-    void _AllocateSigmaPolar(const para::Parameter &);
+    void _AllocateGW(const para::ParaMC &);
+    void _AllocateSigmaPolar(const para::ParaMC &);
 };
 int TestWeight();
 }

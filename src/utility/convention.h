@@ -42,46 +42,10 @@ const int OUT = 1;
 
 const int MAX_ORDER = 15;
 
-//define the model you want to simualte here
-enum model { TEST,
-             DIAGRAMCOUNTER,
-             J1J2,
-             HUBBARD };
-const model MODEL = J1J2;
-
-//define analytic Sigma diagram here
-enum diagram { HATREE,
-               FOCK,
-               HATREEFOCK };
-const diagram DIAGRAM = FOCK;
-
 //define your lattice here
 
-enum lattice {
-    SQUARE,
-    CHECKBOARD,
-    HONEYCOMB,
-    SIMPLE_CUBIC
-};
-#define LATTICE_INDEX 0
-
-#if LATTICE_INDEX == 0
-const lattice LATTICE = SQUARE;
-const int D = 2;
-const int NSublattice = 1;
-#elif LATTICE_INDEX == 1
-const lattice LATTICE = CHECKBOARD;
 const int D = 2;
 const int NSublattice = 2;
-#elif LATTICE_INDEX == 2
-const lattice LATTICE = HONEYCOMB;
-const int D = 2;
-const int NSublattice = 2;
-#elif LATTICE_INDEX == 3
-const lattice LATTICE = SIMPLE_CUBIC;
-const int D = 3;
-const int NSublattice = 1;
-#endif
 
 const int NSublattice2 = NSublattice * NSublattice;
 

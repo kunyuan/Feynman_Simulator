@@ -11,42 +11,24 @@
 #include "../utility/convention.h"
 #include "../utility/abort.h"
 #include "../utility/utility.h"
-Lattice::Lattice()
+Lattice::Lattice(const Vec<int>& size, int NSublat)
 {
-    Initialize(Vec<int>(4), LATTICE);
-}
-Lattice::Lattice(const Vec<int> &size, lattice _Lattice)
-{
-    Initialize(size, _Lattice);
+    Initialize(size, NSublat);
 }
 
-void Lattice::Initialize(const Vec<int> &size, lattice _Lattice)
+void Lattice::Initialize(const Vec<int>& size, int NSublat)
 {
-    LatticeType = _Lattice;
     Dimension = D;
     Vol = 1;
     Size = size;
     for (int i = 0; i < D; i++) {
         Vol *= Size[i];
     }
-    SublatVol = NSublattice;
-    SublatVol2 = NSublattice * NSublattice;
-    switch (_Lattice) {
-        case SQUARE:
-            _Square();
-            break;
-        case CHECKBOARD:
-            _Checkboard();
-            break;
-        case HONEYCOMB:
-            _Honeycomb();
-            break;
-        case SIMPLE_CUBIC:
-            ABORT("simple cubic lattice has not been implemented yet!");
-    }
+    SublatVol = NSublat;
+    SublatVol2 = NSublat * NSublat;
 }
 
-bool operator==(const Site &v1, const Site &v2)
+bool operator==(const Site& v1, const Site& v2)
 {
     if (v1.Sublattice != v2.Sublattice)
         return false;
@@ -55,7 +37,7 @@ bool operator==(const Site &v1, const Site &v2)
     return true;
 }
 
-bool operator!=(const Site &v1, const Site &v2)
+bool operator!=(const Site& v1, const Site& v2)
 {
     return !(v1 == v2);
 }
@@ -67,7 +49,7 @@ bool operator!=(const Site &v1, const Site &v2)
  *
  *  @return new variable within [0, L]
  */
-Vec<int> Lattice::Shift(const Vec<int> &vec) const
+Vec<int> Lattice::Shift(const Vec<int>& vec) const
 {
     Vec<int> newvec(vec);
     for (int i = 0; i < D; i++) {
@@ -82,7 +64,7 @@ Vec<int> Lattice::Shift(const Vec<int> &vec) const
 /**
  * return vec[0]*L1*L2+vec[1]*L2+vec[2]
  * */
-int Lattice::Vec2Index(const Vec<int> &vec) const
+int Lattice::Vec2Index(const Vec<int>& vec) const
 {
     int Index = vec[0];
     for (int i = 1; i < D; i++) {
@@ -134,8 +116,7 @@ std::tuple<int, int> Lattice::Index2Sublat(int index) const
 
 bool Lattice::IsOnSameSubLat(int Index)
 {
-    return Index2Sublat(Index, IN) ==
-           Index2Sublat(Index, OUT);
+    return Index2Sublat(Index, IN) == Index2Sublat(Index, OUT);
 }
 
 /**
@@ -145,171 +126,25 @@ bool Lattice::IsOnSameSubLat(int Index)
  *
  *  @return a site struct
  */
-Site Lattice::GetSite(int name) const
-{
-    return Site(name % 2, Index2Vec(name / 2));
-}
 
-/**
- *  get the name for a site on the lattice
- *
- *  @return Name for the Site in [0, NSublattice*Vol)
- */
-int Lattice::GetName(const Site &site) const
-{
-    return Vec2Index(site.Coordinate) * NSublattice + site.Sublattice;
-}
-
-/**
- *  get the real vector for each site
- *
- *  @return a vector which defines the site's coordinate on the lattice
- */
-Vec<real> Lattice::GetRealVec(const Site &site, Vec<int> offset) const
-{
-    Vec<real> vec(0.0);
-    Vec<int> coordinate = site.Coordinate;
-    coordinate = Shift(coordinate + offset);
-    for (int i = 0; i < D; i++)
-        vec += LatticeVec[i] * coordinate[i];
-    vec += SublatticeVec[site.Sublattice];
-    return vec;
-}
-
-Distance Lattice::Dist(const Site &SiteIn, const Site &SiteOut) const
+Distance Lattice::Dist(const Site& SiteIn, const Site& SiteOut) const
 {
     int sub = Sublat2Index(SiteIn.Sublattice, SiteOut.Sublattice);
     int coord = Vec2Index(Shift(SiteOut.Coordinate - SiteIn.Coordinate));
     return Distance(sub, coord);
 }
 
-std::tuple<Site, Site> Lattice::GetSite(const Distance &dis) const
+std::tuple<Site, Site> Lattice::GetSite(const Distance& dis) const
 {
     return std::make_tuple(Site(Index2Sublat(dis.SublatIndex, IN), Vec<int>(0)),
                            Site(Index2Sublat(dis.SublatIndex, OUT),
                                 Index2Vec(dis.CoordiIndex)));
 }
 
-Site Lattice::GetSite(const Distance &dis, int direction) const
+Site Lattice::GetSite(const Distance& dis, int direction) const
 {
     if (direction == IN)
         return Site(Index2Sublat(dis.SublatIndex, direction), Vec<int>(0));
     else
         return Site(Index2Sublat(dis.SublatIndex, direction), Index2Vec(dis.CoordiIndex));
-}
-
-/**
- *  get the real vector for the distance between two sites
- *
- *  @return a real vector $\vec{r_2}-\vec{r_1}$
- */
-Vec<real> Lattice::GetRealVec(const class Distance &dis, Vec<int> offset) const
-{
-    Vec<real> vec(0.0);
-    Site site_out = GetSite(dis, OUT);
-    Site site_in = GetSite(dis, IN);
-    Vec<int> coordinate = Shift(site_out.Coordinate + offset);
-    for (int i = 0; i < D; i++)
-        vec += LatticeVec[i] * coordinate[i];
-    vec += SublatticeVec[site_out.Sublattice] - SublatticeVec[site_in.Sublattice];
-    return vec;
-}
-
-/**
- *  save all the coordinates of the sites on lattice to a plotable python file
- */
-void Lattice::PlotLattice()
-{
-    ofstream os("lattice.py", ios::out);
-    const unsigned int N = NSublattice * Vol;
-    os << "#[Real Vec tuple, Int Vec tuple, Sublattice]" << endl;
-    os << "points=[" << endl;
-    Vec<int> offset;
-    for (int i = 0; i < D; i++)
-        offset[i] = Size[i] / 2 - 1;
-    for (int i = 0; i < N; i++) {
-        Site site = GetSite(i);
-        os << "[" << GetRealVec(site, offset).PrettyString() << ","
-           << site.Coordinate.PrettyString() << "," << site.Sublattice
-           << "]," << endl;
-    }
-    os << "]";
-    os.close();
-}
-
-/**
- *  initialize the lattice vectors
- */
-void Lattice::_Checkboard()
-{
-    ASSERT_ALLWAYS(LatticeType == CHECKBOARD,
-                   ToString(int(LatticeType)) + " is not CheckBoard!");
-    ASSERT_ALLWAYS(Dimension == 2 && SublatVol == 2,
-                   "Checkboard lattice has D=2 and Sublattice=2");
-    ASSERT_ALLWAYS(Size[0] > 1 && Size[1] > 1, "System size must be bigger than 1!");
-    //Square Lattice with two sublattices
-    LatticeVec[0][0] = 1.0;
-    LatticeVec[0][1] = 0.0;
-
-    LatticeVec[1][0] = 0.0;
-    LatticeVec[1][1] = 1.0;
-
-    ReciprocalLatticeVec[0][0] = 2.0 * PI;
-    ReciprocalLatticeVec[0][1] = 0.0;
-    ReciprocalLatticeVec[1][0] = 0.0;
-    ReciprocalLatticeVec[1][1] = 2.0 * PI;
-
-    SublatticeVec[0][0] = 0.0;
-    SublatticeVec[0][1] = 0.0;
-    SublatticeVec[1][0] = 0.5;
-    SublatticeVec[1][1] = 0.5;
-}
-
-void Lattice::_Square()
-{
-    ASSERT_ALLWAYS(LatticeType == SQUARE,
-                   ToString(int(LatticeType)) + " is not SQUARE!");
-    ASSERT_ALLWAYS(Dimension == 2 && SublatVol == 1,
-                   "Square lattice has D=2 and Sublattice=1");
-    ASSERT_ALLWAYS(Size[0] > 1 && Size[1] > 1, "System size must be bigger than 1!");
-    
-    //Square Lattice with one sublattices
-    LatticeVec[0][0] = 1.0;
-    LatticeVec[0][1] = 0.0;
-    
-    LatticeVec[1][0] = 0.0;
-    LatticeVec[1][1] = 1.0;
-
-    ReciprocalLatticeVec[0][0] = 2.0 * PI;
-    ReciprocalLatticeVec[0][1] = 0.0;
-    ReciprocalLatticeVec[1][0] = 0.0;
-    ReciprocalLatticeVec[1][1] = 2.0 * PI;
-
-    SublatticeVec[0][0] = 0.0;
-    SublatticeVec[0][1] = 0.0;
-}
-
-void Lattice::_Honeycomb()
-{
-    ASSERT_ALLWAYS(LatticeType == HONEYCOMB,
-                   ToString(int(LatticeType)) + " is not CheckBoard!");
-    ASSERT_ALLWAYS(Dimension == 2 && SublatVol == 2,
-                   "Checkboard lattice has D=2 and Sublattice=2");
-    ASSERT_ALLWAYS(Size[0] > 1 && Size[1] > 1, "System size must be bigger than 1!");
-    //Lattice Honeycomb
-    LatticeVec[0][0] = 0.0;
-    LatticeVec[0][1] = 1.0;
-
-    LatticeVec[1][0] = sqrt(3.0) / 2.0;
-    LatticeVec[1][1] = -0.5;
-
-    ReciprocalLatticeVec[0][0] = 2.0 * PI / sqrt(3.0);
-    ReciprocalLatticeVec[0][1] = 2.0 * PI;
-    ReciprocalLatticeVec[1][0] = 4.0 * PI / sqrt(3.0);
-    ReciprocalLatticeVec[1][1] = 0.0;
-
-    SublatticeVec[0][0] = 0.0;
-    SublatticeVec[0][1] = 0.0;
-    SublatticeVec[1][0] = 1.0 / 2.0 / sqrt(3.0);
-    SublatticeVec[1][1] = 0.5;
 }

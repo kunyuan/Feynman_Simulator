@@ -48,7 +48,7 @@ public:
     void Save(const std::string& FileName, const std::string Mode = "a");
 
 protected:
-    Basic(const Lattice& lat, real Beta, SpinNum,
+    Basic(const Lattice& lat, real Beta, uint MaxTauBin, SpinNum,
           TauSymmetry Symmetry, std::string);
 
     uint* GetShape(); //the shape of internal weight array
@@ -57,12 +57,12 @@ protected:
     void Reset(real beta);
     int GetTauSymmetryFactor(real t_in, real t_out) const;
 
-    model _Model;
     int _TauSymmetryFactor;
     std::string _Name;
     real _Beta;
     real _dBeta; //_Beta/MAX_TAU
     real _dBetaInverse;
+    uint _MaxTauBin;
     Lattice _Lat;
     int _SpinNum;
     vector<uint> _Shape;

@@ -17,8 +17,6 @@ class Message {
   public:
     int Version;
     real Beta;
-    std::vector<real> Interaction;
-    real ExternalField;
 
     bool Load();
     void Save();

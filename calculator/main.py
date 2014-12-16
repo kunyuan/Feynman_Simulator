@@ -13,8 +13,7 @@ para = para.Parameter()
 para.Load("../data/infile/_in_DYSON_1")
 Assert(para.Type=="DYSON", "The job type should be DYSON, not {0}".format(para.Type))
 Beta = para.InitialBeta
-Lat=lat.Lattice(para.Lattice, para.L)
-WeightPara={"NSublat":Lat.NSublat, "L":para.L, "Beta": Beta, "MaxTauBin": 32}
+WeightPara={"NSublat":para.NSublat, "L":para.L, "Beta": Beta, "MaxTauBin": para.MaxTauBin}
 map=weight.IndexMap(**WeightPara)
 
 if para.StartFromBare is True:
