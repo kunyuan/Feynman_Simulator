@@ -21,7 +21,8 @@ class G : public Basic {
     friend class GInitializer;
 
 public:
-    G(const Lattice& lat, real beta, TauSymmetry TauSymmetry = TauAntiSymmetric);
+    G(const Lattice& lat, real beta, uint MaxTauBin,
+      TauSymmetry TauSymmetry = TauAntiSymmetric);
     void BuildTest(weight::model);
     void Reset(real Beta);
 
@@ -41,7 +42,7 @@ class W : public Basic {
     friend class WInitializer;
 
 public:
-    W(const Lattice& lat, real Beta);
+    W(const Lattice& lat, real Beta, uint MaxTauBin);
     void BuildTest(weight::model);
     void WriteBareToASCII();
     void Reset(real Beta);
@@ -56,7 +57,7 @@ protected:
 
 class Sigma : public Basic {
 public:
-    Sigma(const Lattice&, real Beta, int MaxOrder,
+    Sigma(const Lattice&, real Beta, uint MaxTauBin, int MaxOrder,
           TauSymmetry Symmetry = TauAntiSymmetric);
     void BuildNew();
     void BuildTest();
@@ -78,7 +79,7 @@ protected:
 
 class Polar : public Basic {
 public:
-    Polar(const Lattice&, real Beta, int MaxOrder);
+    Polar(const Lattice&, real Beta, uint MaxTauBin, int MaxOrder);
     void BuildNew();
     void BuildTest();
 

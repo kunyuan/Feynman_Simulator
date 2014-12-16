@@ -45,7 +45,7 @@ void CheckVec2Index(Lattice _Lat)
     }
 }
 
-Basic::Basic(const Lattice& lat, real beta, SpinNum spin_num,
+Basic::Basic(const Lattice& lat, real beta, uint MaxTauBin, SpinNum spin_num,
              TauSymmetry Symmetry, string name)
     : _Lat(lat)
     , _Beta(beta)
@@ -53,15 +53,16 @@ Basic::Basic(const Lattice& lat, real beta, SpinNum spin_num,
     , _Name(name)
     , _SpinNum(int(spin_num))
 {
-    _dBeta = beta / MAX_TAU_BIN;
+    _MaxTauBin = MaxTauBin;
+    _dBeta = beta / _MaxTauBin;
     _dBetaInverse = 1.0 / _dBeta;
     CheckVec2Index(lat);
 
     auto SpinVol = static_cast<uint>(pow(2, _SpinNum));
-    _Shape = vector<uint>({ SpinVol, (uint)_Lat.SublatVol2, (uint)_Lat.Vol, MAX_TAU_BIN });
+    _Shape = vector<uint>({ SpinVol, (uint)_Lat.SublatVol2, (uint)_Lat.Vol, _MaxTauBin });
     for (auto e : _Lat.Size)
         _SpaceTimeShape.push_back(e);
-    _SpaceTimeShape.push_back(MAX_TAU_BIN);
+    _SpaceTimeShape.push_back(_MaxTauBin);
 
     _SmoothTWeight.Allocate(GetShape());
     _SmoothTWeight = Complex(0.0, 0.0);
@@ -82,7 +83,7 @@ uint* Basic::GetSpaceTimeShape()
 void Basic::Reset(real beta)
 {
     _Beta = beta;
-    _dBeta = beta / MAX_TAU_BIN;
+    _dBeta = beta / _MaxTauBin;
     _dBetaInverse = 1.0 / _dBeta;
     //TODO: please implement how to reset the weight here
 }

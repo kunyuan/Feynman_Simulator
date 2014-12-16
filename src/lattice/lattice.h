@@ -18,44 +18,42 @@ int GetSublatIndex(int, int);
  *  class Site defines all the vertexes on the lattice using a vector of the unit cell: Coordinate and the sublattice number: Sublattice
  */
 class Site {
-  public:
+public:
     int Sublattice;
     Vec<int> Coordinate;
 
-    Site()
-        : Sublattice(0), Coordinate(0)
-    {
-    }
-
-    Site(int sub, Vec<int> vec)
-        : Sublattice(sub), Coordinate(vec)
+    Site(int sub = 0, Vec<int> vec = Vec<int>())
+        : Sublattice(sub)
+        , Coordinate(vec)
     {
     }
 };
 
-bool operator==(const Site &v1, const Site &v2);
-bool operator!=(const Site &v1, const Site &v2);
+bool operator==(const Site& v1, const Site& v2);
+bool operator!=(const Site& v1, const Site& v2);
 
 /**
  *  class Distance defines Site1-Site2 using the vector: Dr and sublattice of Site1 and Site2: Sublattice[0] and Sublattice[1].
  */
 
 class Distance {
-  public:
+public:
     int SublatIndex;
     int CoordiIndex;
 
     Distance()
-        : SublatIndex(0), CoordiIndex(0)
+        : SublatIndex(0)
+        , CoordiIndex(0)
     {
     }
 
     Distance(int sublat, int coordi)
-        : SublatIndex(sublat), CoordiIndex(coordi)
+        : SublatIndex(sublat)
+        , CoordiIndex(coordi)
     {
     }
 
-    bool operator==(const Distance &v2)
+    bool operator==(const Distance& v2)
     {
         if (SublatIndex != v2.SublatIndex)
             return false;
@@ -64,7 +62,7 @@ class Distance {
         return true;
     }
 
-    bool operator!=(const Distance &v2)
+    bool operator!=(const Distance& v2)
     {
         if (*this == v2)
             return false;
@@ -76,22 +74,17 @@ class Distance {
  *  class Lattice includes three set of vectors: 1) LatticeVec (unit cell lattice vector); 2)ReLatticeVec (reciprocal lattice vector for k); 3) SublatticeVec (vectors between different sublattices in the same unit cell).
  */
 class Lattice {
-  public:
+public:
     int Dimension;
     int Vol;
     int SublatVol;
     int SublatVol2;
-    lattice LatticeType;
     Vec<int> Size;
-    Vec<real> LatticeVec[D];
-    Vec<real> ReciprocalLatticeVec[D];
-    Vec<real> SublatticeVec[NSublattice];
 
-    Lattice();
-    Lattice(const Vec<int> &size, lattice);
-    void Initialize(const Vec<int> &size, lattice);
+    Lattice(const Vec<int>& size = Vec<int>(4), int NSublat = 2);
+    void Initialize(const Vec<int>& size, int NSublat);
 
-    int Vec2Index(const Vec<int> &) const;
+    int Vec2Index(const Vec<int>&) const;
     int Vec2Index(std::initializer_list<int> list) const;
     Vec<int> Index2Vec(int) const;
 
@@ -111,25 +104,13 @@ class Lattice {
     *
     *  @return tuple<Site IN, Site OUT>
     */
-    std::tuple<Site, Site> GetSite(const Distance &dis) const;
-    Site GetSite(const Distance &dis, int direction) const;
-    Site GetSite(int name) const;
-    int GetName(const Site &) const;
+    std::tuple<Site, Site> GetSite(const Distance& dis) const;
+    Site GetSite(const Distance& dis, int direction) const;
 
-    Distance Dist(const Site &, const Site &) const;
+    Distance Dist(const Site&, const Site&) const;
 
-    Vec<real> GetRealVec(const Site &, Vec<int> offset = Vec<int>(0)) const;
-    Vec<real> GetRealVec(const Distance &, Vec<int> offset = Vec<int>(0)) const;
-
-    //TODO: lattice IO
-    void PlotLattice();
-
-  private:
-    void Initialize();
-    Vec<int> Shift(const Vec<int> &) const;
-    void _Square();
-    void _Checkboard();
-    void _Honeycomb();
+private:
+    Vec<int> Shift(const Vec<int>& vec) const;
 };
 
 int TestLattice();

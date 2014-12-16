@@ -43,9 +43,9 @@ void TestWeightMeasuring()
 void WeightMeasuring(real Beta, int Num)
 {
     //some initialization
-    Lattice lat(Vec<int>(4), LATTICE);
-    weight::Sigma Sig(lat, Beta, 4);
-    weight::Sigma Sig2(lat, Beta, 4);
+    Lattice lat(Vec<int>(4));
+    weight::Sigma Sig(lat, Beta, 32, 4);
+    weight::Sigma Sig2(lat, Beta, 32, 4);
     Site s1 = Site(0, 0);
     Site s2 = Site(0, 0);
     spin SpinIn = DOWN, SpinOut = DOWN;

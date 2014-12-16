@@ -13,9 +13,9 @@
 using namespace weight;
 using namespace std;
 
-G::G(const Lattice& lat, real beta, TauSymmetry Symmetry)
-    : weight::Basic(lat, beta, SPIN2, Symmetry, "G")
-    , _Map(IndexMapSPIN2(beta, lat))
+G::G(const Lattice& lat, real beta, uint MaxTauBin, TauSymmetry Symmetry)
+    : weight::Basic(lat, beta, MaxTauBin, SPIN2, Symmetry, "G")
+    , _Map(IndexMapSPIN2(beta, MaxTauBin, lat))
 {
     //use _Shape[SP] to _Shape[TAU] to construct array3
     _MeasureWeight.Allocate(GetShape());
@@ -62,12 +62,12 @@ void G::BuildTest(weight::model Model)
 void G::Reset(real Beta)
 {
     Basic::Reset(Beta);
-    _Map = IndexMapSPIN2(Beta, _Lat);
+    _Map = IndexMapSPIN2(Beta, _MaxTauBin, _Lat);
 }
 
-W::W(const Lattice& lat, real Beta)
-    : weight::Basic(lat, Beta, SPIN4, TauSymmetric, "W")
-    , _Map(IndexMapSPIN4(Beta, lat))
+W::W(const Lattice& lat, real Beta, uint MaxTauBin)
+    : weight::Basic(lat, Beta, MaxTauBin, SPIN4, TauSymmetric, "W")
+    , _Map(IndexMapSPIN4(Beta, MaxTauBin, lat))
 {
     //use _Shape[SP] to _Shape[VOL] to construct array3
     _MeasureWeight.Allocate(GetShape());
@@ -133,36 +133,13 @@ void W::BuildTest(weight::model Model)
 void W::Reset(real Beta)
 {
     Basic::Reset(Beta);
-    _Map = IndexMapSPIN4(Beta, _Lat);
+    _Map = IndexMapSPIN4(Beta, _MaxTauBin, _Lat);
 }
 
-void W::WriteBareToASCII()
-{
-    _Lat.PlotLattice();
-    Vec<int> offset;
-    for (int i = 0; i < D; i++)
-        offset[i] = _Lat.Size[i] / 2 - 1;
-    auto Shape = GetShape();
-    ofstream os("interaction.py", ios::out);
-    int spin_index = _Map.SpinIndex(UP, UP, UP, UP);
-    os << "line=[" << endl;
-    for (int sub = 0; sub < Shape[SUB]; sub++)
-        for (int coord = 0; coord < Shape[VOL]; coord++) {
-            real bare_weight = mod(_DeltaTWeight[spin_index][sub][coord]);
-            if (!Zero(bare_weight)) {
-                Site start, end;
-                tie(start, end) = _Lat.GetSite(Distance(sub, coord));
-                os << "[" << _Lat.GetRealVec(start, offset).PrettyString() << ","
-                   << _Lat.GetRealVec(end, offset).PrettyString() << ","
-                   << start.Sublattice << "]," << endl;
-            }
-        }
-    os << "]" << endl;
-}
-
-Sigma::Sigma(const Lattice& lat, real Beta, int MaxOrder, TauSymmetry Symmetry)
-    : weight::Basic(lat, Beta, SPIN2, Symmetry, "Sigma")
-    , _Map(IndexMapSPIN2(Beta, lat))
+Sigma::Sigma(const Lattice& lat, real Beta, uint MaxTauBin,
+             int MaxOrder, TauSymmetry Symmetry)
+    : weight::Basic(lat, Beta, MaxTauBin, SPIN2, Symmetry, "Sigma")
+    , _Map(IndexMapSPIN2(Beta, MaxTauBin, lat))
     , Estimator(Beta, MaxOrder, "Sigma", Norm::Weight(), GetShape())
 {
 }
@@ -180,7 +157,7 @@ void Sigma::BuildTest()
 void Sigma::Reset(real Beta)
 {
     Basic::Reset(Beta);
-    _Map = IndexMapSPIN2(Beta, _Lat);
+    _Map = IndexMapSPIN2(Beta, _MaxTauBin, _Lat);
     Estimator.ReWeight(Beta);
 }
 
@@ -194,9 +171,9 @@ void Sigma::Save(const std::string& FileName, const std::string Mode)
     Basic::Save(FileName, "a");
 }
 
-Polar::Polar(const Lattice& lat, real Beta, int MaxOrder)
-    : weight::Basic(lat, Beta, SPIN4, TauSymmetric, "Polar")
-    , _Map(IndexMapSPIN4(Beta, lat))
+Polar::Polar(const Lattice& lat, real Beta, uint MaxTauBin, int MaxOrder)
+    : weight::Basic(lat, Beta, MaxTauBin, SPIN4, TauSymmetric, "Polar")
+    , _Map(IndexMapSPIN4(Beta, MaxTauBin, lat))
     , Estimator(Beta, MaxOrder, "Polar", Norm::Weight(), GetShape())
 {
 }
@@ -214,7 +191,7 @@ void Polar::BuildTest()
 void Polar::Reset(real Beta)
 {
     Basic::Reset(Beta);
-    _Map = IndexMapSPIN4(Beta, _Lat);
+    _Map = IndexMapSPIN4(Beta, _MaxTauBin, _Lat);
     Estimator.ReWeight(Beta);
 }
 
