@@ -20,21 +20,21 @@ class ParaMC;
 
 namespace mc {
 class MarkovMonitor {
-  public:
+public:
     MarkovMonitor();
 
-    para::Parameter *Para;
-    diag::Diagram *Diag;
-    weight::Weight *Weight;
+    para::ParaMC* Para;
+    diag::Diagram* Diag;
+    weight::Weight* Weight;
 
     EstimatorBundle<Complex> cEstimator;
     EstimatorBundle<real> rEstimator;
     EstimatorBundle<real> DetailBalanceEstimator;
     Estimator<real> ZeroOrderWeight;
 
-    bool BuildNew(para::ParaMC &, diag::Diagram &, weight::Weight &);
-    bool Load(const std::string &InputFile, para::ParaMC &, diag::Diagram &, weight::Weight &);
-    void Save(const std::string &InputFile, const std::string &Mode = "a");
+    bool BuildNew(para::ParaMC&, diag::Diagram&, weight::Weight&);
+    bool Load(const std::string& InputFile, para::ParaMC&, diag::Diagram&, weight::Weight&);
+    void Save(const std::string& InputFile, const std::string& Mode = "a");
     void ReWeight();
 
     void Annealing();

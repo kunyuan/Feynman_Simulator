@@ -12,20 +12,21 @@
 
 using namespace weight;
 
-IndexMap::IndexMap(real Beta, const Lattice &lat)
+IndexMap::IndexMap(real Beta, uint MaxTauBin, const Lattice& lat)
 {
+    _MaxTauBin = MaxTauBin;
     _Beta = Beta;
-    _dBeta = Beta / MAX_TAU_BIN;
+    _dBeta = Beta / _MaxTauBin;
     _dBetaInverse = 1.0 / _dBeta;
     _Lat = lat;
 }
 
-int IndexMap::SublatIndex(const Distance &dist) const
+int IndexMap::SublatIndex(const Distance& dist) const
 {
     return dist.SublatIndex;
 }
 
-int IndexMap::CoordiIndex(const Distance &dist) const
+int IndexMap::CoordiIndex(const Distance& dist) const
 {
     return dist.CoordiIndex;
 }
@@ -37,13 +38,13 @@ int IndexMap::TauIndex(real tau) const
                         << -_Beta << "," << _Beta << ")");
     //TODO: mapping between tau and bin
 
-    int bin = tau < 0 ? floor(tau * _dBetaInverse) + MAX_TAU_BIN
+    int bin = tau < 0 ? floor(tau * _dBetaInverse) + _MaxTauBin
                       : floor(tau * _dBetaInverse);
-    if (DEBUGMODE && bin < 0 || tau >= MAX_TAU_BIN) {
+    if (DEBUGMODE && bin < 0 || tau >= _MaxTauBin) {
         LOG_INFO("tau=" << tau << " is out of the range ["
                         << -_Beta << "," << _Beta << ")");
         LOG_INFO("bin=" << bin << " is out of the range ["
-                        << 0 << "," << MAX_TAU_BIN << "]");
+                        << 0 << "," << _MaxTauBin << "]");
     }
     return bin;
 }
@@ -69,8 +70,8 @@ bool IndexMapSPIN2::IsSameSpin(int spindex)
     return (spindex == 0 || spindex == 2);
 }
 
-void IndexMapSPIN2::Map(uint *result, spin SpinIn, spin SpinOut,
-                        const Site &rin, const Site &rout, real tin, real tout) const
+void IndexMapSPIN2::Map(uint* result, spin SpinIn, spin SpinOut,
+                        const Site& rin, const Site& rout, real tin, real tout) const
 {
     auto dis = _Lat.Dist(rin, rout);
     result[0] = SpinIndex(SpinIn, SpinOut);
@@ -78,8 +79,8 @@ void IndexMapSPIN2::Map(uint *result, spin SpinIn, spin SpinOut,
     result[2] = dis.CoordiIndex;
     result[3] = TauIndex(tin, tout);
 }
-void IndexMapSPIN2::MapDeltaT(uint *result, spin SpinIn, spin SpinOut,
-                              const Site &rin, const Site &rout) const
+void IndexMapSPIN2::MapDeltaT(uint* result, spin SpinIn, spin SpinOut,
+                              const Site& rin, const Site& rout) const
 {
     auto dis = _Lat.Dist(rin, rout);
     result[0] = SpinIndex(SpinIn, SpinOut);
@@ -90,10 +91,9 @@ void IndexMapSPIN2::MapDeltaT(uint *result, spin SpinIn, spin SpinOut,
 //First In/Out: direction of WLine; Second In/Out: direction of Vertex
 int IndexMapSPIN4::SpinIndex(spin SpinInIn, spin SpinInOut, spin SpinOutIn, spin SpinOutOut)
 {
-    return SpinInIn * SPIN3 + SpinInOut * SPIN2 +
-           SpinOutIn * SPIN + SpinOutOut;
+    return SpinInIn * SPIN3 + SpinInOut * SPIN2 + SpinOutIn * SPIN + SpinOutOut;
 }
-int IndexMapSPIN4::SpinIndex(const spin *TwoSpinIn, const spin *TwoSpinOut)
+int IndexMapSPIN4::SpinIndex(const spin* TwoSpinIn, const spin* TwoSpinOut)
 {
     return SpinIndex(TwoSpinIn[0], TwoSpinIn[1],
                      TwoSpinOut[0], TwoSpinOut[1]);
@@ -107,14 +107,11 @@ std::vector<int> IndexMapSPIN4::GetSpinIndexVector(SPIN4Filter filter)
             for (int OutIn = 0; OutIn < 2; OutIn++)
                 for (int OutOut = 0; OutOut < 2; OutOut++) {
                     bool flag = false;
-                    if (filter == UpUp2UpUp &&
-                        InIn == InOut && InIn == OutIn && InIn == OutOut)
+                    if (filter == UpUp2UpUp && InIn == InOut && InIn == OutIn && InIn == OutOut)
                         flag = true;
-                    if (filter == UpDown2UpDown &&
-                        InIn == InOut && OutIn == OutOut && InIn == FLIP(OutIn))
+                    if (filter == UpDown2UpDown && InIn == InOut && OutIn == OutOut && InIn == FLIP(OutIn))
                         flag = true;
-                    if (filter == UpDown2DownUp &&
-                        InIn == FLIP(InOut) && OutIn == FLIP(OutOut) && InIn == FLIP(OutIn))
+                    if (filter == UpDown2DownUp && InIn == FLIP(InOut) && OutIn == FLIP(OutOut) && InIn == FLIP(OutIn))
                         flag = true;
                     if (flag)
                         list.push_back(SpinIndex(spin(InIn), spin(InOut),
@@ -123,8 +120,8 @@ std::vector<int> IndexMapSPIN4::GetSpinIndexVector(SPIN4Filter filter)
     return list;
 }
 
-void IndexMapSPIN4::Map(uint *result, const spin *SpinIn, const spin *SpinOut,
-                        const Site &rin, const Site &rout, real tin, real tout) const
+void IndexMapSPIN4::Map(uint* result, const spin* SpinIn, const spin* SpinOut,
+                        const Site& rin, const Site& rout, real tin, real tout) const
 {
     auto dis = _Lat.Dist(rin, rout);
     result[0] = SpinIndex(SpinIn, SpinOut);
@@ -132,8 +129,8 @@ void IndexMapSPIN4::Map(uint *result, const spin *SpinIn, const spin *SpinOut,
     result[2] = dis.CoordiIndex;
     result[3] = TauIndex(tin, tout);
 }
-void IndexMapSPIN4::MapDeltaT(uint *result, const spin *SpinIn, const spin *SpinOut,
-                              const Site &rin, const Site &rout) const
+void IndexMapSPIN4::MapDeltaT(uint* result, const spin* SpinIn, const spin* SpinOut,
+                              const Site& rin, const Site& rout) const
 {
     auto dis = _Lat.Dist(rin, rout);
     result[0] = SpinIndex(SpinIn, SpinOut);

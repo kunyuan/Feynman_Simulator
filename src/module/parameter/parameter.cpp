@@ -14,8 +14,6 @@ Message Parameter::GenerateMessage()
 {
     Message Message_;
     Message_.Version = Version;
-    Message_.Interaction = Interaction;
-    Message_.ExternalField = ExternalField;
     Message_.Beta = Beta;
     return Message_;
 }
@@ -23,8 +21,6 @@ Message Parameter::GenerateMessage()
 void Parameter::UpdateWithMessage(const Message& Message_)
 {
     Version = Message_.Version;
-    Interaction = Message_.Interaction;
-    ExternalField = Message_.ExternalField;
     Beta = Message_.Beta;
     T = 1.0 / Beta;
 }
@@ -32,17 +28,14 @@ void Parameter::UpdateWithMessage(const Message& Message_)
 bool Parameter::_BuildNew(const std::string& InputFile)
 {
     _para.ParseFile(InputFile);
-    GetPara(_para, Hopping);
-    GetPara(_para, Interaction);
-    GetPara(_para, ChemicalPotential);
-    GetPara(_para, ExternalField);
     GetPara(_para, L);
     GetPara(_para, InitialBeta);
     GetPara(_para, DeltaBeta);
     GetPara(_para, FinalBeta);
     GetPara(_para, Order);
+    GetPara(_para, NSublat)
 
-    Lat.Initialize(L, LATTICE);
+        Lat.Initialize(L, NSublat);
     Version = 0;
     Beta = InitialBeta;
     T = 1.0 / Beta;
@@ -55,10 +48,6 @@ bool Parameter::_Load(const std::string& InputFile)
 {
     _para.ParseFile(InputFile);
     GetPara(_para, Version);
-    GetPara(_para, Hopping);
-    GetPara(_para, Interaction);
-    GetPara(_para, ChemicalPotential);
-    GetPara(_para, ExternalField);
     GetPara(_para, L);
     GetPara(_para, InitialBeta);
     GetPara(_para, DeltaBeta);
@@ -66,8 +55,9 @@ bool Parameter::_Load(const std::string& InputFile)
     //!!!Beta should be a part of state, so it will be stored
     GetPara(_para, Beta);
     GetPara(_para, Order);
+    GetPara(_para, NSublat)
 
-    Lat.Initialize(L, LATTICE);
+        Lat.Initialize(L, NSublat);
     T = 1.0 / Beta;
     if (Order >= MAX_ORDER)
         ABORT("Order can not be bigger than " << MAX_ORDER);
@@ -81,16 +71,13 @@ void Parameter::_SavePreparation()
 {
     _para.clear();
     SetPara(_para, Version);
-    SetPara(_para, Hopping);
-    SetPara(_para, Interaction);
-    SetPara(_para, ChemicalPotential);
-    SetPara(_para, ExternalField);
     SetPara(_para, L);
     SetPara(_para, InitialBeta);
     SetPara(_para, DeltaBeta);
     SetPara(_para, FinalBeta);
     SetPara(_para, Beta);
     SetPara(_para, Order);
+    SetPara(_para, NSublat);
 }
 
 bool ParaMC::BuildNew(const std::string& InputFile)
@@ -102,6 +89,7 @@ bool ParaMC::BuildNew(const std::string& InputFile)
     GetPara(_para, Seed);
     GetPara(_para, WormSpaceReweight);
     GetPara(_para, OrderReWeight);
+    GetPara(_para, MaxTauBin);
 
     ASSERT_ALLWAYS(OrderReWeight.size() == Order + 1, "OrderReWeight should have Order+1 elementes!");
     Counter = 0;
@@ -119,6 +107,7 @@ bool ParaMC::Load(const std::string& InputFile)
     GetPara(_para, WormSpaceReweight);
     GetPara(_para, OrderReWeight);
     GetPara(_para, RNG);
+    GetPara(_para, MaxTauBin);
     return true;
 }
 
@@ -132,6 +121,7 @@ void ParaMC::Save(const std::string& OutputFile, string Mode)
     SetPara(_para, WormSpaceReweight);
     SetPara(_para, OrderReWeight);
     SetPara(_para, RNG);
+    SetPara(_para, MaxTauBin);
     ASSERT_ALLWAYS(OrderReWeight.size() == Order + 1, "OrderReWeight should have Order+1 elementes!");
     _para.SaveToFile(OutputFile, Mode);
     //save with append mode, so that it will not overwrite stuff wroten by Parameter:SaveParameter
@@ -141,13 +131,9 @@ void ParaMC::SetTest()
 {
     Version = 0;
     int size[2] = { 8, 8 };
+    NSublat = 2;
     L = Vec<int>(size);
-    Lat = Lattice(L, LATTICE);
-    Hopping.push_back(0.0);
-    Interaction.push_back(1.0);
-    ChemicalPotential.push_back(0.0);
-    ChemicalPotential.push_back(0.0);
-    ExternalField = 0.0;
+    Lat = Lattice(L, NSublat);
     InitialBeta = 1.0;
     DeltaBeta = 0.0;
     FinalBeta = 1.0;
@@ -160,4 +146,5 @@ void ParaMC::SetTest()
     OrderReWeight = { 1, 1, 1, 1 };
     T = 1.0 / Beta;
     Counter = 0;
+    MaxTauBin = 32;
 }

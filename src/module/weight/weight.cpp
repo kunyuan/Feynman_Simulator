@@ -38,7 +38,7 @@ weight::Weight::~Weight()
 *  @param order     order
 */
 
-bool weight::Weight::BuildNew(flag _flag, const Parameter& para)
+bool weight::Weight::BuildNew(flag _flag, const ParaMC& para)
 {
     if (para.Order == 0)
         ABORT("Order can not be zero!!!");
@@ -51,7 +51,7 @@ bool weight::Weight::BuildNew(flag _flag, const Parameter& para)
     return true;
 }
 
-void weight::Weight::ReWeight(flag _flag, const Parameter& para)
+void weight::Weight::ReWeight(flag _flag, const ParaMC& para)
 {
     if (_flag & weight::GW) {
         //TODO: reweight G, W
@@ -71,7 +71,7 @@ void weight::Weight::ReWeight(flag _flag, const Parameter& para)
 *
 *  @return alway true for now
 */
-bool weight::Weight::Load(const std::string& InputFile, flag _flag, const Parameter& para)
+bool weight::Weight::Load(const std::string& InputFile, flag _flag, const ParaMC& para)
 {
     if (_flag & weight::GW) {
         _AllocateGW(para);
@@ -112,7 +112,7 @@ int weight::Weight::UpdateSigmaPolarWeight(int OrderAccepted, real ErrorThreshol
     return NewOrderAccepted;
 }
 
-void weight::Weight::SetTest(const Parameter& para)
+void weight::Weight::SetTest(const ParaMC& para)
 {
     _AllocateGW(para);
     _AllocateSigmaPolar(para);
@@ -120,7 +120,7 @@ void weight::Weight::SetTest(const Parameter& para)
     W->BuildTest(model::Trivial);
 }
 
-void weight::Weight::SetDiagCounter(const Parameter& para)
+void weight::Weight::SetDiagCounter(const ParaMC& para)
 {
     _AllocateGW(para);
     _AllocateSigmaPolar(para);
@@ -128,21 +128,21 @@ void weight::Weight::SetDiagCounter(const Parameter& para)
     W->BuildTest(model::DiagCount);
 }
 
-void weight::Weight::_AllocateGW(const Parameter& para)
+void weight::Weight::_AllocateGW(const ParaMC& para)
 {
     //make sure old Sigma/Polar/G/W are released before assigning new memory
     delete G;
     auto symmetry = _IsAllSymmetric ? TauSymmetric : TauAntiSymmetric;
-    G = new weight::G(para.Lat, para.Beta, symmetry);
+    G = new weight::G(para.Lat, para.Beta, para.MaxTauBin, symmetry);
     delete W;
-    W = new weight::W(para.Lat, para.Beta);
+    W = new weight::W(para.Lat, para.Beta, para.MaxTauBin);
 }
 
-void weight::Weight::_AllocateSigmaPolar(const Parameter& para)
+void weight::Weight::_AllocateSigmaPolar(const ParaMC& para)
 {
     auto symmetry = _IsAllSymmetric ? TauSymmetric : TauAntiSymmetric;
     delete Sigma;
-    Sigma = new weight::Sigma(para.Lat, para.Beta, para.Order, symmetry);
+    Sigma = new weight::Sigma(para.Lat, para.Beta, para.MaxTauBin, para.Order, symmetry);
     delete Polar;
-    Polar = new weight::Polar(para.Lat, para.Beta, para.Order);
+    Polar = new weight::Polar(para.Lat, para.Beta, para.MaxTauBin, para.Order);
 }

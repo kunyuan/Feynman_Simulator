@@ -80,9 +80,9 @@ void Test_Diagram_Component_Bundle()
 
 void Test_Diagram_IO()
 {
-    Lattice lat(Vec<int>(8), LATTICE);
-    weight::G G(lat, 1.0);
-    weight::W W(lat, 1.0);
+    Lattice lat(Vec<int>(8));
+    weight::G G(lat, 1.0, 32);
+    weight::W W(lat, 1.0, 32);
     G.BuildTest(weight::Trivial);
     W.BuildTest(weight::Trivial);
     Diagram Diag;

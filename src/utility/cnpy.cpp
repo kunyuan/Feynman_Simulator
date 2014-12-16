@@ -217,7 +217,7 @@ cnpy::NpyArray cnpy::npz_load(std::string fname, std::string varname)
 
     if (!fp) {
         printf("npz_load: Error! Unable to open file %s!\n", fname.c_str());
-        abort();
+        throw(ERR_FILE_NOT_FOUND);
     }
 
     while (1) {
