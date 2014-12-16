@@ -28,33 +28,6 @@ def Polar_FirstOrder(G, map):
                         *G.Data[spinG2, subA2B, :, :]
     return Polar
 
-def W_Dyson(W0,Polar,map):
-    W=weight.Weight("W.SmoothT", map, "FourSpins", "Symmetric")
-    W0.FFT(1, "Space")
-    Polar.FFT(1, "Space", "Time")
-
-    NSpin, NSub=W.NSpin, W.NSublat
-    W0.Reshape("SPSUB,SPSUB")
-    W.Reshape("SPSUB,SPSUB")
-    Polar.Reshape("SPSUB,SPSUB")
-    JP=np.einsum("ijv,jkvt->ikvt",W0.Data, Polar.Data)
-    #JP shape: NSpin*NSub,NSpin*NSub,Vol,Tau
-    I=np.eye(NSpin*NSub)
-    W.Data=I[...,np.newaxis,np.newaxis]-JP
-    W.Inverse();
-    W.Data=np.einsum('ijvt,jkv->ikvt', W.Data,W0.Data)-W0.Data[...,np.newaxis]
-    W.Reshape("SP2,SUB2")
-    W0.Reshape("SP2,SUB2")
-    Polar.Reshape("SP2,SUB2")
-    W.FFT(-1, "Space", "Time")
-    Polar.FFT(-1, "Space", "Time")
-    W0.FFT(-1, "Space")
-    #print W.Data[map.Spin4Index((0,0),(0,0)),map.SublatIndex(0,0),0,:]
-
-def Sigma_FirstOrder(G0, W, map):
-    Sigma=weight.Weight("Sigma.SmoothT", map, "TwoSpins", "AntiSymmetric")
-    return Sigma
-
 def W_FirstOrder(Beta,W0, Polar, map):
     W=weight.Weight("W.SmoothT", map, "FourSpins", "Symmetric")
     TauRange = range(W.Shape[TAU])
@@ -81,7 +54,7 @@ def W_FirstOrder(Beta,W0, Polar, map):
                 W.Data[spW,subW,:,tau]+=W0.Data[spW0L,subW0L,:] \
                     *Polar.Data[spPolar,subPolar,:,tau]*W0.Data[spW0R,subW0R,:]
     
-    W.Data[:,:,:,:] *= (Beta/(W.Shape[TAU]**2.0))
+    W.Data[:,:,:,:] *= (Beta/W.Shape[TAU]**2.0)
     W0.FFT(-1, "Space")
     Polar.FFT(-1, "Space")
     W.FFT(-1, "Space")
@@ -111,7 +84,7 @@ def G_FirstOrder(Beta,G0, Sigma0, Sigma, map):
                 G.Data[spG,subG,:,tau]+=G0.Data[spG,subG0L,:,tau] \
                         *Sigma0.Data[spG,subSigma,:]*G0.Data[spG,subG0R,:,tau]
 
-    G.Data[:,:,:,:] *= (Beta/G.Shape[VOL]/(G.Shape[TAU]**2.0))
+    G.Data[:,:,:,:] *= (Beta/G.Shape[VOL]/G.Shape[TAU]**2.0)
 
     G0.FFT(-1, "Space","Time")
     Sigma.FFT(-1, "Space","Time")
@@ -166,7 +139,7 @@ def W_Dyson(Beta, W0,Polar,map):
     JP=np.einsum("ijv,jkvt->ikvt",W0.Data, Polar.Data)
     #JP shape: NSpin*NSub,NSpin*NSub,Vol,Tau
 
-    JP=(Beta/(W.Shape[TAU])**2.0) * JP
+    JP*=(Beta/W.Shape[TAU]**2.0)
     for tau in range(W.Shape[TAU]):
         JP[:,:,:,tau] = JP[:,:,:,tau] * np.cos(tau*np.pi/W.Shape[TAU])
 
