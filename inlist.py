@@ -7,7 +7,7 @@ SLEEP = 5    #check job status for every SLEEP seconds
 TO_DO = []
 
 #common dictionary for all jobs
-beta=1.0
+beta=0.5
 com_dict={
     "L" :   [8,8],
     "InitialBeta" :  beta,
@@ -47,7 +47,6 @@ sc_dict={
     "__AutoRun" : False, 
     "DoesLoad" : True,
     "StartFromBare" : True,
-    
     "OrderAccepted": 1,
     "ErrorThreshold": 0.5,
     "SleepTime": 300
