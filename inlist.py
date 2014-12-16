@@ -16,6 +16,8 @@ com_dict={
     "Order" :  4,
     "Model" : "J1J2",
     "Lattice" : "Square",
+    "NSublat" : 1,
+    "MaxTauBin" : 32,
     "Interaction" : [1.0,0.0],
     "ExternalField": 0.0,
 }
@@ -23,7 +25,7 @@ com_dict={
 # monte carlo job defintion
 mc_dict={
     "__Execute" : "./gamma3.exe",
-    "__Duplicate" : 0,
+    "__Duplicate" : 1,
     "__IsCluster" : False,
     "__AutoRun" : True,
     "DoesLoad" : False,

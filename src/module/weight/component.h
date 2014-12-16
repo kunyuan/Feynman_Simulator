@@ -14,25 +14,22 @@
 #include "utility/complex.h"
 
 namespace weight {
+enum model { DiagCount = 0,
+             Trivial };
+
 class G : public Basic {
     friend class GInitializer;
 
-  public:
-    G(const Lattice &lat, real beta, TauSymmetry TauSymmetry = TauAntiSymmetric);
-    void BuildNew(model Model,
-                  const std::vector<real> &Hopping = {0.0},
-                  const std::vector<Complex> &ChemicalPotential = {0.0, 0.0},
-                  real ExternalField = 0.0);
-    void BuildTest();
+public:
+    G(const Lattice& lat, real beta, uint MaxTauBin,
+      TauSymmetry TauSymmetry = TauAntiSymmetric);
+    void BuildTest(weight::model);
     void Reset(real Beta);
 
-    Complex Weight(const Site &, const Site &, real, real, spin, spin, bool) const;
-    Complex Weight(int, const Site &, const Site &, real, real, spin, spin, bool) const;
+    Complex Weight(const Site&, const Site&, real, real, spin, spin, bool) const;
+    Complex Weight(int, const Site&, const Site&, real, real, spin, spin, bool) const;
 
-  private:
-    std::vector<real> _Hopping;
-    std::vector<Complex> _ChemicalPotential;
-    real _ExternalField;
+private:
     weight::SmoothTMatrix _MeasureWeight;
     IndexMapSPIN2 _Map;
 };
@@ -44,78 +41,73 @@ class G : public Basic {
 class W : public Basic {
     friend class WInitializer;
 
-  public:
-    W(const Lattice &lat, real Beta);
-    void BuildNew(model Model,
-                  const std::vector<real> &Interaction = {0.0},
-                  real ExternalField = 0.0);
-    void BuildTest();
+public:
+    W(const Lattice& lat, real Beta, uint MaxTauBin);
+    void BuildTest(weight::model);
     void WriteBareToASCII();
     void Reset(real Beta);
 
-    Complex Weight(const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool) const;
-    Complex Weight(int, const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool) const;
+    Complex Weight(const Site&, const Site&, real, real, spin*, spin*, bool, bool, bool) const;
+    Complex Weight(int, const Site&, const Site&, real, real, spin*, spin*, bool, bool, bool) const;
 
-  protected:
-    std::vector<real> _Interaction;
-    real _ExternalField;
+protected:
     weight::SmoothTMatrix _MeasureWeight;
     IndexMapSPIN4 _Map;
 };
 
 class Sigma : public Basic {
-  public:
-    Sigma(const Lattice &, real Beta, int MaxOrder,
+public:
+    Sigma(const Lattice&, real Beta, uint MaxTauBin, int MaxOrder,
           TauSymmetry Symmetry = TauAntiSymmetric);
-    void BuildNew(model Model);
+    void BuildNew();
     void BuildTest();
 
     void Reset(real Beta);
-    bool Load(const std::string &FileName);
-    void Save(const std::string &FileName, const std::string Mode = "a");
+    bool Load(const std::string& FileName);
+    void Save(const std::string& FileName, const std::string Mode = "a");
 
-    Complex Weight(const Site &, const Site &, real, real, spin, spin) const;
-    void Measure(const Site &, const Site &, real, real, spin, spin,
-                 int Order, const Complex &);
+    Complex Weight(const Site&, const Site&, real, real, spin, spin) const;
+    void Measure(const Site&, const Site&, real, real, spin, spin,
+                 int Order, const Complex&);
     void UpdateWeight(int order);
 
     WeightEstimator Estimator;
 
-  protected:
+protected:
     IndexMapSPIN2 _Map;
 };
 
 class Polar : public Basic {
-  public:
-    Polar(const Lattice &, real Beta, int MaxOrder);
-    void BuildNew(model Model);
+public:
+    Polar(const Lattice&, real Beta, uint MaxTauBin, int MaxOrder);
+    void BuildNew();
     void BuildTest();
 
     void Reset(real Beta);
-    bool Load(const std::string &FileName);
-    void Save(const std::string &FileName, const std::string Mode = "a");
+    bool Load(const std::string& FileName);
+    void Save(const std::string& FileName, const std::string Mode = "a");
 
-    Complex Weight(const Site &, const Site &, real, real, spin *, spin *) const;
-    void Measure(const Site &, const Site &, real, real, spin *, spin *,
-                 int Order, const Complex &);
+    Complex Weight(const Site&, const Site&, real, real, spin*, spin*) const;
+    void Measure(const Site&, const Site&, real, real, spin*, spin*,
+                 int Order, const Complex&);
     void UpdateWeight(int order);
 
     WeightEstimator Estimator;
 
-  protected:
+protected:
     IndexMapSPIN4 _Map;
 };
 
 class Worm {
-  public:
-    static real Weight(const Site &, const Site &, real, real)
+public:
+    static real Weight(const Site&, const Site&, real, real)
     {
         return 1.0;
     }
 };
 
 class Norm {
-  public:
+public:
     static real Weight()
     {
         return 1.0;

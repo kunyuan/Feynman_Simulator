@@ -19,8 +19,6 @@ bool para::Message::Load()
             throw e;
         return false;
     }
-    GetPara(_Para, Interaction);
-    GetPara(_Para, ExternalField);
     GetPara(_Para, Beta);
     GetPara(_Para, Version);
     return true;
@@ -29,8 +27,6 @@ bool para::Message::Load()
 void para::Message::Save()
 {
     _Para.clear();
-    SetPara(_Para, Interaction);
-    SetPara(_Para, ExternalField);
     SetPara(_Para, Beta);
     SetPara(_Para, Version);
     _Para.SaveToFile(_MessageFile, "w");

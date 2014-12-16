@@ -16,10 +16,11 @@ using namespace weight;
 
 /**********************   Weight Needs measuring  **************************/
 
-WeightEstimator::WeightEstimator(real beta, int order, string name, real Norm, const uint *Shape)
+WeightEstimator::WeightEstimator(real beta, int order, string name, real Norm, const uint* Shape)
 {
+    _MaxTauBin = Shape[TAU];
     _Beta = beta;
-    _dBeta = beta / MAX_TAU_BIN;
+    _dBeta = beta / _MaxTauBin;
     _dBetaInverse = 1.0 / _dBeta;
     _Order = order;
     _Norm = Norm;
@@ -41,7 +42,7 @@ void WeightEstimator::ReWeight(real Beta)
     //so that GetWeightArray will give a same weight function
     _NormAccu *= _Beta / Beta;
     _Beta = Beta;
-    _dBeta = Beta / MAX_TAU_BIN;
+    _dBeta = Beta / _MaxTauBin;
     _dBetaInverse = 1.0 / _dBeta;
 }
 
@@ -75,12 +76,12 @@ int WeightEstimator::OrderAcceptable(int StartFromOrder, real ErrorThreshold)
 *  @param UpToOrder the upper limit of orders to accept
 */
 
-void WeightEstimator::UpdateWeight(SmoothTMatrix &target, int UpToOrder)
+void WeightEstimator::UpdateWeight(SmoothTMatrix& target, int UpToOrder)
 {
     //WeightEstimator and the corresponding WeightArray
     //share the same memory structure from _Shape[SP]  to _Shape[TAU]
     int order = 1;
-    real NormFactor = 1.0 / _NormAccu * _Norm * MAX_TAU_BIN / _Beta;
+    real NormFactor = 1.0 / _NormAccu * _Norm * _MaxTauBin / _Beta;
 
     target = _WeightAccu[order - 1];
     //add order>1 on _Weight
@@ -96,7 +97,7 @@ void WeightEstimator::MeasureNorm()
     _NormAccu += 1.0;
 }
 
-void WeightEstimator::Measure(uint *Index, int Order, Complex Weight)
+void WeightEstimator::Measure(uint* Index, int Order, Complex Weight)
 {
     if (DEBUGMODE && Order < 1)
         LOG_ERROR("Too small order=" << Order);
@@ -129,16 +130,16 @@ void WeightEstimator::SqueezeStatistics(real factor)
 }
 
 /**********************   Weight IO ****************************************/
-void WeightEstimator::Save(const std::string &FileName, const std::string &Mode)
+void WeightEstimator::Save(const std::string& FileName, const std::string& Mode)
 {
-    unsigned int shape[1] = {1};
+    unsigned int shape[1] = { 1 };
     cnpy::npz_save(FileName, _Name + ".Norm", &_Norm, shape, 1, Mode);
     cnpy::npz_save(FileName, _Name + ".NormAccu", &_NormAccu, shape, 1, "a");
     cnpy::npz_save(FileName, _Name + ".WeightAccu", _WeightAccu(), _MeaShape, 5, "a");
     _WeightErrorEstimator.SaveStatistics(FileName, "a");
 }
 
-bool WeightEstimator::Load(const std::string &FileName)
+bool WeightEstimator::Load(const std::string& FileName)
 {
     _WeightErrorEstimator.LoadStatistics(FileName);
 
@@ -149,7 +150,7 @@ bool WeightEstimator::Load(const std::string &FileName)
     if (weight_accu.data == nullptr)
         ABORT("Can't find estimator " << _Name << ".WeightAccu in .npz data file!");
     //using assign here will make a copy of the data in Complex *start
-    _WeightAccu = reinterpret_cast<Complex *>(weight_accu.data);
+    _WeightAccu = reinterpret_cast<Complex*>(weight_accu.data);
 
     //read normalization factor
     cnpy::npz_load_number(NpzMap, _Name + ".NormAccu", _NormAccu);
