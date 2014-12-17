@@ -89,10 +89,10 @@ class BareFactory:
         coordnnn=[(1,1),(Lx-1,1),(1,Ly-1),(Lx-1,Ly-1)]
         #J1 interaction on nearest neighbors
         for i in coordnn:
-            self.BareW.Data[spinindex,sub,self.__Map.CoordiIndex(i)] = J1;
+            self.BareW.Data[spinindex,sub,self.__Map.CoordiIndex(i)] = J1/4.0;
         #J2 interaction on next nearest neighbors
         for i in coordnnn:
-            self.BareW.Data[spinindex,sub,self.__Map.CoordiIndex(i)] = J2;
+            self.BareW.Data[spinindex,sub,self.__Map.CoordiIndex(i)] = J2/4.0;
         #Generate other non-zero spin configuration
         for e in self.__Map.GetSpin4SimilarTuples((UP,UP),(UP,UP)):
             self.BareW.Data[self.__Map.Spin4Index(*e),...]=self.BareW.Data[spinindex,...]

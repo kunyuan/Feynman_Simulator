@@ -30,23 +30,20 @@ else:
     W0.Load("../data/GW.npz")
 
 Polar=calc.Polar_FirstOrder(G0, map)
-W=calc.W_FirstOrder(Beta, W0, Polar,map) 
-print W.Data[map.Spin4Index((UP,UP),(UP,UP)),0, 0,:]
+W = calc.W_Dyson(Beta, W0, Polar,map)
+
 Sigma=calc.Sigma_FirstOrder(G0, W, map)
 Sigma0=calc.Sigma0_FirstOrder(G0, W0, map)
 
-
-#for i in range(10):
-W = calc.W_Dyson(Beta, W0,Polar,map)
 G = calc.G_Dyson(Beta, G0, Sigma0, Sigma, map)
 
+#for i in range(10):
+    #W = calc.W_Dyson(Beta, W0,Polar,map)
+    #G = calc.G_Dyson(Beta, G0, Sigma0, Sigma, map)
     #Polar = calc.Polar_FirstOrder(G, map)
     #Sigma = calc.Sigma_FirstOrder(G,W,map)
     #Sigma0 = calc.Sigma0_FirstOrder(G,W0,map)
 
-print G0.Data[map.Spin2Index(UP,UP),0, 0,:]
-print Polar.Data[map.Spin4Index((UP,UP),(UP,UP)),0, 0,:]
-print W.Data[map.Spin4Index((UP,UP),(UP,UP)),0, 0,:]
-print Sigma.Data[map.Spin2Index(UP,UP),0, 0,:]
+print W.Data[map.Spin4Index((UP,UP),(UP,UP)),0,0,:]
 print G.Data[map.Spin2Index(UP,UP),0, 0,:]
 

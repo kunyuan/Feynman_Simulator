@@ -161,14 +161,14 @@ class Weight():
             self.ChangeSymmetry(-1)
     def ChangeSymmetry(self,BackForth):
         ''' the transformation has to be done in continuous tau representation, namely using  
-        exp(i*Pi*Tau_n/Beta)(e.g. exp(i*Pi*(n+1/2)/N)) as the phase factor
-        otherwise, if you use exp(i*Pi*n/N)) as the phase factor here, you'll have to take care of 
+        exp(-i*Pi*Tau_n/Beta)(e.g. exp(-i*Pi*(n+1/2)/N)) as the phase factor
+        otherwise, if you use exp(-i*Pi*n/N)) as the phase factor here, you'll have to take care of 
         an extra coeffecient exp(-i*Pi/(2N)) for each function (G0, Sigma, G) in the integral.
         '''
         if self.IsSymmetric or not self.__HasTau:
             return
         tau=np.array([self.Map.IndexToTau(e) for e in range(self.Shape[TAU])])
-        PhaseFactor=np.exp(1j*BackForth*np.pi*tau/self.Beta)
+        PhaseFactor=np.exp(-1j*BackForth*np.pi*tau/self.Beta)
         self.Data*=PhaseFactor
 
     def __fftSpace(self, BackForth):
