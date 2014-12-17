@@ -142,7 +142,8 @@ def G_Dyson(Beta, G0, Sigma0, Sigma, map):
     for tau in range(map.MaxTauBin):
         G0Sigma0[:,:,:,tau] = G0Sigma0[:,:,:,tau]*np.cos(np.pi*map.IndexToTau(tau)/Beta)
 
-    GS  = Beta/map.MaxTauBin*(Beta/map.MaxTauBin*G0Sigma + G0Sigma0)
+    #GS  = Beta/map.MaxTauBin*(Beta/map.MaxTauBin*G0Sigma + G0Sigma0)
+    GS  = Beta/map.MaxTauBin*(Beta/map.MaxTauBin*G0Sigma)
     #GS shape: NSpin*NSub,NSpin*NSub,Vol,Tau
 
     I=np.eye(NSpin*NSub)
