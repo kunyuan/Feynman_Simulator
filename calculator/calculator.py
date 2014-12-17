@@ -30,7 +30,7 @@ def Polar_FirstOrder(G, map):
 
 def W_FirstOrder(Beta,W0, Polar, map):
     W=weight.Weight("W.SmoothT", map, "FourSpins", "Symmetric")
-    TauRange = range(W.Shape[TAU])
+    TauRange = range(map.MaxTauBin)
     SubRange=range(W.NSublat)
     SubList=[(a,b,c,d) for a in SubRange for b in SubRange for c in SubRange for d in SubRange]
     SpinList=[(Wtuple,Polartuple) for Wtuple in map.GetConservedSpinTuple("FourSpins") \
@@ -54,49 +54,15 @@ def W_FirstOrder(Beta,W0, Polar, map):
                 W.Data[spW,subW,:,tau]+=W0.Data[spW0L,subW0L,:] \
                     *Polar.Data[spPolar,subPolar,:,tau]*W0.Data[spW0R,subW0R,:]
     
-    W.Data[:,:,:,:] *= (Beta**2.0/W.Shape[TAU]**3.0)
     W0.FFT(-1, "Space")
     Polar.FFT(-1, "Space")
     W.FFT(-1, "Space")
     return W
 
-def G_FirstOrder(Beta,G0, Sigma0, Sigma, map):
-    G=weight.Weight("G.SmoothT", map, "TwoSpins", "AntiSymmetric")
-    TauRange = range(G.Shape[TAU])
-    SubRange=range(G.NSublat)
-    SubList=[(a,b,c,d) for a in SubRange for b in SubRange for c in SubRange for d in SubRange]
-
-    #make sure spin conservation on W0
-    G0.FFT(1, "Space","Time")
-    Sigma.FFT(1, "Space","Time")
-    Sigma0.FFT(1, "Space")
-    SpinList = [map.Spin2Index(UP,UP), map.Spin2Index(DOWN,DOWN)]
-    for spG in SpinList:
-        for e in SubList:
-            subG0L = map.SublatIndex(e[0], e[1])
-            subSigma0 = map.SublatIndex(e[1], e[2])
-            subSigma = map.SublatIndex(e[1], e[2])
-            subG0R = map.SublatIndex(e[2], e[3])
-            subG = map.SublatIndex(e[0], e[3])
-            G.Data[spG,subG,:,:]+=G0.Data[spG,subG0L,:,:] \
-                    *Sigma.Data[spG,subSigma,:,:]*G0.Data[spG,subG0R,:,:]
-            for tau in TauRange:
-                G.Data[spG,subG,:,tau]+=G0.Data[spG,subG0L,:,tau] \
-                        *Sigma0.Data[spG,subSigma,:]*G0.Data[spG,subG0R,:,tau]
-
-    G.Data[:,:,:,:] *= (Beta**2.0/G.Shape[TAU]**3.0)
-
-    G0.FFT(-1, "Space","Time")
-    Sigma.FFT(-1, "Space","Time")
-    Sigma0.FFT(-1, "Space")
-    G.FFT(-1, "Space","Time")
-    return G
-
-
 def Sigma_FirstOrder(G, W, map):
     Sigma=weight.Weight("Sigma.SmoothT", map, "TwoSpins", "AntiSymmetric")
 
-    TauRange = range(G.Shape[TAU])
+    TauRange = range(map.MaxTauBin)
 
     for spin1 in range(2):
         for spin2 in range(2):
@@ -104,29 +70,27 @@ def Sigma_FirstOrder(G, W, map):
             spinG = map.Spin2Index(spin2, spin2)
             spinSigma = map.Spin2Index(spin1, spin1)
             Sigma.Data[spinSigma, :, :, :]  \
-                    = G.Data[spinG, :, :, :]\
+                    -= G.Data[spinG, :, :, :]\
                     *W.Data[spinW, :, :, :]
-
     return Sigma
 
 def Sigma0_FirstOrder(G, W0, map):
 
     Sigma0=weight.Weight("Sigma.DeltaT", map, "TwoSpins", "AntiSymmetric")
 
-    TauRange = range(G.Shape[TAU])
     for spin1 in range(2):
         for spin2 in range(2):
             spinW = map.Spin4Index((spin1,spin2),(spin2,spin1))
             spinG = map.Spin2Index(spin2, spin2)
             spinSigma = map.Spin2Index(spin1, spin1)
-            for tau in TauRange:
-                Sigma0.Data[spinSigma, :, :]  \
-                        = G.Data[spinG, :, :, tau]\
-                        *W0.Data[spinW, :, :]
+            #############G(tau==-0)
+            Sigma0.Data[spinSigma, :, :]  \
+                    -= G.Data[spinG, :, :, -1]\
+                    *W0.Data[spinW, :, :]
     return Sigma0
 
 
-def W_Dyson(Beta, W0,Polar,map):
+def W_Dyson(Beta, W0, Polar,map):
     W=weight.Weight("W.SmoothT", map, "FourSpins", "Symmetric")
     W0.FFT(1, "Space")
     Polar.FFT(1, "Space", "Time")
@@ -139,14 +103,15 @@ def W_Dyson(Beta, W0,Polar,map):
     JP=np.einsum("ijv,jkvt->ikvt",W0.Data, Polar.Data)
     #JP shape: NSpin*NSub,NSpin*NSub,Vol,Tau
 
-    JP*=(Beta**2.0/W.Shape[TAU]**3.0)
-    for tau in range(W.Shape[TAU]):
-        JP[:,:,:,tau] = JP[:,:,:,tau] * np.cos(tau*np.pi/W.Shape[TAU])
+    JP *= Beta/map.MaxTauBin
+    for tau in range(map.MaxTauBin):
+        JP[:,:,:,tau] = JP[:,:,:,tau] * np.cos(tau*np.pi/map.MaxTauBin)
 
     I=np.eye(NSpin*NSub)
     W.Data=I[...,np.newaxis,np.newaxis]-JP
     W.Inverse();
-    W.Data=np.einsum('ijvt,jkv->ikvt', W.Data,W0.Data)-W0.Data[...,np.newaxis]
+    W.Data = np.einsum('ijvt,jkv->ikvt', W.Data,W0.Data)
+    W.Data = map.MaxTauBin/Beta*(W.Data - W0.Data[...,np.newaxis])
 
     W.Reshape("SP2SUB2")
     W0.Reshape("SP2SUB2")
@@ -155,7 +120,6 @@ def W_Dyson(Beta, W0,Polar,map):
     W.FFT(-1, "Space", "Time")
     Polar.FFT(-1, "Space", "Time")
     W0.FFT(-1, "Space")
-    #print W.Data[map.Spin4Index((0,0),(0,0)),map.SublatIndex(0,0),0,:]
     return W
 
 def G_Dyson(Beta, G0, Sigma0, Sigma, map):
@@ -172,12 +136,13 @@ def G_Dyson(Beta, G0, Sigma0, Sigma, map):
     Sigma.Reshape("SPSUBSPSUB")
 
     G0Sigma0=np.einsum("ijvt,jkv->ikvt",G0.Data, Sigma0.Data)
-    ####correction term
-    for tau in range(G.Shape[TAU]):
-        G0Sigma0[:,:,:,tau] = G0Sigma0[:,:,:,tau]*np.cos((tau+0.5)*np.pi/G.Shape[TAU])
-
     G0Sigma=np.einsum("ijvt,jkvt->ikvt",G0.Data, Sigma.Data)
-    GS=(Beta**2.0/G.Shape[TAU]**3.0) * (G0Sigma0+G0Sigma)
+
+    ####correction term
+    for tau in range(map.MaxTauBin):
+        G0Sigma0[:,:,:,tau] = G0Sigma0[:,:,:,tau]*np.cos(np.pi*map.IndexToTau(tau)/Beta)
+
+    GS  = Beta/map.MaxTauBin*(Beta/map.MaxTauBin*G0Sigma + G0Sigma0)
     #GS shape: NSpin*NSub,NSpin*NSub,Vol,Tau
 
     I=np.eye(NSpin*NSub)
