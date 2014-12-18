@@ -7,7 +7,7 @@
 //
 
 #include "parameter.h"
-#include "utility.h"
+#include "utility/utility.h"
 using namespace para;
 
 Message Parameter::GenerateMessage()

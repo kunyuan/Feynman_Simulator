@@ -17,10 +17,10 @@ using namespace std;
 
 template <typename T>
 class Vec {
-  private:
+private:
     T _Array[D];
 
-  public:
+public:
     Vec()
     {
     }
@@ -40,33 +40,33 @@ class Vec {
             _Array[j] = value;
     }
 
-    Vec(T *value)
+    Vec(T* value)
     {
         for (int j = 0; j < D; j++)
             _Array[j] = value[j];
     }
 
-    void CopyToArray(T *target) const
+    void CopyToArray(T* target) const
     {
         for (int i = 0; i < D; i++)
             target[i] = _Array[i];
     }
 
-    T *begin()
+    T* begin()
     {
         return _Array;
     }
-    T *end()
+    T* end()
     {
         return _Array + D;
     }
 
-    T &operator[](int index)
+    T& operator[](int index)
     {
         return _Array[index];
     }
 
-    const T &operator[](int index) const
+    const T& operator[](int index) const
     {
         return _Array[index];
     }
@@ -79,7 +79,7 @@ class Vec {
         return v;
     }
 
-    Vec operator*(const real &i) const
+    Vec operator*(const real& i) const
     {
         Vec v;
         for (int j = 0; j < D; j++)
@@ -87,7 +87,7 @@ class Vec {
         return v;
     }
 
-    Vec operator+(const Vec &v2) const
+    Vec operator+(const Vec& v2) const
     {
         Vec v;
         for (int j = 0; j < D; j++)
@@ -95,7 +95,7 @@ class Vec {
         return v;
     }
 
-    Vec operator-(const Vec &v2) const
+    Vec operator-(const Vec& v2) const
     {
         Vec v;
         for (int j = 0; j < D; j++)
@@ -103,14 +103,14 @@ class Vec {
         return v;
     }
 
-    Vec &operator+=(const Vec &v2)
+    Vec& operator+=(const Vec& v2)
     {
         for (int j = 0; j < D; j++)
             _Array[j] += v2._Array[j];
         return *this;
     }
 
-    Vec &operator-=(const Vec &v2)
+    Vec& operator-=(const Vec& v2)
     {
         for (int j = 0; j < D; j++)
             _Array[j] -= v2._Array[j];
@@ -120,18 +120,15 @@ class Vec {
     string PrettyString();
 
     template <typename TT>
-    friend std::ostream &operator<<(std::ostream &os, const Vec<TT> &);
+    friend std::ostream& operator<<(std::ostream& os, const Vec<TT>&);
     template <typename TT>
-    friend std::istream &operator>>(std::istream &is, Vec<TT> &);
+    friend std::istream& operator>>(std::istream& is, Vec<TT>&);
 
-    friend bool operator==(const Vec<int> &, const Vec<int> &);
-    friend bool operator==(const Vec<real> &, const Vec<real> &);
-    template <typename TT>
-    friend bool operator!=(const Vec<TT> &v1, const Vec<TT> &v2)
-    {
-        return !(v1 == v2);
-    }
+    friend bool operator==(const Vec<int>&, const Vec<int>&);
+    friend bool operator==(const Vec<real>&, const Vec<real>&);
 };
+bool operator!=(const Vec<int>& v1, const Vec<int>& v2);
+bool operator!=(const Vec<real>& v1, const Vec<real>& v2);
 
 template <typename T>
 std::string ToString(Vec<T> value)
