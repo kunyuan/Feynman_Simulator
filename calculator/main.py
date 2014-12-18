@@ -2,7 +2,7 @@
 import numpy as np
 import parameter as para
 import calculator as calc
-from weight import UP,DOWN,IN,OUT,TAU,SP,SUB,VOL
+from weight import UP,DOWN,IN,OUT,TAU,SP1,SUB1,SP2,SUB2,VOL
 import weight
 import model
 import lattice as lat
@@ -43,6 +43,7 @@ for i in range(10):
     Sigma = calc.Sigma_FirstOrder(G,W,map)
     Sigma0 = calc.Sigma0_FirstOrder(G,W0,map)
 
-print W.Data[map.Spin4Index((UP,UP),(UP,UP)),0,0,:]
-print G.Data[map.Spin2Index(UP,UP),0, 0,:]
+spinUP = map.Spin2Index(UP,UP)
+print W.Data[spinUP,0,spinUP,0,0,:]
+print G.Data[UP,0,UP,0,0,:]
 

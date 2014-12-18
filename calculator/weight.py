@@ -9,7 +9,7 @@ from logger import *
 SPIN,SPIN2,SPIN3=2,4,8
 IN,OUT=0,1
 DOWN,UP=0,1
-SP,SUB,VOL,TAU=0,1,2,3
+SP1,SUB1,SP2,SUB2,VOL,TAU=0,1,2,3,4,5
 
 ### Shape: [SP][SUB][VOL][TAU], the TAU dimension may be missing
 
@@ -36,12 +36,11 @@ class IndexMap:
     def IndexToTau(self, Index):
         return (Index+0.5)*self.__dBeta
 
-    def SublatIndex(self, In, Out):
-        return In*self.NSublat+Out
-    def GetAllSublat(self):
+    def GetAllSublatTuple(self):
         return ((i,j) for i in range(self.NSublat) for j in range(self.NSublat))
-    def GetLocalSublatIndexs(self):
-        return (self.SublatIndex(i,i) for i in range(self.NSublat))
+
+    def GetLocalSublatTuple(self):
+        return ((i,i) for i in range(self.NSublat))
 
     def CoordiIndex(self, Out):
         #Out[0]*L1*L2+Out[1]*L2+Out[2] with In=(0,0,0)
@@ -49,6 +48,7 @@ class IndexMap:
         for i in range(1,len(Out)):
             Index=Index*self.L[i]+Out[i]
         return Index
+
     def GetAllCoordi(self):
         if len(self.L)==2:
             return ((i,j) for i in range(self.L[0]) for j in range(self.L[1]))
@@ -59,28 +59,14 @@ class IndexMap:
         else:
             Assert(False, "Dimension {0} has been implemented!".format(len(self.L)))
 
-    def SpinIndex(self, In, Out, SpinNum):
-        if SpinNum==2:
-            self.Spin2Index(In, Out)
-        elif SpinNum==4:
-            self.Spin4Index(In, Out)
-    def Spin2Index(self, In, Out):
-        return In*SPIN+Out
-    def Spin4Index(self, InTuple, OutTuple):
-        return InTuple[IN]*SPIN3+InTuple[OUT]*SPIN2+ \
-                OutTuple[IN]*SPIN+OutTuple[OUT]
+    def Spin2Index(self, SpinIN, SpinOUT):
+        return SpinIN*SPIN+SpinOUT
 
     def IsConserved(self, SpinNum, SpinTuple):
         if SpinNum==2:
             return (SpinTuple[IN]==SpinTuple[OUT])
         if SpinNum==4:
             return (SpinTuple[IN][IN]+SpinTuple[OUT][IN]==SpinTuple[IN][OUT]+SpinTuple[OUT][OUT])
-
-    def GetConservedSpinIndexs(self, SpinNum):
-        if SpinNum=="TwoSpins":
-            return [self.Spin2Index(*s) for s in self.GetConservedSpinTuple(SpinNum)]
-        if SpinNum=="FourSpins":
-            return [self.Spin4Index(*s) for s in self.GetConservedSpinTuple(SpinNum)]
 
     def GetConservedSpinTuple(self, SpinNum):
         if SpinNum=="TwoSpins":
@@ -89,6 +75,7 @@ class IndexMap:
             return self.GetSpin4SimilarTuples((UP,UP),(UP,UP))+ \
                    self.GetSpin4SimilarTuples((UP,UP),(DOWN,DOWN))+ \
                    self.GetSpin4SimilarTuples((DOWN,UP),(UP,DOWN))
+
     def GetSpin4SimilarTuples(self, InTuple, OutTuple):
         if InTuple==OutTuple:
             if InTuple[IN]==InTuple[OUT]:
@@ -121,9 +108,9 @@ class Weight():
         elif NSpin is "FourSpins":
             self.NSpin=4
         else:
-            Assert(False, "Only accept OneSpin or TwoSpins, not {0}".format(NSpin))
+            Assert(False, "Only accept TwoSpin or FourSpins, not {0}".format(NSpin))
 
-        self.Shape=[self.NSpin**2, self.NSublat**2, self.Map.Vol]
+        self.Shape=[self.NSpin, self.NSublat, self.NSpin, self.NSublat, self.Map.Vol]
         if ".SmoothT" in Name:
             self.Beta=self.Map.Beta
             self.Shape.append(self.Map.MaxTauBin)
@@ -187,24 +174,28 @@ class Weight():
         SpatialShape=shape[0:InsertPos]+self.L+shape[InsertPos+1:]
         return range(InsertPos, InsertPos+len(self.L)), SpatialShape
 
-    def Reshape(self, ShapeMode):
-        OriginShape=self.__OriginShape
-        MidShape1=[self.NSpin, self.NSpin,self.NSublat,self.NSublat]+self.__OriginShape[VOL:]
-        MidShape2=[self.NSpin, self.NSublat, self.NSpin, self.NSublat]+self.__OriginShape[VOL:]
-        NewShape=[self.NSpin*self.NSublat, self.NSpin*self.NSublat]+self.__OriginShape[VOL:]
-        if ShapeMode is "SP2SUB2":
-            self.__AssertShape(self.Shape, NewShape)
-            self.Data=self.Data.reshape(MidShape2).swapaxes(1,2).reshape(OriginShape)
-            self.Shape=OriginShape
-        elif ShapeMode is "SPSUBSPSUB":
-            self.__AssertShape(self.Shape, OriginShape)
-            self.Data=self.Data.reshape(MidShape1).swapaxes(1,2).reshape(NewShape)
-            self.Shape=NewShape
+    #def Reshape(self, ShapeMode):
+        #OriginShape=self.__OriginShape
+        #MidShape1=[self.NSpin, self.NSpin,self.NSublat,self.NSublat]+self.__OriginShape[VOL:]
+        #MidShape2=[self.NSpin, self.NSublat, self.NSpin, self.NSublat]+self.__OriginShape[VOL:]
+        #NewShape=[self.NSpin*self.NSublat, self.NSpin*self.NSublat]+self.__OriginShape[VOL:]
+        #if ShapeMode is "SP2SUB2":
+            #self.__AssertShape(self.Shape, NewShape)
+            #self.Data=self.Data.reshape(MidShape2).swapaxes(1,2).reshape(OriginShape)
+            #self.Shape=OriginShape
+        #elif ShapeMode is "SPSUBSPSUB":
+            #self.__AssertShape(self.Shape, OriginShape)
+            #self.Data=self.Data.reshape(MidShape1).swapaxes(1,2).reshape(NewShape)
+            #self.Shape=NewShape
 
     def Inverse(self):
         self.__InverseSpinAndSublat()
 
     def __InverseSpinAndSublat(self):
+        Sp = self.NSpin
+        Sub = self.NSublat
+        OriginShape = self.Shape
+        self.Data = self.Data.reshape([Sp*Sub,Sp*Sub]+OriginShape[VOL:])
         for j in self.__SpaceTimeIndex:
             index=[Ellipsis,]+j
             try:
@@ -212,17 +203,30 @@ class Weight():
             except:
                 log.error("Fail to inverse matrix :,:,{0}\n{1}".format(index, self.Data[index].shape))
                 sys.exit(0)
+        self.Data = self.Data.reshape([Sp,Sub,Sp,Sub]+OriginShape[VOL:])
 
     def Load(self, FileName):
         log.info("Loading {0} Matrix...".format(self.Name));
         data=self.__LoadNpz(FileName)
+
+
         if self.Name in data.files:
             log.info("Load {0}".format(self.Name))
+
+            ######RESHAPE data[self.Name]
+            OldShape=[self.NSpin**2, self.NSublat**2]+self.__OriginShape[VOL:]
+            MidShape=[self.NSpin, self.NSpin, self.NSublat,self.NSublat]+self.__OriginShape[VOL:]
+            NewShape=self.__OriginShape
+            self.__AssertShape(data[self.Name].shape, OldShape)
+            data[self.Name]=data[self.Name].reshape(MidShape).swapaxes(1,2).reshape(NewShape)
             self.__AssertShape(self.Shape, data[self.Name].shape)
+
             self.Data=data[self.Name]
         else:
             Assert(False, "{0} not found!").format(self.Name)
+
     def Save(self, FileName, Mode="a"):
+
         log.info("Saving {0} Matrix...".format(self.Name));
         data={}
         if Mode is "a" and os.path.exists(FileName)==True:
@@ -230,7 +234,17 @@ class Weight():
             for e in olddata.files:
                 data[e]=olddata[e]
         data[self.Name]=self.Data
+
+        #######RESHAPE
+        OldShape=self.__OriginShape
+        MidShape=[self.NSpin, self.NSublat,self.NSpin, self.NSublat]+self.__OriginShape[VOL:]
+        NewShape=[self.NSpin**2, self.NSublat**2]+self.__OriginShape[VOL:]
+
+        self.__AssertShape(data[self.Name].shape, OldShape)
+        data[self.Name]=data[self.Name].reshape(MidShape).swapaxes(1,2).reshape(NewShape)
+
         np.savez(FileName, **data)
+
     def __LoadNpz(self, FileName):
         try:
             data=np.load(FileName)
