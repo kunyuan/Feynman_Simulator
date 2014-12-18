@@ -15,35 +15,42 @@ file(GLOB_RECURSE SRCS *.cpp)
 file(GLOB_RECURSE HDRS *.h)
 ADD_EXECUTABLE(FeynmanSimulator  ${SRCS} ${HDRS})
 
-# $ZLIB_DIR is an environment variable that would
-# correspond to the ./configure --prefix=$ZLIB_DIR
-# used in building zlib.
-FIND_PATH(ZLIB_INCLUDE_DIR zlib.h
-    $ENV{ZLIB_DIR}/include
-    $ENV{ZLIB_DIR}
-    /usr/local/include
-    /usr/include
-    /opt/local/include # DarwinPorts
-    /opt/include
-)
+find_package(PythonLibs REQUIRED)
+include_directories(${PYTHON_INCLUDE_DIRS})
+message(PYTHONLIBS_VERSION_STRING)
+message(PYTHON_INCLUDE_PATH)
+message(PYTHON_LIBRARIES)
+target_link_libraries(FeynmanSimulator ${PYTHON_LIBRARIES})
 
-FIND_LIBRARY(ZLIB_LIBRARY
-    NAMES z libz zlib
-    PATHS
-    $ENV{ZLIB_DIR}/lib
-    $ENV{ZLIB_DIR}
-    /usr/local/lib
-    /usr/lib
-    /opt/local/lib
-    /opt/lib
-)
+## $ZLIB_DIR is an environment variable that would
+## correspond to the ./configure --prefix=$ZLIB_DIR
+## used in building zlib.
+#FIND_PATH(ZLIB_INCLUDE_DIR zlib.h
+    #$ENV{ZLIB_DIR}/include
+    #$ENV{ZLIB_DIR}
+    #/usr/local/include
+    #/usr/include
+    #/opt/local/include # DarwinPorts
+    #/opt/include
+#)
 
-message(${ZLIB_INCLUDE_DIR})
-message(${ZLIB_LIBRARY})
-IF(ZLIB_LIBRARY)
-    message("zlib is found.")
-    target_link_libraries(FeynmanSimulator ${ZLIB_LIBRARY})
-ELSE()
-    message("zlib is not found!")
-ENDIF()
+#FIND_LIBRARY(ZLIB_LIBRARY
+    #NAMES z libz zlib
+    #PATHS
+    #$ENV{ZLIB_DIR}/lib
+    #$ENV{ZLIB_DIR}
+    #/usr/local/lib
+    #/usr/lib
+    #/opt/local/lib
+    #/opt/lib
+#)
+
+#message(${ZLIB_INCLUDE_DIR})
+#message(${ZLIB_LIBRARY})
+#IF(ZLIB_LIBRARY)
+    #message("zlib is found.")
+    #target_link_libraries(FeynmanSimulator ${ZLIB_LIBRARY})
+#ELSE()
+    #message("zlib is not found!")
+#ENDIF()
 
