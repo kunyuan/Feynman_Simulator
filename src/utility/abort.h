@@ -18,6 +18,12 @@
         throw(ERR_GENERAL); \
     } while (0)
 
+#define ERRORCODEABORT(errorcode, msg) \
+    do {                               \
+        LOG_ERROR(msg);                \
+        throw(errorcode);              \
+    } while (0)
+
 #define ASSERT_ALLWAYS(expression, msg)                   \
     do {                                                  \
         if ((expression) == false)                        \

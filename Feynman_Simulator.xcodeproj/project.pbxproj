@@ -144,7 +144,6 @@
 		843DBB871A448545009DB448 /* dictionary_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dictionary_test.cpp; sourceTree = "<group>"; };
 		843DBB881A448545009DB448 /* dictionary.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dictionary.cpp; sourceTree = "<group>"; };
 		843DBB891A448545009DB448 /* dictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dictionary.h; sourceTree = "<group>"; };
-		843DBB8D1A44854E009DB448 /* Average coder_ Python wrapper in C++11.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Average coder_ Python wrapper in C++11.pdf"; sourceTree = "<group>"; };
 		843DBB8E1A44854E009DB448 /* pywrapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pywrapper.cpp; sourceTree = "<group>"; };
 		843DBB8F1A44854E009DB448 /* pywrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pywrapper.h; sourceTree = "<group>"; };
 		84519AEA19F2C554007CB81B /* environment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = environment.h; path = environment/environment.h; sourceTree = "<group>"; };
@@ -208,9 +207,9 @@
 			isa = PBXGroup;
 			children = (
 				843DBB8C1A44854E009DB448 /* pyglue */,
-				843DBB871A448545009DB448 /* dictionary_test.cpp */,
-				843DBB881A448545009DB448 /* dictionary.cpp */,
 				843DBB891A448545009DB448 /* dictionary.h */,
+				843DBB881A448545009DB448 /* dictionary.cpp */,
+				843DBB871A448545009DB448 /* dictionary_test.cpp */,
 				843DBB3B1A3B535A009DB448 /* timer_test.cpp */,
 				843DBB3C1A3B535A009DB448 /* timer.cpp */,
 				843DBB3D1A3B535A009DB448 /* timer.h */,
@@ -361,9 +360,8 @@
 		843DBB8C1A44854E009DB448 /* pyglue */ = {
 			isa = PBXGroup;
 			children = (
-				843DBB8D1A44854E009DB448 /* Average coder_ Python wrapper in C++11.pdf */,
-				843DBB8E1A44854E009DB448 /* pywrapper.cpp */,
 				843DBB8F1A44854E009DB448 /* pywrapper.h */,
+				843DBB8E1A44854E009DB448 /* pywrapper.cpp */,
 			);
 			path = pyglue;
 			sourceTree = "<group>";
