@@ -663,31 +663,13 @@ static int __Pyx_InitStrings(__Pyx_StringTabEntry *t);
 /* Module declarations from 'cython' */
 
 /* Module declarations from 'glue' */
-__PYX_EXTERN_C DL_EXPORT(PyObject) *CastBool(bool); /*proto*/
-__PYX_EXTERN_C DL_EXPORT(PyObject) *CastInt(int); /*proto*/
-__PYX_EXTERN_C DL_EXPORT(PyObject) *CastReal(real); /*proto*/
-__PYX_EXTERN_C DL_EXPORT(PyObject) *CastStr(std::string); /*proto*/
-__PYX_EXTERN_C DL_EXPORT(PyObject) *CastComplex(Complex); /*proto*/
-__PYX_EXTERN_C DL_EXPORT(bool) AsBool(PyObject *); /*proto*/
-__PYX_EXTERN_C DL_EXPORT(void) AsInt(PyObject *, int &); /*proto*/
-__PYX_EXTERN_C DL_EXPORT(real) AsReal(PyObject *, real &); /*proto*/
-__PYX_EXTERN_C DL_EXPORT(real) AsComplex(PyObject *, Complex &); /*proto*/
-__PYX_EXTERN_C DL_EXPORT(void) AsStr(PyObject *, std::string &); /*proto*/
 __PYX_EXTERN_C DL_EXPORT(PyObject) *NewDict(void); /*proto*/
-__PYX_EXTERN_C DL_EXPORT(void) DictSet(PyObject *, std::string, PyObject *); /*proto*/
-__PYX_EXTERN_C DL_EXPORT(PyObject) *DictGet(PyObject *, std::string); /*proto*/
+__PYX_EXTERN_C DL_EXPORT(void) DictSet_int(PyObject *, std::string, int); /*proto*/
+__PYX_EXTERN_C DL_EXPORT(void) DictGet_int(PyObject *, std::string, int *); /*proto*/
 __PYX_EXTERN_C DL_EXPORT(void) DictDel(PyObject *, std::string, PyObject *); /*proto*/
 __PYX_EXTERN_C DL_EXPORT(void) DictPrint(PyObject *); /*proto*/
-__PYX_EXTERN_C DL_EXPORT(PyObject) *__pyx_fuse_0Cast(bool); /*proto*/
-__PYX_EXTERN_C DL_EXPORT(PyObject) *__pyx_fuse_1Cast(int); /*proto*/
-__PYX_EXTERN_C DL_EXPORT(PyObject) *__pyx_fuse_2Cast(real); /*proto*/
-__PYX_EXTERN_C DL_EXPORT(PyObject) *__pyx_fuse_3Cast(std::string); /*proto*/
-__PYX_EXTERN_C DL_EXPORT(PyObject) *__pyx_fuse_4Cast(Complex); /*proto*/
-__PYX_EXTERN_C DL_EXPORT(void) __pyx_fuse_0As(PyObject *, bool *); /*proto*/
-__PYX_EXTERN_C DL_EXPORT(void) __pyx_fuse_1As(PyObject *, int *); /*proto*/
-__PYX_EXTERN_C DL_EXPORT(void) __pyx_fuse_2As(PyObject *, real *); /*proto*/
-__PYX_EXTERN_C DL_EXPORT(void) __pyx_fuse_3As(PyObject *, std::string *); /*proto*/
-__PYX_EXTERN_C DL_EXPORT(void) __pyx_fuse_4As(PyObject *, Complex *); /*proto*/
+static CYTHON_INLINE PyObject *__pyx_fuse_1__pyx_f_4glue_Cast(int); /*proto*/
+static CYTHON_INLINE void __pyx_fuse_1__pyx_f_4glue_GetAs(PyObject *, int *); /*proto*/
 static PyObject *__pyx_convert_string_to_py_(std::string const &); /*proto*/
 #define __Pyx_MODULE_NAME "glue"
 int __pyx_module_is_main_glue = 0;
@@ -698,9 +680,7 @@ static char __pyx_k_end[] = "end";
 static char __pyx_k_pop[] = "pop";
 static char __pyx_k_file[] = "file";
 static char __pyx_k_glue[] = "glue";
-static char __pyx_k_imag[] = "imag";
 static char __pyx_k_main[] = "__main__";
-static char __pyx_k_real[] = "real";
 static char __pyx_k_test[] = "__test__";
 static char __pyx_k_hello[] = "hello";
 static char __pyx_k_print[] = "print";
@@ -711,58 +691,56 @@ static PyObject *__pyx_n_s_end;
 static PyObject *__pyx_n_s_file;
 static PyObject *__pyx_n_s_glue;
 static PyObject *__pyx_n_s_hello;
-static PyObject *__pyx_n_s_imag;
 static PyObject *__pyx_n_s_main;
 static PyObject *__pyx_n_s_pop;
 static PyObject *__pyx_n_s_print;
-static PyObject *__pyx_n_s_real;
 static PyObject *__pyx_n_s_test;
 static PyObject *__pyx_n_s_world;
 static PyObject *__pyx_codeobj_;
 
-/* "glue.pyx":36
- *         result[0]=value
+/* "glue.pyx":22
+ *     Complex
  * 
- * cdef public object CastBool(bool value):             # <<<<<<<<<<<<<<
- *     return value
- * cdef public object CastInt(int value):
+ * cdef inline object Cast(generic value):             # <<<<<<<<<<<<<<
+ *     if generic is Complex:
+ *         return value.Re+1j*value.Im
  */
 
-PyObject *CastBool(bool __pyx_v_value) {
+static CYTHON_INLINE PyObject *__pyx_fuse_1__pyx_f_4glue_Cast(int __pyx_v_value) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("CastBool", 0);
+  __Pyx_RefNannySetupContext("__pyx_fuse_1Cast", 0);
 
-  /* "glue.pyx":37
+  /* "glue.pyx":26
+ *         return value.Re+1j*value.Im
+ *     else:
+ *         return value             # <<<<<<<<<<<<<<
+ * cdef inline void GetAs(object value, generic* result):
+ *     if generic is Complex:
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_value); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 26; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* "glue.pyx":22
+ *     Complex
  * 
- * cdef public object CastBool(bool value):
- *     return value             # <<<<<<<<<<<<<<
- * cdef public object CastInt(int value):
- *     return value
- */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyBool_FromLong(__pyx_v_value); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 37; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* "glue.pyx":36
- *         result[0]=value
- * 
- * cdef public object CastBool(bool value):             # <<<<<<<<<<<<<<
- *     return value
- * cdef public object CastInt(int value):
+ * cdef inline object Cast(generic value):             # <<<<<<<<<<<<<<
+ *     if generic is Complex:
+ *         return value.Re+1j*value.Im
  */
 
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("glue.CastBool", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("glue.Cast", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = 0;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -770,449 +748,50 @@ PyObject *CastBool(bool __pyx_v_value) {
   return __pyx_r;
 }
 
-/* "glue.pyx":38
- * cdef public object CastBool(bool value):
- *     return value
- * cdef public object CastInt(int value):             # <<<<<<<<<<<<<<
- *     return value
- * cdef public object CastReal(real value):
+/* "glue.pyx":27
+ *     else:
+ *         return value
+ * cdef inline void GetAs(object value, generic* result):             # <<<<<<<<<<<<<<
+ *     if generic is Complex:
+ *         result[0].Re=value.real
  */
 
-PyObject *CastInt(int __pyx_v_value) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  int __pyx_lineno = 0;
-  const char *__pyx_filename = NULL;
-  int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("CastInt", 0);
-
-  /* "glue.pyx":39
- *     return value
- * cdef public object CastInt(int value):
- *     return value             # <<<<<<<<<<<<<<
- * cdef public object CastReal(real value):
- *     return value
- */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_value); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 39; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* "glue.pyx":38
- * cdef public object CastBool(bool value):
- *     return value
- * cdef public object CastInt(int value):             # <<<<<<<<<<<<<<
- *     return value
- * cdef public object CastReal(real value):
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("glue.CastInt", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = 0;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "glue.pyx":40
- * cdef public object CastInt(int value):
- *     return value
- * cdef public object CastReal(real value):             # <<<<<<<<<<<<<<
- *     return value
- * cdef public object CastStr(string value):
- */
-
-PyObject *CastReal(real __pyx_v_value) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  int __pyx_lineno = 0;
-  const char *__pyx_filename = NULL;
-  int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("CastReal", 0);
-
-  /* "glue.pyx":41
- *     return value
- * cdef public object CastReal(real value):
- *     return value             # <<<<<<<<<<<<<<
- * cdef public object CastStr(string value):
- *     return value
- */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_value); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 41; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* "glue.pyx":40
- * cdef public object CastInt(int value):
- *     return value
- * cdef public object CastReal(real value):             # <<<<<<<<<<<<<<
- *     return value
- * cdef public object CastStr(string value):
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("glue.CastReal", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = 0;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "glue.pyx":42
- * cdef public object CastReal(real value):
- *     return value
- * cdef public object CastStr(string value):             # <<<<<<<<<<<<<<
- *     return value
- * cdef public object CastComplex(Complex value):
- */
-
-PyObject *CastStr(std::string __pyx_v_value) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  int __pyx_lineno = 0;
-  const char *__pyx_filename = NULL;
-  int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("CastStr", 0);
-
-  /* "glue.pyx":43
- *     return value
- * cdef public object CastStr(string value):
- *     return value             # <<<<<<<<<<<<<<
- * cdef public object CastComplex(Complex value):
- *     return value.Re+1j*value.Im
- */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_convert_string_to_py_(__pyx_v_value); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 43; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* "glue.pyx":42
- * cdef public object CastReal(real value):
- *     return value
- * cdef public object CastStr(string value):             # <<<<<<<<<<<<<<
- *     return value
- * cdef public object CastComplex(Complex value):
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("glue.CastStr", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = 0;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "glue.pyx":44
- * cdef public object CastStr(string value):
- *     return value
- * cdef public object CastComplex(Complex value):             # <<<<<<<<<<<<<<
- *     return value.Re+1j*value.Im
- * cdef public bool AsBool(value):
- */
-
-PyObject *CastComplex(Complex __pyx_v_value) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  __pyx_t_double_complex __pyx_t_1;
-  PyObject *__pyx_t_2 = NULL;
-  int __pyx_lineno = 0;
-  const char *__pyx_filename = NULL;
-  int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("CastComplex", 0);
-
-  /* "glue.pyx":45
- *     return value
- * cdef public object CastComplex(Complex value):
- *     return value.Re+1j*value.Im             # <<<<<<<<<<<<<<
- * cdef public bool AsBool(value):
- *     return value
- */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_c_sum(__pyx_t_double_complex_from_parts(__pyx_v_value.Re, 0), __Pyx_c_prod(__pyx_t_double_complex_from_parts(0, 1.0), __pyx_t_double_complex_from_parts(__pyx_v_value.Im, 0)));
-  __pyx_t_2 = __pyx_PyComplex_FromComplex(__pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 45; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_r = __pyx_t_2;
-  __pyx_t_2 = 0;
-  goto __pyx_L0;
-
-  /* "glue.pyx":44
- * cdef public object CastStr(string value):
- *     return value
- * cdef public object CastComplex(Complex value):             # <<<<<<<<<<<<<<
- *     return value.Re+1j*value.Im
- * cdef public bool AsBool(value):
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_AddTraceback("glue.CastComplex", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = 0;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "glue.pyx":46
- * cdef public object CastComplex(Complex value):
- *     return value.Re+1j*value.Im
- * cdef public bool AsBool(value):             # <<<<<<<<<<<<<<
- *     return value
- * cdef public void AsInt(object value, int& result):
- */
-
-bool AsBool(PyObject *__pyx_v_value) {
-  bool __pyx_r;
-  __Pyx_RefNannyDeclarations
-  bool __pyx_t_1;
-  int __pyx_lineno = 0;
-  const char *__pyx_filename = NULL;
-  int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("AsBool", 0);
-
-  /* "glue.pyx":47
- *     return value.Re+1j*value.Im
- * cdef public bool AsBool(value):
- *     return value             # <<<<<<<<<<<<<<
- * cdef public void AsInt(object value, int& result):
- *     (&result)[0]=value
- */
-  __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_v_value); if (unlikely((__pyx_t_1 == (bool)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 47; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_r = __pyx_t_1;
-  goto __pyx_L0;
-
-  /* "glue.pyx":46
- * cdef public object CastComplex(Complex value):
- *     return value.Re+1j*value.Im
- * cdef public bool AsBool(value):             # <<<<<<<<<<<<<<
- *     return value
- * cdef public void AsInt(object value, int& result):
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_WriteUnraisable("glue.AsBool", __pyx_clineno, __pyx_lineno, __pyx_filename, 0);
-  __pyx_r = 0;
-  __pyx_L0:;
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "glue.pyx":48
- * cdef public bool AsBool(value):
- *     return value
- * cdef public void AsInt(object value, int& result):             # <<<<<<<<<<<<<<
- *     (&result)[0]=value
- * cdef public real AsReal(object value, real& result):
- */
-
-void AsInt(PyObject *__pyx_v_value, int &__pyx_v_result) {
+static CYTHON_INLINE void __pyx_fuse_1__pyx_f_4glue_GetAs(PyObject *__pyx_v_value, int *__pyx_v_result) {
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("AsInt", 0);
+  __Pyx_RefNannySetupContext("__pyx_fuse_1GetAs", 0);
 
-  /* "glue.pyx":49
- *     return value
- * cdef public void AsInt(object value, int& result):
- *     (&result)[0]=value             # <<<<<<<<<<<<<<
- * cdef public real AsReal(object value, real& result):
- *     (&result)[0]=value
- */
-  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_value); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 49; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  ((&__pyx_v_result)[0]) = __pyx_t_1;
-
-  /* "glue.pyx":48
- * cdef public bool AsBool(value):
- *     return value
- * cdef public void AsInt(object value, int& result):             # <<<<<<<<<<<<<<
- *     (&result)[0]=value
- * cdef public real AsReal(object value, real& result):
- */
-
-  /* function exit code */
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __Pyx_WriteUnraisable("glue.AsInt", __pyx_clineno, __pyx_lineno, __pyx_filename, 0);
-  __pyx_L0:;
-  __Pyx_RefNannyFinishContext();
-}
-
-/* "glue.pyx":50
- * cdef public void AsInt(object value, int& result):
- *     (&result)[0]=value
- * cdef public real AsReal(object value, real& result):             # <<<<<<<<<<<<<<
- *     (&result)[0]=value
- * cdef public real AsComplex(object value, Complex& result):
- */
-
-real AsReal(PyObject *__pyx_v_value, real &__pyx_v_result) {
-  real __pyx_r;
-  __Pyx_RefNannyDeclarations
-  real __pyx_t_1;
-  int __pyx_lineno = 0;
-  const char *__pyx_filename = NULL;
-  int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("AsReal", 0);
-
-  /* "glue.pyx":51
- *     (&result)[0]=value
- * cdef public real AsReal(object value, real& result):
- *     (&result)[0]=value             # <<<<<<<<<<<<<<
- * cdef public real AsComplex(object value, Complex& result):
- *     result.Re=value.real
- */
-  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_v_value); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 51; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  ((&__pyx_v_result)[0]) = __pyx_t_1;
-
-  /* "glue.pyx":50
- * cdef public void AsInt(object value, int& result):
- *     (&result)[0]=value
- * cdef public real AsReal(object value, real& result):             # <<<<<<<<<<<<<<
- *     (&result)[0]=value
- * cdef public real AsComplex(object value, Complex& result):
- */
-
-  /* function exit code */
-  __pyx_r = 0;
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __Pyx_WriteUnraisable("glue.AsReal", __pyx_clineno, __pyx_lineno, __pyx_filename, 0);
-  __pyx_r = 0;
-  __pyx_L0:;
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "glue.pyx":52
- * cdef public real AsReal(object value, real& result):
- *     (&result)[0]=value
- * cdef public real AsComplex(object value, Complex& result):             # <<<<<<<<<<<<<<
- *     result.Re=value.real
- *     result.Im=value.imag
- */
-
-real AsComplex(PyObject *__pyx_v_value, Complex &__pyx_v_result) {
-  real __pyx_r;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  real __pyx_t_2;
-  int __pyx_lineno = 0;
-  const char *__pyx_filename = NULL;
-  int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("AsComplex", 0);
-
-  /* "glue.pyx":53
- *     (&result)[0]=value
- * cdef public real AsComplex(object value, Complex& result):
- *     result.Re=value.real             # <<<<<<<<<<<<<<
- *     result.Im=value.imag
- * cdef public void AsStr(value, string& result):
- */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_value, __pyx_n_s_real); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 53; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 53; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_v_result.Re = __pyx_t_2;
-
-  /* "glue.pyx":54
- * cdef public real AsComplex(object value, Complex& result):
- *     result.Re=value.real
- *     result.Im=value.imag             # <<<<<<<<<<<<<<
- * cdef public void AsStr(value, string& result):
- *     result.append(<char *>value)
- */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_value, __pyx_n_s_imag); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 54; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 54; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_v_result.Im = __pyx_t_2;
-
-  /* "glue.pyx":52
- * cdef public real AsReal(object value, real& result):
- *     (&result)[0]=value
- * cdef public real AsComplex(object value, Complex& result):             # <<<<<<<<<<<<<<
- *     result.Re=value.real
- *     result.Im=value.imag
- */
-
-  /* function exit code */
-  __pyx_r = 0;
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_WriteUnraisable("glue.AsComplex", __pyx_clineno, __pyx_lineno, __pyx_filename, 0);
-  __pyx_r = 0;
-  __pyx_L0:;
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "glue.pyx":55
- *     result.Re=value.real
- *     result.Im=value.imag
- * cdef public void AsStr(value, string& result):             # <<<<<<<<<<<<<<
- *     result.append(<char *>value)
- * 
- */
-
-void AsStr(PyObject *__pyx_v_value, std::string &__pyx_v_result) {
-  __Pyx_RefNannyDeclarations
-  char *__pyx_t_1;
-  int __pyx_lineno = 0;
-  const char *__pyx_filename = NULL;
-  int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("AsStr", 0);
-
-  /* "glue.pyx":56
- *     result.Im=value.imag
- * cdef public void AsStr(value, string& result):
- *     result.append(<char *>value)             # <<<<<<<<<<<<<<
+  /* "glue.pyx":34
+ *         result[0].append(<char *>value)
+ *     else:
+ *         result[0]=value             # <<<<<<<<<<<<<<
  * 
  * cdef public NewDict():
  */
-  __pyx_t_1 = __Pyx_PyObject_AsString(__pyx_v_value); if (unlikely((!__pyx_t_1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 56; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_v_result.append(((char *)__pyx_t_1));
+  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_value); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  (__pyx_v_result[0]) = __pyx_t_1;
 
-  /* "glue.pyx":55
- *     result.Re=value.real
- *     result.Im=value.imag
- * cdef public void AsStr(value, string& result):             # <<<<<<<<<<<<<<
- *     result.append(<char *>value)
- * 
+  /* "glue.pyx":27
+ *     else:
+ *         return value
+ * cdef inline void GetAs(object value, generic* result):             # <<<<<<<<<<<<<<
+ *     if generic is Complex:
+ *         result[0].Re=value.real
  */
 
   /* function exit code */
   goto __pyx_L0;
   __pyx_L1_error:;
-  __Pyx_WriteUnraisable("glue.AsStr", __pyx_clineno, __pyx_lineno, __pyx_filename, 0);
+  __Pyx_WriteUnraisable("glue.GetAs", __pyx_clineno, __pyx_lineno, __pyx_filename, 0);
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
 }
 
-/* "glue.pyx":58
- *     result.append(<char *>value)
+/* "glue.pyx":36
+ *         result[0]=value
  * 
  * cdef public NewDict():             # <<<<<<<<<<<<<<
  *     node={}
@@ -1229,32 +808,32 @@ PyObject *NewDict(void) {
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("NewDict", 0);
 
-  /* "glue.pyx":59
+  /* "glue.pyx":37
  * 
  * cdef public NewDict():
  *     node={}             # <<<<<<<<<<<<<<
  *     return node
  * 
  */
-  __pyx_t_1 = PyDict_New(); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 59; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyDict_New(); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 37; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_node = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "glue.pyx":60
+  /* "glue.pyx":38
  * cdef public NewDict():
  *     node={}
  *     return node             # <<<<<<<<<<<<<<
  * 
- * cdef public void DictSet(node, string key, value):
+ * cdef public void DictSet_int(node, string key, int value):
  */
   __Pyx_XDECREF(__pyx_r);
   __Pyx_INCREF(__pyx_v_node);
   __pyx_r = __pyx_v_node;
   goto __pyx_L0;
 
-  /* "glue.pyx":58
- *     result.append(<char *>value)
+  /* "glue.pyx":36
+ *         result[0]=value
  * 
  * cdef public NewDict():             # <<<<<<<<<<<<<<
  *     node={}
@@ -1273,108 +852,108 @@ PyObject *NewDict(void) {
   return __pyx_r;
 }
 
-/* "glue.pyx":62
+/* "glue.pyx":40
  *     return node
  * 
- * cdef public void DictSet(node, string key, value):             # <<<<<<<<<<<<<<
- *     node[key]=value
+ * cdef public void DictSet_int(node, string key, int value):             # <<<<<<<<<<<<<<
+ *     node[key]=Cast(value)
  * 
  */
 
-void DictSet(PyObject *__pyx_v_node, std::string __pyx_v_key, PyObject *__pyx_v_value) {
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  int __pyx_lineno = 0;
-  const char *__pyx_filename = NULL;
-  int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("DictSet", 0);
-
-  /* "glue.pyx":63
- * 
- * cdef public void DictSet(node, string key, value):
- *     node[key]=value             # <<<<<<<<<<<<<<
- * 
- * cdef public DictGet(node, string key) except +:
- */
-  __pyx_t_1 = __pyx_convert_string_to_py_(__pyx_v_key); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 63; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_1);
-  if (unlikely(PyObject_SetItem(__pyx_v_node, __pyx_t_1, __pyx_v_value) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 63; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "glue.pyx":62
- *     return node
- * 
- * cdef public void DictSet(node, string key, value):             # <<<<<<<<<<<<<<
- *     node[key]=value
- * 
- */
-
-  /* function exit code */
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_WriteUnraisable("glue.DictSet", __pyx_clineno, __pyx_lineno, __pyx_filename, 0);
-  __pyx_L0:;
-  __Pyx_RefNannyFinishContext();
-}
-
-/* "glue.pyx":65
- *     node[key]=value
- * 
- * cdef public DictGet(node, string key) except +:             # <<<<<<<<<<<<<<
- *     return node[key]
- * 
- */
-
-PyObject *DictGet(PyObject *__pyx_v_node, std::string __pyx_v_key) {
-  PyObject *__pyx_r = NULL;
+void DictSet_int(PyObject *__pyx_v_node, std::string __pyx_v_key, int __pyx_v_value) {
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   PyObject *__pyx_t_2 = NULL;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("DictGet", 0);
+  __Pyx_RefNannySetupContext("DictSet_int", 0);
 
-  /* "glue.pyx":66
+  /* "glue.pyx":41
  * 
- * cdef public DictGet(node, string key) except +:
- *     return node[key]             # <<<<<<<<<<<<<<
+ * cdef public void DictSet_int(node, string key, int value):
+ *     node[key]=Cast(value)             # <<<<<<<<<<<<<<
  * 
- * cdef public void DictDel(node, string key, value):
+ * cdef public void DictGet_int(node, string key, int* result) except +:
  */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_convert_string_to_py_(__pyx_v_key); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 66; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __pyx_fuse_1__pyx_f_4glue_Cast(__pyx_v_value); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 41; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyObject_GetItem(__pyx_v_node, __pyx_t_1); if (unlikely(__pyx_t_2 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 66; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+  __pyx_t_2 = __pyx_convert_string_to_py_(__pyx_v_key); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 41; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
+  if (unlikely(PyObject_SetItem(__pyx_v_node, __pyx_t_2, __pyx_t_1) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 41; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_r = __pyx_t_2;
-  __pyx_t_2 = 0;
-  goto __pyx_L0;
 
-  /* "glue.pyx":65
- *     node[key]=value
+  /* "glue.pyx":40
+ *     return node
  * 
- * cdef public DictGet(node, string key) except +:             # <<<<<<<<<<<<<<
- *     return node[key]
+ * cdef public void DictSet_int(node, string key, int value):             # <<<<<<<<<<<<<<
+ *     node[key]=Cast(value)
  * 
  */
 
   /* function exit code */
+  goto __pyx_L0;
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_AddTraceback("glue.DictGet", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = 0;
+  __Pyx_WriteUnraisable("glue.DictSet_int", __pyx_clineno, __pyx_lineno, __pyx_filename, 0);
   __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
-  return __pyx_r;
 }
 
-/* "glue.pyx":68
- *     return node[key]
+/* "glue.pyx":43
+ *     node[key]=Cast(value)
+ * 
+ * cdef public void DictGet_int(node, string key, int* result) except +:             # <<<<<<<<<<<<<<
+ *     GetAs(node[key], result)
+ * 
+ */
+
+void DictGet_int(PyObject *__pyx_v_node, std::string __pyx_v_key, int *__pyx_v_result) {
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("DictGet_int", 0);
+
+  /* "glue.pyx":44
+ * 
+ * cdef public void DictGet_int(node, string key, int* result) except +:
+ *     GetAs(node[key], result)             # <<<<<<<<<<<<<<
+ * 
+ * cdef public void DictDel(node, string key, value):
+ */
+  __pyx_t_1 = __pyx_convert_string_to_py_(__pyx_v_key); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 44; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = PyObject_GetItem(__pyx_v_node, __pyx_t_1); if (unlikely(__pyx_t_2 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 44; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_fuse_1__pyx_f_4glue_GetAs(__pyx_t_2, __pyx_v_result);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+  /* "glue.pyx":43
+ *     node[key]=Cast(value)
+ * 
+ * cdef public void DictGet_int(node, string key, int* result) except +:             # <<<<<<<<<<<<<<
+ *     GetAs(node[key], result)
+ * 
+ */
+
+  /* function exit code */
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_AddTraceback("glue.DictGet_int", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+}
+
+/* "glue.pyx":46
+ *     GetAs(node[key], result)
  * 
  * cdef public void DictDel(node, string key, value):             # <<<<<<<<<<<<<<
  *     node.pop(key, None)
@@ -1394,16 +973,16 @@ void DictDel(PyObject *__pyx_v_node, std::string __pyx_v_key, CYTHON_UNUSED PyOb
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("DictDel", 0);
 
-  /* "glue.pyx":69
+  /* "glue.pyx":47
  * 
  * cdef public void DictDel(node, string key, value):
  *     node.pop(key, None)             # <<<<<<<<<<<<<<
  * 
  * cdef public void DictPrint(node):
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_node, __pyx_n_s_pop); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 69; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_node, __pyx_n_s_pop); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 47; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __pyx_convert_string_to_py_(__pyx_v_key); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 69; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = __pyx_convert_string_to_py_(__pyx_v_key); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 47; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_4 = NULL;
   __pyx_t_5 = 0;
@@ -1417,7 +996,7 @@ void DictDel(PyObject *__pyx_v_node, std::string __pyx_v_key, CYTHON_UNUSED PyOb
       __pyx_t_5 = 1;
     }
   }
-  __pyx_t_6 = PyTuple_New(2+__pyx_t_5); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 69; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_6 = PyTuple_New(2+__pyx_t_5); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 47; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_6);
   if (__pyx_t_4) {
     PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_4); __Pyx_GIVEREF(__pyx_t_4); __pyx_t_4 = NULL;
@@ -1428,14 +1007,14 @@ void DictDel(PyObject *__pyx_v_node, std::string __pyx_v_key, CYTHON_UNUSED PyOb
   PyTuple_SET_ITEM(__pyx_t_6, 1+__pyx_t_5, Py_None);
   __Pyx_GIVEREF(Py_None);
   __pyx_t_3 = 0;
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_6, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 69; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_6, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 47; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "glue.pyx":68
- *     return node[key]
+  /* "glue.pyx":46
+ *     GetAs(node[key], result)
  * 
  * cdef public void DictDel(node, string key, value):             # <<<<<<<<<<<<<<
  *     node.pop(key, None)
@@ -1455,7 +1034,7 @@ void DictDel(PyObject *__pyx_v_node, std::string __pyx_v_key, CYTHON_UNUSED PyOb
   __Pyx_RefNannyFinishContext();
 }
 
-/* "glue.pyx":71
+/* "glue.pyx":49
  *     node.pop(key, None)
  * 
  * cdef public void DictPrint(node):             # <<<<<<<<<<<<<<
@@ -1470,16 +1049,16 @@ void DictPrint(PyObject *__pyx_v_node) {
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("DictPrint", 0);
 
-  /* "glue.pyx":72
+  /* "glue.pyx":50
  * 
  * cdef public void DictPrint(node):
  *     print node             # <<<<<<<<<<<<<<
  * 
  * def hello():
  */
-  if (__Pyx_PrintOne(0, __pyx_v_node) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 72; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (__Pyx_PrintOne(0, __pyx_v_node) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 50; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-  /* "glue.pyx":71
+  /* "glue.pyx":49
  *     node.pop(key, None)
  * 
  * cdef public void DictPrint(node):             # <<<<<<<<<<<<<<
@@ -1495,7 +1074,7 @@ void DictPrint(PyObject *__pyx_v_node) {
   __Pyx_RefNannyFinishContext();
 }
 
-/* "glue.pyx":74
+/* "glue.pyx":52
  *     print node
  * 
  * def hello():             # <<<<<<<<<<<<<<
@@ -1525,16 +1104,16 @@ static PyObject *__pyx_pf_4glue_hello(CYTHON_UNUSED PyObject *__pyx_self) {
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("hello", 0);
 
-  /* "glue.pyx":75
+  /* "glue.pyx":53
  * 
  * def hello():
  *     print "hello"             # <<<<<<<<<<<<<<
  * 
  * cdef void world():
  */
-  if (__Pyx_PrintOne(0, __pyx_n_s_hello) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 75; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (__Pyx_PrintOne(0, __pyx_n_s_hello) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 53; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-  /* "glue.pyx":74
+  /* "glue.pyx":52
  *     print node
  * 
  * def hello():             # <<<<<<<<<<<<<<
@@ -1554,7 +1133,7 @@ static PyObject *__pyx_pf_4glue_hello(CYTHON_UNUSED PyObject *__pyx_self) {
   return __pyx_r;
 }
 
-/* "glue.pyx":77
+/* "glue.pyx":55
  *     print "hello"
  * 
  * cdef void world():             # <<<<<<<<<<<<<<
@@ -1569,15 +1148,15 @@ static void __pyx_f_4glue_world(void) {
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("world", 0);
 
-  /* "glue.pyx":78
+  /* "glue.pyx":56
  * 
  * cdef void world():
  *     print "world"             # <<<<<<<<<<<<<<
  * 
  */
-  if (__Pyx_PrintOne(0, __pyx_n_s_world) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 78; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (__Pyx_PrintOne(0, __pyx_n_s_world) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 56; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-  /* "glue.pyx":77
+  /* "glue.pyx":55
  *     print "hello"
  * 
  * cdef void world():             # <<<<<<<<<<<<<<
@@ -1671,11 +1250,9 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_file, __pyx_k_file, sizeof(__pyx_k_file), 0, 0, 1, 1},
   {&__pyx_n_s_glue, __pyx_k_glue, sizeof(__pyx_k_glue), 0, 0, 1, 1},
   {&__pyx_n_s_hello, __pyx_k_hello, sizeof(__pyx_k_hello), 0, 0, 1, 1},
-  {&__pyx_n_s_imag, __pyx_k_imag, sizeof(__pyx_k_imag), 0, 0, 1, 1},
   {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
   {&__pyx_n_s_pop, __pyx_k_pop, sizeof(__pyx_k_pop), 0, 0, 1, 1},
   {&__pyx_n_s_print, __pyx_k_print, sizeof(__pyx_k_print), 0, 0, 1, 1},
-  {&__pyx_n_s_real, __pyx_k_real, sizeof(__pyx_k_real), 0, 0, 1, 1},
   {&__pyx_n_s_test, __pyx_k_test, sizeof(__pyx_k_test), 0, 0, 1, 1},
   {&__pyx_n_s_world, __pyx_k_world, sizeof(__pyx_k_world), 0, 0, 1, 1},
   {0, 0, 0, 0, 0, 0, 0}
@@ -1688,14 +1265,14 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "glue.pyx":74
+  /* "glue.pyx":52
  *     print node
  * 
  * def hello():             # <<<<<<<<<<<<<<
  *     print "hello"
  * 
  */
-  __pyx_codeobj_ = (PyObject*)__Pyx_PyCode_New(0, 0, 0, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_kchen_project_Feynman_Sim, __pyx_n_s_hello, 74, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj_)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 74; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_codeobj_ = (PyObject*)__Pyx_PyCode_New(0, 0, 0, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_kchen_project_Feynman_Sim, __pyx_n_s_hello, 52, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj_)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 52; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -1795,16 +1372,16 @@ PyMODINIT_FUNC PyInit_glue(void)
   /*--- Function import code ---*/
   /*--- Execution code ---*/
 
-  /* "glue.pyx":74
+  /* "glue.pyx":52
  *     print node
  * 
  * def hello():             # <<<<<<<<<<<<<<
  *     print "hello"
  * 
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_4glue_1hello, NULL, __pyx_n_s_glue); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 74; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_4glue_1hello, NULL, __pyx_n_s_glue); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 52; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_hello, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 74; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_hello, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 52; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "glue.pyx":1
