@@ -18,175 +18,244 @@
  * 
  */
 
+#include "utility/utility.h"
+#include "utility/complex.h"
+#include <stdio.h>
 #include <algorithm>
+#include <fstream>
 #include "pywrapper.h"
 
-using std::runtime_error;
 using std::string;
 
 namespace Python {
-Object::Object() {
-    
+Object::Object()
+{
 }
 
-Object::Object(PyObject *obj) : py_obj(make_pyshared(obj)) {
-    
+Object::Object(PyObject* obj)
+    : py_obj(make_pyshared(obj))
+{
 }
 
-Python::Object::pyshared_ptr Object::make_pyshared(PyObject *obj) {
-    return pyshared_ptr(obj, [](PyObject *obj) { Py_XDECREF(obj); });
+void Object::Print()
+{
+    PyObject_Print(py_obj.get(), stdout, 0);
 }
 
-Object Object::from_script(const string &script_path) {
+std::string Object::PrettyString()
+{
+    pyunique_ptr str(PyObject_Repr(py_obj.get()));
+    MakeSureNoError();
+    return PyString_AsString(str.get());
+}
+
+Python::Object::pyshared_ptr Object::make_pyshared(PyObject* obj)
+{
+    return pyshared_ptr(obj, [](PyObject* obj) { Py_XDECREF(obj); });
+}
+
+void Object::reset_pyshared(PyObject* obj)
+{
+    py_obj.reset(obj, [](PyObject* obj) { Py_XDECREF(obj); });
+}
+
+void Object::EvalScript(const std::string& script)
+{
+    pyunique_ptr main(PyImport_AddModule("__main__"));
+    PyObject* global = PyModule_GetDict(main.get()); //borrowed reference
+    pyunique_ptr local(PyDict_New());
+    PyObject* result = PyRun_String(script.c_str(), Py_eval_input,
+                                    global, local.get());
+    MakeSureNoError();
+    reset_pyshared(result);
+}
+
+void Object::LoadModule(const string& script_path)
+{
     char arr[] = "path";
-    PyObject *path(PySys_GetObject(arr));
+    PyObject* path(PySys_GetObject(arr));
     string base_path("."), file_path;
     size_t last_slash(script_path.rfind("/"));
-    if(last_slash != string::npos) {
-        if(last_slash >= script_path.size() - 2)
-            throw runtime_error("Invalid script path");
+    if (last_slash != string::npos) {
+        if (last_slash >= script_path.size() - 2)
+            ABORT("Invalid script path");
         base_path = script_path.substr(0, last_slash);
         file_path = script_path.substr(last_slash + 1);
     }
     else
         file_path = script_path;
-    if(file_path.rfind(".py") == file_path.size() - 3)
+    if (file_path.rfind(".py") == file_path.size() - 3)
         file_path = file_path.substr(0, file_path.size() - 3);
     pyunique_ptr pwd(PyString_FromString(base_path.c_str()));
-    
+
     PyList_Append(path, pwd.get());
     /* We don't need that string value anymore, so deref it */
-    PyObject *py_ptr(PyImport_ImportModule(file_path.c_str()));
-    if(!py_ptr) {
-        print_error();
-        throw runtime_error("Failed to load script"); 
-    }
-    return {py_ptr};
+    reset_pyshared(PyImport_ImportModule(file_path.c_str()));
+    MakeSureNoError();
 }
 
-PyObject *Object::load_function(const std::string &name) {
-    PyObject *obj(PyObject_GetAttrString(py_obj.get(), name.c_str()));
-    if(!obj)
-        throw std::runtime_error("Failed to find function");
+PyObject* Object::load_function(const std::string& name)
+{
+    PyObject* obj(PyObject_GetAttrString(py_obj.get(), name.c_str()));
+    MakeSureNoError();
     return obj;
 }
 
-Object Object::call_function(const std::string &name) {
+Object Object::CallFunction(const std::string& name)
+{
     pyunique_ptr func(load_function(name));
-    PyObject *ret(PyObject_CallObject(func.get(), 0));
-    if(!ret)
-        throw std::runtime_error("Failed to call function");
-    return {ret};
+    PyObject* ret(PyObject_CallObject(func.get(), 0));
+    MakeSureNoError();
+    return { ret };
 }
 
-Object Object::get_attr(const std::string &name) {
-    PyObject *obj(PyObject_GetAttrString(py_obj.get(), name.c_str()));
-    if(!obj)
-        throw std::runtime_error("Unable to find attribute '" + name + '\'');
-    return {obj};
+Object Object::GetAttr(const std::string& name)
+{
+    PyObject* obj(PyObject_GetAttrString(py_obj.get(), name.c_str()));
+    MakeSureNoError();
+    return { obj };
 }
 
-bool Object::has_attr(const std::string &name) {
+bool Object::HasAttr(const std::string& name)
+{
     try {
-        get_attr(name);
+        GetAttr(name);
         return true;
-    } catch(std::runtime_error&) {
+    }
+    catch (ERRORCODE e) {
         return false;
     }
 }
 
-void initialize() {
+void Initialize()
+{
     Py_Initialize();
 }
 
-void finalize() {
+void Finalize()
+{
     Py_Finalize();
 }
 
-void clear_error() {
+void ClearError()
+{
     PyErr_Clear();
 }
 
-void print_error() {
+void PrintError()
+{
     PyErr_Print();
 }
 
-void print_object(PyObject *obj) {
+void MakeSureNoError()
+{
+    if (PyErr_Occurred()) {
+        PrintError();
+        ABORT("Python fatal error!");
+    }
+}
+
+void PrintPyObject(PyObject* obj)
+{
     PyObject_Print(obj, stdout, 0);
 }
 
 // Allocation methods
 
-PyObject *alloc_pyobject(const std::string &str) {
+PyObject* CastToPyObject(const std::string& str)
+{
     return PyString_FromString(str.c_str());
 }
 
-PyObject *alloc_pyobject(const std::vector<char> &val, size_t sz) {
+PyObject* CastToPyObject(const std::vector<char>& val, size_t sz)
+{
     return PyByteArray_FromStringAndSize(val.data(), sz);
 }
 
-PyObject *alloc_pyobject(const std::vector<char> &val) {
-    return alloc_pyobject(val, val.size());
+PyObject* CastToPyObject(const std::vector<char>& val)
+{
+    return CastToPyObject(val, val.size());
 }
 
-PyObject *alloc_pyobject(const char *cstr) {
+PyObject* CastToPyObject(const char* cstr)
+{
     return PyString_FromString(cstr);
 }
 
-PyObject *alloc_pyobject(bool value) {
+PyObject* CastToPyObject(bool value)
+{
     return PyBool_FromLong(value);
 }
 
-PyObject *alloc_pyobject(double num) {
+PyObject* CastToPyObject(real num)
+{
     return PyFloat_FromDouble(num);
 }
 
-bool is_py_int(PyObject *obj) {
+PyObject* CastToPyObject(const Complex& num)
+{
+    return PyComplex_FromDoubles(num.Re, num.Im);
+}
+
+bool is_py_int(PyObject* obj)
+{
     return PyInt_Check(obj);
 }
 
-bool is_py_float(PyObject *obj) {
+bool is_py_float(PyObject* obj)
+{
     return PyFloat_Check(obj);
 }
 
-bool convert(PyObject *obj, std::string &val) {
-    if(!PyString_Check(obj))
+bool Convert(PyObject* obj, std::string& val)
+{
+    if (!PyString_Check(obj))
         return false;
     val = PyString_AsString(obj);
     return true;
 }
 
-bool convert(PyObject *obj, std::vector<char> &val) {
-    if(!PyByteArray_Check(obj))
+bool Convert(PyObject* obj, std::vector<char>& val)
+{
+    if (!PyByteArray_Check(obj))
         return false;
-    if(val.size() < (size_t)PyByteArray_Size(obj))
+    if (val.size() < (size_t)PyByteArray_Size(obj))
         val.resize(PyByteArray_Size(obj));
-    std::copy(PyByteArray_AsString(obj), 
-      PyByteArray_AsString(obj) + PyByteArray_Size(obj), 
-      val.begin());
+    std::copy(PyByteArray_AsString(obj),
+              PyByteArray_AsString(obj) + PyByteArray_Size(obj),
+              val.begin());
     return true;
 }
 
-/*bool convert(PyObject *obj, Py_ssize_t &val) {
-    return generic_convert<Py_ssize_t>(obj, is_py_int, PyInt_AsSsize_t, val);
+/*bool Convert(PyObject *obj, Py_ssize_t &val) {
+    return GenericConvert<Py_ssize_t>(obj, is_py_int, PyInt_AsSsize_t, val);
 }*/
-bool convert(PyObject *obj, bool &value) {
-    if(obj == Py_False)
+bool Convert(PyObject* obj, bool& value)
+{
+    if (obj == Py_False)
         value = false;
-    else if(obj == Py_True)
+    else if (obj == Py_True)
         value = true;
     else
         return false;
     return true;
 }
 
-bool convert(PyObject *obj, double &val) {
-    return generic_convert<double>(obj, is_py_float, PyFloat_AsDouble, val);
+bool Convert(PyObject* obj, real& val)
+{
+    return GenericConvert<real>(obj, is_py_float, PyFloat_AsDouble, val);
 }
 
-/*bool convert(PyObject *obj, size_t &val) {
-    return generic_convert<size_t>(obj, is_py_int, PyInt_AsLong, val);
+/*bool Convert(PyObject *obj, size_t &val) {
+    return GenericConvert<size_t>(obj, is_py_int, PyInt_AsLong, val);
 }*/
 
-
+bool Convert(PyObject* obj, Complex& val)
+{
+    if (!PyComplex_Check(obj))
+        return false;
+    val = Complex(PyComplex_RealAsDouble(obj),
+                  PyComplex_ImagAsDouble(obj));
+    return true;
+}
 }

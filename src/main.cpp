@@ -12,14 +12,15 @@
 #include "test.h"
 #include "environment/environment.h"
 #include "job/job.h"
-#include <Python/Python.h>
+#include "utility/pyglue/pywrapper.h"
+
 using namespace std;
 using namespace para;
 
 void MonteCarlo(const Job&);
 int main(int argc, const char* argv[])
 {
-    Py_Initialize();
+    Python::Initialize();
     RunTest();
     return 0;
     string InputFile = "infile/_in_MC_2";
@@ -31,7 +32,7 @@ int main(int argc, const char* argv[])
     else if (Job.Type == "DYSON") {
         cout << "Not Defined" << endl;
     }
-    Py_Finalize();
+    Python::Finalize();
     return 0;
 }
 
