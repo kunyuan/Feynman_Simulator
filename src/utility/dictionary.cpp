@@ -9,7 +9,6 @@
 #include "dictionary.h"
 #include "utility/complex.h"
 #include <stdio.h>
-#include "glue.h"
 #include <initializer_list>
 #include <iostream>
 #include <fstream>

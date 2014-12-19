@@ -15,8 +15,7 @@
 #include "lattice/lattice.h"
 #include "estimator/estimator.h"
 #include "module/weight/component.h"
-#include "utility/json/json.h"
-#include "utility/glue/dictionary.h"
+#include "utility/dictionary.h"
 
 using namespace std;
 
@@ -43,7 +42,6 @@ int RunTest()
     //    TEST(TestFFT);
 
     //    Testcnpy();
-    TestJson();
     TestDictionary();
 
     return 0;
