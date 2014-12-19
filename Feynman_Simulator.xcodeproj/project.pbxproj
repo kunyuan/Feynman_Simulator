@@ -40,8 +40,8 @@
 		843DBB6E1A4129AE009DB448 /* jsoncpp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 843DBB6D1A4129AE009DB448 /* jsoncpp.cpp */; };
 		843DBB701A412C1E009DB448 /* json_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 843DBB6F1A412C1E009DB448 /* json_test.cpp */; };
 		843DBB781A427A60009DB448 /* libpython2.7.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 843DBB771A427A60009DB448 /* libpython2.7.dylib */; };
-		843DBB7D1A427D93009DB448 /* serialization.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 843DBB7C1A427D93009DB448 /* serialization.cpp */; };
-		843DBB801A428143009DB448 /* serialization_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 843DBB7F1A428143009DB448 /* serialization_test.cpp */; };
+		843DBB7D1A427D93009DB448 /* dictionary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 843DBB7C1A427D93009DB448 /* dictionary.cpp */; };
+		843DBB801A428143009DB448 /* dictionary_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 843DBB7F1A428143009DB448 /* dictionary_test.cpp */; };
 		843DBB861A4356A9009DB448 /* glue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 843DBB851A4356A9009DB448 /* glue.cpp */; };
 		84519AED19F2C57A007CB81B /* envMonteCarlo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84519AEC19F2C57A007CB81B /* envMonteCarlo.cpp */; };
 		84519AF219F33F22007CB81B /* complex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84519AF019F33F22007CB81B /* complex.cpp */; };
@@ -147,12 +147,11 @@
 		843DBB6D1A4129AE009DB448 /* jsoncpp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jsoncpp.cpp; sourceTree = "<group>"; };
 		843DBB6F1A412C1E009DB448 /* json_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = json_test.cpp; sourceTree = "<group>"; };
 		843DBB741A427A2A009DB448 /* glue.pyx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = glue.pyx; sourceTree = "<group>"; };
-		843DBB751A427A2A009DB448 /* setup.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = setup.py; sourceTree = "<group>"; };
 		843DBB771A427A60009DB448 /* libpython2.7.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpython2.7.dylib; path = usr/lib/python2.7/config/libpython2.7.dylib; sourceTree = SDKROOT; };
-		843DBB7A1A427BBF009DB448 /* serialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = serialization.h; sourceTree = "<group>"; };
-		843DBB7C1A427D93009DB448 /* serialization.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = serialization.cpp; sourceTree = "<group>"; };
+		843DBB7A1A427BBF009DB448 /* dictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dictionary.h; sourceTree = "<group>"; };
+		843DBB7C1A427D93009DB448 /* dictionary.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dictionary.cpp; sourceTree = "<group>"; };
 		843DBB7E1A427D9C009DB448 /* glue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glue.h; sourceTree = "<group>"; };
-		843DBB7F1A428143009DB448 /* serialization_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = serialization_test.cpp; sourceTree = "<group>"; };
+		843DBB7F1A428143009DB448 /* dictionary_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dictionary_test.cpp; sourceTree = "<group>"; };
 		843DBB851A4356A9009DB448 /* glue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = glue.cpp; sourceTree = "<group>"; };
 		84519AEA19F2C554007CB81B /* environment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = environment.h; path = environment/environment.h; sourceTree = "<group>"; };
 		84519AEC19F2C57A007CB81B /* envMonteCarlo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = envMonteCarlo.cpp; path = environment/envMonteCarlo.cpp; sourceTree = "<group>"; };
@@ -380,10 +379,9 @@
 				843DBB851A4356A9009DB448 /* glue.cpp */,
 				843DBB7E1A427D9C009DB448 /* glue.h */,
 				843DBB741A427A2A009DB448 /* glue.pyx */,
-				843DBB751A427A2A009DB448 /* setup.py */,
-				843DBB7A1A427BBF009DB448 /* serialization.h */,
-				843DBB7C1A427D93009DB448 /* serialization.cpp */,
-				843DBB7F1A428143009DB448 /* serialization_test.cpp */,
+				843DBB7A1A427BBF009DB448 /* dictionary.h */,
+				843DBB7C1A427D93009DB448 /* dictionary.cpp */,
+				843DBB7F1A428143009DB448 /* dictionary_test.cpp */,
 			);
 			name = serialization;
 			path = glue;
@@ -505,7 +503,7 @@
 			files = (
 				8422FE131A09C112002EB44E /* diagram.cpp in Sources */,
 				84C86DDB1A214E33002A3D8D /* component.cpp in Sources */,
-				843DBB801A428143009DB448 /* serialization_test.cpp in Sources */,
+				843DBB801A428143009DB448 /* dictionary_test.cpp in Sources */,
 				84C86DFA1A24310F002A3D8D /* component_MC.cpp in Sources */,
 				84FDE07419DDFC2F0092B441 /* main.cpp in Sources */,
 				8422FE101A09C112002EB44E /* diagram_check.cpp in Sources */,
@@ -526,7 +524,7 @@
 				841D905C19E054900066116A /* test.cpp in Sources */,
 				8422FE3E1A0A7F8D002EB44E /* estimator_test.cpp in Sources */,
 				84519AF219F33F22007CB81B /* complex.cpp in Sources */,
-				843DBB7D1A427D93009DB448 /* serialization.cpp in Sources */,
+				843DBB7D1A427D93009DB448 /* dictionary.cpp in Sources */,
 				8422FE311A0A7E7E002EB44E /* estimator.cpp in Sources */,
 				61266D7AEDBA61CFA3C84C6B /* rng.cpp in Sources */,
 				1CFBB0BD1A16C1F900EE2E9E /* diagram_filter.cpp in Sources */,

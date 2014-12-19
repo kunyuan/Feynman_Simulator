@@ -16,7 +16,7 @@
 #include "estimator/estimator.h"
 #include "module/weight/component.h"
 #include "utility/json/json.h"
-#include "utility/glue/serialization.h"
+#include "utility/glue/dictionary.h"
 
 using namespace std;
 
@@ -44,7 +44,7 @@ int RunTest()
 
     //    Testcnpy();
     TestJson();
-    TestSerialization();
+    TestDictionary();
 
     return 0;
 }
