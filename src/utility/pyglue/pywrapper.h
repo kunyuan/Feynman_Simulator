@@ -70,8 +70,12 @@ typedef std::unique_ptr<PyObject, BorrowedPyObjectDeleter> pyunique_ptr_borrowed
 bool Convert(PyObject* obj, std::string& val);
 // Convert a PyObject to a bool value.
 bool Convert(PyObject* obj, bool& value);
+typedef std::common_type<char, short, int, unsigned char, unsigned short, unsigned int>::type A;
+typedef std::common_type<long, long long, unsigned long, unsigned long long>::type B;
+typedef std::common_type<A, B>::type C;
+typedef std::common_type<float, double>::type D;
 //most generic convertor, require operator >> overloaded for type T
-template <class T, typename std::enable_if<!std::is_integral<T>::value, T>::type>
+template <class T, typename std::enable_if<!std::is_same<T, A>::value, T>::type>
 bool Convert(PyObject* obj, T& val)
 {
     pyunique_ptr sourceobj(PyObject_Str(obj));
@@ -89,6 +93,7 @@ bool Convert(PyObject* obj, T& val)
 // Convert a PyObject to any integral type.
 // It should at least be sufficient to handle up to singed long
 template <class T, typename std::enable_if<std::is_integral<T>::value, T>::type = 0>
+//template <class T, typename std::enable_if<std::is_same<T, A>::value, T>::type = 0>
 bool Convert(PyObject* obj, T& val)
 {
     if (!PyInt_Check(obj))
@@ -96,9 +101,15 @@ bool Convert(PyObject* obj, T& val)
     val = (T)PyInt_AsLong(obj);
     return true;
 }
-bool Convert(PyObject* obj, unsigned long& value);
+//template <class T, typename std::enable_if<std::is_same<T, B>::value>::type>
+//bool Convert(PyObject* obj, T& val)
+//{
+//    if (!PyInt_Check(obj))
+//        return false;
+//    val = (T)PyLong_AsLongLong(obj);
+//    return true;
+//}
 bool Convert(PyObject* obj, unsigned long long& value);
-bool Convert(PyObject* obj, long long& value);
 // Convert a PyObject to an float.
 bool Convert(PyObject* obj, real& val);
 bool Convert(PyObject* obj, Complex& val);

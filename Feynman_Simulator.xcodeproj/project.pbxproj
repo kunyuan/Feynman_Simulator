@@ -41,6 +41,7 @@
 		843DBB8B1A448545009DB448 /* dictionary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 843DBB881A448545009DB448 /* dictionary.cpp */; };
 		843DBB901A44854E009DB448 /* pywrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 843DBB8E1A44854E009DB448 /* pywrapper.cpp */; };
 		843DBB931A45308B009DB448 /* vector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 843DBB911A45308B009DB448 /* vector.cpp */; };
+		843DBB961A45F9A8009DB448 /* type_cast.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 843DBB941A45F9A8009DB448 /* type_cast.cpp */; };
 		84519AED19F2C57A007CB81B /* envMonteCarlo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84519AEC19F2C57A007CB81B /* envMonteCarlo.cpp */; };
 		84519AF219F33F22007CB81B /* complex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84519AF019F33F22007CB81B /* complex.cpp */; };
 		84681F6519F9AAA600832DAD /* crc32.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84681F6319F9AAA600832DAD /* crc32.cpp */; };
@@ -144,6 +145,8 @@
 		843DBB8F1A44854E009DB448 /* pywrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pywrapper.h; sourceTree = "<group>"; };
 		843DBB911A45308B009DB448 /* vector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vector.cpp; sourceTree = "<group>"; };
 		843DBB921A45308B009DB448 /* vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vector.h; sourceTree = "<group>"; };
+		843DBB941A45F9A8009DB448 /* type_cast.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = type_cast.cpp; sourceTree = "<group>"; };
+		843DBB951A45F9A8009DB448 /* type_cast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = type_cast.h; sourceTree = "<group>"; };
 		84519AEA19F2C554007CB81B /* environment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = environment.h; path = environment/environment.h; sourceTree = "<group>"; };
 		84519AEC19F2C57A007CB81B /* envMonteCarlo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = envMonteCarlo.cpp; path = environment/envMonteCarlo.cpp; sourceTree = "<group>"; };
 		84519AF019F33F22007CB81B /* complex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = complex.cpp; sourceTree = "<group>"; };
@@ -357,6 +360,8 @@
 			children = (
 				843DBB8F1A44854E009DB448 /* pywrapper.h */,
 				843DBB8E1A44854E009DB448 /* pywrapper.cpp */,
+				843DBB941A45F9A8009DB448 /* type_cast.cpp */,
+				843DBB951A45F9A8009DB448 /* type_cast.h */,
 			);
 			path = pyglue;
 			sourceTree = "<group>";
@@ -517,6 +522,7 @@
 				1CFBB0B91A1668C500EE2E9E /* markov_diag_counter.cpp in Sources */,
 				84B8FC4B19EDA348003D6DF6 /* cnpy.cpp in Sources */,
 				1CA5CF3819ED6F1B00212E20 /* lattice_test.cpp in Sources */,
+				843DBB961A45F9A8009DB448 /* type_cast.cpp in Sources */,
 				8422FE0F1A09C112002EB44E /* component.cpp in Sources */,
 				8422FE251A09C13D002EB44E /* markov_monitor.cpp in Sources */,
 				1CA021B91A0A897D00A18085 /* momentum.cpp in Sources */,

@@ -26,6 +26,12 @@ int TestDictionary()
 
 void Test_Dict()
 {
+    PyObject* i = PyInt_FromLong(1);
+    long ii = PyLong_AsLongLong(i);
+    cout << ii << endl;
+    Python::MakeSureNoError();
+    Python::PrintError();
+
     Dictionary Port;
     int IntMax = std::numeric_limits<int>::max();
     int IntMin = std::numeric_limits<int>::min();

@@ -89,7 +89,7 @@ bool ParaMC::Load(const std::string& InputFile)
 {
     Dictionary _para;
     _para.Load(InputFile);
-    GET(_para, Counter);
+//    GET(_para, Counter);
     GET(_para, Toss);
     GET(_para, Sample);
     GET(_para, Sweep);
