@@ -230,18 +230,6 @@ bool Convert(PyObject* obj, std::string& val)
     return true;
 }
 
-bool Convert(PyObject* obj, std::vector<char>& val)
-{
-    if (!PyByteArray_Check(obj))
-        return false;
-    if (val.size() < (size_t)PyByteArray_Size(obj))
-        val.resize(PyByteArray_Size(obj));
-    std::copy(PyByteArray_AsString(obj),
-              PyByteArray_AsString(obj) + PyByteArray_Size(obj),
-              val.begin());
-    return true;
-}
-
 /*bool Convert(PyObject *obj, Py_ssize_t &val) {
     return GenericConvert<Py_ssize_t>(obj, is_py_int, PyInt_AsSsize_t, val);
 }*/
@@ -255,22 +243,11 @@ bool Convert(PyObject* obj, bool& value)
         return false;
     return true;
 }
-
-bool Convert(PyObject* obj, unsigned long& value)
-{
-    return GenericConvert<unsigned long>(obj, is_py_int, PyLong_AsUnsignedLong, value);
-}
 bool Convert(PyObject* obj, unsigned long long& value)
 {
     return GenericConvert<unsigned long long>(obj,
                                               is_py_int,
                                               PyLong_AsUnsignedLongLong, value);
-}
-bool Convert(PyObject* obj, long long& value)
-{
-    return GenericConvert<long long>(obj,
-                                     is_py_int,
-                                     PyLong_AsLongLong, value);
 }
 
 bool Convert(PyObject* obj, real& val)
