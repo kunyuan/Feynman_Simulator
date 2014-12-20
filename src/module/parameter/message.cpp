@@ -7,32 +7,37 @@
 //
 
 #include "message.h"
+#include "utility/dictionary.h"
 
 bool para::Message::Load()
 {
     //do not abort if message file does not exist
+    Dictionary _Para;
     try {
-        _Para.ParseFile(_MessageFile);
+        _Para.Load(_MessageFile);
     }
     catch (ERRORCODE e) {
         if (e != ERR_FILE_NOT_FOUND)
             throw e;
         return false;
     }
-    GetPara(_Para, Beta);
-    GetPara(_Para, Version);
+    GET(_Para, Beta);
+    GET(_Para, Version);
     return true;
 }
 
 void para::Message::Save()
 {
-    _Para.clear();
-    SetPara(_Para, Beta);
-    SetPara(_Para, Version);
-    _Para.SaveToFile(_MessageFile, "w");
+    Dictionary _Para;
+    SET(_Para, Beta);
+    SET(_Para, Version);
+    _Para.Save(_MessageFile, "w");
 }
 
 std::string para::Message::PrettyString()
 {
+    Dictionary _Para;
+    SET(_Para, Beta);
+    SET(_Para, Version);
     return _Para.PrettyString();
 }

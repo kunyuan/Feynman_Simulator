@@ -7,6 +7,7 @@
 //
 #include <initializer_list>
 #include <iostream>
+#include <limits>
 #include "utility/sput.h"
 #include "utility/complex.h"
 #include "dictionary.h"
@@ -26,22 +27,48 @@ int TestDictionary()
 void Test_Dict()
 {
     Dictionary Port;
-    Port.Set("a", 1);
+    int IntMax = std::numeric_limits<int>::max();
+    int IntMin = std::numeric_limits<int>::min();
+    Port.Set("IntMax", IntMax);
+    Port.Set("IntMin", IntMin);
+    long long ago = std::numeric_limits<long long>::max();
+    Port.Set("ago", ago);
+    long long after = std::numeric_limits<long long>::min();
+    Port.Set("after", after);
+    unsigned long long biggest = std::numeric_limits<unsigned long long>::max();
+    cout << biggest << endl;
+    Port.Set("biggest", biggest);
     vector<int> v = { 1, 2, 3 };
     Port.Set("Vec", v);
-    sput_fail_unless(Port.Get<int>("a") == 1, "check integer type");
+    sput_fail_unless(Port.Get<int>("IntMax") == IntMax, "check integer type");
+    sput_fail_unless(Port.Get<int>("IntMin") == IntMin, "check integer type");
+    sput_fail_unless(Port.Get<long long>("ago") == ago,
+                     "check long long integer type");
+    sput_fail_unless(Port.Get<long long>("after") == after,
+                     "check long long integer type");
+    sput_fail_unless(Port.Get<unsigned long long>("biggest") == biggest,
+                     "check unsigned long long integer type");
     sput_fail_unless(std::equal(v.begin(), v.end(),
                                 Port.Get<vector<int> >("Vec").begin()),
                      "check vector<int> type");
-    Complex a = { 1.0, 2.0 };
-    Complex b = { 4.0, 2.1 };
-    vector<Complex> vc = { a, b };
+    Complex ca = { 1.0, 2.0 };
+    Complex cb = { 4.0, 2.1 };
+    vector<Complex> vc = { ca, cb };
+    Python::Object cvec = vc;
     Port.Set("cVec", vc);
-    sput_fail_unless(Equal((Port.Get<vector<Complex> >("cVec"))[1], b),
+    sput_fail_unless(Equal((Port.Get<vector<Complex> >("cVec"))[1], cb),
                      "check vector<Complex> type");
     Dictionary SubPort;
     SubPort.LoadByEval("{'b':11,'c':22}");
     Port.Set("dict", SubPort);
     sput_fail_unless(Port.Get<Dictionary>("dict").Get<int>("b") == 11,
                      "check dict type");
+    Port.Save("test.py", "w");
+    Port.Clear();
+    Port.Load("test.py");
+    Port.Print();
+    system("rm test.py");
+    SubPort.Clear();
+    SubPort = Port.Get<Dictionary>("dict");
+    SubPort.Print();
 }
