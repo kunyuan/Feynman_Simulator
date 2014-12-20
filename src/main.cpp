@@ -22,7 +22,6 @@ int main(int argc, const char* argv[])
 {
     Python::Initialize();
     RunTest();
-    return 0;
     string InputFile = "infile/_in_MC_2";
     para::Job Job(InputFile);
 

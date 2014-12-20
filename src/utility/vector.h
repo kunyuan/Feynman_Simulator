@@ -11,6 +11,7 @@
 
 #include <iosfwd>
 #include <sstream>
+#include <vector>
 #include <initializer_list>
 #include "../utility/convention.h"
 using namespace std;
@@ -52,13 +53,17 @@ public:
             target[i] = _Array[i];
     }
 
-    T* begin()
+    const T* begin() const
     {
         return _Array;
     }
-    T* end()
+    const T* end() const
     {
         return _Array + D;
+    }
+    uint size() const
+    {
+        return D;
     }
 
     T& operator[](int index)

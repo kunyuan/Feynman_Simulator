@@ -9,7 +9,7 @@
 #ifndef __Fermion_Simulator__lattice__
 #define __Fermion_Simulator__lattice__
 
-#include "vector.h"
+#include "utility/vector.h"
 #include <tuple>
 
 int GetSublatIndex(int, int);

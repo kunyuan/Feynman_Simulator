@@ -14,18 +14,20 @@
 typedef double real;
 
 class RandomFactory {
-    friend std::ostream &operator<<(std::ostream &os, RandomFactory &r);
-    friend std::istream &operator>>(std::istream &is, RandomFactory &r);
-    friend std::string ToString(const RandomFactory &RNG);
+    friend std::ostream& operator<<(std::ostream& os, RandomFactory& r);
+    friend std::istream& operator>>(std::istream& is, RandomFactory& r);
+    friend std::string ToString(const RandomFactory& RNG);
 
-  private:
+private:
     std::mt19937 _eng;
 
-  public:
+public:
     RandomFactory();
     RandomFactory(int);
+    RandomFactory(const std::string& state);
     void Reset();
     void Reset(int);
+    void Reset(const std::string& state);
     inline real urn()
     {
         static std::uniform_real_distribution<real> d(0.0, 1.0);

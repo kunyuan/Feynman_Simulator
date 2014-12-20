@@ -24,6 +24,7 @@
 #include <string>
 #include <stdexcept>
 #include <utility>
+#include <sstream>
 #include <memory>
 #include <map>
 #include <vector>
@@ -31,6 +32,7 @@
 #include <tuple>
 #include "utility/convention.h"
 #include "utility/abort.h"
+#include "utility/vector.h"
 #include <Python/Python.h>
 
 /*
@@ -39,7 +41,7 @@
 /*
    The reference count behavior of functions in the Python/C API is best explained in terms of ownership of references. Ownership pertains to references, never to objects (objects are not owned: they are always shared). “Owning a reference” means being responsible for calling Py_DECREF on it when the reference is no longer needed. Ownership can also be transferred, meaning that the code that receives ownership of the reference then becomes responsible for eventually decref’ing it by calling Py_DECREF() or Py_XDECREF() when it’s no longer needed—or passing on this responsibility (usually to its caller). When a function passes ownership of a reference on to its caller, the caller is said to receive a new reference. When no ownership is transferred, the caller is said to borrow the reference. Nothing needs to be done for a borrowed reference.
 
-   Conversely, when a calling function passes in a reference to an object, there are two possibilities: the function steals a reference to the object, or it does not. Stealing a reference means that when you pass a reference to a function, that function assumes that it now owns that reference, and you are not responsible for it any longer.
+   Conversely, when a calling function passes in a reference to an object, there are two possibilities: the function steals a reference to the object, or it does not. TakeOvering a reference means that when you pass a reference to a function, that function assumes that it now owns that reference, and you are not responsible for it any longer.
  
    Few functions steal references; the two notable exceptions are PyList_SetItem() and PyTuple_SetItem(), which steal a reference to the item (but not to the tuple or list into which the item is put!). These functions were designed to steal a reference because of a common idiom for populating a tuple or list with newly created objects. 
  */
@@ -53,18 +55,39 @@ struct PyObjectDeleter {
         Py_XDECREF(obj);
     }
 };
+struct BorrowedPyObjectDeleter {
+    void operator()(PyObject* obj)
+    {
+    }
+};
 // unique_ptr that uses Py_XDECREF as the destructor function.
 typedef std::unique_ptr<PyObject, PyObjectDeleter> pyunique_ptr;
+typedef std::unique_ptr<PyObject, BorrowedPyObjectDeleter> pyunique_ptr_borrowed;
 
 // ------------ Conversion functions ------------
 
 // Convert a PyObject to a std::string.
 bool Convert(PyObject* obj, std::string& val);
-// Convert a PyObject to a std::vector<char>.
-bool Convert(PyObject* obj, std::vector<char>& val);
 // Convert a PyObject to a bool value.
 bool Convert(PyObject* obj, bool& value);
+//most generic convertor, require operator >> overloaded for type T
+template <class T, typename std::enable_if<!std::is_integral<T>::value, T>::type>
+bool Convert(PyObject* obj, T& val)
+{
+    pyunique_ptr sourceobj(PyObject_Str(obj));
+    std::string source;
+    if (!Convert(sourceobj.get(), source))
+        return false;
+    istringstream iss(source);
+    T temp;
+    iss >> temp;
+    if (iss.bad() || iss.fail())
+        return false;
+    val = temp;
+    return true;
+}
 // Convert a PyObject to any integral type.
+// It should at least be sufficient to handle up to singed long
 template <class T, typename std::enable_if<std::is_integral<T>::value, T>::type = 0>
 bool Convert(PyObject* obj, T& val)
 {
@@ -73,10 +96,27 @@ bool Convert(PyObject* obj, T& val)
     val = (T)PyInt_AsLong(obj);
     return true;
 }
+bool Convert(PyObject* obj, unsigned long& value);
+bool Convert(PyObject* obj, unsigned long long& value);
+bool Convert(PyObject* obj, long long& value);
 // Convert a PyObject to an float.
 bool Convert(PyObject* obj, real& val);
 bool Convert(PyObject* obj, Complex& val);
+template <typename T>
+bool Convert(PyObject* obj, Vec<T>& val)
+{
+    auto Dim = val.size();
+    if (!PyList_Check(obj) || PyList_Size(obj) < Dim)
+        return false;
 
+    for (auto i = 0; i < Dim; i++) {
+        T v;
+        if (!Convert(PyList_GetItem(obj, i), v))
+            return false;
+        val[i] = v;
+    }
+    return true;
+}
 template <size_t n, class... Args>
 typename std::enable_if<n == 0, bool>::type
 AddToTuple(PyObject* obj, std::tuple<Args...>& tup)
@@ -158,20 +198,28 @@ bool GenericConvert(PyObject* obj,
 }
 
 // -------------- PyObject allocators ----------------
+
 // Creates a PyObject from a std::string
 PyObject* CastToPyObject(const std::string& str);
-// Creates a PyObject from a std::vector<char>
-PyObject* CastToPyObject(const std::vector<char>& val, size_t sz);
-// Creates a PyObject from a std::vector<char>
-PyObject* CastToPyObject(const std::vector<char>& val);
 // Creates a PyObject from a const char*
 PyObject* CastToPyObject(const char* cstr);
+//  Most generic function to create a PyObject from class T,
+//  require  std::string ToString(cont T&) overloaded for type T
+template <class T, typename std::enable_if<!std::is_integral<T>::value, T>::type>
+PyObject* CastToPyObject(const T& val)
+{
+    return CastToPyObject(ToString(val));
+}
 // Creates a PyObject from any integral type(gets Converted to PyInt)
+// It should at least be sufficient to handle up to singed long
 template <class T, typename std::enable_if<std::is_integral<T>::value, T>::type = 0>
 PyObject* CastToPyObject(T num)
 {
     return PyInt_FromLong(num);
 }
+PyObject* CastToPyObject(unsigned long num);
+PyObject* CastToPyObject(long long num);
+PyObject* CastToPyObject(unsigned long long num);
 // Creates a PyObject from a bool
 PyObject* CastToPyObject(bool value);
 // Creates a PyObject from a real
@@ -191,6 +239,12 @@ static PyObject* CastToPyList(const T& container)
 
     return lst;
 }
+template <typename T>
+PyObject* CastToPyObject(const Vec<T>& container)
+{
+    return CastToPyList(container);
+}
+
 template <class T>
 PyObject* CastToPyObject(const std::vector<T>& container)
 {
@@ -224,6 +278,10 @@ void ClearError();
 void MakeSureNoError();
 void PrintPyObject(PyObject* obj);
 
+enum Ownership {
+    TakeOver = 0,
+    Borrowed
+};
 /**
      * \class Object
      * \brief This class represents a python object.
@@ -242,11 +300,12 @@ public:
          * means no Py_INCREF is performed on it. 
          * \param obj The pointer from which to construct this Object.
          */
-    Object(PyObject* obj);
+    Object(PyObject* obj, Ownership ownership = TakeOver);
     template <typename T>
-    Object(T obj)
-        : py_obj(make_pyshared(CastToPyObject(obj)))
+    Object(T obj, Ownership ownership = TakeOver)
+        : py_obj(make_pyshared(CastToPyObject(obj), ownership))
     {
+        _owenership = ownership;
     }
     ~Object()
     {
@@ -363,11 +422,13 @@ public:
 
 private:
     typedef std::shared_ptr<PyObject> pyshared_ptr;
+    Ownership _owenership;
+    void _deleter(PyObject* obj);
 
     PyObject* load_function(const std::string& name);
 
-    pyshared_ptr make_pyshared(PyObject* obj);
-    void reset_pyshared(PyObject* obj);
+    pyshared_ptr make_pyshared(PyObject* obj, Ownership ownership);
+    void reset_pyshared(PyObject* obj, Ownership ownership);
 
     // Variadic template method to add items to a tuple
     template <typename First, typename... Rest>

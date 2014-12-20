@@ -13,7 +13,11 @@
 
 #include "utility/convention.h"
 #include "utility/utility.h"
+#include "utility/vector.h"
 #include "utility/pyglue/pywrapper.h"
+
+#define SET(para, value) (para).Set((#value), (value));
+#define GET(para, value) (para).Get((#value), (value));
 
 class Dictionary {
 public:
@@ -44,7 +48,8 @@ public:
     template <typename T>
     bool Get(const std::string& key, T& value)
     {
-        Python::Object object = PyDict_GetItemString(_Dict.get(), key.c_str());
+        Python::Object object(PyDict_GetItemString(_Dict.get(), key.c_str()),
+                              Python::Ownership::Borrowed);
         if (object.get() == nullptr)
             return false;
         object.Convert(value);
@@ -52,8 +57,9 @@ public:
     }
     bool Get(const std::string& key, Dictionary& value)
     {
-        PyObject* object = PyDict_GetItemString(_Dict.get(), key.c_str());
-        if (object == nullptr)
+        Python::Object object(PyDict_GetItemString(_Dict.get(), key.c_str()),
+                              Python::Ownership::Borrowed);
+        if (object.get() == nullptr)
             return false;
         value = Dictionary(object);
         return true;
@@ -67,14 +73,17 @@ public:
                            "Key " << key << " is not found in dictionary!");
         return value;
     }
+    void Clear();
     void Print();
+    std::string PrettyString() { return _Dict.PrettyString(); }
     void LoadByEval(const std::string&);
     void Load(const std::string& FileName);
     void Save(const std::string& FileName, const std::string& Mode = "a");
 
+    void _PrintDebug() const;
+
 private:
     Python::Object _Dict;
-    void _PrintDebug() const;
 };
 
 int TestDictionary();

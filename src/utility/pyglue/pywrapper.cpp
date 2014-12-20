@@ -32,9 +32,10 @@ Object::Object()
 {
 }
 
-Object::Object(PyObject* obj)
-    : py_obj(make_pyshared(obj))
+Object::Object(PyObject* obj, Ownership ownership)
+    : py_obj(make_pyshared(obj, ownership))
 {
+    _owenership = ownership;
 }
 
 void Object::Print()
@@ -44,30 +45,38 @@ void Object::Print()
 
 std::string Object::PrettyString()
 {
-    pyunique_ptr str(PyObject_Repr(py_obj.get()));
+    PyObject* result = PyObject_Repr(py_obj.get());
+    pyunique_ptr str(result);
     MakeSureNoError();
     return PyString_AsString(str.get());
 }
 
-Python::Object::pyshared_ptr Object::make_pyshared(PyObject* obj)
+Python::Object::pyshared_ptr Object::make_pyshared(PyObject* obj, Ownership ownership)
 {
-    return pyshared_ptr(obj, [](PyObject* obj) { Py_XDECREF(obj); });
+    if (ownership == TakeOver)
+        return pyshared_ptr(obj, [](PyObject* obj) { Py_XDECREF(obj); });
+    else
+        return pyshared_ptr(obj, [](PyObject* obj) {});
 }
 
-void Object::reset_pyshared(PyObject* obj)
+void Object::reset_pyshared(PyObject* obj, Ownership ownership)
 {
-    py_obj.reset(obj, [](PyObject* obj) { Py_XDECREF(obj); });
+    if (ownership == TakeOver)
+        return py_obj.reset(obj, [](PyObject* obj) { Py_XDECREF(obj); });
+    else
+        return py_obj.reset(obj, [](PyObject* obj) {});
 }
 
 void Object::EvalScript(const std::string& script)
 {
-    pyunique_ptr main(PyImport_AddModule("__main__"));
-    PyObject* global = PyModule_GetDict(main.get()); //borrowed reference
+    pyunique_ptr_borrowed main(PyImport_AddModule("__main__"));
+    pyunique_ptr_borrowed global(PyModule_GetDict(main.get())); //borrowed reference
     pyunique_ptr local(PyDict_New());
     PyObject* result = PyRun_String(script.c_str(), Py_eval_input,
-                                    global, local.get());
+                                    global.get(), local.get());
     MakeSureNoError();
-    reset_pyshared(result);
+    _owenership = TakeOver; //take over ownership of dict result
+    reset_pyshared(result, _owenership);
 }
 
 void Object::LoadModule(const string& script_path)
@@ -90,8 +99,10 @@ void Object::LoadModule(const string& script_path)
 
     PyList_Append(path, pwd.get());
     /* We don't need that string value anymore, so deref it */
-    reset_pyshared(PyImport_ImportModule(file_path.c_str()));
+    PyObject* result = PyImport_ImportModule(file_path.c_str());
     MakeSureNoError();
+    _owenership = TakeOver; //take over ownership of dict result
+    reset_pyshared(result, _owenership);
 }
 
 PyObject* Object::load_function(const std::string& name)
@@ -167,20 +178,24 @@ PyObject* CastToPyObject(const std::string& str)
     return PyString_FromString(str.c_str());
 }
 
-PyObject* CastToPyObject(const std::vector<char>& val, size_t sz)
-{
-    return PyByteArray_FromStringAndSize(val.data(), sz);
-}
-
-PyObject* CastToPyObject(const std::vector<char>& val)
-{
-    return CastToPyObject(val, val.size());
-}
-
 PyObject* CastToPyObject(const char* cstr)
 {
     return PyString_FromString(cstr);
 }
+
+PyObject* CastToPyObject(unsigned long num)
+{
+    return PyLong_FromUnsignedLong(num);
+}
+PyObject* CastToPyObject(unsigned long long num)
+{
+    return PyLong_FromUnsignedLongLong(num);
+}
+PyObject* CastToPyObject(long long num)
+{
+    return PyLong_FromLongLong(num);
+}
+PyObject* CastToPyObject(unsigned long long num);
 
 PyObject* CastToPyObject(bool value)
 {
@@ -199,7 +214,7 @@ PyObject* CastToPyObject(const Complex& num)
 
 bool is_py_int(PyObject* obj)
 {
-    return PyInt_Check(obj);
+    return PyInt_Check(obj) || PyLong_Check(obj);
 }
 
 bool is_py_float(PyObject* obj)
@@ -239,6 +254,23 @@ bool Convert(PyObject* obj, bool& value)
     else
         return false;
     return true;
+}
+
+bool Convert(PyObject* obj, unsigned long& value)
+{
+    return GenericConvert<unsigned long>(obj, is_py_int, PyLong_AsUnsignedLong, value);
+}
+bool Convert(PyObject* obj, unsigned long long& value)
+{
+    return GenericConvert<unsigned long long>(obj,
+                                              is_py_int,
+                                              PyLong_AsUnsignedLongLong, value);
+}
+bool Convert(PyObject* obj, long long& value)
+{
+    return GenericConvert<long long>(obj,
+                                     is_py_int,
+                                     PyLong_AsLongLong, value);
 }
 
 bool Convert(PyObject* obj, real& val)

@@ -8,6 +8,7 @@
 
 #include "parameter.h"
 #include "utility/utility.h"
+#include "utility/dictionary.h"
 using namespace para;
 
 Message Parameter::GenerateMessage()
@@ -27,15 +28,16 @@ void Parameter::UpdateWithMessage(const Message& Message_)
 
 bool Parameter::_BuildNew(const std::string& InputFile)
 {
-    _para.ParseFile(InputFile);
-    GetPara(_para, L);
-    GetPara(_para, InitialBeta);
-    GetPara(_para, DeltaBeta);
-    GetPara(_para, FinalBeta);
-    GetPara(_para, Order);
-    GetPara(_para, NSublat)
+    Dictionary _para;
+    _para.Load(InputFile);
+    GET(_para, L);
+    GET(_para, InitialBeta);
+    GET(_para, DeltaBeta);
+    GET(_para, FinalBeta);
+    GET(_para, Order);
+    GET(_para, NSublat);
 
-        Lat.Initialize(L, NSublat);
+    Lat.Initialize(L, NSublat);
     Version = 0;
     Beta = InitialBeta;
     T = 1.0 / Beta;
@@ -46,50 +48,36 @@ bool Parameter::_BuildNew(const std::string& InputFile)
 
 bool Parameter::_Load(const std::string& InputFile)
 {
-    _para.ParseFile(InputFile);
-    GetPara(_para, Version);
-    GetPara(_para, L);
-    GetPara(_para, InitialBeta);
-    GetPara(_para, DeltaBeta);
-    GetPara(_para, FinalBeta);
+    Dictionary _para;
+    _para.Load(InputFile);
+    GET(_para, Version);
+    GET(_para, L);
+    GET(_para, InitialBeta);
+    GET(_para, DeltaBeta);
+    GET(_para, FinalBeta);
     //!!!Beta should be a part of state, so it will be stored
-    GetPara(_para, Beta);
-    GetPara(_para, Order);
-    GetPara(_para, NSublat)
+    GET(_para, Beta);
+    GET(_para, Order);
+    GET(_para, NSublat)
 
-        Lat.Initialize(L, NSublat);
+    Lat.Initialize(L, NSublat);
     T = 1.0 / Beta;
     if (Order >= MAX_ORDER)
         ABORT("Order can not be bigger than " << MAX_ORDER);
     return true;
 }
 
-/**
-*  subclass may have more parameters to write to _para, so the function does not really save _para to file here
-*/
-void Parameter::_SavePreparation()
-{
-    _para.clear();
-    SetPara(_para, Version);
-    SetPara(_para, L);
-    SetPara(_para, InitialBeta);
-    SetPara(_para, DeltaBeta);
-    SetPara(_para, FinalBeta);
-    SetPara(_para, Beta);
-    SetPara(_para, Order);
-    SetPara(_para, NSublat);
-}
-
 bool ParaMC::BuildNew(const std::string& InputFile)
 {
-    Parameter::_BuildNew(InputFile);
-    GetPara(_para, Toss);
-    GetPara(_para, Sample);
-    GetPara(_para, Sweep);
-    GetPara(_para, Seed);
-    GetPara(_para, WormSpaceReweight);
-    GetPara(_para, OrderReWeight);
-    GetPara(_para, MaxTauBin);
+    Dictionary _para;
+    _para.Load(InputFile);
+    GET(_para, Toss);
+    GET(_para, Sample);
+    GET(_para, Sweep);
+    GET(_para, Seed);
+    GET(_para, WormSpaceReweight);
+    GET(_para, OrderReWeight);
+    GET(_para, MaxTauBin);
 
     ASSERT_ALLWAYS(OrderReWeight.size() == Order + 1, "OrderReWeight should have Order+1 elementes!");
     Counter = 0;
@@ -99,31 +87,41 @@ bool ParaMC::BuildNew(const std::string& InputFile)
 
 bool ParaMC::Load(const std::string& InputFile)
 {
-    Parameter::_Load(InputFile);
-    GetPara(_para, Counter);
-    GetPara(_para, Toss);
-    GetPara(_para, Sample);
-    GetPara(_para, Sweep);
-    GetPara(_para, WormSpaceReweight);
-    GetPara(_para, OrderReWeight);
-    GetPara(_para, RNG);
-    GetPara(_para, MaxTauBin);
+    Dictionary _para;
+    _para.Load(InputFile);
+    GET(_para, Counter);
+    GET(_para, Toss);
+    GET(_para, Sample);
+    GET(_para, Sweep);
+    GET(_para, WormSpaceReweight);
+    GET(_para, OrderReWeight);
+    GET(_para, MaxTauBin);
+    string RNGState = _para.Get<string>("RNG");
+    RNG.Reset(RNGState);
     return true;
 }
 
 void ParaMC::Save(const std::string& OutputFile, string Mode)
 {
-    Parameter::_SavePreparation();
-    SetPara(_para, Counter);
-    SetPara(_para, Toss);
-    SetPara(_para, Sample);
-    SetPara(_para, Sweep);
-    SetPara(_para, WormSpaceReweight);
-    SetPara(_para, OrderReWeight);
-    SetPara(_para, RNG);
-    SetPara(_para, MaxTauBin);
+    Dictionary _para;
+    SET(_para, Version);
+    SET(_para, L);
+    SET(_para, InitialBeta);
+    SET(_para, DeltaBeta);
+    SET(_para, FinalBeta);
+    SET(_para, Beta);
+    SET(_para, Order);
+    SET(_para, NSublat);
+    SET(_para, Counter);
+    SET(_para, Toss);
+    SET(_para, Sample);
+    SET(_para, Sweep);
+    SET(_para, WormSpaceReweight);
+    SET(_para, OrderReWeight);
+    SET(_para, MaxTauBin);
+    _para.Set("RNG", ToString(RNG));
     ASSERT_ALLWAYS(OrderReWeight.size() == Order + 1, "OrderReWeight should have Order+1 elementes!");
-    _para.SaveToFile(OutputFile, Mode);
+    _para.Save(OutputFile, Mode);
     //save with append mode, so that it will not overwrite stuff wroten by Parameter:SaveParameter
 }
 

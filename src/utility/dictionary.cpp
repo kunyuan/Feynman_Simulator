@@ -29,11 +29,16 @@ void Dictionary::LoadByEval(const std::string& script)
 
 void Dictionary::Load(const std::string& FileName)
 {
-    ASSERT_ALLWAYS(DoesFileExist(FileName), "File not exist!");
+    if (!DoesFileExist(FileName)) {
+        LOG_WARNING(FileName << " File does not exist!");
+        throw(ERR_FILE_NOT_FOUND);
+    }
     ifstream ifs(FileName, std::ios::in);
     ON_SCOPE_EXIT([&] {ifs.close(); });
-    string source;
-    ifs >> source;
+    string source = "", line;
+    while (getline(ifs, line)) {
+        source += line;
+    }
     LoadByEval(source);
 }
 
@@ -50,6 +55,10 @@ void Dictionary::Save(const string& FileName, const string& Mode)
     if (!ofs.is_open())
         ABORT("Fail to open file " << FileName);
     ofs << _Dict.PrettyString() << endl;
+}
+void Dictionary::Clear()
+{
+    PyDict_Clear(_Dict.get());
 }
 
 void Dictionary::Print()
