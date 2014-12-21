@@ -80,11 +80,16 @@ public:
     void Load(const std::string& FileName);
     void Save(const std::string& FileName, const std::string& Mode = "a");
 
+    PyObject* GetPyObject() const { return _Dict.get(); }
     void _PrintDebug() const;
 
 private:
     Python::Object _Dict;
 };
+namespace Python {
+bool Convert(PyObject* obj, Dictionary& value);
+PyObject* CastToPyObject(const Dictionary& num);
+}
 
 int TestDictionary();
 

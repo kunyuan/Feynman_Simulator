@@ -39,19 +39,19 @@ bool Convert(PyObject* obj, double& value);
 bool Convert(PyObject* obj, Complex& val);
 
 //most generic convertor, require operator >> overloaded for type T
-template <typename T>
-bool Convert(PyObject* obj, T& val)
-{
-    PyObject* sourceobj = PyObject_Str(obj);
-    std::string source;
-    bool flag = Convert(sourceobj, source);
-    Py_XDECREF(sourceobj);
-    if (!flag)
-        return false;
-    istringstream iss(source);
-    iss >> val;
-    return !(iss.bad() || iss.fail());
-}
+//template <typename T>
+//bool Convert(PyObject* obj, T& val)
+//{
+//    PyObject* sourceobj = PyObject_Str(obj);
+//    std::string source;
+//    bool flag = Convert(sourceobj, source);
+//    Py_XDECREF(sourceobj);
+//    if (!flag)
+//        return false;
+//    istringstream iss(source);
+//    iss >> val;
+//    return !(iss.bad() || iss.fail());
+//}
 template <typename T>
 bool Convert(PyObject* obj, Vec<T>& val)
 {
@@ -141,11 +141,11 @@ bool Convert(PyObject* obj, std::vector<T>& vec)
 PyObject* CastToPyObject(const std::string& str);
 //  Most generic function to create a PyObject from class T,
 //  require  std::string ToString(cont T&) overloaded for type T
-template <class T>
-PyObject* CastToPyObject(const T& val)
-{
-    return CastToPyObject(ToString(val));
-}
+//template <class T>
+//PyObject* CastToPyObject(const T& val)
+//{
+//    return CastToPyObject(ToString(val));
+//}
 PyObject* CastToPyObject(int num);
 PyObject* CastToPyObject(unsigned int num);
 PyObject* CastToPyObject(long num);

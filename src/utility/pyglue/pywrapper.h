@@ -21,19 +21,8 @@
 #ifndef PYWRAPPER_H
 #define PYWRAPPER_H
 
-#include <string>
-#include <stdexcept>
-#include <utility>
-#include <sstream>
-#include <memory>
-#include <map>
-#include <vector>
-#include <list>
-#include <tuple>
-#include "utility/convention.h"
 #include "utility/abort.h"
-#include "utility/vector.h"
-#include <Python/Python.h>
+#include "type_cast.h"
 
 /*
    Make sure you have carefully gone through the following explaination about reference count behavior in python before touch following codes
@@ -46,7 +35,6 @@
    Few functions steal references; the two notable exceptions are PyList_SetItem() and PyTuple_SetItem(), which steal a reference to the item (but not to the tuple or list into which the item is put!). These functions were designed to steal a reference because of a common idiom for populating a tuple or list with newly created objects. 
  */
 
-class Complex;
 namespace Python {
 // Deleter that calls Py_XDECREF on the PyObject parameter.
 struct PyObjectDeleter {
@@ -63,224 +51,6 @@ struct BorrowedPyObjectDeleter {
 // unique_ptr that uses Py_XDECREF as the destructor function.
 typedef std::unique_ptr<PyObject, PyObjectDeleter> pyunique_ptr;
 typedef std::unique_ptr<PyObject, BorrowedPyObjectDeleter> pyunique_ptr_borrowed;
-
-// ------------ Conversion functions ------------
-
-// Convert a PyObject to a std::string.
-bool Convert(PyObject* obj, std::string& val);
-// Convert a PyObject to a bool value.
-bool Convert(PyObject* obj, bool& value);
-typedef std::common_type<char, short, int, unsigned char, unsigned short, unsigned int>::type A;
-typedef std::common_type<long, long long, unsigned long, unsigned long long>::type B;
-typedef std::common_type<A, B>::type C;
-typedef std::common_type<float, double>::type D;
-//most generic convertor, require operator >> overloaded for type T
-template <class T, typename std::enable_if<!std::is_same<T, A>::value, T>::type>
-bool Convert(PyObject* obj, T& val)
-{
-    pyunique_ptr sourceobj(PyObject_Str(obj));
-    std::string source;
-    if (!Convert(sourceobj.get(), source))
-        return false;
-    istringstream iss(source);
-    T temp;
-    iss >> temp;
-    if (iss.bad() || iss.fail())
-        return false;
-    val = temp;
-    return true;
-}
-// Convert a PyObject to any integral type.
-// It should at least be sufficient to handle up to singed long
-template <class T, typename std::enable_if<std::is_integral<T>::value, T>::type = 0>
-//template <class T, typename std::enable_if<std::is_same<T, A>::value, T>::type = 0>
-bool Convert(PyObject* obj, T& val)
-{
-    if (!PyInt_Check(obj))
-        return false;
-    val = (T)PyInt_AsLong(obj);
-    return true;
-}
-//template <class T, typename std::enable_if<std::is_same<T, B>::value>::type>
-//bool Convert(PyObject* obj, T& val)
-//{
-//    if (!PyInt_Check(obj))
-//        return false;
-//    val = (T)PyLong_AsLongLong(obj);
-//    return true;
-//}
-bool Convert(PyObject* obj, unsigned long long& value);
-// Convert a PyObject to an float.
-bool Convert(PyObject* obj, real& val);
-bool Convert(PyObject* obj, Complex& val);
-template <typename T>
-bool Convert(PyObject* obj, Vec<T>& val)
-{
-    auto Dim = val.size();
-    if (!PyList_Check(obj) || PyList_Size(obj) < Dim)
-        return false;
-
-    for (auto i = 0; i < Dim; i++) {
-        T v;
-        if (!Convert(PyList_GetItem(obj, i), v))
-            return false;
-        val[i] = v;
-    }
-    return true;
-}
-template <size_t n, class... Args>
-typename std::enable_if<n == 0, bool>::type
-AddToTuple(PyObject* obj, std::tuple<Args...>& tup)
-{
-    return Convert(PyTuple_GetItem(obj, n), std::get<n>(tup));
-}
-
-template <size_t n, class... Args>
-typename std::enable_if<n != 0, bool>::type
-AddToTuple(PyObject* obj, std::tuple<Args...>& tup)
-{
-    AddToTuple<n - 1, Args...>(obj, tup);
-    return Convert(PyTuple_GetItem(obj, n), std::get<n>(tup));
-}
-
-template <class... Args>
-bool Convert(PyObject* obj, std::tuple<Args...>& tup)
-{
-    if (!PyTuple_Check(obj) || PyTuple_Size(obj) != sizeof...(Args))
-        return false;
-    return AddToTuple<sizeof...(Args)-1, Args...>(obj, tup);
-}
-// Convert a PyObject to a std::map
-template <class K, class V>
-bool Convert(PyObject* obj, std::map<K, V>& mp)
-{
-    if (!PyDict_Check(obj))
-        return false;
-    PyObject* py_key, *py_val;
-    Py_ssize_t pos(0);
-    while (PyDict_Next(obj, &pos, &py_key, &py_val)) {
-        K key;
-        if (!Convert(py_key, key))
-            return false;
-        V val;
-        if (!Convert(py_val, val))
-            return false;
-        mp.insert(std::make_pair(key, val));
-    }
-    return true;
-}
-// Convert a PyObject to a generic container.
-template <class T, class C>
-bool ConvertList(PyObject* obj, C& container)
-{
-    if (!PyList_Check(obj))
-        return false;
-    for (Py_ssize_t i(0); i < PyList_Size(obj); ++i) {
-        T val;
-        if (!Convert(PyList_GetItem(obj, i), val))
-            return false;
-        container.push_back(std::move(val));
-    }
-    return true;
-}
-// Convert a PyObject to a std::list.
-template <class T>
-bool Convert(PyObject* obj, std::list<T>& lst)
-{
-    return ConvertList<T, std::list<T> >(obj, lst);
-}
-// Convert a PyObject to a std::vector.
-template <class T>
-bool Convert(PyObject* obj, std::vector<T>& vec)
-{
-    return ConvertList<T, std::vector<T> >(obj, vec);
-}
-
-template <class T>
-bool GenericConvert(PyObject* obj,
-                    const std::function<bool(PyObject*)>& is_obj,
-                    const std::function<T(PyObject*)>& Converter,
-                    T& val)
-{
-    if (!is_obj(obj))
-        return false;
-    val = Converter(obj);
-    return true;
-}
-
-// -------------- PyObject allocators ----------------
-
-// Creates a PyObject from a std::string
-PyObject* CastToPyObject(const std::string& str);
-// Creates a PyObject from a const char*
-PyObject* CastToPyObject(const char* cstr);
-//  Most generic function to create a PyObject from class T,
-//  require  std::string ToString(cont T&) overloaded for type T
-template <class T, typename std::enable_if<!std::is_integral<T>::value, T>::type>
-PyObject* CastToPyObject(const T& val)
-{
-    return CastToPyObject(ToString(val));
-}
-// Creates a PyObject from any integral type(gets Converted to PyInt)
-// It should at least be sufficient to handle up to singed long
-template <class T, typename std::enable_if<std::is_integral<T>::value, T>::type = 0>
-PyObject* CastToPyObject(T num)
-{
-    return PyInt_FromLong(num);
-}
-PyObject* CastToPyObject(unsigned long num);
-PyObject* CastToPyObject(long long num);
-PyObject* CastToPyObject(unsigned long long num);
-// Creates a PyObject from a bool
-PyObject* CastToPyObject(bool value);
-// Creates a PyObject from a real
-PyObject* CastToPyObject(real num);
-PyObject* CastToPyObject(const Complex& num);
-// Creates a PyObject from a std::vector
-
-// Generic python list allocation
-template <class T>
-static PyObject* CastToPyList(const T& container)
-{
-    PyObject* lst(PyList_New(container.size()));
-
-    Py_ssize_t i(0);
-    for (auto it(container.begin()); it != container.end(); ++it)
-        PyList_SetItem(lst, i++, CastToPyObject(*it));
-
-    return lst;
-}
-template <typename T>
-PyObject* CastToPyObject(const Vec<T>& container)
-{
-    return CastToPyList(container);
-}
-
-template <class T>
-PyObject* CastToPyObject(const std::vector<T>& container)
-{
-    return CastToPyList(container);
-}
-// Creates a PyObject from a std::list
-template <class T>
-PyObject* CastToPyObject(const std::list<T>& container)
-{
-    return CastToPyList(container);
-}
-// Creates a PyObject from a std::map
-template <class T, class K>
-PyObject* CastToPyObject(
-    const std::map<T, K>& container)
-{
-    PyObject* dict(PyDict_New());
-
-    for (auto it(container.begin()); it != container.end(); ++it)
-        PyDict_SetItem(dict,
-                       CastToPyObject(it->first),
-                       CastToPyObject(it->second));
-
-    return dict;
-}
 
 void Initialize();
 void Finalize();
@@ -416,7 +186,7 @@ public:
          * \param script_path The path of the script to be loaded.
          * \return Object representing the loaded script.
          */
-    void LoadModule(const std::string& script_path);
+    void LoadScript(const std::string& script_path);
     /**
          * \brief Constructs a Python::Object from a script string.
          * 
@@ -428,11 +198,13 @@ public:
          * \return Object representing the evaluated script.
          */
     void EvalScript(const std::string& script);
+    void LoadModule(const std::string& module);
 
     size_t use_count() const { return py_obj.use_count(); }
 
 private:
     typedef std::shared_ptr<PyObject> pyshared_ptr;
+    pyshared_ptr py_obj;
     Ownership _owenership;
     void _deleter(PyObject* obj);
 
@@ -478,8 +250,6 @@ private:
     {
         PyTuple_SetItem(tup.get(), i, CastToPyObject(data));
     }
-
-    pyshared_ptr py_obj;
 };
 };
 

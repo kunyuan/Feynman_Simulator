@@ -79,7 +79,7 @@ void Object::EvalScript(const std::string& script)
     reset_pyshared(result, _owenership);
 }
 
-void Object::LoadModule(const string& script_path)
+void Object::LoadScript(const string& script_path)
 {
     char arr[] = "path";
     PyObject* path(PySys_GetObject(arr));
@@ -103,6 +103,13 @@ void Object::LoadModule(const string& script_path)
     MakeSureNoError();
     _owenership = TakeOver; //take over ownership of dict result
     reset_pyshared(result, _owenership);
+}
+
+void Object::LoadModule(const std::string& module)
+{
+    PyObject* mod = PyImport_ImportModule(module.c_str());
+    PyObject* dir = PyObject_Dir(mod);
+    PrintPyObject(dir);
 }
 
 PyObject* Object::load_function(const std::string& name)
@@ -169,102 +176,5 @@ void MakeSureNoError()
 void PrintPyObject(PyObject* obj)
 {
     PyObject_Print(obj, stdout, 0);
-}
-
-// Allocation methods
-
-PyObject* CastToPyObject(const std::string& str)
-{
-    return PyString_FromString(str.c_str());
-}
-
-PyObject* CastToPyObject(const char* cstr)
-{
-    return PyString_FromString(cstr);
-}
-
-PyObject* CastToPyObject(unsigned long num)
-{
-    return PyLong_FromUnsignedLong(num);
-}
-PyObject* CastToPyObject(unsigned long long num)
-{
-    return PyLong_FromUnsignedLongLong(num);
-}
-PyObject* CastToPyObject(long long num)
-{
-    return PyLong_FromLongLong(num);
-}
-PyObject* CastToPyObject(unsigned long long num);
-
-PyObject* CastToPyObject(bool value)
-{
-    return PyBool_FromLong(value);
-}
-
-PyObject* CastToPyObject(real num)
-{
-    return PyFloat_FromDouble(num);
-}
-
-PyObject* CastToPyObject(const Complex& num)
-{
-    return PyComplex_FromDoubles(num.Re, num.Im);
-}
-
-bool is_py_int(PyObject* obj)
-{
-    return PyInt_Check(obj) || PyLong_Check(obj);
-}
-
-bool is_py_float(PyObject* obj)
-{
-    return PyFloat_Check(obj);
-}
-
-bool Convert(PyObject* obj, std::string& val)
-{
-    if (!PyString_Check(obj))
-        return false;
-    val = PyString_AsString(obj);
-    return true;
-}
-
-/*bool Convert(PyObject *obj, Py_ssize_t &val) {
-    return GenericConvert<Py_ssize_t>(obj, is_py_int, PyInt_AsSsize_t, val);
-}*/
-bool Convert(PyObject* obj, bool& value)
-{
-    if (obj == Py_False)
-        value = false;
-    else if (obj == Py_True)
-        value = true;
-    else
-        return false;
-    return true;
-}
-bool Convert(PyObject* obj, unsigned long long& value)
-{
-    return GenericConvert<unsigned long long>(obj,
-                                              is_py_int,
-                                              PyLong_AsUnsignedLongLong, value);
-}
-
-bool Convert(PyObject* obj, real& val)
-{
-    return GenericConvert<real>(obj, is_py_float, PyFloat_AsDouble, val);
-}
-
-/*bool Convert(PyObject *obj, size_t &val) {
-    return GenericConvert<size_t>(obj, is_py_int, PyInt_AsLong, val);
-}*/
-
-bool Convert(PyObject* obj, Complex& val)
-{
-    if (!PyComplex_Check(obj))
-        return false;
-    val = Complex(PyComplex_RealAsDouble(obj),
-                  PyComplex_ImagAsDouble(obj));
-    return true;
 }
 }
