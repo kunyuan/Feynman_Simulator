@@ -29,7 +29,9 @@
 struct _object;
 typedef _object PyObject;
 #endif
-namespace Python0 {
+namespace Python {
+void Initialize();
+void Finalize();
 void PrintError();
 void ClearError();
 void MakeSureNoPyError(ERRORCODE);
@@ -55,9 +57,12 @@ public:
     std::string PrettyString();
     void MakeSureNotNull();
 
-private:
+protected:
     PyObject* _PyPtr;
     Ownership _OwnerShip;
+
+private:
+    Object& operator=(const Object& a);
 };
 }
 

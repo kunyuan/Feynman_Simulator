@@ -145,16 +145,6 @@ bool Object::HasAttr(const std::string& name)
     }
 }
 
-void Initialize()
-{
-    Py_Initialize();
-}
-
-void Finalize()
-{
-    Py_Finalize();
-}
-
 void ClearError()
 {
     PyErr_Clear();

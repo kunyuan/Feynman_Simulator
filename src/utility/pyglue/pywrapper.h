@@ -23,56 +23,39 @@
 
 #include "utility/abort.h"
 #include "type_cast.h"
-
-/*
-   Make sure you have carefully gone through the following explaination about reference count behavior in python before touch following codes
-*/
-/*
-   The reference count behavior of functions in the Python/C API is best explained in terms of ownership of references. Ownership pertains to references, never to objects (objects are not owned: they are always shared). “Owning a reference” means being responsible for calling Py_DECREF on it when the reference is no longer needed. Ownership can also be transferred, meaning that the code that receives ownership of the reference then becomes responsible for eventually decref’ing it by calling Py_DECREF() or Py_XDECREF() when it’s no longer needed—or passing on this responsibility (usually to its caller). When a function passes ownership of a reference on to its caller, the caller is said to receive a new reference. When no ownership is transferred, the caller is said to borrow the reference. Nothing needs to be done for a borrowed reference.
-
-   Conversely, when a calling function passes in a reference to an object, there are two possibilities: the function steals a reference to the object, or it does not. TakeOvering a reference means that when you pass a reference to a function, that function assumes that it now owns that reference, and you are not responsible for it any longer.
- 
-   Few functions steal references; the two notable exceptions are PyList_SetItem() and PyTuple_SetItem(), which steal a reference to the item (but not to the tuple or list into which the item is put!). These functions were designed to steal a reference because of a common idiom for populating a tuple or list with newly created objects. 
- */
+#include "object.h"
 
 namespace Python {
-// Deleter that calls Py_XDECREF on the PyObject parameter.
-struct PyObjectDeleter {
-    void operator()(PyObject* obj)
+class AnyObject : public Object {
+public:
+    AnyObject(Ownership ownership = Received);
+    AnyObject(PyObject* ptr, Ownership ownership = Received);
+    AnyObject(const AnyObject&, Ownership ownership = Received);
+    template <typename T>
+    AnyObject(T value)
     {
-        Py_XDECREF(obj);
+        _OwnerShip = Received;
+        _PyPtr = CastToPyObject(value);
     }
-};
-struct BorrowedPyObjectDeleter {
-    void operator()(PyObject* obj)
+    template <typename T>
+    T As()
     {
+        T value;
+        if (Python::Convert(_PyPtr, value))
+            ERRORCODEABORT(ERR_VALUE_INVALID, "Fail to convert PyObject!");
+        return value;
     }
-};
-// unique_ptr that uses Py_XDECREF as the destructor function.
-typedef std::unique_ptr<PyObject, PyObjectDeleter> pyunique_ptr;
-typedef std::unique_ptr<PyObject, BorrowedPyObjectDeleter> pyunique_ptr_borrowed;
 
-void Initialize();
-void Finalize();
-void PrintError();
-void ClearError();
-void MakeSureNoError();
-void PrintPyObject(PyObject* obj);
-
-enum Ownership {
-    TakeOver = 0,
-    Borrowed
+private:
+    AnyObject& operator=(const AnyObject& a);
 };
-/**
-     * \class Object
-     * \brief This class represents a python object.
-     */
-class Object {
+
+class ModuleObject : Object {
 public:
     /**
          * \brief Constructs a default python object
          */
-    Object();
+    ModuleObject();
 
     /**
          * \brief Constructs a python object from a PyObject pointer.
