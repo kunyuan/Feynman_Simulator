@@ -9,7 +9,7 @@
 #include "object.h"
 #include "utility/abort.h"
 #include <Python/Python.h>
-namespace Python0 {
+namespace Python {
 void IncreaseRef(PyObject* obj, Ownership os)
 {
     if (obj != nullptr)
@@ -20,6 +20,16 @@ void DecreaseRef(PyObject* obj, Ownership os)
 {
     if (os == Received)
         Py_XDECREF(obj);
+}
+
+void Initialize()
+{
+    Py_Initialize();
+}
+
+void Finalize()
+{
+    Py_Finalize();
 }
 
 void ClearError()

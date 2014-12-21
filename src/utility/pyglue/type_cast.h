@@ -25,18 +25,18 @@ namespace Python {
 // ------------ Conversion functions ------------
 
 // Convert a PyObject to a std::string.
-bool Convert(PyObject* obj, std::string& val);
+bool Convert(Object* obj, std::string& val);
 // Convert a PyObject to a bool value.
-bool Convert(PyObject* obj, bool& value);
-bool Convert(PyObject* obj, int& value);
-bool Convert(PyObject* obj, unsigned int& value);
-bool Convert(PyObject* obj, long& value);
-bool Convert(PyObject* obj, unsigned long& value);
-bool Convert(PyObject* obj, long long& value);
-bool Convert(PyObject* obj, unsigned long long& value);
-bool Convert(PyObject* obj, float& value);
-bool Convert(PyObject* obj, double& value);
-bool Convert(PyObject* obj, Complex& val);
+bool Convert(Object* obj, bool& value);
+bool Convert(Object* obj, int& value);
+bool Convert(Object* obj, unsigned int& value);
+bool Convert(Object* obj, long& value);
+bool Convert(Object* obj, unsigned long& value);
+bool Convert(Object* obj, long long& value);
+bool Convert(Object* obj, unsigned long long& value);
+bool Convert(Object* obj, float& value);
+bool Convert(Object* obj, double& value);
+bool Convert(Object* obj, Complex& val);
 
 //most generic convertor, require operator >> overloaded for type T
 //template <typename T>
