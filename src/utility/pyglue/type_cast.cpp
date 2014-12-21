@@ -8,7 +8,7 @@
 
 #include "type_cast.h"
 #include "utility/complex.h"
-
+namespace Python {
 bool Convert(PyObject* obj, std::string& val)
 {
     if (!PyString_Check(obj))
@@ -141,4 +141,5 @@ PyObject* CastToPyObject(double num)
 PyObject* CastToPyObject(const Complex& num)
 {
     return PyComplex_FromDoubles(num.Re, num.Im);
+}
 }

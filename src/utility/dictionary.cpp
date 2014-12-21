@@ -12,10 +12,28 @@
 #include <memory>
 #include "utility/abort.h"
 #include "utility/scopeguard.h"
+#include <iostream>
 #include "dictionary.h"
 
 using namespace std;
 using namespace Python;
+
+namespace Python {
+bool Convert(PyObject* obj, Dictionary& value)
+{
+    if (!PyDict_Check(obj))
+        return false;
+    value = Dictionary(obj);
+    return true;
+}
+
+PyObject* CastToPyObject(const Dictionary& value)
+{
+    PyObject* NewDict = value.GetPyObject();
+    Py_INCREF(NewDict);
+    return NewDict;
+}
+}
 
 Dictionary::Dictionary()
 {
@@ -29,32 +47,17 @@ void Dictionary::LoadByEval(const std::string& script)
 
 void Dictionary::Load(const std::string& FileName)
 {
-    if (!DoesFileExist(FileName)) {
-        LOG_WARNING(FileName << " File does not exist!");
-        throw(ERR_FILE_NOT_FOUND);
-    }
-    ifstream ifs(FileName, std::ios::in);
-    ON_SCOPE_EXIT([&] {ifs.close(); });
-    string source = "", line;
-    while (getline(ifs, line)) {
-        source += line;
-    }
-    LoadByEval(source);
+    Python::Object LoadDict;
+    LoadDict.LoadScript("IO.py");
+    auto result = LoadDict.CallFunction("LoadDict", FileName);
+    _Dict = result;
 }
 
 void Dictionary::Save(const string& FileName, const string& Mode)
 {
-    auto mode = ios::out;
-    if ((Mode) == "a")
-        mode = ios::app;
-    else if ((Mode) != "w")
-        ABORT("I don't know what is the mode " << Mode << "?");
-
-    ofstream ofs(FileName, mode);
-    ON_SCOPE_EXIT([&] {ofs.close(); });
-    if (!ofs.is_open())
-        ABORT("Fail to open file " << FileName);
-    ofs << _Dict.PrettyString() << endl;
+    Python::Object SaveDict;
+    SaveDict.LoadScript("IO.py");
+    auto result = SaveDict.CallFunction("SaveDict", FileName, Mode, _Dict);
 }
 void Dictionary::Clear()
 {

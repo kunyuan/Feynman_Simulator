@@ -26,12 +26,6 @@ int TestDictionary()
 
 void Test_Dict()
 {
-    PyObject* i = PyInt_FromLong(1);
-    long ii = PyLong_AsLongLong(i);
-    cout << ii << endl;
-    Python::MakeSureNoError();
-    Python::PrintError();
-
     Dictionary Port;
     int IntMax = std::numeric_limits<int>::max();
     int IntMin = std::numeric_limits<int>::min();
@@ -69,12 +63,12 @@ void Test_Dict()
     Port.Set("dict", SubPort);
     sput_fail_unless(Port.Get<Dictionary>("dict").Get<int>("b") == 11,
                      "check dict type");
-    Port.Save("test.py", "w");
+    Port.Save("test.txt", "w");
     Port.Clear();
-    Port.Load("test.py");
+    Port.Load("test.txt");
     Port.Print();
-    system("rm test.py");
-    SubPort.Clear();
-    SubPort = Port.Get<Dictionary>("dict");
-    SubPort.Print();
+    //    system("rm test.py");
+    //    SubPort.Clear();
+    //    SubPort = Port.Get<Dictionary>("dict");
+    //    SubPort.Print();
 }
