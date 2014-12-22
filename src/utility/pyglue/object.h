@@ -34,35 +34,46 @@ void Initialize();
 void Finalize();
 void PrintError();
 void ClearError();
+void PrintPyObject(PyObject*);
 void MakeSureNoPyError(ERRORCODE);
-enum Ownership {
-    //Object with received ownership from others has to
-    //manage the reference count of PyObject
-    //namely, call Py_DECREF() or Py_XDECREF()
-    Received = 0,
-    Borrowed
-};
+/**
+    * Object could be either own the reference (call Py_DECREF() when get deleted) 
+      or unowned the reference (do not call Py_DECREF() when get deleted)
+    * The copy constructor will always create Object who own the reference, meaning Py_INCREF() will always be called
+    * The cast between PyObject/Object involve two actions: Steal or Borrow. Steal means the ownership of PyObject/Object is transfered to Object/PyObject, while Borrow means oppsite
+    */
 class Object {
 public:
-    Object(Ownership ownership = Received)
-        : _OwnerShip(ownership)
+    enum Action {
+        STEAL = 0,
+        BORROW,
+    };
+    Object()
+        : _IsOwner(false)
         , _PyPtr(nullptr){};
-    Object(PyObject* ptr, Ownership ownership = Received);
-    Object(const Object&, Ownership ownership = Received);
+    Object(const Object& obj);
+    Object& operator=(const Object& a);
     ~Object() { Destroy(); }
+
+    static Object Borrow(PyObject* ptr);
+    static Object Steal(PyObject* ptr);
+    PyObject* Borrow() const;
+    PyObject* Steal();
+
     void Destroy();
-    PyObject* GetPtr() const { return _PyPtr; }
-    Ownership GetOwnerShip() const { return _OwnerShip; }
+    bool IsOwner() const { return _IsOwner; }
+
     void Print();
+    void _PrintDebug() const;
     std::string PrettyString();
     void MakeSureNotNull();
 
 protected:
     PyObject* _PyPtr;
-    Ownership _OwnerShip;
+    bool _IsOwner;
 
 private:
-    Object& operator=(const Object& a);
+    Object(PyObject*, bool IsOwner);
 };
 }
 

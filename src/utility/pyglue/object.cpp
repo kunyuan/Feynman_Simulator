@@ -10,18 +10,6 @@
 #include "utility/abort.h"
 #include <Python/Python.h>
 namespace Python {
-void IncreaseRef(PyObject* obj, Ownership os)
-{
-    if (obj != nullptr)
-        if (os == Received)
-            Py_INCREF(obj);
-}
-void DecreaseRef(PyObject* obj, Ownership os)
-{
-    if (os == Received)
-        Py_XDECREF(obj);
-}
-
 void Initialize()
 {
     Py_Initialize();
@@ -42,6 +30,10 @@ void PrintError()
     PyErr_Print();
 }
 
+void PrintPyObject(PyObject* obj)
+{
+    PyObject_Print(obj, stdout, 0);
+}
 void MakeSureNoPyError(ERRORCODE e)
 {
     if (PyErr_Occurred()) {
@@ -50,22 +42,64 @@ void MakeSureNoPyError(ERRORCODE e)
     }
 }
 
-Object::Object(PyObject* ptr, Ownership os)
+void IncreaseRef(PyObject* obj)
+{
+    if (obj != nullptr)
+        Py_INCREF(obj);
+}
+void DecreaseRef(PyObject* obj, bool IsOwner)
+{
+    if (IsOwner)
+        Py_XDECREF(obj);
+}
+
+Object::Object(const Object& obj)
+{
+    _PyPtr = obj.Borrow();
+    _IsOwner = true;
+    IncreaseRef(_PyPtr);
+}
+
+Object& Object::operator=(const Object& obj)
+{
+    _PyPtr = obj.Borrow();
+    _IsOwner = true;
+    IncreaseRef(_PyPtr);
+    return *this;
+}
+
+Object::Object(PyObject* ptr, bool IsOwner)
 {
     _PyPtr = ptr;
-    _OwnerShip = os;
-    IncreaseRef(_PyPtr, _OwnerShip);
+    _IsOwner = IsOwner;
 }
-Object::Object(const Object& obj, Ownership os)
+
+Object Object::Borrow(PyObject* ptr)
 {
-    _PyPtr = obj.GetPtr();
-    _OwnerShip = obj.GetOwnerShip();
-    IncreaseRef(_PyPtr, _OwnerShip);
+    return Object(ptr, false);
 }
+Object Object::Steal(PyObject* ptr)
+{
+    return Object(ptr, true);
+}
+
+PyObject* Object::Borrow() const
+{
+    return _PyPtr;
+}
+
+PyObject* Object::Steal()
+{
+    if (IsOwner() == false)
+        ERRORCODEABORT(ERR_VALUE_INVALID, "Object does not have ownership!");
+    return _PyPtr;
+}
+
 void Object::Destroy()
 {
-    DecreaseRef(_PyPtr, _OwnerShip);
+    DecreaseRef(_PyPtr, IsOwner());
     _PyPtr = nullptr;
+    _IsOwner = false;
 }
 
 void Object::Print()
@@ -73,11 +107,15 @@ void Object::Print()
     PyObject_Print(_PyPtr, stdout, 0);
 }
 
+void Object::_PrintDebug() const
+{
+    LOG_INFO("PyObject ref=" << _PyPtr->ob_refcnt);
+}
 std::string Object::PrettyString()
 {
-    Object result = PyObject_Repr(_PyPtr);
+    Object result = Object::Steal(PyObject_Repr(_PyPtr));
     MakeSureNoPyError(ERR_VALUE_INVALID);
-    return PyString_AsString(result.GetPtr());
+    return PyString_AsString(result.Borrow());
 }
 
 void Object::MakeSureNotNull()

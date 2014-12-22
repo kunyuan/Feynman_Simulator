@@ -9,137 +9,142 @@
 #include "type_cast.h"
 #include "utility/complex.h"
 namespace Python {
-bool Convert(PyObject* obj, std::string& val)
+bool Convert(Object obj, std::string& val)
 {
-    if (!PyString_Check(obj))
+    if (!PyString_Check(obj.Borrow()))
         return false;
-    val = PyString_AsString(obj);
+    val = PyString_AsString(obj.Borrow());
     return true;
 }
-bool Convert(PyObject* obj, bool& value)
+bool Convert(Object obj, bool& value)
 {
-    if (obj == Py_False)
+    if (obj.Borrow() == Py_False)
         value = false;
-    else if (obj == Py_True)
+    else if (obj.Borrow() == Py_True)
         value = true;
     else
         return false;
     return true;
 }
-bool Convert(PyObject* obj, int& value)
+bool IsInt(const Object& obj)
 {
-    if (!PyInt_Check(obj) && !PyLong_Check(obj))
+    return (!PyInt_Check(obj.Borrow()) && !PyLong_Check(obj.Borrow()));
+}
+
+bool Convert(Object obj, int& value)
+{
+    if (IsInt(obj))
         return false;
-    value = (int)PyLong_AsLong(obj);
+    value = (int)PyLong_AsLong(obj.Borrow());
     return true;
 }
-bool Convert(PyObject* obj, unsigned int& value)
+bool Convert(Object obj, unsigned int& value)
 {
-    if (!PyInt_Check(obj) && !PyLong_Check(obj))
+    if (IsInt(obj))
         return false;
-    value = (unsigned int)PyLong_AsUnsignedLong(obj);
+    value = (unsigned int)PyLong_AsUnsignedLong(obj.Borrow());
     return true;
 }
-bool Convert(PyObject* obj, long& value)
+bool Convert(Object obj, long& value)
 {
-    if (!PyInt_Check(obj) && !PyLong_Check(obj))
+    if (IsInt(obj))
         return false;
-    value = PyLong_AsLong(obj);
+    value = PyLong_AsLong(obj.Borrow());
     return true;
 }
-bool Convert(PyObject* obj, unsigned long& value)
+bool Convert(Object obj, unsigned long& value)
 {
-    if (!PyInt_Check(obj) && !PyLong_Check(obj))
+    if (IsInt(obj))
         return false;
-    value = PyLong_AsUnsignedLong(obj);
+    value = PyLong_AsUnsignedLong(obj.Borrow());
     return true;
 }
-bool Convert(PyObject* obj, long long& value)
+bool Convert(Object obj, long long& value)
 {
-    if (!PyInt_Check(obj) && !PyLong_Check(obj))
+    if (IsInt(obj))
         return false;
-    value = PyLong_AsLongLong(obj);
+    value = PyLong_AsLongLong(obj.Borrow());
     return true;
 }
-bool Convert(PyObject* obj, unsigned long long& value)
+bool Convert(Object obj, unsigned long long& value)
 {
-    if (!PyInt_Check(obj) && !PyLong_Check(obj))
+    if (IsInt(obj))
         return false;
-    value = PyLong_AsUnsignedLongLong(obj);
+    value = PyLong_AsUnsignedLongLong(obj.Borrow());
     return true;
 }
 
 template <typename T>
-bool ConvertReal(PyObject* obj, T& val)
+bool ConvertReal(Object obj, T& val)
 {
-    if (!PyFloat_Check(obj))
+    if (!PyFloat_Check(obj.Borrow()))
         return false;
-    val = (T)PyFloat_AsDouble(obj);
+    val = (T)PyFloat_AsDouble(obj.Borrow());
     return true;
 }
-bool Convert(PyObject* obj, float& val)
+bool Convert(Object obj, float& val)
 {
     return ConvertReal(obj, val);
 }
-bool Convert(PyObject* obj, double& val)
+bool Convert(Object obj, double& val)
 {
     return ConvertReal(obj, val);
 }
-bool Convert(PyObject* obj, Complex& val)
+bool Convert(Object obj, Complex& val)
 {
-    if (!PyComplex_Check(obj))
+    if (!PyComplex_Check(obj.Borrow()))
         return false;
-    val = Complex(PyComplex_RealAsDouble(obj),
-                  PyComplex_ImagAsDouble(obj));
+    val = Complex(PyComplex_RealAsDouble(obj.Borrow()),
+                  PyComplex_ImagAsDouble(obj.Borrow()));
     return true;
 }
 
 // Allocation methods
 
-PyObject* CastToPyObject(const std::string& str)
+Object CastToPy(const std::string& str)
 {
-    return PyString_FromString(str.c_str());
+    return Object::Steal(PyString_FromString(str.c_str()));
 }
-PyObject* CastToPyObject(bool value)
+Object CastToPy(bool value)
 {
-    return PyBool_FromLong(value);
+    return Object::Steal(PyBool_FromLong(value));
 }
-PyObject* CastToPyObject(int num)
+Object CastToPy(int num)
 {
-    return PyInt_FromLong(num);
+    return Object::Steal(PyInt_FromLong(num));
 }
-PyObject* CastToPyObject(unsigned int num)
+Object CastToPy(unsigned int num)
 {
-    return PyInt_FromLong(num);
+    return Object::Steal(PyInt_FromLong(num));
 }
-PyObject* CastToPyObject(long num)
+Object CastToPy(long num)
 {
-    return PyLong_FromLong(num);
+    return Object::Steal(PyLong_FromLong(num));
 }
-PyObject* CastToPyObject(unsigned long num)
+Object CastToPy(unsigned long num)
 {
-    return PyLong_FromUnsignedLong(num);
+    return Object::Steal(PyLong_FromUnsignedLong(num));
 }
-PyObject* CastToPyObject(unsigned long long num)
+Object CastToPy(unsigned long long num)
 {
-    return PyLong_FromUnsignedLongLong(num);
+    return Object::Steal(PyLong_FromUnsignedLongLong(num));
 }
-PyObject* CastToPyObject(long long num)
+Object CastToPy(long long num)
 {
-    return PyLong_FromLongLong(num);
+    return Object::Steal(PyLong_FromLongLong(num));
 }
-PyObject* CastToPyObject(unsigned long long num);
+Object CastToPy(unsigned long long num);
 
-PyObject* CastToPyObject(float num)
+Object CastToPy(float num)
 {
-    return PyFloat_FromDouble(num);
+    return Object::Steal(PyFloat_FromDouble(num));
 }
-PyObject* CastToPyObject(double num)
+Object CastToPy(double num)
 {
-    return PyFloat_FromDouble(num);
+    return Object::Steal(PyFloat_FromDouble(num));
 }
-PyObject* CastToPyObject(const Complex& num)
+Object CastToPy(const Complex& num)
 {
-    return PyComplex_FromDoubles(num.Re, num.Im);
+    return Object::Steal(PyComplex_FromDoubles(num.Re, num.Im));
 }
 }

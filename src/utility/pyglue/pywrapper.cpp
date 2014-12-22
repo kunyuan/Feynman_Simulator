@@ -21,6 +21,7 @@
 #include "utility/utility.h"
 #include "utility/complex.h"
 #include <stdio.h>
+#include <iostream>
 #include <algorithm>
 #include <fstream>
 #include "pywrapper.h"
@@ -28,61 +29,20 @@
 using std::string;
 
 namespace Python {
-Object::Object()
-{
-}
 
-Object::Object(PyObject* obj, Ownership ownership)
-    : py_obj(make_pyshared(obj, ownership))
+void AnyObject::EvalScript(const std::string& script)
 {
-    _owenership = ownership;
+    Object main = Object::Steal(PyImport_AddModule("__main__"));
+    Object global = Object::Borrow(PyModule_GetDict(main.Borrow())); //borrowed reference
+    Object local = Object::Steal(PyDict_New());
+    *this = Object::Steal(PyRun_String(script.c_str(), Py_eval_input,
+                                       global.Borrow(), local.Borrow()));
+    MakeSureNoPyError(ERR_GENERAL);
 }
-
-void Object::Print()
-{
-    PyObject_Print(py_obj.get(), stdout, 0);
-}
-
-std::string Object::PrettyString()
-{
-    PyObject* result = PyObject_Repr(py_obj.get());
-    pyunique_ptr str(result);
-    MakeSureNoError();
-    return PyString_AsString(str.get());
-}
-
-Python::Object::pyshared_ptr Object::make_pyshared(PyObject* obj, Ownership ownership)
-{
-    if (ownership == TakeOver)
-        return pyshared_ptr(obj, [](PyObject* obj) { Py_XDECREF(obj); });
-    else
-        return pyshared_ptr(obj, [](PyObject* obj) {});
-}
-
-void Object::reset_pyshared(PyObject* obj, Ownership ownership)
-{
-    if (ownership == TakeOver)
-        return py_obj.reset(obj, [](PyObject* obj) { Py_XDECREF(obj); });
-    else
-        return py_obj.reset(obj, [](PyObject* obj) {});
-}
-
-void Object::EvalScript(const std::string& script)
-{
-    pyunique_ptr_borrowed main(PyImport_AddModule("__main__"));
-    pyunique_ptr_borrowed global(PyModule_GetDict(main.get())); //borrowed reference
-    pyunique_ptr local(PyDict_New());
-    PyObject* result = PyRun_String(script.c_str(), Py_eval_input,
-                                    global.get(), local.get());
-    MakeSureNoError();
-    _owenership = TakeOver; //take over ownership of dict result
-    reset_pyshared(result, _owenership);
-}
-
-void Object::LoadScript(const string& script_path)
+void ModuleObject::LoadModule(const string& script_path)
 {
     char arr[] = "path";
-    PyObject* path(PySys_GetObject(arr));
+    Object path = Object::Borrow(PySys_GetObject(arr));
     string base_path("."), file_path;
     size_t last_slash(script_path.rfind("/"));
     if (last_slash != string::npos) {
@@ -95,46 +55,44 @@ void Object::LoadScript(const string& script_path)
         file_path = script_path;
     if (file_path.rfind(".py") == file_path.size() - 3)
         file_path = file_path.substr(0, file_path.size() - 3);
-    pyunique_ptr pwd(PyString_FromString(base_path.c_str()));
+    Object pwd = Object::Steal(PyString_FromString(base_path.c_str()));
 
-    PyList_Append(path, pwd.get());
+    PyList_Append(path.Borrow(), pwd.Borrow());
     /* We don't need that string value anymore, so deref it */
-    PyObject* result = PyImport_ImportModule(file_path.c_str());
-    MakeSureNoError();
-    _owenership = TakeOver; //take over ownership of dict result
-    reset_pyshared(result, _owenership);
+    PyObject* module = PyImport_ImportModule(file_path.c_str());
+    PyObject* dict = PyModule_GetDict(module);
+    cout << PyDict_Check(dict) << endl;
+    PrintPyObject(dict);
+    MakeSureNoPyError(ERR_GENERAL);
+    *this = Object::Steal(module);
 }
 
-void Object::LoadModule(const std::string& module)
+PyObject* ModuleObject::load_function(const std::string& name)
 {
-    PyObject* mod = PyImport_ImportModule(module.c_str());
-    PyObject* dir = PyObject_Dir(mod);
-    PrintPyObject(dir);
+    PyObject* attr = PyObject_GetAttrString(Borrow(), name.c_str());
+    Object obj = Object::Steal(attr);
+    obj.MakeSureNotNull();
+    MakeSureNoPyError(ERR_GENERAL);
+    return obj.Steal();
 }
 
-PyObject* Object::load_function(const std::string& name)
+Object ModuleObject::CallFunction(const std::string& name)
 {
-    PyObject* obj(PyObject_GetAttrString(py_obj.get(), name.c_str()));
-    MakeSureNoError();
-    return obj;
-}
-
-Object Object::CallFunction(const std::string& name)
-{
-    pyunique_ptr func(load_function(name));
-    PyObject* ret(PyObject_CallObject(func.get(), 0));
-    MakeSureNoError();
+    PyObject* func = load_function(name);
+    //    Object func = load_function(name);
+    Object ret = Object::Steal(PyObject_CallObject(func, 0));
+    MakeSureNoPyError(ERR_GENERAL);
     return { ret };
 }
 
-Object Object::GetAttr(const std::string& name)
+Object ModuleObject::GetAttr(const std::string& name)
 {
-    PyObject* obj(PyObject_GetAttrString(py_obj.get(), name.c_str()));
-    MakeSureNoError();
+    Object obj = Object::Steal(PyObject_GetAttrString(Borrow(), name.c_str()));
+    MakeSureNoPyError(ERR_GENERAL);
     return { obj };
 }
 
-bool Object::HasAttr(const std::string& name)
+bool ModuleObject::HasAttr(const std::string& name)
 {
     try {
         GetAttr(name);
@@ -143,28 +101,5 @@ bool Object::HasAttr(const std::string& name)
     catch (ERRORCODE e) {
         return false;
     }
-}
-
-void ClearError()
-{
-    PyErr_Clear();
-}
-
-void PrintError()
-{
-    PyErr_Print();
-}
-
-void MakeSureNoError()
-{
-    if (PyErr_Occurred()) {
-        PrintError();
-        ABORT("Python fatal error!");
-    }
-}
-
-void PrintPyObject(PyObject* obj)
-{
-    PyObject_Print(obj, stdout, 0);
 }
 }
