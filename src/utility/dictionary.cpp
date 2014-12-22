@@ -19,49 +19,47 @@ using namespace std;
 using namespace Python;
 
 namespace Python {
-bool Convert(PyObject* obj, Dictionary& value)
+bool Convert(Object obj, Dictionary& value)
 {
-    if (!PyDict_Check(obj))
+    if (!PyDict_Check(obj.Borrow()))
         return false;
     value = Dictionary(obj);
     return true;
 }
-
-PyObject* CastToPyObject(const Dictionary& value)
+Object CastToPy(const Dictionary& value)
 {
-    PyObject* NewDict = value.GetPyObject();
-    Py_INCREF(NewDict);
-    return NewDict;
+    return value.GetObject();
 }
 }
 
 Dictionary::Dictionary()
 {
-    _Dict = PyDict_New();
+    _Dict = Object::Steal(PyDict_New());
 }
 
-void Dictionary::LoadByEval(const std::string& script)
+void Dictionary::LoadFromString(const std::string& script)
 {
     _Dict.EvalScript(script);
 }
 
 void Dictionary::Load(const std::string& FileName)
 {
-    Python::Object LoadDict;
-    LoadDict.LoadScript("IO.py");
-    auto result = LoadDict.CallFunction("LoadDict", FileName);
+    ModuleObject LoadDict;
+    LoadDict.LoadModule("IO.py");
+    Object result = LoadDict.CallFunction("LoadDict", FileName);
     _Dict = result;
 }
 
 void Dictionary::Save(const string& FileName, const string& Mode)
 {
-    Python::Object SaveDict;
-    SaveDict.LoadScript("IO.py");
-    auto result = SaveDict.CallFunction("SaveDict", FileName, Mode, _Dict);
+    ModuleObject SaveDict;
+    SaveDict.LoadModule("IO.py");
+    //    SaveDict.CallFunction("Simple");
+    SaveDict.CallFunction("SaveDict", FileName, Mode, _Dict);
 }
 void Dictionary::Clear()
 {
-    PyDict_Clear(_Dict.get());
+    PyDict_Clear(_Dict.Borrow());
 }
 
 void Dictionary::Print()
@@ -71,5 +69,5 @@ void Dictionary::Print()
 
 void Dictionary::_PrintDebug() const
 {
-    LOG_INFO("Object ref=" << _Dict.use_count() << ", PyObject ref=" << _Dict.get()->ob_refcnt);
+    LOG_INFO("PyObject ref=" << _Dict.Borrow()->ob_refcnt);
 }

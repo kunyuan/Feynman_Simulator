@@ -18,48 +18,46 @@
 
 #define SET(para, value) (para).Set((#value), (value));
 #define GET(para, value) (para).Get((#value), (value));
-
+using namespace Python;
 class Dictionary {
 public:
     friend class Dictionary;
     Dictionary();
-    //borrow reference, no change on reference of PyObject
     Dictionary(const Python::Object& obj)
         : _Dict(obj)
     {
     }
-    //borrow reference, no change on reference of PyObject
     Dictionary(const Dictionary& dict)
+        : _Dict(dict.GetObject())
     {
-        //        dict._PrintDebug();
-        *this = dict;
-        //        dict._PrintDebug();
     }
+
     template <typename T>
     void Set(const std::string& key, const T& value)
     {
-        Python::Object object(value);
-        PyDict_SetItemString(_Dict.get(), key.c_str(), object.get());
+        Python::AnyObject object(value);
+        PyDict_SetItemString(_Dict.Borrow(), key.c_str(), object.Borrow());
     }
     void Set(const std::string& key, const Dictionary& value)
     {
-        PyDict_SetItemString(_Dict.get(), key.c_str(), value._Dict.get());
+        PyDict_SetItemString(_Dict.Borrow(), key.c_str(), value._Dict.Borrow());
     }
     template <typename T>
     bool Get(const std::string& key, T& value)
     {
-        Python::Object object(PyDict_GetItemString(_Dict.get(), key.c_str()),
-                              Python::Ownership::Borrowed);
-        if (object.get() == nullptr)
+        AnyObject object = Object::Borrow(PyDict_GetItemString(_Dict.Borrow(),
+                                                               key.c_str()));
+        if (object.Borrow() == nullptr)
             return false;
-        object.Convert(value);
+        value = object.As<T>();
+        object.Print();
         return true;
     }
     bool Get(const std::string& key, Dictionary& value)
     {
-        Python::Object object(PyDict_GetItemString(_Dict.get(), key.c_str()),
-                              Python::Ownership::Borrowed);
-        if (object.get() == nullptr)
+        AnyObject object = Object::Borrow(PyDict_GetItemString(_Dict.Borrow(),
+                                                               key.c_str()));
+        if (object.Borrow() == nullptr)
             return false;
         value = Dictionary(object);
         return true;
@@ -76,19 +74,19 @@ public:
     void Clear();
     void Print();
     std::string PrettyString() { return _Dict.PrettyString(); }
-    void LoadByEval(const std::string&);
+    void LoadFromString(const std::string&);
     void Load(const std::string& FileName);
     void Save(const std::string& FileName, const std::string& Mode = "a");
 
-    PyObject* GetPyObject() const { return _Dict.get(); }
+    Python::AnyObject GetObject() const { return _Dict; }
     void _PrintDebug() const;
 
 private:
-    Python::Object _Dict;
+    Python::AnyObject _Dict;
 };
 namespace Python {
-bool Convert(PyObject* obj, Dictionary& value);
-PyObject* CastToPyObject(const Dictionary& num);
+bool Convert(Object obj, Dictionary& value);
+Object CastToPy(const Dictionary& num);
 }
 
 int TestDictionary();

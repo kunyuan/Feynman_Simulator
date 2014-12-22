@@ -48,25 +48,26 @@ void Test_Dict()
                      "check long long integer type");
     sput_fail_unless(Port.Get<unsigned long long>("biggest") == biggest,
                      "check unsigned long long integer type");
+    auto vect = Port.Get<vector<int> >("Vec");
     sput_fail_unless(std::equal(v.begin(), v.end(),
-                                Port.Get<vector<int> >("Vec").begin()),
+                                vect.begin()),
                      "check vector<int> type");
     Complex ca = { 1.0, 2.0 };
     Complex cb = { 4.0, 2.1 };
     vector<Complex> vc = { ca, cb };
-    Python::Object cvec = vc;
     Port.Set("cVec", vc);
     sput_fail_unless(Equal((Port.Get<vector<Complex> >("cVec"))[1], cb),
                      "check vector<Complex> type");
     Dictionary SubPort;
-    SubPort.LoadByEval("{'b':11,'c':22}");
+    SubPort.LoadFromString("{'b':11,'c':22}");
     Port.Set("dict", SubPort);
     sput_fail_unless(Port.Get<Dictionary>("dict").Get<int>("b") == 11,
                      "check dict type");
     Port.Save("test.txt", "w");
-    Port.Clear();
-    Port.Load("test.txt");
-    Port.Print();
+    PrintPyObject(Port.GetObject().Borrow());
+    //    Port.Clear();
+    //    Port.Load("test.txt");
+    //    Port.Print();
     //    system("rm test.py");
     //    SubPort.Clear();
     //    SubPort = Port.Get<Dictionary>("dict");
