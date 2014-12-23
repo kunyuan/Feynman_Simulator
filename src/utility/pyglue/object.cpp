@@ -92,6 +92,7 @@ PyObject* Object::Steal()
 {
     if (IsOwner() == false)
         ERRORCODEABORT(ERR_VALUE_INVALID, "Object does not have ownership!");
+    _IsOwner = false;
     return _PyPtr;
 }
 
