@@ -22,6 +22,9 @@ class Momentum{
 
     int K; // member
 
+    int index();
+    int abs();
+    
     Momentum &operator=(const Momentum &);
     Momentum &operator=(int);
 

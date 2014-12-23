@@ -49,6 +49,7 @@ bool Diagram::LoadConfig(istream &is, gLine g)
     READ(is, g_out);
     g->nVer[OUT] = Ver(g_out);
     READ(is, g->K);
+    AddGHash(g->K);
     READ(is, g->IsMeasure);
     if(g->IsMeasure)
     {
@@ -73,6 +74,7 @@ bool Diagram::LoadConfig(istream &is, wLine w)
     READ(is, w_out);
     w->nVer[OUT] = Ver(w_out);
     READ(is, w->K);
+    AddWHash(w->K);
     READ(is, w->IsDelta);
     READ(is, w->IsMeasure);
     if(w->IsMeasure)

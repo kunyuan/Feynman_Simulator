@@ -74,6 +74,7 @@ void MarkovMonitor::Measure()
 {
     //    cEstimator[0].Measure(<#const Complex &#>);
     //    cEstimator["1"].Measure(<#const Complex &#>);
+//    Weight->Sigma->Measure(
 }
 
 void MarkovMonitor::AddStatistics()
