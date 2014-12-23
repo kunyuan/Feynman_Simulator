@@ -63,6 +63,13 @@ void Test_Dict()
     Port.Set("dict", SubPort);
     sput_fail_unless(Port.Get<Dictionary>("dict").Get<int>("b") == 11,
                      "check dict type");
+    Port.GetObject()._PrintDebug();
+    PyObject* k = CastToPy(Port).Steal();
+    Port.GetObject()._PrintDebug();
+    AnyObject i = 1;
+    i._PrintDebug();
+    PyObject* j = CastToPy(1).Steal();
+    i._PrintDebug();
     Port.Save("test.txt", "w");
     PrintPyObject(Port.GetObject().Borrow());
     //    Port.Clear();

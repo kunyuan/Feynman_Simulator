@@ -111,7 +111,8 @@ Object CastToPy(bool value)
 }
 Object CastToPy(int num)
 {
-    return Object::Steal(PyInt_FromLong(num));
+    PyObject* i = PyInt_FromLong(num);
+    return Object::Steal(i);
 }
 Object CastToPy(unsigned int num)
 {

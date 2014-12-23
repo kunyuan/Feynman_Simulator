@@ -28,6 +28,9 @@ bool Convert(Object obj, Dictionary& value)
 }
 Object CastToPy(const Dictionary& value)
 {
+    //    PyObject* dptr = value.GetObject().Borrow();
+    //    Py_INCREF(dptr);
+    //    return Object::Steal(dptr);
     return value.GetObject();
 }
 }

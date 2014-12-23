@@ -60,9 +60,6 @@ void ModuleObject::LoadModule(const string& script_path)
     PyList_Append(path.Borrow(), pwd.Borrow());
     /* We don't need that string value anymore, so deref it */
     PyObject* module = PyImport_ImportModule(file_path.c_str());
-    PyObject* dict = PyModule_GetDict(module);
-    cout << PyDict_Check(dict) << endl;
-    PrintPyObject(dict);
     MakeSureNoPyError(ERR_GENERAL);
     *this = Object::Steal(module);
 }

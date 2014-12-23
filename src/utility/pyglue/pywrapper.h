@@ -23,6 +23,7 @@
 
 #include "utility/abort.h"
 #include "type_cast.h"
+#include <iostream>
 #include "object.h"
 
 namespace Python {
@@ -149,7 +150,7 @@ public:
     //         * \param name The name of the attribute to be returned.
     //         * \return Python::Object representing the attribute.
     //         */
-        Object GetAttr(const std::string& name);
+    Object GetAttr(const std::string& name);
     //
     //    /**
     //         * \brief Checks whether this object contains a certain attribute.
@@ -157,7 +158,7 @@ public:
     //         * \param name The name of the attribute to be searched.
     //         * \return bool indicating whether the attribute is defined.
     //         */
-        bool HasAttr(const std::string& name);
+    bool HasAttr(const std::string& name);
 
     /**
          * \brief Returns the internal PyObject*.
@@ -225,12 +226,15 @@ public:
     template <typename... Args>
     Object CallFunction(const std::string& name, const Args&... args)
     {
-        pyunique_ptr func(load_function(name));
+        PyObject* func = load_function(name);
         // Create the tuple argument
         pyunique_ptr tup(PyTuple_New(sizeof...(args)));
         add_tuple_vars(tup, args...);
         // Call our object
-        PyObject* result(PyObject_CallObject(func.get(), tup.get()));
+        PrintPyObject(tup.get());
+        std::cout << PyTuple_Size(tup.get()) << std::endl;
+        PyObject* result(PyObject_CallObject(func, tup.get()));
+        MakeSureNoPyError(ERR_GENERAL);
         if (!result)
             throw std::runtime_error("Failed to call function " + name);
         Object ret = Object::Steal(result);
