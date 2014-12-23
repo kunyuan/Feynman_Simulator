@@ -98,8 +98,7 @@ bool ParaMC::Load(const std::string& InputFile)
     GET(_para, WormSpaceReweight);
     GET(_para, OrderReWeight);
     GET(_para, MaxTauBin);
-    string RNGState = _para.Get<string>("RNG");
-    RNG.Reset(RNGState);
+    GET(_para, RNG);
     return true;
 }
 
@@ -121,7 +120,7 @@ void ParaMC::Save(const std::string& OutputFile, string Mode)
     SET(_para, WormSpaceReweight);
     SET(_para, OrderReWeight);
     SET(_para, MaxTauBin);
-    _para.Set("RNG", ToString(RNG));
+    SET(_para, RNG);
     ASSERT_ALLWAYS(OrderReWeight.size() == Order + 1, "OrderReWeight should have Order+1 elementes!");
     _para.Save(OutputFile, Mode);
     //save with append mode, so that it will not overwrite stuff wroten by Parameter:SaveParameter
