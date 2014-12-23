@@ -8,7 +8,9 @@
 
 #include "object.h"
 #include "utility/abort.h"
+#include <iostream>
 #include <Python/Python.h>
+
 namespace Python {
 void Initialize()
 {
@@ -59,12 +61,16 @@ Object Object::Copy()
 
 Object::Object(const Object& obj)
 {
-    *this = obj;
+    _PyPtr = obj.Get(NewRef);
 }
 
 Object& Object::operator=(const Object& obj)
 {
+    //    if (_PyPtr != nullptr)
+    //        std::cout << "Before= Ref:" << _PyPtr->ob_refcnt << std::endl;
+    DecreaseRef(_PyPtr);
     _PyPtr = obj.Get(NewRef);
+    //    std::cout << "After= Ref:" << _PyPtr->ob_refcnt << std::endl;
     return *this;
 }
 
@@ -91,6 +97,7 @@ void Object::Destroy()
 void Object::Print() const
 {
     PyObject_Print(_PyPtr, stdout, 0);
+    std::cout << std::endl;
     //    PyRun_SimpleString("\n");
 }
 

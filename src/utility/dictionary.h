@@ -23,6 +23,7 @@ using namespace Python;
 class Dictionary {
 public:
     friend class Dictionary;
+    std::string Name;
     Dictionary();
     Dictionary(const Python::Object& obj)
         : _Dict(obj)
@@ -32,15 +33,18 @@ public:
     }
     Dictionary(const Dictionary& dict)
         : _Dict(dict.GetObject())
+        , Name(dict.Name)
     {
     }
-
+    ~Dictionary()
+    {
+        _Dict.Destroy();
+    }
     template <typename T>
     void Set(const std::string& key, const T& value)
     {
         Python::AnyObject object(value);
-        //        _Dict._PrintDebug();
-        PyDict_SetItemString(_Dict.Get(), key.c_str(), CastToPy(value).Get());
+        PyDict_SetItemString(_Dict.Get(), key.c_str(), object.Get());
     }
     void Set(const std::string& key, const Dictionary& value)
     {
@@ -53,7 +57,6 @@ public:
         if (object.Get() == nullptr)
             return false;
         value = object.As<T>();
-        object.Print();
         return true;
     }
     bool Get(const std::string& key, Dictionary& value)
