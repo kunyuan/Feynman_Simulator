@@ -22,6 +22,7 @@
 #include <Python/Python.h>
 
 class Complex;
+class RandomFactory;
 namespace Python {
 // ------------ Conversion functions ------------
 
@@ -38,21 +39,8 @@ bool Convert(Object obj, unsigned long long& value);
 bool Convert(Object obj, float& value);
 bool Convert(Object obj, double& value);
 bool Convert(Object obj, Complex& val);
+bool Convert(Object obj, RandomFactory& val);
 
-//most generic convertor, require operator >> overloaded for type T
-//template <typename T>
-//bool Convert(PyObject* obj, T& val)
-//{
-//    PyObject* sourceobj = PyObject_Str(obj);
-//    std::string source;
-//    bool flag = Convert(sourceobj, source);
-//    Py_XDECREF(sourceobj);
-//    if (!flag)
-//        return false;
-//    istringstream iss(source);
-//    iss >> val;
-//    return !(iss.bad() || iss.fail());
-//}
 template <typename T>
 bool Convert(Object obj, Vec<T>& val)
 {
@@ -145,13 +133,6 @@ bool Convert(Object obj, std::vector<T>& vec)
 
 // Creates a PyObject from a std::string
 Object CastToPy(const std::string& str);
-//  Most generic function to create a PyObject from class T,
-//  require  std::string ToString(cont T&) overloaded for type T
-//template <class T>
-//PyObject* CastToPy(const T& val)
-//{
-//    return CastToPy(ToString(val));
-//}
 Object CastToPy(int num);
 Object CastToPy(unsigned int num);
 Object CastToPy(long num);
@@ -164,6 +145,7 @@ Object CastToPy(bool value);
 Object CastToPy(float num);
 Object CastToPy(double num);
 Object CastToPy(const Complex& num);
+Object CastToPy(const RandomFactory& val);
 // Creates a PyObject from a std::vector
 
 // Generic python list allocation

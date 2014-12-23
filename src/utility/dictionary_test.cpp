@@ -73,8 +73,8 @@ void Test_Dict()
     sput_fail_unless(Port.Get<Dictionary>("dict").Get<int>("b") == 11,
                      "check dict IO");
     //    Port.Print();
-    //    system("rm test.txt");
-    SubPort.Clear();
-    SubPort = Port.Get<Dictionary>("dict");
+    system("rm test.txt");
+    //    SubPort.Clear();
+    //    SubPort = Port.Get<Dictionary>("dict");
     //    SubPort.Print();
 }

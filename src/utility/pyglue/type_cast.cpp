@@ -6,8 +6,9 @@
 //  Copyright (c) 2014 Kun Chen. All rights reserved.
 //
 
-#include "type_cast.h"
 #include "utility/complex.h"
+#include "utility/rng.h"
+#include "type_cast.h"
 namespace Python {
 bool Convert(Object obj, std::string& val)
 {
@@ -98,6 +99,16 @@ bool Convert(Object obj, Complex& val)
                   PyComplex_ImagAsDouble(obj.Get()));
     return true;
 }
+bool Convert(Object obj, RandomFactory& rng)
+{
+    Object sourceobj = PyObject_Str(obj.Get());
+    std::string source;
+    if (!Convert(sourceobj, source))
+        return false;
+    istringstream iss(source);
+    iss >> rng;
+    return !(iss.bad() || iss.fail());
+}
 
 // Allocation methods
 
@@ -145,5 +156,9 @@ Object CastToPy(double num)
 Object CastToPy(const Complex& num)
 {
     return PyComplex_FromDoubles(num.Re, num.Im);
+}
+Object CastToPy(const RandomFactory& rng)
+{
+    return CastToPy(ToString(rng));
 }
 }
