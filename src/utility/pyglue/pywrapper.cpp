@@ -29,6 +29,16 @@ using std::string;
 
 namespace Python {
 
+//ITypeCast interface
+Object AnyObject::ToPy() const
+{
+    return Copy();
+}
+bool AnyObject::FromPy(Object obj)
+{
+    *this = obj;
+    return true;
+}
 void AnyObject::EvalScript(const std::string& script)
 {
     Object main = PyImport_AddModule("__main__");

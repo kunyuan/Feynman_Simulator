@@ -17,17 +17,18 @@
 using namespace std;
 using namespace Python;
 
-Object Dictionary::CastToPy() const
+Object Dictionary::ToPy() const
 {
     return Copy();
 }
-bool Dictionary::Convert(Object obj)
+bool Dictionary::FromPy(Object obj)
 {
     if (!PyDict_Check(obj.Get()))
         return false;
     *this = obj;
     return true;
 }
+
 void Dictionary::LoadFromString(const std::string& script)
 {
     AnyObject obj;
