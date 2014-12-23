@@ -16,34 +16,47 @@ Beta = para.InitialBeta
 WeightPara={"NSublat":para.NSublat, "L":para.L, "Beta": Beta, "MaxTauBin": para.MaxTauBin}
 map=weight.IndexMap(**WeightPara)
 
+##########INITIALIZATION ##########################
+Factory=model.BareFactory(map, para.Hopping, para.Interaction, 
+                            para.ChemicalPotential, para.ExternalField)
+G0,W0=Factory.Build(para.Model, para.Lattice)
+G0.Save(prefix+para.WeightFile,"w")
+W0.Save(prefix+para.WeightFile,"a")
+#Factory.Plot()
+
 if para.StartFromBare is True:
-    Factory=model.BareFactory(map, para.Hopping, para.Interaction, 
-                              para.ChemicalPotential, para.ExternalField)
-    G0,W0=Factory.Build(para.Model, para.Lattice)
-    G0.Save(prefix+para.WeightFile,"w")
-    W0.Save(prefix+para.WeightFile,"a")
-    #Factory.Plot()
+    #####FIRST ORDER CALCULATION FOR POLAR, W AND SIGMA############
+    Polar=calc.Polar_FirstOrder(G0, map)
+    W = calc.W_Dyson(Beta, W0, Polar,map)
+
+    Sigma=calc.Sigma_FirstOrder(G0, W, map)
+    Sigma0=calc.Sigma0_FirstOrder(G0, W0, map)
+
 else:
-    G0=weight.Weight("G.SmoothT", map, "TwoSpins", "AntiSymmetric")
-    G0.Load("../data/GW.npz")
-    W0=weight.Weight("W.DeltaT", map, "FourSpins", "Symmetric")
-    W0.Load("../data/GW.npz")
+    #########READ G,SIGMA,POLAR; CALCULATE SIGMA0 #################
+    G=weight.Weight("G.SmoothT", map, "TwoSpins", "AntiSymmetric")
+    G.Load(prefix+para.WeightFile)
+    Sigma0=calc.Sigma0_FirstOrder(G, W0, map)
 
-Polar=calc.Polar_FirstOrder(G0, map)
+    Sigma=weight.Weight("Sigma.SmoothT", map, "TwoSpins", "AntiSymmetric")
+    Sigma.Load(prefix+para.WeightFile)
+
+    Polar=weight.Weight("Polar.SmoothT", map, "FourSpins", "Symmetric")
+    Polar.Load(prefix+para.WeightFile)
+
+#######DYSON FOR W AND G###########################
 W = calc.W_Dyson(Beta, W0, Polar,map)
+G = calc.G_Dyson(Beta, G0, Sigma0, Sigma, map)
+###################################################
 
-Sigma=calc.Sigma_FirstOrder(G0, W, map)
-Sigma0=calc.Sigma0_FirstOrder(G0, W0, map)
 
-for i in range(10):
-    W = calc.W_Dyson(Beta, W0,Polar,map)
-    G = calc.G_Dyson(Beta, G0, Sigma0, Sigma, map)
-
-    Polar = calc.Polar_FirstOrder(G, map)
-    Sigma = calc.Sigma_FirstOrder(G,W,map)
-    Sigma0 = calc.Sigma0_FirstOrder(G,W0,map)
-
-spinUP = map.Spin2Index(UP,UP)
+##########OUTPUT AND FILE SAVE ####################
+spinUP=map.Spin2Index(UP,UP)
 print W.Data[spinUP,0,spinUP,0,0,:]
 print G.Data[UP,0,UP,0,0,:]
+
+G.Save(prefix+para.WeightFile,"a")
+W.Save(prefix+para.WeightFile,"a")
+
+###################################################
 
