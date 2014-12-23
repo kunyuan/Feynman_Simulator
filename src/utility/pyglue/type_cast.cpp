@@ -109,6 +109,10 @@ bool Convert(Object obj, RandomFactory& rng)
     iss >> rng;
     return !(iss.bad() || iss.fail());
 }
+bool Convert(Object obj, ITypeCast& value)
+{
+    return value.Convert(obj);
+}
 
 // Allocation methods
 
@@ -160,5 +164,9 @@ Object CastToPy(const Complex& num)
 Object CastToPy(const RandomFactory& rng)
 {
     return CastToPy(ToString(rng));
+}
+Object CastToPy(const ITypeCast& val)
+{
+    return val.CastToPy();
 }
 }

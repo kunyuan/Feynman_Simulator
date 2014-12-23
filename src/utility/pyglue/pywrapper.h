@@ -26,15 +26,6 @@
 #include "object.h"
 
 namespace Python {
-
-struct PyObjectDeleter {
-    void operator()(PyObject* obj)
-    {
-        Py_XDECREF(obj);
-    }
-};
-// unique_ptr that uses Py_XDECREF as the destructor function.
-typedef std::unique_ptr<PyObject, PyObjectDeleter> pyunique_ptr;
 class AnyObject : public Object {
 public:
     AnyObject()

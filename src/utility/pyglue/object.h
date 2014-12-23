@@ -56,6 +56,7 @@ public:
     Object Copy();
     Object& operator=(const Object& obj); //assignment operator, default Action: STEAL
     ~Object() { Destroy(); }
+    long RefCount();
 
     PyObject* Get(OwnerShip ownership = NoRef) const;
 

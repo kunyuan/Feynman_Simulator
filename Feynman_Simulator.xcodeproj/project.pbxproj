@@ -150,6 +150,7 @@
 		843DBB951A45F9A8009DB448 /* type_cast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = type_cast.h; sourceTree = "<group>"; };
 		843DBB971A472AB1009DB448 /* object.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = object.cpp; sourceTree = "<group>"; };
 		843DBB981A472AB1009DB448 /* object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = object.h; sourceTree = "<group>"; };
+		843DBB9A1A49D2B3009DB448 /* type_cast_interface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = type_cast_interface.h; sourceTree = "<group>"; };
 		84519AEA19F2C554007CB81B /* environment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = environment.h; path = environment/environment.h; sourceTree = "<group>"; };
 		84519AEC19F2C57A007CB81B /* envMonteCarlo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = envMonteCarlo.cpp; path = environment/envMonteCarlo.cpp; sourceTree = "<group>"; };
 		84519AF019F33F22007CB81B /* complex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = complex.cpp; sourceTree = "<group>"; };
@@ -367,6 +368,7 @@
 				843DBB951A45F9A8009DB448 /* type_cast.h */,
 				843DBB981A472AB1009DB448 /* object.h */,
 				843DBB971A472AB1009DB448 /* object.cpp */,
+				843DBB9A1A49D2B3009DB448 /* type_cast_interface.h */,
 			);
 			path = pyglue;
 			sourceTree = "<group>";
