@@ -20,37 +20,39 @@
 
 #define SET(para, value) (para).Set((#value), (value));
 #define GET(para, value) (para).Get((#value), (value));
-class Dictionary : public Python::ITypeCast {
+class Dictionary : public Python::Object, public Python::ITypeCast {
 public:
-    friend class Dictionary;
-    Dictionary();
+    Dictionary()
+        : Object()
+    {
+        _PyPtr = PyDict_New();
+    }
     Dictionary(const Python::Object& obj)
-        : _Dict(obj)
+        : Object(obj)
     {
         if (!PyDict_Check(obj.Get()))
             ERRORCODEABORT(ERR_VALUE_INVALID, "Expected PyDict object to create Dictionary!");
     }
-    Dictionary(const Dictionary& dict)
-        : _Dict(dict.GetObject())
+    Dictionary& operator=(const Dictionary& obj)
     {
-    }
-    ~Dictionary()
-    {
-        _Dict.Destroy();
+        Object::operator=(obj);
+        return *this;
     }
 
+    //ITypeCast interface
     virtual Python::Object CastToPy() const;
     virtual bool Convert(Python::Object);
+
     template <typename T>
     void Set(const std::string& key, const T& value)
     {
         Python::AnyObject object(value);
-        PyDict_SetItemString(_Dict.Get(), key.c_str(), object.Get());
+        PyDict_SetItemString(_PyPtr, key.c_str(), object.Get());
     }
     template <typename T>
     bool Get(const std::string& key, T& value)
     {
-        Python::AnyObject object = Python::Object(PyDict_GetItemString(_Dict.Get(), key.c_str()), Python::NoRef);
+        Python::AnyObject object = Python::Object(PyDict_GetItemString(_PyPtr, key.c_str()), Python::NoRef);
         if (object.Get() == nullptr)
             return false;
         value = object.As<T>();
@@ -66,17 +68,9 @@ public:
         return value;
     }
     void Clear();
-    void Print();
-    std::string PrettyString() { return _Dict.PrettyString(); }
     void LoadFromString(const std::string&);
     void Load(const std::string& FileName);
     void Save(const std::string& FileName, const std::string& Mode = "a");
-
-    Python::AnyObject GetObject() const { return _Dict; }
-    void _PrintDebug() const;
-
-private:
-    Python::AnyObject _Dict;
 };
 int TestDictionary();
 
