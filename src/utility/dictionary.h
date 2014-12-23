@@ -14,6 +14,7 @@
 #include "utility/convention.h"
 #include "utility/utility.h"
 #include "utility/vector.h"
+#include "utility/abort.h"
 #include "utility/pyglue/pywrapper.h"
 
 #define SET(para, value) (para).Set((#value), (value));
@@ -26,6 +27,8 @@ public:
     Dictionary(const Python::Object& obj)
         : _Dict(obj)
     {
+        if (!PyDict_Check(obj.Get()))
+            ERRORCODEABORT(ERR_VALUE_INVALID, "Expected PyDict object to create Dictionary!");
     }
     Dictionary(const Dictionary& dict)
         : _Dict(dict.GetObject())
@@ -36,18 +39,18 @@ public:
     void Set(const std::string& key, const T& value)
     {
         Python::AnyObject object(value);
-        PyDict_SetItemString(_Dict.Borrow(), key.c_str(), object.Borrow());
+        //        _Dict._PrintDebug();
+        PyDict_SetItemString(_Dict.Get(), key.c_str(), CastToPy(value).Get());
     }
     void Set(const std::string& key, const Dictionary& value)
     {
-        PyDict_SetItemString(_Dict.Borrow(), key.c_str(), value._Dict.Borrow());
+        PyDict_SetItemString(_Dict.Get(), key.c_str(), value._Dict.Get());
     }
     template <typename T>
     bool Get(const std::string& key, T& value)
     {
-        AnyObject object = Object::Borrow(PyDict_GetItemString(_Dict.Borrow(),
-                                                               key.c_str()));
-        if (object.Borrow() == nullptr)
+        AnyObject object = Object(PyDict_GetItemString(_Dict.Get(), key.c_str()), NoRef);
+        if (object.Get() == nullptr)
             return false;
         value = object.As<T>();
         object.Print();
@@ -55,9 +58,8 @@ public:
     }
     bool Get(const std::string& key, Dictionary& value)
     {
-        AnyObject object = Object::Borrow(PyDict_GetItemString(_Dict.Borrow(),
-                                                               key.c_str()));
-        if (object.Borrow() == nullptr)
+        AnyObject object = Object(PyDict_GetItemString(_Dict.Get(), key.c_str()), NoRef);
+        if (object.Get() == nullptr)
             return false;
         value = Dictionary(object);
         return true;

@@ -46,6 +46,10 @@ public:
         : Object(obj)
     {
     }
+    AnyObject(PyObject* obj, OwnerShip ownership = NewRef)
+        : Object(obj, ownership)
+    {
+    }
     AnyObject& operator=(const AnyObject& obj)
     {
         Object::operator=(obj);
@@ -91,15 +95,9 @@ public:
         : Object()
     {
     }
-    ModuleObject(const Object& obj)
-        : Object(obj)
-    {
-    }
-    ModuleObject& operator=(const ModuleObject& obj)
-    {
-        Object::operator=(obj);
-        return *this;
-    }
+    ModuleObject(const Object& obj);
+    ModuleObject(PyObject* obj, OwnerShip ownership = NewRef);
+    ModuleObject& operator=(const ModuleObject& obj);
 
     /**
          * \brief Calls the callable attribute "name" using the provided
@@ -113,21 +111,20 @@ public:
          * attribute.
          * \return Python::Object containing the result of the function.
          */
-    //    template <typename... Args>
-    //    Object CallFunction(const std::string& name, const Args&... args)
-    //    {
-    //        Object func = load_function(name);
-    //        func.MakeSureNotNull();
-    //        // Create the tuple argument
-    //        Object tup = Object::Steal(PyTuple_New(sizeof...(args)));
-    //        add_tuple_vars(tup, args...);
-    //        // Call our object
-    //        tup.Print();
-    //        PyObject* result = PyObject_CallObject(func.Borrow(), tup.Borrow());
-    //        Object ret = Object::Steal(result);
-    //        MakeSureNoPyError(ERR_GENERAL);
-    //        return ret;
-    //    }
+    template <typename... Args>
+    Object CallFunction(const std::string& name, const Args&... args)
+    {
+        Object func = load_function(name);
+        func.MakeSureNotNull();
+        // Create the tuple argument
+        Object tup = PyTuple_New(sizeof...(args));
+        add_tuple_vars(tup, args...);
+        // Call our object
+        tup.Print();
+        Object result = PyObject_CallObject(func.Get(), tup.Get());
+        MakeSureNoPyError(ERR_GENERAL);
+        return result;
+    }
     //
     //    /**
     //         * \brief Calls a callable attribute using no arguments.
@@ -180,108 +177,47 @@ public:
          * \return Object representing the loaded script.
          */
     void LoadModule(const std::string& script_path);
-    //
-    //private:
-    //    Object load_function(const std::string& name);
-    //
-    //    // Variadic template method to add items to a tuple
-    //    template <typename First, typename... Rest>
-    //    void add_tuple_vars(Object& tup, const First& head, const Rest&... tail)
-    //    {
-    //        add_tuple_var(
-    //            tup,
-    //            PyTuple_Size(tup.Borrow()) - sizeof...(tail)-1,
-    //            head);
-    //        add_tuple_vars(tup, tail...);
-    //    }
-    //
-    //    void add_tuple_vars(Object& tup, Object arg)
-    //    {
-    //        add_tuple_var(tup, PyTuple_Size(tup.Borrow()) - 1, arg);
-    //    }
-    //
-    //    // Base case for add_tuple_vars
-    //    template <typename Arg>
-    //    void add_tuple_vars(Object& tup, const Arg& arg)
-    //    {
-    //        add_tuple_var(tup,
-    //                      PyTuple_Size(tup.Borrow()) - 1, CastToPy(arg));
-    //    }
-    //
-    //    // Adds a Object to the tuple object
-    //    void add_tuple_var(Object& tup, Py_ssize_t i, Object pobj)
-    //    {
-    //        PyTuple_SetItem(tup.Borrow(), i, pobj.Steal());
-    //    }
-    //
-    //    // Adds a PyObject* to the tuple object
-    //    template <class T>
-    //    void add_tuple_var(Object& tup, Py_ssize_t i,
-    //                       const T& data)
-    //    {
-    //        Object item = CastToPy(data);
-    //        PyTuple_SetItem(tup.Borrow(), i, item.Steal());
-    //    }
-
-    template <typename... Args>
-    Object CallFunction(const std::string& name, const Args&... args)
-    {
-        PyObject* func = load_function(name);
-        // Create the tuple argument
-        pyunique_ptr tup(PyTuple_New(sizeof...(args)));
-        add_tuple_vars(tup, args...);
-        // Call our object
-        PrintPyObject(tup.get());
-        std::cout << PyTuple_Size(tup.get()) << std::endl;
-        PyObject* result(PyObject_CallObject(func, tup.get()));
-        MakeSureNoPyError(ERR_GENERAL);
-        if (!result)
-            throw std::runtime_error("Failed to call function " + name);
-        Object ret = Object::Steal(result);
-        return { ret };
-    }
 
 private:
-    PyObject* load_function(const std::string& name);
+    Object load_function(const std::string& name);
 
     // Variadic template method to add items to a tuple
     template <typename First, typename... Rest>
-    void add_tuple_vars(pyunique_ptr& tup, const First& head, const Rest&... tail)
+    void add_tuple_vars(Object& tup, const First& head, const Rest&... tail)
     {
         add_tuple_var(
             tup,
-            PyTuple_Size(tup.get()) - sizeof...(tail)-1,
+            PyTuple_Size(tup.Get()) - sizeof...(tail)-1,
             head);
         add_tuple_vars(tup, tail...);
     }
 
-    void add_tuple_vars(pyunique_ptr& tup, PyObject* arg)
+    void add_tuple_vars(Object& tup, Object arg)
     {
-        add_tuple_var(tup, PyTuple_Size(tup.get()) - 1, arg);
+        add_tuple_var(tup, PyTuple_Size(tup.Get()) - 1, arg);
     }
 
     // Base case for add_tuple_vars
     template <typename Arg>
-    void add_tuple_vars(pyunique_ptr& tup, const Arg& arg)
+    void add_tuple_vars(Object& tup, const Arg& arg)
     {
-        PyObject* item = CastToPy(arg).Steal();
         add_tuple_var(tup,
-                      PyTuple_Size(tup.get()) - 1, item);
+                      PyTuple_Size(tup.Get()) - 1, CastToPy(arg));
     }
 
-    // Adds a PyObject* to the tuple object
-    void add_tuple_var(pyunique_ptr& tup, Py_ssize_t i, PyObject* pobj)
+    // Adds a Object to the tuple object
+    void add_tuple_var(Object& tup, Py_ssize_t i, Object pobj)
     {
-        PyTuple_SetItem(tup.get(), i, pobj);
+        PyTuple_SetItem(tup.Get(), i, pobj.Get(NewRef));
     }
 
     // Adds a PyObject* to the tuple object
     template <class T>
-    void add_tuple_var(pyunique_ptr& tup, Py_ssize_t i,
+    void add_tuple_var(Object& tup, Py_ssize_t i,
                        const T& data)
     {
-        PyObject* item = CastToPy(data).Steal();
-        PyTuple_SetItem(tup.get(), i, item);
+        Object item = CastToPy(data);
+        PyTuple_SetItem(tup.Get(), i, item.Get(NewRef));
     }
 };
 };
