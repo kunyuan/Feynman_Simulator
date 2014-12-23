@@ -50,16 +50,11 @@ public:
         : Object(CastToPy(value))
     {
     }
-    template <class T>
-    bool Convert(T& value)
-    {
-        return Python::Convert(*this, value);
-    }
     template <typename T>
     T As()
     {
         T value;
-        if (!Convert(value))
+        if (!Python::Convert(*this, value))
             ERRORCODEABORT(ERR_VALUE_INVALID, "Fail to convert PyObject!");
         return value;
     }

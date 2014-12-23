@@ -19,23 +19,20 @@ using namespace Python;
 
 Object Dictionary::CastToPy() const
 {
-    return GetObject().Copy();
+    return Copy();
 }
 bool Dictionary::Convert(Object obj)
 {
     if (!PyDict_Check(obj.Get()))
         return false;
-    _Dict = obj;
+    *this = obj;
     return true;
 }
-Dictionary::Dictionary()
-{
-    _Dict = PyDict_New();
-}
-
 void Dictionary::LoadFromString(const std::string& script)
 {
-    _Dict.EvalScript(script);
+    AnyObject obj;
+    obj.EvalScript(script);
+    *this = obj;
 }
 
 void Dictionary::Load(const std::string& FileName)
@@ -43,26 +40,16 @@ void Dictionary::Load(const std::string& FileName)
     ModuleObject LoadDict;
     LoadDict.LoadModule("IO.py");
     Object result = LoadDict.CallFunction("LoadDict", FileName);
-    _Dict = result;
+    *this = result;
 }
 
 void Dictionary::Save(const string& FileName, const string& Mode)
 {
     ModuleObject SaveDict;
     SaveDict.LoadModule("IO.py");
-    SaveDict.CallFunction("SaveDict", FileName, Mode, _Dict);
+    SaveDict.CallFunction("SaveDict", FileName, Mode, *this);
 }
 void Dictionary::Clear()
 {
-    PyDict_Clear(_Dict.Get());
-}
-
-void Dictionary::Print()
-{
-    _Dict.Print();
-}
-
-void Dictionary::_PrintDebug() const
-{
-    _Dict._PrintDebug();
+    PyDict_Clear(_PyPtr);
 }

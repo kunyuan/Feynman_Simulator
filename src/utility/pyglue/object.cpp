@@ -53,7 +53,7 @@ void DecreaseRef(PyObject* obj)
 {
     Py_XDECREF(obj);
 }
-Object Object::Copy()
+Object Object::Copy() const
 {
     IncreaseRef(_PyPtr);
     return Object(_PyPtr, NewRef);
@@ -94,7 +94,7 @@ void Object::Destroy()
     _PyPtr = nullptr;
 }
 
-long Object::RefCount()
+long Object::RefCount() const
 {
     if (_PyPtr != nullptr)
         return _PyPtr->ob_refcnt;
