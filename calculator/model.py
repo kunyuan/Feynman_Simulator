@@ -1,6 +1,6 @@
 import weight
 import lattice as lat
-from weight import UP,DOWN,IN,OUT,TAU,SP,SUB,VOL
+from weight import UP,DOWN,IN,OUT,TAU,SP1,SUB1,SP2,SUB2,VOL
 import numpy as np
 from logger import *
 
@@ -36,37 +36,46 @@ class BareFactory:
         log.info("set Mu={0}, Hopping={1}, and SmoothT Bare G".format(self.__Mu, self.__Hopping))
         TauGrid=np.array([self.__Map.IndexToTau(t) for t in range(self.__MaxTauBin)])
         TauWeight=np.exp(self.__Mu*TauGrid)/(1.0+1.0*1j)
-        for sp in self.__Map.GetConservedSpinIndexs("TwoSpins"):
-            for sub in self.__Map.GetLocalSublatIndexs():
-                self.BareG.Data[sp][sub][0][:]=TauWeight[:]
+        for sp in self.__Map.GetConservedSpinTuple("TwoSpins"):
+            for sub in self.__Map.GetLocalSublatTuple():
+                self.BareG.Data[sp[IN]][sub[IN]][sp[OUT]][sub[OUT]][0][:]=TauWeight[:]
+
         #Bare W
         J1,J2=self.__Interaction[0:2]
-        spinindex=self.__Map.Spin4Index((UP,UP),(UP,UP))
-        subA2B=self.__Map.SublatIndex(0,1)
-        subB2A=self.__Map.SublatIndex(1,0)
-        subA2A=self.__Map.SublatIndex(0,0)
-        subB2B=self.__Map.SublatIndex(1,1)
-        coordA2B=[(0,0),(0,Ly-1),(Lx-1,0),(Lx-1,Ly-1)]
-        coordB2A=[(0, 0),(0,1),(1,0),(1,1)]
-        coordA2A=[(0,1),(1,0),(0,Ly-1),(Lx-1,0)]
-        coordB2B=[(0, 1),(1,0),(0,Ly-1),(Lx-1,0)]
+        spin=self.__Map.Spin2Index(UP,UP)
+        subA=0
+        subB=1
+        coordA2B=[(0, 0),(0,Ly-1),(Lx-1,0),(Lx-1,Ly-1)]
+        coordB2A=[(0, 0),(0,   1),(1,   0),(   1,   1)]
+        coordA2A=[(0, 1),(1,   0),(0,Ly-1),(Lx-1,   0)]
+        coordB2B=[(0, 1),(1,   0),(0,Ly-1),(Lx-1,   0)]
+
         #J1 interaction A-->B, B-->A
         for i in coordA2B:
-            self.BareW.Data[spinindex,subA2B,self.__Map.CoordiIndex(i)] = J1;
+            self.BareW.Data[spin,subA,spin,subB,self.__Map.CoordiIndex(i)] = J1;
+
         for i in coordB2A:
-            self.BareW.Data[spinindex,subB2A,self.__Map.CoordiIndex(i)] = J1;
+            self.BareW.Data[spin,subB,spin,subA,self.__Map.CoordiIndex(i)] = J1;
+
         #J2 interaction A-->A, B-->B
         for i in coordA2A:
-            self.BareW.Data[spinindex,subA2A,self.__Map.CoordiIndex(i)] = J2;
+            self.BareW.Data[spin,subA,spin,subA,self.__Map.CoordiIndex(i)] = J2;
         for i in coordB2B:
-            self.BareW.Data[spinindex,subB2B,self.__Map.CoordiIndex(i)] = J2;
+            self.BareW.Data[spin,subB,spin,subB,self.__Map.CoordiIndex(i)] = J2;
+
         #Generate other non-zero spin configuration
         for e in self.__Map.GetSpin4SimilarTuples((UP,UP),(UP,UP)):
-            self.BareW.Data[self.__Map.Spin4Index(*e),...]=self.BareW.Data[spinindex,...]
+            spleft = self.__Map.Spin2Index(*e[IN]) 
+            spright = self.__Map.Spin2Index(*e[OUT]) 
+            self.BareW.Data[spleft,:,spright,...]=self.BareW.Data[spin,:,spin,...]
         for e in self.__Map.GetSpin4SimilarTuples((DOWN,DOWN),(UP,UP)):
-            self.BareW.Data[self.__Map.Spin4Index(*e),...]=-1.0*self.BareW.Data[spinindex,...]
+            spleft = self.__Map.Spin2Index(*e[IN]) 
+            spright = self.__Map.Spin2Index(*e[OUT]) 
+            self.BareW.Data[spleft,:,spright,...]=-1.0*self.BareW.Data[spin,:,spin,...]
         for e in self.__Map.GetSpin4SimilarTuples((DOWN,UP),(UP,DOWN)):
-            self.BareW.Data[self.__Map.Spin4Index(*e),...]=2.0*self.BareW.Data[spinindex,...]
+            spleft = self.__Map.Spin2Index(*e[IN]) 
+            spright = self.__Map.Spin2Index(*e[OUT]) 
+            self.BareW.Data[spleft,:,spright,...]=2.0*self.BareW.Data[spin,:,spin,...]
 
     def __J1J2onSquare(self):
         Lx,Ly=self.__Map.L
@@ -78,28 +87,36 @@ class BareFactory:
         log.info("set Mu={0}, Hopping={1}, and SmoothT Bare G".format(self.__Mu, self.__Hopping))
         TauGrid=np.array([self.__Map.IndexToTau(t) for t in range(self.__MaxTauBin)])
         TauWeight=np.exp(self.__Mu*TauGrid)/(1.0+1.0*1j)
-        for sp in self.__Map.GetConservedSpinIndexs("TwoSpins"):
-            for sub in self.__Map.GetLocalSublatIndexs():
-                self.BareG.Data[sp][sub][0][:]=TauWeight[:]
+        for sp in self.__Map.GetConservedSpinTuple("TwoSpins"):
+            for sub in self.__Map.GetLocalSublatTuple():
+                self.BareG.Data[sp[IN]][sub[IN]][sp[OUT]][sub[OUT]][0][:]=TauWeight[:]
+
         #Bare W
         J1,J2=self.__Interaction[0:2]
-        spinindex=self.__Map.Spin4Index((UP,UP),(UP,UP))
-        sub=self.__Map.SublatIndex(0,0)
+        spin=self.__Map.Spin2Index(UP,UP)
+        sub=0
         coordnn=[(0,1),(1,0),(Lx-1,0),(0,Ly-1)]
         coordnnn=[(1,1),(Lx-1,1),(1,Ly-1),(Lx-1,Ly-1)]
         #J1 interaction on nearest neighbors
         for i in coordnn:
-            self.BareW.Data[spinindex,sub,self.__Map.CoordiIndex(i)] = J1;
+            self.BareW.Data[spin,sub,spin,sub,self.__Map.CoordiIndex(i)] = J1/4.0;
         #J2 interaction on next nearest neighbors
         for i in coordnnn:
-            self.BareW.Data[spinindex,sub,self.__Map.CoordiIndex(i)] = J2;
+            self.BareW.Data[spin,sub,spin,sub,self.__Map.CoordiIndex(i)] = J2/4.0;
+
         #Generate other non-zero spin configuration
         for e in self.__Map.GetSpin4SimilarTuples((UP,UP),(UP,UP)):
-            self.BareW.Data[self.__Map.Spin4Index(*e),...]=self.BareW.Data[spinindex,...]
+            spleft = self.__Map.Spin2Index(*e[IN]) 
+            spright = self.__Map.Spin2Index(*e[OUT]) 
+            self.BareW.Data[spleft,:,spright,...]=self.BareW.Data[spin,:,spin,...]
         for e in self.__Map.GetSpin4SimilarTuples((DOWN,DOWN),(UP,UP)):
-            self.BareW.Data[self.__Map.Spin4Index(*e),...]=-1.0*self.BareW.Data[spinindex,...]
+            spleft = self.__Map.Spin2Index(*e[IN]) 
+            spright = self.__Map.Spin2Index(*e[OUT]) 
+            self.BareW.Data[spleft,:,spright,...]=-1.0*self.BareW.Data[spin,:,spin,...]
         for e in self.__Map.GetSpin4SimilarTuples((DOWN,UP),(UP,DOWN)):
-            self.BareW.Data[self.__Map.Spin4Index(*e),...]=2.0*self.BareW.Data[spinindex,...]
+            spleft = self.__Map.Spin2Index(*e[IN]) 
+            spright = self.__Map.Spin2Index(*e[OUT]) 
+            self.BareW.Data[spleft,:,spright,...]=2.0*self.BareW.Data[spin,:,spin,...]
 
     def Plot(self):
         import matplotlib.pyplot as plt
@@ -120,12 +137,12 @@ class BareFactory:
         plt.show()
 
     def __GetBareWList(self):
-        SpinIndex=self.__Map.Spin4Index((UP,UP),(UP,UP))
+        Spin=self.__Map.Spin2Index(UP,UP)
         offset=np.array(self.__Map.L)/2-1
         BareWList=[]
-        for sub in self.__Map.GetAllSublat():
+        for sub in self.__Map.GetAllSublatTuple():
             for coord in self.__Map.GetAllCoordi():
-                weight=self.BareW.Data[SpinIndex, self.__Map.SublatIndex(*sub),self.__Map.CoordiIndex(coord)]
+                weight=self.BareW.Data[Spin,sub[IN],Spin,sub[OUT],self.__Map.CoordiIndex(coord)]
                 if weight*weight>1.0e-10:
                     BareWList.append([self.Lat.GetRealVec((0,0), sub[IN], offset), \
                                     self.Lat.GetRealVec(coord, sub[OUT], offset), 
