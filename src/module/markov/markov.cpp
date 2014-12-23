@@ -114,8 +114,10 @@ void Markov::CreateWorm()
     vertex vin = w->NeighVer(IN);
     vertex vout = w->NeighVer(OUT);
 
-    Momentum k = RandomPickK();
-    //TODO: Hash check for k
+    Momentum kWorm = RandomPickK();
+    Momentum kW = w->K - kWorm;
+    if (Diag->WHashCheck(kW))
+        return;
 
     int dspin = RandomPickDeltaSpin();
     if (CanNotMoveWorm(dspin, vin->Spin(IN), vin->Spin(OUT)) && CanNotMoveWorm(-dspin, vout->Spin(IN), vout->Spin(OUT)))
@@ -142,11 +144,13 @@ void Markov::CreateWorm()
         Worm->Ira = vin;
         Worm->Masha = vout;
         Worm->dSpin = dspin;
-        Worm->K = k;
+        Worm->K = kWorm;
         Worm->Weight = wormWeight;
+        
 
+        Diag->ReplaceWHash(w->K, kW);
+        w->K = kW;
         w->IsWorm = true;
-        w->K -= k;
         w->Weight = wWeight;
     }
 }
@@ -165,7 +169,8 @@ void Markov::DeleteWorm()
     if (!(w == Masha->NeighW()))
         return;
     Momentum k = SIGN(Ira->Dir) * w->K + Worm->K;
-    //TODO: Hash check for k
+    if (Diag->WHashCheck(k))
+        return;
 
     Complex wWeight = W->Weight(Ira->Dir, Ira->R, Masha->R, Ira->Tau, Masha->Tau,
                                 Ira->Spin(), Masha->Spin(),
@@ -185,6 +190,7 @@ void Markov::DeleteWorm()
         Worm->Exist = false;
 
         w->IsWorm = false;
+        Diag->ReplaceWHash(w->K, k);
         w->K = k;
         w->Weight = wWeight;
     }
@@ -208,8 +214,8 @@ void Markov::MoveWormOnG()
     if (v2 == Ira || v2 == Masha || CanNotMoveWorm(Worm->dSpin, g->Spin(), dir))
         return;
     Momentum k = g->K - SIGN(dir) * Worm->K;
-    //TODO: Hash check for G(knew)
-    //    if(!IsKValidG(k)) return;
+    if (Diag->GHashCheck(k))
+        return;
 
     wLine w1 = Ira->NeighW();
     vertex vW1 = w1->NeighVer(INVERSE(Ira->Dir));
@@ -252,6 +258,7 @@ void Markov::MoveWormOnG()
         Diag->Weight *= weightRatio;
 
         g->Weight = gWeight;
+        Diag->ReplaceGHash(g->K, k);
         g->K = k;
 
         w1->Weight = w1Weight;
@@ -284,7 +291,8 @@ void Markov::MoveWormOnW()
     if (v2 == Ira || v2 == Masha)
         return;
     Momentum k = w->K + SIGN(Ira->Dir) * Worm->K;
-    //TODO: Check Hash for k
+    if (Diag->WHashCheck(k))
+        return;
 
     Complex wWeight = W->Weight(Ira->Dir, Ira->R, v2->R, Ira->Tau, v2->Tau, Ira->Spin(),
                                 v2->Spin(), w->IsWorm, w->IsMeasure, w->IsDelta);
@@ -301,6 +309,7 @@ void Markov::MoveWormOnW()
         Diag->Weight *= weightRatio;
 
         w->Weight = wWeight;
+        Diag->ReplaceWHash(w->K, k);
         w->K = k;
 
         Ira = v2;
@@ -374,7 +383,8 @@ void Markov::AddInteraction()
     vertex Ira = Worm->Ira, Masha = Worm->Masha;
 
     Momentum kW = RandomPickK();
-    //TODO Hash Check for k
+    if (Diag->WHashCheck(kW))
+        return;
 
     int dir = RandomPickDir();
     int dirW = RandomPickDir();
@@ -383,7 +393,10 @@ void Markov::AddInteraction()
     Momentum kIA = GIC->K - SIGN(dir) * SIGN(dirW) * kW;
     Momentum kMB = GMD->K + SIGN(dir) * SIGN(dirW) * kW;
     Momentum kWorm = Worm->K - SIGN(dirW) * kW;
-    //TODO: Hash Check for KIA, kMB, kWorm
+    if (Diag->GHashCheck(kIA))
+        return;
+    if (Diag->GHashCheck(kMB))
+        return;
 
     bool isdelta = RandomPickBool();
     real tauA = RandomPickTau(), tauB;
@@ -451,11 +464,13 @@ void Markov::AddInteraction()
         GIA->nVer[dir] = vA;
         GIA->SetGLine(kIA, GIAWeight,
                       false); //IsMeasure
+        Diag->AddGHash(kIA);
 
         GMB->nVer[INVERSE(dir)] = Masha;
         GMB->nVer[dir] = vB;
         GMB->SetGLine(kMB, GMBWeight,
                       false); //IsMeasure
+        Diag->AddGHash(kMB);
 
         WAB->nVer[dirW] = vA;
         WAB->nVer[INVERSE(dirW)] = vB;
@@ -463,6 +478,7 @@ void Markov::AddInteraction()
                       false, //IsWorm
                       false, //IsMeasure
                       isdelta);
+        Diag->AddWHash(kW);
 
         Ira->nG[dir] = GIA;
         Masha->nG[dir] = GMB;
@@ -519,7 +535,6 @@ void Markov::DeleteInteraction()
         return;
 
     Momentum kWorm = Worm->K + SIGN(vA->Dir) * wAB->K;
-    //TODO: Hash Check for kWorm
 
     Complex GICWeight = G->Weight(INVERSE(dir), Ira->R, vC->R, Ira->Tau, vC->Tau,
                                   Ira->Spin(dir), vC->Spin(INVERSE(dir)), GAC->IsMeasure);
@@ -544,8 +559,14 @@ void Markov::DeleteInteraction()
 
         Diag->Ver.Remove(vA);
         Diag->Ver.Remove(vB);
+        
+        Diag->RemoveGHash(GIA->K);
         Diag->G.Remove(GIA);
+        
+        Diag->RemoveGHash(GMB->K);
         Diag->G.Remove(GMB);
+        
+        Diag->RemoveWHash(wAB->K);
         Diag->W.Remove(wAB);
 
         Ira->nG[dir] = GAC;
@@ -1034,7 +1055,7 @@ void Markov::ChangeContinuousToDelta()
 
 Momentum Markov::RandomPickK()
 {
-    return (Momentum)(RNG->irn(-MAX_K + 1, MAX_K - 1));
+    return (Momentum)(RNG->irn(-MAX_K, MAX_K));
 }
 
 int Markov::RandomPickDeltaSpin()

@@ -48,10 +48,6 @@ def W_FirstOrder(Beta,W0, Polar, map):
         spW = (map.Spin2Index(*spWt[IN]), map.Spin2Index(*spWt[OUT]))
         spPolar = (map.Spin2Index(*spPolart[IN]), map.Spin2Index(*spPolart[OUT]))
         for e in SubList:
-            subW0L = (e[0], e[1])
-            subPolar = map.SublatIndex(e[1], e[2])
-            subW0R = map.SublatIndex(e[2], e[3])
-            subW = map.SublatIndex(e[0], e[3])
             for tau in TauRange:
                 W.Data[spW[IN],e[0],spW[OUT],e[3],:,tau]+=\
                         W0.Data[spW0L[IN],e[0],spW0L[OUT],e[1],:] \
@@ -94,7 +90,7 @@ def Sigma0_FirstOrder(G, W0, map):
     return Sigma0
 
 
-def W_Dyson(Beta, W0, Polar,map):
+def W_Dyson(Beta, W0, Polar, map):
     W=weight.Weight("W.SmoothT", map, "FourSpins", "Symmetric")
     W0.FFT(1, "Space")
     Polar.FFT(1, "Space", "Time")
@@ -147,5 +143,3 @@ def G_Dyson(Beta, G0, Sigma0, Sigma, map):
     Sigma.FFT(-1, "Space", "Time")
     G0.FFT(-1, "Space","Time")
     return G
-
-

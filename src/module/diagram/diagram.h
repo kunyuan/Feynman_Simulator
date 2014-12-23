@@ -43,6 +43,9 @@ class Diagram {
     Bundle<GLine> G;
     Bundle<WLine> W;
     Bundle<Vertex> Ver;
+    
+    bool GHash[2*MAX_K+1];
+    bool WHash[MAX_K+1];
 
     WormClass Worm;
     bool IsWorm(vertex);
@@ -54,7 +57,16 @@ class Diagram {
     //Diagram
     void ClearDiagram();
 
-    //Diagram Check
+    //Diagram Hash Table Check
+    bool GHashCheck(Momentum);
+    bool WHashCheck(Momentum);
+    
+    void AddGHash(Momentum);
+    void AddWHash(Momentum);
+    void RemoveGHash(Momentum);
+    void RemoveWHash(Momentum);
+    void ReplaceGHash(Momentum, Momentum);
+    void ReplaceWHash(Momentum, Momentum);
 
     void WriteDiagram2gv(std::string);
 
