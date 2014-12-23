@@ -69,6 +69,7 @@ bool Parameter::_Load(const std::string& InputFile)
 
 bool ParaMC::BuildNew(const std::string& InputFile)
 {
+    Parameter::_BuildNew(InputFile);
     Dictionary _para;
     _para.Load(InputFile);
     GET(_para, Toss);
@@ -87,9 +88,10 @@ bool ParaMC::BuildNew(const std::string& InputFile)
 
 bool ParaMC::Load(const std::string& InputFile)
 {
+    Parameter::_Load(InputFile);
     Dictionary _para;
     _para.Load(InputFile);
-//    GET(_para, Counter);
+    GET(_para, Counter);
     GET(_para, Toss);
     GET(_para, Sample);
     GET(_para, Sweep);

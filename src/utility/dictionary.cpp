@@ -12,7 +12,6 @@
 #include <memory>
 #include "utility/abort.h"
 #include "utility/scopeguard.h"
-#include <iostream>
 #include "dictionary.h"
 
 using namespace std;
@@ -68,6 +67,5 @@ void Dictionary::Print()
 
 void Dictionary::_PrintDebug() const
 {
-    cout << "IsDict=" << PyDict_Check(_Dict.Get()) << endl;
     _Dict._PrintDebug();
 }

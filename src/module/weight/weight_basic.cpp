@@ -107,8 +107,12 @@ bool LoadMatrix(T& matrix, const string& FileName, const string& Name)
     }
     catch (ERRORCODE e) {
         LOG_WARNING(Name << " is not found in " << FileName << ", so it is set to zero!");
-        if (e != ERR_VALUE_NOT_FOUND)
-            throw e;
+        if (e != ERR_VALUE_NOT_FOUND) {
+            if (e == ERR_FILE_NOT_FOUND)
+                ERRORCODEABORT(e, "File not found!");
+            else
+                ERRORCODEABORT(e, "Something happens!");
+        }
         return false;
     }
 }

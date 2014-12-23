@@ -23,7 +23,6 @@
 
 #include "utility/abort.h"
 #include "type_cast.h"
-#include <iostream>
 #include "object.h"
 
 namespace Python {
@@ -120,7 +119,6 @@ public:
         Object tup = PyTuple_New(sizeof...(args));
         add_tuple_vars(tup, args...);
         // Call our object
-        tup.Print();
         Object result = PyObject_CallObject(func.Get(), tup.Get());
         MakeSureNoPyError(ERR_GENERAL);
         return result;
