@@ -37,16 +37,12 @@ void ClearError();
 void PrintPyObject(PyObject*);
 void MakeSureNoPyError(ERRORCODE);
 /**
-    * Object could be either own the reference (call Py_DECREF() when get deleted) 
-      or unowned the reference (do not call Py_DECREF() when get deleted)
-    * The copy constructor will always create Object who own the reference, meaning Py_INCREF() will always be called
-    * The cast between PyObject/Object involve two actions: Steal or Borrow. Steal means the ownership of PyObject/Object is transfered to Object/PyObject, while Borrow means oppsite
+    * Object always own an new reference (so it need to call Py_DECREF() when get deleted)
+    * The copy constructor Object A=B will create an new reference for Object A.
+    * The assigment operator A=B has two steps: call Py_DECREF() on old A if it contains a PyObject. Then A copies the PyObject from B, but with its own reference
+    * The constructor Object(PyObect*, OwnerShip) has two types depends on the ownership of reference of PyObject: If PyObject owns the reference(OwnerShip=NewRef), the reference will be transferred to Object, while if PyObject is borrowed(OwnerShip=NoRef), a new reference is created for the Object
+    * The method PyObject* Get(OwnerShip) has two types depends on the ownership of reference of PyObject the user required: If user needs PyObject who owns the reference(OwnerShip=NewRef), a new reference is created for the returned PyObject*, while if user needs PyObject whose reference is borrowed(OwnerShip=NoRef), no reference will be created for the returned PyObject*
     */
-enum Action {
-    COPY = 0,
-    STEAL,
-    BORROW,
-};
 enum OwnerShip {
     NewRef,
     NoRef
