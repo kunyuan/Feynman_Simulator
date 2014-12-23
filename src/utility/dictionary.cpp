@@ -21,23 +21,20 @@ using namespace Python;
 namespace Python {
 bool Convert(Object obj, Dictionary& value)
 {
-    if (!PyDict_Check(obj.Borrow()))
+    if (!PyDict_Check(obj.Get()))
         return false;
     value = Dictionary(obj);
     return true;
 }
 Object CastToPy(const Dictionary& value)
 {
-    //    PyObject* dptr = value.GetObject().Borrow();
-    //    Py_INCREF(dptr);
-    //    return Object::Steal(dptr);
-    return value.GetObject();
+    return value.GetObject().Copy();
 }
 }
 
 Dictionary::Dictionary()
 {
-    _Dict = Object::Steal(PyDict_New());
+    _Dict = PyDict_New();
 }
 
 void Dictionary::LoadFromString(const std::string& script)
@@ -57,12 +54,11 @@ void Dictionary::Save(const string& FileName, const string& Mode)
 {
     ModuleObject SaveDict;
     SaveDict.LoadModule("IO.py");
-    //    SaveDict.CallFunction("Simple");
     SaveDict.CallFunction("SaveDict", FileName, Mode, _Dict);
 }
 void Dictionary::Clear()
 {
-    PyDict_Clear(_Dict.Borrow());
+    PyDict_Clear(_Dict.Get());
 }
 
 void Dictionary::Print()
@@ -72,5 +68,6 @@ void Dictionary::Print()
 
 void Dictionary::_PrintDebug() const
 {
-    LOG_INFO("PyObject ref=" << _Dict.Borrow()->ob_refcnt);
+    cout << "IsDict=" << PyDict_Check(_Dict.Get()) << endl;
+    _Dict._PrintDebug();
 }

@@ -32,17 +32,35 @@ namespace Python {
 
 void AnyObject::EvalScript(const std::string& script)
 {
-    Object main = Object::Steal(PyImport_AddModule("__main__"));
-    Object global = Object::Borrow(PyModule_GetDict(main.Borrow())); //borrowed reference
-    Object local = Object::Steal(PyDict_New());
-    *this = Object::Steal(PyRun_String(script.c_str(), Py_eval_input,
-                                       global.Borrow(), local.Borrow()));
+    Object main = PyImport_AddModule("__main__");
+    Object global = Object(PyModule_GetDict(main.Get()), NoRef); //borrowed reference
+    Object local = PyDict_New();
+    *this = PyRun_String(script.c_str(), Py_eval_input,
+                         global.Get(), local.Get());
     MakeSureNoPyError(ERR_GENERAL);
+}
+
+ModuleObject::ModuleObject(const Object& obj)
+    : Object(obj)
+{
+    if (!PyModule_Check(obj.Get()))
+        ERRORCODEABORT(ERR_VALUE_INVALID, "PyModule object is expected!");
+}
+ModuleObject::ModuleObject(PyObject* obj, OwnerShip ownership)
+    : Object(obj, ownership)
+{
+    if (!PyModule_Check(obj))
+        ERRORCODEABORT(ERR_VALUE_INVALID, "PyModule object is expected!");
+}
+ModuleObject& ModuleObject::operator=(const ModuleObject& obj)
+{
+    Object::operator=(obj);
+    return *this;
 }
 void ModuleObject::LoadModule(const string& script_path)
 {
     char arr[] = "path";
-    Object path = Object::Borrow(PySys_GetObject(arr));
+    Object path = Object(PySys_GetObject(arr), NoRef);
     string base_path("."), file_path;
     size_t last_slash(script_path.rfind("/"));
     if (last_slash != string::npos) {
@@ -55,36 +73,35 @@ void ModuleObject::LoadModule(const string& script_path)
         file_path = script_path;
     if (file_path.rfind(".py") == file_path.size() - 3)
         file_path = file_path.substr(0, file_path.size() - 3);
-    Object pwd = Object::Steal(PyString_FromString(base_path.c_str()));
+    Object pwd = PyString_FromString(base_path.c_str());
 
-    PyList_Append(path.Borrow(), pwd.Borrow());
+    PyList_Append(path.Get(), pwd.Get());
     /* We don't need that string value anymore, so deref it */
-    PyObject* module = PyImport_ImportModule(file_path.c_str());
+    Object module = PyImport_ImportModule(file_path.c_str());
     MakeSureNoPyError(ERR_GENERAL);
-    *this = Object::Steal(module);
+    *this = module;
 }
 
-PyObject* ModuleObject::load_function(const std::string& name)
+Object ModuleObject::load_function(const std::string& name)
 {
-    PyObject* attr = PyObject_GetAttrString(Borrow(), name.c_str());
-    Object obj = Object::Steal(attr);
+    Object obj = PyObject_GetAttrString(_PyPtr, name.c_str());
     obj.MakeSureNotNull();
     MakeSureNoPyError(ERR_GENERAL);
-    return obj.Steal();
+    return obj;
 }
 
 Object ModuleObject::CallFunction(const std::string& name)
 {
-    PyObject* func = load_function(name);
+    Object func = load_function(name);
     //    Object func = load_function(name);
-    Object ret = Object::Steal(PyObject_CallObject(func, 0));
+    Object ret = PyObject_CallObject(func.Get(), 0);
     MakeSureNoPyError(ERR_GENERAL);
     return { ret };
 }
 
 Object ModuleObject::GetAttr(const std::string& name)
 {
-    Object obj = Object::Steal(PyObject_GetAttrString(Borrow(), name.c_str()));
+    Object obj = PyObject_GetAttrString(_PyPtr, name.c_str());
     MakeSureNoPyError(ERR_GENERAL);
     return { obj };
 }

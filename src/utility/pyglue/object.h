@@ -42,38 +42,36 @@ void MakeSureNoPyError(ERRORCODE);
     * The copy constructor will always create Object who own the reference, meaning Py_INCREF() will always be called
     * The cast between PyObject/Object involve two actions: Steal or Borrow. Steal means the ownership of PyObject/Object is transfered to Object/PyObject, while Borrow means oppsite
     */
+enum Action {
+    COPY = 0,
+    STEAL,
+    BORROW,
+};
+enum OwnerShip {
+    NewRef,
+    NoRef
+};
 class Object {
 public:
-    enum Action {
-        STEAL = 0,
-        BORROW,
-    };
     Object()
-        : _IsOwner(false)
-        , _PyPtr(nullptr){};
+        : _PyPtr(nullptr){};
     Object(const Object& obj);
-    Object& operator=(const Object& a);
+    Object(PyObject*, OwnerShip ownership = NewRef);
+    Object Copy();
+    Object& operator=(const Object& obj); //assignment operator, default Action: STEAL
     ~Object() { Destroy(); }
 
-    static Object Borrow(PyObject* ptr);
-    static Object Steal(PyObject* ptr);
-    PyObject* Borrow() const;
-    PyObject* Steal();
+    PyObject* Get(OwnerShip ownership = NoRef) const;
 
     void Destroy();
-    bool IsOwner() const { return _IsOwner; }
 
-    void Print();
+    void Print() const;
     void _PrintDebug() const;
     std::string PrettyString();
     void MakeSureNotNull();
 
 protected:
     PyObject* _PyPtr;
-    bool _IsOwner;
-
-private:
-    Object(PyObject*, bool IsOwner);
 };
 }
 

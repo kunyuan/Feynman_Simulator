@@ -57,12 +57,13 @@ template <typename T>
 bool Convert(Object obj, Vec<T>& val)
 {
     auto Dim = val.size();
-    if (!PyList_Check(obj.Borrow()) || PyList_Size(obj.Borrow()) < Dim)
+    if (!PyList_Check(obj.Get()) || PyList_Size(obj.Get()) < Dim)
         return false;
 
     for (auto i = 0; i < Dim; i++) {
         T v;
-        if (!Convert(Object::Borrow(PyList_GetItem(obj.Borrow(), i)), v))
+        Object item = Object(PyList_GetItem(obj.Get(), i), NoRef);
+        if (!Convert(item, v))
             return false;
         val[i] = v;
     }
@@ -72,7 +73,7 @@ template <size_t n, class... Args>
 typename std::enable_if<n == 0, bool>::type
 AddToTuple(Object obj, std::tuple<Args...>& tup)
 {
-    Object item = Object::Borrow(PyTuple_GetItem(obj.Borrow(), n));
+    Object item = Object(PyTuple_GetItem(obj.Get(), n), NoRef);
     return Convert(item, std::get<n>(tup));
 }
 
@@ -80,15 +81,15 @@ template <size_t n, class... Args>
 typename std::enable_if<n != 0, bool>::type
 AddToTuple(Object obj, std::tuple<Args...>& tup)
 {
-    AddToTuple<n - 1, Args...>(obj.Borrow(), tup);
-    Object item = Object::Borrow(PyTuple_GetItem(obj.Borrow(), n));
+    AddToTuple<n - 1, Args...>(obj.Get(), tup);
+    Object item = Object(PyTuple_GetItem(obj.Get(), n), NoRef);
     return Convert(item, std::get<n>(tup));
 }
 
 template <class... Args>
 bool Convert(Object obj, std::tuple<Args...>& tup)
 {
-    if (!PyTuple_Check(obj.Borrow()) || PyTuple_Size(obj.Borrow()) != sizeof...(Args))
+    if (!PyTuple_Check(obj.Get()) || PyTuple_Size(obj.Get()) != sizeof...(Args))
         return false;
     return AddToTuple<sizeof...(Args)-1, Args...>(obj, tup);
 }
@@ -96,16 +97,17 @@ bool Convert(Object obj, std::tuple<Args...>& tup)
 template <class K, class V>
 bool Convert(Object obj, std::map<K, V>& mp)
 {
-    if (!PyDict_Check(obj.Borrow()))
+    if (!PyDict_Check(obj.Get()))
         return false;
     PyObject* py_key, *py_val;
     Py_ssize_t pos(0);
-    while (PyDict_Next(obj.Borrow(), &pos, &py_key, &py_val)) {
+    while (PyDict_Next(obj.Get(), &pos, &py_key, &py_val)) {
+        //PyDict_Next return borrowed key and val
         K key;
-        if (!Convert(py_key, key))
+        if (!Convert(Object(py_key, NoRef), key))
             return false;
         V val;
-        if (!Convert(py_val, val))
+        if (!Convert(Object(py_val, NoRef), val))
             return false;
         mp.insert(std::make_pair(key, val));
     }
@@ -115,11 +117,11 @@ bool Convert(Object obj, std::map<K, V>& mp)
 template <class T, class C>
 bool ConvertList(Object obj, C& container)
 {
-    if (!PyList_Check(obj.Borrow()))
+    if (!PyList_Check(obj.Get()))
         return false;
-    for (Py_ssize_t i(0); i < PyList_Size(obj.Borrow()); ++i) {
+    for (Py_ssize_t i(0); i < PyList_Size(obj.Get()); ++i) {
         T val;
-        Object item = Object::Borrow(PyList_GetItem(obj.Borrow(), i));
+        Object item = Object(PyList_GetItem(obj.Get(), i), NoRef);
         if (!Convert(item, val))
             return false;
         container.push_back(std::move(val));
@@ -168,16 +170,12 @@ Object CastToPy(const Complex& num);
 template <class T>
 static Object CastToPyList(const T& container)
 {
-    Object lst = Object::Steal(PyList_New(container.size()));
+    Object lst = PyList_New(container.size());
 
     Py_ssize_t i(0);
     for (auto it(container.begin()); it != container.end(); ++it) {
         auto obj = CastToPy(*it);
-        //        obj._PrintDebug();
-        //        obj.Print();
-        PyList_SetItem(lst.Borrow(), i++, obj.Steal());
-        //        obj._PrintDebug();
-        //        obj.Print();
+        PyList_SetItem(lst.Get(), i++, obj.Get(NewRef));
     }
     return lst;
 }
@@ -203,12 +201,12 @@ template <class T, class K>
 Object CastToPy(
     const std::map<T, K>& container)
 {
-    Object dict = Object::Steal(PyDict_New());
+    Object dict = PyDict_New();
 
     for (auto it(container.begin()); it != container.end(); ++it)
         PyDict_SetItem(dict,
-                       CastToPy(it->first).Borrow(),
-                       CastToPy(it->second).Borrow());
+                       CastToPy(it->first).Get(),
+                       CastToPy(it->second)).Get();
 
     return dict;
 }

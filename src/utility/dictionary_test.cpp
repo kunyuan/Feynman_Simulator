@@ -30,6 +30,7 @@ void Test_Dict()
     int IntMax = std::numeric_limits<int>::max();
     int IntMin = std::numeric_limits<int>::min();
     Port.Set("IntMax", IntMax);
+    Port._PrintDebug();
     Port.Set("IntMin", IntMin);
     long long ago = std::numeric_limits<long long>::max();
     Port.Set("ago", ago);
@@ -64,19 +65,22 @@ void Test_Dict()
     sput_fail_unless(Port.Get<Dictionary>("dict").Get<int>("b") == 11,
                      "check dict type");
     Port.GetObject()._PrintDebug();
-    PyObject* k = CastToPy(Port).Steal();
+    Object k = CastToPy(Port);
     Port.GetObject()._PrintDebug();
     AnyObject i = 1;
     i._PrintDebug();
-    PyObject* j = CastToPy(1).Steal();
+    Object j = CastToPy(1);
     i._PrintDebug();
     Port.Save("test.txt", "w");
-    PrintPyObject(Port.GetObject().Borrow());
-    //    Port.Clear();
-    //    Port.Load("test.txt");
-    //    Port.Print();
-    //    system("rm test.py");
-    //    SubPort.Clear();
-    //    SubPort = Port.Get<Dictionary>("dict");
-    //    SubPort.Print();
+    Port.Clear();
+    Port.Load("test.txt");
+    sput_fail_unless(Equal((Port.Get<vector<Complex> >("cVec"))[1], cb),
+                     "check vector<Complex> type");
+    sput_fail_unless(Port.Get<Dictionary>("dict").Get<int>("b") == 11,
+                     "check dict IO");
+    Port.Print();
+    //    system("rm test.txt");
+    SubPort.Clear();
+    SubPort = Port.Get<Dictionary>("dict");
+    SubPort.Print();
 }

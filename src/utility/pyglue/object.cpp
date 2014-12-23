@@ -47,76 +47,63 @@ void IncreaseRef(PyObject* obj)
     if (obj != nullptr)
         Py_INCREF(obj);
 }
-void DecreaseRef(PyObject* obj, bool IsOwner)
+void DecreaseRef(PyObject* obj)
 {
-    if (IsOwner)
-        Py_XDECREF(obj);
+    Py_XDECREF(obj);
+}
+Object Object::Copy()
+{
+    IncreaseRef(_PyPtr);
+    return Object(_PyPtr, NewRef);
 }
 
 Object::Object(const Object& obj)
 {
-    _PyPtr = obj.Borrow();
-    _IsOwner = true;
-    IncreaseRef(_PyPtr);
+    *this = obj;
 }
 
 Object& Object::operator=(const Object& obj)
 {
-    _PyPtr = obj.Borrow();
-    _IsOwner = true;
-    IncreaseRef(_PyPtr);
+    _PyPtr = obj.Get(NewRef);
     return *this;
 }
 
-Object::Object(PyObject* ptr, bool IsOwner)
+Object::Object(PyObject* obj, OwnerShip os)
 {
-    _PyPtr = ptr;
-    _IsOwner = IsOwner;
+    _PyPtr = obj;
+    if (os != NewRef)
+        IncreaseRef(_PyPtr);
 }
 
-Object Object::Borrow(PyObject* ptr)
+PyObject* Object::Get(OwnerShip os) const
 {
-    return Object(ptr, false);
-}
-Object Object::Steal(PyObject* ptr)
-{
-    return Object(ptr, true);
-}
-
-PyObject* Object::Borrow() const
-{
-    return _PyPtr;
-}
-
-PyObject* Object::Steal()
-{
-    if (IsOwner() == false)
-        ERRORCODEABORT(ERR_VALUE_INVALID, "Object does not have ownership!");
-    _IsOwner = false;
+    if (os == NewRef)
+        IncreaseRef(_PyPtr);
     return _PyPtr;
 }
 
 void Object::Destroy()
 {
-    DecreaseRef(_PyPtr, IsOwner());
+    DecreaseRef(_PyPtr);
     _PyPtr = nullptr;
-    _IsOwner = false;
 }
 
-void Object::Print()
+void Object::Print() const
 {
     PyObject_Print(_PyPtr, stdout, 0);
+    //    PyRun_SimpleString("\n");
 }
 
 void Object::_PrintDebug() const
 {
     LOG_INFO("PyObject ref=" << _PyPtr->ob_refcnt);
+    Print();
 }
 std::string Object::PrettyString()
 {
-    Object result = Object::Steal(PyObject_Repr(_PyPtr));
+    Object result = PyObject_Repr(_PyPtr);
     MakeSureNoPyError(ERR_VALUE_INVALID);
-    return PyString_AsString(result.Borrow());
+    return PyString_AsString(result.Get());
 }
 
 void Object::MakeSureNotNull()
