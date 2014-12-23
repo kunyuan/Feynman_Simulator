@@ -15,7 +15,6 @@
 #include "utility/utility.h"
 #include "utility/vector.h"
 #include "utility/abort.h"
-#include "utility/pyglue/type_cast_interface.h"
 #include "utility/pyglue/pywrapper.h"
 
 #define SET(para, value) (para).Set((#value), (value));
@@ -40,8 +39,8 @@ public:
     }
 
     //ITypeCast interface
-    virtual Python::Object CastToPy() const;
-    virtual bool Convert(Python::Object);
+    virtual Python::Object ToPy() const;
+    virtual bool FromPy(Python::Object);
 
     template <typename T>
     void Set(const std::string& key, const T& value)
@@ -49,6 +48,7 @@ public:
         Python::AnyObject object(value);
         PyDict_SetItemString(_PyPtr, key.c_str(), object.Get());
     }
+    void Set(const std::string& key, Complex* data, uint* Shape, uint Dim);
     template <typename T>
     bool Get(const std::string& key, T& value)
     {

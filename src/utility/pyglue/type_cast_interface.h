@@ -12,8 +12,8 @@
 namespace Python {
 class ITypeCast {
 public:
-    virtual Object CastToPy() const = 0;
-    virtual bool Convert(Object) = 0;
+    virtual Object ToPy() const = 0;
+    virtual bool FromPy(Object) = 0;
 
 protected:
     ~ITypeCast() {}

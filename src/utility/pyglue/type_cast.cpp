@@ -111,7 +111,7 @@ bool Convert(Object obj, RandomFactory& rng)
 }
 bool Convert(Object obj, ITypeCast& value)
 {
-    return value.Convert(obj);
+    return value.FromPy(obj);
 }
 
 // Allocation methods
@@ -167,6 +167,6 @@ Object CastToPy(const RandomFactory& rng)
 }
 Object CastToPy(const ITypeCast& val)
 {
-    return val.CastToPy();
+    return val.ToPy();
 }
 }

@@ -55,7 +55,10 @@ public:
     Object(PyObject*, OwnerShip ownership = NewRef);
     Object Copy() const;
     Object& operator=(const Object& obj); //assignment operator, default Action: STEAL
-    ~Object() { Destroy(); }
+    ~Object()
+    {
+        Destroy();
+    }
     long RefCount() const;
 
     PyObject* Get(OwnerShip ownership = NoRef) const;

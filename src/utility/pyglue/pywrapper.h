@@ -26,7 +26,7 @@
 #include "object.h"
 
 namespace Python {
-class AnyObject : public Object {
+class AnyObject : public Object, public ITypeCast {
 public:
     AnyObject()
         : Object()
@@ -45,6 +45,11 @@ public:
         Object::operator=(obj);
         return *this;
     }
+
+    //ITypeCast interface
+    virtual Python::Object ToPy() const;
+    virtual bool FromPy(Python::Object);
+    
     template <typename T>
     AnyObject(T value)
         : Object(CastToPy(value))

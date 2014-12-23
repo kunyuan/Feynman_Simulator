@@ -111,7 +111,12 @@ void Test_Dict()
                      "check dict IO");
     //    Port.Print();
     system("rm test.txt");
-    //    SubPort.Clear();
-    //    SubPort = Port.Get<Dictionary>("dict");
-    //    SubPort.Print();
+    SubPort.Clear();
+    SubPort = Port.Get<Dictionary>("dict");
+    SubPort.Print();
+
+    sput_fail_unless(Port.RefCount() == 1, "Port ref check");
+    Port.Destroy();
+    sput_fail_unless(SubPort.RefCount() == 1, "SubPort ref check");
+    SubPort.Destroy();
 }
