@@ -56,8 +56,67 @@ void Diagram::SetTest(Lattice &lat, weight::G &g, weight::W &w)
     FixDiagram();
 }
 
+bool Diagram::GHashCheck(Momentum k)
+{
+    return (k==0 || GHash[k.index()]);
+}
+
+void Diagram::AddGHash(Momentum k)
+{
+    if(DEBUGMODE && GHash[k.index()])
+        ABORT("add occupied G Hash!");
+    GHash[k.index()] = true;
+}
+
+void Diagram::RemoveGHash(Momentum k)
+{
+    if(DEBUGMODE && !(GHash[k.index()]))
+        ABORT("remove empty G Hash!");
+    GHash[k.index()] = false;
+}
+
+void Diagram::ReplaceGHash(Momentum kold, Momentum k)
+{
+    RemoveGHash(kold);
+    AddGHash(k);
+}
+
+bool Diagram::WHashCheck(Momentum k)
+{
+    return (k==0 || WHash[k.abs()]);
+}
+
+void Diagram::AddWHash(Momentum k)
+{
+    if(DEBUGMODE && WHash[k.abs()])
+        ABORT("add occupied W Hash!");
+    WHash[k.abs()] = true;
+}
+
+void Diagram::RemoveWHash(Momentum k)
+{
+    if(DEBUGMODE && !(WHash[k.abs()]))
+        ABORT("remove empty W Hash!");
+    WHash[k.abs()] = false;
+}
+
+void Diagram::ReplaceWHash(Momentum kold, Momentum k)
+{
+    RemoveWHash(kold);
+    AddWHash(k);
+}
+
 void Diagram::ClearDiagram()
 {
+    for(int i=0; i<2*MAX_K+1; i++)
+    {
+        GHash[i]=false;
+    }
+    for(int i=0; i<MAX_K+1; i++)
+    {
+        WHash[i]=false;
+    }
+    
     while (G.HowMany() > 0)
         G.Remove(G.HowMany() - 1);
     while (W.HowMany() > 0)

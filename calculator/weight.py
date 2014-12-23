@@ -174,20 +174,6 @@ class Weight():
         SpatialShape=shape[0:InsertPos]+self.L+shape[InsertPos+1:]
         return range(InsertPos, InsertPos+len(self.L)), SpatialShape
 
-    #def Reshape(self, ShapeMode):
-        #OriginShape=self.__OriginShape
-        #MidShape1=[self.NSpin, self.NSpin,self.NSublat,self.NSublat]+self.__OriginShape[VOL:]
-        #MidShape2=[self.NSpin, self.NSublat, self.NSpin, self.NSublat]+self.__OriginShape[VOL:]
-        #NewShape=[self.NSpin*self.NSublat, self.NSpin*self.NSublat]+self.__OriginShape[VOL:]
-        #if ShapeMode is "SP2SUB2":
-            #self.__AssertShape(self.Shape, NewShape)
-            #self.Data=self.Data.reshape(MidShape2).swapaxes(1,2).reshape(OriginShape)
-            #self.Shape=OriginShape
-        #elif ShapeMode is "SPSUBSPSUB":
-            #self.__AssertShape(self.Shape, OriginShape)
-            #self.Data=self.Data.reshape(MidShape1).swapaxes(1,2).reshape(NewShape)
-            #self.Shape=NewShape
-
     def Inverse(self):
         self.__InverseSpinAndSublat()
 
@@ -209,19 +195,19 @@ class Weight():
         log.info("Loading {0} Matrix...".format(self.Name));
         data=self.__LoadNpz(FileName)
 
-
         if self.Name in data.files:
             log.info("Load {0}".format(self.Name))
+            datamat = data[self.Name]
 
             ######RESHAPE data[self.Name]
             OldShape=[self.NSpin**2, self.NSublat**2]+self.__OriginShape[VOL:]
             MidShape=[self.NSpin, self.NSpin, self.NSublat,self.NSublat]+self.__OriginShape[VOL:]
             NewShape=self.__OriginShape
-            self.__AssertShape(data[self.Name].shape, OldShape)
-            data[self.Name]=data[self.Name].reshape(MidShape).swapaxes(1,2).reshape(NewShape)
-            self.__AssertShape(self.Shape, data[self.Name].shape)
+            self.__AssertShape(datamat.shape, OldShape)
+            datamat=datamat.reshape(MidShape).swapaxes(1,2).reshape(NewShape)
+            self.__AssertShape(self.Shape, datamat.shape)
 
-            self.Data=data[self.Name]
+            self.Data=datamat
         else:
             Assert(False, "{0} not found!").format(self.Name)
 
