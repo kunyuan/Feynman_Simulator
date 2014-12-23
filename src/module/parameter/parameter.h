@@ -11,7 +11,6 @@
 
 #include "lattice/lattice.h"
 #include "message.h"
-#include "utility/parser.h"
 #include "utility/rng.h"
 #include "utility/complex.h"
 #include "utility/convention.h"
@@ -39,9 +38,7 @@ public:
 protected:
     bool _BuildNew(const std::string& InputFile);
     bool _Load(const std::string& InputFile);
-    void _SavePreparation();
 
-    SimpleParser _para;
     Vec<int> L;
 };
 

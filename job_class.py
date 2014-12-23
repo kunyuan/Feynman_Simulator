@@ -41,13 +41,17 @@ class Job:
         self.para["WeightFile"]="Weight.npz"
         self.para["MessageFile"]="Message.txt"
         self.__set_model_specific__()
+        import json
+        json.dump(self.para, open("test.json","w"), indent=4)
         return self.__formator__(self.para)
 
     def __formator__(self,para):
-        for (k,v) in para.items():
-            if type(v) is str:
-                para[k]="'"+v+"'"
-        return "\n".join([k+" = "+str(v) for (k,v) in para.items()])
+        #for (k,v) in para.items():
+            #if type(v) is str:
+                #para[k]="'"+v+"'"
+        #return "\n".join([k+" = "+str(v) for (k,v) in para.items()])
+        import pprint
+        return pprint.pformat(para)
 
     def __check_parameters__(self, para):
         if para["__Execute"] is "":

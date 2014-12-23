@@ -39,7 +39,10 @@ protected:
 
 class IndexMapSPIN2 : public IndexMap {
 public:
-    using IndexMap::IndexMap;
+    IndexMapSPIN2(real Beta, uint MaxTauBin, const Lattice& Lat)
+        : IndexMap(Beta, MaxTauBin, Lat)
+    {
+    }
     static int SpinIndex(spin SpinIn, spin SpinOut);
     static bool IsSameSpin(int spindex);
     void Map(uint* result, spin in, spin out,
@@ -49,7 +52,10 @@ public:
 
 class IndexMapSPIN4 : public IndexMap {
 public:
-    using IndexMap::IndexMap;
+    IndexMapSPIN4(real Beta, uint MaxTauBin, const Lattice& Lat)
+        : IndexMap(Beta, MaxTauBin, Lat)
+    {
+    }
     //First In/Out: direction of WLine; Second In/Out: direction of Vertex
     static int SpinIndex(spin SpinInIn, spin SpinInOut, spin SpinOutIn, spin SpinOutOut);
     static int SpinIndex(const spin* TwoSpinIn, const spin* TwoSpinOut);

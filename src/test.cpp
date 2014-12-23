@@ -15,6 +15,7 @@
 #include "lattice/lattice.h"
 #include "estimator/estimator.h"
 #include "module/weight/component.h"
+#include "utility/dictionary.h"
 
 using namespace std;
 
@@ -29,7 +30,6 @@ int RunTest()
     //    TestTimer();  //Test the timer
     //    TestRNG();
     //    TestArray();
-    TEST(TestEnvironment);
     TEST(diag::TestDiagram);
     TEST(weight::TestWeight);
     TEST(mc::TestMarkov);
@@ -42,5 +42,7 @@ int RunTest()
     //    TEST(TestFFT);
 
     //    Testcnpy();
+    TestDictionary();
+
     return 0;
 }
