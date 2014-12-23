@@ -9,12 +9,13 @@
 #ifndef __Feynman_Simulator__status__
 #define __Feynman_Simulator__status__
 
-#include "utility/parser.h"
-#include <vector>
+#include <string>
+#include "utility/convention.h"
+
 namespace para {
 
 class Message {
-  public:
+public:
     int Version;
     real Beta;
 
@@ -22,9 +23,8 @@ class Message {
     void Save();
     std::string PrettyString();
 
-  private:
+private:
     const std::string _MessageFile = "message.txt";
-    SimpleParser _Para;
 };
 }
 

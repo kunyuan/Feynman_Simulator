@@ -7,21 +7,23 @@
 //
 
 #include "job.h"
+#include "utility/dictionary.h"
 #include <iostream>
 
 using namespace std;
 
 para::Job::Job(string inputfile)
 {
-    _Para.ParseFile(inputfile);
-    GetPara(_Para, Type);
+    Dictionary _Para;
+    _Para.Load(inputfile);
+    GET(_Para, Type);
     if (TypeName.find(Type) == TypeName.end())
         ABORT("I don't know what is Job Type " << Type << "?");
 
-    GetPara(_Para, DoesLoad);
-    GetPara(_Para, PID);
-    GetPara(_Para, WeightFile);
-    GetPara(_Para, MessageFile);
+    GET(_Para, DoesLoad);
+    GET(_Para, PID);
+    GET(_Para, WeightFile);
+    GET(_Para, MessageFile);
     ParaFile = ToString(PID) + "_para.txt";
     StatisticsFile = ToString(PID) + "_statistics.npz";
     ConfigFile = ToString(PID) + "_config.txt";

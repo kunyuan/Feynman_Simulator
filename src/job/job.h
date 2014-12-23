@@ -9,7 +9,8 @@
 #ifndef __Feynman_Simulator__job__
 #define __Feynman_Simulator__job__
 
-#include "utility/parser.h"
+#include "utility/convention.h"
+#include <string>
 #include <set>
 
 namespace para {
@@ -31,9 +32,6 @@ public:
     std::string LogFile;
     std::string ConfigFile;
     std::string InputFile;
-
-private:
-    SimpleParser _Para;
 };
 }
 #endif /* defined(__Feynman_Simulator__job__) */
