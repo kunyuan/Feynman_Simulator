@@ -15,15 +15,14 @@
 #include "utility/utility.h"
 #include "utility/vector.h"
 #include "utility/abort.h"
+#include "utility/pyglue/type_cast_interface.h"
 #include "utility/pyglue/pywrapper.h"
 
 #define SET(para, value) (para).Set((#value), (value));
 #define GET(para, value) (para).Get((#value), (value));
-using namespace Python;
-class Dictionary {
+class Dictionary : public Python::ITypeCast {
 public:
     friend class Dictionary;
-    std::string Name;
     Dictionary();
     Dictionary(const Python::Object& obj)
         : _Dict(obj)
@@ -33,38 +32,28 @@ public:
     }
     Dictionary(const Dictionary& dict)
         : _Dict(dict.GetObject())
-        , Name(dict.Name)
     {
     }
     ~Dictionary()
     {
         _Dict.Destroy();
     }
+
+    virtual Python::Object CastToPy() const;
+    virtual bool Convert(Python::Object);
     template <typename T>
     void Set(const std::string& key, const T& value)
     {
         Python::AnyObject object(value);
         PyDict_SetItemString(_Dict.Get(), key.c_str(), object.Get());
     }
-    void Set(const std::string& key, const Dictionary& value)
-    {
-        PyDict_SetItemString(_Dict.Get(), key.c_str(), value._Dict.Get());
-    }
     template <typename T>
     bool Get(const std::string& key, T& value)
     {
-        AnyObject object = Object(PyDict_GetItemString(_Dict.Get(), key.c_str()), NoRef);
+        Python::AnyObject object = Python::Object(PyDict_GetItemString(_Dict.Get(), key.c_str()), Python::NoRef);
         if (object.Get() == nullptr)
             return false;
         value = object.As<T>();
-        return true;
-    }
-    bool Get(const std::string& key, Dictionary& value)
-    {
-        AnyObject object = Object(PyDict_GetItemString(_Dict.Get(), key.c_str()), NoRef);
-        if (object.Get() == nullptr)
-            return false;
-        value = Dictionary(object);
         return true;
     }
     template <typename T>
@@ -89,11 +78,6 @@ public:
 private:
     Python::AnyObject _Dict;
 };
-namespace Python {
-bool Convert(Object obj, Dictionary& value);
-Object CastToPy(const Dictionary& num);
-}
-
 int TestDictionary();
 
 #endif /* defined(__Feynman_Simulator__serialization__) */

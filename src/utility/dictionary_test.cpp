@@ -13,40 +13,78 @@
 #include "dictionary.h"
 
 using namespace std;
+using namespace Python;
 
-AnyObject ii = std::numeric_limits<int>::max();
+void Test_Ref();
+void Test_Cast();
 void Test_Dict();
 int TestDictionary()
 {
     sput_start_testing();
-    sput_enter_suite("Test Definition of Class Lattice");
+    sput_enter_suite("Test Python wrapper layer");
+    sput_run_test(Test_Ref);
+    sput_run_test(Test_Cast);
     sput_run_test(Test_Dict);
     sput_finish_testing();
     return sput_get_return_value();
 }
 
+void Test_Ref()
+{
+    PyObject* iptr = PyInt_FromLong(1);
+    auto i_ref = iptr->ob_refcnt;
+    AnyObject i1 = iptr;
+    sput_fail_unless(i1.RefCount() == i_ref, "create AnyObject from PyObject* who owns the reference");
+    AnyObject i2 = Object(iptr, NoRef);
+    sput_fail_unless(i2.RefCount() == i_ref + 1, "create AnyObject from PyObject* who does not own the reference");
+    AnyObject i3 = i2;
+    sput_fail_unless(i3.RefCount() == i_ref + 2, "create AnyObject with copy constructor");
+    i2.Destroy();
+
+    AnyObject j = 2;
+    auto j_ref = j.RefCount();
+    i3 = j;
+    //all new reference to iptr has been destroyed except i1
+    sput_fail_unless(iptr->ob_refcnt == i_ref, "the old AnyObject has to call Py_DEREF");
+    sput_fail_unless(i3.RefCount() == j_ref + 1, "the new AnyObject own an new reference");
+    i3.Destroy();
+
+    PyObject* jptr = j.Get(NewRef);
+    sput_fail_unless(jptr->ob_refcnt == j_ref + 1, "get PyObject* with new reference");
+    Py_XDECREF(jptr);
+    PyObject* jjptr = j.Get(NoRef);
+    sput_fail_unless(jjptr->ob_refcnt == j_ref, "get PyObject* witout reference");
+}
+
+void Test_Cast()
+{
+    AnyObject value;
+    int IntMax = std::numeric_limits<int>::max();
+    value = IntMax;
+    sput_fail_unless(IntMax == value.As<int>(), "Int Max");
+    int IntMin = std::numeric_limits<int>::min();
+    value = IntMin;
+    sput_fail_unless(IntMin == value.As<int>(), "Int Min");
+
+    long long lliMax = std::numeric_limits<long long>::max();
+    value = lliMax;
+    sput_fail_unless(lliMax == value.As<long long>(), "Long Long Int Max");
+    long long lliMin = std::numeric_limits<long long>::min();
+    value = lliMin;
+    sput_fail_unless(lliMin == value.As<long long>(), "Long Long Int Min");
+    unsigned long long biggest = std::numeric_limits<unsigned long long>::max();
+    value = biggest;
+    sput_fail_unless(biggest == value.As<unsigned long long>(),
+                     "Unsigned Long Long Int Max");
+}
+
 void Test_Dict()
 {
     Dictionary Port;
-    int IntMax = std::numeric_limits<int>::max();
-    int IntMin = std::numeric_limits<int>::min();
-    Port.Set("IntMax", IntMax);
-    Port.Set("IntMin", IntMin);
-    long long ago = std::numeric_limits<long long>::max();
-    Port.Set("ago", ago);
-    long long after = std::numeric_limits<long long>::min();
-    Port.Set("after", after);
     unsigned long long biggest = std::numeric_limits<unsigned long long>::max();
-    cout << biggest << endl;
     Port.Set("biggest", biggest);
     vector<int> v = { 1, 2, 3 };
     Port.Set("Vec", v);
-    sput_fail_unless(Port.Get<int>("IntMax") == IntMax, "check integer type");
-    sput_fail_unless(Port.Get<int>("IntMin") == IntMin, "check integer type");
-    sput_fail_unless(Port.Get<long long>("ago") == ago,
-                     "check long long integer type");
-    sput_fail_unless(Port.Get<long long>("after") == after,
-                     "check long long integer type");
     sput_fail_unless(Port.Get<unsigned long long>("biggest") == biggest,
                      "check unsigned long long integer type");
     auto vect = Port.Get<vector<int> >("Vec");
@@ -60,7 +98,6 @@ void Test_Dict()
     sput_fail_unless(Equal((Port.Get<vector<Complex> >("cVec"))[1], cb),
                      "check vector<Complex> type");
     Dictionary SubPort;
-    Port.Name = "SubPort";
     SubPort.LoadFromString("{'b':11,'c':22}");
     Port.Set("dict", SubPort);
     sput_fail_unless(Port.Get<Dictionary>("dict").Get<int>("b") == 11,

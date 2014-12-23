@@ -17,20 +17,17 @@
 using namespace std;
 using namespace Python;
 
-namespace Python {
-bool Convert(Object obj, Dictionary& value)
+Object Dictionary::CastToPy() const
+{
+    return GetObject().Copy();
+}
+bool Dictionary::Convert(Object obj)
 {
     if (!PyDict_Check(obj.Get()))
         return false;
-    value = Dictionary(obj);
+    _Dict = obj;
     return true;
 }
-Object CastToPy(const Dictionary& value)
-{
-    return value.GetObject().Copy();
-}
-}
-
 Dictionary::Dictionary()
 {
     _Dict = PyDict_New();

@@ -94,16 +94,29 @@ void Object::Destroy()
     _PyPtr = nullptr;
 }
 
+long Object::RefCount()
+{
+    if (_PyPtr != nullptr)
+        return _PyPtr->ob_refcnt;
+    else
+        return -1;
+}
+
 void Object::Print() const
 {
-    PyObject_Print(_PyPtr, stdout, 0);
-    std::cout << std::endl;
+    if (_PyPtr != nullptr) {
+        PyObject_Print(_PyPtr, stdout, 0);
+        std::cout << std::endl;
+    }
+    else
+        std::cout << "nullptr" << std::endl;
     //    PyRun_SimpleString("\n");
 }
 
 void Object::_PrintDebug() const
 {
-    LOG_INFO("PyObject ref=" << _PyPtr->ob_refcnt);
+    if (_PyPtr != nullptr)
+        LOG_INFO("PyObject ref=" << _PyPtr->ob_refcnt);
     Print();
 }
 std::string Object::PrettyString()

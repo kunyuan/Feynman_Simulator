@@ -18,7 +18,7 @@
 #include <list>
 #include <tuple>
 #include "utility/vector.h"
-#include "object.h"
+#include "type_cast_interface.h"
 #include <Python/Python.h>
 
 class Complex;
@@ -40,6 +40,7 @@ bool Convert(Object obj, float& value);
 bool Convert(Object obj, double& value);
 bool Convert(Object obj, Complex& val);
 bool Convert(Object obj, RandomFactory& val);
+bool Convert(Object obj, ITypeCast& val);
 
 template <typename T>
 bool Convert(Object obj, Vec<T>& val)
@@ -146,6 +147,7 @@ Object CastToPy(float num);
 Object CastToPy(double num);
 Object CastToPy(const Complex& num);
 Object CastToPy(const RandomFactory& val);
+Object CastToPy(const ITypeCast& val);
 // Creates a PyObject from a std::vector
 
 // Generic python list allocation
