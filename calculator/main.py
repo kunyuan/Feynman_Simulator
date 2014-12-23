@@ -2,7 +2,7 @@
 import numpy as np
 import parameter as para
 import calculator as calc
-from weight import UP,DOWN,IN,OUT,TAU,SP,SUB,VOL
+from weight import UP,DOWN,IN,OUT,TAU,SP1,SUB1,SP2,SUB2,VOL
 import weight
 import model
 import lattice as lat
@@ -22,7 +22,7 @@ if para.StartFromBare is True:
     G0,W0=Factory.Build(para.Model, para.Lattice)
     G0.Save(prefix+para.WeightFile,"w")
     W0.Save(prefix+para.WeightFile,"a")
-    Factory.Plot()
+    #Factory.Plot()
 else:
     G0=weight.Weight("G.SmoothT", map, "TwoSpins", "AntiSymmetric")
     G0.Load("../data/GW.npz")
@@ -30,21 +30,20 @@ else:
     W0.Load("../data/GW.npz")
 
 Polar=calc.Polar_FirstOrder(G0, map)
-print "Polar", Polar.Data[map.Spin4Index((DOWN,UP),(UP,DOWN)), 0,0,:]
-
-W=calc.W_FirstOrder(Beta, W0, Polar,map) 
-print W.Data[map.Spin4Index((DOWN,DOWN),(DOWN,DOWN)), 0,0,:]
+W = calc.W_Dyson(Beta, W0, Polar,map)
 
 Sigma=calc.Sigma_FirstOrder(G0, W, map)
 Sigma0=calc.Sigma0_FirstOrder(G0, W0, map)
 
-W = calc.W_Dyson(Beta, W0,Polar,map)
-print W.Data[map.Spin4Index((DOWN,DOWN),(DOWN,DOWN)), 0,0,:]
+for i in range(10):
+    W = calc.W_Dyson(Beta, W0,Polar,map)
+    G = calc.G_Dyson(Beta, G0, Sigma0, Sigma, map)
 
-G = calc.G_FirstOrder(Beta,G0, Sigma0, Sigma, map) 
-print G0.Data[map.Spin2Index(UP,UP),0,0,:]+G.Data[map.Spin2Index(UP,UP), 0,0,:]
+    Polar = calc.Polar_FirstOrder(G, map)
+    Sigma = calc.Sigma_FirstOrder(G,W,map)
+    Sigma0 = calc.Sigma0_FirstOrder(G,W0,map)
 
-G = calc.G_Dyson(Beta, G0, Sigma0, Sigma, map)
-print G.Data[map.Spin2Index(UP,UP), 0,0,:]
+spinUP = map.Spin2Index(UP,UP)
+print W.Data[spinUP,0,spinUP,0,0,:]
+print G.Data[UP,0,UP,0,0,:]
 
-#W=calc.W_FirstOrder(W0, Polar,map) 
