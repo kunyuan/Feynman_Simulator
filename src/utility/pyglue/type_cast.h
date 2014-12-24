@@ -28,6 +28,7 @@ namespace Python {
 
 // Convert a PyObject to a std::string.
 bool Convert(Object obj, std::string& val);
+bool Convert(Object obj, char* val);
 // Convert a PyObject to a bool value.
 bool Convert(Object obj, bool& value);
 bool Convert(Object obj, int& value);
@@ -134,6 +135,7 @@ bool Convert(Object obj, std::vector<T>& vec)
 
 // Creates a PyObject from a std::string
 Object CastToPy(const std::string& str);
+Object CastToPy(const char* str);
 Object CastToPy(int num);
 Object CastToPy(unsigned int num);
 Object CastToPy(long num);
@@ -187,11 +189,11 @@ Object CastToPy(
 {
     Object dict = PyDict_New();
 
-    for (auto it(container.begin()); it != container.end(); ++it)
-        PyDict_SetItem(dict,
-                       CastToPy(it->first).Get(),
-                       CastToPy(it->second)).Get();
-
+    for (auto it(container.begin()); it != container.end(); ++it) {
+        Object first = CastToPy(it->first);
+        Object second = CastToPy(it->second);
+        PyDict_SetItem(dict.Get(), first.Get(), second.Get());
+    }
     return dict;
 }
 }

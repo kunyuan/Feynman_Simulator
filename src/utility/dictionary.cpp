@@ -19,21 +19,20 @@ using namespace Python;
 
 Object Dictionary::ToPy() const
 {
-    return Copy();
+    return Python::CastToPy(_Map);
 }
+
 bool Dictionary::FromPy(Object obj)
 {
-    if (!PyDict_Check(obj.Get()))
-        return false;
-    *this = obj;
-    return true;
+    return Python::Convert(obj, _Map);
 }
 
 void Dictionary::LoadFromString(const std::string& script)
 {
     AnyObject obj;
     obj.EvalScript(script);
-    *this = obj;
+    if (!FromPy(obj))
+        ERRORCODEABORT(ERR_VALUE_INVALID, "Script is invalided!");
 }
 
 void Dictionary::Load(const std::string& FileName)
@@ -41,24 +40,27 @@ void Dictionary::Load(const std::string& FileName)
     ModuleObject LoadDict;
     LoadDict.LoadModule("IO.py");
     Object result = LoadDict.CallFunction("LoadDict", FileName);
-    *this = result;
+    if (!FromPy(result))
+        ERRORCODEABORT(ERR_VALUE_INVALID, "File is invalided!");
 }
 
-void Dictionary::Save(const string& FileName, const string& Mode)
+void Dictionary::Save(const string& FileName, const std::string& Mode)
 {
     ModuleObject SaveDict;
     SaveDict.LoadModule("IO.py");
-    if (Mode == "w") {
-        SaveDict.CallFunction("SaveDict", FileName, Mode, *this);
-    }
-    else {
-        Dictionary Origin;
-        Origin.Load(FileName);
-        Origin.Set(Name, *this);
-        Origin.Save(FileName, "w");
-    }
+    SaveDict.CallFunction("SaveDict", FileName, "w", _Map);
 }
 void Dictionary::Clear()
 {
-    PyDict_Clear(_PyPtr);
+    _Map.clear();
+}
+
+void Dictionary::Print()
+{
+    AnyObject(_Map).Print();
+}
+
+std::string Dictionary::PrettyString()
+{
+    return AnyObject(_Map).PrettyString();
 }

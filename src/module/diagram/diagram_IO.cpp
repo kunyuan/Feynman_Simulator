@@ -24,7 +24,7 @@ const string SEP_LINE_SHORT = "####";
 /*******************  Read/write diagram to dat file ****************/
 Dictionary GetDict(WormClass worm)
 {
-    Dictionary WormDict("Worm");
+    Dictionary WormDict;
     WormDict.Set("Ira", worm.Ira->Name);
     WormDict.Set("Masha", worm.Masha->Name);
     WormDict.Set("dSpin", (int)worm.dSpin);
@@ -33,7 +33,7 @@ Dictionary GetDict(WormClass worm)
 }
 Dictionary GetDict(gLine g)
 {
-    Dictionary GDict("G");
+    Dictionary GDict;
     GDict.Set("IN", g->nVer[IN]->Name);
     GDict.Set("OUT", g->nVer[OUT]->Name);
     GDict.Set("K", g->K.K);
@@ -42,7 +42,7 @@ Dictionary GetDict(gLine g)
 }
 Dictionary GetDict(wLine w)
 {
-    Dictionary WDict("W");
+    Dictionary WDict;
     WDict.Set("IN", w->nVer[IN]->Name);
     WDict.Set("OUT", w->nVer[OUT]->Name);
     WDict.Set("K", w->K.K);
@@ -52,7 +52,7 @@ Dictionary GetDict(wLine w)
 }
 Dictionary GetDict(vertex v)
 {
-    Dictionary VerDict("Ver");
+    Dictionary VerDict;
     VerDict.Set("Name", v->Name);
     VerDict.Set("Sublat", v->R.Sublattice);
     VerDict.Set("Coordi", v->R.Coordinate);
@@ -63,7 +63,7 @@ Dictionary GetDict(vertex v)
 }
 void Diagram::Save(const std::string& FileName, string Mode)
 {
-    Dictionary Config("Config");
+    Dictionary Config;
     for (int index = 0; index < Ver.HowMany(); index++) {
         Config.Set("Ver", GetDict(Ver(index)));
     }
