@@ -102,6 +102,7 @@ void Test_Dict()
     Port.Set("dict", SubPort);
     sput_fail_unless(Port.Get<Dictionary>("dict").Get<int>("b") == 11,
                      "check dict type");
+    Port.Print();
     Port.Save("test.txt", "w");
     Port.Clear();
     Port.Load("test.txt");
@@ -109,14 +110,8 @@ void Test_Dict()
                      "check vector<Complex> type");
     sput_fail_unless(Port.Get<Dictionary>("dict").Get<int>("b") == 11,
                      "check dict IO");
-    //    Port.Print();
     system("rm test.txt");
     SubPort.Clear();
     SubPort = Port.Get<Dictionary>("dict");
     SubPort.Print();
-
-    sput_fail_unless(Port.RefCount() == 1, "Port ref check");
-    Port.Destroy();
-    sput_fail_unless(SubPort.RefCount() == 1, "SubPort ref check");
-    SubPort.Destroy();
 }

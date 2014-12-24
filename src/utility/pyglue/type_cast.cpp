@@ -120,6 +120,10 @@ Object CastToPy(const std::string& str)
 {
     return PyString_FromString(str.c_str());
 }
+Object CastToPy(const char* str)
+{
+    return PyString_FromString(str);
+}
 Object CastToPy(bool value)
 {
     return PyBool_FromLong(value);
