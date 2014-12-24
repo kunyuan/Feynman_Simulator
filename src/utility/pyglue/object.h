@@ -50,7 +50,9 @@ enum OwnerShip {
 class Object {
 public:
     Object()
-        : _PyPtr(nullptr){};
+        : _PyPtr(nullptr)
+    {
+    }
     Object(const Object& obj);
     Object(PyObject*, OwnerShip ownership = NewRef);
     Object Copy() const;

@@ -55,12 +55,6 @@ ModuleObject::ModuleObject(const Object& obj)
     if (!PyModule_Check(obj.Get()))
         ERRORCODEABORT(ERR_VALUE_INVALID, "PyModule object is expected!");
 }
-ModuleObject::ModuleObject(PyObject* obj, OwnerShip ownership)
-    : Object(obj, ownership)
-{
-    if (!PyModule_Check(obj))
-        ERRORCODEABORT(ERR_VALUE_INVALID, "PyModule object is expected!");
-}
 ModuleObject& ModuleObject::operator=(const ModuleObject& obj)
 {
     Object::operator=(obj);

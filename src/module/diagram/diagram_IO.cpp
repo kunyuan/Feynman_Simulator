@@ -10,6 +10,7 @@
 #include <vector>
 #include <iostream>
 #include "diagram.h"
+#include "utility/dictionary.h"
 #include "utility/abort.h"
 #include "utility/scopeguard.h"
 using namespace std;
@@ -21,41 +22,63 @@ const string SEP_LINE = "#######################################################
 const string SEP_LINE_SHORT = "####";
 
 /*******************  Read/write diagram to dat file ****************/
-void Diagram::Save(const std::string &FileName, string Mode)
+Dictionary GetDict(WormClass worm)
 {
-    ofstream os;
-    if (Mode == "w")
-        os.open(FileName, ios::out);
-    else if (Mode == "a")
-        os.open(FileName, ios::app);
-    else
-        ABORT("What is Mode=" << Mode << "?");
-    ON_SCOPE_EXIT([&] {os.close(); });
-    if (!os.is_open()) {
-        ABORT("Cannot open " + FileName);
+    Dictionary WormDict("Worm");
+    WormDict.Set("Ira", worm.Ira->Name);
+    WormDict.Set("Masha", worm.Masha->Name);
+    WormDict.Set("dSpin", (int)worm.dSpin);
+    WormDict.Set("K", worm.K.K);
+    return WormDict;
+}
+Dictionary GetDict(gLine g)
+{
+    Dictionary GDict("G");
+    GDict.Set("IN", g->nVer[IN]->Name);
+    GDict.Set("OUT", g->nVer[OUT]->Name);
+    GDict.Set("K", g->K.K);
+    GDict.Set("IsMeasure", g->IsMeasure);
+    return GDict;
+}
+Dictionary GetDict(wLine w)
+{
+    Dictionary WDict("W");
+    WDict.Set("IN", w->nVer[IN]->Name);
+    WDict.Set("OUT", w->nVer[OUT]->Name);
+    WDict.Set("K", w->K.K);
+    WDict.Set("IsDelta", w->IsDelta);
+    WDict.Set("IsMeasure", w->IsMeasure);
+    return WDict;
+}
+Dictionary GetDict(vertex v)
+{
+    Dictionary VerDict("Ver");
+    VerDict.Set("Name", v->Name);
+    VerDict.Set("Sublat", v->R.Sublattice);
+    VerDict.Set("Coordi", v->R.Coordinate);
+    VerDict.Set("Tau", v->Tau);
+    VerDict.Set("SpinIn", (int)v->Spin(IN));
+    VerDict.Set("SpinOut", (int)v->Spin(OUT));
+    return VerDict;
+}
+void Diagram::Save(const std::string& FileName, string Mode)
+{
+    Dictionary Config("Config");
+    for (int index = 0; index < Ver.HowMany(); index++) {
+        Config.Set("Ver", GetDict(Ver(index)));
     }
-    else {
-        os << SEP_LINE << endl;
-        os << COMMENT << Ver.BundleName() << endl;
-        for (int index = 0; index < Ver.HowMany(); index++)
-            SaveConfig(os << 'v' << SEP, Ver(index));
-
-        os << COMMENT << G.BundleName() << endl;
-        for (int index = 0; index < G.HowMany(); index++)
-            SaveConfig(os << 'g' << SEP, G(index));
-
-        os << COMMENT << W.BundleName() << endl;
-        for (int index = 0; index < W.HowMany(); index++)
-            SaveConfig(os << 'w' << SEP, W(index));
-
-        if (Worm.Exist) {
-            os << COMMENT << "Worm" << endl;
-            SaveConfig(os << 'i' << SEP, Worm);
-        }
+    for (int index = 0; index < G.HowMany(); index++) {
+        Config.Set("G", GetDict(G(index)));
+    }
+    for (int index = 0; index < W.HowMany(); index++) {
+        Config.Set("W", GetDict(W(index)));
+    }
+    if (Worm.Exist) {
+        Config.Set("Worm", GetDict(Worm));
     }
 }
 
-bool Diagram::_Load(istream &ifs)
+bool Diagram::_Load(istream& ifs)
 {
     string line;
     //locate the last configration block
@@ -94,7 +117,7 @@ bool Diagram::_Load(istream &ifs)
     return true;
 }
 
-bool Diagram::Load(const std::string &FileName)
+bool Diagram::Load(const std::string& FileName)
 {
 
     ifstream ifs(FileName, ios::in);
@@ -106,8 +129,8 @@ bool Diagram::Load(const std::string &FileName)
     return _Load(ifs);
 }
 
-bool Diagram::Load(const std::string &FileName, Lattice &lat,
-                   weight::G &g, weight::W &w)
+bool Diagram::Load(const std::string& FileName, Lattice& lat,
+                   weight::G& g, weight::W& w)
 {
     Reset(lat, g, w);
     return Load(FileName);
@@ -120,7 +143,7 @@ string GLineStyle(bool IsMeasure, spin in, spin out)
     if (IsMeasure)
         color = "color=\"green\"";
     else {
-        string str[2] = {"blue", "red"};
+        string str[2] = { "blue", "red" };
         color = "color=\"" + str[in] + ":" + str[out] + ";0.5\"";
     }
     return "[" + color + "]";

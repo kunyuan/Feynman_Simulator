@@ -48,7 +48,15 @@ void Dictionary::Save(const string& FileName, const string& Mode)
 {
     ModuleObject SaveDict;
     SaveDict.LoadModule("IO.py");
-    SaveDict.CallFunction("SaveDict", FileName, Mode, *this);
+    if (Mode == "w") {
+        SaveDict.CallFunction("SaveDict", FileName, Mode, *this);
+    }
+    else {
+        Dictionary Origin;
+        Origin.Load(FileName);
+        Origin.Set(Name, *this);
+        Origin.Save(FileName, "w");
+    }
 }
 void Dictionary::Clear()
 {

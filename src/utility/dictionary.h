@@ -21,20 +21,23 @@
 #define GET(para, value) (para).Get((#value), (value));
 class Dictionary : public Python::Object, public Python::ITypeCast {
 public:
-    Dictionary()
-        : Object()
+    std::string Name;
+    Dictionary(const std::string& name = "default")
     {
+        Name = name;
         _PyPtr = PyDict_New();
     }
-    Dictionary(const Python::Object& obj)
+    Dictionary(const Python::Object& obj, const std::string& name = "default")
         : Object(obj)
     {
+        Name = name;
         if (!PyDict_Check(obj.Get()))
             ERRORCODEABORT(ERR_VALUE_INVALID, "Expected PyDict object to create Dictionary!");
     }
     Dictionary& operator=(const Dictionary& obj)
     {
         Object::operator=(obj);
+        Name = obj.Name;
         return *this;
     }
 
@@ -48,7 +51,6 @@ public:
         Python::AnyObject object(value);
         PyDict_SetItemString(_PyPtr, key.c_str(), object.Get());
     }
-    void Set(const std::string& key, Complex* data, uint* Shape, uint Dim);
     template <typename T>
     bool Get(const std::string& key, T& value)
     {
@@ -70,6 +72,7 @@ public:
     void Clear();
     void LoadFromString(const std::string&);
     void Load(const std::string& FileName);
+    //the key will be used as the name of Dictionary when Mode="a"
     void Save(const std::string& FileName, const std::string& Mode = "a");
 };
 int TestDictionary();

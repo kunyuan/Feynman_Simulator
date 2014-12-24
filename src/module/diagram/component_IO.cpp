@@ -21,6 +21,7 @@ using namespace diag;
             ABORT("Fail to read " << #thing << "!"); \
     }
 
+
 /*******************   Read/write component to dat file  ********************************/
 bool Diagram::LoadConfig(istream &is, WormClass &worm)
 {

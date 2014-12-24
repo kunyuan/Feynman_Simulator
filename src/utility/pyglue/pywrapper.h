@@ -49,7 +49,7 @@ public:
     //ITypeCast interface
     virtual Python::Object ToPy() const;
     virtual bool FromPy(Python::Object);
-    
+
     template <typename T>
     AnyObject(T value)
         : Object(CastToPy(value))
@@ -86,7 +86,6 @@ public:
     {
     }
     ModuleObject(const Object& obj);
-    ModuleObject(PyObject* obj, OwnerShip ownership = NewRef);
     ModuleObject& operator=(const ModuleObject& obj);
 
     /**
