@@ -24,53 +24,31 @@ bool Diagram::IsWorm(vertex v)
 }
 
 Diagram::Diagram()
-    : Order(0), Phase(Complex(1.0, 0.0)), Weight(Complex(1.0, 0.0)), G("GLine"), W("WLine"), Ver("nVer")
+    : Order(0)
+    , Phase(Complex(1.0, 0.0))
+    , Weight(Complex(1.0, 0.0))
+    , G("GLine")
+    , W("WLine")
+    , Ver("nVer")
 {
     Lat = nullptr;
 }
 
-#include "diagram_initialize.config"
-void Diagram::BuildNew(Lattice &lat, weight::G &g, weight::W &w)
-{
-    Reset(lat, g, w);
-    stringstream ss(InitialDiagram);
-    _Load(ss);
-    FixDiagram();
-}
-
-void Diagram::Reset(Lattice &lat, weight::G &g, weight::W &w)
-{
-    Lat = &lat;
-    GWeight = &g;
-    WWeight = &w;
-    FixDiagram();
-    //TODO: maybe you have to do more to reset
-}
-
-#include "diagram_template.config"
-void Diagram::SetTest(Lattice &lat, weight::G &g, weight::W &w)
-{
-    Reset(lat, g, w);
-    stringstream ss(TestDiagramString);
-    _Load(ss);
-    FixDiagram();
-}
-
 bool Diagram::GHashCheck(Momentum k)
 {
-    return (k==0 || GHash[k.index()]);
+    return (k == 0 || GHash[k.index()]);
 }
 
 void Diagram::AddGHash(Momentum k)
 {
-    if(DEBUGMODE && GHash[k.index()])
+    if (DEBUGMODE && GHash[k.index()])
         ABORT("add occupied G Hash!");
     GHash[k.index()] = true;
 }
 
 void Diagram::RemoveGHash(Momentum k)
 {
-    if(DEBUGMODE && !(GHash[k.index()]))
+    if (DEBUGMODE && !(GHash[k.index()]))
         ABORT("remove empty G Hash!");
     GHash[k.index()] = false;
 }
@@ -83,19 +61,19 @@ void Diagram::ReplaceGHash(Momentum kold, Momentum k)
 
 bool Diagram::WHashCheck(Momentum k)
 {
-    return (k==0 || WHash[k.abs()]);
+    return (k == 0 || WHash[k.abs()]);
 }
 
 void Diagram::AddWHash(Momentum k)
 {
-    if(DEBUGMODE && WHash[k.abs()])
+    if (DEBUGMODE && WHash[k.abs()])
         ABORT("add occupied W Hash!");
     WHash[k.abs()] = true;
 }
 
 void Diagram::RemoveWHash(Momentum k)
 {
-    if(DEBUGMODE && !(WHash[k.abs()]))
+    if (DEBUGMODE && !(WHash[k.abs()]))
         ABORT("remove empty W Hash!");
     WHash[k.abs()] = false;
 }
@@ -106,17 +84,24 @@ void Diagram::ReplaceWHash(Momentum kold, Momentum k)
     AddWHash(k);
 }
 
+void Diagram::Reset(Lattice& lat, weight::G& g, weight::W& w)
+{
+    Lat = &lat;
+    GWeight = &g;
+    WWeight = &w;
+    FixDiagram();
+    //TODO: maybe you have to do more to reset
+}
+
 void Diagram::ClearDiagram()
 {
-    for(int i=0; i<2*MAX_K+1; i++)
-    {
-        GHash[i]=false;
+    for (int i = 0; i < 2 * MAX_K + 1; i++) {
+        GHash[i] = false;
     }
-    for(int i=0; i<MAX_K+1; i++)
-    {
-        WHash[i]=false;
+    for (int i = 0; i < MAX_K + 1; i++) {
+        WHash[i] = false;
     }
-    
+
     while (G.HowMany() > 0)
         G.Remove(G.HowMany() - 1);
     while (W.HowMany() > 0)

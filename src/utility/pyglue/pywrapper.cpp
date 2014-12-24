@@ -34,14 +34,14 @@ Object AnyObject::ToPy() const
 {
     return Copy();
 }
-bool AnyObject::FromPy(Object obj)
+bool AnyObject::FromPy(const Object& obj)
 {
     *this = obj;
     return true;
 }
 void AnyObject::EvalScript(const std::string& script)
 {
-    Object main = PyImport_AddModule("__main__");
+    Object main = Object(PyImport_AddModule("__main__"), NoRef);
     Object global = Object(PyModule_GetDict(main.Get()), NoRef); //borrowed reference
     Object local = PyDict_New();
     *this = PyRun_String(script.c_str(), Py_eval_input,

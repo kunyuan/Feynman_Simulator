@@ -8,6 +8,7 @@
 
 #include "utility/complex.h"
 #include "utility/rng.h"
+#include "utility/momentum.h"
 #include "type_cast.h"
 namespace Python {
 bool Convert(Object obj, std::string& val)
@@ -78,7 +79,7 @@ bool Convert(Object obj, unsigned long long& value)
 template <typename T>
 bool ConvertReal(Object obj, T& val)
 {
-    if (!PyFloat_Check(obj.Get()))
+    if (!PyFloat_Check(obj.Get()) && !IsInt(obj))
         return false;
     val = (T)PyFloat_AsDouble(obj.Get());
     return true;
@@ -114,6 +115,14 @@ bool Convert(Object obj, ITypeCast& value)
     return value.FromPy(obj);
 }
 
+bool Convert(Object obj, spin& val)
+{
+    return Convert(obj, val);
+}
+bool Convert(Object obj, Momentum& val)
+{
+    return Convert(obj, val.K);
+}
 // Allocation methods
 
 Object CastToPy(const std::string& str)
@@ -172,5 +181,14 @@ Object CastToPy(const RandomFactory& rng)
 Object CastToPy(const ITypeCast& val)
 {
     return val.ToPy();
+}
+
+Object CastToPy(spin num)
+{
+    return CastToPy((int)num);
+}
+Object CastToPy(Momentum k)
+{
+    return CastToPy(k.K);
 }
 }

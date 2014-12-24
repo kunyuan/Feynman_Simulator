@@ -90,6 +90,6 @@ void Test_Diagram_IO()
     Diag.SetTest(lat, G, W);
     LOG_INFO(Diag.Ver(0)->PrettyString());
     sput_fail_unless(Diag.CheckDiagram(), "Check diagram G,W,Ver and Weight");
-    //    Diag.Save("diagram_test.config", "w");
+    Diag.Save("diagram_test.py", "w");
     Diag.WriteDiagram2gv("./test.gv");
 }

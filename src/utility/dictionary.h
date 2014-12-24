@@ -18,11 +18,12 @@
 #include <map>
 #include "utility/pyglue/pywrapper.h"
 
-#define SET(para, value) (para).Set((#value), (value));
+#define SET(para, value) (para[#value] = (value));
 #define GET(para, value) (para).Get((#value), (value));
+typedef std::map<std::string, Python::AnyObject> PythonMap;
 class Dictionary : public Python::ITypeCast {
 private:
-    std::map<std::string, Python::AnyObject> _Map;
+    PythonMap _Map;
 
 public:
     friend class Dictionary;
@@ -37,30 +38,47 @@ public:
 
     //ITypeCast interface
     virtual Python::Object ToPy() const;
-    virtual bool FromPy(Python::Object);
+    virtual bool FromPy(const Python::Object&);
+    Python::AnyObject& operator[](const std::string& key);
 
     template <typename T>
-    void Set(const std::string& key, const T& value)
+    Dictionary& Set(const std::string& key, const T& value)
     {
-        _Map[key] = value;
+        _Map[key] = Python::AnyObject(value);
+        return *this;
     }
     template <typename T>
-    bool Get(std::string key, T& value)
+    bool Get(const std::string& key, T& value) const
     {
-        return Python::Convert(_Map[key], value);
+        return Python::Convert(_Map.at(key), value);
     }
     template <typename T>
-    T Get(std::string key)
+    T Get(const std::string& key) const
     {
-        return _Map[key].As<T>();
+        T value;
+        if (!Python::Convert(_Map.at(key), value))
+            ERRORCODEABORT(ERR_VALUE_INVALID, "Fail to convert " << key);
+        return value;
     }
+    bool HasKey(const std::string& key) const;
     void Clear();
+    bool IsEmpty() const;
     void LoadFromString(const std::string&);
     void Load(const std::string& FileName);
     //the key will be used as the name of Dictionary when Mode="a"
-    void Save(const std::string& FileName, const std::string& Mode = "a");
-    void Print();
-    std::string PrettyString();
+    void Save(const std::string& FileName, const std::string& Mode = "a",
+              const std::string& key = "default");
+    void Print() const;
+    std::string PrettyString() const;
+
+    const PythonMap::iterator begin()
+    {
+        return _Map.begin();
+    }
+    const PythonMap::iterator end()
+    {
+        return _Map.end();
+    }
 };
 int TestDictionary();
 

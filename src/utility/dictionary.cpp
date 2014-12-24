@@ -22,9 +22,14 @@ Object Dictionary::ToPy() const
     return Python::CastToPy(_Map);
 }
 
-bool Dictionary::FromPy(Object obj)
+bool Dictionary::FromPy(const Object& obj)
 {
     return Python::Convert(obj, _Map);
+}
+
+Python::AnyObject& Dictionary::operator[](const std::string& key)
+{
+    return _Map[key];
 }
 
 void Dictionary::LoadFromString(const std::string& script)
@@ -37,6 +42,8 @@ void Dictionary::LoadFromString(const std::string& script)
 
 void Dictionary::Load(const std::string& FileName)
 {
+    if (!DoesFileExist(FileName))
+        ERRORCODEABORT(ERR_FILE_NOT_FOUND, FileName + " does not exist!");
     ModuleObject LoadDict;
     LoadDict.LoadModule("IO.py");
     Object result = LoadDict.CallFunction("LoadDict", FileName);
@@ -44,23 +51,48 @@ void Dictionary::Load(const std::string& FileName)
         ERRORCODEABORT(ERR_VALUE_INVALID, "File is invalided!");
 }
 
-void Dictionary::Save(const string& FileName, const std::string& Mode)
+void Dictionary::Save(const string& FileName, const std::string& Mode,
+                      const std::string& key)
 {
     ModuleObject SaveDict;
     SaveDict.LoadModule("IO.py");
-    SaveDict.CallFunction("SaveDict", FileName, "w", _Map);
+    if (Mode == "a") {
+        Dictionary root;
+        try {
+            root.Load(FileName);
+        }
+        catch (ERRORCODE e) {
+            if (e != ERR_FILE_NOT_FOUND)
+                throw e;
+        }
+        if (root.IsEmpty())
+            root = *this;
+        else
+            root[key] = *this;
+        root.Save(FileName, "w");
+    }
+    else
+        SaveDict.CallFunction("SaveDict", FileName, "w", _Map);
 }
 void Dictionary::Clear()
 {
     _Map.clear();
 }
 
-void Dictionary::Print()
+bool Dictionary::HasKey(const std::string& key) const
+{
+    return _Map.find(key) != _Map.end();
+}
+bool Dictionary::IsEmpty() const
+{
+    return _Map.empty();
+}
+void Dictionary::Print() const
 {
     AnyObject(_Map).Print();
 }
 
-std::string Dictionary::PrettyString()
+std::string Dictionary::PrettyString() const
 {
     return AnyObject(_Map).PrettyString();
 }

@@ -19,10 +19,12 @@
 #include <tuple>
 #include "utility/vector.h"
 #include "type_cast_interface.h"
+#include "utility/convention.h"
 #include <Python/Python.h>
 
 class Complex;
 class RandomFactory;
+class Momentum;
 namespace Python {
 // ------------ Conversion functions ------------
 
@@ -41,6 +43,8 @@ bool Convert(Object obj, float& value);
 bool Convert(Object obj, double& value);
 bool Convert(Object obj, Complex& val);
 bool Convert(Object obj, RandomFactory& val);
+bool Convert(Object obj, spin& val);
+bool Convert(Object obj, Momentum& val);
 bool Convert(Object obj, ITypeCast& val);
 
 template <typename T>
@@ -149,6 +153,8 @@ Object CastToPy(float num);
 Object CastToPy(double num);
 Object CastToPy(const Complex& num);
 Object CastToPy(const RandomFactory& val);
+Object CastToPy(spin num);
+Object CastToPy(Momentum num);
 Object CastToPy(const ITypeCast& val);
 // Creates a PyObject from a std::vector
 

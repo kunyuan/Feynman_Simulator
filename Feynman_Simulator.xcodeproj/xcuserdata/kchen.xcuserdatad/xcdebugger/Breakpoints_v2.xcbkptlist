@@ -157,5 +157,65 @@
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "src/module/diagram/diagram_IO.cpp"
+            timestampString = "441154219.166235"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "93"
+            endingLineNumber = "93"
+            landmarkName = "Diagram::_FromDict(const Dictionary&amp; WDict, wLine w)"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "diag::Diagram::_FromDict(Dictionary const&amp;, diag::WLine*)"
+                  moduleName = "Feynman_Simulator"
+                  urlString = "file:///Users/kchen/project/Feynman_Simulator/src/module/diagram/diagram_IO.cpp"
+                  timestampString = "441154222.635582"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "93"
+                  endingLineNumber = "93"
+                  offsetFromSymbolStart = "5794">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "diag::Diagram::_FromDict(Dictionary const&amp;, diag::WLine*)"
+                  moduleName = "Feynman_Simulator"
+                  urlString = "file:///Users/kchen/project/Feynman_Simulator/src/module/diagram/diagram_IO.cpp"
+                  timestampString = "441154222.635745"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "93"
+                  endingLineNumber = "93"
+                  offsetFromSymbolStart = "7143">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "diag::Diagram::_FromDict(Dictionary const&amp;, diag::WLine*)"
+                  moduleName = "Feynman_Simulator"
+                  urlString = "file:///Users/kchen/project/Feynman_Simulator/src/module/diagram/diagram_IO.cpp"
+                  timestampString = "441154222.635856"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "93"
+                  endingLineNumber = "93"
+                  offsetFromSymbolStart = "7489">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>
