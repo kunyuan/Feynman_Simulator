@@ -82,36 +82,36 @@ void Test_Dict()
 {
     Dictionary Port;
     unsigned long long biggest = std::numeric_limits<unsigned long long>::max();
-    Port.Set("biggest", biggest);
+    Port["biggest"] = biggest;
     vector<int> v = { 1, 2, 3 };
-    Port.Set("Vec", v);
-    sput_fail_unless(Port.Get<unsigned long long>("biggest") == biggest,
+    Port["Vec"] = v;
+    sput_fail_unless(Port["biggest"].As<unsigned long long>() == biggest,
                      "check unsigned long long integer type");
-    auto vect = Port.Get<vector<int> >("Vec");
+    auto vect = Port["Vec"].As<vector<int> >();
     sput_fail_unless(std::equal(v.begin(), v.end(),
                                 vect.begin()),
                      "check vector<int> type");
     Complex ca = { 1.0, 2.0 };
     Complex cb = { 4.0, 2.1 };
     vector<Complex> vc = { ca, cb };
-    Port.Set("cVec", vc);
-    sput_fail_unless(Equal((Port.Get<vector<Complex> >("cVec"))[1], cb),
-                     "check vector<Complex> type");
+    Port["cVec"] = vc;
+    Complex cc = (Port["cVec"].As<vector<Complex> >())[1];
+    sput_fail_unless(Equal(cc, cb), "check vector<Complex> type");
     Dictionary SubPort;
-    SubPort.LoadFromString("{'b':11,'c':22}");
-    Port.Set("dict", SubPort);
-    sput_fail_unless(Port.Get<Dictionary>("dict").Get<int>("b") == 11,
+    SubPort.LoadFromString("{'b':11,'c':22, 'r':False}");
+    Port["dict"] = SubPort;
+    sput_fail_unless((Port["dict"].As<Dictionary>())["b"].As<int>() == 11,
                      "check dict type");
     Port.Print();
     Port.Save("test.txt", "w");
     Port.Clear();
     Port.Load("test.txt");
-    sput_fail_unless(Equal((Port.Get<vector<Complex> >("cVec"))[1], cb),
+    sput_fail_unless(Equal((Port["cVec"].As<vector<Complex> >())[1], cb),
                      "check vector<Complex> type");
-    sput_fail_unless(Port.Get<Dictionary>("dict").Get<int>("b") == 11,
+    sput_fail_unless((Port["dict"].As<Dictionary>())["b"].As<int>() == 11,
                      "check dict IO");
     system("rm test.txt");
     SubPort.Clear();
-    SubPort = Port.Get<Dictionary>("dict");
+    SubPort = Port["dict"].As<Dictionary>();
     SubPort.Print();
 }

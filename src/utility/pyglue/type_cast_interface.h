@@ -13,7 +13,7 @@ namespace Python {
 class ITypeCast {
 public:
     virtual Object ToPy() const = 0;
-    virtual bool FromPy(Object) = 0;
+    virtual bool FromPy(const Object&) = 0;
 
 protected:
     ~ITypeCast() {}

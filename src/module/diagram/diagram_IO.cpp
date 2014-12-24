@@ -20,113 +20,149 @@ const char SEP = ' ';
 const char COMMENT = '#';
 const string SEP_LINE = "#######################################################";
 const string SEP_LINE_SHORT = "####";
+#define CHECK(x) \
+    if (!x)      \
+    ERRORCODEABORT(ERR_VALUE_INVALID, "Fail to read!")
 
 /*******************  Read/write diagram to dat file ****************/
-Dictionary GetDict(WormClass worm)
+Dictionary Diagram::_ToDict(WormClass worm)
 {
     Dictionary WormDict;
-    WormDict.Set("Ira", worm.Ira->Name);
-    WormDict.Set("Masha", worm.Masha->Name);
-    WormDict.Set("dSpin", (int)worm.dSpin);
-    WormDict.Set("K", worm.K.K);
+    WormDict["Ira"] = worm.Ira->Name;
+    WormDict["Masha"] = worm.Masha->Name;
+    WormDict["dSpin"] = worm.dSpin;
+    WormDict["K"] = worm.K;
     return WormDict;
 }
-Dictionary GetDict(gLine g)
+void Diagram::_FromDict(const Dictionary& WormDict, WormClass& worm)
+{
+    name ira, masha;
+    CHECK(WormDict.Get("Ira", ira));
+    worm.Ira = Ver(ira);
+    CHECK(WormDict.Get("Masha", masha));
+    worm.Masha = Ver(masha);
+    CHECK(WormDict.Get("dSpin", worm.dSpin));
+    CHECK(WormDict.Get("K", worm.K));
+}
+Dictionary Diagram::_ToDict(gLine g)
 {
     Dictionary GDict;
-    GDict.Set("IN", g->nVer[IN]->Name);
-    GDict.Set("OUT", g->nVer[OUT]->Name);
-    GDict.Set("K", g->K.K);
-    GDict.Set("IsMeasure", g->IsMeasure);
+    GDict["IN"] = g->nVer[IN]->Name;
+    GDict["OUT"] = g->nVer[OUT]->Name;
+    GDict["K"] = g->K;
+    GDict["IsMeasure"] = g->IsMeasure;
     return GDict;
 }
-Dictionary GetDict(wLine w)
+void Diagram::_FromDict(const Dictionary& GDict, gLine g)
+{
+    name g_in, g_out;
+    CHECK(GDict.Get("IN", g_in));
+    g->nVer[IN] = Ver(g_in);
+    CHECK(GDict.Get("OUT", g_out));
+    g->nVer[OUT] = Ver(g_out);
+    CHECK(GDict.Get("K", g->K));
+    AddGHash(g->K);
+    CHECK(GDict.Get("IsMeasure", g->IsMeasure));
+    if (g->IsMeasure) {
+        MeasureGLine = true;
+        GMeasure = g;
+        WMeasure = nullptr;
+    }
+}
+
+Dictionary Diagram::_ToDict(wLine w)
 {
     Dictionary WDict;
-    WDict.Set("IN", w->nVer[IN]->Name);
-    WDict.Set("OUT", w->nVer[OUT]->Name);
-    WDict.Set("K", w->K.K);
-    WDict.Set("IsDelta", w->IsDelta);
-    WDict.Set("IsMeasure", w->IsMeasure);
+    WDict["IN"] = w->nVer[IN]->Name;
+    WDict["OUT"] = w->nVer[OUT]->Name;
+    WDict["K"] = w->K;
+    WDict["IsDelta"] = w->IsDelta;
+    WDict["IsMeasure"] = w->IsMeasure;
     return WDict;
 }
-Dictionary GetDict(vertex v)
+void Diagram::_FromDict(const Dictionary& WDict, wLine w)
+{
+    name w_in, w_out;
+    CHECK(WDict.Get("IN", w_in));
+    w->nVer[IN] = Ver(w_in);
+    CHECK(WDict.Get("OUT", w_out));
+    w->nVer[OUT] = Ver(w_out);
+    CHECK(WDict.Get("K", w->K));
+    AddWHash(w->K);
+    WDict.Print();
+    CHECK(WDict.Get("IsDelta", w->IsDelta));
+    CHECK(WDict.Get("IsMeasure", w->IsMeasure));
+    if (w->IsMeasure) {
+        MeasureGLine = false;
+        GMeasure = nullptr;
+        WMeasure = w;
+    }
+}
+Dictionary Diagram::_ToDict(vertex v)
 {
     Dictionary VerDict;
-    VerDict.Set("Name", v->Name);
-    VerDict.Set("Sublat", v->R.Sublattice);
-    VerDict.Set("Coordi", v->R.Coordinate);
-    VerDict.Set("Tau", v->Tau);
-    VerDict.Set("SpinIn", (int)v->Spin(IN));
-    VerDict.Set("SpinOut", (int)v->Spin(OUT));
+    VerDict["Name"] = v->Name;
+    VerDict["Sublat"] = v->R.Sublattice;
+    VerDict["Coordi"] = v->R.Coordinate;
+    VerDict["Tau"] = v->Tau;
+    VerDict["SpinIn"] = (int)v->Spin(IN);
+    VerDict["SpinOut"] = (int)v->Spin(OUT);
     return VerDict;
+}
+void Diagram::_FromDict(const Dictionary& VerDict, vertex v)
+{
+    CHECK(VerDict.Get("Name", v->Name));
+    CHECK(VerDict.Get("Sublat", v->R.Sublattice));
+    CHECK(VerDict.Get("Coordi", v->R.Coordinate));
+    CHECK(VerDict.Get("Tau", v->Tau));
+    int spinin, spinout;
+    CHECK(VerDict.Get("SpinIn", spinin));
+    CHECK(VerDict.Get("SpinOut", spinout));
+    v->_spin[IN] = spin(spinin);
+    v->_spin[OUT] = spin(spinout);
 }
 void Diagram::Save(const std::string& FileName, string Mode)
 {
     Dictionary Config;
-    for (int index = 0; index < Ver.HowMany(); index++) {
-        Config.Set("Ver", GetDict(Ver(index)));
-    }
-    for (int index = 0; index < G.HowMany(); index++) {
-        Config.Set("G", GetDict(G(index)));
-    }
-    for (int index = 0; index < W.HowMany(); index++) {
-        Config.Set("W", GetDict(W(index)));
-    }
+    vector<Dictionary> VerList, GList, WList;
+    for (int index = 0; index < Ver.HowMany(); index++)
+        VerList.push_back(_ToDict(Ver(index)));
+    Config["Ver"] = VerList;
+    for (int index = 0; index < G.HowMany(); index++)
+        GList.push_back(_ToDict(G(index)));
+    Config["G"] = GList;
+    for (int index = 0; index < W.HowMany(); index++)
+        WList.push_back(_ToDict(W(index)));
+    Config["W"] = WList;
     if (Worm.Exist) {
-        Config.Set("Worm", GetDict(Worm));
+        Config["Worm"] = _ToDict(Worm);
     }
+    Config["SignFermiLoop"] = SignFermiLoop;
+    Config.Save(FileName, Mode, "Config");
 }
 
-bool Diagram::_Load(istream& ifs)
+bool Diagram::_Load(const Dictionary& Config)
 {
-    string line;
-    //locate the last configration block
-    streampos lastBlockPos = 0;
-    while (getline(ifs, line)) {
-        if (line.compare(0, SEP_LINE_SHORT.size(), SEP_LINE_SHORT) == 0)
-            lastBlockPos = ifs.tellg();
-    }
-    ifs.clear();
-    ifs.seekg(lastBlockPos);
-
     ClearDiagram();
-    char head;
-    string temp;
-    while (!ifs.eof()) {
-        ifs >> head;
-        if (head == COMMENT) {
-            getline(ifs, temp);
-            continue;
-        }
-        else if (head == 'g')
-            LoadConfig(ifs, G.Add());
-        else if (head == 'w')
-            LoadConfig(ifs, W.Add());
-        else if (head == 'v')
-            LoadConfig(ifs, Ver.Add());
-        else if (head == 'i')
-            LoadConfig(ifs, Worm);
-        else if (head == 's')
-            ifs >> SignFermiLoop;
-        else
-            ABORT("Error in reading diagram! Get " + ToString(head) + " as the head!");
-        head = COMMENT;
-    }
+    for (auto& dict : Config.Get<vector<Dictionary> >("Ver"))
+        _FromDict(dict, Ver.Add());
+    for (auto& dict : Config.Get<vector<Dictionary> >("W"))
+        _FromDict(dict, W.Add());
+    for (auto& dict : Config.Get<vector<Dictionary> >("G"))
+        _FromDict(dict, G.Add());
+    if (Config.HasKey("Worm"))
+        for (auto& dict : Config.Get<vector<Dictionary> >("Worm"))
+            _FromDict(dict, Worm);
+    SignFermiLoop = Config.Get<real>("SignFermiLoop");
     FixDiagram();
     return true;
 }
 
 bool Diagram::Load(const std::string& FileName)
 {
-
-    ifstream ifs(FileName, ios::in);
-    ON_SCOPE_EXIT([&] {ifs.close(); });
-    if (!ifs.is_open()) {
-        ABORT("Cannot open " + FileName);
-        return false;
-    }
-    return _Load(ifs);
+    Dictionary Config;
+    Config.Load(FileName);
+    return _Load(Config);
 }
 
 bool Diagram::Load(const std::string& FileName, Lattice& lat,
@@ -134,6 +170,26 @@ bool Diagram::Load(const std::string& FileName, Lattice& lat,
 {
     Reset(lat, g, w);
     return Load(FileName);
+}
+
+#include "diagram_initialize.config"
+void Diagram::BuildNew(Lattice& lat, weight::G& g, weight::W& w)
+{
+    Reset(lat, g, w);
+    Dictionary Config;
+    Config.LoadFromString(InitialDiagram);
+    if (!_Load(Config))
+        ERRORCODEABORT(ERR_VALUE_INVALID, "Faile to construct diagram!");
+}
+
+#include "diagram_template.config"
+void Diagram::SetTest(Lattice& lat, weight::G& g, weight::W& w)
+{
+    Reset(lat, g, w);
+    Dictionary Config;
+    Config.LoadFromString(InitialDiagram);
+    if (!_Load(Config))
+        ERRORCODEABORT(ERR_VALUE_INVALID, "Faile to construct diagram!");
 }
 
 /************************   write component to gv ****************************************/

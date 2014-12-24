@@ -48,7 +48,7 @@ public:
 
     //ITypeCast interface
     virtual Python::Object ToPy() const;
-    virtual bool FromPy(Python::Object);
+    virtual bool FromPy(const Python::Object&);
 
     template <typename T>
     AnyObject(T value)

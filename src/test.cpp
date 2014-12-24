@@ -35,14 +35,14 @@ int RunTest()
     TEST(mc::TestMarkov);
     //    TEST(mc::TestDiagCounter);
 
-//    TEST(TestLattice);
+    //    TEST(TestLattice);
     //    TEST(TestEstimator);
 
     //    TEST(TestCRC32);
     //    TEST(TestFFT);
 
     //    Testcnpy();
-    TestDictionary();
+    TEST(TestDictionary);
 
     return 0;
 }
