@@ -15,7 +15,7 @@ using namespace std;
 para::Job::Job(string inputfile)
 {
     Dictionary _Para;
-    _Para.Load(inputfile);
+    _Para.Load(inputfile, "Para");
     GET(_Para, Type);
     if (TypeName.find(Type) == TypeName.end())
         ABORT("I don't know what is Job Type " << Type << "?");

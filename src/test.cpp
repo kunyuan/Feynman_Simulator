@@ -39,7 +39,6 @@ int RunTest()
     //    TEST(TestEstimator);
 
     //    TEST(TestCRC32);
-    //    TEST(TestFFT);
 
     //    Testcnpy();
     TEST(TestDictionary);

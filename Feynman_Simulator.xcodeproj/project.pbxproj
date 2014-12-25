@@ -20,7 +20,6 @@
 		8422FDFE1A09C0ED002EB44E /* parameter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FDF71A09C0ED002EB44E /* parameter.cpp */; };
 		8422FE001A09C0ED002EB44E /* message.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FDFB1A09C0ED002EB44E /* message.cpp */; };
 		8422FE0D1A09C112002EB44E /* component_bundle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FE011A09C112002EB44E /* component_bundle.cpp */; };
-		8422FE0E1A09C112002EB44E /* component_IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FE031A09C112002EB44E /* component_IO.cpp */; };
 		8422FE0F1A09C112002EB44E /* component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FE041A09C112002EB44E /* component.cpp */; };
 		8422FE101A09C112002EB44E /* diagram_check.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FE061A09C112002EB44E /* diagram_check.cpp */; };
 		8422FE111A09C112002EB44E /* diagram_IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FE081A09C112002EB44E /* diagram_IO.cpp */; };
@@ -95,7 +94,6 @@
 		8422FDFC1A09C0ED002EB44E /* message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = message.h; path = module/parameter/message.h; sourceTree = "<group>"; };
 		8422FE011A09C112002EB44E /* component_bundle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = component_bundle.cpp; path = module/diagram/component_bundle.cpp; sourceTree = "<group>"; };
 		8422FE021A09C112002EB44E /* component_bundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = component_bundle.h; path = module/diagram/component_bundle.h; sourceTree = "<group>"; };
-		8422FE031A09C112002EB44E /* component_IO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = component_IO.cpp; path = module/diagram/component_IO.cpp; sourceTree = "<group>"; };
 		8422FE041A09C112002EB44E /* component.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = component.cpp; path = module/diagram/component.cpp; sourceTree = "<group>"; };
 		8422FE051A09C112002EB44E /* component.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = component.h; path = module/diagram/component.h; sourceTree = "<group>"; };
 		8422FE061A09C112002EB44E /* diagram_check.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = diagram_check.cpp; path = module/diagram/diagram_check.cpp; sourceTree = "<group>"; };
@@ -318,7 +316,6 @@
 				8422FE0B1A09C112002EB44E /* diagram.cpp */,
 				8422FE081A09C112002EB44E /* diagram_IO.cpp */,
 				8422FE061A09C112002EB44E /* diagram_check.cpp */,
-				8422FE031A09C112002EB44E /* component_IO.cpp */,
 				8422FE021A09C112002EB44E /* component_bundle.h */,
 				8422FE011A09C112002EB44E /* component_bundle.cpp */,
 				8422FE051A09C112002EB44E /* component.h */,
@@ -518,7 +515,6 @@
 				8422FE271A09C13D002EB44E /* markov.cpp in Sources */,
 				84519AED19F2C57A007CB81B /* envMonteCarlo.cpp in Sources */,
 				8422FE391A0A7ECA002EB44E /* weight_test.cpp in Sources */,
-				8422FE0E1A09C112002EB44E /* component_IO.cpp in Sources */,
 				8422FDFE1A09C0ED002EB44E /* parameter.cpp in Sources */,
 				61266E5CDE0355C1306E9EBD /* rng_test.cpp in Sources */,
 				6126638BECC823E2FECDBE1A /* utility.cpp in Sources */,

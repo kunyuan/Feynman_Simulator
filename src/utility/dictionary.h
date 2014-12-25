@@ -30,6 +30,10 @@ public:
     Dictionary()
     {
     }
+    Dictionary(const std::string& script)
+    {
+        LoadFromString(script);
+    }
     Dictionary& operator=(const Dictionary& dict)
     {
         _Map = dict._Map;
@@ -64,7 +68,7 @@ public:
     void Clear();
     bool IsEmpty() const;
     void LoadFromString(const std::string&);
-    void Load(const std::string& FileName);
+    void Load(const std::string& FileName, const std::string& key = "default");
     //the key will be used as the name of Dictionary when Mode="a"
     void Save(const std::string& FileName, const std::string& Mode = "a",
               const std::string& key = "default");

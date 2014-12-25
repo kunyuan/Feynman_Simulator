@@ -16,10 +16,6 @@
 using namespace std;
 using namespace diag;
 
-const char SEP = ' ';
-const char COMMENT = '#';
-const string SEP_LINE = "#######################################################";
-const string SEP_LINE_SHORT = "####";
 #define CHECK(x) \
     if (!x)      \
     ERRORCODEABORT(ERR_VALUE_INVALID, "Fail to read!")
@@ -161,7 +157,7 @@ bool Diagram::_Load(const Dictionary& Config)
 bool Diagram::Load(const std::string& FileName)
 {
     Dictionary Config;
-    Config.Load(FileName);
+    Config.Load(FileName, "Config");
     return _Load(Config);
 }
 
@@ -172,22 +168,38 @@ bool Diagram::Load(const std::string& FileName, Lattice& lat,
     return Load(FileName);
 }
 
-#include "diagram_initialize.config"
 void Diagram::BuildNew(Lattice& lat, weight::G& g, weight::W& w)
 {
     Reset(lat, g, w);
     Dictionary Config;
-    Config.LoadFromString(InitialDiagram);
+    Config.LoadFromString(
+        "{'SignFermiLoop': 1.0,"
+        "'Ver': "
+        "[{'Name': 0, 'Sublat': 0, 'Coordi': [1, 0], 'Tau': 0.5, 'SpinIn': 0, 'SpinOut' :0},"
+        "{'Name': 1, 'Sublat': 0, 'Coordi': [1, 0], 'Tau': 0.5, 'SpinIn': 0, 'SpinOut' :0}],"
+        "'G':"
+        "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsMeasure': False},"
+        "{'IN': 1, 'OUT': 0, 'K': 2, 'IsMeasure': False}],"
+        "'W':"
+        "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsDelta': False, 'IsMeasure': True}]}");
     if (!_Load(Config))
         ERRORCODEABORT(ERR_VALUE_INVALID, "Faile to construct diagram!");
 }
 
-#include "diagram_template.config"
 void Diagram::SetTest(Lattice& lat, weight::G& g, weight::W& w)
 {
     Reset(lat, g, w);
     Dictionary Config;
-    Config.LoadFromString(InitialDiagram);
+    Config.LoadFromString(
+        "{'SignFermiLoop': -1.0,"
+        "'Ver': "
+        "[{'Name': 0, 'Sublat': 0, 'Coordi': [1, 0], 'Tau': 0.1, 'SpinIn': 1, 'SpinOut' :1},"
+        "{'Name': 1, 'Sublat': 0, 'Coordi': [1, 0], 'Tau': 0.2, 'SpinIn': 1, 'SpinOut' :1}],"
+        "'G':"
+        "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsMeasure': False},"
+        "{'IN': 1, 'OUT': 0, 'K': 2, 'IsMeasure': False}],"
+        "'W':"
+        "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsDelta': False, 'IsMeasure': True}]}");
     if (!_Load(Config))
         ERRORCODEABORT(ERR_VALUE_INVALID, "Faile to construct diagram!");
 }
