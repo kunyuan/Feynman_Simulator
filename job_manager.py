@@ -5,12 +5,13 @@ import os
 import time
 import subprocess
 import logging
-
+import IO
 import inlist
 
 PROCLIST = []
 PROCLIST_BACK = []
 workdir="./data"
+os.system("cp IO.py "+workdir)
 logging.basicConfig(filename=workdir+"/project.log",
         level=logging.INFO,
         format="\n[job.daemon][%(asctime)s][%(levelname)s]:\n%(message)s",
@@ -35,8 +36,8 @@ class JobAtom():
         self.auto_run = bundle.auto_run
         self.keep_cpu_busy = bundle.keep_cpu_busy
         self.name = bundle.name
-        self.para = bundle.para
         self.input_str = bundle.to_string(pid)
+        self.para = bundle.para
         return
 
     def get_job_name(self):
@@ -101,8 +102,9 @@ def submit_job(job_atom):
     jobfile = os.path.abspath(workdir+"/_job_{0}_{1}.sh".format(
         job_atom.name, job_atom.pid))
     #write input file into ./infile folder
-    with open(infile, "w") as f:
-        f.write(job_atom.input_str)
+    #with open(infile, "w") as f:
+        #f.write(job_atom.input_str)
+    IO.SaveDict(infile, "w", "Para", job_atom.para)
     f_allinput = open(os.path.abspath(workdir+"/all_input.log"), "a")
     f_allinput.write("Job ID: {0}, Job name: {1}\n".format(
             job_atom.pid, job_atom.name))
