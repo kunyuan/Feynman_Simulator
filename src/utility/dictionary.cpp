@@ -40,13 +40,13 @@ void Dictionary::LoadFromString(const std::string& script)
         ERRORCODEABORT(ERR_VALUE_INVALID, "Script is invalided!");
 }
 
-void Dictionary::Load(const std::string& FileName)
+void Dictionary::Load(const std::string& FileName, const std::string& key)
 {
     if (!DoesFileExist(FileName))
         ERRORCODEABORT(ERR_FILE_NOT_FOUND, FileName + " does not exist!");
     ModuleObject LoadDict;
     LoadDict.LoadModule("IO.py");
-    Object result = LoadDict.CallFunction("LoadDict", FileName);
+    Object result = LoadDict.CallFunction("LoadDict", FileName, key);
     if (!FromPy(result))
         ERRORCODEABORT(ERR_VALUE_INVALID, "File is invalided!");
 }
@@ -56,23 +56,7 @@ void Dictionary::Save(const string& FileName, const std::string& Mode,
 {
     ModuleObject SaveDict;
     SaveDict.LoadModule("IO.py");
-    if (Mode == "a") {
-        Dictionary root;
-        try {
-            root.Load(FileName);
-        }
-        catch (ERRORCODE e) {
-            if (e != ERR_FILE_NOT_FOUND)
-                throw e;
-        }
-        if (root.IsEmpty())
-            root = *this;
-        else
-            root[key] = *this;
-        root.Save(FileName, "w");
-    }
-    else
-        SaveDict.CallFunction("SaveDict", FileName, "w", _Map);
+    SaveDict.CallFunction("SaveDict", FileName, Mode, key, _Map);
 }
 void Dictionary::Clear()
 {

@@ -11,6 +11,8 @@
 #include "utility/dictionary.h"
 using namespace para;
 
+const std::string KEYNAME = "Para";
+
 Message Parameter::GenerateMessage()
 {
     Message Message_;
@@ -29,7 +31,7 @@ void Parameter::UpdateWithMessage(const Message& Message_)
 bool Parameter::_BuildNew(const std::string& InputFile)
 {
     Dictionary _para;
-    _para.Load(InputFile);
+    _para.Load(InputFile, KEYNAME);
     GET(_para, L);
     GET(_para, InitialBeta);
     GET(_para, DeltaBeta);
@@ -49,7 +51,7 @@ bool Parameter::_BuildNew(const std::string& InputFile)
 bool Parameter::_Load(const std::string& InputFile)
 {
     Dictionary _para;
-    _para.Load(InputFile);
+    _para.Load(InputFile, KEYNAME);
     GET(_para, Version);
     GET(_para, L);
     GET(_para, InitialBeta);
@@ -71,7 +73,7 @@ bool ParaMC::BuildNew(const std::string& InputFile)
 {
     Parameter::_BuildNew(InputFile);
     Dictionary _para;
-    _para.Load(InputFile);
+    _para.Load(InputFile, KEYNAME);
     GET(_para, Toss);
     GET(_para, Sample);
     GET(_para, Sweep);
@@ -90,7 +92,7 @@ bool ParaMC::Load(const std::string& InputFile)
 {
     Parameter::_Load(InputFile);
     Dictionary _para;
-    _para.Load(InputFile);
+    _para.Load(InputFile, KEYNAME);
     GET(_para, Counter);
     GET(_para, Toss);
     GET(_para, Sample);
@@ -122,7 +124,7 @@ void ParaMC::Save(const std::string& OutputFile, string Mode)
     SET(_para, MaxTauBin);
     SET(_para, RNG);
     ASSERT_ALLWAYS(OrderReWeight.size() == Order + 1, "OrderReWeight should have Order+1 elementes!");
-    _para.Save(OutputFile, Mode);
+    _para.Save(OutputFile, Mode, KEYNAME);
     //save with append mode, so that it will not overwrite stuff wroten by Parameter:SaveParameter
 }
 
