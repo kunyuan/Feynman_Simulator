@@ -35,7 +35,6 @@
 		8422FE4D1A0A85E7002EB44E /* job.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8422FE4B1A0A85E7002EB44E /* job.cpp */; };
 		843DBB3E1A3B535A009DB448 /* timer_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 843DBB3B1A3B535A009DB448 /* timer_test.cpp */; };
 		843DBB3F1A3B535A009DB448 /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 843DBB3C1A3B535A009DB448 /* timer.cpp */; };
-		843DBB781A427A60009DB448 /* libpython2.7.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 843DBB771A427A60009DB448 /* libpython2.7.dylib */; };
 		843DBB8A1A448545009DB448 /* dictionary_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 843DBB871A448545009DB448 /* dictionary_test.cpp */; };
 		843DBB8B1A448545009DB448 /* dictionary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 843DBB881A448545009DB448 /* dictionary.cpp */; };
 		843DBB901A44854E009DB448 /* pywrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 843DBB8E1A44854E009DB448 /* pywrapper.cpp */; };
@@ -43,6 +42,7 @@
 		843DBB961A45F9A8009DB448 /* type_cast.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 843DBB941A45F9A8009DB448 /* type_cast.cpp */; };
 		843DBB991A472AB1009DB448 /* object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 843DBB971A472AB1009DB448 /* object.cpp */; };
 		843DBB9D1A4CBFBF009DB448 /* pyarraywrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 843DBB9B1A4CBFBF009DB448 /* pyarraywrapper.cpp */; };
+		843DBBA21A4D07F9009DB448 /* libpython2.7.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 843DBBA11A4D07F9009DB448 /* libpython2.7.dylib */; };
 		84519AED19F2C57A007CB81B /* envMonteCarlo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84519AEC19F2C57A007CB81B /* envMonteCarlo.cpp */; };
 		84519AF219F33F22007CB81B /* complex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84519AF019F33F22007CB81B /* complex.cpp */; };
 		84681F6519F9AAA600832DAD /* crc32.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84681F6319F9AAA600832DAD /* crc32.cpp */; };
@@ -137,7 +137,6 @@
 		843DBB4B1A3E96BD009DB448 /* parameter.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = parameter.py; sourceTree = "<group>"; };
 		843DBB4E1A3E96BD009DB448 /* test.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = test.py; sourceTree = "<group>"; };
 		843DBB501A3E96BD009DB448 /* weight.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = weight.py; sourceTree = "<group>"; };
-		843DBB771A427A60009DB448 /* libpython2.7.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpython2.7.dylib; path = usr/lib/python2.7/config/libpython2.7.dylib; sourceTree = SDKROOT; };
 		843DBB871A448545009DB448 /* dictionary_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dictionary_test.cpp; sourceTree = "<group>"; };
 		843DBB881A448545009DB448 /* dictionary.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dictionary.cpp; sourceTree = "<group>"; };
 		843DBB891A448545009DB448 /* dictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dictionary.h; sourceTree = "<group>"; };
@@ -152,6 +151,7 @@
 		843DBB9A1A49D2B3009DB448 /* type_cast_interface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = type_cast_interface.h; sourceTree = "<group>"; };
 		843DBB9B1A4CBFBF009DB448 /* pyarraywrapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pyarraywrapper.cpp; sourceTree = "<group>"; };
 		843DBB9C1A4CBFBF009DB448 /* pyarraywrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pyarraywrapper.h; sourceTree = "<group>"; };
+		843DBBA11A4D07F9009DB448 /* libpython2.7.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpython2.7.dylib; path = "../../anaconda/pkgs/python-2.7.9-1/lib/libpython2.7.dylib"; sourceTree = "<group>"; };
 		84519AEA19F2C554007CB81B /* environment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = environment.h; path = environment/environment.h; sourceTree = "<group>"; };
 		84519AEC19F2C57A007CB81B /* envMonteCarlo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = envMonteCarlo.cpp; path = environment/envMonteCarlo.cpp; sourceTree = "<group>"; };
 		84519AF019F33F22007CB81B /* complex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = complex.cpp; sourceTree = "<group>"; };
@@ -189,7 +189,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				843DBB781A427A60009DB448 /* libpython2.7.dylib in Frameworks */,
+				843DBBA21A4D07F9009DB448 /* libpython2.7.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -400,7 +400,7 @@
 		84FDE06719DDFC2F0092B441 = {
 			isa = PBXGroup;
 			children = (
-				843DBB771A427A60009DB448 /* libpython2.7.dylib */,
+				843DBBA11A4D07F9009DB448 /* libpython2.7.dylib */,
 				84FDE07219DDFC2F0092B441 /* Feynman_Simulator */,
 				84FDE07119DDFC2F0092B441 /* Products */,
 			);
@@ -626,11 +626,11 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/python2.7/config",
+					"/Users/kchen/anaconda/pkgs/python-2.7.9-1/lib",
 				);
 				OTHER_CPLUSPLUSFLAGS = "";
 				PRODUCT_NAME = Feynman_Simulator;
-				USER_HEADER_SEARCH_PATHS = "/System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7 src";
-				"USER_HEADER_SEARCH_PATHS[arch=*]" = "/System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7 /System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/numpy/core/include src";
+				USER_HEADER_SEARCH_PATHS = "~/anaconda/lib/python2.7/site-packages/numpy/core/include src ~/anaconda/pkgs/python-2.7.9-1/include/python2.7";
 			};
 			name = Debug;
 		};
@@ -642,11 +642,11 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/python2.7/config",
+					"/Users/kchen/anaconda/pkgs/python-2.7.9-1/lib",
 				);
 				OTHER_CPLUSPLUSFLAGS = "";
 				PRODUCT_NAME = Feynman_Simulator;
-				USER_HEADER_SEARCH_PATHS = "src /System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7";
-				"USER_HEADER_SEARCH_PATHS[arch=*]" = "/System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7 /System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/numpy/core/include src";
+				USER_HEADER_SEARCH_PATHS = "~/anaconda/lib/python2.7/site-packages/numpy/core/include src ~/anaconda/pkgs/python-2.7.9-1/include/python2.7";
 			};
 			name = Release;
 		};
