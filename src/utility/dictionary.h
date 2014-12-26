@@ -13,9 +13,7 @@
 
 #include "utility/convention.h"
 #include "utility/utility.h"
-#include "utility/vector.h"
 #include "utility/abort.h"
-#include <map>
 #include "utility/pyglue/pywrapper.h"
 
 #define SET(para, value) (para[#value] = (value));
@@ -69,9 +67,11 @@ public:
     bool IsEmpty() const;
     void LoadFromString(const std::string&);
     void Load(const std::string& FileName, const std::string& key = "default");
-    //the key will be used as the name of Dictionary when Mode="a"
     void Save(const std::string& FileName, const std::string& Mode = "a",
               const std::string& key = "default");
+    void BigLoad(const std::string& FileName, const std::string& key = "default");
+    void BigSave(const std::string& FileName, const std::string& Mode = "a",
+                 const std::string& key = "default");
     void Print() const;
     std::string PrettyString() const;
 

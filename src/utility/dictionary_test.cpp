@@ -10,6 +10,7 @@
 #include <limits>
 #include "utility/sput.h"
 #include "utility/complex.h"
+#include "utility/pyglue/pyarraywrapper.h"
 #include "dictionary.h"
 
 using namespace std;
@@ -58,6 +59,17 @@ void Test_Ref()
 
 void Test_Cast()
 {
+    //    Complex a[] = { { 1.0, 2.0 }, { 3.0, 1.0 }, { 1.0, 1.0 }, { 2.0, 1.0 } };
+    //    uint Shape[] = { 2, 2 };
+    //    ArrayObject array(a, Shape, 2);
+    //    array.Print();
+    //    cout << array.RefCount() << endl;
+    //    auto t = (Complex*)array.Data();
+    //    cout << t[0] << ", " << t[2] << endl;
+    //    cout << array.RefCount() << endl;
+    //    array.Destroy();
+    //    cout << a[0] << ", " << a[2] << endl;
+    //
     AnyObject value;
     int IntMax = std::numeric_limits<int>::max();
     value = IntMax;

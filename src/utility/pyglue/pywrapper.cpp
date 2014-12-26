@@ -29,14 +29,9 @@ using std::string;
 
 namespace Python {
 
-//ITypeCast interface
-Object AnyObject::ToPy() const
+bool Convert(Object obj, AnyObject& any)
 {
-    return Copy();
-}
-bool AnyObject::FromPy(const Object& obj)
-{
-    *this = obj;
+    any = obj;
     return true;
 }
 void AnyObject::EvalScript(const std::string& script)
