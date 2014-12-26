@@ -1,5 +1,7 @@
 #!/usr/bin/python
 import pprint
+import h5py
+import numpy
 
 def SaveDict(filename, mode, key, root):
     with open(filename, mode) as f:
@@ -10,5 +12,7 @@ def LoadDict(filename, keystr):
         content=f.read()
         exec(content)
         return locals()[keystr]
-def Simple():
-    print "Hello World!"
+
+def SaveBigDict(filename, mode, key, root):
+
+

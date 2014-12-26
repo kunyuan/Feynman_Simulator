@@ -16,11 +16,21 @@ file(GLOB_RECURSE HDRS *.h)
 ADD_EXECUTABLE(FeynmanSimulator  ${SRCS} ${HDRS})
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR})
-find_package(PythonLibs REQUIRED)
-include_directories(${PYTHON_INCLUDE_DIRS})
-message(${PYTHON_INCLUDE_PATH})
-message(${PYTHON_LIBRARIES})
+find_package(PythonInterp REQUIRED)
+find_package(PythonDev REQUIRED)
+#find_package(PythonLibs REQUIRED)
 find_package(NumPy REQUIRED)
+# Require version >= 1.6
+if(NUMPY_VERSION_DECIMAL LESS 10600)
+    message(FATAL_ERROR,
+        "requires NumPy >= 1.6")
+endif()
+
+include_directories(
+    ${PYTHON_INCLUDE_DIR}
+    ${NUMPY_INCLUDE_DIRS}
+    )
+message(${PYTHON_INCLUDE_DIR})
+message(${PYTHON_LIBRARIES})
 message(${NUMPY_VERSION})
-include_directories(${NUMPY_INCLUDE_DIRS})
 target_link_libraries(FeynmanSimulator ${PYTHON_LIBRARIES})
