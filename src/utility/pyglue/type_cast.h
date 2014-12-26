@@ -156,6 +156,7 @@ Object CastToPy(const RandomFactory& val);
 Object CastToPy(spin num);
 Object CastToPy(Momentum num);
 Object CastToPy(const ITypeCast& val);
+Object CastToPy(Object);
 // Creates a PyObject from a std::vector
 
 // Generic python list allocation

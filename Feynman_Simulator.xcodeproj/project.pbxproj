@@ -42,6 +42,7 @@
 		843DBB931A45308B009DB448 /* vector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 843DBB911A45308B009DB448 /* vector.cpp */; };
 		843DBB961A45F9A8009DB448 /* type_cast.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 843DBB941A45F9A8009DB448 /* type_cast.cpp */; };
 		843DBB991A472AB1009DB448 /* object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 843DBB971A472AB1009DB448 /* object.cpp */; };
+		843DBB9D1A4CBFBF009DB448 /* pyarraywrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 843DBB9B1A4CBFBF009DB448 /* pyarraywrapper.cpp */; };
 		84519AED19F2C57A007CB81B /* envMonteCarlo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84519AEC19F2C57A007CB81B /* envMonteCarlo.cpp */; };
 		84519AF219F33F22007CB81B /* complex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84519AF019F33F22007CB81B /* complex.cpp */; };
 		84681F6519F9AAA600832DAD /* crc32.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84681F6319F9AAA600832DAD /* crc32.cpp */; };
@@ -149,6 +150,8 @@
 		843DBB971A472AB1009DB448 /* object.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = object.cpp; sourceTree = "<group>"; };
 		843DBB981A472AB1009DB448 /* object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = object.h; sourceTree = "<group>"; };
 		843DBB9A1A49D2B3009DB448 /* type_cast_interface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = type_cast_interface.h; sourceTree = "<group>"; };
+		843DBB9B1A4CBFBF009DB448 /* pyarraywrapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pyarraywrapper.cpp; sourceTree = "<group>"; };
+		843DBB9C1A4CBFBF009DB448 /* pyarraywrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pyarraywrapper.h; sourceTree = "<group>"; };
 		84519AEA19F2C554007CB81B /* environment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = environment.h; path = environment/environment.h; sourceTree = "<group>"; };
 		84519AEC19F2C57A007CB81B /* envMonteCarlo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = envMonteCarlo.cpp; path = environment/envMonteCarlo.cpp; sourceTree = "<group>"; };
 		84519AF019F33F22007CB81B /* complex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = complex.cpp; sourceTree = "<group>"; };
@@ -359,10 +362,12 @@
 		843DBB8C1A44854E009DB448 /* pyglue */ = {
 			isa = PBXGroup;
 			children = (
+				843DBB9C1A4CBFBF009DB448 /* pyarraywrapper.h */,
+				843DBB9B1A4CBFBF009DB448 /* pyarraywrapper.cpp */,
 				843DBB8F1A44854E009DB448 /* pywrapper.h */,
 				843DBB8E1A44854E009DB448 /* pywrapper.cpp */,
-				843DBB941A45F9A8009DB448 /* type_cast.cpp */,
 				843DBB951A45F9A8009DB448 /* type_cast.h */,
+				843DBB941A45F9A8009DB448 /* type_cast.cpp */,
 				843DBB981A472AB1009DB448 /* object.h */,
 				843DBB971A472AB1009DB448 /* object.cpp */,
 				843DBB9A1A49D2B3009DB448 /* type_cast_interface.h */,
@@ -520,6 +525,7 @@
 				6126638BECC823E2FECDBE1A /* utility.cpp in Sources */,
 				843DBB991A472AB1009DB448 /* object.cpp in Sources */,
 				84681F6519F9AAA600832DAD /* crc32.cpp in Sources */,
+				843DBB9D1A4CBFBF009DB448 /* pyarraywrapper.cpp in Sources */,
 				8422FE3C1A0A7ECA002EB44E /* weight.cpp in Sources */,
 				84C86DFD1A24E463002A3D8D /* weight_estimator.cpp in Sources */,
 				84C86DF51A23D9FD002A3D8D /* index_map.cpp in Sources */,
@@ -624,7 +630,7 @@
 				OTHER_CPLUSPLUSFLAGS = "";
 				PRODUCT_NAME = Feynman_Simulator;
 				USER_HEADER_SEARCH_PATHS = "/System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7 src";
-				"USER_HEADER_SEARCH_PATHS[arch=*]" = "/System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7 src";
+				"USER_HEADER_SEARCH_PATHS[arch=*]" = "/System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7 /System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/numpy/core/include src";
 			};
 			name = Debug;
 		};
@@ -640,7 +646,7 @@
 				OTHER_CPLUSPLUSFLAGS = "";
 				PRODUCT_NAME = Feynman_Simulator;
 				USER_HEADER_SEARCH_PATHS = "src /System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7";
-				"USER_HEADER_SEARCH_PATHS[arch=*]" = "src /System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7";
+				"USER_HEADER_SEARCH_PATHS[arch=*]" = "/System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7 /System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/numpy/core/include src";
 			};
 			name = Release;
 		};

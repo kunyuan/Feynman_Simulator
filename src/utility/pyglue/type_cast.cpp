@@ -183,6 +183,11 @@ Object CastToPy(const ITypeCast& val)
     return val.ToPy();
 }
 
+Object CastToPy(Object obj)
+{
+    return obj.Copy();
+}
+
 Object CastToPy(spin num)
 {
     return CastToPy((int)num);
