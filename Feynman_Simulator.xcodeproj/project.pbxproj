@@ -209,9 +209,9 @@
 		612661D40BB91FC506C3E572 /* utility */ = {
 			isa = PBXGroup;
 			children = (
-				843DBB911A45308B009DB448 /* vector.cpp */,
-				843DBB921A45308B009DB448 /* vector.h */,
 				843DBB8C1A44854E009DB448 /* pyglue */,
+				843DBB921A45308B009DB448 /* vector.h */,
+				843DBB911A45308B009DB448 /* vector.cpp */,
 				843DBB891A448545009DB448 /* dictionary.h */,
 				843DBB881A448545009DB448 /* dictionary.cpp */,
 				843DBB871A448545009DB448 /* dictionary_test.cpp */,

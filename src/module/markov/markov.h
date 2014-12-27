@@ -9,6 +9,7 @@
 #ifndef __Feynman_Simulator__markov__
 #define __Feynman_Simulator__markov__
 
+#include <string>
 #include "utility/convention.h"
 
 namespace diag {
@@ -32,27 +33,24 @@ class Momentum;
 
 namespace mc {
 class Markov {
-  public:
-    long long *Counter;
+public:
+    long long* Counter;
     real Beta;
     int Order;
-    Lattice *Lat;
-    real *OrderWeight;
-    diag::Diagram *Diag;
-    diag::WormClass *Worm;
-    weight::Sigma *Sigma;
-    weight::Polar *Polar;
-    weight::G *G;
-    weight::W *W;
-    RandomFactory *RNG;
+    Lattice* Lat;
+    real* OrderWeight;
+    diag::Diagram* Diag;
+    diag::WormClass* Worm;
+    weight::Sigma* Sigma;
+    weight::Polar* Polar;
+    weight::G* G;
+    weight::W* W;
+    RandomFactory* RNG;
 
-    const static int NUpdates = 13;
-    real ProbofCall[NUpdates];
-    real SumofProbofCall[NUpdates] = {0.0};
-
-    bool BuildNew(para::ParaMC &, diag::Diagram &, weight::Weight &);
-    void ReWeight(para::ParaMC &);
+    bool BuildNew(para::ParaMC&, diag::Diagram&, weight::Weight&);
+    void ReWeight(para::ParaMC&);
     void Hop(int);
+    void PrintDetailBalanceInfo();
 
     void CreateWorm();
     void DeleteWorm();
@@ -70,15 +68,41 @@ class Markov {
     void ChangeContinuousToDelta();
     void ChangeSpinOnVertex();
 
-  private:
+private:
+    const static int NUpdates = 15;
+    real ProbofCall[NUpdates] = { 0.0 };
+    real SumofProbofCall[NUpdates] = { 0.0 };
+    std::string OperationName[NUpdates];
+    real Accepted[NUpdates][MAX_ORDER] = { 0.0 };
+    real Proposed[NUpdates][MAX_ORDER] = { 0.0 };
+
     int RandomPickDeltaSpin();
     Momentum RandomPickK();
     int RandomPickDir();
     real RandomPickTau();
     real ProbTau(real);
     Site RandomPickSite();
-    real ProbSite(const Site &);
+    real ProbSite(const Site&);
     bool RandomPickBool();
+    enum Operations {
+        CREATE_WORM = 0,
+        DELETE_WORM,
+        MOVE_WORM_G,
+        MOVE_WORM_W,
+        RECONNECT,
+        ADD_INTERACTION,
+        DEL_INTERACTION,
+        CHANGE_TAU_VERTEX,
+        CHANGE_R_VERTEX,
+        CHANGE_R_LOOP,
+        CHANGE_MEASURE_G2W,
+        CHANGE_MEASURE_W2G,
+        CHANGE_DELTA2CONTINUS,
+        CHANGE_CONTINUS2DELTA,
+        CHANGE_SPIN_VERTEX
+    };
+    std::string _DetailBalanceStr(Operations op);
+    std::string _CheckBalance(Operations op1, Operations op2);
 };
 
 int TestMarkov();
