@@ -6,8 +6,10 @@
 //  Copyright (c) 2014 Kun Chen. All rights reserved.
 //
 
+#include <stdio.h>
 #include "markov.h"
 #include "math.h"
+#include "utility/utility.h"
 #include "utility/momentum.h"
 #include "module/diagram/diagram.h"
 #include "module/parameter/parameter.h"
@@ -21,11 +23,12 @@ using namespace para;
 using namespace mc;
 
 #define SIGN(x) ((x) == IN ? 1 : -1)
+#define NAME(x) #x
 
 bool CanNotMoveWorm(int dspin, spin sin, spin sout);
 bool CanNotMoveWorm(int dspin, spin sin, int dir);
 
-bool Markov::BuildNew(ParaMC &para, Diagram &diag, weight::Weight &weight)
+bool Markov::BuildNew(ParaMC& para, Diagram& diag, weight::Weight& weight)
 {
     Beta = para.Beta;
     Order = para.Order;
@@ -45,10 +48,104 @@ bool Markov::BuildNew(ParaMC &para, Diagram &diag, weight::Weight &weight)
         for (int j = i; j < NUpdates; j++)
             SumofProbofCall[j] += ProbofCall[i];
     }
+    OperationName[CREATE_WORM] = NAME(CREATE_WORM);
+    OperationName[DELETE_WORM] = NAME(DELETE_WORM);
+    OperationName[MOVE_WORM_G] = NAME(MOVE_WORM_G);
+    OperationName[MOVE_WORM_W] = NAME(MOVE_WORM_W);
+    OperationName[RECONNECT] = NAME(RECONNECT);
+    OperationName[ADD_INTERACTION] = NAME(ADD_INTERACTION);
+    OperationName[DEL_INTERACTION] = NAME(DEL_INTERACTION);
+    OperationName[CHANGE_TAU_VERTEX] = NAME(CHANGE_TAU_VERTEX);
+    OperationName[CHANGE_R_VERTEX] = NAME(CHANGE_R_VERTEX);
+    OperationName[CHANGE_R_LOOP] = NAME(CHANGE_R_LOOP);
+    OperationName[CHANGE_MEASURE_G2W] = NAME(CHANGE_MEASURE_G2W);
+    OperationName[CHANGE_MEASURE_W2G] = NAME(CHANGE_MEASURE_W2G);
+    OperationName[CHANGE_CONTINUS2DELTA] = NAME(CHANGE_CONTINUS2DELTA);
+    OperationName[CHANGE_DELTA2CONTINUS] = NAME(CHANGE_DELTA2CONTINUS);
+    OperationName[CHANGE_SPIN_VERTEX] = NAME(CHANGE_SPIN_VERTEX);
     return true;
 }
 
-void Markov::ReWeight(ParaMC &para)
+std::string Markov::_DetailBalanceStr(Operations op)
+{
+    string Output = OperationName[op] + ":\n";
+    char temp[80];
+    real TotalProposed = 0.0, TotalAccepted = 0.0;
+    for (int i = 0; i < Order; i++) {
+        if (!Equal(Proposed[op][i], 0.0)) {
+            TotalAccepted += Accepted[op][i];
+            TotalProposed += Proposed[op][i];
+            sprintf(temp, "\t%8s%2i:%15g%15g%15g\n", "Order", i, Proposed[op][i], Accepted[op][i], Accepted[op][i] / Proposed[op][i]);
+            Output += temp;
+        }
+    }
+    if (!Equal(TotalProposed, 0.0)) {
+        sprintf(temp, "\t%10s:%15g%15g%15g\n", "Summation", TotalProposed, TotalAccepted, TotalAccepted / TotalProposed);
+        Output += temp;
+    }
+    else
+        Output += "\tNone\n";
+    return Output;
+}
+
+std::string Markov::_CheckBalance(Operations op1, Operations op2)
+{
+    string Output = OperationName[op1] + "<------>" + OperationName[op2] + ":\n";
+    char temp[80];
+    real TotalAccepted1 = 0.0;
+    real TotalAccepted2 = 0.0;
+    for (int i = 0; i < Order; i++) {
+        if (!Equal(Accepted[op1][i] + Accepted[op2][i], 0.0)) {
+            TotalAccepted1 += Accepted[op1][i];
+            TotalAccepted2 += Accepted[op2][i];
+            sprintf(temp, "\t%8s%2i:%15g%15g%15g\n",
+                    "Order", i, Accepted[op1][i], Accepted[op2][i],
+                    fabs(Accepted[op1][i] - Accepted[op2][i])
+                    / sqrt(Accepted[op1][i] + Accepted[op2][i]));
+            Output += temp;
+        }
+    }
+    if (!Equal(TotalAccepted1 + TotalAccepted2, 0.0)) {
+        sprintf(temp, "\t%10s:%15g%15g%15g\n",
+                "Summation", TotalAccepted1, TotalAccepted2,
+                fabs(TotalAccepted1 - TotalAccepted2)
+                / sqrt(TotalAccepted1 + TotalAccepted2));
+        Output += temp;
+    }
+    else
+        Output += "\tNone\n";
+    return Output;
+}
+
+void Markov::PrintDetailBalanceInfo()
+{
+    string Output = "";
+    Output = string(60, '=') + "\n";
+    Output += _DetailBalanceStr(CREATE_WORM);
+    Output += _DetailBalanceStr(DELETE_WORM);
+    Output += _DetailBalanceStr(MOVE_WORM_G);
+    Output += _DetailBalanceStr(MOVE_WORM_W);
+    Output += _DetailBalanceStr(RECONNECT);
+    Output += _DetailBalanceStr(ADD_INTERACTION);
+    Output += _DetailBalanceStr(DEL_INTERACTION);
+    Output += _DetailBalanceStr(CHANGE_TAU_VERTEX);
+    Output += _DetailBalanceStr(CHANGE_R_VERTEX);
+    Output += _DetailBalanceStr(CHANGE_R_LOOP);
+    Output += _DetailBalanceStr(CHANGE_MEASURE_G2W);
+    Output += _DetailBalanceStr(CHANGE_MEASURE_W2G);
+    Output += _DetailBalanceStr(CHANGE_CONTINUS2DELTA);
+    Output += _DetailBalanceStr(CHANGE_DELTA2CONTINUS);
+    Output += _DetailBalanceStr(CHANGE_SPIN_VERTEX);
+    Output += string(60, '-') + "\n";
+    Output += _CheckBalance(CREATE_WORM, DELETE_WORM);
+    Output += _CheckBalance(ADD_INTERACTION, DEL_INTERACTION);
+    Output += _CheckBalance(CHANGE_MEASURE_G2W, CHANGE_MEASURE_W2G);
+    Output += _CheckBalance(CHANGE_CONTINUS2DELTA, CHANGE_DELTA2CONTINUS);
+    Output += string(60, '=') + "\n";
+    LOG_INFO(Output);
+}
+
+void Markov::ReWeight(ParaMC& para)
 {
     Beta = para.Beta;
     OrderWeight = para.OrderReWeight.data();
@@ -67,36 +164,37 @@ void Markov::Hop(int sweep)
 {
     for (int i = 0; i < sweep; i++) {
         double x = RNG->urn();
-        if (x < SumofProbofCall[0])
+        if (x < SumofProbofCall[CREATE_WORM])
             CreateWorm();
-        else if (x < SumofProbofCall[1])
+        else if (x < SumofProbofCall[DELETE_WORM])
             DeleteWorm();
-        else if (x < SumofProbofCall[2])
+        else if (x < SumofProbofCall[MOVE_WORM_G])
             MoveWormOnG();
-        else if (x < SumofProbofCall[3])
+        else if (x < SumofProbofCall[MOVE_WORM_W])
             MoveWormOnW();
-        else if (x < SumofProbofCall[4])
+        else if (x < SumofProbofCall[RECONNECT])
             Reconnect();
-        else if (x < SumofProbofCall[5])
+        else if (x < SumofProbofCall[ADD_INTERACTION])
             AddInteraction();
-        else if (x < SumofProbofCall[6])
+        else if (x < SumofProbofCall[DEL_INTERACTION])
             DeleteInteraction();
-        else if (x < SumofProbofCall[7])
+        else if (x < SumofProbofCall[CHANGE_TAU_VERTEX])
             ChangeTauOnVertex();
-        else if (x < SumofProbofCall[8])
-            ChangeRLoop();
-        else if (x < SumofProbofCall[9])
-            ChangeMeasureFromGToW();
-        else if (x < SumofProbofCall[10])
-            ChangeMeasureFromWToG();
-        else if (x < SumofProbofCall[11])
-            ChangeDeltaToContinuous();
-        else if (x < SumofProbofCall[12])
-            ChangeContinuousToDelta();
-
-        //        else if (x < SumofProbofCall[13])
+        else if (x < SumofProbofCall[CHANGE_R_VERTEX])
+            ;
         //            ChangeROnVertex();
-        //        else if (x < SumofProbofCall[14])
+        else if (x < SumofProbofCall[CHANGE_R_LOOP])
+            ChangeRLoop();
+        else if (x < SumofProbofCall[CHANGE_MEASURE_G2W])
+            ChangeMeasureFromGToW();
+        else if (x < SumofProbofCall[CHANGE_MEASURE_W2G])
+            ChangeMeasureFromWToG();
+        else if (x < SumofProbofCall[CHANGE_DELTA2CONTINUS])
+            ChangeDeltaToContinuous();
+        else if (x < SumofProbofCall[CHANGE_CONTINUS2DELTA])
+            ChangeContinuousToDelta();
+        else if (x < SumofProbofCall[CHANGE_SPIN_VERTEX])
+            ;
         //            ChangeSpinOnVertex();
         (*Counter)++;
     }
@@ -134,9 +232,12 @@ void Markov::CreateWorm()
 
     real wormWeight = weight::Worm::Weight(vin->R, vout->R, vin->Tau, vout->Tau);
 
-    prob *= ProbofCall[1] / ProbofCall[0] * wormWeight * Diag->Order * 2.0;
+    prob *= ProbofCall[DELETE_WORM] / ProbofCall[CREATE_WORM]
+            * wormWeight * Diag->Order * 2.0;
 
+    Proposed[CREATE_WORM][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
+        Accepted[CREATE_WORM][Diag->Order] += 1.0;
         Diag->Phase *= sgn;
         Diag->Weight *= weightRatio;
 
@@ -146,7 +247,6 @@ void Markov::CreateWorm()
         Worm->dSpin = dspin;
         Worm->K = kWorm;
         Worm->Weight = wormWeight;
-        
 
         Diag->ReplaceWHash(w->K, kW);
         w->K = kW;
@@ -162,8 +262,8 @@ void Markov::DeleteWorm()
 {
     if (!Worm->Exist)
         return;
-    vertex &Ira = Worm->Ira;
-    vertex &Masha = Worm->Masha;
+    vertex& Ira = Worm->Ira;
+    vertex& Masha = Worm->Masha;
 
     wLine w = Ira->NeighW();
     if (!(w == Masha->NeighW()))
@@ -181,9 +281,12 @@ void Markov::DeleteWorm()
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    prob *= ProbofCall[0] / (ProbofCall[1] * Worm->Weight * Diag->Order * 2.0);
+    prob *= ProbofCall[CREATE_WORM] / (ProbofCall[DELETE_WORM]
+                                       * Worm->Weight * Diag->Order * 2.0);
 
+    Proposed[DELETE_WORM][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
+        Accepted[DELETE_WORM][Diag->Order] += 1.0;
         Diag->Phase *= sgn;
         Diag->Weight *= weightRatio;
 
@@ -204,8 +307,8 @@ void Markov::MoveWormOnG()
     if (!Worm->Exist)
         return;
 
-    vertex &Ira = Worm->Ira;
-    vertex &Masha = Worm->Masha;
+    vertex& Ira = Worm->Ira;
+    vertex& Masha = Worm->Masha;
 
     int dir = RandomPickDir();
     gLine g = Ira->NeighG(dir);
@@ -225,7 +328,7 @@ void Markov::MoveWormOnG()
     else
         isWormW1 = Diag->IsWorm(vW1);
 
-    spin spinV1[2] = {Ira->Spin(0), Ira->Spin(1)};
+    spin spinV1[2] = { Ira->Spin(0), Ira->Spin(1) };
     spinV1[dir] = FLIP(spinV1[dir]);
 
     Complex w1Weight = W->Weight(Ira->Dir, Ira->R, vW1->R, Ira->Tau, vW1->Tau,
@@ -234,7 +337,7 @@ void Markov::MoveWormOnG()
     wLine w2 = v2->NeighW();
     vertex vW2 = w2->NeighVer(INVERSE(v2->Dir));
 
-    spin spinV2[2] = {v2->Spin(0), v2->Spin(1)};
+    spin spinV2[2] = { v2->Spin(0), v2->Spin(1) };
     spinV2[INVERSE(dir)] = FLIP(spinV2[INVERSE(dir)]);
 
     Complex w2Weight = W->Weight(v2->Dir, v2->R, vW2->R, v2->Tau, vW2->Tau,
@@ -253,7 +356,9 @@ void Markov::MoveWormOnG()
 
     prob *= wormWeight / Worm->Weight;
 
+    Proposed[MOVE_WORM_G][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
+        Accepted[MOVE_WORM_G][Diag->Order] += 1.0;
         Diag->Phase *= sgn;
         Diag->Weight *= weightRatio;
 
@@ -283,8 +388,8 @@ void Markov::MoveWormOnW()
     if (!Worm->Exist)
         return;
 
-    vertex &Ira = Worm->Ira;
-    vertex &Masha = Worm->Masha;
+    vertex& Ira = Worm->Ira;
+    vertex& Masha = Worm->Masha;
 
     wLine w = Ira->NeighW();
     vertex v2 = w->NeighVer(INVERSE(Ira->Dir));
@@ -304,7 +409,9 @@ void Markov::MoveWormOnW()
     real wormWeight = weight::Worm::Weight(v2->R, Masha->R, v2->Tau, Masha->Tau);
     prob *= wormWeight / Worm->Weight;
 
+    Proposed[MOVE_WORM_W][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
+        Accepted[MOVE_WORM_W][Diag->Order] += 1.0;
         Diag->Phase *= sgn;
         Diag->Weight *= weightRatio;
 
@@ -351,7 +458,9 @@ void Markov::Reconnect()
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
+    Proposed[RECONNECT][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
+        Accepted[RECONNECT][Diag->Order] += 1.0;
         Diag->Phase *= sgn;
         Diag->Weight *= weightRatio;
         Diag->SignFermiLoop *= -1;
@@ -406,8 +515,8 @@ void Markov::AddInteraction()
     else
         tauB = RandomPickTau();
 
-    spin spinA[2] = {GIC->Spin(), GIC->Spin()};
-    spin spinB[2] = {GMD->Spin(), GMD->Spin()};
+    spin spinA[2] = { GIC->Spin(), GIC->Spin() };
+    spin spinB[2] = { GMD->Spin(), GMD->Spin() };
     vertex vC = GIC->NeighVer(dir), vD = GMD->NeighVer(dir);
     Site RA = vC->R, RB = vD->R;
 
@@ -435,11 +544,16 @@ void Markov::AddInteraction()
     Complex sgn = phase(weightRatio);
 
     if (isdelta)
-        prob *= OrderWeight[Diag->Order + 1] * ProbofCall[6] / (ProbofCall[5] * OrderWeight[Diag->Order] * ProbTau(tauA));
+        prob *= OrderWeight[Diag->Order + 1] * ProbofCall[DEL_INTERACTION]
+                / (ProbofCall[ADD_INTERACTION] * OrderWeight[Diag->Order] * ProbTau(tauA));
     else
-        prob *= OrderWeight[Diag->Order + 1] * ProbofCall[6] / (ProbofCall[5] * OrderWeight[Diag->Order] * ProbTau(tauA) * ProbTau(tauB));
+        prob *= OrderWeight[Diag->Order + 1] * ProbofCall[DEL_INTERACTION]
+                / (ProbofCall[ADD_INTERACTION] * OrderWeight[Diag->Order]
+                   * ProbTau(tauA) * ProbTau(tauB));
 
+    Proposed[ADD_INTERACTION][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
+        Accepted[ADD_INTERACTION][Diag->Order] += 1.0;
         Diag->Order += 1;
         Diag->Phase *= sgn;
         Diag->Weight *= weightRatio;
@@ -547,25 +661,26 @@ void Markov::DeleteInteraction()
     Complex sgn = phase(weightRatio);
 
     if (wAB->IsDelta)
-        prob *= OrderWeight[Diag->Order - 1] * ProbofCall[5] * ProbTau(vA->Tau) /
-                (ProbofCall[6] * OrderWeight[Diag->Order]);
+        prob *= OrderWeight[Diag->Order - 1] * ProbofCall[ADD_INTERACTION] * ProbTau(vA->Tau) / (ProbofCall[DEL_INTERACTION] * OrderWeight[Diag->Order]);
     else
-        prob *= OrderWeight[Diag->Order - 1] * ProbofCall[5] * ProbTau(vA->Tau) * ProbTau(vB->Tau) / (ProbofCall[6] * OrderWeight[Diag->Order]);
+        prob *= OrderWeight[Diag->Order - 1] * ProbofCall[ADD_INTERACTION] * ProbTau(vA->Tau) * ProbTau(vB->Tau) / (ProbofCall[DEL_INTERACTION] * OrderWeight[Diag->Order]);
 
+    Proposed[DEL_INTERACTION][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
+        Accepted[DEL_INTERACTION][Diag->Order] += 1.0;
         Diag->Order--;
         Diag->Phase *= sgn;
         Diag->Weight *= weightRatio;
 
         Diag->Ver.Remove(vA);
         Diag->Ver.Remove(vB);
-        
+
         Diag->RemoveGHash(GIA->K);
         Diag->G.Remove(GIA);
-        
+
         Diag->RemoveGHash(GMB->K);
         Diag->G.Remove(GMB);
-        
+
         Diag->RemoveWHash(wAB->K);
         Diag->W.Remove(wAB);
 
@@ -630,7 +745,9 @@ void Markov::ChangeTauOnVertex()
 
     prob *= ProbTau(ver->Tau) / ProbTau(tau);
 
+    Proposed[CHANGE_TAU_VERTEX][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
+        Accepted[CHANGE_TAU_VERTEX][Diag->Order] += 1.0;
         Diag->Phase *= sgn;
         Diag->Weight *= weightRatio;
 
@@ -660,10 +777,10 @@ void Markov::ChangeSpinOnVertex()
     vertex v2 = g->NeighVer(dir);
     wLine w2 = v2->NeighW();
 
-    spin spinv1[2] = {v1->Spin(IN), v1->Spin(OUT)};
+    spin spinv1[2] = { v1->Spin(IN), v1->Spin(OUT) };
     spinv1[dir] = FLIP(spinv1[dir]);
 
-    spin spinv2[2] = {v2->Spin(IN), v2->Spin(OUT)};
+    spin spinv2[2] = { v2->Spin(IN), v2->Spin(OUT) };
     spinv2[INVERSE(dir)] = FLIP(spinv2[INVERSE(dir)]);
 
     spin spinv[2];
@@ -703,7 +820,9 @@ void Markov::ChangeSpinOnVertex()
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
+    Proposed[CHANGE_SPIN_VERTEX][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
+        Accepted[CHANGE_SPIN_VERTEX][Diag->Order] += 1.0;
         Diag->Phase *= sgn;
         Diag->Weight *= weightRatio;
 
@@ -769,7 +888,9 @@ void Markov::ChangeROnVertex()
 
     prob *= ProbSite(ver->R) / ProbSite(site);
 
+    Proposed[CHANGE_R_VERTEX][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
+        Accepted[CHANGE_R_VERTEX][Diag->Order] += 1.0;
         Diag->Phase *= sgn;
         Diag->Weight *= weightRatio;
 
@@ -792,9 +913,9 @@ void Markov::ChangeRLoop()
     //TODO: If G is not a local function, return;
     //TODO: use key word 'static' here to save time
     assert(Order <= MAX_ORDER);
-    vertex v[2 * MAX_ORDER] = {nullptr};
-    bool flagVer[2 * MAX_ORDER] = {false};
-    int flagW[MAX_ORDER] = {0};
+    vertex v[2 * MAX_ORDER] = { nullptr };
+    bool flagVer[2 * MAX_ORDER] = { false };
+    int flagW[MAX_ORDER] = { 0 };
     int n = 0;
     v[0] = Diag->Ver.RandomPick(*RNG);
     Site oldR = v[0]->R;
@@ -815,8 +936,8 @@ void Markov::ChangeRLoop()
     wLine w = nullptr;
 
     //TODO: use key word 'static' here to save time
-    Complex GWeight[2 * MAX_ORDER] = {Complex(1.0, 0.0)};
-    Complex WWeight[2 * MAX_ORDER] = {Complex(1.0, 0.0)};
+    Complex GWeight[2 * MAX_ORDER] = { Complex(1.0, 0.0) };
+    Complex WWeight[2 * MAX_ORDER] = { Complex(1.0, 0.0) };
 
     Complex oldWeight(1.0, 0.0);
     Complex newWeight(1.0, 0.0);
@@ -860,7 +981,9 @@ void Markov::ChangeRLoop()
 
     prob *= ProbSite(oldR) / ProbSite(newR);
 
+    Proposed[CHANGE_R_LOOP][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
+        Accepted[CHANGE_R_LOOP][Diag->Order] += 1.0;
         Diag->Phase *= sgn;
         Diag->Weight *= weightRatio;
 
@@ -901,9 +1024,11 @@ void Markov::ChangeMeasureFromGToW()
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    prob *= 0.50 * ProbofCall[10] / (ProbofCall[9]);
+    prob *= 0.50 * ProbofCall[CHANGE_MEASURE_W2G] / (ProbofCall[CHANGE_MEASURE_G2W]);
 
+    Proposed[CHANGE_MEASURE_G2W][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
+        Accepted[CHANGE_MEASURE_G2W][Diag->Order] += 1.0;
         Diag->Phase *= sgn;
         Diag->Weight *= weightRatio;
 
@@ -946,9 +1071,11 @@ void Markov::ChangeMeasureFromWToG()
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    prob *= ProbofCall[9] * 2.0 / (ProbofCall[10]);
+    prob *= ProbofCall[CHANGE_MEASURE_G2W] * 2.0 / (ProbofCall[CHANGE_MEASURE_W2G]);
 
+    Proposed[CHANGE_MEASURE_W2G][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
+        Accepted[CHANGE_MEASURE_W2G][Diag->Order] += 1.0;
         Diag->Phase *= sgn;
         Diag->Weight *= weightRatio;
 
@@ -993,9 +1120,11 @@ void Markov::ChangeDeltaToContinuous()
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    prob *= ProbofCall[12] / (ProbofCall[11] * ProbTau(tau));
+    prob *= ProbofCall[CHANGE_CONTINUS2DELTA] / (ProbofCall[CHANGE_DELTA2CONTINUS] * ProbTau(tau));
 
+    Proposed[CHANGE_DELTA2CONTINUS][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
+        Accepted[CHANGE_DELTA2CONTINUS][Diag->Order] += 1.0;
         Diag->Phase *= sgn;
         Diag->Weight *= weightRatio;
 
@@ -1038,9 +1167,11 @@ void Markov::ChangeContinuousToDelta()
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    prob *= ProbofCall[11] * ProbTau(vout->Tau) / ProbofCall[12];
+    prob *= ProbofCall[CHANGE_DELTA2CONTINUS] * ProbTau(vout->Tau) / ProbofCall[CHANGE_CONTINUS2DELTA];
 
+    Proposed[CHANGE_CONTINUS2DELTA][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
+        Accepted[CHANGE_CONTINUS2DELTA][Diag->Order] += 1.0;
         Diag->Phase *= sgn;
         Diag->Weight *= weightRatio;
 
@@ -1091,7 +1222,7 @@ Site Markov::RandomPickSite()
     return (Site(RNG->irn(0, NSublattice - 1), coord));
 }
 
-real Markov::ProbSite(const Site &site)
+real Markov::ProbSite(const Site& site)
 {
 
     return 1.0 / (Lat->Vol * Lat->SublatVol);

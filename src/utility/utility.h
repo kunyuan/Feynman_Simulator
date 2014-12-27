@@ -44,6 +44,19 @@ std::string ToString(const T &value)
     return oss.str();
 }
 
+/* Convert double to string with specified number of places after the decimal
+   and left padding. */
+std::string ToString(const double x, const int width, const int decDigits = 5);
+/*! Center-aligns string within a field of width w. Pads with blank spaces
+    to enforce alignment. */
+std::string Center(const std::string s, const int w);
+/* Right-aligns string within a field of width w. Pads with blank spaces
+ to enforce alignment. */
+std::string Right(const std::string s, const int w);
+/*! Left-aligns string within a field of width w. Pads with blank spaces
+ to enforce alignment. */
+std::string Left(const std::string s, const int w);
+
 template <typename T>
 void AssignFromTo(T *source, T *target, int size)
 {
@@ -69,3 +82,4 @@ bool DoesFileExist(const std::string &FileName);
     }
 
 #endif
+
