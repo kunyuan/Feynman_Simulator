@@ -80,13 +80,14 @@ void WeightEstimator::UpdateWeight(SmoothTMatrix& target, int UpToOrder)
 {
     //WeightEstimator and the corresponding WeightArray
     //share the same memory structure from _Shape[SP]  to _Shape[TAU]
-    int order = 1;
     real NormFactor = 1.0 / _NormAccu * _Norm * _MaxTauBin / _Beta;
-
+    
+    int order = 1;
     target = _WeightAccu[order - 1];
     //add order>1 on _Weight
     for (order = 2; order <= UpToOrder; order++)
         target += _WeightAccu[order - 1];
+    
     target *= NormFactor;
 
     //TODO:Update DeltaTWeight for Sigma

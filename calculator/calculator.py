@@ -42,6 +42,51 @@ def Sigma0_FirstOrder(G, W0, map):
                     *W0.Data[spinW[IN], :, spinW[OUT], :, :]
     return Sigma0
 
+def Polar_FirstOrder(G, map):
+    Polar=weight.Weight("Polar.SmoothT", map, "FourSpins","Symmetric")
+    NSublat = G.NSublat
+    SubList=[(a,b) for a in range(NSublat) for b in range(NSublat)]
+    SpList=[(a,b) for a in range(SPIN) for b in range(SPIN)]
+    for spin1,spin2 in SpList:
+        spinPolar = ((spin1,spin2),(spin2,spin1))
+        spinG1 = (spin1, spin1)
+        spinG2 = (spin2, spin2)
+        for subA,subB in SubList:
+            Polar.Data[map.Spin2Index(*spinPolar[IN]),subA, \
+                    map.Spin2Index(*spinPolar[OUT]),subB,:,:]\
+                    = (-1.0)*G.Data[spinG1[IN], subB, spinG1[OUT], subA, :, ::-1]  \
+                    *G.Data[spinG2[IN], subA, spinG2[OUT], subB, :, :]
+    return Polar
+
+def W_FirstOrder(Beta,W0, Polar, map):
+    W=weight.Weight("W.SmoothT", map, "FourSpins", "Symmetric")
+    TauRange = range(map.MaxTauBin)
+    SubRange=range(W.NSublat)
+    SubList=[(a,b,c,d) for a in SubRange for b in SubRange for c in SubRange for d in SubRange]
+    SpinList=[(Wtuple,Polartuple) for Wtuple in map.GetConservedSpinTuple("FourSpins") \
+                                  for Polartuple in map.GetConservedSpinTuple("FourSpins") \
+                                  if map.IsConserved(4, (Wtuple[IN], Polartuple[IN]))] 
+    #make sure spin conservation on W0
+
+    W0.FFT(1, "Space")
+    Polar.FFT(1, "Space")
+
+    for spWt,spPolart in SpinList:
+        spW0L=(map.Spin2Index(*spWt[IN]), map.Spin2Index(*spPolart[IN]))
+        spW0R=(map.Spin2Index(*spPolart[OUT]), map.Spin2Index(*spWt[IN]))
+        spW = (map.Spin2Index(*spWt[IN]), map.Spin2Index(*spWt[OUT]))
+        spPolar = (map.Spin2Index(*spPolart[IN]), map.Spin2Index(*spPolart[OUT]))
+        for e in SubList:
+            for tau in TauRange:
+                W.Data[spW[IN],e[0],spW[OUT],e[3],:,tau]+=\
+                        W0.Data[spW0L[IN],e[0],spW0L[OUT],e[1],:] \
+                        *Polar.Data[spPolar[IN],e[1],spPolar[OUT],e[2],:,tau]\
+                        *W0.Data[spW0R[IN],e[2],spW0R[OUT],e[3],:]
+    
+    W0.FFT(-1, "Space")
+    Polar.FFT(-1, "Space")
+    W.FFT(-1, "Space")
+    return W
 
 def W_Dyson(Beta, W0, Polar, map):
     W=weight.Weight("W.SmoothT", map, "FourSpins", "Symmetric")
@@ -97,48 +142,30 @@ def G_Dyson(Beta, G0, Sigma0, Sigma, map):
     G0.FFT(-1, "Space","Time")
     return G
 
-def Polar_FirstOrder(G, map):
-    Polar=weight.Weight("Polar.SmoothT", map, "FourSpins","Symmetric")
-    NSublat = G.NSublat
-    SubList=[(a,b) for a in range(NSublat) for b in range(NSublat)]
-    SpList=[(a,b) for a in range(SPIN) for b in range(SPIN)]
-    for spin1,spin2 in SpList:
-        spinPolar = ((spin1,spin2),(spin2,spin1))
-        spinG1 = (spin1, spin1)
-        spinG2 = (spin2, spin2)
-        for subA,subB in SubList:
-            Polar.Data[map.Spin2Index(*spinPolar[IN]),subA, \
-                    map.Spin2Index(*spinPolar[OUT]),subB,:,:]\
-                    = (-1.0)*G.Data[spinG1[IN], subB, spinG1[OUT], subA, :, ::-1]  \
-                    *G.Data[spinG2[IN], subA, spinG2[OUT], subB, :, :]
-    return Polar
 
-def W_FirstOrder(Beta,W0, Polar, map):
-    W=weight.Weight("W.SmoothT", map, "FourSpins", "Symmetric")
-    TauRange = range(map.MaxTauBin)
-    SubRange=range(W.NSublat)
-    SubList=[(a,b,c,d) for a in SubRange for b in SubRange for c in SubRange for d in SubRange]
-    SpinList=[(Wtuple,Polartuple) for Wtuple in map.GetConservedSpinTuple("FourSpins") \
-                                  for Polartuple in map.GetConservedSpinTuple("FourSpins") \
-                                  if map.IsConserved(4, (Wtuple[IN], Polartuple[IN]))] 
-    #make sure spin conservation on W0
+def Calculate_Chi(Beta, W0, Polar, map):
+
+    Chi=weight.Weight("Chi.SmoothT", map, "FourSpins", "Symmetric")
 
     W0.FFT(1, "Space")
-    Polar.FFT(1, "Space")
+    Polar.FFT(1, "Space", "Time")
 
-    for spWt,spPolart in SpinList:
-        spW0L=(map.Spin2Index(*spWt[IN]), map.Spin2Index(*spPolart[IN]))
-        spW0R=(map.Spin2Index(*spPolart[OUT]), map.Spin2Index(*spWt[IN]))
-        spW = (map.Spin2Index(*spWt[IN]), map.Spin2Index(*spWt[OUT]))
-        spPolar = (map.Spin2Index(*spPolart[IN]), map.Spin2Index(*spPolart[OUT]))
-        for e in SubList:
-            for tau in TauRange:
-                W.Data[spW[IN],e[0],spW[OUT],e[3],:,tau]+=\
-                        W0.Data[spW0L[IN],e[0],spW0L[OUT],e[1],:] \
-                        *Polar.Data[spPolar[IN],e[1],spPolar[OUT],e[2],:,tau]\
-                        *W0.Data[spW0R[IN],e[2],spW0R[OUT],e[3],:]
-    
+    NSpin, NSub=Chi.NSpin, Chi.NSublat
+
+    JP=np.einsum("ijklv,klmnvt->ijmnvt",W0.Data, Polar.Data)
+    #JP shape: NSpin,NSub,NSpin,NSub,Vol,Tau
+
+    JP *= Beta/map.MaxTauBin
+    for tau in range(map.MaxTauBin):
+        JP[:,:,:,:,:,tau] = JP[:,:,:,:,:,tau] * np.cos(tau*np.pi/map.MaxTauBin)
+
+    I=np.eye(NSpin*NSub).reshape([NSpin,NSub,NSpin,NSub])
+    Chi.Data=I[...,np.newaxis,np.newaxis]-JP
+    Chi.Inverse();
+    Chi.Data = np.einsum('ijklvt,klmnvt->ijmnvt', Polar.Data, Chi.Data)
+    Chi.Data *=-1.5
+
+    Chi.FFT(-1, "Space", "Time")
+    Polar.FFT(-1, "Space", "Time")
     W0.FFT(-1, "Space")
-    Polar.FFT(-1, "Space")
-    W.FFT(-1, "Space")
-    return W
+    return Chi

@@ -32,6 +32,17 @@ if para.StartFromBare is True:
     Sigma=calc.Sigma_FirstOrder(G0, W, map)
     Sigma0=calc.Sigma0_FirstOrder(G0, W0, map)
 
+    for i in range(30):
+        #######DYSON FOR W AND G###########################
+        W = calc.W_Dyson(Beta, W0, Polar,map)
+        G = calc.G_Dyson(Beta, G0, Sigma0, Sigma, map)
+        ###################################################
+
+        Polar=calc.Polar_FirstOrder(G, map)
+        Sigma=calc.Sigma_FirstOrder(G, W, map)
+        Sigma0=calc.Sigma0_FirstOrder(G, W0, map)
+        ###################################################
+
 else:
     #########READ G,SIGMA,POLAR; CALCULATE SIGMA0 #################
     G=weight.Weight("G.SmoothT", map, "TwoSpins", "AntiSymmetric")
@@ -44,16 +55,21 @@ else:
     Polar=weight.Weight("Polar.SmoothT", map, "FourSpins", "Symmetric")
     Polar.Load(prefix+para.WeightFile)
 
-#######DYSON FOR W AND G###########################
-W = calc.W_Dyson(Beta, W0, Polar,map)
-G = calc.G_Dyson(Beta, G0, Sigma0, Sigma, map)
-###################################################
+    #######DYSON FOR W AND G###########################
+    W = calc.W_Dyson(Beta, W0, Polar,map)
+    G = calc.G_Dyson(Beta, G0, Sigma0, Sigma, map)
+    ###################################################
 
+######Calculate Chi ###############################
+Chi = calc.Calculate_Chi(Beta, W0, Polar, map)
 
 ##########OUTPUT AND FILE SAVE ####################
 spinUP=map.Spin2Index(UP,UP)
 print W.Data[spinUP,0,spinUP,0,0,:]
 print G.Data[UP,0,UP,0,0,:]
+
+print Polar.Data[spinUP,0,spinUP,0,0,:]
+print Chi.Data[spinUP,0,spinUP,0,0,:]
 
 G.Save(prefix+para.WeightFile,"a")
 W.Save(prefix+para.WeightFile,"a")
