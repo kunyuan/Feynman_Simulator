@@ -23,6 +23,7 @@
 
 #include "utility/abort.h"
 #include "type_cast.h"
+#include "pyarraywrapper.h"
 #include "object.h"
 
 namespace Python {

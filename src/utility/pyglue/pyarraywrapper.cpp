@@ -18,6 +18,15 @@ void ArrayInitialize()
 {
     import_array();
 }
+
+bool Convert(Object obj, ArrayObject& array)
+{
+    if (!PyArray_Check(obj.Get()))
+        return false;
+    array = obj;
+    return true;
+}
+
 ArrayObject::ArrayObject(const Object& obj)
     : Object(obj)
 {
@@ -34,7 +43,7 @@ ArrayObject::ArrayObject(PyObject* obj, OwnerShip ownership)
 }
 
 template <>
-ArrayObject::ArrayObject(Complex* data, uint* Shape, int Dim)
+ArrayObject::ArrayObject(Complex* data, const vector<uint>& Shape, const int Dim)
 {
     ArrayInitialize();
     int TypeName;
@@ -53,9 +62,10 @@ ArrayObject::ArrayObject(Complex* data, uint* Shape, int Dim)
     *this = Object(array);
 }
 
-void* ArrayObject::Data()
+template <>
+Complex* ArrayObject::Data<Complex>()
 {
-    return PyArray_DATA(_PyPtr);
+    return reinterpret_cast<Complex*>(PyArray_DATA(_PyPtr));
 }
 std::vector<uint> ArrayObject::Shape()
 {
