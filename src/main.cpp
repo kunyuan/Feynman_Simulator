@@ -49,20 +49,20 @@ void MonteCarlo(const para::Job& Job)
     int Sweep = 0;
     //Don't use Para.Counter as counter
     
-    while (Sweep < 500000) {
+    while (Sweep < 5000000) {
         Sweep++;
-        Grasshopper.Hop(1000);
+        Grasshopper.Hop(50);
 
         Scarecrow.Measure();
 
-        if (Sweep % 10 == 0) {
+        if (Sweep % 1000 == 0) {
             //            Env.AddStatistics();
             Scarecrow.ReWeightEachOrder();
         }
         if (Sweep % 10000 == 0) {
             PaddyField.Save();
         }
-        if (Sweep % 20 == 0) {
+        if (Sweep % 200 == 0) {
             PaddyField.ListenToMessage();
         }
     }

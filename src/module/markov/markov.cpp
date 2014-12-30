@@ -93,6 +93,10 @@ void Markov::Hop(int sweep)
             ChangeDeltaToContinuous();
         else if (x < SumofProbofCall[12])
             ChangeContinuousToDelta();
+        else if (x < SumofProbofCall[13])
+            JumpToOrder0();
+        else if (x < SumofProbofCall[14])
+            JumpBackToOrder1();
 
 //            else if (x < SumofProbofCall[13])
 //                ChangeROnVertex();
@@ -1054,6 +1058,85 @@ void Markov::ChangeContinuousToDelta()
     }
 }
 
+void Markov::JumpToOrder0()
+{
+    if(Worm->Exist)    return;
+    if(Diag->Order!=1) return;
+    
+    vertex Ver1 = &Diag->Ver[0];
+    vertex Ver2 = &Diag->Ver[1];
+    if(Ver1->R!=Ver2->R) return;
+    
+    Complex weightRatio;
+    if(Diag->MeasureGLine)
+        weightRatio = Diag->ConstSigma / Diag->Weight;
+    else
+        weightRatio = Diag->ConstPolar / Diag->Weight;
+    
+    real prob = mod(weightRatio);
+    Complex sgn = phase(weightRatio);
+
+    prob *= (ProbofCall[14]*ProbSite(Ver1->R)*ProbTau(Ver1->Tau)*ProbTau(Ver2->Tau)*0.5*0.5)/ProbofCall[13];
+
+    if (prob >= 1.0 || RNG->urn() < prob) {
+        Diag->Order = 0;
+        Diag->Phase *= sgn;
+        Diag->SignFermiLoop = 1.0;
+        Diag->Weight = Diag->MeasureGLine? Diag->ConstSigma : Diag->ConstPolar;
+    }
+}
+
+void Markov::JumpBackToOrder1()
+{
+    if(Worm->Exist) return;
+    if(Diag->Order!=0) return;
+    
+    Site R = RandomPickSite();
+    real Tau1 = RandomPickTau();
+    real Tau2 = RandomPickTau();
+    spin SpinG1 = RandomPickSpin();
+    spin SpinG2 = RandomPickSpin();
+    
+    vertex Ver1 = &Diag->Ver[0];
+    vertex Ver2 = &Diag->Ver[1];
+    gLine G1 = Ver1->NeighG(OUT);
+    gLine G2 = Ver2->NeighG(OUT);
+    wLine W1 = Ver1->NeighW();
+    
+    spin SpinV1[2] = {SpinG2, SpinG1};
+    spin SpinV2[2] = {SpinG1, SpinG2};
+    
+    Complex weightG1 = G->Weight(R, R, Tau1, Tau2, SpinG1, SpinG1, G1->IsMeasure);
+    Complex weightG2 = G->Weight(R, R, Tau2, Tau1, SpinG2, SpinG2, G2->IsMeasure);
+    Complex weightW = W->Weight(Ver1->Dir, R, R, Tau1, Tau2, SpinV1, SpinV2, false, W1->IsMeasure, W1->IsDelta);
+    
+    Complex weightRatio = weightG1 *weightG2 *weightW/Diag->Weight;
+    real prob = mod(weightRatio);
+    Complex sgn = phase(weightRatio);
+    
+    prob *= ProbofCall[13]/(ProbofCall[14]*ProbSite(R)*ProbTau(Tau1)*ProbTau(Tau2)*0.5*0.5);
+    
+    if (prob >= 1.0 || RNG->urn() < prob) {
+        Diag->Order = 1;
+        
+        Diag->SignFermiLoop = -1.0;
+        Diag->Phase *= sgn;
+        Diag->Weight *= weightRatio;
+        
+        Ver1->R = R;
+        Ver2->R = R;
+        Ver1->Tau = Tau1;
+        Ver2->Tau = Tau2;
+        Ver1->SetSpin(SpinV1);
+        Ver2->SetSpin(SpinV2);
+        
+        G1->Weight = weightG1;
+        G2->Weight = weightG2;
+        W1->Weight = weightW;
+    }
+    
+}
+
 Momentum Markov::RandomPickK()
 {
     return (Momentum)(RNG->irn(-MAX_K, MAX_K));
@@ -1062,6 +1145,11 @@ Momentum Markov::RandomPickK()
 int Markov::RandomPickDeltaSpin()
 {
     return RNG->irn(0, 1) * 2 - 1;
+}
+
+spin Markov::RandomPickSpin()
+{
+    return (RNG->irn(0, 1)==0? DOWN : UP);
 }
 
 int Markov::RandomPickDir()

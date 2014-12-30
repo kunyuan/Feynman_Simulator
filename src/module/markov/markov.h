@@ -46,7 +46,7 @@ class Markov {
     weight::W *W;
     RandomFactory *RNG;
 
-    const static int NUpdates = 13;
+    const static int NUpdates = 15;
     real ProbofCall[NUpdates];
     real SumofProbofCall[NUpdates] = {0.0};
 
@@ -61,6 +61,8 @@ class Markov {
     void Reconnect();
     void AddInteraction();
     void DeleteInteraction();
+    void JumpToOrder0();
+    void JumpBackToOrder1();
     void ChangeTauOnVertex();
     void ChangeROnVertex();
     void ChangeRLoop();
@@ -72,6 +74,7 @@ class Markov {
 
   private:
     int RandomPickDeltaSpin();
+    spin RandomPickSpin();
     Momentum RandomPickK();
     int RandomPickDir();
     real RandomPickTau();
