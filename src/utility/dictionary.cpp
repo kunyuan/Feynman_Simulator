@@ -58,6 +58,24 @@ void Dictionary::Save(const string& FileName, const std::string& Mode,
     SaveDict.LoadModule("IO.py");
     SaveDict.CallFunction("SaveDict", FileName, Mode, key, _Map);
 }
+
+void Dictionary::BigLoad(const std::string& FileName)
+{
+    if (!DoesFileExist(FileName))
+        ERRORCODEABORT(ERR_FILE_NOT_FOUND, FileName + " does not exist!");
+    ModuleObject LoadBigDict;
+    LoadBigDict.LoadModule("IO.py");
+    Object result = LoadBigDict.CallFunction("LoadBigDict", FileName);
+    if (!FromPy(result))
+        ERRORCODEABORT(ERR_VALUE_INVALID, "File is invalided!");
+}
+void Dictionary::BigSave(const std::string& FileName)
+{
+    ModuleObject SaveBigDict;
+    SaveBigDict.LoadModule("IO.py");
+    SaveBigDict.CallFunction("SaveBigDict", FileName, _Map);
+}
+
 void Dictionary::Clear()
 {
     _Map.clear();

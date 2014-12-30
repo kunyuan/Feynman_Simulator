@@ -95,6 +95,7 @@ void Test_Dict()
     Dictionary Port;
     unsigned long long biggest = std::numeric_limits<unsigned long long>::max();
     Port["biggest"] = biggest;
+    //list as a node
     vector<int> v = { 1, 2, 3 };
     Port["Vec"] = v;
     sput_fail_unless(Port["biggest"].As<unsigned long long>() == biggest,
@@ -103,17 +104,26 @@ void Test_Dict()
     sput_fail_unless(std::equal(v.begin(), v.end(),
                                 vect.begin()),
                      "check vector<int> type");
+    //complex list as a node
     Complex ca = { 1.0, 2.0 };
     Complex cb = { 4.0, 2.1 };
     vector<Complex> vc = { ca, cb };
     Port["cVec"] = vc;
-    Complex cc = (Port["cVec"].As<vector<Complex> >())[1];
-    sput_fail_unless(Equal(cc, cb), "check vector<Complex> type");
+    Complex vc2 = (Port["cVec"].As<vector<Complex> >())[1];
+    sput_fail_unless(Equal(vc2, cb), "check vector<Complex> type");
+    //Dictionary as a node
     Dictionary SubPort;
     SubPort.LoadFromString("{'b':11,'c':22, 'r':False}");
     Port["dict"] = SubPort;
     sput_fail_unless((Port["dict"].As<Dictionary>())["b"].As<int>() == 11,
                      "check dict type");
+    //array as a node
+    ArrayObject ac = ArrayObject(vc.data(), { 2 }, 1);
+    Port["cArray"] = ac;
+    ArrayObject acc = Port["cArray"].As<ArrayObject>();
+    sput_fail_unless(Equal((acc.Data<Complex>())[1], vc2), "check Complex array type");
+
+    //Dict IO small dictionary
     Port.Print();
     Port.Save("test.txt", "w");
     Port.Clear();
@@ -126,4 +136,13 @@ void Test_Dict()
     SubPort.Clear();
     SubPort = Port["dict"].As<Dictionary>();
     SubPort.Print();
+    //Dict IO large dictionary
+
+    Port.BigSave("test.dat");
+    Port.Clear();
+    Port.BigLoad("test.dat");
+    sput_fail_unless(Equal((Port["cVec"].As<vector<Complex> >())[1], cb),
+                     "check vector<Complex> type");
+    sput_fail_unless((Port["dict"].As<Dictionary>())["b"].As<int>() == 11,
+                     "check dict IO");
 }

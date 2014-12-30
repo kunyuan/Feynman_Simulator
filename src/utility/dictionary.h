@@ -69,9 +69,8 @@ public:
     void Load(const std::string& FileName, const std::string& key = "default");
     void Save(const std::string& FileName, const std::string& Mode = "a",
               const std::string& key = "default");
-    void BigLoad(const std::string& FileName, const std::string& key = "default");
-    void BigSave(const std::string& FileName, const std::string& Mode = "a",
-                 const std::string& key = "default");
+    void BigLoad(const std::string& FileName);
+    void BigSave(const std::string& FileName);
     void Print() const;
     std::string PrettyString() const;
 
