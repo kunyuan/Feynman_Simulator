@@ -1,26 +1,27 @@
 #!/usr/bin/python
 import pprint
-import hickle
+import cPickle as pickle
 from numpy import *
+
 set_printoptions(threshold=nan) #make sure numpy will print all elements, so that SaveDict and LoadDict will work even for very large array
 
 def SaveDict(filename, mode, keystr, root):
-    with open(filename, mode) as f:
+    with open(filename+".txt", mode) as f:
         f.write(keystr+"="+pprint.pformat(root))
 
 def LoadDict(filename, keystr):
-    with open(filename, "r") as f:
+    with open(filename+".txt", "r") as f:
         content=f.read()
         exec(content)
         return locals()[keystr]
 
 def SaveBigDict(filename, root):
-    with open(filename+".hkl", "w") as f:
-        hickle.dump(root, f)
+    with open(filename+".pkl", "w") as f:
+        pickle.dump(root, f, pickle.HIGHEST_PROTOCOL)
 
 def LoadBigDict(filename):
-    with open(filename+".hkl", "w") as f:
-        root=hickle.load(f)
+    with open(filename+".pkl", "r") as f:
+        root=pickle.load(f)
     return root
 
 

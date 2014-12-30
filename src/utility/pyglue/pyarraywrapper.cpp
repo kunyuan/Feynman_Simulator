@@ -30,14 +30,12 @@ bool Convert(Object obj, ArrayObject& array)
 ArrayObject::ArrayObject(const Object& obj)
     : Object(obj)
 {
-    ArrayInitialize();
     if (!PyArray_Check(obj.Get()))
         ERRORCODEABORT(ERR_VALUE_INVALID, "PyArray object is expected!");
 }
 ArrayObject::ArrayObject(PyObject* obj, OwnerShip ownership)
     : Object(obj, ownership)
 {
-    ArrayInitialize();
     if (!PyArray_Check(obj))
         ERRORCODEABORT(ERR_VALUE_INVALID, "PyArray object is expected!");
 }
