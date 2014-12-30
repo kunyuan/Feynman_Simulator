@@ -94,10 +94,10 @@ void Markov::Hop(int sweep)
         else if (x < SumofProbofCall[12])
             ChangeContinuousToDelta();
 
-        //        else if (x < SumofProbofCall[13])
-        //            ChangeROnVertex();
-        //        else if (x < SumofProbofCall[14])
-        //            ChangeSpinOnVertex();
+//            else if (x < SumofProbofCall[13])
+//                ChangeROnVertex();
+//            else if (x < SumofProbofCall[14])
+//                ChangeSpinOnVertex();
         (*Counter)++;
     }
 }
@@ -168,7 +168,7 @@ void Markov::DeleteWorm()
     wLine w = Ira->NeighW();
     if (!(w == Masha->NeighW()))
         return;
-    Momentum k = SIGN(Ira->Dir) * w->K + Worm->K;
+    Momentum k = w->K + SIGN(Ira->Dir)*Worm->K;
     if (Diag->WHashCheck(k))
         return;
 
@@ -337,7 +337,6 @@ void Markov::Reconnect()
         return;
 
     Momentum k = Worm->K + SIGN(dir) * (GMB->K - GIA->K);
-    //TODO: Hash check for k
 
     vertex vA = GIA->NeighVer(dir);
     Complex GIAWeight = G->Weight(INVERSE(dir), Masha->R, vA->R, Masha->Tau, vA->Tau,
@@ -397,6 +396,7 @@ void Markov::AddInteraction()
         return;
     if (Diag->GHashCheck(kMB))
         return;
+    if(kIA==kMB) return;
 
     bool isdelta = RandomPickBool();
     real tauA = RandomPickTau(), tauB;
@@ -435,9 +435,9 @@ void Markov::AddInteraction()
     Complex sgn = phase(weightRatio);
 
     if (isdelta)
-        prob *= OrderWeight[Diag->Order + 1] * ProbofCall[6] / (ProbofCall[5] * OrderWeight[Diag->Order] * ProbTau(tauA));
+        prob *= 2.0*OrderWeight[Diag->Order + 1] * ProbofCall[6] / (ProbofCall[5] * OrderWeight[Diag->Order] * ProbTau(tauA));
     else
-        prob *= OrderWeight[Diag->Order + 1] * ProbofCall[6] / (ProbofCall[5] * OrderWeight[Diag->Order] * ProbTau(tauA) * ProbTau(tauB));
+        prob *= 2.0*OrderWeight[Diag->Order + 1] * ProbofCall[6] / (ProbofCall[5] * OrderWeight[Diag->Order] * ProbTau(tauA) * ProbTau(tauB));
 
     if (prob >= 1.0 || RNG->urn() < prob) {
         Diag->Order += 1;
@@ -548,9 +548,10 @@ void Markov::DeleteInteraction()
 
     if (wAB->IsDelta)
         prob *= OrderWeight[Diag->Order - 1] * ProbofCall[5] * ProbTau(vA->Tau) /
-                (ProbofCall[6] * OrderWeight[Diag->Order]);
+                (2.0*ProbofCall[6] * OrderWeight[Diag->Order]);
     else
-        prob *= OrderWeight[Diag->Order - 1] * ProbofCall[5] * ProbTau(vA->Tau) * ProbTau(vB->Tau) / (ProbofCall[6] * OrderWeight[Diag->Order]);
+        prob *= OrderWeight[Diag->Order - 1] * ProbofCall[5] * ProbTau(vA->Tau)
+                *ProbTau(vB->Tau) / (2.0*ProbofCall[6] * OrderWeight[Diag->Order]);
 
     if (prob >= 1.0 || RNG->urn() < prob) {
         Diag->Order--;
@@ -1088,7 +1089,7 @@ Site Markov::RandomPickSite()
     Vec<int> coord;
     for (int i = 0; i < D; i++)
         coord[i] = RNG->irn(0, Lat->Size[i] - 1);
-    return (Site(RNG->irn(0, NSublattice - 1), coord));
+    return (Site(RNG->irn(0, Lat->SublatVol - 1), coord));
 }
 
 real Markov::ProbSite(const Site &site)

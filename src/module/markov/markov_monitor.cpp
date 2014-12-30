@@ -74,7 +74,19 @@ void MarkovMonitor::Measure()
 {
     //    cEstimator[0].Measure(<#const Complex &#>);
     //    cEstimator["1"].Measure(<#const Complex &#>);
-//    Weight->Sigma->Measure(
+    if(Diag->MeasureGLine)
+    {
+        gLine g=Diag->GMeasure;
+        vertex vin = g->NeighVer(OUT);
+        vertex vout = g->NeighVer(IN);
+        Weight->Sigma->Measure(vin->R, vout->R, vin->Tau, vout->Tau, g->Spin(OUT), g->Spin(IN), Diag->Order, Diag->Weight);
+    }else{
+        wLine w=Diag->WMeasure;
+        vertex vin = w->NeighVer(OUT);
+        vertex vout = w->NeighVer(IN);
+        Weight->Polar->Measure(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin(), vout->Spin(), Diag->Order, Diag->Weight);
+    }
+                               
 }
 
 void MarkovMonitor::AddStatistics()

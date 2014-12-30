@@ -37,7 +37,6 @@ void Test_Counter()
     Markov markov;
     markov.BuildNew(Para, Diag, Weight);
 
-    //    Para.RNG.Reset(100);
     system("rm -rf diagram");
     system("mkdir diagram");
     sput_fail_unless(Diag.CheckDiagram(), "Check diagram G,W,Ver and Weight");
@@ -48,7 +47,7 @@ void Test_Counter()
     for (int i = 0; i < 5000; i++) {
         //        if(i==0)
         //            cout << i<<endl;
-        markov.Hop(5000);
+        markov.Hop(40000);
 
         sput_fail_unless(markov.Diag->CheckDiagram(), "Check for all the random steps");
         if (!markov.Diag->Worm.Exist) {
@@ -56,6 +55,6 @@ void Test_Counter()
             Diag.WriteDiagram2gv("diagram/" + ToString(Para.Counter) + ".gv");
         }
     }
-    cout << "Number of different Order diagrams in 1000 samples: " << 2.0 * real(total[2]) / real(total[1]) << " " << 2.0 * real(total[3]) / real(total[1]) << endl;
+    cout << "Number of different Order diagrams in 5000 samples: " << real(total[2]) / real(total[1]) << " " <<  4.0*real(total[3]) / real(total[1]) << endl;
     LOG_INFO("Updates Check are done!");
 }
