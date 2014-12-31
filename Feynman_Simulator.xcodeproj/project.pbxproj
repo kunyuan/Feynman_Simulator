@@ -76,7 +76,6 @@
 		1CFBB0B81A1668C500EE2E9E /* markov_diag_counter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = markov_diag_counter.cpp; path = module/markov/markov_diag_counter.cpp; sourceTree = "<group>"; };
 		1CFBB0BC1A16C1F900EE2E9E /* diagram_filter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = diagram_filter.cpp; path = module/diagram/diagram_filter.cpp; sourceTree = "<group>"; };
 		612660FB5825D574D3D39D34 /* utility.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = utility.cpp; sourceTree = "<group>"; };
-		612664CF0EF6FC3F36675242 /* sput_tutorial.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sput_tutorial.txt; sourceTree = "<group>"; };
 		612665F3FD7F1A73D9E774F8 /* rng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rng.h; sourceTree = "<group>"; };
 		6126679998941F2D7A5DBE4E /* rng_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = rng_test.cpp; sourceTree = "<group>"; };
 		612667B1A17242731ADAF002 /* rng.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = rng.cpp; sourceTree = "<group>"; };
@@ -214,7 +213,6 @@
 				841D511219EB6DD900FDB7FF /* logger.h */,
 				841D511119EB6DD900FDB7FF /* logger.cpp */,
 				8426667D19E2E6B800CF7B59 /* sput.h */,
-				612664CF0EF6FC3F36675242 /* sput_tutorial.txt */,
 				612665F3FD7F1A73D9E774F8 /* rng.h */,
 				612667B1A17242731ADAF002 /* rng.cpp */,
 				6126679998941F2D7A5DBE4E /* rng_test.cpp */,
