@@ -42,7 +42,7 @@ void Test_Counter()
     sput_fail_unless(Diag.CheckDiagram(), "Check diagram G,W,Ver and Weight");
     sput_fail_if(Equal(Diag.Weight, Complex(0.0, 0.0)), "Initialize diagram has nonzero weight");
 
-    int total[MAX_ORDER] = {0};
+    int total[MAX_ORDER] = { 0 };
 
     for (int i = 0; i < 5000; i++) {
         //        if(i==0)
