@@ -33,6 +33,8 @@ bool Diagram::CheckDiagram()
 ///*************************   Diagram check    *************************/
 bool Diagram::_CheckTopo()
 {
+    if (Order==0)
+        return true;
     if (G.HowMany() != 2 * Order)
         ABORT("Number of G is wrong!");
     if (W.HowMany() != Order)
@@ -67,6 +69,8 @@ bool Diagram::_CheckTopo()
 
 bool Diagram::_CheckStatus()
 {
+    if(Order==0)
+        return true;
     int totalmeasure = 0;
     for (int i = 0; i < G.HowMany(); i++) {
         if (G(i)->IsMeasure) {
@@ -99,6 +103,8 @@ bool Diagram::_CheckStatus()
 
 bool Diagram::_CheckK()
 {
+    if(Order==0)
+        return true;
     Momentum totalk;
     for (int i = 0; i < Ver.HowMany(); i++) {
         totalk = Ver(i)->NeighG(IN)->K - Ver(i)->NeighG(OUT)->K;
@@ -118,7 +124,9 @@ bool Diagram::_CheckK()
 
 bool Diagram::_CheckSpin()
 {
-
+    if(Order==0)
+        return true;
+    
     for (int i = 0; i < G.HowMany(); i++) {
         if (G(i)->NeighVer(IN)->Spin(OUT) != G(i)->NeighVer(OUT)->Spin(IN))
             ABORT("The spin on Gline is not the same" + G(i)->PrettyString());
@@ -129,34 +137,34 @@ bool Diagram::_CheckSpin()
 
 bool Diagram::_CheckWeight()
 {
-    Complex DiagWeight(1.0, 0.0);
-    Complex gWeight, wWeight;
-    vertex vin, vout;
+    if(Order==0)
+        return Equal(Weight, (MeasureGLine? ConstSigma : ConstPolar));
+    else{
+        Complex DiagWeight(1.0, 0.0);
+        Complex gWeight, wWeight;
+        vertex vin, vout;
 
-    for (int i = 0; i < G.HowMany(); i++) {
-        DiagWeight *= G(i)->Weight;
+        for (int i = 0; i < G.HowMany(); i++) {
+            DiagWeight *= G(i)->Weight;
 
-        vin = G(i)->NeighVer(IN);
-        vout = G(i)->NeighVer(OUT);
-        gWeight = GWeight->Weight(vin->R, vout->R, vin->Tau, vout->Tau,
-                                  vin->Spin(OUT), vout->Spin(IN), G(i)->IsMeasure);
-        if (!Equal(G(i)->Weight, gWeight))
-            return false;
+            vin = G(i)->NeighVer(IN);
+            vout = G(i)->NeighVer(OUT);
+            gWeight = GWeight->Weight(vin->R, vout->R, vin->Tau, vout->Tau,
+                                      vin->Spin(OUT), vout->Spin(IN), G(i)->IsMeasure);
+            if (!Equal(G(i)->Weight, gWeight))
+                return false;
+        }
+        for (int i = 0; i < W.HowMany(); i++) {
+            DiagWeight *= W(i)->Weight;
+
+            vin = W(i)->NeighVer(IN);
+            vout = W(i)->NeighVer(OUT);
+            wWeight = WWeight->Weight(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin(),
+                                      vout->Spin(), W(i)->IsWorm, W(i)->IsMeasure, W(i)->IsDelta);
+            if (!Equal(W(i)->Weight, wWeight))
+                return false;
+        }
+        DiagWeight *= SignFermiLoop * (Order % 2 == 0 ? 1 : -1);
+        return (Equal(DiagWeight, Weight));
     }
-    for (int i = 0; i < W.HowMany(); i++) {
-        DiagWeight *= W(i)->Weight;
-
-        vin = W(i)->NeighVer(IN);
-        vout = W(i)->NeighVer(OUT);
-        wWeight = WWeight->Weight(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin(),
-                                  vout->Spin(), W(i)->IsWorm, W(i)->IsMeasure, W(i)->IsDelta);
-        if (!Equal(W(i)->Weight, wWeight))
-            return false;
-    }
-    DiagWeight *= SignFermiLoop * (Order % 2 == 0 ? 1 : -1);
-
-    if (!Equal(DiagWeight, Weight))
-        return false;
-
-    return true;
 }

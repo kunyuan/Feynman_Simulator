@@ -139,8 +139,8 @@ void ParaMC::SetTest()
     DeltaBeta = 0.0;
     FinalBeta = 1.0;
     Beta = 1.0;
-    Order = 3;
-    OrderReWeight = { 1, 1, 1, 0.25};
+    Order = 1;
+    OrderReWeight = { 1, 1};
     Toss = 10000;
     Sample = 5000000;
     Seed = 519180543;

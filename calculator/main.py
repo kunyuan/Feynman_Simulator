@@ -73,6 +73,7 @@ print Chi.Data[spinUP,0,spinUP,0,0,:]
 
 G.Save(prefix+para.WeightFile,"a")
 W.Save(prefix+para.WeightFile,"a")
+Sigma.Save(prefix+para.WeightFile,"a")
 
 ###################################################
 
