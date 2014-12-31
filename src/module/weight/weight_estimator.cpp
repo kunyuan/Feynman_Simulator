@@ -6,9 +6,11 @@
 //  Copyright (c) 2014 Kun Chen. All rights reserved.
 //
 
-#include "weight_estimator.h"
 #include "utility/abort.h"
 #include "utility/scopeguard.h"
+#include "utility/cnpy.h"
+#include "utility/dictionary.h"
+#include "weight_estimator.h"
 
 using namespace std;
 using namespace Array;
@@ -130,18 +132,39 @@ void WeightEstimator::SqueezeStatistics(real factor)
 }
 
 /**********************   Weight IO ****************************************/
+
+bool WeightEstimator::FromDict(const Dictionary& dict)
+{
+    _Norm = dict.Get<real>("Norm");
+    _NormAccu = dict.Get<real>("NormAccu");
+    auto arr = dict.Get<Python::ArrayObject>("WeightAccu");
+    ASSERT_ALLWAYS(Equal(arr.Shape().data(), _MeaShape, 5), "Shape should match!");
+    _WeightAccu = arr.Data<Complex>();
+    return _WeightErrorEstimator.FromDict(dict.Get<Dictionary>("Estimator"));
+}
+
+Dictionary WeightEstimator::ToDict()
+{
+    Dictionary dict;
+    dict["Norm"] = _Norm;
+    dict["NormAccu"] = _NormAccu;
+    dict["WeightAccu"] = _WeightAccu();
+    dict["Estimator"] = _WeightErrorEstimator.ToDict();
+    return dict;
+}
+
 void WeightEstimator::Save(const std::string& FileName, const std::string& Mode)
 {
     unsigned int shape[1] = { 1 };
     cnpy::npz_save(FileName, _Name + ".Norm", &_Norm, shape, 1, Mode);
     cnpy::npz_save(FileName, _Name + ".NormAccu", &_NormAccu, shape, 1, "a");
     cnpy::npz_save(FileName, _Name + ".WeightAccu", _WeightAccu(), _MeaShape, 5, "a");
-    _WeightErrorEstimator.SaveStatistics(FileName, "a");
+    //    _WeightErrorEstimator.SaveStatistics(FileName, "a");
 }
 
 bool WeightEstimator::Load(const std::string& FileName)
 {
-    _WeightErrorEstimator.LoadStatistics(FileName);
+    //    _WeightErrorEstimator.LoadStatistics(FileName);
 
     cnpy::npz_t NpzMap = cnpy::npz_load(FileName);
     ON_SCOPE_EXIT([&] {NpzMap.destruct(); });

@@ -8,6 +8,7 @@
 
 #include "component.h"
 #include "utility/cnpy.h"
+#include "utility/dictionary.h"
 #include <tuple>
 
 using namespace weight;
@@ -171,6 +172,19 @@ void Sigma::Save(const std::string& FileName, const std::string Mode)
     Basic::Save(FileName, "a");
 }
 
+bool Sigma::FromDict(const Dictionary& dict)
+{
+    return Estimator.FromDict(dict.Get<Dictionary>("Histogram"))
+           && Basic::FromDict(dict);
+}
+
+Dictionary Sigma::ToDict()
+{
+    Dictionary dict = Basic::ToDict();
+    dict["Histogram"] = Estimator.ToDict();
+    return dict;
+}
+
 Polar::Polar(const Lattice& lat, real Beta, uint MaxTauBin, int MaxOrder)
     : weight::Basic(lat, Beta, MaxTauBin, SPIN4, TauSymmetric, "Polar")
     , _Map(IndexMapSPIN4(Beta, MaxTauBin, lat))
@@ -203,4 +217,17 @@ void Polar::Save(const std::string& FileName, const std::string Mode)
 {
     Estimator.Save(FileName, Mode);
     Basic::Save(FileName, "a");
+}
+
+bool Polar::FromDict(const Dictionary& dict)
+{
+    return Estimator.FromDict(dict.Get<Dictionary>("Histogram"))
+           && Basic::FromDict(dict);
+}
+
+Dictionary Polar::ToDict()
+{
+    Dictionary dict = Basic::ToDict();
+    dict["Histogram"] = Estimator.ToDict();
+    return dict;
 }

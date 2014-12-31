@@ -11,6 +11,7 @@
 #include "module/parameter/parameter.h"
 #include "module/weight/weight.h"
 #include "module/weight/component.h"
+#include "utility/dictionary.h"
 
 using namespace std;
 using namespace diag;
@@ -23,7 +24,7 @@ MarkovMonitor::MarkovMonitor()
     rEstimator.AddEstimator("1");
 }
 
-bool MarkovMonitor::BuildNew(ParaMC &para, Diagram &diag, weight::Weight &weight)
+bool MarkovMonitor::BuildNew(ParaMC& para, Diagram& diag, weight::Weight& weight)
 {
     Para = &para;
     Diag = &diag;
@@ -39,22 +40,38 @@ void MarkovMonitor::ReWeight()
     //TODO: reweight Estimators here
 }
 
-bool MarkovMonitor::Load(const string &InputFile, ParaMC &para, Diagram &diag, weight::Weight &weight)
+bool MarkovMonitor::Load(const string& InputFile, ParaMC& para, Diagram& diag, weight::Weight& weight)
 {
     Para = &para;
     Diag = &diag;
     Weight = &weight;
-    cEstimator.LoadStatistics(InputFile);
-    rEstimator.LoadStatistics(InputFile);
+    //    cEstimator.LoadStatistics(InputFile);
+    //    rEstimator.LoadStatistics(InputFile);
     //TODO: more observables
     return true;
 }
 
-void MarkovMonitor::Save(const string &InputFile, const string &Mode)
+void MarkovMonitor::Save(const string& InputFile, const string& Mode)
 {
-    cEstimator.SaveStatistics(InputFile, Mode);
-    rEstimator.SaveStatistics(InputFile, "a");
+    //    cEstimator.SaveStatistics(InputFile, Mode);
+    //    rEstimator.SaveStatistics(InputFile, "a");
     //TODO: more observables
+}
+
+bool MarkovMonitor::FromDict(const Dictionary& dict, ParaMC& para, Diagram& diag, weight::Weight& weight)
+{
+    Para = &para;
+    Diag = &diag;
+    Weight = &weight;
+    return cEstimator.FromDict(dict.Get<Dictionary>("cEstimator"))
+           || rEstimator.FromDict(dict.Get<Dictionary>("rEstimator"));
+}
+Dictionary MarkovMonitor::ToDict()
+{
+    Dictionary dict;
+    dict["cEstimator"] = cEstimator.ToDict();
+    dict["rEstimator"] = rEstimator.ToDict();
+    return dict;
 }
 
 void MarkovMonitor::Annealing()
@@ -74,7 +91,7 @@ void MarkovMonitor::Measure()
 {
     //    cEstimator[0].Measure(<#const Complex &#>);
     //    cEstimator["1"].Measure(<#const Complex &#>);
-//    Weight->Sigma->Measure(
+    //    Weight->Sigma->Measure(
 }
 
 void MarkovMonitor::AddStatistics()

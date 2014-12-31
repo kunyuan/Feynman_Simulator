@@ -12,6 +12,15 @@
 using namespace std;
 
 //---------------------------------------------------------------------------
+
+bool Equal(real x1, real x2, real eps)
+{
+    return (fabs(x1 - x2) < eps);
+}
+bool Equal(uint x1, uint x2, real eps)
+{
+    return x1 == x2;
+}
 // FORTRAN abs
 real abs(real x)
 {
@@ -29,12 +38,6 @@ bool Zero(real x, real eps)
 {
     return (fabs(x) < eps);
 }
-
-// float equal
-bool Equal(real x1, real x2, real eps)
-{
-    return (fabs(x1 - x2) < eps);
-};
 
 bool CleanFile(const string& FileName)
 {

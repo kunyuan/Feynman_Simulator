@@ -28,6 +28,38 @@ void Parameter::UpdateWithMessage(const Message& Message_)
     T = 1.0 / Beta;
 }
 
+bool Parameter::_FromDict(const Dictionary& _para)
+{
+    GET(_para, L);
+    GET(_para, InitialBeta);
+    GET(_para, DeltaBeta);
+    GET(_para, FinalBeta);
+    GET(_para, Order);
+    GET(_para, NSublat);
+    _para.HasKey("Beta") ? GET(_para, Beta) : Beta = InitialBeta;
+    _para.HasKey("Version") ? GET(_para, Version) : Version = 0;
+
+    Lat.Initialize(L, NSublat);
+    T = 1.0 / Beta;
+
+    ASSERT_ALLWAYS(Beta >= InitialBeta && Beta <= FinalBeta, "Beta should be between Initial and Final Beta");
+    ASSERT_ALLWAYS(Order < MAX_ORDER, "Order can not be bigger than " << MAX_ORDER);
+    return true;
+}
+Dictionary Parameter::_ToDict()
+{
+    Dictionary _para;
+    SET(_para, L);
+    SET(_para, InitialBeta);
+    SET(_para, DeltaBeta);
+    SET(_para, FinalBeta);
+    SET(_para, Order);
+    SET(_para, NSublat);
+    SET(_para, Beta);
+    SET(_para, Version);
+    return _para;
+}
+
 bool Parameter::_BuildNew(const std::string& InputFile)
 {
     Dictionary _para;
@@ -60,7 +92,7 @@ bool Parameter::_Load(const std::string& InputFile)
     //!!!Beta should be a part of state, so it will be stored
     GET(_para, Beta);
     GET(_para, Order);
-    GET(_para, NSublat)
+    GET(_para, NSublat);
 
     Lat.Initialize(L, NSublat);
     T = 1.0 / Beta;
@@ -86,6 +118,39 @@ bool ParaMC::BuildNew(const std::string& InputFile)
     Counter = 0;
     this->RNG.Reset(Seed);
     return true;
+}
+
+bool ParaMC::FromDict(const Dictionary& _para)
+{
+    Parameter::_FromDict(_para);
+    GET(_para, Toss);
+    GET(_para, Sample);
+    GET(_para, Sweep);
+    GET(_para, WormSpaceReweight);
+    GET(_para, OrderReWeight);
+    GET(_para, MaxTauBin);
+    _para.HasKey("Counter") ? GET(_para, Counter) : Counter = 0;
+    _para.HasKey("Seed") ? GET(_para, Seed) : Seed = 0;
+    if (_para.HasKey("RNG"))
+        GET(_para, RNG);
+    else
+        RNG.Reset(Seed);
+    ASSERT_ALLWAYS(OrderReWeight.size() == Order + 1, "OrderReWeight should have Order+1 elementes!");
+    return true;
+}
+Dictionary ParaMC::ToDict()
+{
+    Dictionary _para;
+    SET(_para, Toss);
+    SET(_para, Sample);
+    SET(_para, Sweep);
+    SET(_para, WormSpaceReweight);
+    SET(_para, OrderReWeight);
+    SET(_para, MaxTauBin);
+    SET(_para, Counter);
+    SET(_para, RNG);
+    _para.Update(Parameter::_ToDict());
+    return _para;
 }
 
 bool ParaMC::Load(const std::string& InputFile)

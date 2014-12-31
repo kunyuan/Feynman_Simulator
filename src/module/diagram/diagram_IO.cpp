@@ -117,7 +117,8 @@ void Diagram::_FromDict(const Dictionary& VerDict, vertex v)
     v->_spin[IN] = spin(spinin);
     v->_spin[OUT] = spin(spinout);
 }
-void Diagram::Save(const std::string& FileName, string Mode)
+
+Dictionary Diagram::ToDict()
 {
     Dictionary Config;
     vector<Dictionary> VerList, GList, WList;
@@ -134,10 +135,16 @@ void Diagram::Save(const std::string& FileName, string Mode)
         Config["Worm"] = _ToDict(Worm);
     }
     Config["SignFermiLoop"] = SignFermiLoop;
-    Config.Save(FileName, Mode, "Config");
+    return Config;
 }
 
-bool Diagram::_Load(const Dictionary& Config)
+bool Diagram::FromDict(const Dictionary& dict, Lattice& lat, weight::G& g, weight::W& w)
+{
+    Reset(lat, g, w);
+    return FromDict(dict);
+}
+
+bool Diagram::FromDict(const Dictionary& Config)
 {
     ClearDiagram();
     for (auto& dict : Config.Get<vector<Dictionary> >("Ver"))
@@ -154,11 +161,16 @@ bool Diagram::_Load(const Dictionary& Config)
     return true;
 }
 
+void Diagram::Save(const std::string& FileName, string Mode)
+{
+    ToDict().Save(FileName, Mode, "Config");
+}
+
 bool Diagram::Load(const std::string& FileName)
 {
     Dictionary Config;
     Config.Load(FileName, "Config");
-    return _Load(Config);
+    return FromDict(Config);
 }
 
 bool Diagram::Load(const std::string& FileName, Lattice& lat,
@@ -182,7 +194,7 @@ void Diagram::BuildNew(Lattice& lat, weight::G& g, weight::W& w)
         "{'IN': 1, 'OUT': 0, 'K': 2, 'IsMeasure': False}],"
         "'W':"
         "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsDelta': False, 'IsMeasure': True}]}");
-    if (!_Load(Config))
+    if (!FromDict(Config))
         ERRORCODEABORT(ERR_VALUE_INVALID, "Faile to construct diagram!");
 }
 
@@ -200,7 +212,7 @@ void Diagram::SetTest(Lattice& lat, weight::G& g, weight::W& w)
         "{'IN': 1, 'OUT': 0, 'K': 2, 'IsMeasure': False}],"
         "'W':"
         "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsDelta': False, 'IsMeasure': True}]}");
-    if (!_Load(Config))
+    if (!FromDict(Config))
         ERRORCODEABORT(ERR_VALUE_INVALID, "Faile to construct diagram!");
 }
 

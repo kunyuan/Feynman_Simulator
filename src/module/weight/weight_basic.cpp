@@ -9,6 +9,7 @@
 #include "weight_basic.h"
 #include "utility/logger.h"
 #include "utility/cnpy.h"
+#include "dictionary.h"
 #include <math.h>
 
 using namespace std;
@@ -135,4 +136,29 @@ void Basic::Save(const std::string& FileName, const std::string Mode)
 {
     SaveMatrix(_SmoothTWeight, FileName, Mode, _Name + SMOOTH, GetShape(), 4);
     SaveMatrix(_DeltaTWeight, FileName, "a", _Name + DELTA, GetShape(), 3);
+}
+
+bool Basic::FromDict(const Dictionary& dict)
+{
+    bool flagSmooth = dict.HasKey(SMOOTH);
+    bool flagDelta = dict.HasKey(DELTA);
+    if (flagSmooth) {
+        auto arr = dict.Get<Python::ArrayObject>(SMOOTH);
+        ASSERT_ALLWAYS(Equal(arr.Shape().data(), GetShape(), 4), "Shape should match!");
+        _SmoothTWeight = arr.Data<Complex>();
+    }
+    if (flagDelta) {
+        auto arr = dict.Get<Python::ArrayObject>(DELTA);
+        ASSERT_ALLWAYS(Equal(arr.Shape().data(), GetShape(), 3), "Shape should match!");
+        _DeltaTWeight = arr.Data<Complex>();
+    }
+    ASSERT_ALLWAYS(flagSmooth || flagDelta, "Come on! Neither SmoothT nor DeltaT array exist!");
+    return true;
+}
+Dictionary Basic::ToDict()
+{
+    Dictionary dict;
+    dict[SMOOTH] = Python::ArrayObject(_SmoothTWeight(), GetShape(), 4);
+    dict[DELTA] = Python::ArrayObject(_DeltaTWeight(), GetShape(), 3);
+    return dict;
 }

@@ -35,6 +35,8 @@ public:
     bool BuildNew(para::ParaMC&, diag::Diagram&, weight::Weight&);
     bool Load(const std::string& InputFile, para::ParaMC&, diag::Diagram&, weight::Weight&);
     void Save(const std::string& InputFile, const std::string& Mode = "a");
+    bool FromDict(const Dictionary&, para::ParaMC&, diag::Diagram&, weight::Weight&);
+    Dictionary ToDict();
     void ReWeight();
 
     void Annealing();

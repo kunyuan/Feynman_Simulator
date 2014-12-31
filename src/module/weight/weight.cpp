@@ -8,6 +8,7 @@
 
 #include "weight.h"
 #include "component.h"
+#include "utility/dictionary.h"
 #include "module/parameter/parameter.h"
 
 using namespace std;
@@ -100,6 +101,30 @@ void weight::Weight::Save(const string& FileName, flag _flag, string Mode)
         Polar->Save(FileName, "a");
         Mode = "a";
     }
+}
+
+bool weight::Weight::FromDict(const Dictionary& dict, flag _flag, const para::ParaMC& para)
+{
+    if (_flag & weight::GW) {
+        _AllocateGW(para);
+        G->FromDict(dict.Get<Dictionary>("G"));
+        W->FromDict(dict.Get<Dictionary>("W"));
+    }
+    if (_flag & weight::SigmaPolar) {
+        _AllocateSigmaPolar(para);
+        Sigma->FromDict(dict.Get<Dictionary>("Sigma"));
+        Polar->FromDict(dict.Get<Dictionary>("Polar"));
+    }
+    return true;
+}
+Dictionary weight::Weight::ToDict(flag _flag)
+{
+    Dictionary dict;
+    if (_flag & weight::SigmaPolar) {
+        dict["Sigma"] = Sigma->ToDict();
+        dict["Polar"] = Polar->ToDict();
+    }
+    return dict;
 }
 
 int weight::Weight::UpdateSigmaPolarWeight(int OrderAccepted, real ErrorThreshold)

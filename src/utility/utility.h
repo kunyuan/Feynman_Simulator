@@ -35,9 +35,18 @@ bool Zero(real x, real eps = eps0);
 
 // float equal
 bool Equal(real x1, real x2, real eps = eps0);
+bool Equal(uint x1, uint x2, real eps = eps0);
+template <typename T>
+bool Equal(T* x1, const T* x2, uint num, real eps = eps0)
+{
+    for (uint i = 0; i < num; i++)
+        if (Equal(x1[i], x2[i], eps0))
+            return false;
+    return true;
+}
 
 template <typename T>
-std::string ToString(const T &value)
+std::string ToString(const T& value)
 {
     std::ostringstream oss;
     oss << value;
@@ -58,22 +67,22 @@ std::string Right(const std::string s, const int w);
 std::string Left(const std::string s, const int w);
 
 template <typename T>
-void AssignFromTo(T *source, T *target, int size)
+void AssignFromTo(T* source, T* target, int size)
 {
     for (int i = 0; i < size; i++)
         target[i] = source[i];
 }
 
 template <typename T>
-void InitialArray(T *target, T t, int size)
+void InitialArray(T* target, T t, int size)
 {
     for (int i = 0; i < size; i++)
         target[i] = t;
 }
 
-bool CleanFile(const std::string &FileName);
+bool CleanFile(const std::string& FileName);
 
-bool DoesFileExist(const std::string &FileName);
+bool DoesFileExist(const std::string& FileName);
 
 #define CHECKNULL(source)                     \
     {                                         \
@@ -82,4 +91,3 @@ bool DoesFileExist(const std::string &FileName);
     }
 
 #endif
-
