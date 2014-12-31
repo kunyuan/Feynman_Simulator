@@ -94,8 +94,8 @@ int Basic::GetTauSymmetryFactor(real t_in, real t_out) const
     return (t_out > t_in) ? 1 : _TauSymmetryFactor;
 }
 
-const string SMOOTH = ".SmoothT";
-const string DELTA = ".DeltaT";
+const string SMOOTH = "SmoothT";
+const string DELTA = "DeltaT";
 
 template <typename T>
 bool LoadMatrix(T& matrix, const string& FileName, const string& Name)

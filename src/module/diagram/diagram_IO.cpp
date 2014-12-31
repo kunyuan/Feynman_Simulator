@@ -163,13 +163,13 @@ bool Diagram::FromDict(const Dictionary& Config)
 
 void Diagram::Save(const std::string& FileName, string Mode)
 {
-    ToDict().Save(FileName, Mode, "Config");
+    ToDict().Save(FileName, Mode);
 }
 
 bool Diagram::Load(const std::string& FileName)
 {
     Dictionary Config;
-    Config.Load(FileName, "Config");
+    Config.Load(FileName);
     return FromDict(Config);
 }
 

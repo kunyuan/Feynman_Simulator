@@ -40,7 +40,7 @@ template <typename T>
 bool Equal(T* x1, const T* x2, uint num, real eps = eps0)
 {
     for (uint i = 0; i < num; i++)
-        if (Equal(x1[i], x2[i], eps0))
+        if (!Equal(x1[i], x2[i], eps0))
             return false;
     return true;
 }

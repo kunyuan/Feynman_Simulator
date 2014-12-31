@@ -2,4 +2,80 @@
 <Bucket
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "src/module/weight/weight_basic.cpp"
+            timestampString = "441739003.855608"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "147"
+            endingLineNumber = "147"
+            landmarkName = "Basic::FromDict(const Dictionary&amp; dict)"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "weight::Basic::FromDict(Dictionary const&amp;)"
+                  moduleName = "Feynman_Simulator"
+                  urlString = "file:///Users/kchen/project/Feynman_Simulator/src/module/weight/weight_basic.cpp"
+                  timestampString = "441739118.16571"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "147"
+                  endingLineNumber = "147"
+                  offsetFromSymbolStart = "135">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "weight::Basic::FromDict(Dictionary const&amp;)"
+                  moduleName = "Feynman_Simulator"
+                  urlString = "file:///Users/kchen/project/Feynman_Simulator/src/module/weight/weight_basic.cpp"
+                  timestampString = "441739118.165935"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "147"
+                  endingLineNumber = "147"
+                  offsetFromSymbolStart = "1415">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "weight::Basic::FromDict(Dictionary const&amp;)"
+                  moduleName = "Feynman_Simulator"
+                  urlString = "file:///Users/kchen/project/Feynman_Simulator/src/module/weight/weight_basic.cpp"
+                  timestampString = "441739118.166102"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "147"
+                  endingLineNumber = "147"
+                  offsetFromSymbolStart = "1789">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "weight::Basic::FromDict(Dictionary const&amp;)"
+                  moduleName = "Feynman_Simulator"
+                  urlString = "file:///Users/kchen/project/Feynman_Simulator/src/module/weight/weight_basic.cpp"
+                  timestampString = "441739118.166263"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "147"
+                  endingLineNumber = "147"
+                  offsetFromSymbolStart = "1998">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

@@ -45,22 +45,21 @@ void Dictionary::LoadFromString(const std::string& script)
         ERRORCODEABORT(ERR_VALUE_INVALID, "Script is invalided!");
 }
 
-void Dictionary::Load(const std::string& FileName, const std::string& key)
+void Dictionary::Load(const std::string& FileName)
 {
     ModuleObject LoadDict;
     LoadDict.LoadModule("IO.py");
-    Object result = LoadDict.CallFunction("LoadDict", FileName, key);
+    Object result = LoadDict.CallFunction("LoadDict", FileName);
     MakeSureNoPyError(ERR_FILE_INVALID);
     if (!FromPy(result))
         ERRORCODEABORT(ERR_VALUE_INVALID, "File is invalided!");
 }
 
-void Dictionary::Save(const string& FileName, const std::string& Mode,
-                      const std::string& key)
+void Dictionary::Save(const string& FileName, const std::string& Mode)
 {
     ModuleObject SaveDict;
     SaveDict.LoadModule("IO.py");
-    SaveDict.CallFunction("SaveDict", FileName, Mode, key, _Map);
+    SaveDict.CallFunction("SaveDict", FileName, Mode, _Map);
     MakeSureNoPyError(ERR_FILE_INVALID);
 }
 

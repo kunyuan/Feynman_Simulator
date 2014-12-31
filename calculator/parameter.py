@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 from logger import *
+import sys
 import pprint
+sys.path.append("../") #add the root dir into PYTHONPATH
+import IO
 
 class Parameter:
     def Load(self, FileName):
         log.info("Loading Parameters...")
-        with open(FileName, "r") as f:
-            content=f.read()
-        exec(content)
-        d=locals()["Para"]
-        self.__dict__=d
+        d=IO.LoadDict(FileName)
+        self.__dict__=d["Para"]
         print self.__dict__
         log.info("Loaded parameters:\n"+pprint.pformat(self.__dict__))
 
