@@ -75,10 +75,10 @@ class JobMonteCarlo(Job):
             print "The Reweight numbers should be equal to Order!"
             return False
 
-    def to_string(self, pid=0):
+    def to_dict(self, pid=0):
         #set Seed here so that each job has it own rng seed
         self.para["Seed"] = int(random.random()*2**30)
-        return Job.to_string(self, pid)
+        return Job.to_dict(self, pid)
 
 class JobConsistLoop(Job):
     '''job subclass for self consistent loop jobs'''
@@ -88,8 +88,8 @@ class JobConsistLoop(Job):
         self.para["Type"] = "DYSON"
         self.name = "DYSON"
 
-    def to_string(self, pid=0):
-        return Job.to_string(self, pid)
+    def to_dict(self, pid=0):
+        return Job.to_dict(self, pid)
 
 if __name__ == "__main__":
     A = JobMonteCarlo({
