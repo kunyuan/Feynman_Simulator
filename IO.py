@@ -13,6 +13,4 @@ def LoadDict(filename, keystr):
         exec(content)
         return locals()[keystr]
 
-def SaveBigDict(filename, mode, key, root):
-
-
+#def SaveBigDict(filename, mode, key, root):

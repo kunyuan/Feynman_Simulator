@@ -63,6 +63,8 @@ bool Markov::BuildNew(ParaMC& para, Diagram& diag, weight::Weight& weight)
     OperationName[CHANGE_CONTINUS2DELTA] = NAME(CHANGE_CONTINUS2DELTA);
     OperationName[CHANGE_DELTA2CONTINUS] = NAME(CHANGE_DELTA2CONTINUS);
     OperationName[CHANGE_SPIN_VERTEX] = NAME(CHANGE_SPIN_VERTEX);
+    OperationName[JUMP_TO_ORDER0] = NAME(JUMP_TO_ORDER0);
+    OperationName[JUMP_BACK_TO_ORDER1] = NAME(JUMP_BACK_TO_ORDER1);
     return true;
 }
 
@@ -71,7 +73,7 @@ std::string Markov::_DetailBalanceStr(Operations op)
     string Output = OperationName[op] + ":\n";
     char temp[80];
     real TotalProposed = 0.0, TotalAccepted = 0.0;
-    for (int i = 0; i < Order; i++) {
+    for (int i = 0; i <=Order; i++) {
         if (!Equal(Proposed[op][i], 0.0)) {
             TotalAccepted += Accepted[op][i];
             TotalProposed += Proposed[op][i];
@@ -94,7 +96,7 @@ std::string Markov::_CheckBalance(Operations op1, Operations op2)
     char temp[80];
     real TotalAccepted1 = 0.0;
     real TotalAccepted2 = 0.0;
-    for (int i = 0; i < Order; i++) {
+    for (int i = 0; i <=Order; i++) {
         if (!Equal(Accepted[op1][i] + Accepted[op2][i], 0.0)) {
             TotalAccepted1 += Accepted[op1][i];
             TotalAccepted2 += Accepted[op2][i];
@@ -141,6 +143,7 @@ void Markov::PrintDetailBalanceInfo()
     Output += _CheckBalance(ADD_INTERACTION, DEL_INTERACTION);
     Output += _CheckBalance(CHANGE_MEASURE_G2W, CHANGE_MEASURE_W2G);
     Output += _CheckBalance(CHANGE_CONTINUS2DELTA, CHANGE_DELTA2CONTINUS);
+    Output += _CheckBalance(JUMP_TO_ORDER0, JUMP_BACK_TO_ORDER1);
     Output += string(60, '=') + "\n";
     LOG_INFO(Output);
 }
@@ -193,15 +196,14 @@ void Markov::Hop(int sweep)
             ChangeDeltaToContinuous();
         else if (x < SumofProbofCall[CHANGE_CONTINUS2DELTA])
             ChangeContinuousToDelta();
-        else if (x < SumofProbofCall[13])
+        else if (x < SumofProbofCall[CHANGE_SPIN_VERTEX])
+            ;
+        //            ChangeSpinOnVertex();
+        else if (x < SumofProbofCall[JUMP_TO_ORDER0])
             JumpToOrder0();
-        else if (x < SumofProbofCall[14])
+        else if (x < SumofProbofCall[JUMP_BACK_TO_ORDER1])
             JumpBackToOrder1();
 
-//            else if (x < SumofProbofCall[13])
-//                ChangeROnVertex();
-//            else if (x < SumofProbofCall[14])
-//                ChangeSpinOnVertex();
         (*Counter)++;
     }
 }
@@ -211,7 +213,7 @@ void Markov::Hop(int sweep)
  */
 void Markov::CreateWorm()
 {
-    if (Worm->Exist)
+    if (Diag->Order==0 || Worm->Exist)
         return;
 
     wLine w = Diag->W.RandomPick(*RNG);
@@ -266,7 +268,7 @@ void Markov::CreateWorm()
  */
 void Markov::DeleteWorm()
 {
-    if (!Worm->Exist)
+    if (Diag->Order==0 || !Worm->Exist)
         return;
     vertex& Ira = Worm->Ira;
     vertex& Masha = Worm->Masha;
@@ -310,7 +312,7 @@ void Markov::DeleteWorm()
  */
 void Markov::MoveWormOnG()
 {
-    if (!Worm->Exist)
+    if (Diag->Order==0 || !Worm->Exist)
         return;
 
     vertex& Ira = Worm->Ira;
@@ -391,7 +393,7 @@ void Markov::MoveWormOnG()
  */
 void Markov::MoveWormOnW()
 {
-    if (!Worm->Exist)
+    if (Diag->Order==0 || !Worm->Exist)
         return;
 
     vertex& Ira = Worm->Ira;
@@ -435,7 +437,7 @@ void Markov::MoveWormOnW()
  */
 void Markov::Reconnect()
 {
-    if (!Worm->Exist)
+    if (Diag->Order==0 || !Worm->Exist)
         return;
 
     vertex Ira = Worm->Ira;
@@ -492,7 +494,7 @@ void Markov::AddInteraction()
 {
     if (!Worm->Exist)
         return;
-    if (Diag->Order >= Order)
+    if (Diag->Order==0 || Diag->Order >= Order)
         return;
     vertex Ira = Worm->Ira, Masha = Worm->Masha;
 
@@ -707,7 +709,7 @@ void Markov::DeleteInteraction()
  */
 void Markov::ChangeTauOnVertex()
 {
-    if (Worm->Exist)
+    if (Diag->Order==0 || Worm->Exist)
         return;
     vertex ver = Diag->Ver.RandomPick(*RNG);
     real tau = RandomPickTau();
@@ -774,7 +776,7 @@ void Markov::ChangeTauOnVertex()
 void Markov::ChangeSpinOnVertex()
 {
     //TODO: If W is spin conserved, return;
-    if (Worm->Exist)
+    if (Diag->Order==0 || Worm->Exist)
         return;
     vertex v1 = Diag->Ver.RandomPick(*RNG);
     wLine w1 = v1->NeighW();
@@ -849,7 +851,7 @@ void Markov::ChangeSpinOnVertex()
  */
 void Markov::ChangeROnVertex()
 {
-    if (Worm->Exist)
+    if (Diag->Order==0 || Worm->Exist)
         return;
     //TODO: Return if G is local
     vertex ver = Diag->Ver.RandomPick(*RNG);
@@ -914,7 +916,7 @@ void Markov::ChangeROnVertex()
  */
 void Markov::ChangeRLoop()
 {
-    if (Worm->Exist)
+    if (Diag->Order==0 || Worm->Exist)
         return;
     //TODO: If G is not a local function, return;
     //TODO: use key word 'static' here to save time
@@ -1006,7 +1008,7 @@ void Markov::ChangeRLoop()
  */
 void Markov::ChangeMeasureFromGToW()
 {
-    if (!Diag->MeasureGLine)
+    if (Diag->Order==0 || !Diag->MeasureGLine)
         return;
 
     wLine w = Diag->W.RandomPick(*RNG);
@@ -1055,7 +1057,7 @@ void Markov::ChangeMeasureFromGToW()
  */
 void Markov::ChangeMeasureFromWToG()
 {
-    if (Diag->MeasureGLine)
+    if (Diag->Order==0 || Diag->MeasureGLine)
         return;
 
     gLine g = Diag->G.RandomPick(*RNG);
@@ -1102,6 +1104,8 @@ void Markov::ChangeMeasureFromWToG()
  */
 void Markov::ChangeDeltaToContinuous()
 {
+    if(Diag->Order==0)
+        return;
     wLine w = Diag->W.RandomPick(*RNG);
     vertex vin = w->NeighVer(IN), vout = w->NeighVer(OUT);
     gLine G1 = vout->NeighG(IN), G2 = vout->NeighG(OUT);
@@ -1148,6 +1152,9 @@ void Markov::ChangeDeltaToContinuous()
  */
 void Markov::ChangeContinuousToDelta()
 {
+    if(Diag->Order<2)
+        return;
+    
     wLine w = Diag->W.RandomPick(*RNG);
     if (w->IsDelta || w->IsMeasure)
         return;
@@ -1208,12 +1215,13 @@ void Markov::JumpToOrder0()
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    prob *= (ProbofCall[14]*ProbSite(Ver1->R)*ProbTau(Ver1->Tau)*ProbTau(Ver2->Tau)*0.5*0.5)/ProbofCall[13];
+    prob *= (ProbofCall[JUMP_BACK_TO_ORDER1]*ProbSite(Ver1->R)*ProbTau(Ver1->Tau)*ProbTau(Ver2->Tau)*0.5*0.5)/ProbofCall[JUMP_TO_ORDER0];
 
+    Proposed[JUMP_TO_ORDER0][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
+        Accepted[JUMP_TO_ORDER0][Diag->Order] += 1.0;
         Diag->Order = 0;
         Diag->Phase *= sgn;
-        Diag->SignFermiLoop = 1.0;
         Diag->Weight = Diag->MeasureGLine? Diag->ConstSigma : Diag->ConstPolar;
     }
 }
@@ -1242,16 +1250,17 @@ void Markov::JumpBackToOrder1()
     Complex weightG2 = G->Weight(R, R, Tau2, Tau1, SpinG2, SpinG2, G2->IsMeasure);
     Complex weightW = W->Weight(Ver1->Dir, R, R, Tau1, Tau2, SpinV1, SpinV2, false, W1->IsMeasure, W1->IsDelta);
     
-    Complex weightRatio = weightG1 *weightG2 *weightW/Diag->Weight;
+    Complex weightRatio = -1.0*weightG1 *weightG2 *weightW/Diag->Weight;
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
     
-    prob *= ProbofCall[13]/(ProbofCall[14]*ProbSite(R)*ProbTau(Tau1)*ProbTau(Tau2)*0.5*0.5);
+    prob *= ProbofCall[JUMP_TO_ORDER0]/(ProbofCall[JUMP_BACK_TO_ORDER1]*ProbSite(R)*ProbTau(Tau1)*ProbTau(Tau2)*0.5*0.5);
     
+    Proposed[JUMP_BACK_TO_ORDER1][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
+        Accepted[JUMP_BACK_TO_ORDER1][Diag->Order] += 1.0;
         Diag->Order = 1;
         
-        Diag->SignFermiLoop = -1.0;
         Diag->Phase *= sgn;
         Diag->Weight *= weightRatio;
         

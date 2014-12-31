@@ -7,17 +7,17 @@ SLEEP = 5    #check job status for every SLEEP seconds
 TO_DO = []
 
 #common dictionary for all jobs
-beta=0.5
+beta=0.3
 com_dict={
-    "L" :   [8,8],
+    "L" :   [16,16],
     "InitialBeta" :  beta,
     "DeltaBeta" :  0.00,
     "FinalBeta" :  beta,
-    "Order" :  4,
+    "Order" :  1,
     "Model" : "J1J2",
     "Lattice" : "Square",
     "NSublat" : 1,
-    "MaxTauBin" : 32,
+    "MaxTauBin" : 64,
     "Interaction" : [1.0,0.0],
     "ExternalField": 0.0,
 }
@@ -30,11 +30,11 @@ mc_dict={
     "__AutoRun" : True,
     "DoesLoad" : False,
     #Start from order 0, so that OrderReWeight has Order+1 elements
-    "OrderReWeight" : [1.0, 1.0, 3.0,4.0,1.0],
-    "Sample" :  5000000,
+    "OrderReWeight" : [1.0, 1.0],
+    "Sample" :  500000,
     "Sweep" : 10,
     "Toss" : 10000,
-    "WormSpaceReweight" : 0.100
+    "WormSpaceReweight" : 0.500
     }
 mc_dict.update(com_dict)
 TO_DO.append(job.JobMonteCarlo(mc_dict))

@@ -33,23 +33,19 @@ class Momentum;
 
 namespace mc {
 class Markov {
-public:
-    long long* Counter;
+  public:
+    long long *Counter;
     real Beta;
     int Order;
-    Lattice* Lat;
-    real* OrderWeight;
-    diag::Diagram* Diag;
-    diag::WormClass* Worm;
-    weight::Sigma* Sigma;
-    weight::Polar* Polar;
-    weight::G* G;
-    weight::W* W;
-    RandomFactory* RNG;
-
-    const static int NUpdates = 15;
-    real ProbofCall[NUpdates];
-    real SumofProbofCall[NUpdates] = {0.0};
+    Lattice *Lat;
+    real *OrderWeight;
+    diag::Diagram *Diag;
+    diag::WormClass *Worm;
+    weight::Sigma *Sigma;
+    weight::Polar *Polar;
+    weight::G *G;
+    weight::W *W;
+    RandomFactory *RNG;
 
     bool BuildNew(para::ParaMC &, diag::Diagram &, weight::Weight &);
     void ReWeight(para::ParaMC &);
@@ -74,13 +70,13 @@ public:
     void ChangeContinuousToDelta();
     void ChangeSpinOnVertex();
 
-private:
-    const static int NUpdates = 15;
-    real ProbofCall[NUpdates] = { 0.0 };
-    real SumofProbofCall[NUpdates] = { 0.0 };
+  private:
+    const static int NUpdates = 17;
+    real ProbofCall[NUpdates] = {0.0};
+    real SumofProbofCall[NUpdates] = {0.0};
     std::string OperationName[NUpdates];
-    real Accepted[NUpdates][MAX_ORDER] = { 0.0 };
-    real Proposed[NUpdates][MAX_ORDER] = { 0.0 };
+    real Accepted[NUpdates][MAX_ORDER] = {0.0};
+    real Proposed[NUpdates][MAX_ORDER] = {0.0};
 
     int RandomPickDeltaSpin();
     spin RandomPickSpin();
@@ -89,7 +85,7 @@ private:
     real RandomPickTau();
     real ProbTau(real);
     Site RandomPickSite();
-    real ProbSite(const Site&);
+    real ProbSite(const Site &);
     bool RandomPickBool();
     enum Operations {
         CREATE_WORM = 0,
@@ -106,7 +102,9 @@ private:
         CHANGE_MEASURE_W2G,
         CHANGE_DELTA2CONTINUS,
         CHANGE_CONTINUS2DELTA,
-        CHANGE_SPIN_VERTEX
+        CHANGE_SPIN_VERTEX,
+        JUMP_TO_ORDER0,
+        JUMP_BACK_TO_ORDER1
     };
     std::string _DetailBalanceStr(Operations op);
     std::string _CheckBalance(Operations op1, Operations op2);
