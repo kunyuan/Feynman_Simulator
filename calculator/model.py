@@ -13,8 +13,8 @@ class BareFactory:
         self.__Hopping=Hopping
         self.__MaxTauBin=self.__Map.MaxTauBin
         self.__Beta=self.__Map.Beta
-        self.BareG=weight.Weight("G.SmoothT", self.__Map, "TwoSpins", "AntiSymmetric")
-        self.BareW=weight.Weight("W.DeltaT", self.__Map, "FourSpins", "Symmetric")
+        self.BareG=weight.Weight("SmoothT", self.__Map, "TwoSpins", "AntiSymmetric")
+        self.BareW=weight.Weight("DeltaT", self.__Map, "FourSpins", "Symmetric")
 
     def Build(self, Model, LatName=None):
         self.Lat=lat.Lattice(LatName, self.__Map)

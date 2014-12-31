@@ -8,6 +8,7 @@
 
 #include "estimator.h"
 #include "utility/sput.h"
+#include "utility/dictionary.h"
 
 void TestObservableComplex();
 void TestObservableReal();
@@ -49,11 +50,11 @@ void TestObservableComplex()
     EstimatorBundle<Complex> QuanVector;
     QuanVector.AddEstimator(quan1);
     QuanVector.AddEstimator(quan2);
-    QuanVector.SaveStatistics("TestObservable.npz", "w");
+    Dictionary dict = QuanVector.ToDict();
     EstimatorBundle<Complex> QuanVector2;
     QuanVector2.AddEstimator("1");
     QuanVector2.AddEstimator("2");
-    QuanVector2.LoadStatistics("TestObservable.npz");
+    QuanVector2.FromDict(dict);
     system("rm TestObservable.npz");
     sput_fail_unless(Equal(QuanVector2[1].Estimate().Mean, -ExpectedResult.Mean),
                      "EstimatorVector:check the Mean value.");

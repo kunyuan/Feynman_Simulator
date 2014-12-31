@@ -6,9 +6,10 @@
 //  Copyright (c) 2014 Kun Chen. All rights reserved.
 //
 
-#include "weight_estimator.h"
 #include "utility/abort.h"
 #include "utility/scopeguard.h"
+#include "utility/dictionary.h"
+#include "weight_estimator.h"
 
 using namespace std;
 using namespace Array;
@@ -131,31 +132,23 @@ void WeightEstimator::SqueezeStatistics(real factor)
 }
 
 /**********************   Weight IO ****************************************/
-void WeightEstimator::Save(const std::string& FileName, const std::string& Mode)
+
+bool WeightEstimator::FromDict(const Dictionary& dict)
 {
-    unsigned int shape[1] = { 1 };
-    cnpy::npz_save(FileName, _Name + ".Norm", &_Norm, shape, 1, Mode);
-    cnpy::npz_save(FileName, _Name + ".NormAccu", &_NormAccu, shape, 1, "a");
-    cnpy::npz_save(FileName, _Name + ".WeightAccu", _WeightAccu(), _MeaShape, 5, "a");
-    _WeightErrorEstimator.SaveStatistics(FileName, "a");
+    _Norm = dict.Get<real>("Norm");
+    _NormAccu = dict.Get<real>("NormAccu");
+    auto arr = dict.Get<Python::ArrayObject>("WeightAccu");
+    ASSERT_ALLWAYS(Equal(arr.Shape().data(), _MeaShape, 5), "Shape should match!");
+    _WeightAccu = arr.Data<Complex>();
+    return _WeightErrorEstimator.FromDict(dict.Get<Dictionary>("Estimator"));
 }
 
-bool WeightEstimator::Load(const std::string& FileName)
+Dictionary WeightEstimator::ToDict()
 {
-    _WeightErrorEstimator.LoadStatistics(FileName);
-
-    cnpy::npz_t NpzMap = cnpy::npz_load(FileName);
-    ON_SCOPE_EXIT([&] {NpzMap.destruct(); });
-
-    cnpy::NpyArray weight_accu = NpzMap[_Name + ".WeightAccu"];
-    if (weight_accu.data == nullptr)
-        ABORT("Can't find estimator " << _Name << ".WeightAccu in .npz data file!");
-    //using assign here will make a copy of the data in Complex *start
-    _WeightAccu = reinterpret_cast<Complex*>(weight_accu.data);
-
-    //read normalization factor
-    cnpy::npz_load_number(NpzMap, _Name + ".NormAccu", _NormAccu);
-    cnpy::npz_load_number(NpzMap, _Name + ".Norm", _Norm);
-
-    return true;
+    Dictionary dict;
+    dict["Norm"] = _Norm;
+    dict["NormAccu"] = _NormAccu;
+    dict["WeightAccu"] = Python::ArrayObject(_WeightAccu(), _MeaShape, 5);
+    dict["Estimator"] = _WeightErrorEstimator.ToDict();
+    return dict;
 }

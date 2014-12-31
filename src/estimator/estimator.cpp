@@ -10,12 +10,14 @@
 #include "estimator.h"
 #include "utility/abort.h"
 #include "utility/scopeguard.h"
+#include "utility/dictionary.h"
 
 using namespace std;
 
 template <typename T>
 Estimate<T>::Estimate()
-    : Mean(), Error()
+    : Mean()
+    , Error()
 {
 }
 
@@ -27,8 +29,9 @@ Estimate<T>::Estimate()
 *
 */
 template <typename T>
-Estimate<T>::Estimate(const T &mean, const T &error)
-    : Mean(mean), Error(error)
+Estimate<T>::Estimate(const T& mean, const T& error)
+    : Mean(mean)
+    , Error(error)
 {
 }
 template <>
@@ -45,14 +48,14 @@ real Estimate<real>::RelativeError()
 /**
 *  \brief Pretty output of Complex Estimate
 */
-ostream &operator<<(ostream &os, const Estimate<Complex> &e)
+ostream& operator<<(ostream& os, const Estimate<Complex>& e)
 {
     os.setf(ios::showpoint);
     os << "(" << e.Mean.Re << "+/-" << e.Error.Re << "," << e.Mean.Im << "+/-" << e.Error.Im << ")";
     return os;
 }
 
-ostream &operator<<(ostream &os, const Estimate<real> &e)
+ostream& operator<<(ostream& os, const Estimate<real>& e)
 {
     os.setf(ios::showpoint);
     os << e.Mean << "+/-" << e.Error;
@@ -165,7 +168,7 @@ void Estimator<Complex>::_update()
 }
 
 template <typename T>
-void Estimator<T>::Measure(const T &t)
+void Estimator<T>::Measure(const T& t)
 {
     _accumulator += t;
     _norm += 1.0;
@@ -191,28 +194,28 @@ real Estimator<T>::Ratio()
 }
 
 template <typename T>
-bool Estimator<T>::LoadStatistics(cnpy::npz_t NpzMap)
+bool Estimator<T>::FromDict(const Dictionary& dict)
 {
     ClearStatistics();
-    bool flag = true;
-    flag &= cnpy::npz_load_vector(NpzMap, Name, _history);
-    //read normalization factor
-    flag &= cnpy::npz_load_number(NpzMap, Name + "_Norm", _norm);
-    //read accumulation
-    flag &= cnpy::npz_load_number(NpzMap, Name + "_Accu", _accumulator);
+    auto hist_ = dict.Get<Python::ArrayObject>("History");
+    ASSERT_ALLWAYS(hist_.Dim() == 1, "expect one dimension array here!");
+    T* begin = hist_.Data<T>();
+    _history = vector<T>(begin, begin + hist_.Shape()[0]);
+    _accumulator = dict.Get<T>("Accu");
+    _norm = dict.Get<real>("Norm");
     _update();
-    return flag;
+    return true;
 }
 
 template <typename T>
-void Estimator<T>::SaveStatistics(const string &FileName, string Mode)
+Dictionary Estimator<T>::ToDict()
 {
-    unsigned int shape[1];
-    shape[0] = (unsigned int)_history.size();
-    cnpy::npz_save(FileName, Name, _history.data(), shape, 1, Mode);
-    shape[0] = 1;
-    cnpy::npz_save(FileName, Name + "_Norm", &_norm, shape, 1, "a");
-    cnpy::npz_save(FileName, Name + "_Accu", &_accumulator, shape, 1, "a");
+    vector<uint> shape = { (uint)_history.size() };
+    Dictionary dict;
+    dict["Norm"] = _norm;
+    dict["Accu"] = _accumulator;
+    dict["History"] = Python::ArrayObject(_history.data(), shape, 1);
+    return dict;
 }
 
 template class Estimator<real>;
@@ -230,7 +233,7 @@ void EstimatorBundle<T>::AddEstimator(string name)
 *  \brief this function will give you a new copy of Estimator<T>, including a __new__ Estimator<T>._history
 */
 template <typename T>
-void EstimatorBundle<T>::AddEstimator(const Estimator<T> &est)
+void EstimatorBundle<T>::AddEstimator(const Estimator<T>& est)
 {
     _MakeSureKeyNotExists(est.Name);
     _EstimatorVector.push_back(est);
@@ -261,34 +264,32 @@ int EstimatorBundle<T>::HowMany()
 }
 
 template <typename T>
-bool EstimatorBundle<T>::LoadStatistics(const string &FileName)
+bool EstimatorBundle<T>::FromDict(const Dictionary& dict)
 {
-    cnpy::npz_t NpzMap = cnpy::npz_load(FileName);
-    ON_SCOPE_EXIT([&] {NpzMap.destruct(); });
-    for (auto &vector : _EstimatorVector)
-        vector.LoadStatistics(NpzMap);
-    return true;
+    bool flag = true;
+    for (auto& vector : _EstimatorVector)
+        flag &= vector.FromDict(dict.Get<Dictionary>(vector.Name));
+    return flag;
 }
 
 template <typename T>
-void EstimatorBundle<T>::SaveStatistics(const string &FileName, string Mode)
+Dictionary EstimatorBundle<T>::ToDict()
 {
-    string Mod = Mode;
-    for (unsigned int i = 0; i < _EstimatorVector.size(); i++) {
-        _EstimatorVector[i].SaveStatistics(FileName, Mod);
-        if (i == 0 && Mod == "w")
-            Mod = "a"; //the second and the rest elements will be wrote as appended
+    Dictionary dict;
+    for (auto& vector : _EstimatorVector) {
+        dict[vector.Name] = vector.ToDict();
     }
+    return dict;
 }
 
 template <typename T>
-Estimator<T> &EstimatorBundle<T>::operator[](int index)
+Estimator<T>& EstimatorBundle<T>::operator[](int index)
 {
     return _EstimatorVector[index];
 }
 
 template <typename T>
-Estimator<T> &EstimatorBundle<T>::operator[](string name)
+Estimator<T>& EstimatorBundle<T>::operator[](string name)
 {
     return *_EstimatorMap[name];
 }
@@ -301,14 +302,14 @@ Estimator<T> &EstimatorBundle<T>::operator[](string name)
 template <typename T>
 void EstimatorBundle<T>::ClearStatistics()
 {
-    for (auto &vector : _EstimatorVector)
+    for (auto& vector : _EstimatorVector)
         vector.ClearStatistics();
 }
 
 template <typename T>
 void EstimatorBundle<T>::SqueezeStatistics(double factor)
 {
-    for (auto &vector : _EstimatorVector)
+    for (auto& vector : _EstimatorVector)
         vector.SqueezeStatistics(factor);
 }
 

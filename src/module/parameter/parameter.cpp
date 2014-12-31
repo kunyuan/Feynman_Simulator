@@ -11,7 +11,6 @@
 #include "utility/dictionary.h"
 using namespace para;
 
-const std::string KEYNAME = "Para";
 
 Message Parameter::GenerateMessage()
 {
@@ -28,10 +27,42 @@ void Parameter::UpdateWithMessage(const Message& Message_)
     T = 1.0 / Beta;
 }
 
+bool Parameter::_FromDict(const Dictionary& _para)
+{
+    GET(_para, L);
+    GET(_para, InitialBeta);
+    GET(_para, DeltaBeta);
+    GET(_para, FinalBeta);
+    GET(_para, Order);
+    GET(_para, NSublat);
+    _para.HasKey("Beta") ? GET(_para, Beta) : Beta = InitialBeta;
+    _para.HasKey("Version") ? GET(_para, Version) : Version = 0;
+
+    Lat.Initialize(L, NSublat);
+    T = 1.0 / Beta;
+
+    ASSERT_ALLWAYS(Beta >= InitialBeta && Beta <= FinalBeta, "Beta should be between Initial and Final Beta");
+    ASSERT_ALLWAYS(Order < MAX_ORDER, "Order can not be bigger than " << MAX_ORDER);
+    return true;
+}
+Dictionary Parameter::_ToDict()
+{
+    Dictionary _para;
+    SET(_para, L);
+    SET(_para, InitialBeta);
+    SET(_para, DeltaBeta);
+    SET(_para, FinalBeta);
+    SET(_para, Order);
+    SET(_para, NSublat);
+    SET(_para, Beta);
+    SET(_para, Version);
+    return _para;
+}
+
 bool Parameter::_BuildNew(const std::string& InputFile)
 {
     Dictionary _para;
-    _para.Load(InputFile, KEYNAME);
+    _para.Load(InputFile);
     GET(_para, L);
     GET(_para, InitialBeta);
     GET(_para, DeltaBeta);
@@ -48,32 +79,11 @@ bool Parameter::_BuildNew(const std::string& InputFile)
     return true;
 }
 
-bool Parameter::_Load(const std::string& InputFile)
-{
-    Dictionary _para;
-    _para.Load(InputFile, KEYNAME);
-    GET(_para, Version);
-    GET(_para, L);
-    GET(_para, InitialBeta);
-    GET(_para, DeltaBeta);
-    GET(_para, FinalBeta);
-    //!!!Beta should be a part of state, so it will be stored
-    GET(_para, Beta);
-    GET(_para, Order);
-    GET(_para, NSublat)
-
-    Lat.Initialize(L, NSublat);
-    T = 1.0 / Beta;
-    if (Order >= MAX_ORDER)
-        ABORT("Order can not be bigger than " << MAX_ORDER);
-    return true;
-}
-
 bool ParaMC::BuildNew(const std::string& InputFile)
 {
     Parameter::_BuildNew(InputFile);
     Dictionary _para;
-    _para.Load(InputFile, KEYNAME);
+    _para.Load(InputFile);
     GET(_para, Toss);
     GET(_para, Sample);
     GET(_para, Sweep);
@@ -88,44 +98,37 @@ bool ParaMC::BuildNew(const std::string& InputFile)
     return true;
 }
 
-bool ParaMC::Load(const std::string& InputFile)
+bool ParaMC::FromDict(const Dictionary& _para)
 {
-    Parameter::_Load(InputFile);
-    Dictionary _para;
-    _para.Load(InputFile, KEYNAME);
-    GET(_para, Counter);
+    Parameter::_FromDict(_para);
     GET(_para, Toss);
     GET(_para, Sample);
     GET(_para, Sweep);
     GET(_para, WormSpaceReweight);
     GET(_para, OrderReWeight);
     GET(_para, MaxTauBin);
-    GET(_para, RNG);
+    _para.HasKey("Counter") ? GET(_para, Counter) : Counter = 0;
+    _para.HasKey("Seed") ? GET(_para, Seed) : Seed = 0;
+    if (_para.HasKey("RNG"))
+        GET(_para, RNG);
+    else
+        RNG.Reset(Seed);
+    ASSERT_ALLWAYS(OrderReWeight.size() == Order + 1, "OrderReWeight should have Order+1 elementes!");
     return true;
 }
-
-void ParaMC::Save(const std::string& OutputFile, string Mode)
+Dictionary ParaMC::ToDict()
 {
     Dictionary _para;
-    SET(_para, Version);
-    SET(_para, L);
-    SET(_para, InitialBeta);
-    SET(_para, DeltaBeta);
-    SET(_para, FinalBeta);
-    SET(_para, Beta);
-    SET(_para, Order);
-    SET(_para, NSublat);
-    SET(_para, Counter);
     SET(_para, Toss);
     SET(_para, Sample);
     SET(_para, Sweep);
     SET(_para, WormSpaceReweight);
     SET(_para, OrderReWeight);
     SET(_para, MaxTauBin);
+    SET(_para, Counter);
     SET(_para, RNG);
-    ASSERT_ALLWAYS(OrderReWeight.size() == Order + 1, "OrderReWeight should have Order+1 elementes!");
-    _para.Save(OutputFile, Mode, KEYNAME);
-    //save with append mode, so that it will not overwrite stuff wroten by Parameter:SaveParameter
+    _para.Update(Parameter::_ToDict());
+    return _para;
 }
 
 void ParaMC::SetTest()

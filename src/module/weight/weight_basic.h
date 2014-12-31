@@ -13,6 +13,7 @@
 #include "utility/array.h"
 #include "index_map.h"
 
+class Dictionary;
 namespace weight {
 
 enum TauSymmetry {
@@ -44,8 +45,8 @@ class Basic {
     friend class WInitializer;
 
 public:
-    bool Load(const std::string& FileName);
-    void Save(const std::string& FileName, const std::string Mode = "a");
+    bool FromDict(const Dictionary&);
+    Dictionary ToDict();
 
 protected:
     Basic(const Lattice& lat, real Beta, uint MaxTauBin, SpinNum,

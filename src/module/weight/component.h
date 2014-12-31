@@ -63,8 +63,8 @@ public:
     void BuildTest();
 
     void Reset(real Beta);
-    bool Load(const std::string& FileName);
-    void Save(const std::string& FileName, const std::string Mode = "a");
+    bool FromDict(const Dictionary&);
+    Dictionary ToDict();
 
     Complex Weight(const Site&, const Site&, real, real, spin, spin) const;
     void Measure(const Site&, const Site&, real, real, spin, spin,
@@ -84,8 +84,8 @@ public:
     void BuildTest();
 
     void Reset(real Beta);
-    bool Load(const std::string& FileName);
-    void Save(const std::string& FileName, const std::string Mode = "a");
+    bool FromDict(const Dictionary&);
+    Dictionary ToDict();
 
     Complex Weight(const Site&, const Site&, real, real, spin*, spin*) const;
     void Measure(const Site&, const Site&, real, real, spin*, spin*,

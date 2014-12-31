@@ -11,6 +11,7 @@
 #include "module/parameter/parameter.h"
 #include "module/weight/weight.h"
 #include "module/weight/component.h"
+#include "utility/dictionary.h"
 
 using namespace std;
 using namespace diag;
@@ -23,7 +24,7 @@ MarkovMonitor::MarkovMonitor()
     rEstimator.AddEstimator("1");
 }
 
-bool MarkovMonitor::BuildNew(ParaMC &para, Diagram &diag, weight::Weight &weight)
+bool MarkovMonitor::BuildNew(ParaMC& para, Diagram& diag, weight::Weight& weight)
 {
     Para = &para;
     Diag = &diag;
@@ -39,22 +40,22 @@ void MarkovMonitor::ReWeight()
     //TODO: reweight Estimators here
 }
 
-bool MarkovMonitor::Load(const string &InputFile, ParaMC &para, Diagram &diag, weight::Weight &weight)
+bool MarkovMonitor::FromDict(const Dictionary& dict, ParaMC& para, Diagram& diag, weight::Weight& weight)
 {
     Para = &para;
     Diag = &diag;
     Weight = &weight;
-    cEstimator.LoadStatistics(InputFile);
-    rEstimator.LoadStatistics(InputFile);
     //TODO: more observables
-    return true;
+    return cEstimator.FromDict(dict.Get<Dictionary>("cEstimator"))
+           || rEstimator.FromDict(dict.Get<Dictionary>("rEstimator"));
 }
-
-void MarkovMonitor::Save(const string &InputFile, const string &Mode)
+Dictionary MarkovMonitor::ToDict()
 {
-    cEstimator.SaveStatistics(InputFile, Mode);
-    rEstimator.SaveStatistics(InputFile, "a");
+    Dictionary dict;
+    dict["cEstimator"] = cEstimator.ToDict();
+    dict["rEstimator"] = rEstimator.ToDict();
     //TODO: more observables
+    return dict;
 }
 
 void MarkovMonitor::Annealing()
@@ -96,7 +97,6 @@ void MarkovMonitor::Measure()
             Weight->Polar->Measure(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin(), vout->Spin(), Diag->Order, Diag->Phase);
         }
     }
-                               
 }
 
 void MarkovMonitor::AddStatistics()

@@ -10,6 +10,7 @@
 #include "component.h"
 #include "utility/sput.h"
 #include "utility/rng.h"
+#include "utility/dictionary.h"
 
 using namespace std;
 using namespace weight;
@@ -78,8 +79,9 @@ void WeightMeasuring(real Beta, int Num)
                      "Check imag part of Weight and it's error");
 
     //Weight class IO operation
-    Sig.Save("test_weight.npz", "w");
-    Sig2.Load("test_weight.npz");
+
+    Dictionary dict = Sig.ToDict();
+    Sig2.FromDict(dict);
     sput_fail_unless(Equal(Sig.Weight(s1, s2, 0.0, Beta / 2, SpinIn, SpinOut),
                            Sig2.Weight(s1, s2, 0.0, Beta / 2, SpinIn, SpinOut)),
                      "Weight class IO check.");
