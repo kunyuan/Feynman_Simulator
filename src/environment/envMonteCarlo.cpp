@@ -91,7 +91,7 @@ bool EnvMonteCarlo::ListenToMessage()
 {
     LOG_INFO("Start reweighting...");
     Message Message_;
-    if (!Message_.Load())
+    if (!Message_.Load(Job.MessageFile))
         return false;
     if (Para.Version >= Message_.Version) {
         LOG_INFO("Status has not been updated yet since the last reweighting!");
