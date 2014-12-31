@@ -43,8 +43,6 @@ public:
     void ClearStatistics();
     void SqueezeStatistics(real factor);
     //    std::string PrettyString();
-    void Save(const std::string& FileName, const std::string& Mode = "a");
-    bool Load(const std::string& FileName);
     bool FromDict(const Dictionary&);
     Dictionary ToDict();
 

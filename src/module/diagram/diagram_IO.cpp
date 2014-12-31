@@ -161,25 +161,6 @@ bool Diagram::FromDict(const Dictionary& Config)
     return true;
 }
 
-void Diagram::Save(const std::string& FileName, string Mode)
-{
-    ToDict().Save(FileName, Mode);
-}
-
-bool Diagram::Load(const std::string& FileName)
-{
-    Dictionary Config;
-    Config.Load(FileName);
-    return FromDict(Config);
-}
-
-bool Diagram::Load(const std::string& FileName, Lattice& lat,
-                   weight::G& g, weight::W& w)
-{
-    Reset(lat, g, w);
-    return Load(FileName);
-}
-
 void Diagram::BuildNew(Lattice& lat, weight::G& g, weight::W& w)
 {
     Reset(lat, g, w);

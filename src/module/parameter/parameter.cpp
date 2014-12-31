@@ -11,7 +11,6 @@
 #include "utility/dictionary.h"
 using namespace para;
 
-const std::string KEYNAME = "Para";
 
 Message Parameter::GenerateMessage()
 {
@@ -80,27 +79,6 @@ bool Parameter::_BuildNew(const std::string& InputFile)
     return true;
 }
 
-bool Parameter::_Load(const std::string& InputFile)
-{
-    Dictionary _para;
-    _para.Load(InputFile);
-    GET(_para, Version);
-    GET(_para, L);
-    GET(_para, InitialBeta);
-    GET(_para, DeltaBeta);
-    GET(_para, FinalBeta);
-    //!!!Beta should be a part of state, so it will be stored
-    GET(_para, Beta);
-    GET(_para, Order);
-    GET(_para, NSublat);
-
-    Lat.Initialize(L, NSublat);
-    T = 1.0 / Beta;
-    if (Order >= MAX_ORDER)
-        ABORT("Order can not be bigger than " << MAX_ORDER);
-    return true;
-}
-
 bool ParaMC::BuildNew(const std::string& InputFile)
 {
     Parameter::_BuildNew(InputFile);
@@ -151,46 +129,6 @@ Dictionary ParaMC::ToDict()
     SET(_para, RNG);
     _para.Update(Parameter::_ToDict());
     return _para;
-}
-
-bool ParaMC::Load(const std::string& InputFile)
-{
-    Parameter::_Load(InputFile);
-    Dictionary _para;
-    _para.Load(InputFile);
-    GET(_para, Counter);
-    GET(_para, Toss);
-    GET(_para, Sample);
-    GET(_para, Sweep);
-    GET(_para, WormSpaceReweight);
-    GET(_para, OrderReWeight);
-    GET(_para, MaxTauBin);
-    GET(_para, RNG);
-    return true;
-}
-
-void ParaMC::Save(const std::string& OutputFile, string Mode)
-{
-    Dictionary _para;
-    SET(_para, Version);
-    SET(_para, L);
-    SET(_para, InitialBeta);
-    SET(_para, DeltaBeta);
-    SET(_para, FinalBeta);
-    SET(_para, Beta);
-    SET(_para, Order);
-    SET(_para, NSublat);
-    SET(_para, Counter);
-    SET(_para, Toss);
-    SET(_para, Sample);
-    SET(_para, Sweep);
-    SET(_para, WormSpaceReweight);
-    SET(_para, OrderReWeight);
-    SET(_para, MaxTauBin);
-    SET(_para, RNG);
-    ASSERT_ALLWAYS(OrderReWeight.size() == Order + 1, "OrderReWeight should have Order+1 elementes!");
-    _para.Save(OutputFile, Mode);
-    //save with append mode, so that it will not overwrite stuff wroten by Parameter:SaveParameter
 }
 
 void ParaMC::SetTest()

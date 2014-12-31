@@ -7,7 +7,6 @@
 //
 
 #include "test.h"
-#include "utility/crc32.h"
 #include "environment/environment.h"
 #include "module/markov/markov.h"
 #include "module/diagram/diagram.h"
@@ -38,9 +37,6 @@ int RunTest()
     //    TEST(TestLattice);
     TEST(TestEstimator);
 
-    //    TEST(TestCRC32);
-
-    //    Testcnpy();
     TEST(TestDictionary);
 
     return 0;

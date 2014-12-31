@@ -24,10 +24,6 @@ public:
     Diagram();
 
     void BuildNew(Lattice&, weight::G&, weight::W&);
-    bool Load(const std::string& FileName, Lattice&,
-              weight::G&, weight::W&);
-    bool Load(const std::string& FileName);
-    void Save(const std::string& FileName, std::string Mode = "a");
     bool FromDict(const Dictionary&, Lattice&, weight::G&, weight::W&);
     bool FromDict(const Dictionary&);
     Dictionary ToDict();

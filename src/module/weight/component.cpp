@@ -7,7 +7,6 @@
 //
 
 #include "component.h"
-#include "utility/cnpy.h"
 #include "utility/dictionary.h"
 #include <tuple>
 
@@ -162,16 +161,6 @@ void Sigma::Reset(real Beta)
     Estimator.ReWeight(Beta);
 }
 
-bool Sigma::Load(const std::string& FileName)
-{
-    return Estimator.Load(FileName) && Basic::Load(FileName);
-}
-void Sigma::Save(const std::string& FileName, const std::string Mode)
-{
-    Estimator.Save(FileName, Mode);
-    Basic::Save(FileName, "a");
-}
-
 bool Sigma::FromDict(const Dictionary& dict)
 {
     return Estimator.FromDict(dict.Get<Dictionary>("Histogram"))
@@ -207,16 +196,6 @@ void Polar::Reset(real Beta)
     Basic::Reset(Beta);
     _Map = IndexMapSPIN4(Beta, _MaxTauBin, _Lat);
     Estimator.ReWeight(Beta);
-}
-
-bool Polar::Load(const std::string& FileName)
-{
-    return Estimator.Load(FileName) && Basic::Load(FileName);
-}
-void Polar::Save(const std::string& FileName, const std::string Mode)
-{
-    Estimator.Save(FileName, Mode);
-    Basic::Save(FileName, "a");
 }
 
 bool Polar::FromDict(const Dictionary& dict)
