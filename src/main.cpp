@@ -44,24 +44,26 @@ void MonteCarlo(const para::Job& Job)
     else
         PaddyField.BuildNew();
 
-    auto& Para = PaddyField.Para;
     auto& Grasshopper = PaddyField.Grasshopper;
     auto& Scarecrow = PaddyField.Scarecrow;
 
-    while (Para.Counter < 10) {
-        Para.Counter++;
-        Grasshopper.Hop(0);
+    int Sweep = 0;
+    //Don't use Para.Counter as counter
+    
+    while (Sweep < 500000) {
+        Sweep++;
+        Grasshopper.Hop(1000);
 
         Scarecrow.Measure();
 
-        if (Para.Counter % 10 == 0) {
+        if (Sweep % 10 == 0) {
             //            Env.AddStatistics();
             Scarecrow.ReWeightEachOrder();
         }
-        if (Para.Counter % 100000 == 0) {
+        if (Sweep % 10000 == 0) {
             PaddyField.Save();
         }
-        if (Para.Counter % 20 == 0) {
+        if (Sweep % 20 == 0) {
             PaddyField.ListenToMessage();
         }
     }
