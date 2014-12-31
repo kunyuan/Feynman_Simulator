@@ -1,8 +1,11 @@
-import numpy as np
+import sys
+import IO
 import matplotlib.pyplot as plt
-dataMC=np.load("data/2_statistics.npz")
-sigmaMC = dataMC['Sigma.WeightAccu'][0][0][0][0]*dataMC['Sigma.Norm']/dataMC['Sigma.NormAccu']
+
+dataMC=IO.LoadBigDict("data/2_statistics")['Histogram']['Sigma']['Histogram']
+sigmaMC = dataMC['WeightAccu'][0][0][0][0]*dataMC['Norm']/dataMC['NormAccu']
 plt.plot(sigmaMC[1:])
-dataDyson=np.load("data/Weight.npz")
-plt.plot(dataDyson['Sigma.SmoothT'][0][0][0])
+
+dataDyson=IO.LoadBigDict("data/Weight")['Sigma']
+plt.plot(dataDyson['SmoothT'][0][0][0])
 plt.show()
