@@ -288,8 +288,8 @@
 				84C86DDA1A214E33002A3D8D /* component.h */,
 				84C86DD91A214E33002A3D8D /* component.cpp */,
 				84C86DF81A24310F002A3D8D /* component_MC.cpp */,
-				84C86DFB1A24E463002A3D8D /* weight_estimator.cpp */,
 				84C86DFC1A24E463002A3D8D /* weight_estimator.h */,
+				84C86DFB1A24E463002A3D8D /* weight_estimator.cpp */,
 				84C86DF41A23D9FD002A3D8D /* index_map.h */,
 				84C86DF31A23D9FD002A3D8D /* index_map.cpp */,
 				8422FE341A0A7ECA002EB44E /* weight_test.cpp */,
@@ -314,11 +314,11 @@
 		8426668419E445F000CF7B59 /* diagram */ = {
 			isa = PBXGroup;
 			children = (
-				1CFBB0BC1A16C1F900EE2E9E /* diagram_filter.cpp */,
 				8422FE0C1A09C112002EB44E /* diagram.h */,
 				8422FE0B1A09C112002EB44E /* diagram.cpp */,
 				8422FE081A09C112002EB44E /* diagram_IO.cpp */,
 				8422FE061A09C112002EB44E /* diagram_check.cpp */,
+				1CFBB0BC1A16C1F900EE2E9E /* diagram_filter.cpp */,
 				8422FE021A09C112002EB44E /* component_bundle.h */,
 				8422FE011A09C112002EB44E /* component_bundle.cpp */,
 				8422FE051A09C112002EB44E /* component.h */,

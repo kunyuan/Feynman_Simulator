@@ -28,6 +28,9 @@ public:
               weight::G&, weight::W&);
     bool Load(const std::string& FileName);
     void Save(const std::string& FileName, std::string Mode = "a");
+    bool FromDict(const Dictionary&, Lattice&, weight::G&, weight::W&);
+    bool FromDict(const Dictionary&);
+    Dictionary ToDict();
     void Reset(Lattice&, weight::G&, weight::W&);
     void SetTest(Lattice&, weight::G&, weight::W&);
     bool CheckDiagram();
@@ -78,7 +81,6 @@ private:
     bool _CheckSpin();
     bool _CheckWeight();
 
-    bool _Load(const Dictionary&);
     void _FromDict(const Dictionary&, wLine);
     void _FromDict(const Dictionary&, gLine);
     void _FromDict(const Dictionary&, vertex);

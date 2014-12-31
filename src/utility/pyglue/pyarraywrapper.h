@@ -27,7 +27,15 @@ public:
     ArrayObject(const Object& obj);
     ArrayObject(PyObject* obj, OwnerShip ownership = NewRef);
     template <typename T>
-    ArrayObject(T* data, const std::vector<uint>& Shape, const int Dim);
+    ArrayObject(T* data, const std::vector<uint>& Shape, const int Dim)
+    {
+        _Construct(data, Shape.data(), Dim);
+    }
+    template <typename T>
+    ArrayObject(T* data, const uint* Shape, const int Dim)
+    {
+        _Construct(data, Shape, Dim);
+    }
     template <typename T>
     T* Data();
     std::vector<uint> Shape();
@@ -37,6 +45,10 @@ public:
         Object::operator=(obj);
         return *this;
     }
+
+private:
+    void _Construct(real* data, const uint* Shape, const int Dim);
+    void _Construct(Complex* data, const uint* Shape, const int Dim);
 };
 }
 

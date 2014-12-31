@@ -59,17 +59,6 @@ void Test_Ref()
 
 void Test_Cast()
 {
-    //    Complex a[] = { { 1.0, 2.0 }, { 3.0, 1.0 }, { 1.0, 1.0 }, { 2.0, 1.0 } };
-    //    uint Shape[] = { 2, 2 };
-    //    ArrayObject array(a, Shape, 2);
-    //    array.Print();
-    //    cout << array.RefCount() << endl;
-    //    auto t = (Complex*)array.Data();
-    //    cout << t[0] << ", " << t[2] << endl;
-    //    cout << array.RefCount() << endl;
-    //    array.Destroy();
-    //    cout << a[0] << ", " << a[2] << endl;
-    //
     AnyObject value;
     int IntMax = std::numeric_limits<int>::max();
     value = IntMax;
@@ -125,9 +114,9 @@ void Test_Dict()
 
     //Dict IO small dictionary
     Port.Print();
-    Port.Save("test.txt", "w");
+    Port.Save("test", "w");
     Port.Clear();
-    Port.Load("test.txt");
+    Port.Load("test");
     sput_fail_unless(Equal((Port["cVec"].As<vector<Complex> >())[1], cb),
                      "check vector<Complex> type");
     sput_fail_unless((Port["dict"].As<Dictionary>())["b"].As<int>() == 11,

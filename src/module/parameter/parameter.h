@@ -16,6 +16,7 @@
 #include "utility/convention.h"
 #include <string>
 
+class Dictionary;
 namespace para {
 
 class Parameter {
@@ -38,6 +39,8 @@ public:
 protected:
     bool _BuildNew(const std::string& InputFile);
     bool _Load(const std::string& InputFile);
+    bool _FromDict(const Dictionary&);
+    Dictionary _ToDict();
 
     Vec<int> L;
 };
@@ -57,6 +60,8 @@ public:
     bool BuildNew(const std::string& InputFile);
     bool Load(const std::string& InputFile);
     void Save(const std::string& InputFile, std::string Mode = "a");
+    bool FromDict(const Dictionary&);
+    Dictionary ToDict();
     void SetTest();
 };
 }

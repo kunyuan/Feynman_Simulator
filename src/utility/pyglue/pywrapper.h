@@ -109,7 +109,7 @@ public:
         add_tuple_vars(tup, args...);
         // Call our object
         Object result = PyObject_CallObject(func.Get(), tup.Get());
-        MakeSureNoPyError(ERR_GENERAL);
+        //        MakeSureNoPyError(ERR_GENERAL);
         return result;
     }
     //

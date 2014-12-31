@@ -36,7 +36,7 @@ int RunTest()
     //    TEST(mc::TestDiagCounter);
 
     //    TEST(TestLattice);
-    //    TEST(TestEstimator);
+    TEST(TestEstimator);
 
     //    TEST(TestCRC32);
 

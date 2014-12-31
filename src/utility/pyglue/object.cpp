@@ -7,8 +7,8 @@
 //
 
 #include "object.h"
-#include "utility/abort.h"
 #include <iostream>
+#include "utility/abort.h"
 #include <Python/Python.h>
 
 namespace Python {
@@ -42,6 +42,15 @@ void MakeSureNoPyError(ERRORCODE e)
         PrintError();
         ERRORCODEABORT(e, "Python runtime error!");
     }
+}
+
+void FilterPyError(PyObject* err, ERRORCODE e)
+{
+    if (PyErr_Occurred())
+        if (PyErr_ExceptionMatches(err)) {
+            PrintError();
+            ERRORCODEABORT(e, "Python runtime error!");
+        }
 }
 
 void IncreaseRef(PyObject* obj)
