@@ -17,6 +17,7 @@ namespace Python {
 void ArrayInitialize();
 class ArrayObject;
 bool Convert(Object, ArrayObject&);
+//Object CastToPy(const ArrayObject&);
 class ArrayObject : public Object {
 public:
     ArrayObject()
@@ -26,8 +27,17 @@ public:
     ArrayObject(const Object& obj);
     ArrayObject(PyObject* obj, OwnerShip ownership = NewRef);
     template <typename T>
-    ArrayObject(T* data, uint* Shape, int Dim);
-    void* Data();
+    ArrayObject(T* data, const std::vector<uint>& Shape, const int Dim)
+    {
+        _Construct(data, Shape.data(), Dim);
+    }
+    template <typename T>
+    ArrayObject(T* data, const uint* Shape, const int Dim)
+    {
+        _Construct(data, Shape, Dim);
+    }
+    template <typename T>
+    T* Data();
     std::vector<uint> Shape();
     int Dim();
     ArrayObject& operator=(const ArrayObject& obj)
@@ -35,6 +45,10 @@ public:
         Object::operator=(obj);
         return *this;
     }
+
+private:
+    void _Construct(real* data, const uint* Shape, const int Dim);
+    void _Construct(Complex* data, const uint* Shape, const int Dim);
 };
 }
 

@@ -111,7 +111,7 @@ class Weight():
             Assert(False, "Only accept TwoSpin or FourSpins, not {0}".format(NSpin))
 
         self.Shape=[self.NSpin, self.NSublat, self.NSpin, self.NSublat, self.Map.Vol]
-        if ".SmoothT" in Name:
+        if Name=="SmoothT":
             self.Beta=self.Map.Beta
             self.Shape.append(self.Map.MaxTauBin)
             self.__HasTau=True
@@ -122,7 +122,7 @@ class Weight():
                 self.IsSymmetric=False
             else:
                 Assert(False, "Should be either Symmetric or AntiSymmetric, not {0}".format(Symmetry))
-        elif ".DeltaT" in Name:
+        elif Name=="DeltaT":
             self.__HasTau=False
             self.__SpaceTimeIndex=[[k,] for k in range(self.Shape[VOL])]
         else:
@@ -191,11 +191,10 @@ class Weight():
                 sys.exit(0)
         self.Data = self.Data.reshape([Sp,Sub,Sp,Sub]+OriginShape[VOL:])
 
-    def Load(self, FileName):
+    def FromDict(self, data):
         log.info("Loading {0} Matrix...".format(self.Name));
-        data=self.__LoadNpz(FileName)
 
-        if self.Name in data.files:
+        if self.Name in data:
             log.info("Load {0}".format(self.Name))
             datamat = data[self.Name]
 
@@ -210,17 +209,10 @@ class Weight():
             self.Data=datamat
         else:
             Assert(False, "{0} not found!").format(self.Name)
-
-    def Save(self, FileName, Mode="a"):
-
+    def ToDict(self):
         log.info("Saving {0} Matrix...".format(self.Name));
         data={}
-        if Mode is "a" and os.path.exists(FileName)==True:
-            olddata=self.__LoadNpz(FileName)
-            for e in olddata.files:
-                data[e]=olddata[e]
         data[self.Name]=self.Data
-
         #######RESHAPE
         OldShape=self.__OriginShape
         MidShape=[self.NSpin, self.NSublat,self.NSpin, self.NSublat]+self.__OriginShape[VOL:]
@@ -228,16 +220,8 @@ class Weight():
 
         self.__AssertShape(data[self.Name].shape, OldShape)
         data[self.Name]=data[self.Name].reshape(MidShape).swapaxes(1,2).reshape(NewShape)
-
-        np.savez(FileName, **data)
-
-    def __LoadNpz(self, FileName):
-        try:
-            data=np.load(FileName)
-        except IOError:
-            log.error(FileName+" fails to read!")
-            sys.exit(0)
         return data
+
     def __AssertShape(self, shape1, shape2):
         Assert(tuple(shape1)==tuple(shape2), \
                 "Shape {0} is expected instead of shape {1}!".format(shape1, shape2))
@@ -256,7 +240,7 @@ class TestIndexMap(unittest.TestCase):
 class TestWeightFFT(unittest.TestCase):
     def setUp(self):
         self.Map=IndexMap(Beta=1.0, L=[8,8], NSublat=2, MaxTauBin=64)
-        self.G=Weight("G.SmoothT", self.Map, "TwoSpins", "AntiSymmetric")
+        self.G=Weight("SmoothT", self.Map, "TwoSpins", "AntiSymmetric")
         TauGrid=np.linspace(0.0, self.G.Beta, self.G.Shape[TAU], endpoint=False)/self.G.Beta
         #last point<self.Beta!!!
         self.gTau=np.exp(TauGrid)
@@ -267,7 +251,7 @@ class TestWeightFFT(unittest.TestCase):
     def test_matrix_IO(self):
         FileName="test.npz"
         self.G.Save(FileName)
-        newG=Weight("G.SmoothT", self.Map, "TwoSpins", "AntiSymmetric")
+        newG=Weight("SmoothT", self.Map, "TwoSpins", "AntiSymmetric")
         newG.Load(FileName)
         self.assertTrue(np.allclose(self.G.Data,newG.Data))
         os.system("rm "+FileName)

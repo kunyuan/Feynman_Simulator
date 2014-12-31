@@ -9,15 +9,15 @@
 #include "message.h"
 #include "utility/dictionary.h"
 
-bool para::Message::Load()
+bool para::Message::Load(const string& FileName)
 {
     //do not abort if message file does not exist
     Dictionary _Para;
     try {
-        _Para.Load(_MessageFile);
+        _Para.Load(FileName);
     }
     catch (ERRORCODE e) {
-        if (e != ERR_FILE_NOT_FOUND)
+        if (e != ERR_FILE_INVALID)
             throw e;
         return false;
     }
@@ -26,12 +26,12 @@ bool para::Message::Load()
     return true;
 }
 
-void para::Message::Save()
+void para::Message::Save(const string& FileName)
 {
     Dictionary _Para;
     SET(_Para, Beta);
     SET(_Para, Version);
-    _Para.Save(_MessageFile, "w");
+    _Para.Save(FileName, "w");
 }
 
 std::string para::Message::PrettyString()

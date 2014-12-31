@@ -15,7 +15,8 @@ using namespace std;
 para::Job::Job(string inputfile)
 {
     Dictionary _Para;
-    _Para.Load(inputfile, "Para");
+    _Para.Load(inputfile);
+    _Para = _Para.Get<Dictionary>("Para");
     GET(_Para, Type);
     if (TypeName.find(Type) == TypeName.end())
         ABORT("I don't know what is Job Type " << Type << "?");
@@ -24,9 +25,9 @@ para::Job::Job(string inputfile)
     GET(_Para, PID);
     GET(_Para, WeightFile);
     GET(_Para, MessageFile);
-    ParaFile = ToString(PID) + "_para.txt";
-    StatisticsFile = ToString(PID) + "_statistics.npz";
-    ConfigFile = ToString(PID) + "_config.txt";
+    ParaFile = ToString(PID) + "_para";
+    StatisticsFile = ToString(PID) + "_statistics";
+    ConfigFile = ToString(PID) + "_config";
     LogFile = ToString(PID) + ".log";
     InputFile = inputfile;
 }

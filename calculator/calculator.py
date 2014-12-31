@@ -14,7 +14,7 @@ def PlotTime(array, Beta):
 
 
 def Sigma_FirstOrder(G, W, map):
-    Sigma=weight.Weight("Sigma.SmoothT", map, "TwoSpins", "AntiSymmetric")
+    Sigma=weight.Weight("SmoothT", map, "TwoSpins", "AntiSymmetric")
 
     TauRange = range(map.MaxTauBin)
 
@@ -29,7 +29,7 @@ def Sigma_FirstOrder(G, W, map):
     return Sigma
 
 def Sigma0_FirstOrder(G, W0, map):
-    Sigma0=weight.Weight("Sigma.DeltaT", map, "TwoSpins", "AntiSymmetric")
+    Sigma0=weight.Weight("DeltaT", map, "TwoSpins", "AntiSymmetric")
 
     for spin1 in range(2):
         for spin2 in range(2):
@@ -42,8 +42,9 @@ def Sigma0_FirstOrder(G, W0, map):
                     *W0.Data[spinW[IN], :, spinW[OUT], :, :]
     return Sigma0
 
+
 def Polar_FirstOrder(G, map):
-    Polar=weight.Weight("Polar.SmoothT", map, "FourSpins","Symmetric")
+    Polar=weight.Weight("SmoothT", map, "FourSpins","Symmetric")
     NSublat = G.NSublat
     SubList=[(a,b) for a in range(NSublat) for b in range(NSublat)]
     SpList=[(a,b) for a in range(SPIN) for b in range(SPIN)]
@@ -59,7 +60,7 @@ def Polar_FirstOrder(G, map):
     return Polar
 
 def W_FirstOrder(Beta,W0, Polar, map):
-    W=weight.Weight("W.SmoothT", map, "FourSpins", "Symmetric")
+    W=weight.Weight("SmoothT", map, "FourSpins", "Symmetric")
     TauRange = range(map.MaxTauBin)
     SubRange=range(W.NSublat)
     SubList=[(a,b,c,d) for a in SubRange for b in SubRange for c in SubRange for d in SubRange]
@@ -89,7 +90,7 @@ def W_FirstOrder(Beta,W0, Polar, map):
     return W
 
 def W_Dyson(Beta, W0, Polar, map):
-    W=weight.Weight("W.SmoothT", map, "FourSpins", "Symmetric")
+    W=weight.Weight("SmoothT", map, "FourSpins", "Symmetric")
     W0.FFT(1, "Space")
     Polar.FFT(1, "Space", "Time")
 
@@ -114,7 +115,7 @@ def W_Dyson(Beta, W0, Polar, map):
     return W
 
 def G_Dyson(Beta, G0, Sigma0, Sigma, map):
-    G=weight.Weight("G.SmoothT", map, "TwoSpins", "AntiSymmetric")
+    G=weight.Weight("SmoothT", map, "TwoSpins", "AntiSymmetric")
     G0.FFT(1, "Space", "Time")
     Sigma0.FFT(1, "Space")
     Sigma.FFT(1, "Space", "Time")
@@ -145,7 +146,7 @@ def G_Dyson(Beta, G0, Sigma0, Sigma, map):
 
 def Calculate_Chi(Beta, W0, Polar, map):
 
-    Chi=weight.Weight("Chi.SmoothT", map, "FourSpins", "Symmetric")
+    Chi=weight.Weight("SmoothT", map, "FourSpins", "Symmetric")
 
     W0.FFT(1, "Space")
     Polar.FFT(1, "Space", "Time")

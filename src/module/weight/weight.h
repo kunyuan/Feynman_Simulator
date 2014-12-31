@@ -13,6 +13,7 @@
 #include <string>
 #include "utility/convention.h"
 
+class Dictionary;
 namespace para {
 class ParaMC;
 }
@@ -29,26 +30,26 @@ class W;
 
 class Weight {
 
-  public:
+public:
     Weight(bool IsAllSymmetric = false);
     ~Weight();
     bool _IsAllSymmetric;
-    Sigma *Sigma;
-    Polar *Polar;
-    G *G;
-    W *W;
+    Sigma* Sigma;
+    Polar* Polar;
+    G* G;
+    W* W;
 
-    void SetTest(const para::ParaMC &);
-    void SetDiagCounter(const para::ParaMC &);
-    bool BuildNew(flag, const para::ParaMC &);
-    bool Load(const std::string &InputFile, flag, const para::ParaMC &);
-    void Save(const std::string &InputFile, flag, std::string Mode = "a");
-    void ReWeight(flag, const para::ParaMC &);
+    void SetTest(const para::ParaMC&);
+    void SetDiagCounter(const para::ParaMC&);
+    bool BuildNew(flag, const para::ParaMC&);
+    bool FromDict(const Dictionary&, flag, const para::ParaMC&);
+    Dictionary ToDict(flag);
+    void ReWeight(flag, const para::ParaMC&);
     int UpdateSigmaPolarWeight(int OrderAccepted, real ErrorThreshold);
 
-  private:
-    void _AllocateGW(const para::ParaMC &);
-    void _AllocateSigmaPolar(const para::ParaMC &);
+private:
+    void _AllocateGW(const para::ParaMC&);
+    void _AllocateSigmaPolar(const para::ParaMC&);
 };
 int TestWeight();
 }

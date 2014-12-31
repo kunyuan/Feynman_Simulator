@@ -35,17 +35,15 @@ class Job:
         self.name = ""
         self.para = para
 
-    def to_string(self, pid=0):
+    def to_dict(self, pid=0):
         '''output the corresponding string of the job class'''
         self.para["PID"] = pid
-        self.para["WeightFile"]="Weight.npz"
-        self.para["MessageFile"]="Message.txt"
+        self.para["WeightFile"]="Weight"
+        self.para["MessageFile"]="Message"
         self.__set_model_specific__()
-        return self.__formator__(self.para)
-
-    def __formator__(self,para):
-        import pprint
-        return "Para="+pprint.pformat(para)
+        para_={}
+        para_["Para"]=self.para
+        return para_
 
     def __check_parameters__(self, para):
         if para["__Execute"] is "":
@@ -77,10 +75,10 @@ class JobMonteCarlo(Job):
             print "The Reweight numbers should be equal to Order!"
             return False
 
-    def to_string(self, pid=0):
+    def to_dict(self, pid=0):
         #set Seed here so that each job has it own rng seed
         self.para["Seed"] = int(random.random()*2**30)
-        return Job.to_string(self, pid)
+        return Job.to_dict(self, pid)
 
 class JobConsistLoop(Job):
     '''job subclass for self consistent loop jobs'''
@@ -90,8 +88,8 @@ class JobConsistLoop(Job):
         self.para["Type"] = "DYSON"
         self.name = "DYSON"
 
-    def to_string(self, pid=0):
-        return Job.to_string(self, pid)
+    def to_dict(self, pid=0):
+        return Job.to_dict(self, pid)
 
 if __name__ == "__main__":
     A = JobMonteCarlo({

@@ -8,7 +8,7 @@
 
 #include "weight_basic.h"
 #include "utility/logger.h"
-#include "utility/cnpy.h"
+#include "dictionary.h"
 #include <math.h>
 
 using namespace std;
@@ -93,46 +93,30 @@ int Basic::GetTauSymmetryFactor(real t_in, real t_out) const
     return (t_out > t_in) ? 1 : _TauSymmetryFactor;
 }
 
-const string SMOOTH = ".SmoothT";
-const string DELTA = ".DeltaT";
+const string SMOOTH = "SmoothT";
+const string DELTA = "DeltaT";
 
-template <typename T>
-bool LoadMatrix(T& matrix, const string& FileName, const string& Name)
+bool Basic::FromDict(const Dictionary& dict)
 {
-    try {
-        cnpy::NpyArray weight = cnpy::npz_load(FileName, Name);
-        matrix = (reinterpret_cast<Complex*>(weight.data));
-        //assignment here will copy data in weight.data into *this
-        return true;
+    bool flagSmooth = dict.HasKey(SMOOTH);
+    bool flagDelta = dict.HasKey(DELTA);
+    if (flagSmooth) {
+        auto arr = dict.Get<Python::ArrayObject>(SMOOTH);
+        ASSERT_ALLWAYS(Equal(arr.Shape().data(), GetShape(), 4), "Shape should match!");
+        _SmoothTWeight = arr.Data<Complex>();
     }
-    catch (ERRORCODE e) {
-        LOG_WARNING(Name << " is not found in " << FileName << ", so it is set to zero!");
-        if (e != ERR_VALUE_NOT_FOUND) {
-            if (e == ERR_FILE_NOT_FOUND)
-                ERRORCODEABORT(e, "File not found!");
-            else
-                ERRORCODEABORT(e, "Something happens!");
-        }
-        return false;
+    if (flagDelta) {
+        auto arr = dict.Get<Python::ArrayObject>(DELTA);
+        ASSERT_ALLWAYS(Equal(arr.Shape().data(), GetShape(), 3), "Shape should match!");
+        _DeltaTWeight = arr.Data<Complex>();
     }
-}
-
-template <typename T>
-void SaveMatrix(T& matrix, const string& FileName, const std::string Mode,
-                const string& Name, uint* Shape, int Dim)
-{
-    cnpy::npz_save(FileName, Name, matrix(), Shape, Dim, Mode);
-}
-
-bool Basic::Load(const std::string& FileName)
-{
-    bool flag1 = LoadMatrix(_SmoothTWeight, FileName, _Name + SMOOTH);
-    bool flag2 = LoadMatrix(_DeltaTWeight, FileName, _Name + DELTA);
-    ASSERT_ALLWAYS(flag1 || flag2, "Come on! Neither .SmoothT nor .DeltaT exist!");
+    ASSERT_ALLWAYS(flagSmooth || flagDelta, "Come on! Neither SmoothT nor DeltaT array exist!");
     return true;
 }
-void Basic::Save(const std::string& FileName, const std::string Mode)
+Dictionary Basic::ToDict()
 {
-    SaveMatrix(_SmoothTWeight, FileName, Mode, _Name + SMOOTH, GetShape(), 4);
-    SaveMatrix(_DeltaTWeight, FileName, "a", _Name + DELTA, GetShape(), 3);
+    Dictionary dict;
+    dict[SMOOTH] = Python::ArrayObject(_SmoothTWeight(), GetShape(), 4);
+    dict[DELTA] = Python::ArrayObject(_DeltaTWeight(), GetShape(), 3);
+    return dict;
 }

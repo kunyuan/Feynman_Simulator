@@ -16,8 +16,8 @@
 #include "utility/abort.h"
 #include "utility/pyglue/pywrapper.h"
 
-#define SET(para, value) (para[#value] = (value));
-#define GET(para, value) (para).Get((#value), (value));
+#define SET(para, value) (para[#value] = (value))
+#define GET(para, value) (para).Get((#value), (value))
 typedef std::map<std::string, Python::AnyObject> PythonMap;
 class Dictionary : public Python::ITypeCast {
 private:
@@ -34,55 +34,63 @@ public:
     }
     Dictionary& operator=(const Dictionary& dict)
     {
+        if (this == &dict)
+            return *this;
         _Map = dict._Map;
         return *this;
     }
 
-    //ITypeCast interface
-    virtual Python::Object ToPy() const;
-    virtual bool FromPy(const Python::Object&);
     Python::AnyObject& operator[](const std::string& key);
-
-    template <typename T>
-    Dictionary& Set(const std::string& key, const T& value)
-    {
-        _Map[key] = Python::AnyObject(value);
-        return *this;
-    }
-    template <typename T>
-    bool Get(const std::string& key, T& value) const
-    {
-        return Python::Convert(_Map.at(key), value);
-    }
     template <typename T>
     T Get(const std::string& key) const
     {
         T value;
+        if (!HasKey(key))
+            ERRORCODEABORT(ERR_KEY_NOT_FOUND, "key does not exist!");
         if (!Python::Convert(_Map.at(key), value))
             ERRORCODEABORT(ERR_VALUE_INVALID, "Fail to convert " << key);
         return value;
     }
+    template <typename T>
+    bool Get(const std::string& key, T& value) const
+    {
+        if (!HasKey(key))
+            return false;
+        return Python::Convert(_Map.at(key), value);
+    }
+
+    void Update(const Dictionary&);
     bool HasKey(const std::string& key) const;
     void Clear();
     bool IsEmpty() const;
     void LoadFromString(const std::string&);
-    void Load(const std::string& FileName, const std::string& key = "default");
-    void Save(const std::string& FileName, const std::string& Mode = "a",
-              const std::string& key = "default");
-    void BigLoad(const std::string& FileName, const std::string& key = "default");
-    void BigSave(const std::string& FileName, const std::string& Mode = "a",
-                 const std::string& key = "default");
+    void Load(const std::string& FileName);
+    void Save(const std::string& FileName, const std::string& Mode = "a");
+    void BigLoad(const std::string& FileName);
+    void BigSave(const std::string& FileName);
     void Print() const;
     std::string PrettyString() const;
 
-    const PythonMap::iterator begin()
+    //range based iteration
+    PythonMap::iterator begin()
     {
         return _Map.begin();
     }
-    const PythonMap::iterator end()
+    PythonMap::const_iterator begin() const
+    {
+        return _Map.begin();
+    }
+    PythonMap::iterator end()
     {
         return _Map.end();
     }
+    PythonMap::const_iterator end() const
+    {
+        return _Map.end();
+    }
+    //ITypeCast interface
+    virtual Python::Object ToPy() const;
+    virtual bool FromPy(const Python::Object&);
 };
 int TestDictionary();
 

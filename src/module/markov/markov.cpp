@@ -920,7 +920,7 @@ void Markov::ChangeRLoop()
         return;
     //TODO: If G is not a local function, return;
     //TODO: use key word 'static' here to save time
-    assert(Order <= MAX_ORDER);
+    ASSERT_ALLWAYS(Order <= MAX_ORDER, "Order is too high!");
     vertex v[2 * MAX_ORDER] = { nullptr };
     bool flagVer[2 * MAX_ORDER] = { false };
     int flagW[MAX_ORDER] = { 0 };

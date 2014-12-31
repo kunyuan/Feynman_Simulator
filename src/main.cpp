@@ -21,6 +21,7 @@ void MonteCarlo(const Job&);
 int main(int argc, const char* argv[])
 {
     Python::Initialize();
+    Python::ArrayInitialize();
     RunTest();
     string InputFile = "infile/_in_MC_2";
     para::Job Job(InputFile);

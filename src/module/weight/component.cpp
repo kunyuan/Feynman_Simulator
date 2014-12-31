@@ -7,7 +7,7 @@
 //
 
 #include "component.h"
-#include "utility/cnpy.h"
+#include "utility/dictionary.h"
 #include <tuple>
 
 using namespace weight;
@@ -161,14 +161,17 @@ void Sigma::Reset(real Beta)
     Estimator.ReWeight(Beta);
 }
 
-bool Sigma::Load(const std::string& FileName)
+bool Sigma::FromDict(const Dictionary& dict)
 {
-    return Estimator.Load(FileName) && Basic::Load(FileName);
+    return Estimator.FromDict(dict.Get<Dictionary>("Histogram"))
+           && Basic::FromDict(dict);
 }
-void Sigma::Save(const std::string& FileName, const std::string Mode)
+
+Dictionary Sigma::ToDict()
 {
-    Estimator.Save(FileName, Mode);
-    Basic::Save(FileName, "a");
+    Dictionary dict = Basic::ToDict();
+    dict["Histogram"] = Estimator.ToDict();
+    return dict;
 }
 
 Polar::Polar(const Lattice& lat, real Beta, uint MaxTauBin, int MaxOrder)
@@ -195,12 +198,15 @@ void Polar::Reset(real Beta)
     Estimator.ReWeight(Beta);
 }
 
-bool Polar::Load(const std::string& FileName)
+bool Polar::FromDict(const Dictionary& dict)
 {
-    return Estimator.Load(FileName) && Basic::Load(FileName);
+    return Estimator.FromDict(dict.Get<Dictionary>("Histogram"))
+           && Basic::FromDict(dict);
 }
-void Polar::Save(const std::string& FileName, const std::string Mode)
+
+Dictionary Polar::ToDict()
 {
-    Estimator.Save(FileName, Mode);
-    Basic::Save(FileName, "a");
+    Dictionary dict = Basic::ToDict();
+    dict["Histogram"] = Estimator.ToDict();
+    return dict;
 }

@@ -19,12 +19,9 @@ public:
     int Version;
     real Beta;
 
-    bool Load();
-    void Save();
+    bool Load(const std::string& FileName);
+    void Save(const std::string& FileName);
     std::string PrettyString();
-
-private:
-    const std::string _MessageFile = "message.txt";
 };
 }
 

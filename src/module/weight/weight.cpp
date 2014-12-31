@@ -8,6 +8,7 @@
 
 #include "weight.h"
 #include "component.h"
+#include "utility/dictionary.h"
 #include "module/parameter/parameter.h"
 
 using namespace std;
@@ -60,46 +61,29 @@ void weight::Weight::ReWeight(flag _flag, const ParaMC& para)
         //TODO: reweight SigmaPolar
     }
 }
-/**
-*  Load G, W, Sigma, Polar from file, you may use flag weight::GW and weight::SigmaPolar to control which group to load. Notice those in unflaged group will remain the same.
-*
-*  @param InputFile Input File Name
-*  @param _flag     weight::GW|weight::SigmaPolar
-*  @param Lat       Lattice
-*  @param Beta      Beta
-*  @param order     order
-*
-*  @return alway true for now
-*/
-bool weight::Weight::Load(const std::string& InputFile, flag _flag, const ParaMC& para)
+
+bool weight::Weight::FromDict(const Dictionary& dict, flag _flag, const para::ParaMC& para)
 {
     if (_flag & weight::GW) {
         _AllocateGW(para);
-        G->Load(InputFile);
-        W->Load(InputFile);
+        G->FromDict(dict.Get<Dictionary>("G"));
+        W->FromDict(dict.Get<Dictionary>("W"));
     }
     if (_flag & weight::SigmaPolar) {
         _AllocateSigmaPolar(para);
-        Sigma->Load(InputFile);
-        Polar->Load(InputFile);
+        Sigma->FromDict(dict.Get<Dictionary>("Sigma"));
+        Polar->FromDict(dict.Get<Dictionary>("Polar"));
     }
     return true;
 }
-/**
-*  Save G, W, Sigma, Polar to file, you may use flag weight::GW and weight::SigmaPolar to control which group to save
-*
-*  @param InputFile output file name
-*  @param _flag     weight::GW|weight::SigmaPolar
-*  @param Mode      "a" or "w"
-*/
-void weight::Weight::Save(const string& FileName, flag _flag, string Mode)
+Dictionary weight::Weight::ToDict(flag _flag)
 {
-    //GW never saved here
+    Dictionary dict;
     if (_flag & weight::SigmaPolar) {
-        Sigma->Save(FileName, Mode);
-        Polar->Save(FileName, "a");
-        Mode = "a";
+        dict["Sigma"] = Sigma->ToDict();
+        dict["Polar"] = Polar->ToDict();
     }
+    return dict;
 }
 
 int weight::Weight::UpdateSigmaPolarWeight(int OrderAccepted, real ErrorThreshold)
