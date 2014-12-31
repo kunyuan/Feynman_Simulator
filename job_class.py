@@ -35,17 +35,15 @@ class Job:
         self.name = ""
         self.para = para
 
-    def to_string(self, pid=0):
+    def to_dict(self, pid=0):
         '''output the corresponding string of the job class'''
         self.para["PID"] = pid
-        self.para["WeightFile"]="Weight.npz"
-        self.para["MessageFile"]="Message.txt"
+        self.para["WeightFile"]="Weight"
+        self.para["MessageFile"]="Message"
         self.__set_model_specific__()
-        return self.__formator__(self.para)
-
-    def __formator__(self,para):
-        import pprint
-        return "Para="+pprint.pformat(para)
+        para_={}
+        para_["Para"]=self.para
+        return para_
 
     def __check_parameters__(self, para):
         if para["__Execute"] is "":

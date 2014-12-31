@@ -15,6 +15,7 @@ using namespace para;
 const string ParaKey = "Para";
 const string ConfigKey = "Config";
 const string WeightKey = "Weight";
+const string HistKey = "Histogram";
 const string EstimatorsKey = "Estimators";
 
 EnvMonteCarlo::EnvMonteCarlo(const para::Job& job, bool IsAllTauSymmetric)
@@ -28,18 +29,18 @@ bool EnvMonteCarlo::BuildNew()
     LOGGER_CONF(Job.LogFile, Job.Type, Logger::file_on | Logger::screen_on, INFO, INFO);
     //Read more stuff for the state of MC only
     Dictionary para_;
-    para_.Load(Job.InputFile, ParaKey);
-    Para.FromDict(para_);
+    para_.Load(Job.InputFile);
+    Para.FromDict(para_.Get<Dictionary>(ParaKey));
     //Load GW weight from a global file shared by other MC processes
     Dictionary GW_;
     GW_.BigLoad(Job.WeightFile);
-    Weight.FromDict(GW_.Get<Dictionary>(WeightKey), weight::GW, Para);
+    Weight.FromDict(GW_, weight::GW, Para);
     Weight.BuildNew(weight::SigmaPolar, Para);
     Diag.BuildNew(Para.Lat, *Weight.G, *Weight.W);
     Grasshopper.BuildNew(Para, Diag, Weight);
     Scarecrow.BuildNew(Para, Diag, Weight);
-    para_.Save(Job.ParaFile, "w", ParaKey);
-    Diag.ToDict().Save(Job.ParaFile, "a", ConfigKey);
+    para_[ConfigKey] = Diag.ToDict();
+    para_.Save(Job.ParaFile, "w");
     return true;
 }
 /**
@@ -51,15 +52,13 @@ bool EnvMonteCarlo::Load()
 {
     LOGGER_CONF(Job.LogFile, Job.Type, Logger::file_on | Logger::screen_on, INFO, INFO);
     Dictionary para_;
-    para_.Load(Job.ParaFile, ParaKey);
-    Para.FromDict(para_);
+    para_.Load(Job.ParaFile);
+    Para.FromDict(para_.Get<Dictionary>(ParaKey));
     Dictionary statis_;
     statis_.BigLoad(Job.StatisticsFile);
-    Weight.FromDict(statis_.Get<Dictionary>(WeightKey),
-                    weight::GW | weight::SigmaPolar, Para);
-    Dictionary config_;
-    config_.Load(Job.ParaFile, ConfigKey);
-    Diag.FromDict(config_, Para.Lat, *Weight.G, *Weight.W);
+    Weight.FromDict(statis_.Get<Dictionary>(WeightKey), weight::GW, Para);
+    Weight.FromDict(statis_.Get<Dictionary>(HistKey), weight::SigmaPolar, Para);
+    Diag.FromDict(para_.Get<Dictionary>(ConfigKey), Para.Lat, *Weight.G, *Weight.W);
     Scarecrow.FromDict(statis_.Get<Dictionary>(EstimatorsKey), Para, Diag, Weight);
     Grasshopper.BuildNew(Para, Diag, Weight);
     return true;
@@ -67,11 +66,14 @@ bool EnvMonteCarlo::Load()
 
 void EnvMonteCarlo::Save()
 {
-    Para.ToDict().Save(Job.ParaFile, "w", ParaKey);
-    Diag.ToDict().Save(Job.ParaFile, "a", ConfigKey);
+    Dictionary para_;
+    para_[ParaKey] = Para.ToDict();
+    para_[ConfigKey] = Diag.ToDict();
+    para_.Save(Job.ParaFile);
     Dictionary statis_;
-    statis_["Weight"] = Weight.ToDict(weight::GW | weight::SigmaPolar);
-    statis_["Estimators"] = Scarecrow.ToDict();
+    statis_[WeightKey] = Weight.ToDict(weight::GW);
+    statis_[HistKey] = Weight.ToDict(weight::SigmaPolar);
+    statis_[EstimatorsKey] = Scarecrow.ToDict();
     statis_.BigSave(Job.StatisticsFile);
 }
 void EnvMonteCarlo::DeleteSavedFiles()
@@ -96,7 +98,9 @@ bool EnvMonteCarlo::ListenToMessage()
         return false;
     }
     Para.UpdateWithMessage(Message_);
-    Weight.Load(Job.WeightFile, weight::GW, Para);
+    Dictionary weight_;
+    weight_.Load(Job.WeightFile);
+    Weight.FromDict(weight_, weight::GW, Para);
     Weight.ReWeight(weight::GW | weight::SigmaPolar, Para);
     Grasshopper.ReWeight(Para);
     Scarecrow.ReWeight();

@@ -36,8 +36,7 @@ class JobAtom():
         self.auto_run = bundle.auto_run
         self.keep_cpu_busy = bundle.keep_cpu_busy
         self.name = bundle.name
-        self.input_str = bundle.to_string(pid)
-        self.para = bundle.para
+        self.para = bundle.to_dict(pid)
         return
 
     def get_job_name(self):
@@ -51,7 +50,7 @@ def construct_job_queue(to_do):
     global PURE_BACK
     pid = 0
     if os.path.exists(INFILEPATH):
-        filelist = [int(elem.split('_')[-1]) for elem in os.listdir(INFILEPATH)]
+        filelist = [int(elem.split('.')[0].split('_')[-1]) for elem in os.listdir(INFILEPATH)]
         filelist.sort()
         if len(filelist) != 0:
             pid = filelist[-1]
@@ -101,14 +100,11 @@ def submit_job(job_atom):
         job_atom.name, job_atom.pid)
     jobfile = os.path.abspath(workdir+"/_job_{0}_{1}.sh".format(
         job_atom.name, job_atom.pid))
-    #write input file into ./infile folder
-    #with open(infile, "w") as f:
-        #f.write(job_atom.input_str)
-    IO.SaveDict(infile, "w", "Para", job_atom.para)
+    IO.SaveDict(infile, "w", job_atom.para)
     f_allinput = open(os.path.abspath(workdir+"/all_input.log"), "a")
     f_allinput.write("Job ID: {0}, Job name: {1}\n".format(
             job_atom.pid, job_atom.name))
-    f_allinput.write(job_atom.input_str)
+    f_allinput.write(str(job_atom.para))
     f_allinput.close()
     if job_atom.is_cluster:
         fjob = open(jobfile, "w")
@@ -134,7 +130,7 @@ def submit_job(job_atom):
                 PROCLIST_BACK.append((proc, job_atom))
 
             logging.info(job_atom.get_job_name()+" is started...")
-            logging.info("input:\n"+job_atom.input_str)
+            logging.info("input:\n"+str(job_atom.para))
             logging.info("PID:{0}\n".format(proc.pid))
             print job_atom.get_job_name()+" is started..."
         else:

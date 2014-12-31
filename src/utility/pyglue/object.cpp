@@ -75,11 +75,12 @@ Object::Object(const Object& obj)
 
 Object& Object::operator=(const Object& obj)
 {
-    //    if (_PyPtr != nullptr)
-    //        std::cout << "Before= Ref:" << _PyPtr->ob_refcnt << std::endl;
-    DecreaseRef(_PyPtr);
+    if (this == &obj)
+        return *this;
+    // The PyObject behind obj._PyPtr may be deleted once DecreaseRef(this->_PyPtr) is called. Thus DecreaseRef() should be called after the assigment is done. Otherwise, it can be dangerous when the old this->_PyPtr==obj._PyPtr
+    PyObject* temp = _PyPtr;
     _PyPtr = obj.Get(NewRef);
-    //    std::cout << "After= Ref:" << _PyPtr->ob_refcnt << std::endl;
+    DecreaseRef(temp);
     return *this;
 }
 

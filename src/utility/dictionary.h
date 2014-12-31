@@ -34,6 +34,8 @@ public:
     }
     Dictionary& operator=(const Dictionary& dict)
     {
+        if (this == &dict)
+            return *this;
         _Map = dict._Map;
         return *this;
     }
@@ -62,9 +64,8 @@ public:
     void Clear();
     bool IsEmpty() const;
     void LoadFromString(const std::string&);
-    void Load(const std::string& FileName, const std::string& key = "default");
-    void Save(const std::string& FileName, const std::string& Mode = "a",
-              const std::string& key = "default");
+    void Load(const std::string& FileName);
+    void Save(const std::string& FileName, const std::string& Mode = "a");
     void BigLoad(const std::string& FileName);
     void BigSave(const std::string& FileName);
     void Print() const;
