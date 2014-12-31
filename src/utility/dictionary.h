@@ -24,7 +24,6 @@ private:
     PythonMap _Map;
 
 public:
-    friend class Dictionary;
     Dictionary()
     {
     }
