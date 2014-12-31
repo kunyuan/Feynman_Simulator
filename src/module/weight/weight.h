@@ -42,8 +42,6 @@ public:
     void SetTest(const para::ParaMC&);
     void SetDiagCounter(const para::ParaMC&);
     bool BuildNew(flag, const para::ParaMC&);
-    bool Load(const std::string& InputFile, flag, const para::ParaMC&);
-    void Save(const std::string& InputFile, flag, std::string Mode = "a");
     bool FromDict(const Dictionary&, flag, const para::ParaMC&);
     Dictionary ToDict(flag);
     void ReWeight(flag, const para::ParaMC&);

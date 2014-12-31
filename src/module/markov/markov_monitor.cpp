@@ -40,29 +40,12 @@ void MarkovMonitor::ReWeight()
     //TODO: reweight Estimators here
 }
 
-bool MarkovMonitor::Load(const string& InputFile, ParaMC& para, Diagram& diag, weight::Weight& weight)
-{
-    Para = &para;
-    Diag = &diag;
-    Weight = &weight;
-    //    cEstimator.LoadStatistics(InputFile);
-    //    rEstimator.LoadStatistics(InputFile);
-    //TODO: more observables
-    return true;
-}
-
-void MarkovMonitor::Save(const string& InputFile, const string& Mode)
-{
-    //    cEstimator.SaveStatistics(InputFile, Mode);
-    //    rEstimator.SaveStatistics(InputFile, "a");
-    //TODO: more observables
-}
-
 bool MarkovMonitor::FromDict(const Dictionary& dict, ParaMC& para, Diagram& diag, weight::Weight& weight)
 {
     Para = &para;
     Diag = &diag;
     Weight = &weight;
+    //TODO: more observables
     return cEstimator.FromDict(dict.Get<Dictionary>("cEstimator"))
            || rEstimator.FromDict(dict.Get<Dictionary>("rEstimator"));
 }
@@ -71,6 +54,7 @@ Dictionary MarkovMonitor::ToDict()
     Dictionary dict;
     dict["cEstimator"] = cEstimator.ToDict();
     dict["rEstimator"] = rEstimator.ToDict();
+    //TODO: more observables
     return dict;
 }
 

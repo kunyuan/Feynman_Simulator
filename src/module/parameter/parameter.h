@@ -58,8 +58,6 @@ public:
     std::vector<real> OrderReWeight;
 
     bool BuildNew(const std::string& InputFile);
-    bool Load(const std::string& InputFile);
-    void Save(const std::string& InputFile, std::string Mode = "a");
     bool FromDict(const Dictionary&);
     Dictionary ToDict();
     void SetTest();

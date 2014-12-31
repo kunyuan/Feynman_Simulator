@@ -8,7 +8,6 @@
 
 #include "utility/abort.h"
 #include "utility/scopeguard.h"
-#include "utility/cnpy.h"
 #include "utility/dictionary.h"
 #include "weight_estimator.h"
 
@@ -148,36 +147,7 @@ Dictionary WeightEstimator::ToDict()
     Dictionary dict;
     dict["Norm"] = _Norm;
     dict["NormAccu"] = _NormAccu;
-    dict["WeightAccu"] = _WeightAccu();
+    dict["WeightAccu"] = Python::ArrayObject(_WeightAccu(), _MeaShape, 5);
     dict["Estimator"] = _WeightErrorEstimator.ToDict();
     return dict;
-}
-
-void WeightEstimator::Save(const std::string& FileName, const std::string& Mode)
-{
-    unsigned int shape[1] = { 1 };
-    cnpy::npz_save(FileName, _Name + ".Norm", &_Norm, shape, 1, Mode);
-    cnpy::npz_save(FileName, _Name + ".NormAccu", &_NormAccu, shape, 1, "a");
-    cnpy::npz_save(FileName, _Name + ".WeightAccu", _WeightAccu(), _MeaShape, 5, "a");
-    //    _WeightErrorEstimator.SaveStatistics(FileName, "a");
-}
-
-bool WeightEstimator::Load(const std::string& FileName)
-{
-    //    _WeightErrorEstimator.LoadStatistics(FileName);
-
-    cnpy::npz_t NpzMap = cnpy::npz_load(FileName);
-    ON_SCOPE_EXIT([&] {NpzMap.destruct(); });
-
-    cnpy::NpyArray weight_accu = NpzMap[_Name + ".WeightAccu"];
-    if (weight_accu.data == nullptr)
-        ABORT("Can't find estimator " << _Name << ".WeightAccu in .npz data file!");
-    //using assign here will make a copy of the data in Complex *start
-    _WeightAccu = reinterpret_cast<Complex*>(weight_accu.data);
-
-    //read normalization factor
-    cnpy::npz_load_number(NpzMap, _Name + ".NormAccu", _NormAccu);
-    cnpy::npz_load_number(NpzMap, _Name + ".Norm", _Norm);
-
-    return true;
 }
