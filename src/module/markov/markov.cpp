@@ -268,7 +268,7 @@ void Markov::DeleteWorm()
     wLine w = Ira->NeighW();
     if (!(w == Masha->NeighW()))
         return;
-    Momentum k = SIGN(Ira->Dir) * w->K + Worm->K;
+    Momentum k = w->K + SIGN(Ira->Dir)*Worm->K;
     if (Diag->WHashCheck(k))
         return;
 
@@ -444,7 +444,6 @@ void Markov::Reconnect()
         return;
 
     Momentum k = Worm->K + SIGN(dir) * (GMB->K - GIA->K);
-    //TODO: Hash check for k
 
     vertex vA = GIA->NeighVer(dir);
     Complex GIAWeight = G->Weight(INVERSE(dir), Masha->R, vA->R, Masha->Tau, vA->Tau,
@@ -506,6 +505,7 @@ void Markov::AddInteraction()
         return;
     if (Diag->GHashCheck(kMB))
         return;
+    if(kIA==kMB) return;
 
     bool isdelta = RandomPickBool();
     real tauA = RandomPickTau(), tauB;
@@ -1219,7 +1219,7 @@ Site Markov::RandomPickSite()
     Vec<int> coord;
     for (int i = 0; i < D; i++)
         coord[i] = RNG->irn(0, Lat->Size[i] - 1);
-    return (Site(RNG->irn(0, NSublattice - 1), coord));
+    return (Site(RNG->irn(0, Lat->SublatVol - 1), coord));
 }
 
 real Markov::ProbSite(const Site& site)
