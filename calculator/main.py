@@ -34,6 +34,7 @@ if para.StartFromBare is True:
     Sigma0=calc.Sigma0_FirstOrder(G0, W0, map)
 
     for i in range(30):
+        log.info("Round {0}...".format(i))
         #######DYSON FOR W AND G###########################
         W = calc.W_Dyson(Beta, W0, Polar,map)
         G = calc.G_Dyson(Beta, G0, Sigma0, Sigma, map)
