@@ -36,7 +36,7 @@ Diagram::Diagram()
 
 bool Diagram::GHashCheck(Momentum k)
 {
-    return (k == 0 || GHash[k.index()]);
+    return (GHash[k.index()]);
 }
 
 void Diagram::AddGHash(Momentum k)

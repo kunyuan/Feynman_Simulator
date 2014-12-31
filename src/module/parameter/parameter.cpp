@@ -143,11 +143,11 @@ void ParaMC::SetTest()
     FinalBeta = 1.0;
     Beta = 1.0;
     Order = 3;
+    OrderReWeight = { 1, 1, 1, 0.25};
     Toss = 10000;
     Sample = 5000000;
     Seed = 519180543;
     WormSpaceReweight = 0.1;
-    OrderReWeight = { 1, 1, 1, 1 };
     T = 1.0 / Beta;
     Counter = 0;
     MaxTauBin = 32;
