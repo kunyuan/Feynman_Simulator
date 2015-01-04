@@ -7,16 +7,18 @@ SLEEP = 5    #check job status for every SLEEP seconds
 TO_DO = []
 
 #common dictionary for all jobs
-beta=0.3
+beta=0.5
 com_dict={
-    "L" :   [16,16],
+    "L" :   [8,8],
     "InitialBeta" :  beta,
     "DeltaBeta" :  0.00,
     "FinalBeta" :  beta,
     "Order" :  1,
     "Model" : "J1J2",
-    "Lattice" : "Square",
-    "NSublat" : 1,
+    #"Lattice" : "Square",
+    "Lattice" : "Checkboard",
+    #"Square", "Checkboard", "Honeycomb", "Square"
+    "NSublat" : 2,
     "MaxTauBin" : 64,
     "Interaction" : [1.0,0.0],
     "ExternalField": 0.0,
@@ -72,5 +74,5 @@ TO_DO.append(job.JobConsistLoop(sc_dict))
 if __name__ == "__main__":
     for e in TO_DO:
         print e
-        print e.to_string(1)+"\n"
+        print e.to_dict(1)+"\n"
 
