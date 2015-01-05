@@ -16,9 +16,6 @@
 using namespace std;
 using namespace diag;
 
-#define CHECK(x) \
-    if (!x)      \
-    ERRORCODEABORT(ERR_VALUE_INVALID, "Fail to read!")
 
 /*******************  Read/write diagram to dat file ****************/
 Dictionary Diagram::_ToDict(WormClass worm)
@@ -33,12 +30,12 @@ Dictionary Diagram::_ToDict(WormClass worm)
 void Diagram::_FromDict(const Dictionary& WormDict, WormClass& worm)
 {
     name ira, masha;
-    CHECK(WormDict.Get("Ira", ira));
+    WormDict.Get("Ira", ira);
     worm.Ira = Ver(ira);
-    CHECK(WormDict.Get("Masha", masha));
+    WormDict.Get("Masha", masha);
     worm.Masha = Ver(masha);
-    CHECK(WormDict.Get("dSpin", worm.dSpin));
-    CHECK(WormDict.Get("K", worm.K));
+    WormDict.Get("dSpin", worm.dSpin);
+    WormDict.Get("K", worm.K);
 }
 Dictionary Diagram::_ToDict(gLine g)
 {
@@ -52,13 +49,13 @@ Dictionary Diagram::_ToDict(gLine g)
 void Diagram::_FromDict(const Dictionary& GDict, gLine g)
 {
     name g_in, g_out;
-    CHECK(GDict.Get("IN", g_in));
+    GDict.Get("IN", g_in);
     g->nVer[IN] = Ver(g_in);
-    CHECK(GDict.Get("OUT", g_out));
+    GDict.Get("OUT", g_out);
     g->nVer[OUT] = Ver(g_out);
-    CHECK(GDict.Get("K", g->K));
+    GDict.Get("K", g->K);
     AddGHash(g->K);
-    CHECK(GDict.Get("IsMeasure", g->IsMeasure));
+    GDict.Get("IsMeasure", g->IsMeasure);
     if (g->IsMeasure) {
         MeasureGLine = true;
         GMeasure = g;
@@ -79,15 +76,15 @@ Dictionary Diagram::_ToDict(wLine w)
 void Diagram::_FromDict(const Dictionary& WDict, wLine w)
 {
     name w_in, w_out;
-    CHECK(WDict.Get("IN", w_in));
+    WDict.Get("IN", w_in);
     w->nVer[IN] = Ver(w_in);
-    CHECK(WDict.Get("OUT", w_out));
+    WDict.Get("OUT", w_out);
     w->nVer[OUT] = Ver(w_out);
-    CHECK(WDict.Get("K", w->K));
+    WDict.Get("K", w->K);
     AddWHash(w->K);
     WDict.Print();
-    CHECK(WDict.Get("IsDelta", w->IsDelta));
-    CHECK(WDict.Get("IsMeasure", w->IsMeasure));
+    WDict.Get("IsDelta", w->IsDelta);
+    WDict.Get("IsMeasure", w->IsMeasure);
     if (w->IsMeasure) {
         MeasureGLine = false;
         GMeasure = nullptr;
@@ -107,13 +104,13 @@ Dictionary Diagram::_ToDict(vertex v)
 }
 void Diagram::_FromDict(const Dictionary& VerDict, vertex v)
 {
-    CHECK(VerDict.Get("Name", v->Name));
-    CHECK(VerDict.Get("Sublat", v->R.Sublattice));
-    CHECK(VerDict.Get("Coordi", v->R.Coordinate));
-    CHECK(VerDict.Get("Tau", v->Tau));
+    VerDict.Get("Name", v->Name);
+    VerDict.Get("Sublat", v->R.Sublattice);
+    VerDict.Get("Coordi", v->R.Coordinate);
+    VerDict.Get("Tau", v->Tau);
     int spinin, spinout;
-    CHECK(VerDict.Get("SpinIn", spinin));
-    CHECK(VerDict.Get("SpinOut", spinout));
+    VerDict.Get("SpinIn", spinin);
+    VerDict.Get("SpinOut", spinout);
     v->_spin[IN] = spin(spinin);
     v->_spin[OUT] = spin(spinout);
 }

@@ -26,7 +26,6 @@ class Momentum{
     int abs();
     
     Momentum &operator=(const Momentum &);
-    Momentum &operator=(int);
 
     // define the compound assignment operators first
     Momentum &operator+=(const Momentum &);

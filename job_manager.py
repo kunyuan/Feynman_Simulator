@@ -25,16 +25,16 @@ class JobAtom():
     '''atom class of all jobs'''
     def __init__(self, pid, bundle):
         self.pid = pid
-        if type(bundle.execute) is str:
-            self.execute = bundle.execute
-        elif type(bundle.execute) is list:
-            self.execute = " ".join(bundle.execute)
+        execu=bundle.control["__Execute"]
+        if type(execu) is str:
+            self.execute = os.path.abspath(execu)
+        elif type(bundle.control["__Execute"]) is list:
+            self.execute = " ".join([os.path.abspath(e) if os.path.isfile(e) else e for e in execu])
         else:
             print "Jobs.execute should be a list or str!"
-
-        self.is_cluster = bundle.is_cluster
-        self.auto_run = bundle.auto_run
-        self.keep_cpu_busy = bundle.keep_cpu_busy
+        self.is_cluster=bundle.control["__IsCluster"]
+        self.auto_run=bundle.control["__AutoRun"]
+        self.keep_cpu_busy=bundle.control["__KeepCPUBusy"]
         self.name = bundle.name
         self.para = bundle.to_dict(pid)
         return
@@ -49,25 +49,26 @@ def construct_job_queue(to_do):
     job_queue = []
     global PURE_BACK
     pid = 0
+    #search folder for old jobs, the new pid=largest old pid+1
     if os.path.exists(INFILEPATH):
         filelist = [int(elem.split('.')[0].split('_')[-1]) for elem in os.listdir(INFILEPATH)]
         filelist.sort()
         if len(filelist) != 0:
             pid = filelist[-1]
     #bundle is class job
-    for bundle in [elem for elem in to_do if elem.keep_cpu_busy == False]:
+    for bundle in [e for e in to_do if e.control["__KeepCPUBusy"]== False]:
     #running the jobs doesn't use much cpu first
-        for _ in range(0, bundle.duplicate):
+        for _ in range(0, bundle.control["__Duplicate"]):
             pid += 1
-            if not bundle.is_cluster:
+            if not bundle.control["__IsCluster"]:
                 PURE_BACK = True
             job_queue.append(JobAtom(pid, bundle))
 
-    for bundle in [elem for elem in to_do if elem.keep_cpu_busy == True]:
+    for bundle in [e for e in to_do if e.control["__KeepCPUBusy"] == True]:
     #running the jobs use much cpu next
-        for _ in range(0, bundle.duplicate):
+        for _ in range(0, bundle.control["__Duplicate"]):
             pid += 1
-            if not bundle.is_cluster:
+            if not bundle.control["__IsCluster"]:
                 PURE_BACK = False
             job_queue.append(JobAtom(pid, bundle))
 

@@ -130,22 +130,16 @@ class Weight():
 
         self.Data=np.zeros(self.Shape, dtype=complex)
         self.__OriginShape=list(self.Shape) #get a copy of self.Shape
+    def Copy(self):
+        """return a deep copy of Weight instance"""
+        import copy
+        return copy.deepcopy(self)
 
     def FFT(self, BackForth, *SpaceOrTime):
         if "Space" in SpaceOrTime:
             self.__fftSpace(BackForth)
         if "Time" in SpaceOrTime:
             self.__fftTime(BackForth)
-
-    def __fftTime(self,BackForth):
-        if not self.__HasTau:
-            return
-        if BackForth==1:
-            self.ChangeSymmetry(1)
-            self.Data=np.fft.fft(self.Data, axis=TAU)
-        if BackForth==-1:
-            self.Data=np.fft.ifft(self.Data, axis=TAU)
-            self.ChangeSymmetry(-1)
     def ChangeSymmetry(self,BackForth):
         ''' the transformation has to be done in continuous tau representation, namely using  
         exp(-i*Pi*Tau_n/Beta)(e.g. exp(-i*Pi*(n+1/2)/N)) as the phase factor
@@ -158,6 +152,61 @@ class Weight():
         PhaseFactor=np.exp(-1j*BackForth*np.pi*tau/self.Beta)
         self.Data*=PhaseFactor
 
+    def Inverse(self):
+        self.__InverseSpinAndSublat()
+
+    def FromDict(self, data):
+        log.info("Loading {0} Matrix...".format(self.Name));
+        if self.Name in data:
+            log.info("Load {0}".format(self.Name))
+            datamat = data[self.Name]
+            ######RESHAPE data[self.Name]
+            OldShape=[self.NSpin**2, self.NSublat**2]+self.__OriginShape[VOL:]
+            MidShape=[self.NSpin, self.NSpin, self.NSublat,self.NSublat]+self.__OriginShape[VOL:]
+            NewShape=self.__OriginShape
+            self.__AssertShape(datamat.shape, OldShape)
+            datamat=datamat.reshape(MidShape).swapaxes(1,2).reshape(NewShape)
+            self.__AssertShape(self.Shape, datamat.shape)
+            self.Data=datamat
+        else:
+            Assert(False, "{0} not found!").format(self.Name)
+    def ToDict(self):
+        log.info("Saving {0} Matrix...".format(self.Name));
+        data={}
+        data[self.Name]=self.Data
+        #######RESHAPE
+        OldShape=self.__OriginShape
+        MidShape=[self.NSpin, self.NSublat,self.NSpin, self.NSublat]+self.__OriginShape[VOL:]
+        NewShape=[self.NSpin**2, self.NSublat**2]+self.__OriginShape[VOL:]
+        self.__AssertShape(data[self.Name].shape, OldShape)
+        data[self.Name]=data[self.Name].reshape(MidShape).swapaxes(1,2).reshape(NewShape)
+        return data
+
+    def __InverseSpinAndSublat(self):
+        Sp = self.NSpin
+        Sub = self.NSublat
+        OriginShape = self.Shape
+        self.Data = self.Data.reshape([Sp*Sub,Sp*Sub]+OriginShape[VOL:])
+        for j in self.__SpaceTimeIndex:
+            index=[Ellipsis,]+j
+            try:
+                self.Data[index] = np.linalg.inv(self.Data[index])
+            except:
+                log.error("Fail to inverse matrix :,:,{0}\n{1}".format(index, self.Data[index].shape))
+                sys.exit(0)
+        self.Data = self.Data.reshape([Sp,Sub,Sp,Sub]+OriginShape[VOL:])
+    def __AssertShape(self, shape1, shape2):
+        Assert(tuple(shape1)==tuple(shape2), \
+                "Shape {0} is expected instead of shape {1}!".format(shape1, shape2))
+    def __fftTime(self,BackForth):
+        if not self.__HasTau:
+            return
+        if BackForth==1:
+            self.ChangeSymmetry(1)
+            self.Data=np.fft.fft(self.Data, axis=TAU)
+        if BackForth==-1:
+            self.Data=np.fft.ifft(self.Data, axis=TAU)
+            self.ChangeSymmetry(-1)
     def __fftSpace(self, BackForth):
         OldShape=self.__OriginShape
         self.__AssertShape(self.Shape, OldShape)
@@ -174,57 +223,6 @@ class Weight():
         SpatialShape=shape[0:InsertPos]+self.L+shape[InsertPos+1:]
         return range(InsertPos, InsertPos+len(self.L)), SpatialShape
 
-    def Inverse(self):
-        self.__InverseSpinAndSublat()
-
-    def __InverseSpinAndSublat(self):
-        Sp = self.NSpin
-        Sub = self.NSublat
-        OriginShape = self.Shape
-        self.Data = self.Data.reshape([Sp*Sub,Sp*Sub]+OriginShape[VOL:])
-        for j in self.__SpaceTimeIndex:
-            index=[Ellipsis,]+j
-            try:
-                self.Data[index] = np.linalg.inv(self.Data[index])
-            except:
-                log.error("Fail to inverse matrix :,:,{0}\n{1}".format(index, self.Data[index].shape))
-                sys.exit(0)
-        self.Data = self.Data.reshape([Sp,Sub,Sp,Sub]+OriginShape[VOL:])
-
-    def FromDict(self, data):
-        log.info("Loading {0} Matrix...".format(self.Name));
-
-        if self.Name in data:
-            log.info("Load {0}".format(self.Name))
-            datamat = data[self.Name]
-
-            ######RESHAPE data[self.Name]
-            OldShape=[self.NSpin**2, self.NSublat**2]+self.__OriginShape[VOL:]
-            MidShape=[self.NSpin, self.NSpin, self.NSublat,self.NSublat]+self.__OriginShape[VOL:]
-            NewShape=self.__OriginShape
-            self.__AssertShape(datamat.shape, OldShape)
-            datamat=datamat.reshape(MidShape).swapaxes(1,2).reshape(NewShape)
-            self.__AssertShape(self.Shape, datamat.shape)
-
-            self.Data=datamat
-        else:
-            Assert(False, "{0} not found!").format(self.Name)
-    def ToDict(self):
-        log.info("Saving {0} Matrix...".format(self.Name));
-        data={}
-        data[self.Name]=self.Data
-        #######RESHAPE
-        OldShape=self.__OriginShape
-        MidShape=[self.NSpin, self.NSublat,self.NSpin, self.NSublat]+self.__OriginShape[VOL:]
-        NewShape=[self.NSpin**2, self.NSublat**2]+self.__OriginShape[VOL:]
-
-        self.__AssertShape(data[self.Name].shape, OldShape)
-        data[self.Name]=data[self.Name].reshape(MidShape).swapaxes(1,2).reshape(NewShape)
-        return data
-
-    def __AssertShape(self, shape1, shape2):
-        Assert(tuple(shape1)==tuple(shape2), \
-                "Shape {0} is expected instead of shape {1}!".format(shape1, shape2))
 
 class TestIndexMap(unittest.TestCase):
     def setUp(self):
