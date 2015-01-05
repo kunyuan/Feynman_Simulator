@@ -8,8 +8,7 @@ import os, sys, model, IO, weight, parameter, plot
 sys.path.append("../") #add the root dir into PYTHONPATH
 
 para=parameter.Load(os.path.abspath(sys.argv[1]))
-prefix=os.path.abspath("../data/")
-WeightFile=prefix+"/"+para["Job"]["WeightFile"]
+WeightFile=para["Job"]["WeightFile"]
 WeightPara={"NSublat": para["Lattice"]["NSublat"], "L":para["Lattice"]["L"],
             "Beta": para["Tau"]["Beta"], "MaxTauBin": para["Tau"]["MaxTauBin"]}
 map=weight.IndexMap(**WeightPara)
@@ -55,8 +54,8 @@ spinUP=map.Spin2Index(UP,UP)
 print "W=\n", W.Data[spinUP,0,spinUP,0,0,:]
 print "G=\n", G.Data[UP,0,UP,0,0,:]
 print "Chi=\n", Chi.Data[spinUP,0,spinUP,0,0,:]
-plot.PlotSpatial(Chi, Lat, spinUP, spinUP)
 
+print WeightFile
 data={}
 data["G"]=G.ToDict()
 data["W"]=W.ToDict()
@@ -68,5 +67,6 @@ data["Chi"]=Chi.ToDict()        ####ForTest
 
 IO.SaveBigDict(WeightFile, data)
 ###################################################
+plot.PlotSpatial(Chi, Lat, spinUP, spinUP)
 
 

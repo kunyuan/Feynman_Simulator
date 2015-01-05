@@ -44,9 +44,11 @@
 doc
 data
 data*
+diagram
+diagram*
+infile
+outfile
 .DS_Store
 *.DS_Store
-data/infile
-data/outfile
 build
 

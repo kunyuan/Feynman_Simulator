@@ -7,7 +7,7 @@ SLEEP = 5    #check job status for every SLEEP seconds
 beta=0.5
 Common={
 "Tau": {
-    "MaxTauBin" : 64,
+    "MaxTauBin" : 32,
     "Beta": beta,
     "DeltaBeta" :  0.00,
     "FinalBeta" :  beta,
