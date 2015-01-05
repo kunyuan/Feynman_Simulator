@@ -19,7 +19,7 @@ def Save(para, FileName, Mode="a"):
 
 if __name__=="__main__":
     p=Load("../data/infile/_in_DYSON_1")
-    Save(p, "test.txt","w")
+    Save(p, "test","w")
     print p["Dyson"]["Order"]
 
 
