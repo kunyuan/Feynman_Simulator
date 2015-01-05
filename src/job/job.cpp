@@ -16,7 +16,7 @@ para::Job::Job(string inputfile)
 {
     Dictionary _Para;
     _Para.Load(inputfile);
-    _Para = _Para.Get<Dictionary>("Para");
+    _Para = _Para.Get<Dictionary>("Para").Get<Dictionary>("Job");
     GET(_Para, Type);
     if (TypeName.find(Type) == TypeName.end())
         ABORT("I don't know what is Job Type " << Type << "?");

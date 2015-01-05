@@ -5,12 +5,12 @@ import numpy as np
 from logger import *
 
 class BareFactory:
-    def __init__(self, map, Hopping, Interaction, Mu, ExternalField):
+    def __init__(self, map, Hamiltonian):
         self.__Map=map
-        self.__Interaction=Interaction
-        self.__ExternalField=ExternalField
-        self.__Mu=Mu
-        self.__Hopping=Hopping
+        self.__Interaction=Hamiltonian["Interaction"]
+        self.__ExternalField=Hamiltonian["ExternalField"]
+        self.__Mu=Hamiltonian["ChemicalPotential"]
+        self.__Hopping=Hamiltonian["Hopping"]
         self.__MaxTauBin=self.__Map.MaxTauBin
         self.__Beta=self.__Map.Beta
         self.BareG=weight.Weight("SmoothT", self.__Map, "TwoSpins", "AntiSymmetric")

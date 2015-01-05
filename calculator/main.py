@@ -1,33 +1,26 @@
 #!usr/bin/python
 import numpy as np
-import parameter as para
 import calculator as calc
-from weight import UP,DOWN,IN,OUT,TAU,SP1,SUB1,SP2,SUB2,VOL
-import weight
-import model
 import lattice as lat
+from weight import UP,DOWN,IN,OUT,TAU,SP1,SUB1,SP2,SUB2,VOL
 from logger import *
-import sys
+import os, sys, model, IO, weight, parameter, plot
 sys.path.append("../") #add the root dir into PYTHONPATH
-import IO
-import plot
 
-prefix="../data/"
-para = para.Parameter()
-para.Load("../data/infile/_in_DYSON_1")
-Assert(para.Type=="DYSON", "The job type should be DYSON, not {0}".format(para.Type))
-Beta = para.InitialBeta
-WeightPara={"NSublat":para.NSublat, "L":para.L, "Beta": Beta, "MaxTauBin": para.MaxTauBin}
+para=parameter.Load(os.path.abspath(sys.argv[1]))
+prefix=os.path.abspath("../data/")
+WeightFile=prefix+"/"+para["Job"]["WeightFile"]
+WeightPara={"NSublat": para["Lattice"]["NSublat"], "L":para["Lattice"]["L"],
+            "Beta": para["Tau"]["Beta"], "MaxTauBin": para["Tau"]["MaxTauBin"]}
 map=weight.IndexMap(**WeightPara)
-Lat=lat.Lattice(para.Lattice, map)
+Lat=lat.Lattice(para["Lattice"]["Name"], map)
 
 ##########INITIALIZATION ##########################
-Factory=model.BareFactory(map, para.Hopping, para.Interaction, 
-                            para.ChemicalPotential, para.ExternalField)
-G0,W0=Factory.Build(para.Model, para.Lattice)
+Factory=model.BareFactory(map, para["Model"])
+G0,W0=Factory.Build(para["Model"]["Name"], para["Lattice"]["Name"])
 #Factory.Plot()
 
-if para.StartFromBare is True:
+if para["Job"]["DoesLoad"] is False:
     G=G0.Copy()
     W=weight.Weight("SmoothT", map, "FourSpins", "Symmetric")
     for i in range(10):
@@ -42,7 +35,7 @@ if para.StartFromBare is True:
 
 else:
     #########READ G,SIGMA,POLAR; CALCULATE SIGMA0 #################
-    data=IO.LoadBigDict(prefix+para.WeightFile)
+    data=IO.LoadBigDict(WeightFile)
     G=weight.Weight("SmoothT", map, "TwoSpins", "AntiSymmetric").FromDict(data["G"])
     Sigma=weight.Weight("SmoothT", map, "TwoSpins", "AntiSymmetric").FromDict(data["Sigma"])
     Polar=weight.Weight("SmoothT", map, "FourSpins", "Symmetric").FromDict(data["Polar"])
@@ -73,7 +66,7 @@ data["Sigma"]=Sigma.ToDict()    ####ForTest
 data["Polar"]=Polar.ToDict()    ####ForTest
 data["Chi"]=Chi.ToDict()        ####ForTest
 
-IO.SaveBigDict(prefix+para.WeightFile, data)
+IO.SaveBigDict(WeightFile, data)
 ###################################################
 
 

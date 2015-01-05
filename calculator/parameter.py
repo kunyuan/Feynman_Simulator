@@ -5,24 +5,22 @@ import pprint
 sys.path.append("../") #add the root dir into PYTHONPATH
 import IO
 
-class Parameter:
-    def Load(self, FileName):
-        log.info("Loading Parameters...")
-        d=IO.LoadDict(FileName)
-        self.__dict__=d["Para"]
-        print self.__dict__
-        log.info("Loaded parameters:\n"+pprint.pformat(self.__dict__))
+def Load(FileName):
+    log.info("Loading Parameters...")
+    d=IO.LoadDict(FileName)["Para"]
+    log.info("Loaded parameters:\n"+pprint.pformat(d))
+    Assert(d["Job"]["Type"]=="DYSON", "The job type should be DYSON, not {0}".format(d["Job"]["Type"]))
+    return d
 
-    def Save(self, FileName, Mode="a"):
-        log.info("Saving Parameters...")
-        with open(FileName, Mode) as f:
-            f.write("Para="+pprint.pformat(self.__dict__))
+def Save(para, FileName, Mode="a"):
+    log.info("Saving Parameters...")
+    root={"Para":para}
+    IO.SaveDict(FileName, Mode, root)
 
 if __name__=="__main__":
-    p=Parameter()
-    p.Load("../data/infile/_in_DYSON_1")
-    p.Save("test.txt","w")
-    print p.Order
+    p=Load("../data/infile/_in_DYSON_1")
+    Save(p, "test.txt","w")
+    print p["Dyson"]["Order"]
 
 
 
