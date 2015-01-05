@@ -60,6 +60,9 @@ void MonteCarlo(const para::Job& Job)
         if (icount % 1000 == 0) {
             //            Env.AddStatistics();
             PaddyField.Diag.CheckDiagram();
+            if(!PaddyField.Diag.Worm.Exist)
+                PaddyField.Diag.WriteDiagram2gv("diagram/" + ToString(Para.Counter) + ".gv");
+                
             Scarecrow.ReWeightEachOrder();
         }
         if (icount % 10000 == 0) {
