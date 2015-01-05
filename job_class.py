@@ -16,102 +16,62 @@ class Job:
         if self.__check_parameters__(para) is False:
             print "Something is wrong with the inlist! Abandon!"
             sys.exit()
-        self.duplicate = para.pop("__Duplicate")
-
-        #take care of the list of paths
-        execu = para.pop("__Execute")
-        if type(execu) is str:
-            execu = os.path.abspath(execu)
-        else:
-            for i in range(0, len(execu)):
-                if os.path.isfile(execu[i]):
-                    execu[i] = os.path.abspath(execu[i])
-        #self.execute is the execute file str
-        self.execute = execu
-        self.is_cluster = para.pop("__IsCluster")
-        self.auto_run = para.pop("__AutoRun")
-        self.keep_cpu_busy = True
+        self.control=para.pop("Control")
         self.pid = 0
         self.name = ""
         self.para = para
 
     def to_dict(self, pid=0):
         '''output the corresponding string of the job class'''
-        self.para["PID"] = pid
-        self.para["WeightFile"]="Weight"
-        self.para["MessageFile"]="Message"
+        self.para["Job"]["PID"] = pid
+        self.para["Job"]["WeightFile"]="Weight"
+        self.para["Job"]["MessageFile"]="Message"
         self.__set_model_specific__()
         para_={}
         para_["Para"]=self.para
         return para_
 
     def __check_parameters__(self, para):
-        if para["__Execute"] is "":
+        if para["Control"]["__Execute"] is "":
             print "Please specify the executive file name!"
             return False
 
     def __set_model_specific__(self):
         PI=3.141592653589793238
-        if self.para["Model"]=="J1J2":
-            self.para["Hopping"]=[0.0,]
-            mu=(0,PI/2.0/self.para["InitialBeta"])
-            self.para["ChemicalPotential"]=[mu,mu]
+        if self.para["Model"]["Name"]=="J1J2":
+            self.para["Model"]["Hopping"]=[0.0,]
+            mu=1j*PI/2.0/self.para["Tau"]["Beta"]
+            self.para["Model"]["ChemicalPotential"]=[mu,mu]
 
 class JobMonteCarlo(Job):
     '''job subclass for monte carlo jobs'''
     def __init__(self, para):
         Job.__init__(self, para)
-        self.keep_cpu_busy = True
-        self.para["Type"] = "MC"
+        self.para["Job"]["Type"] = "MC"
         self.name = "MC"
 
     def __check_parameters__(self, para):
         if Job.__check_parameters__(self, para) is False:
             return False
-        if type(para["OrderReWeight"]) is not list:
+        if type(para["Markov"]["OrderReWeight"]) is not list:
             print "The Reweight should be a list!"
             return False
-        if para["Order"]+1 is not len(para["OrderReWeight"]):
+        if para["Markov"]["Order"]+1 is not len(para["Markov"]["OrderReWeight"]):
             print "The Reweight numbers should be equal to Order!"
             return False
 
     def to_dict(self, pid=0):
         #set Seed here so that each job has it own rng seed
-        self.para["Seed"] = int(random.random()*2**30)
+        self.para["Markov"]["Seed"] = int(random.random()*2**30)
         return Job.to_dict(self, pid)
 
-class JobConsistLoop(Job):
+class JobDyson(Job):
     '''job subclass for self consistent loop jobs'''
     def __init__(self, para):
         Job.__init__(self, para)
-        self.keep_cpu_busy = False
-        self.para["Type"] = "DYSON"
+        self.para["Job"]["Type"] = "DYSON"
         self.name = "DYSON"
 
     def to_dict(self, pid=0):
         return Job.to_dict(self, pid)
 
-if __name__ == "__main__":
-    A = JobMonteCarlo({
-        "__Execute": ["python", "./monte_carlo.exe"],
-        "__IsCluster":True,
-        "__Duplicate":3,
-        "IsForever" : True,
-        "Sample" : 1000000,
-        "Sweep" : 10,
-        "Toss" : 1000,
-        "DoesLoad" : True,
-        "StartFromBare" :False,
-        "Type" : 2,
-        "Lx" :  4,
-        "Ly" :  4,
-        "Jcp" :  1.0,
-        "InitialBeta" :  0.5,
-        "DeltaBeta" :  0.05,
-        "FinalBeta" :  0.9,
-        "Order" :  2,
-        "OrderReWeight" : [1,5],
-        "WormSpaceReweight" : 0.5
-    })
-    print A.to_string(1)
-    print A.execute

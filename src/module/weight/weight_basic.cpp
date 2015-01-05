@@ -8,7 +8,7 @@
 
 #include "weight_basic.h"
 #include "utility/logger.h"
-#include "dictionary.h"
+#include "utility/dictionary.h"
 #include <math.h>
 
 using namespace std;
