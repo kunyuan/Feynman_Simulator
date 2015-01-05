@@ -68,9 +68,17 @@ class Lattice:
                 v[i]-=self.L[i]
         return v
     def GetRealVec(self, Coordi, SubLat, offset):
+        '''
+           Coordi: D-dimensional vector of coordinates
+           SubLat: only the OUT sublattice is needed, IN sublattice is assumed to be 0
+        '''
         v=self.__Shift(Coordi+offset)
         return np.einsum("ij,i->j",self.LatVec,v)+self.SubLatVec[SubLat]
     def GetSitesList(self):
+        """
+        return: list of all sites, with format 
+                [tuple of real space vectors of sites, tuple of integer vectors of coordinates, SubLat] 
+        """
         offset=self.L/2-1
         Points=[]
         for sub in range(self.NSublat):

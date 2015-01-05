@@ -22,14 +22,14 @@ namespace para {
 class Parameter {
 public:
     int Version;
-    real InitialBeta;
+    real Beta;
     real DeltaBeta;
     real FinalBeta;
+    uint MaxTauBin;
     int Order;
     int NSublat;
 
     //derived
-    real Beta;
     real T;
     Lattice Lat;
 
@@ -37,8 +37,6 @@ public:
     void UpdateWithMessage(const Message&);
 
 protected:
-    bool _BuildNew(const std::string& InputFile);
-    bool _Load(const std::string& InputFile);
     bool _FromDict(const Dictionary&);
     Dictionary _ToDict();
 
@@ -48,7 +46,6 @@ protected:
 class ParaMC : public Parameter {
 public:
     long long Counter;
-    uint MaxTauBin;
     int Toss;
     int Sample;
     int Sweep;

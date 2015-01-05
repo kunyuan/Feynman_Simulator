@@ -69,7 +69,7 @@ void EnvMonteCarlo::Save()
     Dictionary para_;
     para_[ParaKey] = Para.ToDict();
     para_[ConfigKey] = Diag.ToDict();
-    para_.Save(Job.ParaFile);
+    para_.Save(Job.ParaFile, "w");
     Dictionary statis_ = Weight.ToDict(weight::GW | weight::SigmaPolar);
     statis_.Update(Scarecrow.ToDict());
     statis_.BigSave(Job.StatisticsFile);
