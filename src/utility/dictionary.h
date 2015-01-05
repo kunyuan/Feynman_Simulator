@@ -17,7 +17,14 @@
 #include "utility/pyglue/pywrapper.h"
 
 #define SET(para, value) (para[#value] = (value))
-#define GET(para, value) (para).Get((#value), (value))
+#define GET(para, value) para.Get((#value), (value))
+#define GET_WITH_DEFAULT(para, value, default) \
+    do {                                       \
+        if (para.HasKey(#value))               \
+            para.Get((#value), (value));       \
+        else                                   \
+            value = default;                   \
+    } while (0)
 typedef std::map<std::string, Python::AnyObject> PythonMap;
 class Dictionary : public Python::ITypeCast {
 private:
@@ -51,11 +58,9 @@ public:
         return value;
     }
     template <typename T>
-    bool Get(const std::string& key, T& value) const
+    void Get(const std::string& key, T& value) const
     {
-        if (!HasKey(key))
-            return false;
-        return Python::Convert(_Map.at(key), value);
+        value = Get<T>(key);
     }
 
     void Update(const Dictionary&);

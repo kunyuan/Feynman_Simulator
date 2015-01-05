@@ -11,7 +11,6 @@
 #include "utility/dictionary.h"
 using namespace para;
 
-
 Message Parameter::GenerateMessage()
 {
     Message Message_;
@@ -27,92 +26,65 @@ void Parameter::UpdateWithMessage(const Message& Message_)
     T = 1.0 / Beta;
 }
 
-bool Parameter::_FromDict(const Dictionary& _para)
+bool Parameter::_FromDict(const Dictionary& Para)
 {
-    GET(_para, L);
-    GET(_para, InitialBeta);
+    GET_WITH_DEFAULT(Para, Version, 0);
+    auto _para = Para.Get<Dictionary>("Tau");
+    GET(_para, Beta);
     GET(_para, DeltaBeta);
     GET(_para, FinalBeta);
-    GET(_para, Order);
+    GET(_para, MaxTauBin);
+    _para = Para.Get<Dictionary>("Lattice");
+    GET(_para, L);
     GET(_para, NSublat);
-    _para.HasKey("Beta") ? GET(_para, Beta) : Beta = InitialBeta;
-    _para.HasKey("Version") ? GET(_para, Version) : Version = 0;
 
     Lat.Initialize(L, NSublat);
     T = 1.0 / Beta;
 
-    ASSERT_ALLWAYS(Beta >= InitialBeta && Beta <= FinalBeta, "Beta should be between Initial and Final Beta");
-    ASSERT_ALLWAYS(Order < MAX_ORDER, "Order can not be bigger than " << MAX_ORDER);
+    ASSERT_ALLWAYS(Beta <= FinalBeta, "Beta should be <= Final Beta");
     return true;
 }
 Dictionary Parameter::_ToDict()
 {
-    Dictionary _para;
+    Dictionary Para, _para;
     SET(_para, L);
-    SET(_para, InitialBeta);
+    SET(_para, NSublat);
+    Para["Lattice"] = _para;
+    _para.Clear();
+    SET(_para, Beta);
     SET(_para, DeltaBeta);
     SET(_para, FinalBeta);
-    SET(_para, Order);
-    SET(_para, NSublat);
-    SET(_para, Beta);
-    SET(_para, Version);
-    return _para;
-}
-
-bool Parameter::_BuildNew(const std::string& InputFile)
-{
-    Dictionary _para;
-    _para.Load(InputFile);
-    GET(_para, L);
-    GET(_para, InitialBeta);
-    GET(_para, DeltaBeta);
-    GET(_para, FinalBeta);
-    GET(_para, Order);
-    GET(_para, NSublat);
-
-    Lat.Initialize(L, NSublat);
-    Version = 0;
-    Beta = InitialBeta;
-    T = 1.0 / Beta;
-    if (Order >= MAX_ORDER)
-        ABORT("Order can not be bigger than " << MAX_ORDER);
-    return true;
+    SET(_para, MaxTauBin);
+    Para["Tau"] = _para;
+    SET(Para, Version);
+    return Para;
 }
 
 bool ParaMC::BuildNew(const std::string& InputFile)
 {
-    Parameter::_BuildNew(InputFile);
     Dictionary _para;
     _para.Load(InputFile);
-    GET(_para, Toss);
-    GET(_para, Sample);
-    GET(_para, Sweep);
-    GET(_para, Seed);
-    GET(_para, WormSpaceReweight);
-    GET(_para, OrderReWeight);
-    GET(_para, MaxTauBin);
-
-    ASSERT_ALLWAYS(OrderReWeight.size() == Order + 1, "OrderReWeight should have Order+1 elementes!");
-    Counter = 0;
-    this->RNG.Reset(Seed);
+    FromDict(_para);
     return true;
 }
 
-bool ParaMC::FromDict(const Dictionary& _para)
+bool ParaMC::FromDict(const Dictionary& Para)
 {
-    Parameter::_FromDict(_para);
+    Parameter::_FromDict(Para);
+    auto _para = Para.Get<Dictionary>("Markov");
     GET(_para, Toss);
     GET(_para, Sample);
     GET(_para, Sweep);
     GET(_para, WormSpaceReweight);
     GET(_para, OrderReWeight);
-    GET(_para, MaxTauBin);
-    _para.HasKey("Counter") ? GET(_para, Counter) : Counter = 0;
-    _para.HasKey("Seed") ? GET(_para, Seed) : Seed = 0;
+    GET(_para, Order);
+    GET_WITH_DEFAULT(_para, Counter, 0);
+    GET_WITH_DEFAULT(_para, Seed, 0);
     if (_para.HasKey("RNG"))
         GET(_para, RNG);
     else
         RNG.Reset(Seed);
+    ASSERT_ALLWAYS(Order < MAX_ORDER, "Order can not be bigger than " << MAX_ORDER);
     ASSERT_ALLWAYS(OrderReWeight.size() == Order + 1, "OrderReWeight should have Order+1 elementes!");
     return true;
 }
@@ -124,11 +96,13 @@ Dictionary ParaMC::ToDict()
     SET(_para, Sweep);
     SET(_para, WormSpaceReweight);
     SET(_para, OrderReWeight);
-    SET(_para, MaxTauBin);
     SET(_para, Counter);
     SET(_para, RNG);
-    _para.Update(Parameter::_ToDict());
-    return _para;
+    SET(_para, Order);
+    Dictionary Para;
+    Para["Markov"] = _para;
+    Para.Update(Parameter::_ToDict());
+    return Para;
 }
 
 void ParaMC::SetTest()
@@ -138,12 +112,12 @@ void ParaMC::SetTest()
     NSublat = 2;
     L = Vec<int>(size);
     Lat = Lattice(L, NSublat);
-    InitialBeta = 1.0;
+    Beta = 1.0;
     DeltaBeta = 0.0;
     FinalBeta = 1.0;
     Beta = 1.0;
     Order = 1;
-    OrderReWeight = { 1, 1};
+    OrderReWeight = { 1, 1 };
     Toss = 10000;
     Sample = 5000000;
     Seed = 519180543;
