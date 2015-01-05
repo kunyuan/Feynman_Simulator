@@ -53,8 +53,8 @@ public:
     bool MeasureGLine;
     gLine GMeasure;
     wLine WMeasure;
-    Complex ConstSigma=Complex(1.0, 0.0);
-    Complex ConstPolar=Complex(1.0, 0.0);
+    Complex ConstSigma=Complex(10.0, 0.0);
+    Complex ConstPolar=Complex(10.0, 0.0);
 
     //Diagram
     void ClearDiagram();

@@ -79,6 +79,10 @@ bool weight::Weight::FromDict(const Dictionary& dict, flag _flag, const para::Pa
 Dictionary weight::Weight::ToDict(flag _flag)
 {
     Dictionary dict;
+    if (_flag & weight::GW) {
+        dict["G"] = G->ToDict();
+        dict["W"] = W->ToDict();
+    }
     if (_flag & weight::SigmaPolar) {
         dict["Sigma"] = Sigma->ToDict();
         dict["Polar"] = Polar->ToDict();
