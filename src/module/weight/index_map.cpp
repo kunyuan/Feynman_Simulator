@@ -40,7 +40,7 @@ int IndexMap::TauIndex(real tau) const
 
     int bin = tau < 0 ? floor(tau * _dBetaInverse) + _MaxTauBin
                       : floor(tau * _dBetaInverse);
-    if (DEBUGMODE && bin < 0 || tau >= _MaxTauBin) {
+    if (DEBUGMODE && bin < 0 || bin >= _MaxTauBin) {
         LOG_INFO("tau=" << tau << " is out of the range ["
                         << -_Beta << "," << _Beta << ")");
         LOG_INFO("bin=" << bin << " is out of the range ["

@@ -169,40 +169,54 @@ void Markov::Hop(int sweep)
         double x = RNG->urn();
         if (x < SumofProbofCall[CREATE_WORM])
             CreateWorm();
+//            ;
         else if (x < SumofProbofCall[DELETE_WORM])
             DeleteWorm();
+//            ;
         else if (x < SumofProbofCall[MOVE_WORM_G])
             MoveWormOnG();
+//            ;
         else if (x < SumofProbofCall[MOVE_WORM_W])
             MoveWormOnW();
+//            ;
         else if (x < SumofProbofCall[RECONNECT])
             Reconnect();
+//            ;
         else if (x < SumofProbofCall[ADD_INTERACTION])
             AddInteraction();
+//            ;
         else if (x < SumofProbofCall[DEL_INTERACTION])
             DeleteInteraction();
+//            ;
         else if (x < SumofProbofCall[CHANGE_TAU_VERTEX])
             ChangeTauOnVertex();
         else if (x < SumofProbofCall[CHANGE_R_VERTEX])
             ;
-        //            ChangeROnVertex();
+//                    ChangeROnVertex();
         else if (x < SumofProbofCall[CHANGE_R_LOOP])
             ChangeRLoop();
+//            ;
         else if (x < SumofProbofCall[CHANGE_MEASURE_G2W])
             ChangeMeasureFromGToW();
+//            ;
         else if (x < SumofProbofCall[CHANGE_MEASURE_W2G])
             ChangeMeasureFromWToG();
+//            ;
         else if (x < SumofProbofCall[CHANGE_DELTA2CONTINUS])
             ChangeDeltaToContinuous();
+//            ;
         else if (x < SumofProbofCall[CHANGE_CONTINUS2DELTA])
             ChangeContinuousToDelta();
+//            ;
         else if (x < SumofProbofCall[CHANGE_SPIN_VERTEX])
             ;
         //            ChangeSpinOnVertex();
         else if (x < SumofProbofCall[JUMP_TO_ORDER0])
             JumpToOrder0();
+//        ;
         else if (x < SumofProbofCall[JUMP_BACK_TO_ORDER1])
             JumpBackToOrder1();
+//        ;
 
         (*Counter)++;
     }
@@ -626,6 +640,8 @@ void Markov::DeleteInteraction()
     if (Diag->Order <= 1)
         return;
     vertex Ira = Worm->Ira, Masha = Worm->Masha;
+    if(Ira->NeighW()->IsDelta)
+        return;
 
     int dir = RandomPickDir();
     gLine GIA = Ira->NeighG(dir), GMB = Masha->NeighG(dir);
@@ -756,6 +772,7 @@ void Markov::ChangeTauOnVertex()
     Proposed[CHANGE_TAU_VERTEX][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
         Accepted[CHANGE_TAU_VERTEX][Diag->Order] += 1.0;
+        
         Diag->Phase *= sgn;
         Diag->Weight *= weightRatio;
 
@@ -1008,7 +1025,7 @@ void Markov::ChangeRLoop()
  */
 void Markov::ChangeMeasureFromGToW()
 {
-    if (Diag->Order==0 || !Diag->MeasureGLine)
+    if (Diag->Order==0 || Worm->Exist || !Diag->MeasureGLine)
         return;
 
     wLine w = Diag->W.RandomPick(*RNG);
@@ -1057,7 +1074,7 @@ void Markov::ChangeMeasureFromGToW()
  */
 void Markov::ChangeMeasureFromWToG()
 {
-    if (Diag->Order==0 || Diag->MeasureGLine)
+    if (Diag->Order==0 || Worm->Exist || Diag->MeasureGLine)
         return;
 
     gLine g = Diag->G.RandomPick(*RNG);
@@ -1104,7 +1121,7 @@ void Markov::ChangeMeasureFromWToG()
  */
 void Markov::ChangeDeltaToContinuous()
 {
-    if(Diag->Order==0)
+    if(Diag->Order<2 || Worm->Exist)
         return;
     wLine w = Diag->W.RandomPick(*RNG);
     vertex vin = w->NeighVer(IN), vout = w->NeighVer(OUT);
@@ -1152,7 +1169,7 @@ void Markov::ChangeDeltaToContinuous()
  */
 void Markov::ChangeContinuousToDelta()
 {
-    if(Diag->Order<2)
+    if(Diag->Order<2 || Worm->Exist)
         return;
     
     wLine w = Diag->W.RandomPick(*RNG);
@@ -1199,8 +1216,8 @@ void Markov::ChangeContinuousToDelta()
 
 void Markov::JumpToOrder0()
 {
-    if(Worm->Exist)    return;
-    if(Diag->Order!=1) return;
+    if(Worm->Exist || Diag->Order!=1)
+        return;
     
     vertex Ver1 = &Diag->Ver[0];
     vertex Ver2 = &Diag->Ver[1];
@@ -1228,8 +1245,8 @@ void Markov::JumpToOrder0()
 
 void Markov::JumpBackToOrder1()
 {
-    if(Worm->Exist) return;
-    if(Diag->Order!=0) return;
+    if(Worm->Exist || Diag->Order!=0)
+        return;
     
     Site R = RandomPickSite();
     real Tau1 = RandomPickTau();

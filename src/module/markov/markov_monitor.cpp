@@ -75,6 +75,8 @@ void MarkovMonitor::Measure()
 {
     //    cEstimator[0].Measure(<#const Complex &#>);
     //    cEstimator["1"].Measure(<#const Complex &#>);
+    if(Diag->Worm.Exist)
+        return;
     if(Diag->MeasureGLine)
     {
         if(Diag->Order==0)
