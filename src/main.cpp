@@ -17,21 +17,31 @@
 using namespace std;
 using namespace para;
 
+const string HelpStr = "Usage:"
+                       "-p N / --PID N   use N to construct input file path."
+                       "or -f / --file PATH   use PATH as the input file path.";
+
 void MonteCarlo(const Job&);
 int main(int argc, const char* argv[])
 {
     Python::Initialize();
     Python::ArrayInitialize();
     RunTest();
-    string InputFile = "infile/_in_MC_2";
+    ASSERT_ALLWAYS(argc == 3, HelpStr);
+    string InputFile;
+    if (strcmp(argv[1], "-p") == 0 || strcmp(argv[1], "--PID") == 0)
+        InputFile = string("infile/_in_MC_") + argv[2];
+    else if (strcmp(argv[1], "-f") == 0 || strcmp(argv[1], "--file") == 0)
+        InputFile = argv[2];
+    else
+        ABORT("Unable to parse arguments!\n" + HelpStr);
+
     para::Job Job(InputFile);
 
-    if (Job.Type == "MC") {
+    if (Job.Type == "MC")
         MonteCarlo(Job);
-    }
-    else if (Job.Type == "DYSON") {
+    else
         cout << "Not Defined" << endl;
-    }
     Python::Finalize();
     return 0;
 }
@@ -50,7 +60,7 @@ void MonteCarlo(const para::Job& Job)
 
     int icount = 0;
     //Don't use Para.Counter as counter
-    
+
     while (icount < Para.Sample) {
         icount++;
         Grasshopper.Hop(Para.Sweep);
@@ -60,9 +70,9 @@ void MonteCarlo(const para::Job& Job)
         if (icount % 1000 == 0) {
             //            Env.AddStatistics();
             PaddyField.Diag.CheckDiagram();
-            if(!PaddyField.Diag.Worm.Exist)
+            if (!PaddyField.Diag.Worm.Exist)
                 PaddyField.Diag.WriteDiagram2gv("diagram/" + ToString(Para.Counter) + ".gv");
-                
+
             Scarecrow.ReWeightEachOrder();
         }
         if (icount % 10000 == 0) {

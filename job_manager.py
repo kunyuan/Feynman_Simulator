@@ -107,11 +107,11 @@ def submit_job(job_atom):
     jobfile = os.path.abspath(workdir+"/_job_{0}_{1}.sh".format(
         job_atom.name, job_atom.pid))
     IO.SaveDict(infile, "w", job_atom.para)
-    f_allinput = open(os.path.abspath(workdir+"/all_input.log"), "a")
-    f_allinput.write("Job ID: {0}, Job name: {1}\n".format(
-            job_atom.pid, job_atom.name))
-    f_allinput.write(str(job_atom.para))
-    f_allinput.close()
+    #f_allinput = open(os.path.abspath(workdir+"/all_input.log"), "a")
+    #f_allinput.write("Job ID: {0}, Job name: {1}\n".format(
+            #job_atom.pid, job_atom.name))
+    #f_allinput.write(str(job_atom.para))
+    #f_allinput.close()
     if job_atom.is_cluster:
         fjob = open(jobfile, "w")
         fjob.write("#!/bin/sh\n"+"#PBS -N "+jobname+"\n")

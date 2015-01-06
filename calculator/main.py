@@ -28,7 +28,8 @@ Factory=model.BareFactory(map, para["Model"])
 G0,W0=Factory.Build(para["Model"]["Name"], para["Lattice"]["Name"])
 #Factory.Plot()
 
-if para["Job"]["DoesLoad"] is False:
+if para["Job"]["DoesLoad"] is False or os.path.exists(WeightFile) is False:
+    #start from bare
     G=G0.Copy()
     W=weight.Weight("SmoothT", map, "FourSpins", "Symmetric")
     for i in range(10):
@@ -40,7 +41,6 @@ if para["Job"]["DoesLoad"] is False:
         #W = calc.W_Dyson(W0, Polar,map)
         G = calc.G_Dyson(G0, Sigma0, Sigma, map)
         ###################################################
-
 else:
     #########READ G,SIGMA,POLAR; CALCULATE SIGMA0 #################
     data=IO.LoadBigDict(WeightFile)

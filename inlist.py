@@ -20,14 +20,14 @@ Common={
 "Model": {
     "Name": "J1J2",
     "Interaction": [1.0,0.0],
-    "ExternalField": [-0.0, 0.0]
+    "ExternalField": [-0.0]
     #ExternalField on Sublattice A and B
     }
 }
 # monte carlo job defintion
 MonteCarlo={
 "Control": {
-    "__Execute" : "./gamma3.exe",
+    "__Execute" : "./simulator.exe",
     "__Duplicate" : 1,
     "__IsCluster" : False,
     "__AutoRun" : True,
@@ -52,7 +52,7 @@ Dyson={
     "__AutoRun" : True, 
     "__KeepCPUBusy": False,
     },
-"Job": {"DoesLoad" : False},
+"Job": {"DoesLoad" : True},
 "Dyson": {
     "Order": 1,
     "OrderAccepted": 1,
