@@ -42,7 +42,7 @@ void Test_Updates()
     sput_fail_unless(Diag.CheckDiagram(), "Check diagram G,W,Ver and Weight");
     sput_fail_if(Equal(Diag.Weight, Complex(0.0, 0.0)), "Initialize diagram has nonzero weight");
     for (int i = 0; i < 100; i++) {
-        markov.Hop(1000);
+        markov.Hop(100);
 
         sput_fail_unless(markov.Diag->CheckDiagram(), "Check for all the random steps");
         //        Diag.WriteDiagram2gv("diagram/" + ToString(Para.Counter) + ".gv");

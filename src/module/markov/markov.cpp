@@ -562,6 +562,7 @@ void Markov::AddInteraction()
                                   spinB[dir], vD->Spin(INVERSE(dir)), GMD->IsMeasure);
 
     Complex weightRatio = (-1) * GIAWeight * GMBWeight * wWeight * GACWeight * GBDWeight / (GIC->Weight * GMD->Weight);
+    
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
@@ -676,6 +677,7 @@ void Markov::DeleteInteraction()
 
     Complex GICWeight = G->Weight(INVERSE(dir), Ira->R, vC->R, Ira->Tau, vC->Tau,
                                   Ira->Spin(dir), vC->Spin(INVERSE(dir)), GAC->IsMeasure);
+    
     Complex GMDWeight = G->Weight(INVERSE(dir), Masha->R, vD->R, Masha->Tau, vD->Tau,
                                   Masha->Spin(dir), vD->Spin(INVERSE(dir)), GBD->IsMeasure);
 
@@ -692,6 +694,7 @@ void Markov::DeleteInteraction()
     Proposed[DEL_INTERACTION][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
         Accepted[DEL_INTERACTION][Diag->Order] += 1.0;
+        
         Diag->Order--;
         Diag->Phase *= sgn;
         Diag->Weight *= weightRatio;

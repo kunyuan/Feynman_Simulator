@@ -4,6 +4,7 @@ then
       rm -rf ./diagram/*
   fi
 else
+  rm ./diagram/*
   rm *.pkl
   rm *.txt
   rm *.log
