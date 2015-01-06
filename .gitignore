@@ -28,6 +28,8 @@
 # Data
 *.dat
 *.log
+*.gv
+*.txt
 
 # Figure
 *.png
@@ -37,6 +39,7 @@
 *.pdf
 
 *.npy
+*.pkl
 *.npz
 *.pyc
 *.xccheckout
@@ -44,9 +47,11 @@
 doc
 data
 data*
+diagram
+diagram*
+infile
+outfile
 .DS_Store
 *.DS_Store
-data/infile
-data/outfile
 build
 

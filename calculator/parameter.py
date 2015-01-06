@@ -2,8 +2,6 @@
 from logger import *
 import sys
 import pprint
-sys.path.append("../") #add the root dir into PYTHONPATH
-import IO
 
 def Load(FileName):
     log.info("Loading Parameters...")
@@ -18,8 +16,8 @@ def Save(para, FileName, Mode="a"):
     IO.SaveDict(FileName, Mode, root)
 
 if __name__=="__main__":
-    p=Load("../data/infile/_in_DYSON_1")
-    Save(p, "test.txt","w")
+    p=Load(workspace+"infile/_in_DYSON_1")
+    Save(p, "test","w")
     print p["Dyson"]["Order"]
 
 

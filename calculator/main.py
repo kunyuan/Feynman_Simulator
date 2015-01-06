@@ -1,15 +1,13 @@
-#!usr/bin/python
+#!/usr/bin/env python
 import numpy as np
 import calculator as calc
 import lattice as lat
 from weight import UP,DOWN,IN,OUT,TAU,SP1,SUB1,SP2,SUB2,VOL
 from logger import *
-import os, sys, model, IO, weight, parameter, plot
-sys.path.append("../") #add the root dir into PYTHONPATH
+import os, sys, model, weight, parameter, plot
 
 para=parameter.Load(os.path.abspath(sys.argv[1]))
-prefix=os.path.abspath("../data/")
-WeightFile=prefix+"/"+para["Job"]["WeightFile"]
+WeightFile=para["Job"]["WeightFile"]
 WeightPara={"NSublat": para["Lattice"]["NSublat"], "L":para["Lattice"]["L"],
             "Beta": para["Tau"]["Beta"], "MaxTauBin": para["Tau"]["MaxTauBin"]}
 map=weight.IndexMap(**WeightPara)
@@ -56,6 +54,8 @@ print "W=\n", W.Data[spinUP,0,spinUP,0,0,:]
 print "G=\n", G.Data[UP,0,UP,0,0,:]
 print "Chi=\n", Chi.Data[spinUP,0,spinUP,0,0,:]
 
+print WeightFile
+
 data={}
 data["G"]=G.ToDict()
 data["W"]=W.ToDict()
@@ -65,9 +65,7 @@ data["Sigma"]=Sigma.ToDict()    ####ForTest
 data["Polar"]=Polar.ToDict()    ####ForTest
 data["Chi"]=Chi.ToDict()        ####ForTest
 
-print WeightFile
 IO.SaveBigDict(WeightFile, data)
-
 ###################################################
 plot.PlotSpatial(Chi, Lat, spinUP, spinUP)
 

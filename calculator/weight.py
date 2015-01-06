@@ -1,9 +1,6 @@
 #!/usr/bin/env python
-import math
 import numpy as np
-import sys
-import os
-import unittest
+import sys, os, unittest, math
 from logger import *
 
 SPIN,SPIN2,SPIN3=2,4,8

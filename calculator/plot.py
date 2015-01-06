@@ -8,6 +8,7 @@ from logger import *
 def PlotTime(weight, SpinIn, SubIn, SpinOut, SubOut, Vol):
     x=np.linspace(0, Beta, len(weight.Map.MaxTauBin))
     plt.plot(x,weight[SpinIn, SubIn, SpinOut, SubOut, Vol,:],'-')
+    plt.savefig("time.jpg")
     plt.show()
 
 def PlotSpatial(weight, lattice, SpinIn, SpinOut, Tau=0):
@@ -28,6 +29,7 @@ def PlotSpatial(weight, lattice, SpinIn, SpinOut, Tau=0):
     plt.scatter(x,y,s=100,c=z)
     c = plt.colorbar(orientation='horizontal')
     c.set_label("magnitude")
+    plt.savefig("spatial.jpg")
     plt.show()
 
 

@@ -153,6 +153,7 @@
 		845C92C719F834460066B590 /* job_manager.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = job_manager.py; sourceTree = SOURCE_ROOT; };
 		845C92C819F834460066B590 /* run_loop.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = run_loop.py; sourceTree = SOURCE_ROOT; };
 		845C92C919F835590066B590 /* job_class.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = job_class.py; sourceTree = SOURCE_ROOT; };
+		847BCA691A5B97CC00A2562F /* plot.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = plot.py; sourceTree = "<group>"; };
 		8499DB0919FEECEC00AABA1E /* scopeguard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = scopeguard.h; sourceTree = "<group>"; };
 		84B1D57919DEFC19004C3A89 /* test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = test.h; sourceTree = "<group>"; };
 		84B8FC3E19ECA449003D6DF6 /* convention.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = convention.h; sourceTree = "<group>"; };
@@ -325,6 +326,7 @@
 		843DBB401A3E96BD009DB448 /* calculator */ = {
 			isa = PBXGroup;
 			children = (
+				847BCA691A5B97CC00A2562F /* plot.py */,
 				843DBB411A3E96BD009DB448 /* calculator.py */,
 				843DBB431A3E96BD009DB448 /* lattice.py */,
 				843DBB451A3E96BD009DB448 /* logger.py */,

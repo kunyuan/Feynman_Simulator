@@ -10,7 +10,7 @@ import inlist
 
 PROCLIST = []
 PROCLIST_BACK = []
-workdir="./data"
+workdir="."
 os.system("cp IO.py "+workdir)
 logging.basicConfig(filename=workdir+"/project.log",
         level=logging.INFO,
@@ -123,6 +123,7 @@ def submit_job(job_atom):
             print "You have to run "+job_atom.get_job_name()+" by yourself!"
     else:
         if job_atom.auto_run:
+            #shellstr = "exec "+job_atom.execute+" "+infile+" >> "+outfile
             shellstr = "exec "+job_atom.execute+" "+infile
             proc = subprocess.Popen(shellstr, shell=True)
             if job_atom.keep_cpu_busy:

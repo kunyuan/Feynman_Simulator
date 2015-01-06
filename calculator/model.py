@@ -7,10 +7,10 @@ from logger import *
 class BareFactory:
     def __init__(self, map, Hamiltonian):
         self.__Map=map
-        self.__Interaction=Hamiltonian["Interaction"]
-        self.__ExternalField=Hamiltonian["ExternalField"]
-        self.__Mu=Hamiltonian["ChemicalPotential"]
-        self.__Hopping=Hamiltonian["Hopping"]
+        self.__Interaction=np.array(Hamiltonian["Interaction"])
+        self.__ExternalField=np.array(Hamiltonian["ExternalField"])
+        self.__Mu=np.array(Hamiltonian["ChemicalPotential"])
+        self.__Hopping=np.array(Hamiltonian["Hopping"])
         self.__MaxTauBin=self.__Map.MaxTauBin
         self.__Beta=self.__Map.Beta
         self.BareG=weight.Weight("SmoothT", self.__Map, "TwoSpins", "AntiSymmetric")
@@ -28,13 +28,16 @@ class BareFactory:
         Lx,Ly=self.__Map.L
         #Dimension: 2
         #Bare G
-        self.__Mu=1j*np.pi/2.0/self.__Map.Beta
-        self.__Hopping=[0.0]
+        self.__Mu=self.__ExternalField+1j*np.pi/2.0/self.__Map.Beta
+        #print self.__Mu
+        self.__Hopping=np.array([0.0])
         log.info("set Mu={0}, Hopping={1}, and SmoothT Bare G".format(self.__Mu, self.__Hopping))
+        Assert(len(self.__Mu)==self.__Map.NSublat, 
+                "expect {0} externalfield components!".format(self.__Map.NSublat))
         TauGrid=np.array([self.__Map.IndexToTau(t) for t in range(self.__MaxTauBin)])
-        TauWeight=np.exp(self.__Mu*TauGrid)/(1.0+1.0*1j)
-        for sp in self.__Map.GetConservedSpinTuple("TwoSpins"):
-            for sub in self.__Map.GetLocalSublatTuple():
+        for sub in self.__Map.GetLocalSublatTuple():
+            TauWeight=np.exp(self.__Mu[sub[IN]]*TauGrid)/(1.0+1.0*1j)
+            for sp in self.__Map.GetConservedSpinTuple("TwoSpins"):
                 self.BareG.Data[sp[IN]][sub[IN]][sp[OUT]][sub[OUT]][0][:]=TauWeight[:]
 
         #Bare W

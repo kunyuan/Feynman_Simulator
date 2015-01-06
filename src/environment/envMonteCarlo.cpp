@@ -35,10 +35,6 @@ bool EnvMonteCarlo::BuildNew()
     Dictionary GW_;
     GW_.BigLoad(Job.WeightFile);
     Weight.FromDict(GW_, weight::GW, Para);
-    
-    //TEST
-//    Weight.SetDiagCounter(Para);
-    
     Weight.BuildNew(weight::SigmaPolar, Para);
     Diag.BuildNew(Para.Lat, *Weight.G, *Weight.W);
     Grasshopper.BuildNew(Para, Diag, Weight);
