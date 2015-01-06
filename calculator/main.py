@@ -55,7 +55,6 @@ spinUP=map.Spin2Index(UP,UP)
 print "W=\n", W.Data[spinUP,0,spinUP,0,0,:]
 print "G=\n", G.Data[UP,0,UP,0,0,:]
 print "Chi=\n", Chi.Data[spinUP,0,spinUP,0,0,:]
-plot.PlotSpatial(Chi, Lat, spinUP, spinUP)
 
 data={}
 data["G"]=G.ToDict()
@@ -66,7 +65,10 @@ data["Sigma"]=Sigma.ToDict()    ####ForTest
 data["Polar"]=Polar.ToDict()    ####ForTest
 data["Chi"]=Chi.ToDict()        ####ForTest
 
+print WeightFile
 IO.SaveBigDict(WeightFile, data)
+
 ###################################################
+plot.PlotSpatial(Chi, Lat, spinUP, spinUP)
 
 

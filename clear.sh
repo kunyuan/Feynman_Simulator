@@ -5,4 +5,5 @@ then
   fi
 else
   rm -rf ./data/*
+  mkdir ./data/diagram
 fi

@@ -22,6 +22,7 @@ class G;
 class W;
 class Sigma;
 class Polar;
+class Norm;
 }
 namespace para {
 class ParaMC;

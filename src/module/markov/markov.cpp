@@ -567,10 +567,10 @@ void Markov::AddInteraction()
 
     if (isdelta)
         prob *= OrderWeight[Diag->Order + 1] * ProbofCall[DEL_INTERACTION]
-                / (ProbofCall[ADD_INTERACTION] * OrderWeight[Diag->Order] * ProbTau(tauA));
+                / (0.5*ProbofCall[ADD_INTERACTION] * OrderWeight[Diag->Order] * ProbTau(tauA));
     else
         prob *= OrderWeight[Diag->Order + 1] * ProbofCall[DEL_INTERACTION]
-                / (ProbofCall[ADD_INTERACTION] * OrderWeight[Diag->Order]
+                / (0.5*ProbofCall[ADD_INTERACTION] * OrderWeight[Diag->Order]
                    * ProbTau(tauA) * ProbTau(tauB));
 
     Proposed[ADD_INTERACTION][Diag->Order] += 1.0;
@@ -685,9 +685,9 @@ void Markov::DeleteInteraction()
     Complex sgn = phase(weightRatio);
 
     if (wAB->IsDelta)
-        prob *= OrderWeight[Diag->Order - 1] * ProbofCall[ADD_INTERACTION] * ProbTau(vA->Tau) / (ProbofCall[DEL_INTERACTION] * OrderWeight[Diag->Order]);
+        prob *= 0.5*OrderWeight[Diag->Order - 1] * ProbofCall[ADD_INTERACTION] * ProbTau(vA->Tau) / (ProbofCall[DEL_INTERACTION] * OrderWeight[Diag->Order]);
     else
-        prob *= OrderWeight[Diag->Order - 1] * ProbofCall[ADD_INTERACTION] * ProbTau(vA->Tau) * ProbTau(vB->Tau) / (ProbofCall[DEL_INTERACTION] * OrderWeight[Diag->Order]);
+        prob *= 0.5*OrderWeight[Diag->Order - 1] * ProbofCall[ADD_INTERACTION] * ProbTau(vA->Tau) * ProbTau(vB->Tau) / (ProbofCall[DEL_INTERACTION] * OrderWeight[Diag->Order]);
 
     Proposed[DEL_INTERACTION][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
@@ -1224,10 +1224,7 @@ void Markov::JumpToOrder0()
     if(Ver1->R!=Ver2->R) return;
     
     Complex weightRatio;
-    if(Diag->MeasureGLine)
-        weightRatio = Diag->ConstSigma / Diag->Weight;
-    else
-        weightRatio = Diag->ConstPolar / Diag->Weight;
+    weightRatio = weight::Norm::Weight() / Diag->Weight;
     
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
@@ -1239,7 +1236,7 @@ void Markov::JumpToOrder0()
         Accepted[JUMP_TO_ORDER0][Diag->Order] += 1.0;
         Diag->Order = 0;
         Diag->Phase *= sgn;
-        Diag->Weight = Diag->MeasureGLine? Diag->ConstSigma : Diag->ConstPolar;
+        Diag->Weight = weight::Norm::Weight();
     }
 }
 

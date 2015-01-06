@@ -17,7 +17,7 @@ namespace weight {
 
 class WeightEstimator {
 public:
-    WeightEstimator(real beta, int order, string name, real Norm, const uint* Shape);
+    WeightEstimator(const Lattice& lat, real beta, int order, string name, real Norm, const uint* Shape);
     //Shape including ORDER
     uint* GetExtendedShape();
 
@@ -49,6 +49,8 @@ public:
 protected:
     unsigned int _MeaShape[5];
     uint _MaxTauBin;
+    int _Vol;
+    int _SublatVol;
     real _Beta;
     real _dBeta; //_Beta/MAX_TAU
     real _dBetaInverse;
