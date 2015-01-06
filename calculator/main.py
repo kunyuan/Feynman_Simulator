@@ -4,9 +4,19 @@ import calculator as calc
 import lattice as lat
 from weight import UP,DOWN,IN,OUT,TAU,SP1,SUB1,SP2,SUB2,VOL
 from logger import *
-import os, sys, model, weight, parameter, plot
+import os, sys, model, weight, parameter, plot, argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("-p", "--PID", help="use PID to find the input file")
+parser.add_argument("-f", "--file", help="use file path to find the input file")
+args = parser.parse_args()
+if args.PID:
+    InputFile=workspace+"infile/_in_DYSON_"+str(args.PID)
+elif args.file:
+    InputFile=os.path.abspath(args.file)
+else:
+    Assert(False, "Do not understand the argument!")
 
-para=parameter.Load(os.path.abspath(sys.argv[1]))
+para=parameter.Load(InputFile)
 WeightFile=para["Job"]["WeightFile"]
 WeightPara={"NSublat": para["Lattice"]["NSublat"], "L":para["Lattice"]["L"],
             "Beta": para["Tau"]["Beta"], "MaxTauBin": para["Tau"]["MaxTauBin"]}
@@ -27,7 +37,7 @@ if para["Job"]["DoesLoad"] is False:
         Sigma=calc.Sigma_FirstOrder(G, W, map)
         Sigma0=calc.Sigma0_FirstOrder(G, W0, map)
         #######DYSON FOR W AND G###########################
-        W = calc.W_Dyson(W0, Polar,map)
+        #W = calc.W_Dyson(W0, Polar,map)
         G = calc.G_Dyson(G0, Sigma0, Sigma, map)
         ###################################################
 

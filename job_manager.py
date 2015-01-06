@@ -1,7 +1,7 @@
 #!/usr/bin/python
 '''This is the job manage script.
    This is a quite universal code for all different type of simulations'''
-import os
+import os, sys
 import time
 import subprocess
 import logging
@@ -83,6 +83,11 @@ def check_status():
             PROCLIST.remove(elemp)
             logging.info(elemp[1].get_job_name()+" is ended!")
             print elemp[1].get_job_name()+" is ended..."
+    for elemp in PROCLIST_BACK:
+        if elemp[0].poll() is not None:
+            PROCLIST_BACK.remove(elemp)
+            logging.info(elemp[1].get_job_name()+" is ended!")
+            print elemp[1].get_job_name()+" is ended..."
     return
 
 def submit_job(job_atom):
@@ -123,8 +128,8 @@ def submit_job(job_atom):
             print "You have to run "+job_atom.get_job_name()+" by yourself!"
     else:
         if job_atom.auto_run:
-            #shellstr = "exec "+job_atom.execute+" "+infile+" >> "+outfile
-            shellstr = "exec "+job_atom.execute+" "+infile
+            #shellstr = "exec "+job_atom.execute+" -f "+infile+" >> "+outfile
+            shellstr = "exec "+job_atom.execute+" -f "+infile
             proc = subprocess.Popen(shellstr, shell=True)
             if job_atom.keep_cpu_busy:
                 PROCLIST.append((proc, job_atom))
@@ -139,6 +144,15 @@ def submit_job(job_atom):
             print "You have to run "+job_atom.get_job_name()+" by yourself!"
     return
 
+def StopTheWorld():
+    check_status()
+    ##terminate all background process here
+    for elem in PROCLIST_BACK+PROCLIST:
+        elem[0].kill()
+        logging.info(elem[1].get_job_name()+" is ended!")
+        print elem[1].get_job_name()+" is ended..."
+        sys.exit(0)
+
 if __name__ == "__main__":
     logging.info("Jobs manage daemon is started...")
     JOBQUEUE = construct_job_queue(inlist.TO_DO)
@@ -151,19 +165,11 @@ if __name__ == "__main__":
         submit_job(ATOM)
 
     check_status()
-    while len(PROCLIST) != 0:
-        time.sleep(inlist.SLEEP)
-        check_status()
-
-    if PURE_BACK:
-        #if all jobs are purely background, then just run them forever
-        while True:
-            pass
-    else:
-        #terminate all background process here
-        for elem in PROCLIST_BACK:
-            elem[0].kill()
-            logging.info(elem[1].get_job_name()+" is ended!")
-            print elem[1].get_job_name()+" is ended..."
+    while len(PROCLIST+PROCLIST_BACK) != 0:
+        try:
+            time.sleep(inlist.SLEEP)
+            check_status()
+        except KeyboardInterrupt:
+            StopTheWorld()
 
     logging.info("Jobs manage daemon is ended...")

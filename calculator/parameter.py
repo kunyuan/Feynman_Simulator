@@ -16,7 +16,7 @@ def Save(para, FileName, Mode="a"):
     IO.SaveDict(FileName, Mode, root)
 
 if __name__=="__main__":
-    p=Load(workspace+"infile/_in_DYSON_1")
+    p=Load("../infile/_in_DYSON_1")
     Save(p, "test","w")
     print p["Dyson"]["Order"]
 
