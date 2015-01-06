@@ -9,6 +9,7 @@ log = logging.getLogger()
 log.setLevel(logging.INFO)
 ch = logging.StreamHandler(sys.stdout)
 fh = logging.FileHandler(workspace+'project.log')
+
 ch.setLevel(logging.INFO)
 fh.setLevel(logging.INFO)
 formatter = logging.Formatter(fmt="[calc][%(asctime)s][%(levelname)s]:\n%(message)s",

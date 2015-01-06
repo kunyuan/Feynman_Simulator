@@ -96,7 +96,7 @@ void MarkovMonitor::Measure()
             wLine w=Diag->WMeasure;
             vertex vin = w->NeighVer(OUT);
             vertex vout = w->NeighVer(IN);
-            Weight->Polar->Measure(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin(), vout->Spin(), Diag->Order, Diag->Phase);
+            Weight->Polar->Measure(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin(), vout->Spin(), Diag->Order, -Diag->Phase);
         }
     }
 }

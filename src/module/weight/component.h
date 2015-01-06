@@ -110,7 +110,7 @@ class Norm {
 public:
     static real Weight()
     {
-        return 1.0;
+        return 10.0;
     }
 };
 

@@ -65,6 +65,7 @@ print "G=\n", G.Data[UP,0,UP,0,0,:]
 print "Chi=\n", Chi.Data[spinUP,0,spinUP,0,0,:]
 
 print WeightFile
+
 data={}
 data["G"]=G.ToDict()
 data["W"]=W.ToDict()

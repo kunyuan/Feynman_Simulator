@@ -17,8 +17,10 @@ using namespace weight;
 
 /**********************   Weight Needs measuring  **************************/
 
-WeightEstimator::WeightEstimator(real beta, int order, string name, real Norm, const uint* Shape)
+WeightEstimator::WeightEstimator(const Lattice& lat, real beta, int order, string name, real Norm, const uint* Shape)
 {
+    _Vol = lat.Vol;
+    _SublatVol = lat.SublatVol;
     _MaxTauBin = Shape[TAU];
     _Beta = beta;
     _dBeta = beta / _MaxTauBin;
@@ -81,7 +83,7 @@ void WeightEstimator::UpdateWeight(SmoothTMatrix& target, int UpToOrder)
 {
     //WeightEstimator and the corresponding WeightArray
     //share the same memory structure from _Shape[SP]  to _Shape[TAU]
-    real NormFactor = 1.0 / _NormAccu * _Norm * _MaxTauBin / _Beta;
+    real NormFactor = 1.0 / _NormAccu * _Norm * (_MaxTauBin /_Beta)/_Beta/_Vol/_SublatVol;
     
     int order = 1;
     target = _WeightAccu[order - 1];
@@ -116,7 +118,7 @@ void WeightEstimator::AddStatistics()
 
 void WeightEstimator::ClearStatistics()
 {
-    _NormAccu = 1.0;
+    _NormAccu = 0.0;
     _WeightAccu = 0.0;
     _WeightErrorEstimator.ClearStatistics();
 }

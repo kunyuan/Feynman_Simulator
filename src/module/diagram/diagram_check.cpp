@@ -138,7 +138,7 @@ bool Diagram::_CheckSpin()
 bool Diagram::_CheckWeight()
 {
     if(Order==0)
-        return Equal(Weight, (MeasureGLine? ConstSigma : ConstPolar));
+        return Equal(Weight, weight::Norm::Weight());
     else{
         Complex DiagWeight(1.0, 0.0);
         Complex gWeight, wWeight;
