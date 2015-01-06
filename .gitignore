@@ -28,6 +28,8 @@
 # Data
 *.dat
 *.log
+*.gv
+*.txt
 
 # Figure
 *.png
@@ -37,6 +39,7 @@
 *.pdf
 
 *.npy
+*.pkl
 *.npz
 *.pyc
 *.xccheckout
