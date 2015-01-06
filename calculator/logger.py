@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 import logging
-import sys
-workspace="../"
-sys.path.append(workspace) #add the root dir into PYTHONPATH
+import os, sys
+sys.path.append("../") #add the root dir into PYTHONPATH
 import IO
+workspace = os.path.abspath(os.path.dirname(IO.__file__))
 
 log = logging.getLogger()
 log.setLevel(logging.INFO)
