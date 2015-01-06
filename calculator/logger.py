@@ -1,11 +1,14 @@
 #!/usr/bin/env python
-
 import logging
 import sys
+workspace="../"
+sys.path.append(workspace) #add the root dir into PYTHONPATH
+import IO
+
 log = logging.getLogger()
 log.setLevel(logging.INFO)
 ch = logging.StreamHandler(sys.stdout)
-fh = logging.FileHandler('project.log')
+fh = logging.FileHandler(workspace+'project.log')
 ch.setLevel(logging.INFO)
 fh.setLevel(logging.INFO)
 formatter = logging.Formatter(fmt="[calc][%(asctime)s][%(levelname)s]:\n%(message)s",

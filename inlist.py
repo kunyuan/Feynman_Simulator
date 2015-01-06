@@ -20,7 +20,8 @@ Common={
 "Model": {
     "Name": "J1J2",
     "Interaction": [1.0,0.0],
-    "ExternalField": 0.0
+    "ExternalField": [-10.0, 10.0]
+    #ExternalField on Sublattice A and B
     }
 }
 # monte carlo job defintion

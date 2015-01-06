@@ -1,11 +1,10 @@
-#!usr/bin/python
+#!/usr/bin/env python
 import numpy as np
 import calculator as calc
 import lattice as lat
 from weight import UP,DOWN,IN,OUT,TAU,SP1,SUB1,SP2,SUB2,VOL
 from logger import *
-import os, sys, model, IO, weight, parameter, plot
-sys.path.append("../") #add the root dir into PYTHONPATH
+import os, sys, model, weight, parameter, plot
 
 para=parameter.Load(os.path.abspath(sys.argv[1]))
 WeightFile=para["Job"]["WeightFile"]
