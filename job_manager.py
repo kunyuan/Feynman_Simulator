@@ -23,20 +23,20 @@ PURE_BACK = False
 
 class JobAtom():
     '''atom class of all jobs'''
-    def __init__(self, pid, bundle):
+    def __init__(self, control, pid, para):
         self.pid = pid
-        execu=bundle.control["__Execute"]
+        self.name = control["__Type"]
+        execu=control["__Execute"]
         if type(execu) is str:
             self.execute = os.path.abspath(execu)
-        elif type(bundle.control["__Execute"]) is list:
+        elif type(control["__Execute"]) is list:
             self.execute = " ".join([os.path.abspath(e) if os.path.isfile(e) else e for e in execu])
         else:
             print "Jobs.execute should be a list or str!"
-        self.is_cluster=bundle.control["__IsCluster"]
-        self.auto_run=bundle.control["__AutoRun"]
-        self.keep_cpu_busy=bundle.control["__KeepCPUBusy"]
-        self.name = bundle.name
-        self.para = bundle.to_dict(pid)
+        self.is_cluster=control["__IsCluster"]
+        self.auto_run=control["__AutoRun"]
+        self.keep_cpu_busy=control["__KeepCPUBusy"]
+        self.para = para
         return
 
     def get_job_name(self):
@@ -58,19 +58,17 @@ def construct_job_queue(to_do):
     #bundle is class job
     for bundle in [e for e in to_do if e.control["__KeepCPUBusy"]== False]:
     #running the jobs doesn't use much cpu first
-        for _ in range(0, bundle.control["__Duplicate"]):
-            pid += 1
-            if not bundle.control["__IsCluster"]:
-                PURE_BACK = True
-            job_queue.append(JobAtom(pid, bundle))
+        if not bundle.control["__IsCluster"]:
+            PURE_BACK = True
+        for i,para in enumerate(bundle.to_dict()):
+            job_queue.append(JobAtom(bundle.control, i, para))
 
     for bundle in [e for e in to_do if e.control["__KeepCPUBusy"] == True]:
     #running the jobs use much cpu next
-        for _ in range(0, bundle.control["__Duplicate"]):
-            pid += 1
-            if not bundle.control["__IsCluster"]:
-                PURE_BACK = False
-            job_queue.append(JobAtom(pid, bundle))
+        if not bundle.control["__IsCluster"]:
+            PURE_BACK = False
+        for i,para in enumerate(bundle.to_dict()):
+            job_queue.append(JobAtom(bundle.control, i, para))
 
     logging.info("Constructed the job queue!")
     return job_queue

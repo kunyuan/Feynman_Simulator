@@ -79,7 +79,6 @@ void EnvMonteCarlo::DeleteSavedFiles()
     system(("rm " + Job.ParaFile).c_str());
     system(("rm " + Job.StatisticsFile).c_str());
     system(("rm " + Job.WeightFile).c_str());
-    system(("rm " + Job.ConfigFile).c_str());
 }
 
 /**

@@ -52,7 +52,7 @@ Dyson={
     "__AutoRun" : True, 
     "__KeepCPUBusy": False,
     },
-"Job": {"DoesLoad" : True},
+"Job": {"StartFromBare" : True},
 "Dyson": {
     "Order": 1,
     "OrderAccepted": 1,

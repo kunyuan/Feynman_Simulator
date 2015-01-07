@@ -28,7 +28,7 @@ Factory=model.BareFactory(map, para["Model"])
 G0,W0=Factory.Build(para["Model"]["Name"], para["Lattice"]["Name"])
 #Factory.Plot()
 
-if para["Job"]["DoesLoad"] is False or os.path.exists(WeightFile) is False:
+if para["Job"]["StartFromBare"] is True or os.path.exists(WeightFile) is False:
     #start from bare
     G=G0.Copy()
     W=weight.Weight("SmoothT", map, "FourSpins", "Symmetric")
