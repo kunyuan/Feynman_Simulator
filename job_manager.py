@@ -45,23 +45,16 @@ def construct_job_queue(to_do):
     '''construct JobAtom queue from Job class '''
     logging.info("Constructing the job queue...")
     job_queue = []
-    pid = 0
-    #search folder for old jobs, the new pid=largest old pid+1
-    if os.path.exists(INFILEPATH):
-        filelist = [int(elem.split('.')[0].split('_')[-1]) for elem in os.listdir(INFILEPATH)]
-        filelist.sort()
-        if len(filelist) != 0:
-            pid = filelist[-1]
     #bundle is class job
     for bundle in [e for e in to_do if e.control["__KeepCPUBusy"]== False]:
     #running the jobs doesn't use much cpu first
-        for i,para in enumerate(bundle.to_dict()):
-            job_queue.append(JobAtom(bundle.control, i, para))
+        for pid, para in bundle.to_dict():
+            job_queue.append(JobAtom(bundle.control, pid, para))
 
     for bundle in [e for e in to_do if e.control["__KeepCPUBusy"] == True]:
     #running the jobs use much cpu next
-        for i,para in enumerate(bundle.to_dict()):
-            job_queue.append(JobAtom(bundle.control, i, para))
+        for pid, para in bundle.to_dict():
+            job_queue.append(JobAtom(bundle.control, pid, para))
 
     logging.info("Constructed the job queue!")
     return job_queue
@@ -131,7 +124,8 @@ def StopTheWorld():
     check_status()
     ##terminate all background process here
     for elem in PROCLIST_BACK+PROCLIST:
-        elem[0].kill()
+        #elem[0].kill()
+        elem[0].terminate()
         logging.info(elem[1].get_job_name()+" is ended!")
         print elem[1].get_job_name()+" is ended..."
         sys.exit(0)

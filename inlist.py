@@ -2,7 +2,7 @@
    You have to add new job objects to TO_DO list
    if you want to run simulation.'''
 CPU = 4
-SLEEP = 5    #check job status for every SLEEP seconds
+SLEEP = 1    #check job status for every SLEEP seconds
 #common dictionary for all jobs
 beta=0.1
 Common={

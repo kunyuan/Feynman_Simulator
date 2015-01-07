@@ -1,6 +1,17 @@
 ''' This is a file to define the class of all jobs,
     You have to modify this file if you want to add new type of jobs.'''
-import sys, os, random
+import sys, os, random, re
+
+def get_current_PID(Type):
+    workspace=os.path.abspath(".")
+    KeyWord=Type+"_para"
+    filelist=sorted([int(e.split('_')[0]) for e in os.listdir(workspace) if KeyWord in e])
+    if len(filelist)==0:
+        NextPID=0
+    else:
+        NextPID=filelist[-1]+1
+    return filelist, NextPID
+
 #base class of all jobs
 class Job:
     '''Class Job is the base class of all job objects.
@@ -29,7 +40,7 @@ class Job:
             self.para["Job"]["PID"] = p
             para_={}
             para_["Para"]=self.para
-            para_list.append(para_)
+            para_list.append((p, para_))
         return para_list
 
     def __check_parameters__(self, para):
@@ -63,7 +74,12 @@ class JobMonteCarlo(Job):
     def to_dict(self):
         #set Seed here so that each job has it own rng seed
         self.para["Markov"]["Seed"] = int(random.random()*2**30)
-        self.pid=range(0, self.control["__Duplicate"])
+        #search folder for old jobs, the new pid=largest old pid+1
+        PIDList, NextPID=get_current_PID(self.para["Job"]["Type"])
+        if self.para["Job"]["DoesLoad"]:
+            self.pid=PIDList[len(PIDList)-self.control["__Duplicate"]:]
+        else:
+            self.pid=range(NextPID, NextPID+self.control["__Duplicate"])
         return Job.to_dict(self)
 
 class JobDyson(Job):
@@ -73,6 +89,7 @@ class JobDyson(Job):
         self.para["Job"]["Type"] = "DYSON"
 
     def to_dict(self):
-        self.pid=range(0, self.control["__Duplicate"])
+        PIDList, NextPID=get_current_PID(self.para["Job"]["Type"])
+        self.pid=range(NextPID, NextPID+self.control["__Duplicate"])
         return Job.to_dict(self)
 
