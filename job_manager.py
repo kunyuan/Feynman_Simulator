@@ -11,15 +11,13 @@ import inlist
 PROCLIST = []
 PROCLIST_BACK = []
 workdir="."
-os.system("cp IO.py "+workdir)
 logging.basicConfig(filename=workdir+"/project.log",
         level=logging.INFO,
         format="\n[job.daemon][%(asctime)s][%(levelname)s]:\n%(message)s",
         datefmt='%y/%m/%d %H:%M:%S')
 
-INFILEPATH = os.path.abspath(workdir+"/infile")
-OUTFILEPATH = os.path.abspath(workdir+"/outfile")
-PURE_BACK = False
+INFILEPATH = os.path.join(os.path.abspath(workdir),"infile")
+OUTFILEPATH = os.path.join(os.path.abspath(workdir),"outfile")
 
 class JobAtom():
     '''atom class of all jobs'''
@@ -47,7 +45,6 @@ def construct_job_queue(to_do):
     '''construct JobAtom queue from Job class '''
     logging.info("Constructing the job queue...")
     job_queue = []
-    global PURE_BACK
     pid = 0
     #search folder for old jobs, the new pid=largest old pid+1
     if os.path.exists(INFILEPATH):
@@ -58,15 +55,11 @@ def construct_job_queue(to_do):
     #bundle is class job
     for bundle in [e for e in to_do if e.control["__KeepCPUBusy"]== False]:
     #running the jobs doesn't use much cpu first
-        if not bundle.control["__IsCluster"]:
-            PURE_BACK = True
         for i,para in enumerate(bundle.to_dict()):
             job_queue.append(JobAtom(bundle.control, i, para))
 
     for bundle in [e for e in to_do if e.control["__KeepCPUBusy"] == True]:
     #running the jobs use much cpu next
-        if not bundle.control["__IsCluster"]:
-            PURE_BACK = False
         for i,para in enumerate(bundle.to_dict()):
             job_queue.append(JobAtom(bundle.control, i, para))
 
@@ -76,16 +69,13 @@ def construct_job_queue(to_do):
 def check_status():
     ''' check the status of submitted jobs,
     if the job is done, remove it from PROCLIST so new job could be submitted'''
-    for elemp in PROCLIST:
-        if elemp[0].poll() is not None:
-            PROCLIST.remove(elemp)
-            logging.info(elemp[1].get_job_name()+" is ended!")
-            print elemp[1].get_job_name()+" is ended..."
-    for elemp in PROCLIST_BACK:
-        if elemp[0].poll() is not None:
-            PROCLIST_BACK.remove(elemp)
-            logging.info(elemp[1].get_job_name()+" is ended!")
-            print elemp[1].get_job_name()+" is ended..."
+    PROC=(PROCLIST, PROCLIST_BACK)
+    for plist in PROC:
+        for elemp in plist:
+            if elemp[0].poll() is not None:
+                plist.remove(elemp)
+                logging.info(elemp[1].get_job_name()+" is ended!")
+                print elemp[1].get_job_name()+" is ended..."
     return
 
 def submit_job(job_atom):
@@ -105,11 +95,6 @@ def submit_job(job_atom):
     jobfile = os.path.abspath(workdir+"/_job_{0}_{1}.sh".format(
         job_atom.name, job_atom.pid))
     IO.SaveDict(infile, "w", job_atom.para)
-    #f_allinput = open(os.path.abspath(workdir+"/all_input.log"), "a")
-    #f_allinput.write("Job ID: {0}, Job name: {1}\n".format(
-            #job_atom.pid, job_atom.name))
-    #f_allinput.write(str(job_atom.para))
-    #f_allinput.close()
     if job_atom.is_cluster:
         fjob = open(jobfile, "w")
         fjob.write("#!/bin/sh\n"+"#PBS -N "+jobname+"\n")
@@ -156,18 +141,16 @@ if __name__ == "__main__":
     JOBQUEUE = construct_job_queue(inlist.TO_DO)
     #print [e.keep_cpu_busy for e in JOBQUEUE]
     i = 0
-    for ATOM in JOBQUEUE:
-        while ATOM.is_cluster is False and len(PROCLIST)>=inlist.CPU:
+    try:
+        for ATOM in JOBQUEUE:
+            while ATOM.is_cluster is False and len(PROCLIST)>=inlist.CPU:
+                check_status()
+                time.sleep(inlist.SLEEP)
+            submit_job(ATOM)
+        while len(PROCLIST+PROCLIST_BACK) != 0:
             check_status()
             time.sleep(inlist.SLEEP)
-        submit_job(ATOM)
-
-    check_status()
-    while len(PROCLIST+PROCLIST_BACK) != 0:
-        try:
-            time.sleep(inlist.SLEEP)
-            check_status()
-        except KeyboardInterrupt:
-            StopTheWorld()
+    except KeyboardInterrupt:
+        StopTheWorld()
 
     logging.info("Jobs manage daemon is ended...")
