@@ -111,7 +111,7 @@ bool ModuleObject::HasAttr(const std::string& name)
         GetAttr(name);
         return true;
     }
-    catch (ERRORCODE e) {
+    catch (KeyInvalid) {
         return false;
     }
 }

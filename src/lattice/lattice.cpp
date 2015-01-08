@@ -98,20 +98,20 @@ Vec<int> Lattice::Index2Vec(int index) const
  */
 int Lattice::Sublat2Index(int InSub, int OutSub) const
 {
-    return InSub * NSublattice + OutSub;
+    return InSub * SublatVol + OutSub;
 }
 
 int Lattice::Index2Sublat(int index, int dir) const
 {
     if (dir == IN)
-        return index / NSublattice;
+        return index / SublatVol;
     else
-        return index % NSublattice;
+        return index % SublatVol;
 }
 
 std::tuple<int, int> Lattice::Index2Sublat(int index) const
 {
-    return std::make_tuple(index / NSublattice, index % NSublattice);
+    return std::make_tuple(index / SublatVol, index % SublatVol);
 }
 
 bool Lattice::IsOnSameSubLat(int Index)

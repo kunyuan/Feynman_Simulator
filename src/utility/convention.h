@@ -17,14 +17,6 @@ typedef unsigned int uint;
 const bool DEBUGMODE = true;
 //#define NDEBUG
 //define NDEBUG will turn off debug checking, including the boundary check in array.h
-enum ERRORCODE {
-    ERR_GENERAL = 0,
-    ERR_FILE_NOT_FOUND,
-    ERR_FILE_INVALID,
-    ERR_KEY_NOT_FOUND,
-    ERR_VALUE_NOT_FOUND,
-    ERR_VALUE_INVALID
-};
 
 const real PI = 3.1415926535897932384626433832795;
 
@@ -43,13 +35,10 @@ const int IN = 0;
 const int OUT = 1;
 #define INVERSE(x) (1 - x)
 
-const int MAX_ORDER = 15;
+const int MAX_ORDER = 10;
 
 //define your lattice here
 
 const int D = 2;
-const int NSublattice = 2;
-
-const int NSublattice2 = NSublattice * NSublattice;
 
 #endif
