@@ -35,8 +35,7 @@ void Finalize();
 void PrintError();
 void ClearError();
 void PrintPyObject(PyObject*);
-void FilterPyError(PyObject*, ERRORCODE);
-void MakeSureNoPyError(ERRORCODE);
+void PropagatePyError();
 /**
     * Object always own an new reference (so it need to call Py_DECREF() when get deleted)
     * The copy constructor Object A=B will create an new reference for Object A.

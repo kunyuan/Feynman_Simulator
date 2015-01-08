@@ -31,13 +31,13 @@ ArrayObject::ArrayObject(const Object& obj)
     : Object(obj)
 {
     if (!PyArray_Check(obj.Get()))
-        ERRORCODEABORT(ERR_VALUE_INVALID, "PyArray object is expected!");
+        ABORT("PyArray object is expected!");
 }
 ArrayObject::ArrayObject(PyObject* obj, OwnerShip ownership)
     : Object(obj, ownership)
 {
     if (!PyArray_Check(obj))
-        ERRORCODEABORT(ERR_VALUE_INVALID, "PyArray object is expected!");
+        ABORT("PyArray object is expected!");
 }
 
 void ArrayObject::_Construct(Complex* data, const uint* Shape, const int Dim)

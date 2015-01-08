@@ -42,7 +42,7 @@ void Dictionary::LoadFromString(const std::string& script)
     AnyObject obj;
     obj.EvalScript(script);
     if (!FromPy(obj))
-        ERRORCODEABORT(ERR_VALUE_INVALID, "Script is invalided!");
+        ABORT("Script is invalided!");
 }
 
 void Dictionary::Load(const std::string& FileName)
@@ -50,9 +50,9 @@ void Dictionary::Load(const std::string& FileName)
     ModuleObject LoadDict;
     LoadDict.LoadModule("IO.py");
     Object result = LoadDict.CallFunction("LoadDict", FileName);
-    MakeSureNoPyError(ERR_FILE_INVALID);
+    PropagatePyError();
     if (!FromPy(result))
-        ERRORCODEABORT(ERR_VALUE_INVALID, "File is invalided!");
+        ABORT("Fail to read file!");
 }
 
 void Dictionary::Save(const string& FileName, const std::string& Mode)
@@ -60,7 +60,7 @@ void Dictionary::Save(const string& FileName, const std::string& Mode)
     ModuleObject SaveDict;
     SaveDict.LoadModule("IO.py");
     SaveDict.CallFunction("SaveDict", FileName, Mode, _Map);
-    MakeSureNoPyError(ERR_FILE_INVALID);
+    PropagatePyError();
 }
 
 void Dictionary::BigLoad(const std::string& FileName)
@@ -68,16 +68,16 @@ void Dictionary::BigLoad(const std::string& FileName)
     ModuleObject LoadBigDict;
     LoadBigDict.LoadModule("IO.py");
     Object result = LoadBigDict.CallFunction("LoadBigDict", FileName);
-    MakeSureNoPyError(ERR_FILE_INVALID);
+    PropagatePyError();
     if (!FromPy(result))
-        ERRORCODEABORT(ERR_VALUE_INVALID, "File is invalided!");
+        ABORT("Fail to read file!");
 }
 void Dictionary::BigSave(const std::string& FileName)
 {
     ModuleObject SaveBigDict;
     SaveBigDict.LoadModule("IO.py");
     SaveBigDict.CallFunction("SaveBigDict", FileName, _Map);
-    MakeSureNoPyError(ERR_FILE_INVALID);
+    PropagatePyError();
 }
 
 void Dictionary::Clear()

@@ -36,23 +36,40 @@ void PrintPyObject(PyObject* obj)
 {
     PyObject_Print(obj, stdout, 0);
 }
-void MakeSureNoPyError(ERRORCODE e)
+
+std::string GetPyErrorStr()
+{
+    PyObject* ptype;
+    PyObject* pvalue;
+    PyObject* ptraceback;
+    PyErr_Fetch(&ptype, &pvalue, &ptraceback);
+    PyErr_NormalizeException(&ptype, &pvalue, &ptraceback);
+    Object type = PyObject_Str(ptype);
+    Object value = PyObject_Str(pvalue);
+    auto result = std::string(PyString_AsString(type.Get()))
+                  + std::string(PyString_AsString(value.Get()));
+    Py_XDECREF(ptype);
+    Py_XDECREF(pvalue);
+    Py_XDECREF(ptraceback);
+    return result;
+}
+
+void PropagatePyError()
 {
     if (PyErr_Occurred()) {
-        PrintError();
-        ERRORCODEABORT(e, "Python runtime error!");
+        if (PyErr_ExceptionMatches(PyExc_IOError))
+            THROW(IOInvalid, GetPyErrorStr(), WARNING);
+        else if (PyErr_ExceptionMatches(PyExc_KeyError))
+            THROW(KeyInvalid, GetPyErrorStr(), WARNING);
+        else if (PyErr_ExceptionMatches(PyExc_IndexError))
+            THROW(IndexInvalid, GetPyErrorStr(), WARNING);
+        else if (PyErr_ExceptionMatches(PyExc_MemoryError))
+            THROW(MemoryException, GetPyErrorStr(), WARNING);
+        else
+            THROW(RunTimeException, GetPyErrorStr(), WARNING);
+        PyErr_Clear();
     }
 }
-
-void FilterPyError(PyObject* err, ERRORCODE e)
-{
-    if (PyErr_Occurred())
-        if (PyErr_ExceptionMatches(err)) {
-            PrintError();
-            ERRORCODEABORT(e, "Python runtime error!");
-        }
-}
-
 void IncreaseRef(PyObject* obj)
 {
     if (obj != nullptr)
@@ -132,13 +149,13 @@ void Object::_PrintDebug() const
 std::string Object::PrettyString()
 {
     Object result = PyObject_Repr(_PyPtr);
-    MakeSureNoPyError(ERR_VALUE_INVALID);
+    PropagatePyError();
     return PyString_AsString(result.Get());
 }
 
 void Object::MakeSureNotNull()
 {
     if (_PyPtr == nullptr)
-        ERRORCODEABORT(ERR_VALUE_INVALID, "PyObject* is null!");
+        ABORT("PyObject* is null!");
 }
 }
