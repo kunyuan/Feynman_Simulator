@@ -45,12 +45,6 @@ EXCEPTION(RunTimeException);
 #define ABORT(msg) \
     THROW(RunTimeException, msg, ERROR)
 
-#define ERRORCODEABORT(errorcode, msg) \
-    do {                               \
-        LOG_ERROR(msg);                \
-        throw(errorcode);              \
-    } while (0)
-
 #define ASSERT_ALLWAYS(expression, msg)                   \
     do {                                                  \
         if ((expression) == false)                        \

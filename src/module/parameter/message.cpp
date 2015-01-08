@@ -16,9 +16,7 @@ bool para::Message::Load(const string& FileName)
     try {
         _Para.Load(FileName);
     }
-    catch (ERRORCODE e) {
-        if (e != ERR_FILE_INVALID)
-            throw e;
+    catch (IOInvalid e) {
         return false;
     }
     GET(_Para, Beta);
