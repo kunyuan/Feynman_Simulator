@@ -30,7 +30,6 @@ public:
     std::string StatisticsFile;
     std::string ParaFile;
     std::string LogFile;
-    std::string ConfigFile;
     std::string InputFile;
 };
 }

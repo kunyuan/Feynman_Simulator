@@ -1,8 +1,17 @@
 ''' This is a file to define the class of all jobs,
     You have to modify this file if you want to add new type of jobs.'''
-import sys
-import os
-import random
+import sys, os, random, re
+
+def get_current_PID(Type):
+    workspace=os.path.abspath(".")
+    KeyWord=Type+"_para"
+    filelist=sorted([int(e.split('_')[0]) for e in os.listdir(workspace) if KeyWord in e])
+    if len(filelist)==0:
+        NextPID=0
+    else:
+        NextPID=filelist[-1]+1
+    return filelist, NextPID
+
 #base class of all jobs
 class Job:
     '''Class Job is the base class of all job objects.
@@ -17,19 +26,22 @@ class Job:
             print "Something is wrong with the inlist! Abandon!"
             sys.exit()
         self.control=para.pop("Control")
-        self.pid = 0
-        self.name = ""
+        self.pid = []
         self.para = para
 
-    def to_dict(self, pid=0):
+    def to_dict(self):
         '''output the corresponding string of the job class'''
-        self.para["Job"]["PID"] = pid
+        self.control["__Type"]=self.para["Job"]["Type"]
         self.para["Job"]["WeightFile"]="Weight"
         self.para["Job"]["MessageFile"]="Message"
         self.__set_model_specific__()
-        para_={}
-        para_["Para"]=self.para
-        return para_
+        para_list=[]
+        for p in self.pid:
+            self.para["Job"]["PID"] = p
+            para_={}
+            para_["Para"]=self.para
+            para_list.append((p, para_))
+        return para_list
 
     def __check_parameters__(self, para):
         if para["Control"]["__Execute"] is "":
@@ -48,7 +60,6 @@ class JobMonteCarlo(Job):
     def __init__(self, para):
         Job.__init__(self, para)
         self.para["Job"]["Type"] = "MC"
-        self.name = "MC"
 
     def __check_parameters__(self, para):
         if Job.__check_parameters__(self, para) is False:
@@ -60,18 +71,25 @@ class JobMonteCarlo(Job):
             print "The Reweight numbers should be equal to Order!"
             return False
 
-    def to_dict(self, pid=0):
+    def to_dict(self):
         #set Seed here so that each job has it own rng seed
         self.para["Markov"]["Seed"] = int(random.random()*2**30)
-        return Job.to_dict(self, pid)
+        #search folder for old jobs, the new pid=largest old pid+1
+        PIDList, NextPID=get_current_PID(self.para["Job"]["Type"])
+        if self.para["Job"]["DoesLoad"]:
+            self.pid=PIDList[len(PIDList)-self.control["__Duplicate"]:]
+        else:
+            self.pid=range(NextPID, NextPID+self.control["__Duplicate"])
+        return Job.to_dict(self)
 
 class JobDyson(Job):
     '''job subclass for self consistent loop jobs'''
     def __init__(self, para):
         Job.__init__(self, para)
         self.para["Job"]["Type"] = "DYSON"
-        self.name = "DYSON"
 
-    def to_dict(self, pid=0):
-        return Job.to_dict(self, pid)
+    def to_dict(self):
+        PIDList, NextPID=get_current_PID(self.para["Job"]["Type"])
+        self.pid=range(NextPID, NextPID+self.control["__Duplicate"])
+        return Job.to_dict(self)
 

@@ -173,7 +173,7 @@ void Diagram::BuildNew(Lattice& lat, weight::G& g, weight::W& w)
         "'W':"
         "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsDelta': False, 'IsMeasure': True}]}");
     if (!FromDict(Config))
-        ERRORCODEABORT(ERR_VALUE_INVALID, "Faile to construct diagram!");
+        ABORT("Faile to construct diagram!");
 }
 
 void Diagram::SetTest(Lattice& lat, weight::G& g, weight::W& w)
@@ -191,7 +191,7 @@ void Diagram::SetTest(Lattice& lat, weight::G& g, weight::W& w)
         "'W':"
         "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsDelta': False, 'IsMeasure': True}]}");
     if (!FromDict(Config))
-        ERRORCODEABORT(ERR_VALUE_INVALID, "Faile to construct diagram!");
+        ABORT("Faile to construct diagram!");
 }
 
 /************************   write component to gv ****************************************/

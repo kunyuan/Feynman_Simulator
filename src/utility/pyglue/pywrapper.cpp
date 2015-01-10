@@ -41,14 +41,14 @@ void AnyObject::EvalScript(const std::string& script)
     Object local = PyDict_New();
     *this = PyRun_String(script.c_str(), Py_eval_input,
                          global.Get(), local.Get());
-    MakeSureNoPyError(ERR_GENERAL);
+    PropagatePyError();
 }
 
 ModuleObject::ModuleObject(const Object& obj)
     : Object(obj)
 {
     if (!PyModule_Check(obj.Get()))
-        ERRORCODEABORT(ERR_VALUE_INVALID, "PyModule object is expected!");
+        ABORT("PyModule object is expected!");
 }
 ModuleObject& ModuleObject::operator=(const ModuleObject& obj)
 {
@@ -76,7 +76,7 @@ void ModuleObject::LoadModule(const string& script_path)
     PyList_Append(path.Get(), pwd.Get());
     /* We don't need that string value anymore, so deref it */
     Object module = PyImport_ImportModule(file_path.c_str());
-    MakeSureNoPyError(ERR_GENERAL);
+    PropagatePyError();
     *this = module;
 }
 
@@ -84,7 +84,7 @@ Object ModuleObject::load_function(const std::string& name)
 {
     Object obj = PyObject_GetAttrString(_PyPtr, name.c_str());
     obj.MakeSureNotNull();
-    MakeSureNoPyError(ERR_GENERAL);
+    PropagatePyError();
     return obj;
 }
 
@@ -93,14 +93,15 @@ Object ModuleObject::CallFunction(const std::string& name)
     Object func = load_function(name);
     //    Object func = load_function(name);
     Object ret = PyObject_CallObject(func.Get(), 0);
-    MakeSureNoPyError(ERR_GENERAL);
+    //    MakeSureNoPyError(ERR_GENERAL);
+    PropagatePyError();
     return { ret };
 }
 
 Object ModuleObject::GetAttr(const std::string& name)
 {
     Object obj = PyObject_GetAttrString(_PyPtr, name.c_str());
-    MakeSureNoPyError(ERR_GENERAL);
+    PropagatePyError();
     return { obj };
 }
 
@@ -110,7 +111,7 @@ bool ModuleObject::HasAttr(const std::string& name)
         GetAttr(name);
         return true;
     }
-    catch (ERRORCODE e) {
+    catch (KeyInvalid) {
         return false;
     }
 }

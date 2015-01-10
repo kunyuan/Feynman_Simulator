@@ -2,7 +2,7 @@
    You have to add new job objects to TO_DO list
    if you want to run simulation.'''
 CPU = 4
-SLEEP = 5    #check job status for every SLEEP seconds
+SLEEP = 1    #check job status for every SLEEP seconds
 #common dictionary for all jobs
 beta=0.1
 Common={
@@ -27,7 +27,7 @@ Common={
 # monte carlo job defintion
 MonteCarlo={
 "Control": {
-    "__Execute" : "./gamma3.exe",
+    "__Execute" : "./simulator.exe",
     "__Duplicate" : 1,
     "__IsCluster" : False,
     "__AutoRun" : False,
@@ -52,7 +52,7 @@ Dyson={
     "__AutoRun" : True, 
     "__KeepCPUBusy": False,
     },
-"Job": {"DoesLoad" : False},
+"Job": {"StartFromBare" : True},
 "Dyson": {
     "Order": 1,
     "OrderAccepted": 1,

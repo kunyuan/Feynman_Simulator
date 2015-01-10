@@ -11,4 +11,6 @@ else
   rm *.gv
   rm -rf infile
   rm -rf outfile
+  rm *.jpg
+  rm -rf ./diagram/
 fi

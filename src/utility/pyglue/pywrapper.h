@@ -59,7 +59,7 @@ public:
     {
         T value;
         if (!Python::Convert(*this, value))
-            ERRORCODEABORT(ERR_VALUE_INVALID, "Fail to convert PyObject!");
+            ABORT("Fail to convert PyObject!");
         return value;
     }
     /**

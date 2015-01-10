@@ -25,9 +25,9 @@ para::Job::Job(string inputfile)
     GET(_Para, PID);
     GET(_Para, WeightFile);
     GET(_Para, MessageFile);
-    ParaFile = ToString(PID) + "_para";
-    StatisticsFile = ToString(PID) + "_statistics";
-    ConfigFile = ToString(PID) + "_config";
-    LogFile = ToString(PID) + ".log";
+    string Prefix = ToString(PID) + "_" + string(Type);
+    ParaFile = Prefix + "_para";
+    StatisticsFile = Prefix + "_statis";
+    LogFile = Prefix + ".log";
     InputFile = inputfile;
 }

@@ -1,30 +1,27 @@
 cmake_minimum_required (VERSION 2.6)
 project (FeynmanSimulator)
-set(CMAKE_CXX_COMPILER icpc)
+#set(CMAKE_CXX_COMPILER icpc)
 #set(CMAKE_CXX_COMPILER clang++)
-#set(CMAKE_CXX_FLAGS "-lz")
 #set(CMAKE_BUILD_TYPE Debug)
-set(CMAKE_BUILD_TYPE Release)
+#set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
-#set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-#set(CMAKE_INCLUDE_PATH "src")
 include_directories(${FeynmanSimulator_SOURCE_DIR})
 
 file(GLOB_RECURSE SRCS *.cpp)
 file(GLOB_RECURSE HDRS *.h)
-ADD_EXECUTABLE(FeynmanSimulator  ${SRCS} ${HDRS})
+ADD_EXECUTABLE(simulator.exe  ${SRCS} ${HDRS})
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR})
 find_package(PythonInterp REQUIRED)
 find_package(PythonDev REQUIRED)
-#find_package(PythonLibs REQUIRED)
 find_package(NumPy REQUIRED)
 # Require version >= 1.6
-if(NUMPY_VERSION_DECIMAL LESS 10600)
-    message(FATAL_ERROR,
-        "requires NumPy >= 1.6")
-endif()
+#if(NUMPY_VERSION_DECIMAL LESS 10600)
+    #message(FATAL_ERROR,
+        #"requires NumPy >= 1.6")
+#endif()
 
 include_directories(
     ${PYTHON_INCLUDE_DIR}
@@ -33,4 +30,5 @@ include_directories(
 message(${PYTHON_INCLUDE_DIR})
 message(${PYTHON_LIBRARIES})
 message(${NUMPY_VERSION})
-target_link_libraries(FeynmanSimulator ${PYTHON_LIBRARIES})
+target_link_libraries(simulator.exe ${PYTHON_LIBRARIES})
+install (TARGETS simulator.exe DESTINATION ${PROJECT_SOURCE_DIR}/..)
