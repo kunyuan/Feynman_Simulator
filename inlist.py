@@ -15,7 +15,7 @@ Common={
 "Lattice":  {
     "Name": "Square",
     "NSublat": 1,
-    "L": [4,4]
+    "L": [8,8]
     },
 "Model": {
     "Name": "J1J2",
@@ -37,11 +37,11 @@ MonteCarlo={
 "Markov": {
     "Order": 3,
     #Start from order 0, so that OrderReWeight has Order+1 elements
-    "OrderReWeight" : [1.0, 1.0, 100.0, 1000.0],
+    "OrderReWeight" : [1.0, 1.0, 50.0, 500.0],
     "Sample" : 1000000,
     "Sweep" : 50,
     "Toss" : 10000,
-    "WormSpaceReweight" : 0.500
+    "WormSpaceReweight" : 0.05
     }
 }
 Dyson={

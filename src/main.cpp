@@ -57,7 +57,7 @@ void MonteCarlo(const para::Job& Job)
 
         Scarecrow.Measure();
 
-        if (icount % 10 == 0) {
+        if (icount % 1000 == 0) {
             //            Env.AddStatistics();
             PaddyField.Diag.CheckDiagram();
             if(!PaddyField.Diag.Worm.Exist)
