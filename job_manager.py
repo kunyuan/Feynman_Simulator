@@ -105,8 +105,8 @@ def submit_job(job_atom):
             print "You have to run "+job_atom.get_job_name()+" by yourself!"
     else:
         if job_atom.auto_run:
-            shellstr = "exec "+job_atom.execute+" -f "+infile+" >> "+outfile
-            #shellstr = "exec "+job_atom.execute+" -f "+infile
+            #shellstr = "exec "+job_atom.execute+" -f "+infile+" >> "+outfile
+            shellstr = "exec "+job_atom.execute+" -f "+infile
             proc = subprocess.Popen(shellstr, shell=True)
             if job_atom.keep_cpu_busy:
                 PROCLIST.append((proc, job_atom))

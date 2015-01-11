@@ -28,9 +28,9 @@ Common={
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" : 4,
+    "__Duplicate" : 0,
     "__IsCluster" : False,
-    "__AutoRun" : False,
+    "__AutoRun" : True,
     "__KeepCPUBusy": True,
     },
 "Job": {"DoesLoad" : False},
@@ -47,14 +47,14 @@ MonteCarlo={
 Dyson={
 "Control": {
     "__Execute" : ["python", "./calculator/main.py"],
-    "__Duplicate" : 0,
+    "__Duplicate" : 1,
     "__IsCluster" : False,
     "__AutoRun" : True, 
     "__KeepCPUBusy": False,
     },
-"Job": {"StartFromBare" : True},
+"Job": {"StartFromBare" : False},
 "Dyson": {
-    "Order": 1,
+    "Order": 3,
     "OrderAccepted": 1,
     "ErrorThreshold": 0.5,
     "SleepTime": 300
