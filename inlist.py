@@ -4,10 +4,10 @@
 CPU = 4
 SLEEP = 1    #check job status for every SLEEP seconds
 #common dictionary for all jobs
-beta=0.1
+beta=0.5
 Common={
 "Tau": {
-    "MaxTauBin" : 32,
+    "MaxTauBin" : 128,
     "Beta": beta,
     "DeltaBeta" :  0.00,
     "FinalBeta" :  beta,
@@ -15,7 +15,7 @@ Common={
 "Lattice":  {
     "Name": "Square",
     "NSublat": 1,
-    "L": [8,8]
+    "L": [4,4]
     },
 "Model": {
     "Name": "J1J2",
@@ -28,26 +28,26 @@ Common={
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" : 4,
+    "__Duplicate" : 1,
     "__IsCluster" : False,
     "__AutoRun" : False,
     "__KeepCPUBusy": True,
     },
 "Job": {"DoesLoad" : False},
 "Markov": {
-    "Order": 3,
+    "Order": 4,
     #Start from order 0, so that OrderReWeight has Order+1 elements
-    "OrderReWeight" : [1.0, 1.0, 50.0, 500.0],
-    "Sample" : 1000000,
-    "Sweep" : 50,
-    "Toss" : 10000,
+    "OrderReWeight" : [1.0, 1.0, 50.0, 10.0, 500.0],
+    "Sample" : 50000000,
+    "Sweep" : 10,
+    "Toss" : 1000,
     "WormSpaceReweight" : 0.05
     }
 }
 Dyson={
 "Control": {
     "__Execute" : ["python", "./calculator/main.py"],
-    "__Duplicate" : 0,
+    "__Duplicate" : 1,
     "__IsCluster" : False,
     "__AutoRun" : True, 
     "__KeepCPUBusy": False,

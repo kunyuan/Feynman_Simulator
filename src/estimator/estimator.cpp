@@ -90,6 +90,7 @@ void Estimator<T>::ClearStatistics()
     _accumulator = 0.0;
     _ratio = 1.0;
     _norm = 1.0;
+    //small enough non-zero number to avoid NAN
 }
 
 template <typename T>

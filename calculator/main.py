@@ -11,7 +11,7 @@ parser.add_argument("-p", "--PID", help="use PID to find the input file")
 parser.add_argument("-f", "--file", help="use file path to find the input file")
 args = parser.parse_args()
 if args.PID:
-    InputFile=workspace+"infile/_in_DYSON_"+str(args.PID)
+    InputFile=workspace+"/infile/_in_DYSON_"+str(args.PID)
 elif args.file:
     InputFile=os.path.abspath(args.file)
 else:
@@ -38,8 +38,9 @@ if para["Job"]["StartFromBare"] is True or os.path.exists(WeightFile) is False:
         Polar=calc.Polar_FirstOrder(G, map)
         Sigma=calc.Sigma_FirstOrder(G, W, map)
         Sigma0=calc.Sigma0_FirstOrder(G, W0, map)
+
         #######DYSON FOR W AND G###########################
-        #W = calc.W_Dyson(W0, Polar,map)
+        W = calc.W_Dyson(W0, Polar,map)
         G = calc.G_Dyson(G0, Sigma0, Sigma, map)
         ###################################################
 else:
@@ -70,7 +71,6 @@ print WeightFile
 data={}
 data["G"]=G.ToDict()
 data["W"]=W.ToDict()
-data["W"].update(W0.ToDict())
 
 data["Sigma"]=Sigma.ToDict()    ####ForTest
 data["Polar"]=Polar.ToDict()    ####ForTest
@@ -78,6 +78,6 @@ data["Chi"]=Chi.ToDict()        ####ForTest
 
 IO.SaveBigDict(WeightFile, data)
 ###################################################
-plot.PlotSpatial(Chi, Lat, spinUP, spinUP)
+#plot.PlotSpatial(Chi, Lat, spinUP, spinUP)
 
 

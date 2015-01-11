@@ -66,9 +66,11 @@ void MonteCarlo(const para::Job& Job)
         Grasshopper.Hop(Para.Sweep);
 
         Scarecrow.Measure();
+        
+        if(icount %10==0)
+            Scarecrow.AddStatistics();
 
         if (icount % 1000 == 0) {
-            //            Env.AddStatistics();
             PaddyField.Diag.CheckDiagram();
             if (!PaddyField.Diag.Worm.Exist)
                 PaddyField.Diag.WriteDiagram2gv("diagram/" + ToString(Para.Counter) + ".gv");
