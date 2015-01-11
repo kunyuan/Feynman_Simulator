@@ -12,7 +12,7 @@ parser.add_argument("-p", "--PID", help="use PID to find the input file")
 parser.add_argument("-f", "--file", help="use file path to find the input file")
 args = parser.parse_args()
 if args.PID:
-    InputFile=workspace+"infile/_in_DYSON_"+str(args.PID)
+    InputFile=workspace+"/infile/_in_DYSON_"+str(args.PID)
 elif args.file:
     InputFile=os.path.abspath(args.file)
 else:
@@ -76,7 +76,6 @@ print WeightFile
 data={}
 data["G"]=G.ToDict()
 data["W"]=W.ToDict()
-data["W"].update(W0.ToDict())
 
 data["Sigma"]=Sigma.ToDict()    ####ForTest
 data["Polar"]=Polar.ToDict()    ####ForTest
@@ -84,6 +83,6 @@ data["Chi"]=Chi.ToDict()        ####ForTest
 
 IO.SaveBigDict(WeightFile, data)
 ###################################################
-plot.PlotSpatial(Chi, Lat, spinUP, spinUP)
+#plot.PlotSpatial(Chi, Lat, spinUP, spinUP)
 
 
