@@ -28,7 +28,7 @@ Common={
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" : 1,
+    "__Duplicate" : 4,
     "__IsCluster" : False,
     "__AutoRun" : True,
     "__KeepCPUBusy": True,
@@ -47,7 +47,7 @@ MonteCarlo={
 Dyson={
 "Control": {
     "__Execute" : ["python", "./calculator/main.py"],
-    "__Duplicate" : 1,
+    "__Duplicate" : 0,
     "__IsCluster" : False,
     "__AutoRun" : True, 
     "__KeepCPUBusy": False,

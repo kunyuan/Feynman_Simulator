@@ -92,8 +92,8 @@ class IndexMap:
 
 class Weight():
     def __init__(self, Name, Map, NSpin, Symmetry=None):
-        """Name: end with '.SmoothT' or '.DeltaT'
-           NSpin: 'OneSpin' or 'TwoSpin'
+        """Name: 'SmoothT' or 'DeltaT'
+           NSpin: 'TwoSpins' or 'FourSpins'
            Symmetry: 'Symmetric' or 'AntiSymmetric', only be checked if TauDep is 'SmoothT'
         """
         self.Map=Map
@@ -105,7 +105,7 @@ class Weight():
         elif NSpin is "FourSpins":
             self.NSpin=4
         else:
-            Assert(False, "Only accept TwoSpin or FourSpins, not {0}".format(NSpin))
+            Assert(False, "Only accept TwoSpins or FourSpins, not {0}".format(NSpin))
 
         self.Shape=[self.NSpin, self.NSublat, self.NSpin, self.NSublat, self.Map.Vol]
         if Name=="SmoothT":

@@ -215,6 +215,10 @@ Dictionary Estimator<T>::ToDict()
     dict["Norm"] = _norm;
     dict["Accu"] = _accumulator;
     dict["History"] = Python::ArrayObject(_history.data(), shape, 1);
+    Dictionary est;
+    est["Mean"] = Python::AnyObject(_value.Mean);
+    est["Error"] = Python::AnyObject(_value.Error);
+    dict["Estimation"] = est;
     return dict;
 }
 

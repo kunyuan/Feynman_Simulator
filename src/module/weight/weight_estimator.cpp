@@ -83,14 +83,14 @@ void WeightEstimator::UpdateWeight(SmoothTMatrix& target, int UpToOrder)
 {
     //WeightEstimator and the corresponding WeightArray
     //share the same memory structure from _Shape[SP]  to _Shape[TAU]
-    real NormFactor = 1.0 / _NormAccu * _Norm * (_MaxTauBin /_Beta)/_Beta/_Vol/_SublatVol;
-    
+    real NormFactor = 1.0 / _NormAccu * _Norm * (_MaxTauBin / _Beta) / _Beta / _Vol / _SublatVol;
+
     int order = 1;
     target = _WeightAccu[order - 1];
     //add order>1 on _Weight
     for (order = 2; order <= UpToOrder; order++)
         target += _WeightAccu[order - 1];
-    
+
     target *= NormFactor;
 
     //TODO:Update DeltaTWeight for Sigma
@@ -142,7 +142,7 @@ bool WeightEstimator::FromDict(const Dictionary& dict)
     auto arr = dict.Get<Python::ArrayObject>("WeightAccu");
     ASSERT_ALLWAYS(Equal(arr.Shape().data(), _MeaShape, 5), "Shape should match!");
     _WeightAccu = arr.Data<Complex>();
-    return _WeightErrorEstimator.FromDict(dict.Get<Dictionary>("Estimator"));
+    return _WeightErrorEstimator.FromDict(dict);
 }
 
 Dictionary WeightEstimator::ToDict()
@@ -151,6 +151,6 @@ Dictionary WeightEstimator::ToDict()
     dict["Norm"] = _Norm;
     dict["NormAccu"] = _NormAccu;
     dict["WeightAccu"] = Python::ArrayObject(_WeightAccu(), _MeaShape, 5);
-    dict["Estimator"] = _WeightErrorEstimator.ToDict();
+    dict.Update(_WeightErrorEstimator.ToDict());
     return dict;
 }

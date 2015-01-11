@@ -38,6 +38,11 @@ public:
     {
         LoadFromString(script);
     }
+    template <typename T>
+    Dictionary(const std::string& key, const T& value)
+    {
+        _Map[key] = value;
+    }
     Dictionary& operator=(const Dictionary& dict)
     {
         if (this == &dict)

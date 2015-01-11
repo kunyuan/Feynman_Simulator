@@ -4,7 +4,7 @@ then
       rm -rf ./diagram/*
   fi
 else
-  rm *.pkl
+  #rm *.pkl
   rm *.txt
   rm *.log
   rm *.gv
@@ -12,4 +12,5 @@ else
   rm -rf outfile
   rm *.jpg
   rm -rf ./diagram/
+  mkdir ./diagram
 fi

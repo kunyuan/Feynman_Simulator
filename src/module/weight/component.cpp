@@ -163,14 +163,14 @@ void Sigma::Reset(real Beta)
 
 bool Sigma::FromDict(const Dictionary& dict)
 {
-    return Estimator.FromDict(dict.Get<Dictionary>("Histogram"))
+    return Estimator.FromDict(dict.Get<Dictionary>("Histogram").Get<Dictionary>("SmoothT"))
            && Basic::FromDict(dict);
 }
 
 Dictionary Sigma::ToDict()
 {
     Dictionary dict = Basic::ToDict();
-    dict["Histogram"] = Estimator.ToDict();
+    dict["Histogram"] = Dictionary("SmoothT", Estimator.ToDict());
     return dict;
 }
 
@@ -200,13 +200,13 @@ void Polar::Reset(real Beta)
 
 bool Polar::FromDict(const Dictionary& dict)
 {
-    return Estimator.FromDict(dict.Get<Dictionary>("Histogram"))
+    return Estimator.FromDict(dict.Get<Dictionary>("Histogram").Get<Dictionary>("SmoothT"))
            && Basic::FromDict(dict);
 }
 
 Dictionary Polar::ToDict()
 {
     Dictionary dict = Basic::ToDict();
-    dict["Histogram"] = Estimator.ToDict();
+    dict["Histogram"] = Dictionary("SmoothT", Estimator.ToDict());
     return dict;
 }

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 '''This is the job manage script.
    This is a quite universal code for all different type of simulations'''
-import os, sys
+import os, sys, copy
 import time
 import subprocess
 import logging
@@ -63,6 +63,7 @@ def check_status():
     ''' check the status of submitted jobs,
     if the job is done, remove it from PROCLIST so new job could be submitted'''
     PROC=(PROCLIST, PROCLIST_BACK)
+    #print PROC
     for plist in PROC:
         for elemp in plist:
             if elemp[0].poll() is not None:
@@ -104,14 +105,17 @@ def submit_job(job_atom):
             print "You have to run "+job_atom.get_job_name()+" by yourself!"
     else:
         if job_atom.auto_run:
-            #shellstr = "exec "+job_atom.execute+" -f "+infile+" >> "+outfile
-            shellstr = "exec "+job_atom.execute+" -f "+infile
+            shellstr = "exec "+job_atom.execute+" -f "+infile+" >> "+outfile
+            #shellstr = "exec "+job_atom.execute+" -f "+infile
             proc = subprocess.Popen(shellstr, shell=True)
             if job_atom.keep_cpu_busy:
                 PROCLIST.append((proc, job_atom))
             else:
                 PROCLIST_BACK.append((proc, job_atom))
 
+            #print shellstr
+            #print PROCLIST
+            #print PROCLIST_BACK
             logging.info(job_atom.get_job_name()+" is started...")
             logging.info("input:\n"+str(job_atom.para))
             logging.info("PID:{0}\n".format(proc.pid))

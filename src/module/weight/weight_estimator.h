@@ -21,7 +21,7 @@ public:
     //Shape including ORDER
     uint* GetExtendedShape();
 
-    //The normalization facto is not considered in _WeightErrorEstimator,
+    //The normalization factor is not considered in _WeightErrorEstimator,
     //thus only relative error makes sense
     Complex RelativeError(int order);
 

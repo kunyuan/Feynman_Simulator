@@ -1,6 +1,6 @@
 ''' This is a file to define the class of all jobs,
     You have to modify this file if you want to add new type of jobs.'''
-import sys, os, random, re
+import sys, os, random, re, copy
 
 def get_current_PID(Type):
     workspace=os.path.abspath(".")
@@ -37,9 +37,9 @@ class Job:
         self.__set_model_specific__()
         para_list=[]
         for p in self.pid:
-            self.para["Job"]["PID"] = p
             para_={}
-            para_["Para"]=self.para
+            para_["Para"]=copy.deepcopy(self.para)
+            para_["Para"]["Job"]["PID"] = p
             para_list.append((p, para_))
         return para_list
 
