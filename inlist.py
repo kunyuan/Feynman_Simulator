@@ -7,7 +7,7 @@ SLEEP = 1    #check job status for every SLEEP seconds
 beta=0.1
 Common={
 "Tau": {
-    "MaxTauBin" : 64,
+    "MaxTauBin" : 32,
     "Beta": beta,
     "DeltaBeta" :  0.00,
     "FinalBeta" :  beta,
@@ -15,12 +15,12 @@ Common={
 "Lattice":  {
     "Name": "Square",
     "NSublat": 1,
-    "L": [16,16]
+    "L": [8,8]
     },
 "Model": {
     "Name": "J1J2",
     "Interaction": [1.0,0.0],
-    "ExternalField": [-0.0]
+    "ExternalField": [0.0]
     #ExternalField on Sublattice A and B
     }
 }
@@ -30,18 +30,18 @@ MonteCarlo={
     "__Execute" : "./simulator.exe",
     "__Duplicate" : 4,
     "__IsCluster" : False,
-    "__AutoRun" : True,
+    "__AutoRun" : False,
     "__KeepCPUBusy": True,
     },
 "Job": {"DoesLoad" : False},
 "Markov": {
     "Order": 3,
     #Start from order 0, so that OrderReWeight has Order+1 elements
-    "OrderReWeight" : [1.0, 1.0, 1.0, 1.0],
-    "Sample" :  500000,
+    "OrderReWeight" : [1.0, 1.0, 50.0, 500.0],
+    "Sample" : 1000000,
     "Sweep" : 50,
     "Toss" : 10000,
-    "WormSpaceReweight" : 0.500
+    "WormSpaceReweight" : 0.05
     }
 }
 Dyson={

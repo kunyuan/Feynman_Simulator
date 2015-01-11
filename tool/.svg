@@ -20,20 +20,19 @@
 <text text-anchor="middle" x="13.9608" y="-4" font-family="Times,serif" font-size="10.00">1</text>
 </g>
 <!-- 0&#45;&gt;1 -->
-<g id="edge1" class="edge"><title>0&#45;&gt;1</title>
-<path fill="none" stroke="blue" d="M7.74149,-53.6849C4.0767,-50.6195 1.79544,-44.8447 0.897722,-38.4062"/>
-<path fill="none" stroke="blue" d="M0.897722,-38.4062C0,-31.9678 0.485811,-24.8656 2.35516,-19.1454"/>
-<polygon fill="blue" stroke="blue" points="5.4603,-20.7742 7.63538,-10.405 -0.531266,-17.1546 5.4603,-20.7742"/>
+<g id="edge2" class="edge"><title>0&#45;&gt;1</title>
+<path fill="none" stroke="red" d="M7.74149,-53.6849C4.0767,-50.6195 1.79544,-44.8447 0.897722,-38.4062"/>
+<path fill="none" stroke="red" d="M0.897722,-38.4062C0,-31.9678 0.485811,-24.8656 2.35516,-19.1454"/>
+<polygon fill="red" stroke="red" points="5.4603,-20.7742 7.63538,-10.405 -0.531266,-17.1546 5.4603,-20.7742"/>
 </g>
 <!-- 0&#45;&gt;1 -->
 <g id="edge3" class="edge"><title>0&#45;&gt;1</title>
-<path fill="none" stroke="green" stroke-dasharray="5,2" d="M20.1802,-53.6849C29.8522,-45.5948 29.8876,-18.633 20.2863,-10.405"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M20.1802,-53.6849C29.8522,-45.5948 29.8876,-18.633 20.2863,-10.405"/>
 </g>
 <!-- 1&#45;&gt;0 -->
-<g id="edge2" class="edge"><title>1&#45;&gt;0</title>
-<path fill="none" stroke="red" d="M13.9608,-14.1249C13.9608,-17.3106 13.9608,-21.466 13.9608,-25.9205"/>
-<path fill="none" stroke="red" d="M13.9608,-25.9205C13.9608,-30.375 13.9608,-35.1287 13.9608,-39.5108"/>
-<polygon fill="red" stroke="red" points="10.4609,-39.7248 13.9608,-49.7248 17.4609,-39.7249 10.4609,-39.7248"/>
+<g id="edge1" class="edge"><title>1&#45;&gt;0</title>
+<path fill="none" stroke="green" d="M13.9608,-14.1249C13.9608,-20.4962 13.9608,-30.7465 13.9608,-39.5108"/>
+<polygon fill="green" stroke="green" points="10.4609,-39.7248 13.9608,-49.7248 17.4609,-39.7249 10.4609,-39.7248"/>
 </g>
 </g>
 </svg>

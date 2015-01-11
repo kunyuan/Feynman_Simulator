@@ -12,7 +12,7 @@ using namespace weight;
 using namespace std;
 
 #define GetSmoothT(array, index) array[index[SP]][index[SUB]][index[VOL]][index[TAU]]
-#define GetDeltaT(array, index) array[index[SP]][index[SUB]][index[TAU]]
+#define GetDeltaT(array, index) array[index[SP]][index[SUB]][index[VOL]]
 const spin SPINUPUP[2] = {UP, UP};
 
 Complex G::Weight(const Site &rin, const Site &rout, real tin, real tout, spin SpinIn, spin SpinOut, bool IsMeasure) const

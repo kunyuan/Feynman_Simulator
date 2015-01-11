@@ -113,6 +113,7 @@ bool Basic::FromDict(const Dictionary& dict)
     ASSERT_ALLWAYS(flagSmooth || flagDelta, "Come on! Neither SmoothT nor DeltaT array exist!");
     return true;
 }
+
 Dictionary Basic::ToDict()
 {
     Dictionary dict;

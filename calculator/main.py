@@ -5,6 +5,7 @@ import lattice as lat
 from weight import UP,DOWN,IN,OUT,TAU,SP1,SUB1,SP2,SUB2,VOL
 from logger import *
 import os, sys, model, weight, parameter, plot, argparse
+
 parser = argparse.ArgumentParser()
 parser.add_argument("-p", "--PID", help="use PID to find the input file")
 parser.add_argument("-f", "--file", help="use file path to find the input file")

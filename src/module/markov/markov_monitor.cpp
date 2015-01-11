@@ -86,7 +86,7 @@ void MarkovMonitor::Measure()
             gLine g=Diag->GMeasure;
             vertex vin = g->NeighVer(OUT);
             vertex vout = g->NeighVer(IN);
-            Weight->Sigma->Measure(vin->R, vout->R, vin->Tau, vout->Tau, g->Spin(OUT), g->Spin(IN), Diag->Order, Diag->Phase);
+            Weight->Sigma->Measure(vin->R, vout->R, vin->Tau, vout->Tau, g->Spin(OUT), g->Spin(IN), Diag->Order, Diag->Phase/Para->OrderReWeight[Diag->Order]);
         }
     }else{
         if(Diag->Order==0)
@@ -96,7 +96,7 @@ void MarkovMonitor::Measure()
             wLine w=Diag->WMeasure;
             vertex vin = w->NeighVer(OUT);
             vertex vout = w->NeighVer(IN);
-            Weight->Polar->Measure(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin(), vout->Spin(), Diag->Order, -Diag->Phase);
+            Weight->Polar->Measure(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin(), vout->Spin(), Diag->Order, -Diag->Phase/Para->OrderReWeight[Diag->Order]);
         }
     }
 }
