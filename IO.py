@@ -7,19 +7,27 @@ from numpy import *
 set_printoptions(threshold=nan) #make sure numpy will print all elements, so that SaveDict and LoadDict will work even for very large array
 
 def SaveDict(filename, mode, root):
-    with open(filename+".txt", mode) as f:
+    if filename[-4:]!=".txt":
+        filename+=".txt"
+    with open(filename, mode) as f:
         f.write(pprint.pformat(root))
 
 def LoadDict(filename):
-    with open(filename+".txt", "r") as f:
+    if filename[-4:]!=".txt":
+        filename+=".txt"
+    with open(filename, "r") as f:
         return eval(f.read())
 
 def SaveBigDict(filename, root):
-    with open(filename+".pkl", "w") as f:
+    if filename[-4:]!=".pkl":
+        filename+=".pkl"
+    with open(filename, "w") as f:
         pickle.dump(root, f, pickle.HIGHEST_PROTOCOL)
 
 def LoadBigDict(filename):
-    with open(filename+".pkl", "r") as f:
+    if filename[-4:]!=".pkl":
+        filename+=".pkl"
+    with open(filename, "r") as f:
         root=pickle.load(f)
     return root
 

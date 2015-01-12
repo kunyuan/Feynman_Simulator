@@ -33,7 +33,7 @@ WeightEstimator::WeightEstimator(const Lattice& lat, real beta, int order, strin
     //use _MeaShape[0] to _MeaShape[TAU] to construct array5
     _WeightAccu.Allocate(_MeaShape);
     for (int i = 1; i <= order; i++)
-        _WeightErrorEstimator.AddEstimator(name + "_AvgofOrder" + ToString(i));
+        _WeightErrorEstimator.AddEstimator("Order" + ToString(i));
     ClearStatistics();
 }
 

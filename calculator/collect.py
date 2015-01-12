@@ -19,6 +19,7 @@ class WeightEstimator():
         else:
             Assert(False, "Only accept TwoSpins or FourSpins, not {0}".format(NSpin))
         self.Shape=[Order, self.NSpin**2, self.Map.NSublat**2, self.Map.Vol]
+        self.Name=Name
         if Name=="SmoothT":
             self.Beta=self.Map.Beta
             self.Shape.append(self.Map.MaxTauBin)
@@ -27,38 +28,65 @@ class WeightEstimator():
             self.__HasTau=False
         else:
             Assert(False, "Should be either .SmoothT or .DeltaT in Name, not {0}".format(Name))
-        self.Data=np.zeros(self.Shape, dtype=complex)
-    def FromDict(self, data):
-        log.info("Loading {0} Matrix...".format(self.Name));
-        if self.Name in data:
-            log.info("Load {0}".format(self.Name))
-            datamat = data[self.Name]
-            ######RESHAPE data[self.Name]
-            OldShape=[self.NSpin**2, self.NSublat**2]+self.__OriginShape[VOL:]
-            MidShape=[self.NSpin, self.NSpin, self.NSublat,self.NSublat]+self.__OriginShape[VOL:]
-            NewShape=self.__OriginShape
-            self.__AssertShape(datamat.shape, OldShape)
-            datamat=datamat.reshape(MidShape).swapaxes(1,2).reshape(NewShape)
-            self.__AssertShape(self.Shape, datamat.shape)
-            self.Data=datamat
-        else:
-            Assert(False, "{0} not found!").format(self.Name)
+        self.WeightAccu=np.zeros(self.Shape, dtype=complex)
+        self.NormAccu=0.0
+        self.Norm=None
 
+    def Copy(self):
+        """return a deep copy of Weight instance"""
+        import copy
+        return copy.deepcopy(self)
+
+    def Merge(self, _WeightEstimator):
+        self.WeightAccu+=_WeightEstimator.WeightAccu
+        self.NormAccu+=_WeightEstimator.NormAccu
+        if self.Norm is None:
+            self.Norm=_WeightEstimator.Norm
+        else:
+            Assert(self.Norm==_WeightEstimator.Norm, "Norm have to be the same to merge statistics")
+    
+    def GetWeight(self, ErrorThreshold, OrderAccepted):
+        return np.sum(self.WeightAccu, axis=0)/self.NormAccu*self.Norm*self.Map.MaxTauBin/self.Map.Beta
+
+    def FromDict(self, data):
+        datamat=data[self.Name]
+        self.WeightAccu=datamat['WeightAccu']
+        self.NormAccu=datamat['NormAccu']
+        self.Norm=datamat['Norm']
+        self.__AssertShape(self.Shape, self.WeightAccu.shape)
+
+    def __AssertShape(self, shape1, shape2):
+        Assert(tuple(shape1)==tuple(shape2), \
+                "Shape {0} is expected instead of shape {1}!".format(shape1, shape2))
 
 def GetFileList():
     FileList = [f for f in os.listdir(workspace) if os.path.isfile(os.path.join(workspace,f))]
-    StatisFileList=[f for f in FileList if f.find(StatisFilePattern) is not -1]
+    StatisFileList=[os.path.join(workspace, f) for f in FileList if f.find(StatisFilePattern) is not -1]
     return StatisFileList
 
-def CollectStatis(_map, _order):
-    _FileList=GetFileList()
-    log.info("Collect statistics from {0}".format(_FileList))
+def CollectStatis(_map, _order, ErrorThreshold, OrderAccepted):
     SigmaSmoothT=WeightEstimator("SmoothT", _map, "TwoSpins", _order)
     PolarSmoothT=WeightEstimator("SmoothT", _map, "FourSpins", _order)
+    SigmaTemp=SigmaSmoothT.Copy()
+    PolarTemp=PolarSmoothT.Copy()
+    _FileList=GetFileList()
+    log.info("Collect statistics from {0}".format(_FileList))
+    for f in _FileList:
+        log.info("Merging {0} ...".format(f));
+        Dict=IO.LoadBigDict(f)
+        SigmaTemp.FromDict(Dict['Sigma']['Histogram'])
+        PolarTemp.FromDict(Dict['Polar']['Histogram'])
+        SigmaSmoothT.Merge(SigmaTemp)
+        PolarSmoothT.Merge(PolarTemp)
+    Sigma=weight.Weight("SmoothT", _map, "TwoSpins", "AntiSymmetric")
+    Sigma.Data=SigmaSmoothT.GetWeight(ErrorThreshold, OrderAccepted)
+    Polar=weight.Weight("SmoothT", _map, "FourSpins", "Symmetric")
+    Polar.Data=PolarSmoothT.GetWeight(ErrorThreshold, OrderAccepted)
+    return (Sigma, Polar)
 
 if __name__=="__main__":
-    WeightPara={"NSublat": 1, "L":[16, 16],
-                "Beta": 0.1, "MaxTauBin": 64}
+    WeightPara={"NSublat": 1, "L":[8, 8],
+                "Beta": 0.1, "MaxTauBin": 32}
     map=weight.IndexMap(**WeightPara)
     Order=3
-    CollectStatis(map, Order)
+    CollectStatis(map, Order, 0.5, 1)

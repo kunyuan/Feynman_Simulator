@@ -8,7 +8,7 @@
 #include <sys/time.h>
 
 /// Comment this line if you don't need multithread support
-#define LOGGER_MULTITHREAD
+//#define LOGGER_MULTITHREAD
 
 // log level
 enum LogLevel { MYDEBUG,
@@ -18,7 +18,7 @@ enum LogLevel { MYDEBUG,
 };
 
 // log info header
-const std::string LOGSTR[4] = {"[DEBUG]", "[INFO]", "[WARNING]", "[ERROR]"};
+const std::string LOGSTR[4] = { "[DEBUG]", "[INFO]", "[WARNING]", "[ERROR]" };
 
 #ifdef LOGGER_MULTITHREAD
 #include <pthread.h>
@@ -83,7 +83,7 @@ class Logger {
     /**
 	 * \brief Pointer to the unique Logger (i.e., Singleton)
 	 */
-    static Logger *m_;
+    static Logger* m_;
 
     /**
 	 * \brief Initial part of the name of the file used for Logging.
@@ -139,22 +139,22 @@ class Logger {
 	 */
     inline static void unlock();
 
-  public:
+public:
     typedef loggerConf_ loggerConf;
     static const loggerConf file_on = L_nofile_;
     static const loggerConf file_off = L_file_;
     static const loggerConf screen_on = L_noscreen_;
     static const loggerConf screen_off = L_screen_;
 
-    static Logger &getInstance();
+    static Logger& getInstance();
 
     void print(const unsigned int verbosityLevel,
-               const std::string &sourceFile,
+               const std::string& sourceFile,
                const int codeLine,
-               const std::string &message);
+               const std::string& message);
 
-    void configure(const std::string &outputFile,
-                   const std::string &loggerName,
+    void configure(const std::string& outputFile,
+                   const std::string& loggerName,
                    const loggerConf configuration,
                    const int fileVerbosityLevel,
                    const int screenVerbosityLevel);
@@ -162,14 +162,12 @@ class Logger {
 
 inline Logger::loggerConf operator|(Logger::loggerConf __a, Logger::loggerConf __b)
 {
-    return Logger::loggerConf(static_cast<int>(__a) |
-                              static_cast<int>(__b));
+    return Logger::loggerConf(static_cast<int>(__a) | static_cast<int>(__b));
 }
 
 inline Logger::loggerConf operator&(Logger::loggerConf __a, Logger::loggerConf __b)
 {
-    return Logger::loggerConf(static_cast<int>(__a) &
-                              static_cast<int>(__b));
+    return Logger::loggerConf(static_cast<int>(__a) & static_cast<int>(__b));
 }
 
 #endif /* LOGGER_H */

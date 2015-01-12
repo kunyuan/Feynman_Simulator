@@ -4,6 +4,29 @@
 CPU = 4
 SLEEP = 1    #check job status for every SLEEP seconds
 #common dictionary for all jobs
+# monte carlo job defintion
+MonteCarlo={
+"Control": {
+    "__Execute" : "./simulator.exe",
+    "__Duplicate" : 4,
+    "__IsCluster" : False,
+    "__AutoRun" : True,
+    "__KeepCPUBusy": True,
+    },
+"Job": {"DoesLoad" : False}
+}
+
+Dyson={
+"Control": {
+    "__Execute" : ["python", "./calculator/main.py"],
+    "__Duplicate" : 1,
+    "__IsCluster" : False,
+    "__AutoRun" : True, 
+    "__KeepCPUBusy": False,
+    },
+"Job": {"StartFromBare" : False}
+}
+
 beta=0.5
 Common={
 "Tau": {
@@ -22,39 +45,18 @@ Common={
     "Interaction": [1.0,0.0],
     "ExternalField": [0.0]
     #ExternalField on Sublattice A and B
-    }
-}
-# monte carlo job defintion
-MonteCarlo={
-"Control": {
-    "__Execute" : "./simulator.exe",
-    "__Duplicate" : 1,
-    "__IsCluster" : False,
-    "__AutoRun" : False,
-    "__KeepCPUBusy": True,
     },
-"Job": {"DoesLoad" : False},
 "Markov": {
     "Order": 4,
     #Start from order 0, so that OrderReWeight has Order+1 elements
     "OrderReWeight" : [1.0, 1.0, 50.0, 10.0, 500.0],
-    "Sample" : 50000000,
+    "Sample" : 5000000,
     "Sweep" : 10,
     "Toss" : 1000,
     "WormSpaceReweight" : 0.05
-    }
-}
-Dyson={
-"Control": {
-    "__Execute" : ["python", "./calculator/main.py"],
-    "__Duplicate" : 1,
-    "__IsCluster" : False,
-    "__AutoRun" : True, 
-    "__KeepCPUBusy": False,
     },
-"Job": {"StartFromBare" : True},
 "Dyson": {
-    "Order": 1,
+    "Order": 4,
     "OrderAccepted": 1,
     "ErrorThreshold": 0.5,
     "SleepTime": 300

@@ -1,8 +1,8 @@
 compiler=clang++
 #compiler=icpc
 #compiler=g++
-type=Debug
-#type=Release
+#type=Debug
+type=Release
 
 mkdir build
 rm -rf ./build/*
