@@ -85,5 +85,3 @@ data["Chi"]=Chi.ToDict()        ####ForTest
 IO.SaveBigDict(WeightFile, data)
 ###################################################
 plot.PlotSpatial(Chi, Lat, spinUP, spinUP)
-
-
