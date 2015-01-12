@@ -31,17 +31,13 @@ class Job:
 
     def to_dict(self):
         '''output the corresponding string of the job class'''
+        pid=self.pid.pop(0)
         self.control["__Type"]=self.para["Job"]["Type"]
         self.para["Job"]["WeightFile"]="Weight"
         self.para["Job"]["MessageFile"]="Message"
+        self.para["Job"]["PID"] = pid
         self.__set_model_specific__()
-        para_list=[]
-        for p in self.pid:
-            para_={}
-            para_["Para"]=copy.deepcopy(self.para)
-            para_["Para"]["Job"]["PID"] = p
-            para_list.append((p, para_))
-        return para_list
+        return pid, {"Para":copy.deepcopy(self.para)}
 
     def __check_parameters__(self, para):
         if para["Control"]["__Execute"] is "":
@@ -60,6 +56,12 @@ class JobMonteCarlo(Job):
     def __init__(self, para):
         Job.__init__(self, para)
         self.para["Job"]["Type"] = "MC"
+        #search folder for old jobs, the new pid=largest old pid+1
+        PIDList, NextPID=get_current_PID(self.para["Job"]["Type"])
+        if self.para["Job"]["DoesLoad"]:
+            self.pid=PIDList[len(PIDList)-self.control["__Duplicate"]:]
+        else:
+            self.pid=range(NextPID, NextPID+self.control["__Duplicate"])
 
     def __check_parameters__(self, para):
         if Job.__check_parameters__(self, para) is False:
@@ -72,24 +74,19 @@ class JobMonteCarlo(Job):
             return False
 
     def to_dict(self):
+        pid, Dict=Job.to_dict(self)
         #set Seed here so that each job has it own rng seed
-        self.para["Markov"]["Seed"] = int(random.random()*2**30)
-        #search folder for old jobs, the new pid=largest old pid+1
-        PIDList, NextPID=get_current_PID(self.para["Job"]["Type"])
-        if self.para["Job"]["DoesLoad"]:
-            self.pid=PIDList[len(PIDList)-self.control["__Duplicate"]:]
-        else:
-            self.pid=range(NextPID, NextPID+self.control["__Duplicate"])
-        return Job.to_dict(self)
+        Dict["Para"]["Markov"]["Seed"] = int(random.random()*2**30)
+        return pid, Dict
 
 class JobDyson(Job):
     '''job subclass for self consistent loop jobs'''
     def __init__(self, para):
         Job.__init__(self, para)
         self.para["Job"]["Type"] = "DYSON"
-
-    def to_dict(self):
         PIDList, NextPID=get_current_PID(self.para["Job"]["Type"])
         self.pid=range(NextPID, NextPID+self.control["__Duplicate"])
+
+    def to_dict(self):
         return Job.to_dict(self)
 

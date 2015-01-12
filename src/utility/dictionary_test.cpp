@@ -113,26 +113,26 @@ void Test_Dict()
     sput_fail_unless(Equal((acc.Data<Complex>())[1], vc2), "check Complex array type");
 
     //Dict IO small dictionary
-    Port.Print();
-    Port.Save("test", "w");
-    Port.Clear();
-    Port.Load("test");
-    sput_fail_unless(Equal((Port["cVec"].As<vector<Complex> >())[1], cb),
-                     "check vector<Complex> type");
-    sput_fail_unless((Port["dict"].As<Dictionary>())["b"].As<int>() == 11,
-                     "check dict IO");
-    SubPort.Clear();
-    SubPort = Port["dict"].As<Dictionary>();
-    SubPort.Print();
-    //Dict IO large dictionary
-
-    Port.BigSave("test");
-    Port.Clear();
-    Port.BigLoad("test");
-    sput_fail_unless(Equal((Port["cVec"].As<vector<Complex> >())[1], cb),
-                     "check vector<Complex> type");
-    sput_fail_unless((Port["dict"].As<Dictionary>())["b"].As<int>() == 11,
-                     "check dict IO");
-    system("rm test.txt");
-    system("rm test.pkl");
+    //    Port.Print();
+    //    Port.Save("test", "w");
+    //    Port.Clear();
+    //    Port.Load("test");
+    //    sput_fail_unless(Equal((Port["cVec"].As<vector<Complex> >())[1], cb),
+    //                     "check vector<Complex> type");
+    //    sput_fail_unless((Port["dict"].As<Dictionary>())["b"].As<int>() == 11,
+    //                     "check dict IO");
+    //    SubPort.Clear();
+    //    SubPort = Port["dict"].As<Dictionary>();
+    //    SubPort.Print();
+    //    //Dict IO large dictionary
+    //
+    //    Port.BigSave("test");
+    //    Port.Clear();
+    //    Port.BigLoad("test");
+    //    sput_fail_unless(Equal((Port["cVec"].As<vector<Complex> >())[1], cb),
+    //                     "check vector<Complex> type");
+    //    sput_fail_unless((Port["dict"].As<Dictionary>())["b"].As<int>() == 11,
+    //                     "check dict IO");
+    //    system("rm test.txt");
+    //    system("rm test.pkl");
 }
