@@ -1,2 +1,2 @@
 # Feynman Simulator
-The best quantum simulator using Feynman diagram technique
+A generic purpose quantum simulator using Feynman diagram technique
