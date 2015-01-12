@@ -11,8 +11,9 @@
 #include <unistd.h>
 #include "test.h"
 #include "environment/environment.h"
-#include "job/job.h"
 #include "utility/pyglue/pywrapper.h"
+#include "job/job.h"
+#include "utility/timer.h"
 
 using namespace std;
 using namespace para;
@@ -48,41 +49,42 @@ int main(int argc, const char* argv[])
 
 void MonteCarlo(const para::Job& Job)
 {
-    EnvMonteCarlo PaddyField(Job);
+    EnvMonteCarlo Env(Job);
     if (Job.DoesLoad)
-        PaddyField.Load();
+        Env.Load();
     else
-        PaddyField.BuildNew();
+        Env.BuildNew();
 
-    auto& Grasshopper = PaddyField.Grasshopper;
-    auto& Scarecrow = PaddyField.Scarecrow;
-    auto& Para = PaddyField.Para;
+    auto& Markov = Env.Markov;
+    auto& MarkovMonitor = Env.MarkovMonitor;
+    auto& Para = Env.Para;
 
-    int icount = 0;
-    //Don't use Para.Counter as counter
+    timer PrinterTimer, DiskWriterTimer, MessageTimer;
+    PrinterTimer.start();
+    DiskWriterTimer.start();
+    MessageTimer.start();
+    for (uint Step = 0; Step < Para.Sample; Step++) {
+        //Don't use Para.Counter as counter
+        Markov.Hop(Para.Sweep);
+        MarkovMonitor.Measure();
 
-    while (icount < Para.Sample) {
-        icount++;
-        Grasshopper.Hop(Para.Sweep);
+        if (Step % 10 == 0)
+            MarkovMonitor.AddStatistics();
 
-        Scarecrow.Measure();
-
-        if (icount % 10 == 0)
-            Scarecrow.AddStatistics();
-
-        if (icount % 1000 == 0) {
-            //            PaddyField.Diag.CheckDiagram();
-            //            if (!PaddyField.Diag.Worm.Exist)
-            //                PaddyField.Diag.WriteDiagram2gv("diagram/" + ToString(Para.Counter) + ".gv");
-
-            Scarecrow.ReWeightEachOrder();
-        }
-        if (icount % 1000000 == 0) {
-            PaddyField.Save();
-            Grasshopper.PrintDetailBalanceInfo();
-        }
-        if (icount % 2000000 == 0) {
-            PaddyField.ListenToMessage();
+        if (Step % 1000 == 0) {
+            MarkovMonitor.ReWeightEachOrder();
+            if (PrinterTimer.check(10)) {
+                Env.Diag.CheckDiagram();
+                Markov.PrintDetailBalanceInfo();
+                if (!Env.Diag.Worm.Exist)
+                    Env.Diag.WriteDiagram2gv("diagram/" + ToString(Para.Counter) + ".gv");
+            }
+            if (DiskWriterTimer.check(60))
+                Env.Save();
+            if (MessageTimer.check(600))
+                Env.ListenToMessage();
         }
     }
+    Markov.PrintDetailBalanceInfo();
+    Env.Save();
 }
