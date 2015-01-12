@@ -1,7 +1,7 @@
 #!/usr/bin/python
 '''This is the job manage script.
    This is a quite universal code for all different type of simulations'''
-import os, sys, copy
+import os, sys, copy, signal
 import time
 import subprocess
 import logging
@@ -124,22 +124,32 @@ def submit_job(job_atom):
             print "You have to run "+job_atom.get_job_name()+" by yourself!"
     return
 
-def StopTheWorld():
+def Exit():
+    logging.info("Jobs manage daemon is ended")
+    print("Jobs manage daemon is ended")
+    sys.exit(0)
+
+def StopTheWorld(signum, frame):
+    """Stop the sub-process *child* if *signum* is SIGTERM. Then terminate."""
     check_status()
     ##terminate all background process here
-    for elem in PROCLIST_BACK+PROCLIST:
-        #elem[0].kill()
-        elem[0].terminate()
-        logging.info(elem[1].get_job_name()+" is ended!")
-        print elem[1].get_job_name()+" is ended..."
-        sys.exit(0)
+    try:
+        for elem in PROCLIST_BACK+PROCLIST:
+            elem[0].terminate()
+            elem[0].wait()
+            logging.info(elem[1].get_job_name()+" is ended!")
+            print elem[1].get_job_name()+" is ended!"
+    except:
+        traceback.print_exc()
 
 if __name__ == "__main__":
     logging.info("Jobs manage daemon is started...")
-    JOBQUEUE = construct_job_queue(inlist.TO_DO)
-    #print [e.keep_cpu_busy for e in JOBQUEUE]
-    i = 0
     try:
+        JOBQUEUE = construct_job_queue(inlist.TO_DO)
+        #print [e.keep_cpu_busy for e in JOBQUEUE]
+        i = 0
+        signal.signal(signal.SIGINT, StopTheWorld)
+        signal.signal(signal.SIGTERM, StopTheWorld)
         for ATOM in JOBQUEUE:
             while ATOM.is_cluster is False and len(PROCLIST)>=inlist.CPU:
                 check_status()
@@ -148,7 +158,7 @@ if __name__ == "__main__":
         while len(PROCLIST+PROCLIST_BACK) != 0:
             check_status()
             time.sleep(inlist.SLEEP)
-    except KeyboardInterrupt:
-        StopTheWorld()
-
-    logging.info("Jobs manage daemon is ended...")
+    except:
+        traceback.print_exc()
+    finally:
+        Exit()
