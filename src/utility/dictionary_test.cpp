@@ -121,17 +121,18 @@ void Test_Dict()
                      "check vector<Complex> type");
     sput_fail_unless((Port["dict"].As<Dictionary>())["b"].As<int>() == 11,
                      "check dict IO");
-    system("rm test.txt");
     SubPort.Clear();
     SubPort = Port["dict"].As<Dictionary>();
     SubPort.Print();
     //Dict IO large dictionary
 
-    Port.BigSave("test.dat");
+    Port.BigSave("test");
     Port.Clear();
-    Port.BigLoad("test.dat");
+    Port.BigLoad("test");
     sput_fail_unless(Equal((Port["cVec"].As<vector<Complex> >())[1], cb),
                      "check vector<Complex> type");
     sput_fail_unless((Port["dict"].As<Dictionary>())["b"].As<int>() == 11,
                      "check dict IO");
+    system("rm test.txt");
+    system("rm test.pkl");
 }
