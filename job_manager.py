@@ -45,17 +45,13 @@ def construct_job_queue(to_do):
     '''construct JobAtom queue from Job class '''
     logging.info("Constructing the job queue...")
     job_queue = []
-    #bundle is class job
-    for bundle in [e for e in to_do if e.control["__KeepCPUBusy"]== False]:
-    #running the jobs doesn't use much cpu first
-        for pid, para in bundle.to_dict():
-            job_queue.append(JobAtom(bundle.control, pid, para))
-
-    for bundle in [e for e in to_do if e.control["__KeepCPUBusy"] == True]:
-    #running the jobs use much cpu next
-        for pid, para in bundle.to_dict():
-            job_queue.append(JobAtom(bundle.control, pid, para))
-
+    for JobClass in to_do:
+        try:
+            while True:
+                pid, para=JobClass.to_dict()
+                job_queue.append(JobAtom(JobClass.control, pid, para))
+        except IndexError:
+            pass
     logging.info("Constructed the job queue!")
     return job_queue
 
