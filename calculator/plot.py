@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 from logger import *
 
 def PlotTime(weight, SpinIn, SubIn, SpinOut, SubOut, Vol):
-    x=np.linspace(0, Beta, len(weight.Map.MaxTauBin))
-    plt.plot(x,weight[SpinIn, SubIn, SpinOut, SubOut, Vol,:],'-')
+    x=np.linspace(0, weight.Map.Beta, weight.Map.MaxTauBin)
+    plt.plot(x,weight.Data[SpinIn, SubIn, SpinOut, SubOut, Vol,:],'-')
     plt.savefig("time.jpg")
     plt.show()
 

@@ -197,8 +197,8 @@ void Markov::Hop(int sweep)
             ChangeRLoop();
 //            ;
         else if (x < SumofProbofCall[CHANGE_MEASURE_G2W])
-//            ChangeMeasureFromGToW();
-            ;
+            ChangeMeasureFromGToW();
+//            ;
         else if (x < SumofProbofCall[CHANGE_MEASURE_W2G])
             ChangeMeasureFromWToG();
 //            ;

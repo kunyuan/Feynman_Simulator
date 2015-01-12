@@ -61,14 +61,18 @@ void MonteCarlo(const para::Job& Job)
     int icount = 0;
     //Don't use Para.Counter as counter
 
-    int total[MAX_ORDER] = {0};
+    int sigma[MAX_ORDER] = {0};
+    int polar[MAX_ORDER] = {0};
 
     while (icount < Para.Sample) {
         icount++;
         Grasshopper.Hop(Para.Sweep);
         
         if (!Grasshopper.Diag->Worm.Exist) {
-            total[Grasshopper.Diag->Order]++;
+            if(Grasshopper.Diag->MeasureGLine)
+                sigma[Grasshopper.Diag->Order]++;
+            else
+                polar[Grasshopper.Diag->Order]++;
         }
 
         Scarecrow.Measure();
@@ -92,6 +96,8 @@ void MonteCarlo(const para::Job& Job)
         }
     }
     
-    cout << "Number of different Order diagrams : " << 8*real(total[2]) / real(total[1]) << " "
-     << 64*real(total[3]) / real(total[1]) << endl;
+    cout << "Number of different Order sigma : " << 4*real(sigma[2]) / real(sigma[1]) << " "
+     << 16*real(sigma[3]) / real(sigma[1]) << endl;
+    cout << "Number of different Order polar : " << 4*real(polar[2]) / real(polar[1]) << " "
+     << 16*real(polar[3]) / real(polar[1]) << endl;
 }

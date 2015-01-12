@@ -27,7 +27,6 @@ void G::BuildTest(weight::model Model)
 {
     if (Model == weight::Trivial) {
         _SmoothTWeight = 0.0;
-        int spin_down = _Map.SpinIndex(DOWN, DOWN);
         int spin_up = _Map.SpinIndex(UP, UP);
         for (int sub = 0; sub < GetShape()[SUB]; sub++) {
             if (!_Lat.IsOnSameSubLat(sub))
@@ -35,24 +34,20 @@ void G::BuildTest(weight::model Model)
             int coor = _Lat.Vec2Index({ 0, 0 });
             for (int tau = 0; tau < _Shape[TAU]; tau++) {
                 Complex weight = exp(Complex(0.0, _Map.IndexToTau(tau)));
-                _SmoothTWeight[spin_down][sub][coor][tau] = weight;
                 _SmoothTWeight[spin_up][sub][coor][tau] = weight;
             }
         }
     }
     else if (Model == weight::DiagCount) {
         _SmoothTWeight = 0.0;
-        int spin_down = _Map.SpinIndex(DOWN, DOWN);
         int spin_up = _Map.SpinIndex(UP, UP);
 
         for (int sub = 0; sub < _Shape[SUB]; sub++) {
             if (!_Lat.IsOnSameSubLat(sub))
                 continue;
             int coor = _Lat.Vec2Index({ 0, 0 });
-            //        MeasureWeight[spin_up][sub][coor] = Complex(1.0, 0.0);
             for (int tau = 0; tau < _Shape[TAU]; tau++) {
                 Complex weight = Complex(1.0, 0.0);
-                _SmoothTWeight[spin_down][sub][coor][tau] = weight;
                 _SmoothTWeight[spin_up][sub][coor][tau] = weight;
             }
         }
