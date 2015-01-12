@@ -9,9 +9,6 @@
 #ifndef __Feynman_Simulator__environment__
 #define __Feynman_Simulator__environment__
 
-#include "utility/rng.h"
-#include "utility/scopeguard.h"
-#include "lattice/lattice.h"
 #include "module/parameter/parameter.h"
 #include "module/diagram/diagram.h"
 #include "module/weight/weight.h"
@@ -28,8 +25,8 @@ public:
     para::ParaMC Para;
     weight::Weight Weight;
     diag::Diagram Diag;
-    mc::Markov Grasshopper;
-    mc::MarkovMonitor Scarecrow;
+    mc::Markov Markov;
+    mc::MarkovMonitor MarkovMonitor;
 
     bool BuildNew();
     bool Load();

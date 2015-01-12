@@ -4,7 +4,7 @@
 //
 
 #include "timer.h"
-#include <iostream>
+#include "logger.h"
 
 //===========================================================================
 // Return the total time that the timer has been in the "running"
@@ -26,11 +26,11 @@ double timer::elapsed_time()
 // Start a timer.  If it is already running, let it continue running.
 // Print an optional message.
 
-void timer::start(const char *msg)
+void timer::start(const char* msg)
 {
     // Print an optional message, something like "Starting timer t";
     if (msg)
-        std::cout << msg << std::endl;
+        LOG_INFO(msg << std::endl);
 
     // Return immediately if the timer is already running
     if (running)
@@ -46,11 +46,11 @@ void timer::start(const char *msg)
 //===========================================================================
 // Turn the timer off and start it again from 0.  Print an optional message.
 
-void timer::restart(const char *msg)
+void timer::restart(const char* msg)
 {
     // Print an optional message, something like "Restarting timer t";
     if (msg)
-        std::cout << msg << std::endl;
+        LOG_INFO(msg << std::endl);
 
     // Set timer status to running, reset accumulated time, and set start time
     running = true;
@@ -63,11 +63,11 @@ void timer::restart(const char *msg)
 //===========================================================================
 // Stop the timer and print an optional message.
 
-void timer::stop(const char *msg)
+void timer::stop(const char* msg)
 {
     // Print an optional message, something like "Stopping timer t";
     if (msg)
-        std::cout << msg << std::endl;
+        LOG_INFO(msg << std::endl);
 
     // Compute accumulated running time and set timer status to not running
     if (running)
@@ -79,24 +79,35 @@ void timer::stop(const char *msg)
 //===========================================================================
 // Print out an optional message followed by the current timer timing.
 
-void timer::check(const char *msg)
+void timer::check(const char* msg)
 {
     // Print an optional message, something like "Checking timer t";
     if (msg)
-        std::cout << msg << " : ";
+        LOG_INFO(msg << " : ");
 
-    std::cout << "Elapsed time [" << std::setiosflags(std::ios::fixed)
-              << std::setprecision(2)
-              << acc_time + (running ? elapsed_time() : 0) << "] seconds\n";
+    LOG_INFO("Elapsed time [" << std::setiosflags(std::ios::fixed)
+                              << std::setprecision(2)
+                              << acc_time + (running ? elapsed_time() : 0) << "] seconds");
 
 } // timer::check
+
+bool timer::check(time_t Interval)
+{
+    time_t acc_sec = time(0) - start_time;
+    if (acc_sec < Interval)
+        return false;
+    else {
+        restart();
+        return true;
+    }
+}
 
 //===========================================================================
 // Allow timers to be printed to ostreams using the syntax 'os << t'
 // for an ostream 'os' and a timer 't'.  For example, "cout << t" will
 // print out the total amount of time 't' has been "running".
 
-std::ostream &operator<<(std::ostream &os, timer &t)
+std::ostream& operator<<(std::ostream& os, timer& t)
 {
     os << std::setprecision(2) << std::setiosflags(std::ios::fixed)
        << t.acc_time + (t.running ? t.elapsed_time() : 0);
