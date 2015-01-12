@@ -38,6 +38,7 @@ class WeightEstimator():
         return copy.deepcopy(self)
 
     def Merge(self, _WeightEstimator):
+        """add data from another WeightEstimator"""
         self.WeightAccu+=_WeightEstimator.WeightAccu
         self.NormAccu+=_WeightEstimator.NormAccu
         if self.Norm is None:
@@ -46,6 +47,7 @@ class WeightEstimator():
             Assert(self.Norm==_WeightEstimator.Norm, "Norm have to be the same to merge statistics")
     
     def GetWeight(self, ErrorThreshold, OrderAccepted):
+        """add all different orders together"""
         return np.sum(self.WeightAccu, axis=0)/self.NormAccu*self.Norm*self.Map.MaxTauBin/self.Map.Beta
 
     def FromDict(self, data):
@@ -54,6 +56,13 @@ class WeightEstimator():
         self.NormAccu=datamat['NormAccu']
         self.Norm=datamat['Norm']
         self.__AssertShape(self.Shape, self.WeightAccu.shape)
+
+    def ToDict(self):
+        datatmp={}
+        datatmp["WeightAccu"]=self.WeightAccu
+        datatmp["NormAccu"]=self.NormAccu
+        datatmp["Norm"]=self.Norm
+        return {self.Name: datatmp}
 
     def __AssertShape(self, shape1, shape2):
         Assert(tuple(shape1)==tuple(shape2), \
@@ -64,7 +73,7 @@ def GetFileList():
     StatisFileList=[os.path.join(workspace, f) for f in FileList if f.find(StatisFilePattern) is not -1]
     return StatisFileList
 
-def CollectStatis(_map, _order, ErrorThreshold, OrderAccepted):
+def CollectStatis(_map, _order):
     SigmaSmoothT=WeightEstimator("SmoothT", _map, "TwoSpins", _order)
     PolarSmoothT=WeightEstimator("SmoothT", _map, "FourSpins", _order)
     SigmaTemp=SigmaSmoothT.Copy()
@@ -78,15 +87,24 @@ def CollectStatis(_map, _order, ErrorThreshold, OrderAccepted):
         PolarTemp.FromDict(Dict['Polar']['Histogram'])
         SigmaSmoothT.Merge(SigmaTemp)
         PolarSmoothT.Merge(PolarTemp)
+    return (SigmaSmoothT, PolarSmoothT)
+
+def UpdateWeight(_map, _order, ErrorThreshold, OrderAccepted):
     Sigma=weight.Weight("SmoothT", _map, "TwoSpins", "AntiSymmetric")
     Sigma.Data=SigmaSmoothT.GetWeight(ErrorThreshold, OrderAccepted)
     Polar=weight.Weight("SmoothT", _map, "FourSpins", "Symmetric")
     Polar.Data=PolarSmoothT.GetWeight(ErrorThreshold, OrderAccepted)
-    return (Sigma, Polar)
 
 if __name__=="__main__":
-    WeightPara={"NSublat": 1, "L":[8, 8],
-                "Beta": 0.1, "MaxTauBin": 32}
+    WeightPara={"NSublat": 1, "L":[4, 4],
+                "Beta": 0.5, "MaxTauBin":128}
+    Order=4
     map=weight.IndexMap(**WeightPara)
-    Order=3
-    CollectStatis(map, Order, 0.5, 1)
+
+    SigmaSmoothT, PolarSmoothT=CollectStatis(map, Order)
+
+    data ={}
+    data["Sigma"] = {"Histogram": SigmaSmoothT.ToDict()}
+    data["Polar"] = {"Histogram": PolarSmoothT.ToDict()}
+
+    IO.SaveBigDict(workspace+"/statis_total", data)

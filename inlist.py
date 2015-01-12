@@ -10,7 +10,7 @@ MonteCarlo={
     "__Execute" : "./simulator.exe",
     "__Duplicate" : 4,
     "__IsCluster" : False,
-    "__AutoRun" : True,
+    "__AutoRun" : False,
     "__KeepCPUBusy": True,
     },
 "Job": {"DoesLoad" : False}
