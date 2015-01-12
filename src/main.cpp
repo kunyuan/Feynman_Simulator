@@ -61,9 +61,15 @@ void MonteCarlo(const para::Job& Job)
     int icount = 0;
     //Don't use Para.Counter as counter
 
+    int total[MAX_ORDER] = {0};
+
     while (icount < Para.Sample) {
         icount++;
         Grasshopper.Hop(Para.Sweep);
+        
+        if (!Grasshopper.Diag->Worm.Exist) {
+            total[Grasshopper.Diag->Order]++;
+        }
 
         Scarecrow.Measure();
 
@@ -75,7 +81,7 @@ void MonteCarlo(const para::Job& Job)
             //            if (!PaddyField.Diag.Worm.Exist)
             //                PaddyField.Diag.WriteDiagram2gv("diagram/" + ToString(Para.Counter) + ".gv");
 
-            Scarecrow.ReWeightEachOrder();
+            Scarecrow.ReWeightEachOrder();//TODO
         }
         if (icount % 1000000 == 0) {
             PaddyField.Save();
@@ -85,4 +91,7 @@ void MonteCarlo(const para::Job& Job)
             PaddyField.ListenToMessage();
         }
     }
+    
+    cout << "Number of different Order diagrams : " << 8*real(total[2]) / real(total[1]) << " "
+     << 64*real(total[3]) / real(total[1]) << endl;
 }

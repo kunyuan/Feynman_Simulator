@@ -197,8 +197,8 @@ void Markov::Hop(int sweep)
             ChangeRLoop();
 //            ;
         else if (x < SumofProbofCall[CHANGE_MEASURE_G2W])
-            ChangeMeasureFromGToW();
-//            ;
+//            ChangeMeasureFromGToW();
+            ;
         else if (x < SumofProbofCall[CHANGE_MEASURE_W2G])
             ChangeMeasureFromWToG();
 //            ;
@@ -1052,7 +1052,7 @@ void Markov::ChangeMeasureFromGToW()
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    prob *= 0.50 * ProbofCall[CHANGE_MEASURE_W2G] / (ProbofCall[CHANGE_MEASURE_G2W]);
+    prob *= ProbofCall[CHANGE_MEASURE_W2G] / (ProbofCall[CHANGE_MEASURE_G2W]);
 
     Proposed[CHANGE_MEASURE_G2W][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
@@ -1099,7 +1099,7 @@ void Markov::ChangeMeasureFromWToG()
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    prob *= ProbofCall[CHANGE_MEASURE_G2W] * 2.0 / (ProbofCall[CHANGE_MEASURE_W2G]);
+    prob *= ProbofCall[CHANGE_MEASURE_G2W] / (ProbofCall[CHANGE_MEASURE_W2G]);
 
     Proposed[CHANGE_MEASURE_W2G][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
