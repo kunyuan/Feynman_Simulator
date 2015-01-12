@@ -40,8 +40,8 @@ bool EnvMonteCarlo::BuildNew()
     
     Weight.BuildNew(weight::SigmaPolar, Para);
     Diag.BuildNew(Para.Lat, *Weight.G, *Weight.W);
-    Grasshopper.BuildNew(Para, Diag, Weight);
-    Scarecrow.BuildNew(Para, Diag, Weight);
+    Markov.BuildNew(Para, Diag, Weight);
+    MarkovMonitor.BuildNew(Para, Diag, Weight);
     para_[ConfigKey] = Diag.ToDict();
     para_.Save(Job.ParaFile, "w");
     return true;
@@ -62,8 +62,8 @@ bool EnvMonteCarlo::Load()
     Weight.FromDict(statis_, weight::GW, Para);
     Weight.FromDict(statis_, weight::SigmaPolar, Para);
     Diag.FromDict(para_.Get<Dictionary>(ConfigKey), Para.Lat, *Weight.G, *Weight.W);
-    Scarecrow.FromDict(statis_, Para, Diag, Weight);
-    Grasshopper.BuildNew(Para, Diag, Weight);
+    MarkovMonitor.FromDict(statis_, Para, Diag, Weight);
+    Markov.BuildNew(Para, Diag, Weight);
     return true;
 }
 
@@ -75,7 +75,7 @@ void EnvMonteCarlo::Save()
     para_["PID"] = Job.PID;
     para_.Save(Job.ParaFile, "w");
     Dictionary statis_ = Weight.ToDict(weight::GW | weight::SigmaPolar);
-    statis_.Update(Scarecrow.ToDict());
+    statis_.Update(MarkovMonitor.ToDict());
     statis_.BigSave(Job.StatisticsFile);
 }
 void EnvMonteCarlo::DeleteSavedFiles()
@@ -103,8 +103,8 @@ bool EnvMonteCarlo::ListenToMessage()
     weight_.Load(Job.WeightFile);
     Weight.FromDict(weight_, weight::GW, Para);
     Weight.ReWeight(weight::GW | weight::SigmaPolar, Para);
-    Grasshopper.ReWeight(Para);
-    Scarecrow.ReWeight();
+    Markov.ReWeight(Para);
+    MarkovMonitor.ReWeight();
     LOG_INFO("Reweighted to:\n" << Message_.PrettyString());
     return true;
 }

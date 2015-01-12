@@ -11,9 +11,9 @@
 #include <iomanip>
 
 class timer {
-    friend std::ostream &operator<<(std::ostream &os, timer &t);
+    friend std::ostream& operator<<(std::ostream& os, timer& t);
 
-  private:
+private:
     bool running;
     clock_t start_clock;
     time_t start_time;
@@ -21,18 +21,28 @@ class timer {
 
     double elapsed_time();
 
-  public:
+public:
     // 'running' is initially false.  A timer needs to be explicitly started
     // using 'start' or 'restart'
     timer()
-        : running(false), start_clock(0), start_time(0), acc_time(0)
+        : running(false)
+        , start_clock(0)
+        , start_time(0)
+        , acc_time(0)
     {
     }
 
-    void start(const char *msg = 0);
-    void restart(const char *msg = 0);
-    void stop(const char *msg = 0);
-    void check(const char *msg = 0);
+    void start(const char* msg = 0);
+    void restart(const char* msg = 0);
+    void stop(const char* msg = 0);
+    void check(const char* msg = 0);
+    /**
+    *  check whether Interval seconds has passed since the timer is started. Once it is true, the timer will be automatically restarted
+    *
+    *  @param Interval time interval in Seconds
+    *
+    */
+    bool check(time_t Interval);
 
 }; // class timer
 

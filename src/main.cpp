@@ -11,8 +11,9 @@
 #include <unistd.h>
 #include "test.h"
 #include "environment/environment.h"
-#include "job/job.h"
 #include "utility/pyglue/pywrapper.h"
+#include "job/job.h"
+#include "utility/timer.h"
 
 using namespace std;
 using namespace para;
@@ -48,56 +49,58 @@ int main(int argc, const char* argv[])
 
 void MonteCarlo(const para::Job& Job)
 {
-    EnvMonteCarlo PaddyField(Job);
+    EnvMonteCarlo Env(Job);
     if (Job.DoesLoad)
-        PaddyField.Load();
+        Env.Load();
     else
-        PaddyField.BuildNew();
-
-    auto& Grasshopper = PaddyField.Grasshopper;
-    auto& Scarecrow = PaddyField.Scarecrow;
-    auto& Para = PaddyField.Para;
-
-    int icount = 0;
-    //Don't use Para.Counter as counter
+        Env.BuildNew();
 
     int sigma[MAX_ORDER] = {0};
     int polar[MAX_ORDER] = {0};
 
-    while (icount < Para.Sample) {
-        icount++;
-        Grasshopper.Hop(Para.Sweep);
-        
-        if (!Grasshopper.Diag->Worm.Exist) {
-            if(Grasshopper.Diag->MeasureGLine)
-                sigma[Grasshopper.Diag->Order]++;
+    auto& Markov = Env.Markov;
+    auto& MarkovMonitor = Env.MarkovMonitor;
+    auto& Para = Env.Para;
+
+    timer PrinterTimer, DiskWriterTimer, MessageTimer;
+    PrinterTimer.start();
+    DiskWriterTimer.start();
+    MessageTimer.start();
+
+    for (uint Step = 0; Step < Para.Sample; Step++) {
+        //Don't use Para.Counter as counter
+        Markov.Hop(Para.Sweep);
+        MarkovMonitor.Measure();
+        if(!Markov.Diag->Worm->Exist){
+            if(Markov.Diag->MeasureGLine)
+                sigma[Markov.Diag->Order]++;
             else
-                polar[Grasshopper.Diag->Order]++;
+                polar[Markov.Diag->Order]++;
         }
 
-        Scarecrow.Measure();
-
-        if (icount % 10 == 0)
-            Scarecrow.AddStatistics();
-
-        if (icount % 1000 == 0) {
-            //            PaddyField.Diag.CheckDiagram();
-            //            if (!PaddyField.Diag.Worm.Exist)
-            //                PaddyField.Diag.WriteDiagram2gv("diagram/" + ToString(Para.Counter) + ".gv");
-
-            Scarecrow.ReWeightEachOrder();//TODO
-        }
-        if (icount % 1000000 == 0) {
-            PaddyField.Save();
-            Grasshopper.PrintDetailBalanceInfo();
-        }
-        if (icount % 2000000 == 0) {
-            PaddyField.ListenToMessage();
+        if (Step % 10 == 0)
+            MarkovMonitor.AddStatistics();
+    
+        if (Step % 1000 == 0) {
+            MarkovMonitor.ReWeightEachOrder();
+            if (PrinterTimer.check(10)) {
+                Env.Diag.CheckDiagram();
+                Markov.PrintDetailBalanceInfo();
+                if (!Env.Diag.Worm.Exist)
+                    Env.Diag.WriteDiagram2gv("diagram/" + ToString(Para.Counter) + ".gv");
+            }
+            if (DiskWriterTimer.check(60))
+                Env.Save();
+            if (MessageTimer.check(600))
+                Env.ListenToMessage();
         }
     }
-    
+
     cout << "Number of different Order sigma : " << 4*real(sigma[2]) / real(sigma[1]) << " "
      << 16*real(sigma[3]) / real(sigma[1]) << endl;
     cout << "Number of different Order polar : " << 4*real(polar[2]) / real(polar[1]) << " "
      << 16*real(polar[3]) / real(polar[1]) << endl;
+
+    Markov.PrintDetailBalanceInfo();
+    Env.Save();
 }

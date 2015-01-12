@@ -10,7 +10,6 @@
 #define __Fermion_Simulator__lattice__
 
 #include "utility/vector.h"
-#include <tuple>
 
 int GetSublatIndex(int, int);
 
@@ -90,21 +89,9 @@ public:
 
     int Sublat2Index(int, int) const;
     int Index2Sublat(int, int direction) const;
-    /**
-    *  return a tuple of Sublattice
-    *
-    *  @return tuple<Sublattice IN, Sublattice OUT>
-    */
-    std::tuple<int, int> Index2Sublat(int index) const;
     //return true if the Index represent a pair between the same sublattice
     bool IsOnSameSubLat(int Index);
 
-    /**
-    *  return a tuple of Site
-    *
-    *  @return tuple<Site IN, Site OUT>
-    */
-    std::tuple<Site, Site> GetSite(const Distance& dis) const;
     Site GetSite(const Distance& dis, int direction) const;
 
     Distance Dist(const Site&, const Site&) const;
