@@ -4,7 +4,7 @@ then
       rm -rf ./diagram/*
   fi
 else
-  #rm *.pkl
+  rm *_statis.pkl
   rm *.txt
   rm *.log
   rm *.gv

@@ -167,6 +167,7 @@ class Weight():
             self.Data=datamat
         else:
             Assert(False, "{0} not found!").format(self.Name)
+        return self
     def ToDict(self):
         log.info("Saving {0} Matrix...".format(self.Name));
         data={}

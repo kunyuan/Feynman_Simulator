@@ -66,22 +66,22 @@ void MonteCarlo(const para::Job& Job)
         Grasshopper.Hop(Para.Sweep);
 
         Scarecrow.Measure();
-        
-        if(icount %10==0)
+
+        if (icount % 10 == 0)
             Scarecrow.AddStatistics();
 
         if (icount % 1000 == 0) {
-            PaddyField.Diag.CheckDiagram();
-            if (!PaddyField.Diag.Worm.Exist)
-                PaddyField.Diag.WriteDiagram2gv("diagram/" + ToString(Para.Counter) + ".gv");
+            //            PaddyField.Diag.CheckDiagram();
+            //            if (!PaddyField.Diag.Worm.Exist)
+            //                PaddyField.Diag.WriteDiagram2gv("diagram/" + ToString(Para.Counter) + ".gv");
 
             Scarecrow.ReWeightEachOrder();
         }
-        if (icount % 10000 == 0) {
+        if (icount % 1000000 == 0) {
             PaddyField.Save();
             Grasshopper.PrintDetailBalanceInfo();
         }
-        if (icount % 200 == 0) {
+        if (icount % 2000000 == 0) {
             PaddyField.ListenToMessage();
         }
     }
