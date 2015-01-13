@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import sys
 import IO
 import read_data
@@ -10,7 +11,7 @@ Vol = input['Lattice']['L'][0]*input['Lattice']['L'][1]
 SublatVol = input['Lattice']['NSublat']
 normratio = Vol*(MaxTauBin/Beta)/Beta/Vol/SublatVol
 
-dataMC=IO.LoadBigDict("statis_total")['Sigma']['Histogram']['SmoothT']
+dataMC=IO.LoadBigDict("0_MC_statis")['Sigma']['Histogram']['SmoothT']
 sigmaMC={}
 sigmaMC[0] = dataMC['WeightAccu'][0][0][0][0]*dataMC['Norm']/dataMC['NormAccu']
 sigmaMC[1] =dataMC['WeightAccu'][1][0][0][0]*dataMC['Norm']/dataMC['NormAccu']

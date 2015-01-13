@@ -1052,7 +1052,7 @@ void Markov::ChangeMeasureFromGToW()
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    prob *= 0.50 * ProbofCall[CHANGE_MEASURE_W2G] / (ProbofCall[CHANGE_MEASURE_G2W]);
+    prob *= ProbofCall[CHANGE_MEASURE_W2G] / (ProbofCall[CHANGE_MEASURE_G2W]);
 
     Proposed[CHANGE_MEASURE_G2W][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
@@ -1083,6 +1083,9 @@ void Markov::ChangeMeasureFromWToG()
     gLine g = Diag->G.RandomPick(*RNG);
 
     wLine w = Diag->WMeasure;
+    if(w->IsDelta)
+        return;
+    
     Complex gWeight = G->Weight(g->NeighVer(IN)->R, g->NeighVer(OUT)->R,
                                 g->NeighVer(IN)->Tau, g->NeighVer(OUT)->Tau,
                                 g->Spin(), g->Spin(),
@@ -1099,7 +1102,7 @@ void Markov::ChangeMeasureFromWToG()
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    prob *= ProbofCall[CHANGE_MEASURE_G2W] * 2.0 / (ProbofCall[CHANGE_MEASURE_W2G]);
+    prob *= ProbofCall[CHANGE_MEASURE_G2W] / (ProbofCall[CHANGE_MEASURE_W2G]);
 
     Proposed[CHANGE_MEASURE_W2G][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {

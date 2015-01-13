@@ -8,7 +8,11 @@ SLEEP = 1    #check job status for every SLEEP seconds
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
+<<<<<<< HEAD
     "__Duplicate" : 0,
+=======
+    "__Duplicate" : 1,
+>>>>>>> 36ee0b14fd81833c89d4fa1d2b736ddb205a674b
     "__IsCluster" : False,
     "__AutoRun" : True,
     "__KeepCPUBusy": True,
@@ -49,8 +53,8 @@ Common={
 "Markov": {
     "Order": 4,
     #Start from order 0, so that OrderReWeight has Order+1 elements
-    "OrderReWeight" : [1.0, 1.0, 50.0, 10.0, 500.0],
-    "Sample" : 5000000,
+    "OrderReWeight" : [1.0, 1.0, 1.0, 1.0, 5.0],
+    "Sample" : 50000000,
     "Sweep" : 10,
     "Toss" : 1000,
     "WormSpaceReweight" : 0.05

@@ -63,22 +63,31 @@ void MonteCarlo(const para::Job& Job)
     PrinterTimer.start();
     DiskWriterTimer.start();
     MessageTimer.start();
+    
+    int sigma[MAX_ORDER] = {0};
+    int polar[MAX_ORDER] = {0};
+
     for (uint Step = 0; Step < Para.Sample; Step++) {
         //Don't use Para.Counter as counter
         Markov.Hop(Para.Sweep);
         MarkovMonitor.Measure();
+        if(!Markov.Diag->Worm.Exist){
+            if(Markov.Diag->MeasureGLine)
+                sigma[Markov.Diag->Order]++;
+            else
+                polar[Markov.Diag->Order]++;
+        }
 
         if (Step % 10 == 0)
             MarkovMonitor.AddStatistics();
-
+    
         if (Step % 1000 == 0) {
             MarkovMonitor.ReWeightEachOrder();
-            if (PrinterTimer.check(10))
-            {
+            if (!Env.Diag.Worm.Exist && Env.Diag.Order==3)
+                Env.Diag.WriteDiagram2gv("diagram/" + ToString(Para.Counter) + ".gv");
+            if (PrinterTimer.check(10)) {
                 Env.Diag.CheckDiagram();
                 Markov.PrintDetailBalanceInfo();
-                if (!Env.Diag.Worm.Exist)
-                    Env.Diag.WriteDiagram2gv("diagram/" + ToString(Para.Counter) + ".gv");
             }
             if (DiskWriterTimer.check(60))
                 Env.Save();
@@ -86,6 +95,12 @@ void MonteCarlo(const para::Job& Job)
                 Env.ListenToMessage();
         }
     }
+
+    cout << "Number of different Order sigma : " << 4*real(sigma[2]) / real(sigma[1]) << " "
+     << 16*real(sigma[3]) / real(sigma[1]) << endl;
+    cout << "Number of different Order polar : " << 4*real(polar[2]) / real(polar[1]) << " "
+     << 16*real(polar[3]) / real(polar[1]) << endl;
+
     Markov.PrintDetailBalanceInfo();
     Env.Save();
 }
