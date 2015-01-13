@@ -89,7 +89,7 @@ def CollectStatis(_map, _order):
         PolarSmoothT.Merge(PolarTemp)
     return (SigmaSmoothT, PolarSmoothT)
 
-def UpdateWeight(_map, _order, ErrorThreshold, OrderAccepted):
+def UpdateWeight(_map, _order, ErrorThreshold, OrderAccepted, SigmaSmoothT, PolarSmoothT):
     Sigma=weight.Weight("SmoothT", _map, "TwoSpins", "AntiSymmetric")
     Sigma.Data=SigmaSmoothT.GetWeight(ErrorThreshold, OrderAccepted)
     Polar=weight.Weight("SmoothT", _map, "FourSpins", "Symmetric")

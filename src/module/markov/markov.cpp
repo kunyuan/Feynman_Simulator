@@ -1083,6 +1083,9 @@ void Markov::ChangeMeasureFromWToG()
     gLine g = Diag->G.RandomPick(*RNG);
 
     wLine w = Diag->WMeasure;
+    if(w->IsDelta)
+        return;
+    
     Complex gWeight = G->Weight(g->NeighVer(IN)->R, g->NeighVer(OUT)->R,
                                 g->NeighVer(IN)->Tau, g->NeighVer(OUT)->Tau,
                                 g->Spin(), g->Spin(),
