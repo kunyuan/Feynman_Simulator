@@ -108,9 +108,11 @@ def W_Dyson(W0, Polar, map):
 
     I=np.eye(NSpin*NSub).reshape([NSpin,NSub,NSpin,NSub])
     W.Data=I[...,np.newaxis,np.newaxis]-JP
+    print "1-JP=\n", (np.dot(np.linalg.inv(W.Data[:,0,:,0,0,0]), W0.Data[:,0,:,0,0])-W0.Data[:,0,:,0,0])*map.MaxTauBin/Beta
     W.Inverse();
     W.Data = np.einsum('ijklvt,klmnv->ijmnvt', W.Data,W0.Data)
     W.Data = map.MaxTauBin/Beta*(W.Data - W0.Data[...,np.newaxis])
+    print "1-JP'\n=", W.Data[:,0,:,0,0,0]
 
     W.FFT(-1, "Space", "Time")
     Polar.FFT(-1, "Space", "Time")

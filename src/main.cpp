@@ -73,7 +73,8 @@ void MonteCarlo(const para::Job& Job)
 
         if (Step % 1000 == 0) {
             MarkovMonitor.ReWeightEachOrder();
-            if (PrinterTimer.check(10)) {
+            if (PrinterTimer.check(10))
+            {
                 Env.Diag.CheckDiagram();
                 Markov.PrintDetailBalanceInfo();
                 if (!Env.Diag.Worm.Exist)
