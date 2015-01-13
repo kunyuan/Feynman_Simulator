@@ -10,7 +10,7 @@ MonteCarlo={
     "__Execute" : "./simulator.exe",
     "__Duplicate" : 1,
     "__IsCluster" : False,
-    "__AutoRun" : False,
+    "__AutoRun" : True,
     "__KeepCPUBusy": True,
     },
 "Job": {"DoesLoad" : False}
@@ -50,7 +50,7 @@ Common={
     "Order": 4,
     #Start from order 0, so that OrderReWeight has Order+1 elements
     "OrderReWeight" : [1.0, 1.0, 1.0, 1.0, 5.0],
-    "Sample" : 10000000,
+    "Sample" : 50000000,
     "Sweep" : 10,
     "Toss" : 1000,
     "WormSpaceReweight" : 0.05

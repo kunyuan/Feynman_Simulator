@@ -4,7 +4,7 @@ import os
 import re
 from PyQt4 import QtGui,QtCore,QtSvg
 
-diagram_input_path="../data/diagram/"
+diagram_input_path="../diagram/"
 diagram_export_path="./diagram/"
 icon="./icon/"
 engine=["dot","neato","sfdp","fdp"]

@@ -35,16 +35,20 @@ if para["Job"]["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is 
     log.info("Start from G0 and W0 to do dyson...")
     G=G0.Copy()
     W=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric")
+    Polar=calc.Polar_FirstOrder(G, Map)
+    W = calc.W_Dyson(W0, Polar, Map)
+
+    spinUP=Map.Spin2Index(UP,UP)
+    print "W=\n", W.Data[spinUP,0,spinUP,0,0,:]
+
     for i in range(10):
         log.info("Round {0}...".format(i))
-        Polar=calc.Polar_FirstOrder(G, Map)
         Sigma=calc.Sigma_FirstOrder(G, W, Map)
         Sigma0=calc.Sigma0_FirstOrder(G, W0, Map)
+        Polar=calc.Polar_FirstOrder(G, Map)
         #######DYSON FOR W AND G###########################
-        W = calc.W_Dyson(W0, Polar, Map)
         G = calc.G_Dyson(G0, Sigma0, Sigma, Map)
-        spinUP=Map.Spin2Index(UP,UP)
-        plot.PlotTime(W, spinUP, 0, spinUP, 0, 0)
+        W = calc.W_Dyson(W0, Polar, Map)
         ###################################################
 else:
     #########READ G,SIGMA,POLAR; CALCULATE SIGMA0 #################
@@ -54,8 +58,11 @@ else:
     #Sigma=weight.Weight("SmoothT", map, "TwoSpins", "AntiSymmetric").FromDict(data["Sigma"])
     #Polar=weight.Weight("SmoothT", map, "FourSpins", "Symmetric").FromDict(data["Polar"])
     paraDyson=para["Dyson"]
-    Sigma, Polar=collect.CollectStatis(Map, paraDyson["Order"],
-                                       paraDyson["ErrorThreshold"], paraDyson["OrderAccepted"])
+    SigmaMC, PolarMC=collect.CollectStatis(Map, paraDyson["Order"])
+
+    Sigma, Polar = collect.UpdateWeight(Map, paraDyson["Order"],
+                                       paraDyson["ErrorThreshold"], paraDyson["OrderAccepted"],
+                                       SigmaMC, PolarMC)
 
     Sigma0=calc.Sigma0_FirstOrder(G, W0, Map)
     #######DYSON FOR W AND G###########################
@@ -71,17 +78,21 @@ spinUP=Map.Spin2Index(UP,UP)
 #print "Polar=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
 print "W=\n", W.Data[spinUP,0,spinUP,0,0,:]
 print "G=\n", G.Data[UP,0,UP,0,0,:]
+print "G0=\n", G0.Data[UP,0,UP,0,0,:]
+print "Sigma=\n", Sigma.Data[UP,0,UP,0,0,:]
+print "Polar=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
 print "Chi=\n", Chi.Data[spinUP,0,spinUP,0,0,:]
+print "Chi=\n", np.einsum("ik, kminvt->mnvt", W0.Data[:,0,:,0,1], Chi.Data)[0,0,0,:]
 
 print WeightFile
 
 data={}
 data["G"]=G.ToDict()
 data["W"]=W.ToDict()
+data["W"].update(W0.ToDict())
 data["Sigma"]=Sigma.ToDict()    ####ForTest
 data["Polar"]=Polar.ToDict()    ####ForTest
 data["Chi"]=Chi.ToDict()        ####ForTest
-print data["W"]["SmoothT"][0][0][0]
 
 IO.SaveBigDict(WeightFile, data)
 ###################################################

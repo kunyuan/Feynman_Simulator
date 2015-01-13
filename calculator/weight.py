@@ -149,6 +149,17 @@ class Weight():
         PhaseFactor=np.exp(-1j*BackForth*np.pi*tau/self.Beta)
         self.Data*=PhaseFactor
 
+    def __AdditionalPhaseFactor(self,BackForth):
+        ''' the transformation has to be done in continuous tau representation, namely using  
+        exp(-i*2*Pi*m*Tau_n/Beta)(e.g. exp(-i*2*Pi*m*(n+1/2)/N)) as the phase factor
+        so we have to multiply an additional phase factor exp(-i*Pi*m/N)
+        '''
+        if not self.__HasTau:
+            return
+        omega=np.array(range(self.Shape[TAU]))
+        PhaseFactor=np.exp(-1j*BackForth*np.pi*omega/self.Shape[TAU])
+        self.Data*=PhaseFactor
+
     def Inverse(self):
         self.__InverseSpinAndSublat()
 
@@ -202,7 +213,9 @@ class Weight():
         if BackForth==1:
             self.ChangeSymmetry(1)
             self.Data=np.fft.fft(self.Data, axis=TAU)
+            self.__AdditionalPhaseFactor(1)
         if BackForth==-1:
+            self.__AdditionalPhaseFactor(-1)
             self.Data=np.fft.ifft(self.Data, axis=TAU)
             self.ChangeSymmetry(-1)
     def __fftSpace(self, BackForth):

@@ -73,9 +73,9 @@ class JobMonteCarlo(Job):
 
     def to_dict(self):
         #set Seed here so that each job has it own rng seed
-        self.para["Markov"]["Seed"] = int(random.random()*2**30)
         #search folder for old jobs, the new pid=largest old pid+1
         PIDList, NextPID=get_current_PID(self.para["Job"]["Type"])
+        self.para["Markov"]["Seed"]=int(random.random()*2**30)
         if self.para["Job"]["DoesLoad"]:
             self.pid=PIDList[len(PIDList)-self.control["__Duplicate"]:]
         else:

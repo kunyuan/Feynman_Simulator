@@ -55,9 +55,6 @@ void MonteCarlo(const para::Job& Job)
     else
         Env.BuildNew();
 
-    int sigma[MAX_ORDER] = {0};
-    int polar[MAX_ORDER] = {0};
-
     auto& Markov = Env.Markov;
     auto& MarkovMonitor = Env.MarkovMonitor;
     auto& Para = Env.Para;
@@ -66,12 +63,15 @@ void MonteCarlo(const para::Job& Job)
     PrinterTimer.start();
     DiskWriterTimer.start();
     MessageTimer.start();
+    
+    int sigma[MAX_ORDER] = {0};
+    int polar[MAX_ORDER] = {0};
 
     for (uint Step = 0; Step < Para.Sample; Step++) {
         //Don't use Para.Counter as counter
         Markov.Hop(Para.Sweep);
         MarkovMonitor.Measure();
-        if(!Markov.Diag->Worm->Exist){
+        if(!Markov.Diag->Worm.Exist){
             if(Markov.Diag->MeasureGLine)
                 sigma[Markov.Diag->Order]++;
             else
@@ -83,11 +83,11 @@ void MonteCarlo(const para::Job& Job)
     
         if (Step % 1000 == 0) {
             MarkovMonitor.ReWeightEachOrder();
+            if (!Env.Diag.Worm.Exist && Env.Diag.Order==3)
+                Env.Diag.WriteDiagram2gv("diagram/" + ToString(Para.Counter) + ".gv");
             if (PrinterTimer.check(10)) {
                 Env.Diag.CheckDiagram();
                 Markov.PrintDetailBalanceInfo();
-                if (!Env.Diag.Worm.Exist)
-                    Env.Diag.WriteDiagram2gv("diagram/" + ToString(Para.Counter) + ".gv");
             }
             if (DiskWriterTimer.check(60))
                 Env.Save();
