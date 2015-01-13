@@ -35,14 +35,24 @@ if para["Job"]["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is 
     log.info("Start from G0 and W0 to do dyson...")
     G=G0.Copy()
     W=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric")
-    for i in range(10):
-        log.info("Round {0}...".format(i))
-        Polar=calc.Polar_FirstOrder(G, Map)
-        Sigma=calc.Sigma_FirstOrder(G, W, Map)
-        Sigma0=calc.Sigma0_FirstOrder(G, W0, Map)
-        #######DYSON FOR W AND G###########################
-        W = calc.W_Dyson(W0, Polar, Map)
-        G = calc.G_Dyson(G0, Sigma0, Sigma, Map)
+    Polar=calc.Polar_FirstOrder(G, Map)
+    W = calc.W_Dyson(W0, Polar, Map)
+
+    spinUP=Map.Spin2Index(UP,UP)
+    print "W1=\n", W.Data[spinUP,0,spinUP,0,0,:]
+    Sigma=calc.Sigma_FirstOrder(G, W, Map)
+    Sigma0=calc.Sigma0_FirstOrder(G, W0, Map)
+    Polar=calc.Polar_FirstOrder(G, Map)
+    G = calc.G_Dyson(G0, Sigma0, Sigma, Map)
+    W = calc.W_Dyson(W0, Polar, Map)
+    #for i in range(0):
+        #log.info("Round {0}...".format(i))
+        #Polar=calc.Polar_FirstOrder(G, Map)
+        #Sigma=calc.Sigma_FirstOrder(G, W, Map)
+        #Sigma0=calc.Sigma0_FirstOrder(G, W0, Map)
+        ########DYSON FOR W AND G###########################
+        #W = calc.W_Dyson(W0, Polar, Map)
+        #G = calc.G_Dyson(G0, Sigma0, Sigma, Map)
         ###################################################
 else:
     #########READ G,SIGMA,POLAR; CALCULATE SIGMA0 #################
@@ -66,7 +76,7 @@ Chi = calc.Calculate_Chi(W0, Polar, Map)
 
 ##########OUTPUT AND FILE SAVE ####################
 spinUP=Map.Spin2Index(UP,UP)
-#print "Polar=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
+print "Polar=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
 print "W=\n", W.Data[spinUP,0,spinUP,0,0,:]
 print "G=\n", G.Data[UP,0,UP,0,0,:]
 print "Chi=\n", Chi.Data[spinUP,0,spinUP,0,0,:]
