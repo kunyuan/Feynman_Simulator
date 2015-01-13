@@ -76,6 +76,7 @@ class JobMonteCarlo(Job):
     def to_dict(self):
         pid, Dict=Job.to_dict(self)
         #set Seed here so that each job has it own rng seed
+        #search folder for old jobs, the new pid=largest old pid+1
         Dict["Para"]["Markov"]["Seed"] = int(random.random()*2**30)
         return pid, Dict
 

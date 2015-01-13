@@ -103,6 +103,7 @@ def W_Dyson(W0, Polar, map):
     #JP shape: NSpin,NSub,NSpin,NSub,Vol,Tau
 
     JP *= Beta/map.MaxTauBin
+    JPJ=map.MaxTauBin/Beta*np.einsum("ijklvt,klmnv->ijmnvt", JP, W0.Data)
     for tau in range(map.MaxTauBin):
         JP[:,:,:,:,:,tau] = JP[:,:,:,:,:,tau] * np.cos(tau*np.pi/map.MaxTauBin)
 
@@ -110,9 +111,7 @@ def W_Dyson(W0, Polar, map):
     W.Data=I[...,np.newaxis,np.newaxis]-JP
     print "1-JP=\n", (np.dot(np.linalg.inv(W.Data[:,0,:,0,0,0]), W0.Data[:,0,:,0,0])-W0.Data[:,0,:,0,0])*map.MaxTauBin/Beta
     W.Inverse();
-    W.Data = np.einsum('ijklvt,klmnv->ijmnvt', W.Data,W0.Data)
-    W.Data = map.MaxTauBin/Beta*(W.Data - W0.Data[...,np.newaxis])
-    print "1-JP'\n=", W.Data[:,0,:,0,0,0]
+    W.Data = np.einsum('ijklvt,klmnvt->ijmnvt', W.Data,JPJ)
 
     W.FFT(-1, "Space", "Time")
     Polar.FFT(-1, "Space", "Time")
@@ -133,9 +132,10 @@ def G_Dyson(G0, Sigma0, Sigma, map):
 
     ####correction term
     for tau in range(map.MaxTauBin):
-        G0Sigma0[...,tau] = G0Sigma0[...,tau]*np.cos(np.pi*map.IndexToTau(tau)/Beta)
+        G0Sigma0[...,tau]*= np.cos(np.pi*map.IndexToTau(tau)/Beta)
 
-    GS  = Beta/map.MaxTauBin*(Beta/map.MaxTauBin*G0Sigma + G0Sigma0)
+    #GS  = Beta/map.MaxTauBin*(Beta/map.MaxTauBin*G0Sigma + G0Sigma0)
+    GS  = Beta/map.MaxTauBin*(Beta/map.MaxTauBin*G0Sigma) 
     #GS shape: NSpin,NSub,NSpin,NSub,Vol,Tau
 
     I=np.eye(NSpin*NSub).reshape([NSpin,NSub,NSpin,NSub])
@@ -171,7 +171,6 @@ def Calculate_Chi(W0, Polar, map):
     Chi.Data=I[...,np.newaxis,np.newaxis]-JP
     Chi.Inverse();
     Chi.Data = np.einsum('ijklvt,klmnvt->ijmnvt', Polar.Data, Chi.Data)
-    Chi.Data *=-1.5
 
     Chi.FFT(-1, "Space", "Time")
     Polar.FFT(-1, "Space", "Time")

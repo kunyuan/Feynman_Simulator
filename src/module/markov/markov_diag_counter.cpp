@@ -42,7 +42,8 @@ void Test_Counter()
     sput_fail_unless(Diag.CheckDiagram(), "Check diagram G,W,Ver and Weight");
     sput_fail_if(Equal(Diag.Weight, Complex(0.0, 0.0)), "Initialize diagram has nonzero weight");
 
-    int total[MAX_ORDER] = { 0 };
+    int sigma[MAX_ORDER] = { 0 };
+    int polar[MAX_ORDER] = { 0 };
 
     for (int i = 0; i < 5000; i++) {
         //        if(i==0)
@@ -51,10 +52,16 @@ void Test_Counter()
 
         sput_fail_unless(markov.Diag->CheckDiagram(), "Check for all the random steps");
         if (!markov.Diag->Worm.Exist) {
-            total[Diag.Order]++;
+            if(markov.Diag->MeasureGLine)
+                sigma[Diag.Order]++;
+            else
+                polar[Diag.Order]++;
             Diag.WriteDiagram2gv("diagram/" + ToString(Para.Counter) + ".gv");
         }
     }
-    cout << "Number of different Order diagrams in 5000 samples: " << real(total[2]) / real(total[1]) << " " <<  4.0*real(total[3]) / real(total[1]) << endl;
+    cout << "Number of different Order sigma: " << pow((1.0/markov.Beta), 2.0)*real(sigma[2])
+           /real(sigma[1]) <<" "<<pow((1.0/markov.Beta), 4.0)*real(sigma[3])/real(sigma[1]) << endl;
+    cout << "Number of different Order polar: " << pow((1.0/markov.Beta), 2.0)*real(polar[2])
+           /real(polar[1]) <<" "<<pow((1.0/markov.Beta), 4.0)*real(polar[3])/real(polar[1]) << endl;
     LOG_INFO("Updates Check are done!");
 }
