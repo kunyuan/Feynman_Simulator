@@ -529,12 +529,12 @@ void Markov::AddInteraction()
         return;
     if(kIA==kMB) return;
 
-    bool isdelta = RandomPickBool();
+//    bool isdelta = RandomPickBool();
     real tauA = RandomPickTau(), tauB;
 
-    if (isdelta)
-        tauB = tauA;
-    else
+//    if (isdelta)
+//        tauB = tauA;
+//    else
         tauB = RandomPickTau();
 
     spin spinA[2] = { GIC->Spin(), GIC->Spin() };
@@ -545,7 +545,8 @@ void Markov::AddInteraction()
     Complex wWeight = W->Weight(dirW, RA, RB, tauA, tauB, spinA, spinB,
                                 false, //IsWorm
                                 false, //IsMeasure
-                                isdelta);
+//                                isdelta);
+                                false);
 
     Complex GIAWeight = G->Weight(INVERSE(dir), Ira->R, RA, Ira->Tau, tauA,
                                   Ira->Spin(dir), spinA[INVERSE(dir)],
@@ -566,13 +567,16 @@ void Markov::AddInteraction()
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    if (isdelta)
-        prob *= OrderWeight[Diag->Order + 1] * ProbofCall[DEL_INTERACTION]
-                / (0.5*ProbofCall[ADD_INTERACTION] * OrderWeight[Diag->Order] * ProbTau(tauA));
-    else
-        prob *= OrderWeight[Diag->Order + 1] * ProbofCall[DEL_INTERACTION]
-                / (0.5*ProbofCall[ADD_INTERACTION] * OrderWeight[Diag->Order]
-                   * ProbTau(tauA) * ProbTau(tauB));
+//    if (isdelta)
+//        prob *= OrderWeight[Diag->Order + 1] * ProbofCall[DEL_INTERACTION]
+//                / (0.5*ProbofCall[ADD_INTERACTION] * OrderWeight[Diag->Order] * ProbTau(tauA));
+//    else
+//        prob *= OrderWeight[Diag->Order + 1] * ProbofCall[DEL_INTERACTION]
+//                / (0.5*ProbofCall[ADD_INTERACTION] * OrderWeight[Diag->Order]
+//                   * ProbTau(tauA) * ProbTau(tauB));
+    prob *= OrderWeight[Diag->Order + 1] * ProbofCall[DEL_INTERACTION]
+            / (ProbofCall[ADD_INTERACTION] * OrderWeight[Diag->Order]
+               * ProbTau(tauA) * ProbTau(tauB));
 
     Proposed[ADD_INTERACTION][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
@@ -614,7 +618,8 @@ void Markov::AddInteraction()
         WAB->SetWLine(kW, wWeight,
                       false, //IsWorm
                       false, //IsMeasure
-                      isdelta);
+//                      isdelta);
+                      false);
         Diag->AddWHash(kW);
 
         Ira->nG[dir] = GIA;
@@ -665,6 +670,10 @@ void Markov::DeleteInteraction()
         return;
     if (wAB->IsWorm)
         return;
+//    if (wAB->IsDelta && fabs(vA->Tau-vB->Tau)<pow(10.0, -10.0))
+//        return;
+    if (wAB->IsDelta)
+        return;
 
     gLine GAC = vA->NeighG(dir), GBD = vB->NeighG(dir);
     vertex vC = GAC->NeighVer(dir), vD = GBD->NeighVer(dir);
@@ -686,10 +695,12 @@ void Markov::DeleteInteraction()
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    if (wAB->IsDelta)
-        prob *= 0.5*OrderWeight[Diag->Order - 1] * ProbofCall[ADD_INTERACTION] * ProbTau(vA->Tau) / (ProbofCall[DEL_INTERACTION] * OrderWeight[Diag->Order]);
-    else
-        prob *= 0.5*OrderWeight[Diag->Order - 1] * ProbofCall[ADD_INTERACTION] * ProbTau(vA->Tau) * ProbTau(vB->Tau) / (ProbofCall[DEL_INTERACTION] * OrderWeight[Diag->Order]);
+//    if (wAB->IsDelta)
+//        prob *= 0.5*OrderWeight[Diag->Order - 1] * ProbofCall[ADD_INTERACTION] * ProbTau(vA->Tau) / (ProbofCall[DEL_INTERACTION] * OrderWeight[Diag->Order]);
+//    else
+//        prob *= 0.5*OrderWeight[Diag->Order - 1] * ProbofCall[ADD_INTERACTION] * ProbTau(vA->Tau) * ProbTau(vB->Tau) / (ProbofCall[DEL_INTERACTION] * OrderWeight[Diag->Order]);
+//
+        prob *= OrderWeight[Diag->Order - 1] * ProbofCall[ADD_INTERACTION] * ProbTau(vA->Tau) * ProbTau(vB->Tau) / (ProbofCall[DEL_INTERACTION] * OrderWeight[Diag->Order]);
 
     Proposed[DEL_INTERACTION][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
