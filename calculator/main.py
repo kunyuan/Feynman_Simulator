@@ -3,7 +3,7 @@ import numpy as np
 import calculator as calc
 import lattice as lat
 import collect
-from weight import UP,DOWN,IN,OUT,TAU,SP1,SUB1,SP2,SUB2,VOL
+from weight import UP,DOWN,IN,OUT
 from logger import *
 import os, sys, model, weight, parameter, plot, argparse
 
@@ -35,8 +35,6 @@ if para["Job"]["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is 
     log.info("Start from G0 and W0 to do dyson...")
     G=G0.Copy()
     W=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric")
-    Polar=calc.Polar_FirstOrder(G, Map)
-    W = calc.W_Dyson(W0, Polar, Map)
 
     for i in range(10):
         log.info("Round {0}...".format(i))
@@ -54,10 +52,10 @@ else:
     G=weight.Weight("SmoothT", Map, "TwoSpins", "AntiSymmetric").FromDict(data["G"])
     #Sigma=weight.Weight("SmoothT", map, "TwoSpins", "AntiSymmetric").FromDict(data["Sigma"])
     #Polar=weight.Weight("SmoothT", map, "FourSpins", "Symmetric").FromDict(data["Polar"])
-    paraDyson=para["Dyson"]
-    SigmaMC, PolarMC=collect.CollectStatis(Map, paraDyson["Order"])
+    MaxOrder=para["Dyson"]["Order"]
+    SigmaMC, PolarMC=collect.CollectStatis(Map, MaxOrder)
 
-    Sigma, Polar = collect.UpdateWeight(Map, paraDyson["Order"],
+    Sigma, Polar = collect.UpdateWeight(Map, MaxOrder,
                                        paraDyson["ErrorThreshold"], paraDyson["OrderAccepted"],
                                        SigmaMC, PolarMC)
 
@@ -68,7 +66,8 @@ else:
     ###################################################
 
 ######Calculate Chi ###############################
-Chi = calc.Calculate_Chi(W0, Polar, Map)
+ChiTensor = calc.Calculate_ChiTensor(W0, Polar, Map)
+Chi, _=calc.Calculate_Chi(ChiTensor, Map)
 
 ##########OUTPUT AND FILE SAVE ####################
 spinUP=Map.Spin2Index(UP,UP)
@@ -78,10 +77,7 @@ print "G=\n", G.Data[UP,0,UP,0,0,:]
 print "G0=\n", G0.Data[UP,0,UP,0,0,:]
 print "Sigma=\n", Sigma.Data[UP,0,UP,0,0,:]
 print "Polar=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
-print "Chi=\n", Chi.Data[spinUP,0,spinUP,0,0,:]
-print "Chi=\n", np.einsum("ik, kminvt->mnvt", W0.Data[:,0,:,0,1], Chi.Data)[0,0,0,:]
-
-print WeightFile
+print "Chi=\n", Chi.Data[0,0,0,0,0,:]
 
 data={}
 data["G"]=G.ToDict()
@@ -93,4 +89,4 @@ data["Chi"]=Chi.ToDict()        ####ForTest
 
 IO.SaveBigDict(WeightFile, data)
 ###################################################
-#plot.PlotSpatial(Chi, Lat, spinUP, spinUP)
+plot.PlotSpatial(Chi, Lat, 0, 0)

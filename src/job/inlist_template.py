@@ -36,14 +36,14 @@ Common={
     "FinalBeta" :  beta,
     },
 "Lattice":  {
-    "Name": "Checkboard",
-    "NSublat": 2,
-    "L": [8,8]
+    "Name": "Square",
+    "NSublat": 1,
+    "L": [4,4]
     },
 "Model": {
     "Name": "J1J2",
     "Interaction": [1.0,0.0],
-    "ExternalField": [1.0, -1.0]
+    "ExternalField": [0.0]
     #ExternalField on Sublattice A and B
     },
 "Markov": {

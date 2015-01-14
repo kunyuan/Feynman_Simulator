@@ -1,6 +1,6 @@
 import weight
 import lattice as lat
-from weight import UP,DOWN,IN,OUT,TAU,SP1,SUB1,SP2,SUB2,VOL
+from weight import UP,DOWN,IN,OUT
 import numpy as np
 from logger import *
 

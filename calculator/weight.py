@@ -6,9 +6,6 @@ from logger import *
 SPIN,SPIN2,SPIN3=2,4,8
 IN,OUT=0,1
 DOWN,UP=0,1
-SP1,SUB1,SP2,SUB2,VOL,TAU=0,1,2,3,4,5
-
-### Shape: [SP][SUB][VOL][TAU], the TAU dimension may be missing
 
 class IndexMap:
     def __init__(self, Beta, L, NSublat, MaxTauBin):
@@ -91,6 +88,9 @@ class IndexMap:
                         ((DOWN,DOWN),(DOWN,UP)),((DOWN,DOWN),(UP,DOWN))]
 
 class Weight():
+    """Assumpations of Data:
+       TAU axis always follows VOL axis
+    """
     def __init__(self, Name, Map, NSpin, Symmetry=None):
         """Name: 'SmoothT' or 'DeltaT'
            NSpin: 'TwoSpins' or 'FourSpins'
@@ -100,19 +100,25 @@ class Weight():
         self.Name=Name
         self.NSublat=self.Map.NSublat
         self.L=self.Map.L
-        if NSpin is "TwoSpins":
+        if NSpin is "NoSpin":
+            self.NSpin=1 #the spin dimension has only one element
+            self.VOLDIM=4
+        elif NSpin is "TwoSpins":
             self.NSpin=2
+            self.VOLDIM=4
         elif NSpin is "FourSpins":
             self.NSpin=4
+            self.VOLDIM=4
         else:
             Assert(False, "Only accept TwoSpins or FourSpins, not {0}".format(NSpin))
-
         self.Shape=[self.NSpin, self.NSublat, self.NSpin, self.NSublat, self.Map.Vol]
+        self.TAUDIM=self.VOLDIM+1
         if Name=="SmoothT":
             self.Beta=self.Map.Beta
             self.Shape.append(self.Map.MaxTauBin)
             self.__HasTau=True
-            self.__SpaceTimeIndex=[[k,v] for k in range(self.Shape[VOL]) for v in range(self.Shape[TAU])]
+            self.__SpaceTimeIndex=[[k,v] for k in range(self.Shape[self.VOLDIM]) 
+                    for v in range(self.Shape[self.TAUDIM])]
             if Symmetry is "Symmetric":
                 self.IsSymmetric=True
             elif Symmetry is "AntiSymmetric":
@@ -121,7 +127,7 @@ class Weight():
                 Assert(False, "Should be either Symmetric or AntiSymmetric, not {0}".format(Symmetry))
         elif Name=="DeltaT":
             self.__HasTau=False
-            self.__SpaceTimeIndex=[[k,] for k in range(self.Shape[VOL])]
+            self.__SpaceTimeIndex=[[k,] for k in range(self.Shape[self.VOLDIM])]
         else:
             Assert(False, "Should be either .SmoothT or .DeltaT in Name, not {0}".format(Name))
 
@@ -145,7 +151,7 @@ class Weight():
         '''
         if self.IsSymmetric or not self.__HasTau:
             return
-        tau=np.array([self.Map.IndexToTau(e) for e in range(self.Shape[TAU])])
+        tau=np.array([self.Map.IndexToTau(e) for e in range(self.Shape[self.TAUDIM])])
         PhaseFactor=np.exp(-1j*BackForth*np.pi*tau/self.Beta)
         self.Data*=PhaseFactor
 
@@ -156,8 +162,8 @@ class Weight():
         '''
         if not self.__HasTau:
             return
-        omega=np.array(range(self.Shape[TAU]))
-        PhaseFactor=np.exp(-1j*BackForth*np.pi*omega/self.Shape[TAU])
+        omega=np.array(range(self.Shape[self.TAUDIM]))
+        PhaseFactor=np.exp(-1j*BackForth*np.pi*omega/self.Shape[self.TAUDIM])
         self.Data*=PhaseFactor
 
     def Inverse(self):
@@ -169,8 +175,8 @@ class Weight():
             log.info("Load {0}".format(self.Name))
             datamat = data[self.Name]
             ######RESHAPE data[self.Name]
-            OldShape=[self.NSpin**2, self.NSublat**2]+self.__OriginShape[VOL:]
-            MidShape=[self.NSpin, self.NSpin, self.NSublat,self.NSublat]+self.__OriginShape[VOL:]
+            OldShape=[self.NSpin**2, self.NSublat**2]+self.__OriginShape[self.VOLDIM:]
+            MidShape=[self.NSpin, self.NSpin, self.NSublat,self.NSublat]+self.__OriginShape[self.VOLDIM:]
             NewShape=self.__OriginShape
             self.__AssertShape(datamat.shape, OldShape)
             datamat=datamat.reshape(MidShape).swapaxes(1,2).reshape(NewShape)
@@ -185,9 +191,9 @@ class Weight():
         data[self.Name]=self.Data
         #######RESHAPE
         OldShape=self.__OriginShape
-        MidShape=[self.NSpin, self.NSublat,self.NSpin, self.NSublat]+self.__OriginShape[VOL:]
-        NewShape=[self.NSpin**2, self.NSublat**2]+self.__OriginShape[VOL:]
-        self.__AssertShape(data[self.Name].shape, OldShape)
+        MidShape=[self.NSpin, self.NSublat,self.NSpin, self.NSublat]+self.__OriginShape[self.VOLDIM:]
+        NewShape=[self.NSpin**2, self.NSublat**2]+self.__OriginShape[self.VOLDIM:]
+        self.__AssertShape(OldShape, data[self.Name].shape)
         data[self.Name]=data[self.Name].reshape(MidShape).swapaxes(1,2).reshape(NewShape)
         return data
 
@@ -195,7 +201,7 @@ class Weight():
         Sp = self.NSpin
         Sub = self.NSublat
         OriginShape = self.Shape
-        self.Data = self.Data.reshape([Sp*Sub,Sp*Sub]+OriginShape[VOL:])
+        self.Data = self.Data.reshape([Sp*Sub,Sp*Sub]+OriginShape[self.VOLDIM:])
         for j in self.__SpaceTimeIndex:
             index=[Ellipsis,]+j
             try:
@@ -203,7 +209,7 @@ class Weight():
             except:
                 log.error("Fail to inverse matrix :,:,{0}\n{1}".format(index, self.Data[index].shape))
                 sys.exit(0)
-        self.Data = self.Data.reshape([Sp,Sub,Sp,Sub]+OriginShape[VOL:])
+        self.Data = self.Data.reshape([Sp,Sub,Sp,Sub]+OriginShape[self.VOLDIM:])
     def __AssertShape(self, shape1, shape2):
         Assert(tuple(shape1)==tuple(shape2), \
                 "Shape {0} is expected instead of shape {1}!".format(shape1, shape2))
@@ -212,11 +218,11 @@ class Weight():
             return
         if BackForth==1:
             self.ChangeSymmetry(1)
-            self.Data=np.fft.fft(self.Data, axis=TAU)
+            self.Data=np.fft.fft(self.Data, axis=self.TAUDIM)
             self.__AdditionalPhaseFactor(1)
         if BackForth==-1:
             self.__AdditionalPhaseFactor(-1)
-            self.Data=np.fft.ifft(self.Data, axis=TAU)
+            self.Data=np.fft.ifft(self.Data, axis=self.TAUDIM)
             self.ChangeSymmetry(-1)
     def __fftSpace(self, BackForth):
         OldShape=self.__OriginShape
@@ -229,7 +235,7 @@ class Weight():
             self.Data=np.fft.ifftn(self.Data, axes=Axis)   
         self.Data=self.Data.reshape(OldShape)
     def __SpatialShape(self, shape):
-        InsertPos=VOL
+        InsertPos=self.VOLDIM
         shape=list(shape)
         SpatialShape=shape[0:InsertPos]+self.L+shape[InsertPos+1:]
         return range(InsertPos, InsertPos+len(self.L)), SpatialShape
@@ -250,13 +256,13 @@ class TestWeightFFT(unittest.TestCase):
     def setUp(self):
         self.Map=IndexMap(Beta=1.0, L=[8,8], NSublat=2, MaxTauBin=64)
         self.G=Weight("SmoothT", self.Map, "TwoSpins", "AntiSymmetric")
-        TauGrid=np.linspace(0.0, self.G.Beta, self.G.Shape[TAU], endpoint=False)/self.G.Beta
+        TauGrid=np.linspace(0.0, self.G.Beta, self.G.Shape[self.G.TAUDIM], endpoint=False)/self.G.Beta
         #last point<self.Beta!!!
         self.gTau=np.exp(TauGrid)
         xx,yy=np.meshgrid(range(self.G.L[0]),range(self.G.L[1]))
         zz=np.exp(xx+yy)
         self.z=zz[:,:, np.newaxis]*self.gTau
-        self.G.Data+=self.z.reshape(self.G.Shape[VOL:])
+        self.G.Data+=self.z.reshape(self.G.Shape[self.G.VOLDIM:])
     def test_matrix_IO(self):
         FileName="test.npz"
         self.G.Save(FileName)
@@ -267,7 +273,7 @@ class TestWeightFFT(unittest.TestCase):
     def test_fft_backforth(self):
         self.G.FFT(1, "Time")
         self.G.FFT(-1, "Time")
-        self.assertTrue(np.allclose(self.G.Data[0,0,:,:], self.z.reshape(self.G.Shape[VOL:])))
+        self.assertTrue(np.allclose(self.G.Data[0,0,:,:], self.z.reshape(self.G.Shape[self.G.VOLDIM:])))
     def test_fft_symmetry(self):
         self.G.ChangeSymmetry(-1)
         self.G.FFT(1, "Time") #fftTime(1) will call ChangeSymmetry(1)
@@ -278,6 +284,6 @@ class TestWeightFFT(unittest.TestCase):
         old=self.G.Data.copy()
         self.G.FFT(1, "Space")
         zzz=np.fft.fftn(self.z, axes=(0,1))
-        self.assertTrue(np.allclose(self.G.Data[0,0,:,:], zzz.reshape(self.G.Shape[VOL:])))
+        self.assertTrue(np.allclose(self.G.Data[0,0,:,:], zzz.reshape(self.G.Shape[self.G.VOLDIM:])))
         self.G.FFT(-1, "Space")
         self.assertTrue(np.allclose(self.G.Data, old))
