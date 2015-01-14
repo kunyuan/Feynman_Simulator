@@ -1,24 +1,27 @@
-Interaction = [1.0, 0.0]
-Hopping = [0.0]
-Seed = 759588578
-L = [8, 8]
-ExternalField = 0.0
-Lattice = 'Checkboard'
-ChemicalPotential = [(0, 1.5707963267948966), (0, 1.5707963267948966)]
-DeltaBeta = 0.0
-WeightFile = 'Weight.npz'
-Model = 'J1J2'
-DoesLoad = False
-Type = 'MC'
-Order = 4
-FinalBeta = 1.0
-MessageFile = 'Message.txt'
-Toss = 10000
-OrderReWeight = [1.0, 1.0, 3.0, 4.0, 1.0]
-PID = 2
-Sweep = 10
-Sample = 5000000
-WormSpaceReweight = 0.1
-InitialBeta = 1.0
-NSublat = 2
-MaxTauBin = 32
+{'Para': {'Dyson': {'ErrorThreshold': 0.5,
+                    'Order': 4,
+                    'OrderAccepted': 1,
+                    'SleepTime': 300},
+          'Job': {'DoesLoad': False,
+                  'MessageFile': 'Message',
+                  'PID': 0,
+                  'Type': 'MC',
+                  'WeightFile': 'Weight'},
+          'Lattice': {'L': [8, 8], 'NSublat': 2, 'Name': 'Checkboard'},
+          'Markov': {'Order': 4,
+                     'OrderReWeight': [1.0, 1.0, 1.0, 1.0, 5.0],
+                     'Sample': 50000000,
+                     'Seed': 513857268,
+                     'Sweep': 10,
+                     'Toss': 1000,
+                     'WormSpaceReweight': 0.05},
+          'Model': {'ChemicalPotential': [3.141592653589793j,
+                                          3.141592653589793j],
+                    'ExternalField': [1.0, -1.0],
+                    'Hopping': [0.0],
+                    'Interaction': [1.0, 0.0],
+                    'Name': 'J1J2'},
+          'Tau': {'Beta': 0.5,
+                  'DeltaBeta': 0.0,
+                  'FinalBeta': 0.5,
+                  'MaxTauBin': 128}}}
