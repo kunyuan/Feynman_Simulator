@@ -2,7 +2,7 @@
 import sys
 import numpy as np
 import parameter as para
-from weight import UP,DOWN,IN,OUT,TAU,SP1,SUB1,SP2,SUB2,VOL,SPIN
+from weight import UP,DOWN,IN,OUT
 import weight
 from logger import *
 
@@ -46,9 +46,10 @@ def Sigma0_FirstOrder(G, W0, map):
 
 def Polar_FirstOrder(G, map):
     Polar=weight.Weight("SmoothT", map, "FourSpins","Symmetric")
-    NSublat = G.NSublat
+    NSublat = map.NSublat
+    NSpin = G.NSpin
     SubList=[(a,b) for a in range(NSublat) for b in range(NSublat)]
-    SpList=[(a,b) for a in range(SPIN) for b in range(SPIN)]
+    SpList=[(a,b) for a in range(NSpin) for b in range(NSpin)]
     for spin1,spin2 in SpList:
         spinPolar = ((spin1,spin2),(spin2,spin1))
         spinG1 = (spin1, spin1)
@@ -105,11 +106,10 @@ def W_Dyson(W0, Polar, map):
     JP *= Beta/map.MaxTauBin
     JPJ=map.MaxTauBin/Beta*np.einsum("ijklvt,klmnv->ijmnvt", JP, W0.Data)
     for tau in range(map.MaxTauBin):
-        JP[:,:,:,:,:,tau] = JP[:,:,:,:,:,tau] * np.cos(tau*np.pi/map.MaxTauBin)
-
+        JP[...,tau] *= np.cos(tau*np.pi/map.MaxTauBin)
     I=np.eye(NSpin*NSub).reshape([NSpin,NSub,NSpin,NSub])
+
     W.Data=I[...,np.newaxis,np.newaxis]-JP
-    print "1-JP=\n", (np.dot(np.linalg.inv(W.Data[:,0,:,0,0,0]), W0.Data[:,0,:,0,0])-W0.Data[:,0,:,0,0])*map.MaxTauBin/Beta
     W.Inverse();
     W.Data = np.einsum('ijklvt,klmnvt->ijmnvt', W.Data,JPJ)
 
@@ -150,29 +150,54 @@ def G_Dyson(G0, Sigma0, Sigma, map):
     return G
 
 
-def Calculate_Chi(W0, Polar, map):
-
+def Calculate_ChiTensor(W0, Polar, map):
     Beta=map.Beta
-    Chi=weight.Weight("SmoothT", map, "FourSpins", "Symmetric")
+    ChiTensor=weight.Weight("SmoothT", map, "FourSpins", "Symmetric")
 
     W0.FFT(1, "Space")
     Polar.FFT(1, "Space", "Time")
 
-    NSpin, NSub=Chi.NSpin, Chi.NSublat
+    NSpin, NSub=ChiTensor.NSpin, ChiTensor.NSublat
 
     JP=np.einsum("ijklv,klmnvt->ijmnvt",W0.Data, Polar.Data)
     #JP shape: NSpin,NSub,NSpin,NSub,Vol,Tau
 
     JP *= Beta/map.MaxTauBin
     for tau in range(map.MaxTauBin):
-        JP[:,:,:,:,:,tau] = JP[:,:,:,:,:,tau] * np.cos(tau*np.pi/map.MaxTauBin)
+        JP[...,tau]*= np.cos(tau*np.pi/map.MaxTauBin)
 
     I=np.eye(NSpin*NSub).reshape([NSpin,NSub,NSpin,NSub])
-    Chi.Data=I[...,np.newaxis,np.newaxis]-JP
-    Chi.Inverse();
-    Chi.Data = np.einsum('ijklvt,klmnvt->ijmnvt', Polar.Data, Chi.Data)
+    ChiTensor.Data=I[...,np.newaxis,np.newaxis]-JP
+    ChiTensor.Inverse();
+    ChiTensor.Data = np.einsum('ijklvt,klmnvt->ijmnvt', Polar.Data, ChiTensor.Data)
 
-    Chi.FFT(-1, "Space", "Time")
+    ChiTensor.FFT(-1, "Space", "Time")
     Polar.FFT(-1, "Space", "Time")
     W0.FFT(-1, "Space")
-    return Chi
+    return ChiTensor
+
+def Calculate_Chi(ChiTensor, map):
+    NSpin, NSublat=ChiTensor.NSpin, ChiTensor.NSublat
+    SxSx=np.zeros((NSpin,NSpin))
+    SySy=np.zeros((NSpin,NSpin))
+    SzSz=np.zeros((NSpin,NSpin))
+    UU=map.Spin2Index(UP,UP) 
+    UD=map.Spin2Index(UP,DOWN) 
+    DU=map.Spin2Index(DOWN, UP) 
+    DD=map.Spin2Index(DOWN, DOWN) 
+    SxSx[UD, UD]=SxSx[DU, DU]=1
+    SxSx[UD, DU]=SxSx[DU, UD]=1
+    SySy[UD, UD]= SySy[DU, DU]=-1
+    SySy[UD, DU]= SySy[DU, UD]=1
+    SzSz[UU, UU]= SzSz[DD, DD]=1
+    SzSz[UU, DD]= SzSz[DD, UU]=-1
+    Chi=weight.Weight("SmoothT", map, "NoSpin", "Symmetric")
+    Chi_ss=[Chi.Copy(), Chi.Copy(), Chi.Copy()]
+    SS=[SxSx/4.0, SySy/4.0, SzSz/4.0]
+    for i in range(3):
+        temp=np.einsum("ik, kminvt->mnvt", SS[i], ChiTensor.Data)
+        Chi_ss[i].Data=temp.reshape([1, NSublat, 1, NSublat, map.Vol, map.MaxTauBin]) 
+    Chi.Data=Chi_ss[0].Data+Chi_ss[1].Data+Chi_ss[2].Data
+    return Chi, Chi_ss
+
+
