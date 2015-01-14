@@ -51,7 +51,6 @@ private:
     void _AllocateGW(const para::ParaMC&);
     void _AllocateSigmaPolar(const para::ParaMC&);
 };
-int TestWeight();
 }
 
 #endif /* defined(__Feynman_Simulator__observable__) */

@@ -40,7 +40,7 @@ WeightEstimator::WeightEstimator(const Lattice& lat, real beta, int order, strin
 void WeightEstimator::ReWeight(real Beta)
 {
     //make sure
-    //real NormFactor = 1.0 / _NormAccu * _Norm * MAX_BIN / _Beta;
+    //real NormFactor = 1.0 / _NormAccu * _Norm;
     //has the same value before Beta is changed
     //so that GetWeightArray will give a same weight function
     _NormAccu *= _Beta / Beta;

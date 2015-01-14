@@ -10,7 +10,6 @@
 #include "environment/environment.h"
 #include "module/markov/markov.h"
 #include "module/diagram/diagram.h"
-#include "module/weight/weight.h"
 #include "lattice/lattice.h"
 #include "estimator/estimator.h"
 #include "module/weight/component.h"
@@ -30,14 +29,13 @@ int RunTest()
     //    TestRNG();
     //    TestArray();
     TEST(diag::TestDiagram);
-    TEST(weight::TestWeight);
     //    TEST(mc::TestMarkov);
     //    TEST(mc::TestDiagCounter);
 
     //    TEST(TestLattice);
     //    TEST(TestEstimator);
 
-    TEST(TestDictionary);
+    //    TEST(TestDictionary);
 
     return 0;
 }
