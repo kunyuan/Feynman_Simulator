@@ -8,7 +8,7 @@ SLEEP = 1    #check job status for every SLEEP seconds
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" : 1,
+    "__Duplicate" : 0,
     "__IsCluster" : False,
     "__AutoRun" : True,
     "__KeepCPUBusy": True,
@@ -36,27 +36,27 @@ Common={
     "FinalBeta" :  beta,
     },
 "Lattice":  {
-    "Name": "Checkboard",
-    "NSublat": 2,
-    "L": [8,8]
+    "Name": "Square",
+    "NSublat": 1,
+    "L": [4,4]
     },
 "Model": {
     "Name": "J1J2",
     "Interaction": [1.0,0.0],
-    "ExternalField": [1.0, -1.0]
+    "ExternalField": [0.0]
     #ExternalField on Sublattice A and B
     },
 "Markov": {
-    "Order": 3,
+    "Order": 4,
     #Start from order 0, so that OrderReWeight has Order+1 elements
-    "OrderReWeight" : [1.0, 1.0, 1.0, 1.0],
-    "Sample" : 200000000,
+    "OrderReWeight" : [1.0, 1.0, 1.0, 1.0, 5.0],
+    "Sample" : 50000000,
     "Sweep" : 10,
     "Toss" : 1000,
     "WormSpaceReweight" : 0.05
     },
 "Dyson": {
-    "Order": 3,
+    "Order": 4,
     "OrderAccepted": 1,
     "ErrorThreshold": 0.5,
     "SleepTime": 300
