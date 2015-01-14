@@ -17,6 +17,22 @@ namespace weight {
 enum model { DiagCount = 0,
              Trivial };
 
+class Worm {
+public:
+    static real Weight(const Site&, const Site&, real, real)
+    {
+        return 1.0;
+    }
+};
+
+class Norm {
+public:
+    static real Weight()
+    {
+        return 10.0;
+    }
+};
+
 class G : public Basic {
     friend class GInitializer;
 
@@ -58,7 +74,7 @@ protected:
 class Sigma : public Basic {
 public:
     Sigma(const Lattice&, real Beta, uint MaxTauBin, int MaxOrder,
-          TauSymmetry Symmetry = TauAntiSymmetric);
+          TauSymmetry Symmetry = TauAntiSymmetric, real Norm = Norm::Weight());
     void BuildNew();
     void BuildTest();
 
@@ -79,7 +95,7 @@ protected:
 
 class Polar : public Basic {
 public:
-    Polar(const Lattice&, real Beta, uint MaxTauBin, int MaxOrder);
+    Polar(const Lattice&, real Beta, uint MaxTauBin, int MaxOrder, real Norm = Norm::Weight());
     void BuildNew();
     void BuildTest();
 
@@ -96,22 +112,6 @@ public:
 
 protected:
     IndexMapSPIN4 _Map;
-};
-
-class Worm {
-public:
-    static real Weight(const Site&, const Site&, real, real)
-    {
-        return 1.0;
-    }
-};
-
-class Norm {
-public:
-    static real Weight()
-    {
-        return 10.0;
-    }
 };
 
 int TestWeight();
