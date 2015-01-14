@@ -132,10 +132,10 @@ void W::Reset(real Beta)
 }
 
 Sigma::Sigma(const Lattice& lat, real Beta, uint MaxTauBin,
-             int MaxOrder, TauSymmetry Symmetry)
+             int MaxOrder, TauSymmetry Symmetry, real Norm)
     : weight::Basic(lat, Beta, MaxTauBin, SPIN2, Symmetry, "Sigma")
     , _Map(IndexMapSPIN2(Beta, MaxTauBin, lat))
-    , Estimator(lat, Beta, MaxOrder, "Sigma", Norm::Weight(), GetShape())
+    , Estimator(lat, Beta, MaxOrder, "Sigma", Norm, GetShape())
 {
 }
 
@@ -169,10 +169,10 @@ Dictionary Sigma::ToDict()
     return dict;
 }
 
-Polar::Polar(const Lattice& lat, real Beta, uint MaxTauBin, int MaxOrder)
+Polar::Polar(const Lattice& lat, real Beta, uint MaxTauBin, int MaxOrder, real Norm)
     : weight::Basic(lat, Beta, MaxTauBin, SPIN4, TauSymmetric, "Polar")
     , _Map(IndexMapSPIN4(Beta, MaxTauBin, lat))
-    , Estimator(lat, Beta, MaxOrder, "Polar", Norm::Weight(), GetShape())
+    , Estimator(lat, Beta, MaxOrder, "Polar", Norm, GetShape())
 {
 }
 

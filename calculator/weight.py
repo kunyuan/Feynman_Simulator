@@ -93,7 +93,7 @@ class Weight():
     """
     def __init__(self, Name, Map, NSpin, Symmetry=None):
         """Name: 'SmoothT' or 'DeltaT'
-           NSpin: 'TwoSpins' or 'FourSpins'
+           NSpin: 'NoSpin', 'TwoSpins' or 'FourSpins'
            Symmetry: 'Symmetric' or 'AntiSymmetric', only be checked if TauDep is 'SmoothT'
         """
         self.Map=Map
@@ -102,23 +102,21 @@ class Weight():
         self.L=self.Map.L
         if NSpin is "NoSpin":
             self.NSpin=1 #the spin dimension has only one element
-            self.VOLDIM=4
         elif NSpin is "TwoSpins":
             self.NSpin=2
-            self.VOLDIM=4
         elif NSpin is "FourSpins":
             self.NSpin=4
-            self.VOLDIM=4
         else:
-            Assert(False, "Only accept TwoSpins or FourSpins, not {0}".format(NSpin))
+            Assert(False, "Only accept NoSpin, TwoSpins or FourSpins, not {0}".format(NSpin))
         self.Shape=[self.NSpin, self.NSublat, self.NSpin, self.NSublat, self.Map.Vol]
+        self.VOLDIM=4
         self.TAUDIM=self.VOLDIM+1
         if Name=="SmoothT":
             self.Beta=self.Map.Beta
             self.Shape.append(self.Map.MaxTauBin)
             self.__HasTau=True
             self.__SpaceTimeIndex=[[k,v] for k in range(self.Shape[self.VOLDIM]) 
-                    for v in range(self.Shape[self.TAUDIM])]
+                                         for v in range(self.Shape[self.TAUDIM])]
             if Symmetry is "Symmetric":
                 self.IsSymmetric=True
             elif Symmetry is "AntiSymmetric":
@@ -155,17 +153,6 @@ class Weight():
         PhaseFactor=np.exp(-1j*BackForth*np.pi*tau/self.Beta)
         self.Data*=PhaseFactor
 
-    def __AdditionalPhaseFactor(self,BackForth):
-        ''' the transformation has to be done in continuous tau representation, namely using  
-        exp(-i*2*Pi*m*Tau_n/Beta)(e.g. exp(-i*2*Pi*m*(n+1/2)/N)) as the phase factor
-        so we have to multiply an additional phase factor exp(-i*Pi*m/N)
-        '''
-        if not self.__HasTau:
-            return
-        omega=np.array(range(self.Shape[self.TAUDIM]))
-        PhaseFactor=np.exp(-1j*BackForth*np.pi*omega/self.Shape[self.TAUDIM])
-        self.Data*=PhaseFactor
-
     def Inverse(self):
         self.__InverseSpinAndSublat()
 
@@ -198,10 +185,9 @@ class Weight():
         return data
 
     def __InverseSpinAndSublat(self):
-        Sp = self.NSpin
-        Sub = self.NSublat
+        Sp, Sub = self.NSpin, self.NSublat
         OriginShape = self.Shape
-        self.Data = self.Data.reshape([Sp*Sub,Sp*Sub]+OriginShape[self.VOLDIM:])
+        self.Data = self.Data.reshape([Sp*Sub, Sp*Sub]+OriginShape[self.VOLDIM:])
         for j in self.__SpaceTimeIndex:
             index=[Ellipsis,]+j
             try:
@@ -234,6 +220,16 @@ class Weight():
         elif BackForth==-1:
             self.Data=np.fft.ifftn(self.Data, axes=Axis)   
         self.Data=self.Data.reshape(OldShape)
+    def __AdditionalPhaseFactor(self,BackForth):
+        ''' the transformation has to be done in continuous tau representation, namely using  
+        exp(-i*2*Pi*m*Tau_n/Beta)(e.g. exp(-i*2*Pi*m*(n+1/2)/N)) as the phase factor
+        so we have to multiply an additional phase factor exp(-i*Pi*m/N)
+        '''
+        if not self.__HasTau:
+            return
+        omega=np.array(range(self.Shape[self.TAUDIM]))
+        PhaseFactor=np.exp(-1j*BackForth*np.pi*omega/self.Shape[self.TAUDIM])
+        self.Data*=PhaseFactor
     def __SpatialShape(self, shape):
         InsertPos=self.VOLDIM
         shape=list(shape)
