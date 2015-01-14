@@ -52,7 +52,10 @@ else:
     G=weight.Weight("SmoothT", Map, "TwoSpins", "AntiSymmetric").FromDict(data["G"])
     MaxOrder=para["Dyson"]["Order"]
     SigmaMC, PolarMC=collect.CollectStatis(Map, MaxOrder)
-    Sigma,Polar=collect.UpdateWeight(SigmaMC, PolarMC, paraDyson["ErrorThreshold"], paraDyson["OrderAccepted"])
+
+    Sigma, Polar = collect.UpdateWeight(Map, MaxOrder,
+                                       paraDyson["ErrorThreshold"], paraDyson["OrderAccepted"],
+                                       SigmaMC, PolarMC)
 
     Sigma0=calc.Sigma0_FirstOrder(G, W0, Map)
     #######DYSON FOR W AND G###########################

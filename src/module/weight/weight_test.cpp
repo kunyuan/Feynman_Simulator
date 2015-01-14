@@ -45,13 +45,14 @@ void WeightMeasuring(real Beta, int Num)
 {
     //some initialization
     Lattice lat(Vec<int>(4));
-    weight::Sigma Sig(lat, Beta, 32, 4);
-    weight::Sigma Sig2(lat, Beta, 32, 4);
+    real Norm = 1.0 * Beta * lat.Vol * lat.SublatVol;
+    int order = 4;
+    weight::Sigma Sig(lat, Beta, 32, order, weight::TauAntiSymmetric, Norm);
+    weight::Sigma Sig2(lat, Beta, 32, order, weight::TauAntiSymmetric, Norm);
     Site s1 = Site(0, 0);
     Site s2 = Site(0, 0);
     spin SpinIn = DOWN, SpinOut = DOWN;
     real tau = Beta / 2;
-    int order = 4;
 
     //provide order+1 real numbers, order=0 corresponds to the Norm term
     real P[] = { 16.0, 16.0, 4.0, 1.0, 1.0 };

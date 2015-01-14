@@ -7,27 +7,8 @@ import parameter as para
 StatisFilePattern="_statis"
 
 class WeightEstimator():
-    def __init__(self, Name, Map, NSpin, Order): 
-        """Name: 'SmoothT' or 'DeltaT'
-           NSpin: 'TwoSpins' or 'FourSpins'
-        """
-        self.Map=Map
-        if NSpin is "TwoSpins":
-            self.NSpin=2
-        elif NSpin is "FourSpins":
-            self.NSpin=4
-        else:
-            Assert(False, "Only accept TwoSpins or FourSpins, not {0}".format(NSpin))
-        self.Shape=[Order, self.NSpin**2, self.Map.NSublat**2, self.Map.Vol]
-        self.Name=Name
-        if Name=="SmoothT":
-            self.Beta=self.Map.Beta
-            self.Shape.append(self.Map.MaxTauBin)
-            self.__HasTau=True
-        elif Name=="DeltaT":
-            self.__HasTau=False
-        else:
-            Assert(False, "Should be either .SmoothT or .DeltaT in Name, not {0}".format(Name))
+    def __init__(self, Weight, Order): 
+        self.__Weight=Weight
         self.WeightAccu=np.zeros(self.Shape, dtype=complex)
         self.NormAccu=0.0
         self.Norm=None
@@ -48,7 +29,10 @@ class WeightEstimator():
     
     def GetWeight(self, ErrorThreshold, OrderAccepted):
         """add all different orders together"""
-        return np.sum(self.WeightAccu, axis=0)/self.NormAccu*self.Norm*self.Map.MaxTauBin/self.Map.Beta
+        Dict={self.Name: np.sum(self.WeightAccu, axis=0)/
+                           self.NormAccu*self.Norm*self.Map.MaxTauBin/self.Map.Beta}
+        self.__Weight.FromDict(Dict)
+        return self.__Weight
 
     def FromDict(self, data):
         datamat=data[self.Name]
@@ -74,8 +58,10 @@ def GetFileList():
     return StatisFileList
 
 def CollectStatis(_map, _order):
-    SigmaSmoothT=WeightEstimator("SmoothT", _map, "TwoSpins", _order)
-    PolarSmoothT=WeightEstimator("SmoothT", _map, "FourSpins", _order)
+    Sigma=weight.Weight("SmoothT", _map, "TwoSpins", "AntiSymmetric")
+    SigmaSmoothT=WeightEstimator(Sigma, _order)
+    Polar=weight.Weight("SmoothT", _map, "FourSpins", "Symmetric")
+    PolarSmoothT=WeightEstimator(Polar, _order)
     SigmaTemp=SigmaSmoothT.Copy()
     PolarTemp=PolarSmoothT.Copy()
     _FileList=GetFileList()
@@ -89,11 +75,10 @@ def CollectStatis(_map, _order):
         PolarSmoothT.Merge(PolarTemp)
     return (SigmaSmoothT, PolarSmoothT)
 
-def UpdateWeight(_map, _order, ErrorThreshold, OrderAccepted, SigmaSmoothT, PolarSmoothT):
-    Sigma=weight.Weight("SmoothT", _map, "TwoSpins", "AntiSymmetric")
-    Sigma.Data=SigmaSmoothT.GetWeight(ErrorThreshold, OrderAccepted)
-    Polar=weight.Weight("SmoothT", _map, "FourSpins", "Symmetric")
-    Polar.Data=PolarSmoothT.GetWeight(ErrorThreshold, OrderAccepted)
+def UpdateWeight(SigmaSmoothT, PolarSmoothT, ErrorThreshold, OrderAccepted):
+    Sigma=SigmaSmoothT.GetWeight(ErrorThreshold, OrderAccepted)
+    Polar=PolarSmoothT.GetWeight(ErrorThreshold, OrderAccepted)
+    return Sigma, Polar
 
 if __name__=="__main__":
     WeightPara={"NSublat": 1, "L":[4, 4],
