@@ -25,10 +25,10 @@ def PlotSpatial(weight, lattice, SpinIn, SpinOut, Tau=0):
         else:
             z.append(weight.Data[SpinIn,0,SpinOut,sub,map.CoordiIndex(coord),map.TauIndex(0.0,Tau)].real)
         #print z.real
-    print z
     plt.scatter(x,y,s=100,c=z)
     c = plt.colorbar(orientation='horizontal')
     c.set_label("magnitude")
+    plt.axis('equal')
     plt.savefig("spatial.jpg")
     plt.show()
 

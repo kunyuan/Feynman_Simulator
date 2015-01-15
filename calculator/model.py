@@ -26,19 +26,19 @@ class BareFactory:
 
     def __J1J2(self, LatName):
         Lx,Ly=self.__Map.L
+        Beta=self.__Map.Beta
         #Dimension: 2
         #Bare G
-        self.__Mu=self.__ExternalField+1j*np.pi/2.0/self.__Map.Beta
-        #print self.__Mu
         self.__Hopping=np.array([0.0])
         log.info("set Mu={0}, Hopping={1}, and SmoothT Bare G".format(self.__Mu, self.__Hopping))
-        Assert(len(self.__Mu)==self.__Map.NSublat, 
-                "expect {0} externalfield components!".format(self.__Map.NSublat))
+        Assert(len(self.__Mu)>=self.__Map.NSublat, 
+                "expect at least {0} externalfield components!".format(self.__Map.NSublat))
         TauGrid=np.array([self.__Map.IndexToTau(t) for t in range(self.__MaxTauBin)])
-        for sub in self.__Map.GetLocalSublatTuple():
-            TauWeight=np.exp(self.__Mu[sub[IN]]*TauGrid)/(1.0+1.0*1j)
-            for sp in self.__Map.GetConservedSpinTuple("TwoSpins"):
-                self.BareG.Data[sp[IN]][sub[IN]][sp[OUT]][sub[OUT]][0][:]=TauWeight[:]
+        Pauli_Z=self.__Map.Pauli()[2]
+        for sub in range(self.__Map.NSublat):
+            for sp in range(2):
+                Mu=1j*np.pi/2.0/Beta+Pauli_Z[sp, sp]*self.__ExternalField[sub]
+                self.BareG.Data[sp,sub,sp,sub,0,:]=np.exp(Mu*TauGrid)/(1.0+np.exp(Mu*Beta))
 
         #Bare W
         J1,J2=self.__Interaction[0:2]

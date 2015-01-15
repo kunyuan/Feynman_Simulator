@@ -39,9 +39,16 @@ class IndexMap:
     def CoordiIndex(self, Out):
         #Out[0]*L1*L2+Out[1]*L2+Out[2] with In=(0,0,0)
         Index=Out[0]
-        for i in range(1,len(Out)):
+        for i in range(1,len(self.L)):
             Index=Index*self.L[i]+Out[i]
         return Index
+    def IndexToCoordi(self, Index):
+        Out=[0]*len(self.L)
+        for i in range(len(self.L)-1, 0, -1):
+            Out[i]=Index%self.L[i]
+            Index=Index/self.L[i]
+        Out[0]=Index
+        return Out
 
     def GetAllCoordi(self):
         if len(self.L)==2:
@@ -55,6 +62,9 @@ class IndexMap:
 
     def Spin2Index(self, SpinIN, SpinOUT):
         return SpinIN*SPIN+SpinOUT
+
+    def Pauli(self):
+        return (np.array([[0, 1], [-1, 0]]), np.array([[0, 1j], [-1j, 0]]), np.array([[1,0],[0,-1]]))
 
     def IsConserved(self, SpinNum, SpinTuple):
         if SpinNum==2:

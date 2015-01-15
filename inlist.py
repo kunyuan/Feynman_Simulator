@@ -8,7 +8,7 @@ SLEEP = 1    #check job status for every SLEEP seconds
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" : 1,
+    "__Duplicate" : 0,
     "__IsCluster" : False,
     "__AutoRun" : True,
     "__KeepCPUBusy": True,
@@ -27,7 +27,7 @@ Dyson={
 "Job": {"StartFromBare" : True}
 }
 
-beta=0.5
+beta=1.5
 Common={
 "Tau": {
     "MaxTauBin" : 128,
@@ -43,7 +43,7 @@ Common={
 "Model": {
     "Name": "J1J2",
     "Interaction": [1.0,0.0],
-    "ExternalField": [1.0, -1.0]
+    "ExternalField": [5.0, -5.0]
     #ExternalField on Sublattice A and B
     },
 "Markov": {
