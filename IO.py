@@ -19,6 +19,7 @@ def LoadDict(filename):
         return eval(f.read())
 
 def SaveBigDict(filename, root):
+    #TODO: better to add an file read-lock here
     if filename[-4:]!=".pkl":
         filename+=".pkl"
     with open(filename, "w") as f:
