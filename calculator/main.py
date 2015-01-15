@@ -28,23 +28,33 @@ Lat=lat.Lattice(para["Lattice"]["Name"], Map)
 ##########INITIALIZATION ##########################
 Factory=model.BareFactory(Map, para["Model"])
 G0,W0=Factory.Build(para["Model"]["Name"], para["Lattice"]["Name"])
+print "G0=\n", G0.Data[UP,0,UP,0,0,:]
 #Factory.Plot()
 
 if para["Job"]["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is False:
     #start from bare
     log.info("Start from G0 and W0 to do dyson...")
     G=G0.Copy()
+    for sub in range(2):
+        print G.Data[UP,sub,UP,sub,0,-1]-G.Data[DOWN, sub, DOWN, sub, 0, -1]
     W=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric")
+    #ChiTensor = calc.Calculate_ChiTensor(W0, Polar, Map)
+    #Chi, _=calc.Calculate_Chi(ChiTensor, Map)
+    #plot.PlotSpatial(Chi, Lat, 0, 0)
+    #sys.exit(0)
 
     for i in range(10):
         log.info("Round {0}...".format(i))
         Sigma=calc.Sigma_FirstOrder(G, W, Map)
         Sigma0=calc.Sigma0_FirstOrder(G, W0, Map)
         Polar=calc.Polar_FirstOrder(G, Map)
+
         #######DYSON FOR W AND G###########################
         G = calc.G_Dyson(G0, Sigma0, Sigma, Map)
         W = calc.W_Dyson(W0, Polar, Map)
         ###################################################
+        calc.Check_Denorminator(W0, Polar, Map)
+
 else:
     #########READ G,SIGMA,POLAR; CALCULATE SIGMA0 #################
     log.info("Load Sigma/Polar and G to do dyson...")
@@ -56,8 +66,8 @@ else:
 
     Sigma0=calc.Sigma0_FirstOrder(G, W0, Map)
     #######DYSON FOR W AND G###########################
-    W = calc.W_Dyson(W0, Polar,Map)
     G = calc.G_Dyson(G0, Sigma0, Sigma, Map)
+    W = calc.W_Dyson(W0, Polar,Map)
     ###################################################
 
 ######Calculate Chi ###############################
