@@ -8,7 +8,7 @@ SLEEP = 1    #check job status for every SLEEP seconds
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" : 1,
+    "__Duplicate" : 4,
     "__IsCluster" : False,
     "__AutoRun" : True,
     "__KeepCPUBusy": True,
@@ -21,13 +21,14 @@ Dyson={
     "__Execute" : ["python", "./calculator/main.py"],
     "__Duplicate" : 1,
     "__IsCluster" : False,
-    "__AutoRun" : True, 
+    "__AutoRun" : False, 
     "__KeepCPUBusy": False,
     },
 "Job": {"StartFromBare" : True}
 }
 
 beta=0.5
+Order=4
 Common={
 "Tau": {
     "MaxTauBin" : 128,
@@ -36,27 +37,30 @@ Common={
     "FinalBeta" :  beta,
     },
 "Lattice":  {
-    "Name": "Checkboard",
-    "NSublat": 2,
-    "L": [8,8]
+    "Name": "Square",
+    "NSublat": 1,
+    "L": [4,4]
     },
 "Model": {
     "Name": "J1J2",
     "Interaction": [1.0,0.0],
-    "ExternalField": [1.0, -1.0]
+    "ExternalField": [0.0]
     #ExternalField on Sublattice A and B
     },
+
 "Markov": {
-    "Order": 3,
+    "Order": Order,
     #Start from order 0, so that OrderReWeight has Order+1 elements
-    "OrderReWeight" : [1.0, 1.0, 1.0, 1.0],
-    "Sample" : 200000000,
+    "OrderReWeight" : [1.0, 0.1, 0.5, 0.1, 0.05],
+    "Sample" :100000000,
     "Sweep" : 10,
     "Toss" : 1000,
-    "WormSpaceReweight" : 0.05
+    "SqueezeFactor" : 10.0,
+    "WormSpaceReweight" : 0.05,
+    "OrderTimeRatio" : [1.0, 1.0, 1.0, 4.0, 4.0]
     },
 "Dyson": {
-    "Order": 3,
+    "Order": Order,
     "OrderAccepted": 1,
     "ErrorThreshold": 0.5,
     "SleepTime": 300

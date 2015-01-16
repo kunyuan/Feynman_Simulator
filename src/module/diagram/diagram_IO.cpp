@@ -16,7 +16,6 @@
 using namespace std;
 using namespace diag;
 
-
 /*******************  Read/write diagram to dat file ****************/
 Dictionary Diagram::_ToDict(WormClass worm)
 {
@@ -27,7 +26,7 @@ Dictionary Diagram::_ToDict(WormClass worm)
     WormDict["K"] = worm.K;
     return WormDict;
 }
-void Diagram::_FromDict(const Dictionary& WormDict, WormClass& worm)
+void Diagram::_FromDict(const Dictionary &WormDict, WormClass &worm)
 {
     name ira, masha;
     WormDict.Get("Ira", ira);
@@ -46,7 +45,7 @@ Dictionary Diagram::_ToDict(gLine g)
     GDict["IsMeasure"] = g->IsMeasure;
     return GDict;
 }
-void Diagram::_FromDict(const Dictionary& GDict, gLine g)
+void Diagram::_FromDict(const Dictionary &GDict, gLine g)
 {
     name g_in, g_out;
     GDict.Get("IN", g_in);
@@ -73,7 +72,7 @@ Dictionary Diagram::_ToDict(wLine w)
     WDict["IsMeasure"] = w->IsMeasure;
     return WDict;
 }
-void Diagram::_FromDict(const Dictionary& WDict, wLine w)
+void Diagram::_FromDict(const Dictionary &WDict, wLine w)
 {
     name w_in, w_out;
     WDict.Get("IN", w_in);
@@ -102,7 +101,7 @@ Dictionary Diagram::_ToDict(vertex v)
     VerDict["SpinOut"] = (int)v->Spin(OUT);
     return VerDict;
 }
-void Diagram::_FromDict(const Dictionary& VerDict, vertex v)
+void Diagram::_FromDict(const Dictionary &VerDict, vertex v)
 {
     VerDict.Get("Name", v->Name);
     VerDict.Get("Sublat", v->R.Sublattice);
@@ -135,30 +134,30 @@ Dictionary Diagram::ToDict()
     return Config;
 }
 
-bool Diagram::FromDict(const Dictionary& dict, Lattice& lat, weight::G& g, weight::W& w)
+bool Diagram::FromDict(const Dictionary &dict, Lattice &lat, weight::G &g, weight::W &w)
 {
     Reset(lat, g, w);
     return FromDict(dict);
 }
 
-bool Diagram::FromDict(const Dictionary& Config)
+bool Diagram::FromDict(const Dictionary &Config)
 {
     ClearDiagram();
-    for (auto& dict : Config.Get<vector<Dictionary> >("Ver"))
+    for (auto &dict : Config.Get<vector<Dictionary>>("Ver"))
         _FromDict(dict, Ver.Add());
-    for (auto& dict : Config.Get<vector<Dictionary> >("W"))
+    for (auto &dict : Config.Get<vector<Dictionary>>("W"))
         _FromDict(dict, W.Add());
-    for (auto& dict : Config.Get<vector<Dictionary> >("G"))
+    for (auto &dict : Config.Get<vector<Dictionary>>("G"))
         _FromDict(dict, G.Add());
     if (Config.HasKey("Worm"))
-        for (auto& dict : Config.Get<vector<Dictionary> >("Worm"))
+        for (auto &dict : Config.Get<vector<Dictionary>>("Worm"))
             _FromDict(dict, Worm);
     SignFermiLoop = Config.Get<real>("SignFermiLoop");
     FixDiagram();
     return true;
 }
 
-void Diagram::BuildNew(Lattice& lat, weight::G& g, weight::W& w)
+void Diagram::BuildNew(Lattice &lat, weight::G &g, weight::W &w)
 {
     Reset(lat, g, w);
     Dictionary Config;
@@ -168,15 +167,15 @@ void Diagram::BuildNew(Lattice& lat, weight::G& g, weight::W& w)
         "[{'Name': 0, 'Sublat': 0, 'Coordi': [1, 0], 'Tau': 0.0, 'SpinIn': 1, 'SpinOut' :1},"
         "{'Name': 1, 'Sublat': 0, 'Coordi': [1, 0], 'Tau': 0.0, 'SpinIn': 1, 'SpinOut' :1}],"
         "'G':"
-        "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsMeasure': False},"
+        "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsMeasure': True},"
         "{'IN': 1, 'OUT': 0, 'K': 2, 'IsMeasure': False}],"
         "'W':"
-        "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsDelta': False, 'IsMeasure': True}]}");
+        "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsDelta': False, 'IsMeasure': False}]}");
     if (!FromDict(Config))
         ABORT("Faile to construct diagram!");
 }
 
-void Diagram::SetTest(Lattice& lat, weight::G& g, weight::W& w)
+void Diagram::SetTest(Lattice &lat, weight::G &g, weight::W &w)
 {
     Reset(lat, g, w);
     Dictionary Config;
@@ -186,10 +185,10 @@ void Diagram::SetTest(Lattice& lat, weight::G& g, weight::W& w)
         "[{'Name': 0, 'Sublat': 0, 'Coordi': [1, 0], 'Tau': 0.0, 'SpinIn': 1, 'SpinOut' :1},"
         "{'Name': 1, 'Sublat': 0, 'Coordi': [1, 0], 'Tau': 0.0, 'SpinIn': 1, 'SpinOut' :1}],"
         "'G':"
-        "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsMeasure': False},"
+        "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsMeasure': True},"
         "{'IN': 1, 'OUT': 0, 'K': 2, 'IsMeasure': False}],"
         "'W':"
-        "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsDelta': False, 'IsMeasure': True}]}");
+        "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsDelta': False, 'IsMeasure': False}]}");
     if (!FromDict(Config))
         ABORT("Faile to construct diagram!");
 }
@@ -201,7 +200,7 @@ string GLineStyle(bool IsMeasure, spin in, spin out)
     if (IsMeasure)
         color = "color=\"green\"";
     else {
-        string str[2] = { "blue", "red" };
+        string str[2] = {"blue", "red"};
         color = "color=\"" + str[in] + ":" + str[out] + ";0.5\"";
     }
     return "[" + color + "]";

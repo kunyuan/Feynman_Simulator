@@ -39,7 +39,7 @@ weight::Weight::~Weight()
 *  @param order     order
 */
 
-bool weight::Weight::BuildNew(flag _flag, const ParaMC& para)
+bool weight::Weight::BuildNew(flag _flag, const ParaMC &para)
 {
     if (para.Order == 0)
         ABORT("Order can not be zero!!!");
@@ -52,17 +52,15 @@ bool weight::Weight::BuildNew(flag _flag, const ParaMC& para)
     return true;
 }
 
-void weight::Weight::ReWeight(flag _flag, const ParaMC& para)
+void weight::Weight::Anneal(const ParaMC &para)
 {
-    if (_flag & weight::GW) {
-        //TODO: reweight G, W
-    }
-    if (_flag & weight::SigmaPolar) {
-        //TODO: reweight SigmaPolar
-    }
+    G->Reset(para.Beta);
+    W->Reset(para.Beta);
+    Sigma->Reset(para.Beta);
+    Polar->Reset(para.Beta);
 }
 
-bool weight::Weight::FromDict(const Dictionary& dict, flag _flag, const para::ParaMC& para)
+bool weight::Weight::FromDict(const Dictionary &dict, flag _flag, const para::ParaMC &para)
 {
     if (_flag & weight::GW) {
         _AllocateGW(para);
@@ -100,7 +98,7 @@ int weight::Weight::UpdateSigmaPolarWeight(int OrderAccepted, real ErrorThreshol
     return NewOrderAccepted;
 }
 
-void weight::Weight::SetTest(const ParaMC& para)
+void weight::Weight::SetTest(const ParaMC &para)
 {
     _AllocateGW(para);
     _AllocateSigmaPolar(para);
@@ -108,7 +106,7 @@ void weight::Weight::SetTest(const ParaMC& para)
     W->BuildTest(model::Trivial);
 }
 
-void weight::Weight::SetDiagCounter(const ParaMC& para)
+void weight::Weight::SetDiagCounter(const ParaMC &para)
 {
     _AllocateGW(para);
     _AllocateSigmaPolar(para);
@@ -116,7 +114,7 @@ void weight::Weight::SetDiagCounter(const ParaMC& para)
     W->BuildTest(model::DiagCount);
 }
 
-void weight::Weight::_AllocateGW(const ParaMC& para)
+void weight::Weight::_AllocateGW(const ParaMC &para)
 {
     //make sure old Sigma/Polar/G/W are released before assigning new memory
     delete G;
@@ -126,7 +124,7 @@ void weight::Weight::_AllocateGW(const ParaMC& para)
     W = new weight::W(para.Lat, para.Beta, para.MaxTauBin);
 }
 
-void weight::Weight::_AllocateSigmaPolar(const ParaMC& para)
+void weight::Weight::_AllocateSigmaPolar(const ParaMC &para)
 {
     auto symmetry = _IsAllSymmetric ? TauSymmetric : TauAntiSymmetric;
     delete Sigma;

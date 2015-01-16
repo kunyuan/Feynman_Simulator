@@ -34,10 +34,10 @@ bool EnvMonteCarlo::BuildNew()
     Dictionary GW_;
     GW_.BigLoad(Job.WeightFile);
     Weight.FromDict(GW_, weight::GW, Para);
-    
-    //TEST//
-    Weight.SetDiagCounter(Para);
-    
+
+    //    Weight.SetDiagCounter(Para);//Test for DiagCounter
+    //    Weight.SetTest(Para);//Test for WeightTest
+
     Weight.BuildNew(weight::SigmaPolar, Para);
     Diag.BuildNew(Para.Lat, *Weight.G, *Weight.W);
     Markov.BuildNew(Para, Diag, Weight);
@@ -85,26 +85,42 @@ void EnvMonteCarlo::DeleteSavedFiles()
     system(("rm " + Job.WeightFile).c_str());
 }
 
+void EnvMonteCarlo::AdjustOrderReWeight()
+{
+    LOG_INFO("Start adjusting OrderReweight...");
+    if (MarkovMonitor.AdjustOrderReWeight()) {
+        Markov.Reset(Para, Diag, Weight);
+        string str;
+        for (int i = 0; i <= Para.Order; i++)
+            str += ToString((Para.OrderReWeight[i])) + "  ";
+        LOG_INFO("Reweighted to:\n" + str);
+    }
+    else {
+        LOG_INFO("Number of samples is too small, adjust later.\n");
+    }
+}
 /**
 *  Adjust everything according to new parameters, like new Beta, Jcp
 */
 bool EnvMonteCarlo::ListenToMessage()
 {
-    LOG_INFO("Start reweighting...");
+    LOG_INFO("Start Annealing...");
     Message Message_;
     if (!Message_.Load(Job.MessageFile))
         return false;
     if (Para.Version >= Message_.Version) {
-        LOG_INFO("Status has not been updated yet since the last reweighting!");
+        LOG_INFO("Status has not been updated yet since the last annealing!");
         return false;
     }
     Para.UpdateWithMessage(Message_);
     Dictionary weight_;
     weight_.Load(Job.WeightFile);
     Weight.FromDict(weight_, weight::GW, Para);
-    Weight.ReWeight(weight::GW | weight::SigmaPolar, Para);
-    Markov.ReWeight(Para);
-    MarkovMonitor.ReWeight();
-    LOG_INFO("Reweighted to:\n" << Message_.PrettyString());
+    Weight.Anneal(Para);
+    Diag.Reset(Para.Lat, *Weight.G, *Weight.W);
+    Markov.Reset(Para, Diag, Weight);
+    MarkovMonitor.Reset(Para, Diag, Weight);
+    MarkovMonitor.SqueezeStatistics(Para.SqueezeFactor);
+    LOG_INFO("Annealled to:\n" << Message_.PrettyString());
     return true;
 }

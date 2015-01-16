@@ -10,6 +10,7 @@ import os, sys, model, weight, parameter, plot, argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("-p", "--PID", help="use PID to find the input file")
 parser.add_argument("-f", "--file", help="use file path to find the input file")
+parser.add_argument("-c", "--collect", action="store_true", help="collect all the _statis.pkl file into statis_total.pkl")
 args = parser.parse_args()
 if args.PID:
     InputFile=os.path.join(workspace, "infile/_in_DYSON_"+str(args.PID))
@@ -24,6 +25,15 @@ WeightPara={"NSublat": para["Lattice"]["NSublat"], "L":para["Lattice"]["L"],
             "Beta": para["Tau"]["Beta"], "MaxTauBin": para["Tau"]["MaxTauBin"]}
 Map=weight.IndexMap(**WeightPara)
 Lat=lat.Lattice(para["Lattice"]["Name"], Map)
+
+if args.collect:
+    MaxOrder=para["Dyson"]["Order"]
+    SigmaMC, PolarMC=collect.CollectStatis(Map, MaxOrder)
+    data ={}
+    data["Sigma"] = {"Histogram": SigmaMC.ToDict()}
+    data["Polar"] = {"Histogram": PolarMC.ToDict()}
+    IO.SaveBigDict(workspace+"/statis_total", data)
+    sys.exit(0)
 
 ##########INITIALIZATION ##########################
 Factory=model.BareFactory(Map, para["Model"])
@@ -83,4 +93,4 @@ data["Chi"]=Chi.ToDict()        ####ForTest
 
 IO.SaveBigDict(WeightFile, data)
 ###################################################
-plot.PlotSpatial(Chi, Lat, 0, 0)
+#plot.PlotSpatial(Chi, Lat, 0, 0)

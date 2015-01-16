@@ -22,8 +22,8 @@ const string HelpStr = "Usage:"
                        "-p N / --PID N   use N to construct input file path."
                        "or -f / --file PATH   use PATH as the input file path.";
 
-void MonteCarlo(const Job&);
-int main(int argc, const char* argv[])
+void MonteCarlo(const Job &);
+int main(int argc, const char *argv[])
 {
     Python::Initialize();
     Python::ArrayInitialize();
@@ -47,7 +47,7 @@ int main(int argc, const char* argv[])
     return 0;
 }
 
-void MonteCarlo(const para::Job& Job)
+void MonteCarlo(const para::Job &Job)
 {
     EnvMonteCarlo Env(Job);
     if (Job.DoesLoad)
@@ -55,15 +55,15 @@ void MonteCarlo(const para::Job& Job)
     else
         Env.BuildNew();
 
-    auto& Markov = Env.Markov;
-    auto& MarkovMonitor = Env.MarkovMonitor;
-    auto& Para = Env.Para;
+    auto &Markov = Env.Markov;
+    auto &MarkovMonitor = Env.MarkovMonitor;
+    auto &Para = Env.Para;
 
     timer PrinterTimer, DiskWriterTimer, MessageTimer;
     PrinterTimer.start();
     DiskWriterTimer.start();
     MessageTimer.start();
-    
+
     int sigma[MAX_ORDER] = {0};
     int polar[MAX_ORDER] = {0};
 
@@ -71,8 +71,8 @@ void MonteCarlo(const para::Job& Job)
         //Don't use Para.Counter as counter
         Markov.Hop(Para.Sweep);
         MarkovMonitor.Measure();
-        if(!Markov.Diag->Worm.Exist){
-            if(Markov.Diag->MeasureGLine)
+        if (!Markov.Diag->Worm.Exist) {
+            if (Markov.Diag->MeasureGLine)
                 sigma[Markov.Diag->Order]++;
             else
                 polar[Markov.Diag->Order]++;
@@ -80,27 +80,23 @@ void MonteCarlo(const para::Job& Job)
 
         if (Step % 10 == 0)
             MarkovMonitor.AddStatistics();
-    
+
         if (Step % 1000 == 0) {
-            MarkovMonitor.ReWeightEachOrder();
-            if (!Env.Diag.Worm.Exist && Env.Diag.Order==3)
+            if (!Env.Diag.Worm.Exist && Env.Diag.Order == 3)
                 Env.Diag.WriteDiagram2gv("diagram/" + ToString(Para.Counter) + ".gv");
             if (PrinterTimer.check(10)) {
                 Env.Diag.CheckDiagram();
                 Markov.PrintDetailBalanceInfo();
             }
-            if (DiskWriterTimer.check(60))
+            if (DiskWriterTimer.check(60)) {
+                Env.AdjustOrderReWeight();
                 Env.Save();
+            }
             if (MessageTimer.check(600))
                 Env.ListenToMessage();
         }
     }
 
-    cout << "Number of different Order sigma : " << 4*real(sigma[2]) / real(sigma[1]) << " "
-     << 16*real(sigma[3]) / real(sigma[1]) << endl;
-    cout << "Number of different Order polar : " << 4*real(polar[2]) / real(polar[1]) << " "
-     << 16*real(polar[3]) / real(polar[1]) << endl;
-
-    Markov.PrintDetailBalanceInfo();
+    //    Markov.PrintDetailBalanceInfo();
     Env.Save();
 }

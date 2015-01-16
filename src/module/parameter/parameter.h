@@ -52,7 +52,9 @@ public:
     int Seed;
     RandomFactory RNG;
     real WormSpaceReweight;
+    real SqueezeFactor;
     std::vector<real> OrderReWeight;
+    std::vector<real> OrderTimeRatio;
 
     bool BuildNew(const std::string& InputFile);
     bool FromDict(const Dictionary&);

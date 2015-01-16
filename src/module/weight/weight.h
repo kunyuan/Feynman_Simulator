@@ -44,7 +44,7 @@ public:
     bool BuildNew(flag, const para::ParaMC&);
     bool FromDict(const Dictionary&, flag, const para::ParaMC&);
     Dictionary ToDict(flag);
-    void ReWeight(flag, const para::ParaMC&);
+    void Anneal(const para::ParaMC&);
     int UpdateSigmaPolarWeight(int OrderAccepted, real ErrorThreshold);
 
 private:
