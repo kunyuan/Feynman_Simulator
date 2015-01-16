@@ -32,15 +32,4 @@ def LoadBigDict(filename):
         root=pickle.load(f)
     return root
 
-def InspectDict(Dict):
-    for e in Dict.keys():
-        if type(Dict[e]) is ndarray:
-            Dict[e]="{0} with {1}".format(type(Dict[e]), Dict[e].shape)
-        elif type(Dict[e]) is dict:
-            Dict[e]=InspectDict(Dict[e])
-    return Dict
-
-def InspectBigFile(filename):
-    pprint.pprint(InspectDict(LoadBigDict(filename)))
-
 
