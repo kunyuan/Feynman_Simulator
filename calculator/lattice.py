@@ -17,6 +17,8 @@ class Lattice:
             self.__Square()
         elif Name=="Cubic":
             self.__Cubic()
+        elif Name=="Pyrochlore":
+            self.__Pyrochlore()
         else:
             Assert(False, "Not implemented!")
 
@@ -68,6 +70,18 @@ class Lattice:
         self.ReciprocalLatVec =np.array([[2.0 * np.pi, 0.0, 0.0],
                                          [0.0, 2.0 * np.pi, 0.0],
                                          [0.0, 0.0, 2.0 * np.pi]])
+    def __Pyrochlore(self):
+        self.Dim=3
+        self.__AssertDim()
+        self.NSublat=4
+        self.__AssertNSublat()
+        self.LatVec=np.array([[0.5,0.5,0.0],
+                              [0.0,0.5,0.5],
+                              [0.5,0.0,0.5]])
+        self.SubLatVec=np.array([[0.0,0.0,0.0],
+                                 [0.0,0.25,0.25],
+                                 [0.25,0.0,0.25],
+                                 [0.25,0.25,0]])
 
 
     def __AssertDim(self):
@@ -90,18 +104,23 @@ class Lattice:
            SubLat: only the OUT sublattice is needed, IN sublattice is assumed to be 0
         '''
         v=self.__Shift(Coordi+offset)
-        return np.einsum("ij,i->j",self.LatVec,v)+self.SubLatVec[SubLat]
+        return tuple(np.einsum("ij,i->j",self.LatVec,v)+self.SubLatVec[SubLat])
     def GetSitesList(self):
         """
         return: list of all sites, with format 
                 [tuple of real space vectors of sites, tuple of integer vectors of coordinates, SubLat] 
         """
         offset=self.L/2-1
-        Points=[]
-        for sub in range(self.NSublat):
-            for coord in self.__Map.GetAllCoordi():
-                Points.append([tuple(self.GetRealVec(coord,sub,offset)),coord,sub])
-        return Points
+        Points=[None,]*(self.__Map.Vol*self.__Map.NSublat)
+        LinesInUnitCell=[]
+        Origin=[0 for e in self.L]
+        for coord in self.__Map.GetAllCoordi():
+            for sub in range(self.NSublat):
+                Points[self.__Map.LatIndex(coord, sub)]=[tuple(self.GetRealVec(coord,sub,offset)),coord,sub]
+                for subN in range(sub, self.NSublat):
+                    LinesInUnitCell.append([(self.__Map.LatIndex(coord, sub), \
+                                              self.__Map.LatIndex(coord, subN)), sub])
+        return Points, LinesInUnitCell
 
 if __name__=="__main__":
     import weight

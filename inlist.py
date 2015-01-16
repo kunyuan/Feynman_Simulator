@@ -21,7 +21,7 @@ Dyson={
     "__Execute" : ["python", "./calculator/main.py"],
     "__Duplicate" : 1,
     "__IsCluster" : False,
-    "__AutoRun" : False, 
+    "__AutoRun" : True, 
     "__KeepCPUBusy": False,
     },
 "Job": {"StartFromBare" : True}
@@ -39,12 +39,18 @@ Common={
 "Lattice":  {
     "Name": "Square",
     "NSublat": 1,
-    "L": [4,4]
+    "L": [4,4],
+    #"Name": "Pyrochlore",
+    #"NSublat": 4,
+    #"L": [4,4,4]
+    #"Name": "Checkboard",
+    #"NSublat": 2,
+    #"L": [4,4]
     },
 "Model": {
-    "Name": "J1J2",
-    "Interaction": [1.0,0.0],
-    "ExternalField": [0.0, 0.0]
+    "Name": "Heisenberg",
+    "Interaction": [1.0,],
+    "ExternalField": [0.0, 0.0, 0.0, 0.0]
     #ExternalField on Sublattice A and B
     },
 

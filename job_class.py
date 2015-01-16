@@ -46,7 +46,7 @@ class Job:
 
     def __set_model_specific__(self):
         PI=3.141592653589793238
-        if self.para["Model"]["Name"]=="J1J2":
+        if self.para["Model"]["Name"] in ("J1J2", "Heisenberg"):
             self.para["Model"]["Hopping"]=[0.0,]
             mu=1j*PI/2.0/self.para["Tau"]["Beta"]
             self.para["Model"]["ChemicalPotential"]=[mu,mu]

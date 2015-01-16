@@ -59,6 +59,8 @@ class IndexMap:
                             for k in range(self.L[2]))
         else:
             Assert(False, "Dimension {0} has been implemented!".format(len(self.L)))
+    def LatIndex(self, Coordi, Sublat):
+        return self.CoordiIndex(Coordi)*self.NSublat+Sublat
 
     def Spin2Index(self, SpinIN, SpinOUT):
         return SpinIN*SPIN+SpinOUT
