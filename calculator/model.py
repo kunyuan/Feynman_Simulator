@@ -25,9 +25,7 @@ class BareFactory:
         return (self.BareG,self.BareW)
 
     def __J1J2(self, LatName):
-        Lx,Ly=self.__Map.L
         Beta=self.__Map.Beta
-        #Dimension: 2
         #Bare G
         self.__Hopping=np.array([0.0])
         log.info("set Mu={0}, Hopping={1}, and SmoothT Bare G".format(self.__Mu, self.__Hopping))
@@ -41,10 +39,12 @@ class BareFactory:
                 self.BareG.Data[sp,sub,sp,sub,0,:]=np.exp(Mu*TauGrid)/(1.0+np.exp(Mu*Beta))
 
         #Bare W
+        #Dimension: 2
         J1,J2=self.__Interaction[0:2]
         spin=self.__Map.Spin2Index(UP,UP)
         if LatName=="Checkboard":
         #NSublat: 2
+            Lx,Ly=self.__Map.L
             subA=0
             subB=1
             coordA2B=[(0, 0),(0,Ly-1),(Lx-1,0),(Lx-1,Ly-1)]
@@ -66,6 +66,7 @@ class BareFactory:
                 self.BareW.Data[spin,subB,spin,subB,self.__Map.CoordiIndex(i)] = J2/4;
         elif LatName=="Square":
         #NSublat: 1
+            Lx,Ly=self.__Map.L
             sub=0
             coordnn=[(0,1),(1,0),(Lx-1,0),(0,Ly-1)]
             coordnnn=[(1,1),(Lx-1,1),(1,Ly-1),(Lx-1,Ly-1)]
@@ -75,6 +76,10 @@ class BareFactory:
             #J2 interaction on next nearest neighbors
             for i in coordnnn:
                 self.BareW.Data[spin,sub,spin,sub,self.__Map.CoordiIndex(i)] = J2/4.0;
+        elif LatName=="Cubic":
+        #NSublat: 1
+            Lx,Ly,Lz=self.__Map.L
+            pass
         else:
             Assert(False, "Not implemented yet!")
 
