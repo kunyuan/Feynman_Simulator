@@ -36,9 +36,9 @@ Common={
     "FinalBeta" :  beta,
     },
 "Lattice":  {
-    "Name": "Square",
+    "Name": "Cubic",
     "NSublat": 1,
-    "L": [4,4]
+    "L": [8,8,8]
     },
 "Model": {
     "Name": "J1J2",
