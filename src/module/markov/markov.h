@@ -39,7 +39,8 @@ class Markov {
     real Beta;
     int Order;
     Lattice *Lat;
-    real *OrderWeight;
+    real *OrderReWeight;
+    real *WormSpaceReweight;
     diag::Diagram *Diag;
     diag::WormClass *Worm;
     weight::Sigma *Sigma;
@@ -49,7 +50,7 @@ class Markov {
     RandomFactory *RNG;
 
     bool BuildNew(para::ParaMC &, diag::Diagram &, weight::Weight &);
-    void ReWeight(para::ParaMC &);
+    void Reset(para::ParaMC &, diag::Diagram &, weight::Weight &);
     void Hop(int);
     void PrintDetailBalanceInfo();
 
@@ -60,6 +61,8 @@ class Markov {
     void Reconnect();
     void AddInteraction();
     void DeleteInteraction();
+    void AddDeltaInteraction();
+    void DeleteDeltaInteraction();
     void JumpToOrder0();
     void JumpBackToOrder1();
     void ChangeTauOnVertex();
@@ -72,7 +75,7 @@ class Markov {
     void ChangeSpinOnVertex();
 
   private:
-    const static int NUpdates = 17;
+    const static int NUpdates = 19;
     real ProbofCall[NUpdates] = {0.0};
     real SumofProbofCall[NUpdates] = {0.0};
     std::string OperationName[NUpdates];
@@ -96,6 +99,8 @@ class Markov {
         RECONNECT,
         ADD_INTERACTION,
         DEL_INTERACTION,
+        ADD_DELTA_INTERACTION,
+        DEL_DELTA_INTERACTION,
         CHANGE_TAU_VERTEX,
         CHANGE_R_VERTEX,
         CHANGE_R_LOOP,
@@ -109,6 +114,7 @@ class Markov {
     };
     std::string _DetailBalanceStr(Operations op);
     std::string _CheckBalance(Operations op1, Operations op2);
+    void _Initial(para::ParaMC &, diag::Diagram &, weight::Weight &);
 };
 
 int TestMarkov();

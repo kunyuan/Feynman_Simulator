@@ -16,8 +16,7 @@ using namespace std;
 
 template <typename T>
 Estimate<T>::Estimate()
-    : Mean()
-    , Error()
+    : Mean(), Error()
 {
 }
 
@@ -29,9 +28,8 @@ Estimate<T>::Estimate()
 *
 */
 template <typename T>
-Estimate<T>::Estimate(const T& mean, const T& error)
-    : Mean(mean)
-    , Error(error)
+Estimate<T>::Estimate(const T &mean, const T &error)
+    : Mean(mean), Error(error)
 {
 }
 template <>
@@ -48,14 +46,14 @@ real Estimate<real>::RelativeError()
 /**
 *  \brief Pretty output of Complex Estimate
 */
-ostream& operator<<(ostream& os, const Estimate<Complex>& e)
+ostream &operator<<(ostream &os, const Estimate<Complex> &e)
 {
     os.setf(ios::showpoint);
     os << "(" << e.Mean.Re << "+/-" << e.Error.Re << "," << e.Mean.Im << "+/-" << e.Error.Im << ")";
     return os;
 }
 
-ostream& operator<<(ostream& os, const Estimate<real>& e)
+ostream &operator<<(ostream &os, const Estimate<real> &e)
 {
     os.setf(ios::showpoint);
     os << e.Mean << "+/-" << e.Error;
@@ -169,7 +167,7 @@ void Estimator<Complex>::_update()
 }
 
 template <typename T>
-void Estimator<T>::Measure(const T& t)
+void Estimator<T>::Measure(const T &t)
 {
     _accumulator += t;
     _norm += 1.0;
@@ -189,18 +187,30 @@ Estimate<T> Estimator<T>::Estimate()
 }
 
 template <typename T>
+T Estimator<T>::Value()
+{
+    return _accumulator/_norm;
+}
+
+template <typename T>
+real Estimator<T>::Norm()
+{
+    return _norm;
+}
+
+template <typename T>
 real Estimator<T>::Ratio()
 {
     return _ratio;
 }
 
 template <typename T>
-bool Estimator<T>::FromDict(const Dictionary& dict)
+bool Estimator<T>::FromDict(const Dictionary &dict)
 {
     ClearStatistics();
     auto hist_ = dict.Get<Python::ArrayObject>("History");
     ASSERT_ALLWAYS(hist_.Dim() == 1, "expect one dimension array here!");
-    T* begin = hist_.Data<T>();
+    T *begin = hist_.Data<T>();
     _history = vector<T>(begin, begin + hist_.Shape()[0]);
     _accumulator = dict.Get<T>("Accu");
     _norm = dict.Get<real>("Norm");
@@ -211,7 +221,7 @@ bool Estimator<T>::FromDict(const Dictionary& dict)
 template <typename T>
 Dictionary Estimator<T>::ToDict()
 {
-    vector<uint> shape = { (uint)_history.size() };
+    vector<uint> shape = {(uint)_history.size()};
     Dictionary dict;
     dict["Norm"] = _norm;
     dict["Accu"] = _accumulator;
@@ -238,7 +248,7 @@ void EstimatorBundle<T>::AddEstimator(string name)
 *  \brief this function will give you a new copy of Estimator<T>, including a __new__ Estimator<T>._history
 */
 template <typename T>
-void EstimatorBundle<T>::AddEstimator(const Estimator<T>& est)
+void EstimatorBundle<T>::AddEstimator(const Estimator<T> &est)
 {
     _MakeSureKeyNotExists(est.Name);
     _EstimatorVector.push_back(est);
@@ -269,10 +279,10 @@ int EstimatorBundle<T>::HowMany()
 }
 
 template <typename T>
-bool EstimatorBundle<T>::FromDict(const Dictionary& dict)
+bool EstimatorBundle<T>::FromDict(const Dictionary &dict)
 {
     bool flag = true;
-    for (auto& vector : _EstimatorVector)
+    for (auto &vector : _EstimatorVector)
         flag &= vector.FromDict(dict.Get<Dictionary>(vector.Name));
     return flag;
 }
@@ -281,20 +291,20 @@ template <typename T>
 Dictionary EstimatorBundle<T>::ToDict()
 {
     Dictionary dict;
-    for (auto& vector : _EstimatorVector) {
+    for (auto &vector : _EstimatorVector) {
         dict[vector.Name] = vector.ToDict();
     }
     return dict;
 }
 
 template <typename T>
-Estimator<T>& EstimatorBundle<T>::operator[](int index)
+Estimator<T> &EstimatorBundle<T>::operator[](int index)
 {
     return _EstimatorVector[index];
 }
 
 template <typename T>
-Estimator<T>& EstimatorBundle<T>::operator[](string name)
+Estimator<T> &EstimatorBundle<T>::operator[](string name)
 {
     return *_EstimatorMap[name];
 }
@@ -307,14 +317,14 @@ Estimator<T>& EstimatorBundle<T>::operator[](string name)
 template <typename T>
 void EstimatorBundle<T>::ClearStatistics()
 {
-    for (auto& vector : _EstimatorVector)
+    for (auto &vector : _EstimatorVector)
         vector.ClearStatistics();
 }
 
 template <typename T>
 void EstimatorBundle<T>::SqueezeStatistics(double factor)
 {
-    for (auto& vector : _EstimatorVector)
+    for (auto &vector : _EstimatorVector)
         vector.SqueezeStatistics(factor);
 }
 

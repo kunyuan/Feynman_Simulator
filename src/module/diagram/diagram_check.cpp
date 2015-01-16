@@ -33,7 +33,7 @@ bool Diagram::CheckDiagram()
 ///*************************   Diagram check    *************************/
 bool Diagram::_CheckTopo()
 {
-    if (Order==0)
+    if (Order == 0)
         return true;
     if (G.HowMany() != 2 * Order)
         ABORT("Number of G is wrong!");
@@ -69,7 +69,7 @@ bool Diagram::_CheckTopo()
 
 bool Diagram::_CheckStatus()
 {
-    if(Order==0)
+    if (Order == 0)
         return true;
     int totalmeasure = 0;
     for (int i = 0; i < G.HowMany(); i++) {
@@ -91,9 +91,12 @@ bool Diagram::_CheckStatus()
         if (Worm.Exist)
             if ((!W(i)->IsWorm) && (Worm.Ira->NeighW() == W(i) || Worm.Masha->NeighW() == W(i)))
                 ABORT("W IsWorm status error! has worm!" + W(i)->PrettyString());
-        if (W(i)->IsDelta)
+        if (W(i)->IsDelta) {
             if (W(i)->NeighVer(IN)->Tau != W(i)->NeighVer(OUT)->Tau)
                 ABORT("W is delta function, tau error!" + W(i)->PrettyString());
+            if (W(i)->IsMeasure)
+                ABORT("W is delta function and measuring line, error!" + W(i)->PrettyString());
+        }
     }
     if (totalmeasure != (MeasureGLine ? 0 : 1))
         ABORT("number of Measuring Wline is wrong!");
@@ -103,7 +106,7 @@ bool Diagram::_CheckStatus()
 
 bool Diagram::_CheckK()
 {
-    if(Order==0)
+    if (Order == 0)
         return true;
     Momentum totalk;
     for (int i = 0; i < Ver.HowMany(); i++) {
@@ -124,9 +127,9 @@ bool Diagram::_CheckK()
 
 bool Diagram::_CheckSpin()
 {
-    if(Order==0)
+    if (Order == 0)
         return true;
-    
+
     for (int i = 0; i < G.HowMany(); i++) {
         if (G(i)->NeighVer(IN)->Spin(OUT) != G(i)->NeighVer(OUT)->Spin(IN))
             ABORT("The spin on Gline is not the same" + G(i)->PrettyString());
@@ -137,9 +140,10 @@ bool Diagram::_CheckSpin()
 
 bool Diagram::_CheckWeight()
 {
-    if(Order==0)
+    cout << "Check weight..." << endl;
+    if (Order == 0)
         return Equal(Weight, weight::Norm::Weight());
-    else{
+    else {
         Complex DiagWeight(1.0, 0.0);
         Complex gWeight, wWeight;
         vertex vin, vout;

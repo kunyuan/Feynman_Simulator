@@ -19,14 +19,14 @@ Message Parameter::GenerateMessage()
     return Message_;
 }
 
-void Parameter::UpdateWithMessage(const Message& Message_)
+void Parameter::UpdateWithMessage(const Message &Message_)
 {
     Version = Message_.Version;
     Beta = Message_.Beta;
     T = 1.0 / Beta;
 }
 
-bool Parameter::_FromDict(const Dictionary& Para)
+bool Parameter::_FromDict(const Dictionary &Para)
 {
     GET_WITH_DEFAULT(Para, Version, 0);
     auto _para = Para.Get<Dictionary>("Tau");
@@ -60,7 +60,7 @@ Dictionary Parameter::_ToDict()
     return Para;
 }
 
-bool ParaMC::BuildNew(const std::string& InputFile)
+bool ParaMC::BuildNew(const std::string &InputFile)
 {
     Dictionary _para;
     _para.Load(InputFile);
@@ -68,7 +68,7 @@ bool ParaMC::BuildNew(const std::string& InputFile)
     return true;
 }
 
-bool ParaMC::FromDict(const Dictionary& Para)
+bool ParaMC::FromDict(const Dictionary &Para)
 {
     Parameter::_FromDict(Para);
     auto _para = Para.Get<Dictionary>("Markov");
@@ -77,6 +77,8 @@ bool ParaMC::FromDict(const Dictionary& Para)
     GET(_para, Sweep);
     GET(_para, WormSpaceReweight);
     GET(_para, OrderReWeight);
+    GET(_para, OrderTimeRatio);
+    GET(_para, SqueezeFactor);
     GET(_para, Order);
     GET_WITH_DEFAULT(_para, Counter, 0);
     GET_WITH_DEFAULT(_para, Seed, 0);
@@ -96,6 +98,8 @@ Dictionary ParaMC::ToDict()
     SET(_para, Sweep);
     SET(_para, WormSpaceReweight);
     SET(_para, OrderReWeight);
+    SET(_para, OrderTimeRatio);
+    SET(_para, SqueezeFactor);
     SET(_para, Counter);
     SET(_para, RNG);
     SET(_para, Order);
@@ -108,7 +112,7 @@ Dictionary ParaMC::ToDict()
 void ParaMC::SetTest()
 {
     Version = 0;
-    int size[2] = { 8, 8 };
+    int size[2] = {8, 8};
     NSublat = 2;
     L = Vec<int>(size);
     Lat = Lattice(L, NSublat);
@@ -117,7 +121,9 @@ void ParaMC::SetTest()
     FinalBeta = 1.0;
     Beta = 1.0;
     Order = 1;
-    OrderReWeight = { 1, 1 };
+    OrderReWeight = {1, 1};
+    OrderTimeRatio = {1, 1};
+    SqueezeFactor = 10.0;
     Toss = 10000;
     Sample = 5000000;
     Seed = 519180543;

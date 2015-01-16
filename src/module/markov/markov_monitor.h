@@ -20,26 +20,23 @@ class ParaMC;
 
 namespace mc {
 class MarkovMonitor {
-public:
+  public:
     MarkovMonitor();
 
-    para::ParaMC* Para;
-    diag::Diagram* Diag;
-    weight::Weight* Weight;
+    para::ParaMC *Para;
+    diag::Diagram *Diag;
+    weight::Weight *Weight;
 
-    EstimatorBundle<Complex> cEstimator;
-    EstimatorBundle<real> rEstimator;
-    EstimatorBundle<real> DetailBalanceEstimator;
-    Estimator<real> ZeroOrderWeight;
+    EstimatorBundle<real> WormEstimator;
+    EstimatorBundle<real> PhyEstimator;
 
-    bool BuildNew(para::ParaMC&, diag::Diagram&, weight::Weight&);
-    bool FromDict(const Dictionary&, para::ParaMC&, diag::Diagram&, weight::Weight&);
+    bool BuildNew(para::ParaMC &, diag::Diagram &, weight::Weight &);
+    bool FromDict(const Dictionary &, para::ParaMC &, diag::Diagram &, weight::Weight &);
     Dictionary ToDict();
-    void ReWeight();
 
-    void Annealing();
-    void SqueezeStatistics();
-    void ReWeightEachOrder();
+    void Reset(para::ParaMC &, diag::Diagram &, weight::Weight &);
+    void SqueezeStatistics(real factor);
+    bool AdjustOrderReWeight();
     void Measure();
     void AddStatistics();
 };

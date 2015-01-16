@@ -32,7 +32,7 @@ public:
     bool Load();
     void Save(); //Save everything in EnvMonteCarlo
     void DeleteSavedFiles();
-    bool ReWeight();
+    void AdjustOrderReWeight();
 
     bool ListenToMessage();
 

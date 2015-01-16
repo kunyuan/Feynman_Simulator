@@ -32,7 +32,7 @@ public:
     //The internal _Beta will be changed, so do _WeightAccu, _DeltaWeightAccu and _NormAccu
     //all changed will be done to make sure GetWeightArray returns the reweighted weight function
     //(as for now, reweighted weight function is set to be the unreweighted weight function)
-    void ReWeight(real Beta);
+    void Anneal(real Beta);
 
     void MeasureNorm();
     void Measure(uint* Index, int Order, Complex Weight);

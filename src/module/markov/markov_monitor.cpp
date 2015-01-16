@@ -20,8 +20,6 @@ using namespace mc;
 
 MarkovMonitor::MarkovMonitor()
 {
-    cEstimator.AddEstimator("1");
-    rEstimator.AddEstimator("1");
 }
 
 bool MarkovMonitor::BuildNew(ParaMC &para, Diagram &diag, weight::Weight &weight)
@@ -29,15 +27,20 @@ bool MarkovMonitor::BuildNew(ParaMC &para, Diagram &diag, weight::Weight &weight
     Para = &para;
     Diag = &diag;
     Weight = &weight;
-    cEstimator.ClearStatistics();
-    rEstimator.ClearStatistics();
-    //TODO: more observables
+    for (int i = 0; i <= Para->Order; i++) {
+        WormEstimator.AddEstimator("Order" + ToString(i));
+        PhyEstimator.AddEstimator("Order" + ToString(i));
+    }
+    WormEstimator.ClearStatistics();
+    PhyEstimator.ClearStatistics();
     return true;
 }
 
-void MarkovMonitor::ReWeight()
+void MarkovMonitor::Reset(ParaMC &para, Diagram &diag, weight::Weight &weight)
 {
-    //TODO: reweight Estimators here
+    Para = &para;
+    Diag = &diag;
+    Weight = &weight;
 }
 
 bool MarkovMonitor::FromDict(const Dictionary &dict, ParaMC &para, Diagram &diag, weight::Weight &weight)
@@ -46,56 +49,73 @@ bool MarkovMonitor::FromDict(const Dictionary &dict, ParaMC &para, Diagram &diag
     Diag = &diag;
     Weight = &weight;
     //TODO: more observables
-    return cEstimator.FromDict(dict.Get<Dictionary>("cEstimator")) || rEstimator.FromDict(dict.Get<Dictionary>("rEstimator"));
+    return WormEstimator.FromDict(dict.Get<Dictionary>("cEstimator")) || PhyEstimator.FromDict(dict.Get<Dictionary>("rEstimator"));
 }
 Dictionary MarkovMonitor::ToDict()
 {
     Dictionary dict;
-    dict["cEstimator"] = cEstimator.ToDict();
-    dict["rEstimator"] = rEstimator.ToDict();
-    //TODO: more observables
+    dict["WormEstimator"] = WormEstimator.ToDict();
+    dict["PhyEstimator"] = PhyEstimator.ToDict();
     return dict;
 }
 
-void MarkovMonitor::Annealing()
+void MarkovMonitor::SqueezeStatistics(real factor)
 {
-    SqueezeStatistics();
+    Weight->Sigma->Estimator.SqueezeStatistics(factor);
+    Weight->Polar->Estimator.SqueezeStatistics(factor);
+    WormEstimator.SqueezeStatistics(factor);
+    PhyEstimator.SqueezeStatistics(factor);
 }
 
-void MarkovMonitor::SqueezeStatistics()
+bool MarkovMonitor::AdjustOrderReWeight()
 {
-}
+    for (int i = 0; i <= Para->Order; i++) {
+        if (PhyEstimator[i].Norm() < 1000.0)
+            return false;
+    }
+    Para->OrderReWeight[0] = 1.0;
+    real weight[Para->Order + 1];
+    real wormweight = 0.0, phyweight = 0.0;
+    weight[0] = WormEstimator[0].Value() + PhyEstimator[0].Value();
+    for (int i = 1; i <= Para->Order; i++) {
+        weight[i] = WormEstimator[i].Value() + PhyEstimator[i].Value();
+        wormweight += WormEstimator[i].Value();
+        phyweight += PhyEstimator[i].Value();
 
-void MarkovMonitor::ReWeightEachOrder()
-{
+        Para->OrderReWeight[i] = Para->OrderTimeRatio[i] * weight[0] / weight[i];
+    }
+    Para->WormSpaceReweight = phyweight / wormweight;
+    return true;
 }
 
 void MarkovMonitor::Measure()
 {
-    //    cEstimator[0].Measure(<#const Complex &#>);
-    //    cEstimator["1"].Measure(<#const Complex &#>);
-    if (Diag->Worm.Exist)
-        return;
-    if (Diag->MeasureGLine) {
-        if (Diag->Order == 0) {
-            Weight->Sigma->Estimator.MeasureNorm();
-        }
-        else {
-            gLine g = Diag->GMeasure;
-            vertex vin = g->NeighVer(OUT);
-            vertex vout = g->NeighVer(IN);
-            Weight->Sigma->Measure(vin->R, vout->R, vin->Tau, vout->Tau, g->Spin(OUT), g->Spin(IN), Diag->Order, Diag->Phase / Para->OrderReWeight[Diag->Order]);
-        }
+    if (Diag->Worm.Exist) {
+        WormEstimator[Diag->Order].Measure(1.0 / Para->OrderReWeight[Diag->Order] / Para->WormSpaceReweight);
     }
     else {
-        if (Diag->Order == 0) {
-            Weight->Polar->Estimator.MeasureNorm();
+        PhyEstimator[Diag->Order].Measure(1.0 / Para->OrderReWeight[Diag->Order]);
+        if (Diag->MeasureGLine) {
+            if (Diag->Order == 0) {
+                Weight->Sigma->Estimator.MeasureNorm();
+            }
+            else {
+                gLine g = Diag->GMeasure;
+                vertex vin = g->NeighVer(OUT);
+                vertex vout = g->NeighVer(IN);
+                Weight->Sigma->Measure(vin->R, vout->R, vin->Tau, vout->Tau, g->Spin(OUT), g->Spin(IN), Diag->Order, Diag->Phase / Para->OrderReWeight[Diag->Order]);
+            }
         }
         else {
-            wLine w = Diag->WMeasure;
-            vertex vin = w->NeighVer(OUT);
-            vertex vout = w->NeighVer(IN);
-            Weight->Polar->Measure(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin(), vout->Spin(), Diag->Order, -Diag->Phase / Para->OrderReWeight[Diag->Order]);
+            if (Diag->Order == 0) {
+                Weight->Polar->Estimator.MeasureNorm();
+            }
+            else {
+                wLine w = Diag->WMeasure;
+                vertex vin = w->NeighVer(OUT);
+                vertex vout = w->NeighVer(IN);
+                Weight->Polar->Measure(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin(), vout->Spin(), Diag->Order, -Diag->Phase / Para->OrderReWeight[Diag->Order]);
+            }
         }
     }
 }

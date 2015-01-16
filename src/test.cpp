@@ -29,15 +29,15 @@ int RunTest()
     //    TestTimer();  //Test the timer
     //    TestRNG();
     //    TestArray();
-    TEST(diag::TestDiagram);
-    TEST(weight::TestWeight);
+    //    TEST(diag::TestDiagram);
+    //    TEST(weight::TestWeight);
     //    TEST(mc::TestMarkov);
     //    TEST(mc::TestDiagCounter);
 
     //    TEST(TestLattice);
     //    TEST(TestEstimator);
 
-    TEST(TestDictionary);
+    //    TEST(TestDictionary);
 
     return 0;
 }

@@ -19,7 +19,6 @@ using namespace weight;
 
 WeightEstimator::WeightEstimator(const Lattice& lat, real beta, int order, string name, real Norm, const uint* Shape)
 {
-    _Norm = Norm * (_MaxTauBin / _Beta) / _Beta / _Vol / _SublatVol;
     _Vol = lat.Vol;
     _SublatVol = lat.SublatVol;
     _MaxTauBin = Shape[TAU];
@@ -34,19 +33,17 @@ WeightEstimator::WeightEstimator(const Lattice& lat, real beta, int order, strin
     _WeightAccu.Allocate(_MeaShape);
     for (int i = 1; i <= order; i++)
         _WeightErrorEstimator.AddEstimator("Order" + ToString(i));
+    _Norm = Norm * (_MaxTauBin / _Beta) / _Beta / _Vol / _SublatVol;
     ClearStatistics();
 }
 
-void WeightEstimator::ReWeight(real Beta)
+void WeightEstimator::Anneal(real Beta)
 {
     //make sure
     //real NormFactor = 1.0 / _NormAccu * _Norm * MAX_BIN / _Beta;
     //has the same value before Beta is changed
     //so that GetWeightArray will give a same weight function
-    _NormAccu *= _Beta / Beta;
-    _Beta = Beta;
-    _dBeta = Beta / _MaxTauBin;
-    _dBetaInverse = 1.0 / _dBeta;
+    _NormAccu *= pow((Beta / _Beta), 2.0);
 }
 
 Complex WeightEstimator::RelativeError(int order)
@@ -101,14 +98,13 @@ void WeightEstimator::MeasureNorm()
     _NormAccu += 1.0;
 }
 
-void WeightEstimator::Measure(uint* Index, int Order, Complex Weight)
+void WeightEstimator::Measure(uint* Index, int Order, Complex weight)
 {
     if (DEBUGMODE && Order < 1)
         LOG_ERROR("Too small order=" << Order);
     _WeightAccu[Order - 1][Index[SP]][Index[SUB]]
-               [Index[VOL]][Index[TAU]] += Weight;
-    if (Index[SP] == 0 && Index[SUB] == 0 && Index[VOL] == 0 && Index[TAU] == 0)
-        _WeightErrorEstimator[Order - 1].Measure(Weight);
+               [Index[VOL]][Index[TAU]] += weight;
+    _WeightErrorEstimator[Order - 1].Measure(weight);
 }
 
 void WeightEstimator::AddStatistics()

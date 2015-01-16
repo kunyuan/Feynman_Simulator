@@ -8,6 +8,7 @@ StatisFilePattern="_statis"
 
 class WeightEstimator():
     def __init__(self, Weight, Order): 
+        self.Shape=[Order, Weight.NSpin**2, Weight.NSublat**2]+Weight.Shape[Weight.VOLDIM:]
         self.__Weight=Weight
         self.WeightAccu=np.zeros(self.Shape, dtype=complex)
         self.NormAccu=0.0
@@ -25,17 +26,18 @@ class WeightEstimator():
         if self.Norm is None:
             self.Norm=_WeightEstimator.Norm
         else:
+            print self.Norm, _WeightEstimator.Norm
             Assert(self.Norm==_WeightEstimator.Norm, "Norm have to be the same to merge statistics")
     
     def GetWeight(self, ErrorThreshold, OrderAccepted):
         """add all different orders together"""
-        Dict={self.Name: np.sum(self.WeightAccu, axis=0)/
+        Dict={self.__Weight.Name: np.sum(self.WeightAccu, axis=0)/
                            self.NormAccu*self.Norm*self.Map.MaxTauBin/self.Map.Beta}
         self.__Weight.FromDict(Dict)
         return self.__Weight
 
     def FromDict(self, data):
-        datamat=data[self.Name]
+        datamat=data[self.__Weight.Name]
         self.WeightAccu=datamat['WeightAccu']
         self.NormAccu=datamat['NormAccu']
         self.Norm=datamat['Norm']
@@ -46,7 +48,7 @@ class WeightEstimator():
         datatmp["WeightAccu"]=self.WeightAccu
         datatmp["NormAccu"]=self.NormAccu
         datatmp["Norm"]=self.Norm
-        return {self.Name: datatmp}
+        return {self.__Weight.Name: datatmp}
 
     def __AssertShape(self, shape1, shape2):
         Assert(tuple(shape1)==tuple(shape2), \
@@ -83,7 +85,7 @@ def UpdateWeight(SigmaSmoothT, PolarSmoothT, ErrorThreshold, OrderAccepted):
 if __name__=="__main__":
     WeightPara={"NSublat": 1, "L":[4, 4],
                 "Beta": 0.5, "MaxTauBin":128}
-    Order=4
+    Order=3
     map=weight.IndexMap(**WeightPara)
 
     SigmaSmoothT, PolarSmoothT=CollectStatis(map, Order)

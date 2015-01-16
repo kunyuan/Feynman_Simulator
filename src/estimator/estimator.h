@@ -49,8 +49,10 @@ public:
     std::string Name;
     void Measure(const T&);
     void AddStatistics();
-    Estimate<T> Estimate();
+    T Value();
+    real Norm();
     double Ratio();
+    Estimate<T> Estimate();
     bool FromDict(const Dictionary&);
     Dictionary ToDict();
     void ClearStatistics();

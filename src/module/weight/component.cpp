@@ -166,7 +166,7 @@ void Sigma::Reset(real Beta)
 {
     Basic::Reset(Beta);
     _Map = IndexMapSPIN2(Beta, _MaxTauBin, _Lat);
-    Estimator.ReWeight(Beta);
+    Estimator.Anneal(Beta);
 }
 
 bool Sigma::FromDict(const Dictionary& dict)
@@ -203,7 +203,7 @@ void Polar::Reset(real Beta)
 {
     Basic::Reset(Beta);
     _Map = IndexMapSPIN4(Beta, _MaxTauBin, _Lat);
-    Estimator.ReWeight(Beta);
+    Estimator.Anneal(Beta);
 }
 
 bool Polar::FromDict(const Dictionary& dict)

@@ -45,13 +45,9 @@ void CheckVec2Index(Lattice _Lat)
     }
 }
 
-Basic::Basic(const Lattice& lat, real beta, uint MaxTauBin, SpinNum spin_num,
+Basic::Basic(const Lattice &lat, real beta, uint MaxTauBin, SpinNum spin_num,
              TauSymmetry Symmetry, string name)
-    : _Lat(lat)
-    , _Beta(beta)
-    , _TauSymmetryFactor(int(Symmetry))
-    , _Name(name)
-    , _SpinNum(int(spin_num))
+    : _Lat(lat), _Beta(beta), _TauSymmetryFactor(int(Symmetry)), _Name(name), _SpinNum(int(spin_num))
 {
     _MaxTauBin = MaxTauBin;
     _dBeta = beta / _MaxTauBin;
@@ -59,7 +55,7 @@ Basic::Basic(const Lattice& lat, real beta, uint MaxTauBin, SpinNum spin_num,
     CheckVec2Index(lat);
 
     auto SpinVol = static_cast<uint>(pow(2, _SpinNum));
-    _Shape = vector<uint>({ SpinVol, (uint)_Lat.SublatVol2, (uint)_Lat.Vol, _MaxTauBin });
+    _Shape = vector<uint>({SpinVol, (uint)_Lat.SublatVol2, (uint)_Lat.Vol, _MaxTauBin});
     for (auto e : _Lat.Size)
         _SpaceTimeShape.push_back(e);
     _SpaceTimeShape.push_back(_MaxTauBin);
@@ -70,12 +66,12 @@ Basic::Basic(const Lattice& lat, real beta, uint MaxTauBin, SpinNum spin_num,
     _DeltaTWeight = Complex(0.0, 0.0);
 }
 
-uint* Basic::GetShape()
+uint *Basic::GetShape()
 {
     return _Shape.data();
 }
 
-uint* Basic::GetSpaceTimeShape()
+uint *Basic::GetSpaceTimeShape()
 {
     return _SpaceTimeShape.data();
 }
@@ -96,7 +92,7 @@ int Basic::GetTauSymmetryFactor(real t_in, real t_out) const
 const string SMOOTH = "SmoothT";
 const string DELTA = "DeltaT";
 
-bool Basic::FromDict(const Dictionary& dict)
+bool Basic::FromDict(const Dictionary &dict)
 {
     bool flagSmooth = dict.HasKey(SMOOTH);
     bool flagDelta = dict.HasKey(DELTA);

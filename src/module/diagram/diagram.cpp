@@ -90,7 +90,6 @@ void Diagram::Reset(Lattice& lat, weight::G& g, weight::W& w)
     GWeight = &g;
     WWeight = &w;
     FixDiagram();
-    //TODO: maybe you have to do more to reset
 }
 
 void Diagram::ClearDiagram()
