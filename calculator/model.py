@@ -25,26 +25,26 @@ class BareFactory:
         return (self.BareG,self.BareW)
 
     def __J1J2(self, LatName):
-        Lx,Ly=self.__Map.L
-        #Dimension: 2
+        Beta=self.__Map.Beta
         #Bare G
-        self.__Mu=self.__ExternalField+1j*np.pi/2.0/self.__Map.Beta
-        #print self.__Mu
         self.__Hopping=np.array([0.0])
         log.info("set Mu={0}, Hopping={1}, and SmoothT Bare G".format(self.__Mu, self.__Hopping))
-        Assert(len(self.__Mu)==self.__Map.NSublat, 
-                "expect {0} externalfield components!".format(self.__Map.NSublat))
+        Assert(len(self.__Mu)>=self.__Map.NSublat, 
+                "expect at least {0} externalfield components!".format(self.__Map.NSublat))
         TauGrid=np.array([self.__Map.IndexToTau(t) for t in range(self.__MaxTauBin)])
-        for sub in self.__Map.GetLocalSublatTuple():
-            TauWeight=np.exp(self.__Mu[sub[IN]]*TauGrid)/(1.0+1.0*1j)
-            for sp in self.__Map.GetConservedSpinTuple("TwoSpins"):
-                self.BareG.Data[sp[IN]][sub[IN]][sp[OUT]][sub[OUT]][0][:]=TauWeight[:]
+        Pauli_Z=self.__Map.Pauli()[2]
+        for sub in range(self.__Map.NSublat):
+            for sp in range(2):
+                Mu=1j*np.pi/2.0/Beta+Pauli_Z[sp, sp]*self.__ExternalField[sub]
+                self.BareG.Data[sp,sub,sp,sub,0,:]=np.exp(Mu*TauGrid)/(1.0+np.exp(Mu*Beta))
 
         #Bare W
+        #Dimension: 2
         J1,J2=self.__Interaction[0:2]
         spin=self.__Map.Spin2Index(UP,UP)
         if LatName=="Checkboard":
         #NSublat: 2
+            Lx,Ly=self.__Map.L
             subA=0
             subB=1
             coordA2B=[(0, 0),(0,Ly-1),(Lx-1,0),(Lx-1,Ly-1)]
@@ -66,6 +66,7 @@ class BareFactory:
                 self.BareW.Data[spin,subB,spin,subB,self.__Map.CoordiIndex(i)] = J2/4;
         elif LatName=="Square":
         #NSublat: 1
+            Lx,Ly=self.__Map.L
             sub=0
             coordnn=[(0,1),(1,0),(Lx-1,0),(0,Ly-1)]
             coordnnn=[(1,1),(Lx-1,1),(1,Ly-1),(Lx-1,Ly-1)]
@@ -75,6 +76,10 @@ class BareFactory:
             #J2 interaction on next nearest neighbors
             for i in coordnnn:
                 self.BareW.Data[spin,sub,spin,sub,self.__Map.CoordiIndex(i)] = J2/4.0;
+        elif LatName=="Cubic":
+        #NSublat: 1
+            Lx,Ly,Lz=self.__Map.L
+            pass
         else:
             Assert(False, "Not implemented yet!")
 

@@ -19,6 +19,7 @@ def LoadDict(filename):
         return eval(f.read())
 
 def SaveBigDict(filename, root):
+    #TODO: better to add an file read-lock here
     if filename[-4:]!=".pkl":
         filename+=".pkl"
     with open(filename, "w") as f:
@@ -30,16 +31,5 @@ def LoadBigDict(filename):
     with open(filename, "r") as f:
         root=pickle.load(f)
     return root
-
-def InspectDict(Dict):
-    for e in Dict.keys():
-        if type(Dict[e]) is ndarray:
-            Dict[e]="{0} with {1}".format(type(Dict[e]), Dict[e].shape)
-        elif type(Dict[e]) is dict:
-            Dict[e]=InspectDict(Dict[e])
-    return Dict
-
-def InspectBigFile(filename):
-    pprint.pprint(InspectDict(LoadBigDict(filename)))
 
 
