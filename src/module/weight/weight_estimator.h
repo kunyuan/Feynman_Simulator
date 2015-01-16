@@ -57,8 +57,8 @@ protected:
     int _Order;
     real _Norm; //The normalization factor
     real _NormAccu; //The normalization accumulation
-    //final weight of each bin = _WeightAccu/_NormAccu*_Norm
-    //final weight function = (final weight of each bin)*MAX_BIN/Beta
+    //final weight function =_WeightAccu/_NormAccu*_Norm
+    //final weight of each bin = (final weight of each bin)/MAX_BIN*Beta
     Array::array5<Complex> _WeightAccu; //dim=0 is order, than follows WeightNoMeasure::Shape()
     EstimatorBundle<Complex> _WeightErrorEstimator;
     std::string _Name;

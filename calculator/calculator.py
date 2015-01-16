@@ -92,24 +92,26 @@ def W_FirstOrder(W0, Polar, map):
     W.FFT(-1, "Space")
     return W
 
-def W_Dyson(W0, Polar, map):
+def Calculate_Denorminator(W0, Polar, map):
+    """require W0 and Polar to be in k, omega space"""
     Beta=map.Beta
+    NSpin, NSub=W0.NSpin, W0.NSublat
+    JP=np.einsum("ijklv,klmnvt->ijmnvt",W0.Data, Polar.Data)
+    #JP shape: NSpin,NSub,NSpin,NSub,Vol,Tau
+    JP *= Beta/map.MaxTauBin
+    for tau in range(map.MaxTauBin):
+        JP[...,tau] *= np.cos(tau*np.pi/map.MaxTauBin)
+    I=np.eye(NSpin*NSub).reshape([NSpin,NSub,NSpin,NSub])
+    return I[...,np.newaxis,np.newaxis]-JP
+
+def W_Dyson(W0, Polar, map):
     W=weight.Weight("SmoothT", map, "FourSpins", "Symmetric")
     W0.FFT(1, "Space")
     Polar.FFT(1, "Space", "Time")
 
-    NSpin, NSub=W.NSpin, W.NSublat
-
     JP=np.einsum("ijklv,klmnvt->ijmnvt",W0.Data, Polar.Data)
-    #JP shape: NSpin,NSub,NSpin,NSub,Vol,Tau
-
-    JP *= Beta/map.MaxTauBin
-    JPJ=map.MaxTauBin/Beta*np.einsum("ijklvt,klmnv->ijmnvt", JP, W0.Data)
-    for tau in range(map.MaxTauBin):
-        JP[...,tau] *= np.cos(tau*np.pi/map.MaxTauBin)
-    I=np.eye(NSpin*NSub).reshape([NSpin,NSub,NSpin,NSub])
-
-    W.Data=I[...,np.newaxis,np.newaxis]-JP
+    JPJ=np.einsum("ijklvt,klmnv->ijmnvt", JP, W0.Data)
+    W.Data=Calculate_Denorminator(W0, Polar, map)
     W.Inverse();
     W.Data = np.einsum('ijklvt,klmnvt->ijmnvt', W.Data,JPJ)
 
@@ -151,23 +153,11 @@ def G_Dyson(G0, Sigma0, Sigma, map):
 
 
 def Calculate_ChiTensor(W0, Polar, map):
-    Beta=map.Beta
     ChiTensor=weight.Weight("SmoothT", map, "FourSpins", "Symmetric")
 
     W0.FFT(1, "Space")
     Polar.FFT(1, "Space", "Time")
-
-    NSpin, NSub=ChiTensor.NSpin, ChiTensor.NSublat
-
-    JP=np.einsum("ijklv,klmnvt->ijmnvt",W0.Data, Polar.Data)
-    #JP shape: NSpin,NSub,NSpin,NSub,Vol,Tau
-
-    JP *= Beta/map.MaxTauBin
-    for tau in range(map.MaxTauBin):
-        JP[...,tau]*= np.cos(tau*np.pi/map.MaxTauBin)
-
-    I=np.eye(NSpin*NSub).reshape([NSpin,NSub,NSpin,NSub])
-    ChiTensor.Data=I[...,np.newaxis,np.newaxis]-JP
+    ChiTensor.Data=Calculate_Denorminator(W0, Polar, map)
     ChiTensor.Inverse();
     ChiTensor.Data = np.einsum('ijklvt,klmnvt->ijmnvt', Polar.Data, ChiTensor.Data)
 
@@ -199,5 +189,23 @@ def Calculate_Chi(ChiTensor, map):
         Chi_ss[i].Data=temp.reshape([1, NSublat, 1, NSublat, map.Vol, map.MaxTauBin]) 
     Chi.Data=Chi_ss[0].Data+Chi_ss[1].Data+Chi_ss[2].Data
     return Chi, Chi_ss
+
+def Check_Denorminator(W0, Polar, map):
+    log.info("Check Denorminator...")
+    W0.FFT(1, "Space")
+    Polar.FFT(1, "Space", "Time")
+    NSpin, NSub=Polar.NSpin, Polar.NSublat
+    Denorm=Calculate_Denorminator(W0, Polar, map)
+    Denorm=Denorm.reshape([NSpin*NSub, NSpin*NSub]+Polar.Shape[Polar.VOLDIM:])
+    Determ=np.zeros((map.Vol,map.MaxTauBin))*1j
+    for x in range(map.Vol):
+        for t in range(map.MaxTauBin):
+            Determ[x,t]=np.linalg.det(Denorm[:,:,x,t])
+    pos=np.where(Determ==Determ.min())
+    log.info("The minmum {0} is at K={1} and Omega={2}".format(Determ.min(), map.IndexToCoordi(pos[0][0]), pos[1][0]))
+
+    W0.FFT(-1, "Space")
+    Polar.FFT(-1, "Space", "Time")
+
 
 

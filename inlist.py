@@ -8,7 +8,7 @@ SLEEP = 1    #check job status for every SLEEP seconds
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" : 4,
+    "__Duplicate" : 0,
     "__IsCluster" : False,
     "__AutoRun" : True,
     "__KeepCPUBusy": True,
@@ -31,7 +31,7 @@ beta=0.5
 Order=4
 Common={
 "Tau": {
-    "MaxTauBin" : 128,
+    "MaxTauBin" : 64,
     "Beta": beta,
     "DeltaBeta" :  0.00,
     "FinalBeta" :  beta,
@@ -44,7 +44,7 @@ Common={
 "Model": {
     "Name": "J1J2",
     "Interaction": [1.0,0.0],
-    "ExternalField": [0.0]
+    "ExternalField": [0.0, 0.0]
     #ExternalField on Sublattice A and B
     },
 

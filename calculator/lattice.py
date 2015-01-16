@@ -15,9 +15,12 @@ class Lattice:
             self.__Honeycomb()
         elif Name=="Square":
             self.__Square()
+        elif Name=="Cubic":
+            self.__Cubic()
         else:
             Assert(False, "Not implemented!")
 
+    #2D lattice
     def __Checkboard(self):
         self.Dim=2
         self.__AssertDim()
@@ -52,6 +55,20 @@ class Lattice:
                          [PI2*2.0/root3,0.0]])
         self.ReciprocalLatVec = ([[0.0, 0.0],
                                   [1.0/2.0/root3, 0.5]])
+    #3D lattice
+    def __Cubic(self):
+        self.Dim=3
+        self.__AssertDim()
+        self.NSublat=1
+        self.__AssertNSublat()
+        self.LatVec=np.array([[1.0,0.0,0.0],
+                              [0.0,1.0,0.0],
+                              [0.0,0.0,1.0]])
+        self.SubLatVec=np.array([[0.0,0.0,0.0]])
+        self.ReciprocalLatVec =np.array([[2.0 * np.pi, 0.0, 0.0],
+                                         [0.0, 2.0 * np.pi, 0.0],
+                                         [0.0, 0.0, 2.0 * np.pi]])
+
 
     def __AssertDim(self):
         Assert(len(self.L)==self.Dim, "Dimension {0} is expected for {1} Lattice, not {2}" \
@@ -87,5 +104,11 @@ class Lattice:
         return Points
 
 if __name__=="__main__":
-    l=Lattice("Checkboard", [4,4])
-    print l.GetSitesList()
+    import weight
+    WeightPara={"NSublat": 1, "L":[4, 4, 4],
+            "Beta": 0.5, "MaxTauBin":64}
+    Map=weight.IndexMap(**WeightPara)
+    l=Lattice("Cubic", Map)
+
+    with open("Coordinates.txt","w") as f:
+        f.write(str(l.GetSitesList()))

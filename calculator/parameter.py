@@ -15,6 +15,18 @@ def Save(para, FileName, Mode="a"):
     root={"Para":para}
     IO.SaveDict(FileName, Mode, root)
 
+def GetVersion(MessageFile):
+    try:
+        Version=IO.LoadDict(MessageFile)["Version"]
+    except:
+        Version=0
+    finally:
+        return Version
+
+def BroadcastMessage(MessageFile, Dict):
+    log.info("Broadcast Message")
+    IO.SaveDict(MessageFile, "w", Dict)
+
 if __name__=="__main__":
     p=Load("../infile/_in_DYSON_1")
     Save(p, "test","w")
