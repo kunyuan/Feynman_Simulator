@@ -37,15 +37,15 @@ Common={
     "FinalBeta" :  beta,
     },
 "Lattice":  {
-    "Name": "Square",
-    "NSublat": 1,
-    "L": [4,4],
+    #"Name": "Square",
+    #"NSublat": 1,
+    #"L": [4,4],
     #"Name": "Pyrochlore",
     #"NSublat": 4,
     #"L": [4,4,4]
-    #"Name": "Checkboard",
-    #"NSublat": 2,
-    #"L": [4,4]
+    "Name": "Checkboard",
+    "NSublat": 2,
+    "L": [8,8]
     },
 "Model": {
     "Name": "Heisenberg",

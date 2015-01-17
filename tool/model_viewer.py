@@ -140,7 +140,7 @@ def Plot(InputFile, HasCaption):
     legend.SetWidth(0.1)
     legend.SetHeight(0.1)
     legend.SetDisplayPosition(10,5)
-    txtProp=legend.GetEntryTextProperty()
+    #txtProp=legend.GetEntryTextProperty()
 # Create the Renderer, Window and Interator
     ren = vtkRenderer()
     ren.AddActor(ballActor)
@@ -167,9 +167,7 @@ if __name__=="__main__":
     renWin.SetWindowName("Lattice")
     renWin.SetSize(1000, 800)
     iren = vtkRenderWindowInteractor()
-    picker=vtkPointPicker()
-    iren.SetPicker(picker)
-    iren.SetInteractorStyle(vtk.vtkInteractorStyleTrackballCamera())
+    #iren.SetInteractorStyle(vtk.vtkInteractorStyleTrackballCamera())
     iren.SetRenderWindow(renWin)
 
     iren.Initialize()
