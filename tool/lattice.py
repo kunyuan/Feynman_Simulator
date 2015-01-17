@@ -11,11 +11,13 @@ def Read(filename):
     points = vtkPoints()
     color = vtkFloatArray()
     captions = []
+    SubLat=set()
     for vec, coord, sub in data:
         x, y, z = float(vec[0]), float(vec[1]), float(vec[2])
         points.InsertNextPoint(x, y, z)
         color.InsertNextValue(sub)
         captions.append([(x,y,z),str(tuple(coord))])
+        SubLat.add(sub)
 
     Edges=vtkCellArray()
     lines=Dict["Lines"]
@@ -30,11 +32,11 @@ def Read(filename):
         Interaction.InsertNextCell(2)
         Interaction.InsertCellPoint(coord[0])
         Interaction.InsertCellPoint(coord[1])
-    return (points, captions, color, Edges,Interaction)
+    return (SubLat, points, captions, color, Edges, Interaction)
 
 def Plot(InputFile, HasCaption):
     # Read the data into a vtkPolyData using the functions in ReadPoints.py
-    points, captions, color, Edges, Interaction=Read(InputFile)
+    SubLat, points, captions, color, Edges, Interaction=Read(InputFile)
 
     data = vtk.vtkPolyData()
     data.SetPoints(points)
@@ -120,11 +122,22 @@ def Plot(InputFile, HasCaption):
         txt.SetCaptionTextProperty(txtProp)
         txt.SetCaption(content)
         txt.SetWidth(0.05)
-        txt.SetHeight(0.03)
+        txt.SetHeight(0.04)
         txt.GetProperty().SetColor(0, 0, 0)
         txt.GetProperty().SetOpacity(0.5)
         txtActor.append(txt)
 
+    legend=vtkLegendBoxActor()
+    legend.SetNumberOfEntries(4)
+    for e in SubLat:
+        legend.SetEntry(e, ball.GetOutput(), str(e),
+                colorTransferFunction.GetColor(e)) 
+    legend.BorderOff()
+    legend.SetWidth(0.1)
+    legend.SetHeight(0.1)
+    legend.SetDisplayPosition(10,5)
+    txtProp=legend.GetEntryTextProperty()
+    #txtProp=legend.GetLegendBoxTextProperty()
 # Create the Renderer, Window and Interator
     ren = vtkRenderer()
     ren.AddActor(ballActor)
@@ -136,6 +149,7 @@ def Plot(InputFile, HasCaption):
     #for a in InteractionActor:
         #ren.AddActor(a)
     ren.AddActor(InteractionActor)
+    ren.AddActor(legend)
     ren.SetBackground(0.4, 0.4, 0.4)
     return ren
 
