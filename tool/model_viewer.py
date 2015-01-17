@@ -13,7 +13,11 @@ def Read(filename):
     captions = []
     SubLat=set()
     for vec, coord, sub in data:
-        x, y, z = float(vec[0]), float(vec[1]), float(vec[2])
+        x, y = vec[0], vec[1]
+        if len(vec)==3:
+            z=vec[2]
+        else:
+            z=0
         points.InsertNextPoint(x, y, z)
         color.InsertNextValue(sub)
         captions.append([(x,y,z),str(tuple(coord))])
@@ -137,7 +141,6 @@ def Plot(InputFile, HasCaption):
     legend.SetHeight(0.1)
     legend.SetDisplayPosition(10,5)
     txtProp=legend.GetEntryTextProperty()
-    #txtProp=legend.GetLegendBoxTextProperty()
 # Create the Renderer, Window and Interator
     ren = vtkRenderer()
     ren.AddActor(ballActor)
@@ -146,8 +149,6 @@ def Plot(InputFile, HasCaption):
     if HasCaption:
         for e in txtActor:
             ren.AddActor(e)
-    #for a in InteractionActor:
-        #ren.AddActor(a)
     ren.AddActor(InteractionActor)
     ren.AddActor(legend)
     ren.SetBackground(0.4, 0.4, 0.4)

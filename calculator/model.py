@@ -101,7 +101,7 @@ class BareFactory:
             for i in coordnnn:
                 self.BareW.Data[spin,sub,spin,sub,self.__Map.CoordiIndex(i)] = J2/4.0;
             pass
-        if LatName=="Pyrochlore":
+        elif LatName=="Pyrochlore":
         #NSublat: 4
             Lx,Ly,Lz=self.__Map.L
             A,B,C,D=0,1,2,3
