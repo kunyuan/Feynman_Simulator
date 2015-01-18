@@ -62,12 +62,12 @@ class WeightEstimator():
                                 Position=(orderindex,sp,sub,vol)
                             self.OrderWeight[orderindex,sp,sub,vol, :]=smooth
             try:
+                State="Accepted with relative error {0} (Threshold {1})".format(RelativeError, ErrorThreshold)
                 if RelativeError>=ErrorThreshold:
-                    State="Not accepted with relative error {0}".format(RelativeError)
-                else:
-                    State="Accepted with relative error {0}".format(RelativeError)
+                    State="NOT "+State
                 self.__Plot(Name, x, Original, Smoothed, error, Position, State)
             except:
+                raise
                 log.info("failed to plot")
             log.info("Maximum at Order {0} is {1}".format(orderindex, RelativeError))
             if RelativeError>=ErrorThreshold:
@@ -90,14 +90,19 @@ class WeightEstimator():
         Order=Position[0]+1
         plt.subplot(2, 1, 1)
         plt.plot(x, y.real, 'ro', x, smooth.real, 'b-')
-        plt.errorbar(x[mid], smooth[mid].real, yerr=sigma.real)
+        plt.errorbar(x[mid], smooth[mid].real, yerr=sigma.real,
+                label="Error {0:.2g}".format(sigma.imag))
         plt.title("Order {0} at Spin:{1}, Sublat:{2}, Coordi:{3}\n{4}".format(Order, 
             self.__Map.IndexToSpin4(Position[1]), 
             self.__Map.IndexToSublat(Position[2]),
             self.__Map.IndexToCoordi(Position[3]), State))
+        plt.legend().get_frame().set_alpha(0.5)
         plt.subplot(2, 1, 2)
         plt.plot(x, y.imag, 'ro', x, smooth.imag, 'b-')
-        plt.errorbar(x[mid], smooth[mid].imag, yerr=sigma.imag)
+        plt.errorbar(x[mid], smooth[mid].imag, yerr=sigma.imag, 
+                label="Error {0:.2g}".format(sigma.imag))
+        plt.legend().get_frame().set_alpha(0.5)
+        leg.get_frame().set_alpha(0.5)
         plt.xlabel("Tau")
         plt.savefig(os.path.join(path, "{0}_Smoothed_Order{1}.jpg".format(Name, Order)))
         #plt.show()
@@ -151,6 +156,8 @@ def UpdateWeight(SigmaSmoothT, PolarSmoothT, ErrorThreshold, OrderAccepted):
     SigmaOrder=SigmaSmoothT.GetNewOrderAccepted("Sigma", ErrorThreshold, OrderAccepted)
     PolarOrder=PolarSmoothT.GetNewOrderAccepted("Polar", ErrorThreshold, OrderAccepted)
     NewOrderAccepted=min(SigmaOrder,PolarOrder)
+    log.info("Accepted Sigma order : {0}, accepted Polar order : {1}, new order accepted: {2}".
+            format(SigmaOrder, PolarOrder, NewOrderAccepted))
     Sigma=SigmaSmoothT.GetWeight(NewOrderAccepted)
     Polar=PolarSmoothT.GetWeight(NewOrderAccepted)
     return Sigma, Polar
