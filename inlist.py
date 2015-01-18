@@ -24,7 +24,7 @@ Dyson={
     "__AutoRun" : True, 
     "__KeepCPUBusy": False,
     },
-"Job": {"StartFromBare" : True}
+"Job": {"StartFromBare" : False}
 }
 
 beta=0.5
@@ -37,19 +37,19 @@ Common={
     "FinalBeta" :  beta,
     },
 "Lattice":  {
-    #"Name": "Square",
-    #"NSublat": 1,
-    #"L": [4,4],
+    "Name": "Square",
+    "NSublat": 1,
+    "L": [8,8],
     #"Name": "Pyrochlore",
     #"NSublat": 4,
     #"L": [4,4,4]
-    "Name": "Checkboard",
-    "NSublat": 2,
-    "L": [8,8]
+    #"Name": "Checkboard",
+    #"NSublat": 2,
+    #"L": [8,8]
     },
 "Model": {
-    "Name": "Heisenberg",
-    "Interaction": [1.0,],
+    "Name": "J1J2",
+    "Interaction": [1.0,0.0],
     "ExternalField": [0.0, 0.0, 0.0, 0.0]
     #ExternalField on Sublattice A and B
     },

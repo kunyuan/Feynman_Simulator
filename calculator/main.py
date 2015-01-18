@@ -38,9 +38,7 @@ if args.collect:
 ##########INITIALIZATION ##########################
 Factory=model.BareFactory(Map, para["Model"])
 G0,W0=Factory.Build(para["Model"]["Name"], para["Lattice"]["Name"])
-IO.SaveDict("Coordinates","w", Factory.ToDict())
-Factory.Plot()
-sys.exit(0)
+#IO.SaveDict("Coordinates","w", Factory.ToDict())
 def Measure(G0, W0, G, W, Sigma, Polar):
     log.info("Measuring...")
     calc.Check_Denorminator(W0, Polar, Map)
@@ -97,7 +95,8 @@ else:
             #reinitialize G0, W0 to kill accumulated error
             data=IO.LoadBigDict(WeightFile)
             G=weight.Weight("SmoothT", Map, "TwoSpins", "AntiSymmetric").FromDict(data["G"])
-            MaxOrder=para["Dyson"]["Order"]
+            paraDyson=para["Dyson"]
+            MaxOrder=paraDyson["Order"]
             log.info("Collecting Sigma/Polar statistics...")
             SigmaMC, PolarMC=collect.CollectStatis(Map, MaxOrder)
             Sigma,Polar=collect.UpdateWeight(SigmaMC, PolarMC, 
@@ -109,9 +108,9 @@ else:
             W = calc.W_Dyson(W0, Polar,Map)
             ####### Measure ############
             Measure(G0, W0, G, W, Sigma, Polar)
-            parameter.Broadcast(MessageFile, {"Version": Version, "Beta": Map.Beta})
+            parameter.BroadcastMessage(MessageFile, {"Version": Version, "Beta": Map.Beta})
             log.info("#{0} is done!".format(Version))
         except:
-            log.warnings("#{0} fails due to\n {1}".format(Version, traceback.format_exc()))
+            log.info("#{0} fails due to\n {1}".format(Version, traceback.format_exc()))
         finally:
             time.sleep(para["Dyson"]["SleepTime"])

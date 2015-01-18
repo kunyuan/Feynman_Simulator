@@ -8,7 +8,7 @@
 #include <sys/time.h>
 
 /// Comment this line if you don't need multithread support
-//#define LOGGER_MULTITHREAD
+#define LOGGER_MULTITHREAD
 
 // log level
 enum LogLevel { MYDEBUG,

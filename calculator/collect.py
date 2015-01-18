@@ -6,13 +6,24 @@ import parameter as para
 
 StatisFilePattern="_statis"
 
+def Smooth(x,y):
+    """return: smoothed funciton s(x) and estimation of sigma of y for one data point"""
+    from scipy.interpolate import LSQUnivariateSpline
+    #define segments to do spline smoothing
+    t=np.linspace(0,len(x),5)[1:-1]
+    sr = LSQUnivariateSpline(x, y.real, t)
+    si = LSQUnivariateSpline(x, y.imag, t)
+    return sr(x)+si(x)*1j, (sr.get_residual()/len(x))**0.5+(si.get_residual()/len(x))**0.5*1j
+
 class WeightEstimator():
     def __init__(self, Weight, Order): 
         self.Shape=[Order, Weight.NSpin**2, Weight.NSublat**2]+Weight.Shape[Weight.VOLDIM:]
+        self.__Map=Weight.Map
         self.__Weight=Weight
         self.WeightAccu=np.zeros(self.Shape, dtype=complex)
         self.NormAccu=0.0
         self.Norm=None
+        self.Order=Order
 
     def Copy(self):
         """return a deep copy of Weight instance"""
@@ -26,21 +37,80 @@ class WeightEstimator():
         if self.Norm is None:
             self.Norm=_WeightEstimator.Norm
         else:
-            print self.Norm, _WeightEstimator.Norm
             Assert(self.Norm==_WeightEstimator.Norm, "Norm have to be the same to merge statistics")
     
-    def GetWeight(self, ErrorThreshold, OrderAccepted):
-        """add all different orders together"""
-        Dict={self.__Weight.Name: np.sum(self.WeightAccu, axis=0)/
-                           self.NormAccu*self.Norm*self.Map.MaxTauBin/self.Map.Beta}
+    def GetNewOrderAccepted(self, Name, ErrorThreshold, OrderAccepted):
+        self.OrderWeight=self.WeightAccu/self.NormAccu*self.Norm
+        MaxTauBin=self.__Map.MaxTauBin
+        x=range(0, MaxTauBin)
+        Shape=self.OrderWeight.shape
+        for orderindex in range(OrderAccepted, Shape[0]):
+            # Order Index is equal to real Order-1
+            RelativeError=0
+            for sp in range(Shape[1]):
+                for sub in range(Shape[2]):
+                    for vol in range(Shape[3]):
+                        y=self.OrderWeight[orderindex,sp,sub,vol, :]
+                        if not np.allclose(y, 0.0, 1e-10): 
+                            smooth, sigma=Smooth(x, y)
+                            relative=abs(sigma)/abs(np.average(smooth))
+                            if abs(relative)>RelativeError:
+                                RelativeError=relative
+                                error=sigma
+                                Original=y.copy()
+                                Smoothed=smooth.copy()
+                                Position=(orderindex,sp,sub,vol)
+                            self.OrderWeight[orderindex,sp,sub,vol, :]=smooth
+            try:
+                if RelativeError>=ErrorThreshold:
+                    State="Not accepted with relative error {0}".format(RelativeError)
+                else:
+                    State="Accepted with relative error {0}".format(RelativeError)
+                self.__Plot(Name, x, Original, Smoothed, error, Position, State)
+            except:
+                log.info("failed to plot")
+            log.info("Maximum at Order {0} is {1}".format(orderindex, RelativeError))
+            if RelativeError>=ErrorThreshold:
+                break
+        NewOrderAccepted=orderindex+1
+        log.info("OrderAccepted={0}".format(NewOrderAccepted))
+        return NewOrderAccepted
+
+    def GetWeight(self, OrderAccepted):
+        OrderIndex=OrderAccepted-1
+        Dict={self.__Weight.Name: np.sum(self.OrderWeight[:OrderIndex+1], axis=0)}
         self.__Weight.FromDict(Dict)
         return self.__Weight
+
+    def __Plot(self, Name, x, y, smooth, sigma, Position, State):
+        path=os.path.join(workspace, "status")
+        os.system("mkdir "+path)
+        import matplotlib.pyplot as plt
+        mid=len(x)/2
+        Order=Position[0]+1
+        plt.subplot(2, 1, 1)
+        plt.plot(x, y.real, 'ro', x, smooth.real, 'b-')
+        plt.errorbar(x[mid], smooth[mid].real, yerr=sigma.real)
+        plt.title("Order {0} at Spin:{1}, Sublat:{2}, Coordi:{3}\n{4}".format(Order, 
+            self.__Map.IndexToSpin4(Position[1]), 
+            self.__Map.IndexToSublat(Position[2]),
+            self.__Map.IndexToCoordi(Position[3]), State))
+        plt.subplot(2, 1, 2)
+        plt.plot(x, y.imag, 'ro', x, smooth.imag, 'b-')
+        plt.errorbar(x[mid], smooth[mid].imag, yerr=sigma.imag)
+        plt.xlabel("Tau")
+        plt.savefig(os.path.join(path, "{0}_Smoothed_Order{1}.jpg".format(Name, Order)))
+        #plt.show()
+        plt.clf()
+        plt.cla()
+        plt.close()
 
     def FromDict(self, data):
         datamat=data[self.__Weight.Name]
         self.WeightAccu=datamat['WeightAccu']
         self.NormAccu=datamat['NormAccu']
         self.Norm=datamat['Norm']
+        self.OrderWeight=self.WeightAccu*self.NormAccu/self.Norm
         self.__AssertShape(self.Shape, self.WeightAccu.shape)
 
     def ToDict(self):
@@ -78,8 +148,11 @@ def CollectStatis(_map, _order):
     return (SigmaSmoothT, PolarSmoothT)
 
 def UpdateWeight(SigmaSmoothT, PolarSmoothT, ErrorThreshold, OrderAccepted):
-    Sigma=SigmaSmoothT.GetWeight(ErrorThreshold, OrderAccepted)
-    Polar=PolarSmoothT.GetWeight(ErrorThreshold, OrderAccepted)
+    SigmaOrder=SigmaSmoothT.GetNewOrderAccepted("Sigma", ErrorThreshold, OrderAccepted)
+    PolarOrder=PolarSmoothT.GetNewOrderAccepted("Polar", ErrorThreshold, OrderAccepted)
+    NewOrderAccepted=min(SigmaOrder,PolarOrder)
+    Sigma=SigmaSmoothT.GetWeight(NewOrderAccepted)
+    Polar=PolarSmoothT.GetWeight(NewOrderAccepted)
     return Sigma, Polar
 
 if __name__=="__main__":

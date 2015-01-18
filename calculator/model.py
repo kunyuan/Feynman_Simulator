@@ -48,7 +48,7 @@ class BareFactory:
                 Mu=1j*np.pi/2.0/Beta+Pauli_Z[sp, sp]*self.__ExternalField[sub]
                 self.BareG.Data[sp,sub,sp,sub,0,:]=np.exp(Mu*TauGrid)/(1.0+np.exp(Mu*Beta))
 
-        Interaction=self.__Interaction+[0,0,0,0,0]
+        Interaction=list(self.__Interaction)+[0,0,0,0,0]
         J1,J2=Interaction[0:2]
         #Bare W
         #Dimension: 2
@@ -145,9 +145,9 @@ class BareFactory:
             self.BareW.Data[spleft,:,spright,...]=2.0*self.BareW.Data[spin,:,spin,...]
 
     def ToDict(self):
-        points, LinesInUnitCell=self.Lat.GetSitesList()
+        points, lines=self.Lat.GetSitesList()
         interaction=self.__GetBareWList()
-        return {"Points":points, "Interaction":interaction, "Lines": LinesInUnitCell}
+        return {"Points":points, "Interaction":interaction, "Lines": lines}
 
     def Plot(self):
         if self.Lat.Dim==2:
@@ -170,14 +170,11 @@ class BareFactory:
             plt.show()
 
     def __GetBareWList(self):
-        if self.Lat.Dim==2:
-            Origin=(0,0)
-        elif self.Lat.Dim==3:
-            Origin=(0,0,0)
         Spin=self.__Map.Spin2Index(UP,UP)
         offset=np.array(self.__Map.L)/2-1
         size=self.__Map.Vol*self.__Map.NSublat
         BareWList=[]
+        Origin=[0 for e in self.__Map.L]
         for sub in self.__Map.GetAllSublatTuple():
             for coord in self.__Map.GetAllCoordi():
                 weight=self.BareW.Data[Spin,sub[IN],Spin,sub[OUT],self.__Map.CoordiIndex(coord)]

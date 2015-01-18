@@ -7,10 +7,16 @@ import IO
 
 def InspectDict(Dict):
     for e in Dict.keys():
-        if type(Dict[e]) is np.ndarray:
-            Dict[e]="{0} with {1}".format(type(Dict[e]), Dict[e].shape)
-        elif type(Dict[e]) is dict:
+        if type(Dict[e]) is dict:
             Dict[e]=InspectDict(Dict[e])
+        elif type(Dict[e]) is np.ndarray:
+            Dict[e]="{0} with shape {1}".format(type(Dict[e]), Dict[e].shape)
+        else:
+            try:
+                if len(Dict[e])>100:
+                   Dict[e]="{0} with shape {1}".format(type(Dict[e]), len(Dict[e]))
+            except:
+                pass
     return Dict
 
 def InspectBigFile(filename):

@@ -138,7 +138,8 @@ bool WeightEstimator::FromDict(const Dictionary& dict)
     auto arr = dict.Get<Python::ArrayObject>("WeightAccu");
     ASSERT_ALLWAYS(Equal(arr.Shape().data(), _MeaShape, 5), "Shape should match!");
     _WeightAccu = arr.Data<Complex>();
-    return _WeightErrorEstimator.FromDict(dict);
+    //    return _WeightErrorEstimator.FromDict(dict);
+    return true;
 }
 
 Dictionary WeightEstimator::ToDict()
@@ -147,6 +148,6 @@ Dictionary WeightEstimator::ToDict()
     dict["Norm"] = _Norm;
     dict["NormAccu"] = _NormAccu;
     dict["WeightAccu"] = Python::ArrayObject(_WeightAccu(), _MeaShape, 5);
-    dict.Update(_WeightErrorEstimator.ToDict());
+    //    dict.Update(_WeightErrorEstimator.ToDict());
     return dict;
 }
