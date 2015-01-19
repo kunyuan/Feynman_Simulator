@@ -47,7 +47,6 @@ class ParaMC : public Parameter {
 public:
     long long Counter;
     int Toss;
-    int Sample;
     int Sweep;
     int Seed;
     RandomFactory RNG;

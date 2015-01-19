@@ -26,7 +26,7 @@ int RunTest()
 {
     LOGGER_CONF("test.log", "test", Logger::file_on | Logger::screen_on, INFO, INFO);
     //    TestTimer();  //Test the timer
-    TestRNG();
+    //    TestRNG();
     //    TestArray();
     //    TEST(diag::TestDiagram);
     //    TEST(mc::TestMarkov);

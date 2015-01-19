@@ -16,13 +16,14 @@ para::Job::Job(string inputfile)
 {
     Dictionary _Para;
     _Para.Load(inputfile);
-    _Para = _Para.Get<Dictionary>("Para").Get<Dictionary>("Job");
+    _Para = _Para.Get<Dictionary>("Job");
     GET(_Para, Type);
     if (TypeName.find(Type) == TypeName.end())
         ABORT("I don't know what is Job Type " << Type << "?");
 
     GET(_Para, DoesLoad);
     GET(_Para, PID);
+    GET(_Para, Sample);
     GET(_Para, WeightFile);
     GET(_Para, MessageFile);
     string Prefix = ToString(PID) + "_" + string(Type);

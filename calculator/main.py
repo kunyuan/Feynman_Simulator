@@ -19,8 +19,8 @@ elif args.file:
 else:
     Assert(False, "Do not understand the argument!")
 
-para=parameter.Load(InputFile)
-WeightFile=para["Job"]["WeightFile"]
+job, para=parameter.Load(InputFile)
+WeightFile=job["WeightFile"]
 WeightPara={"NSublat": para["Lattice"]["NSublat"], "L":para["Lattice"]["L"],
             "Beta": para["Tau"]["Beta"], "MaxTauBin": para["Tau"]["MaxTauBin"]}
 Map=weight.IndexMap(**WeightPara)
@@ -66,7 +66,7 @@ def Measure(G0, W0, G, W, Sigma, Polar):
     except:
         pass
 
-if para["Job"]["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is False:
+if job["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is False:
     #start from bare
     log.info("Start from G0 and W0 to do dyson...")
     G=G0.Copy()
@@ -84,7 +84,7 @@ if para["Job"]["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is 
 
 else:
     #########READ G,SIGMA,POLAR; CALCULATE SIGMA0 #################
-    MessageFile=para["Job"]["MessageFile"]
+    MessageFile=job["MessageFile"]
     Version=parameter.GetVersion(MessageFile)
     while True:
         Version+=1

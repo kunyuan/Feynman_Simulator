@@ -13,18 +13,21 @@ MonteCarlo={
     "__AutoRun" : True,
     "__KeepCPUBusy": True,
     },
-"Job": {"DoesLoad" : False}
+"Job": {
+    "DoesLoad" : True,
+    "Sample" :100000000
+    }
 }
 
 Dyson={
 "Control": {
     "__Execute" : ["python", "./calculator/main.py"],
-    "__Duplicate" : 1,
+    "__Duplicate" : 0,
     "__IsCluster" : False,
     "__AutoRun" : True, 
     "__KeepCPUBusy": False,
     },
-"Job": {"StartFromBare" : False}
+"Job": {"StartFromBare" : True}
 }
 
 beta=0.5
@@ -58,7 +61,6 @@ Common={
     "Order": Order,
     #Start from order 0, so that OrderReWeight has Order+1 elements
     "OrderReWeight" : [1.0, 0.1, 0.5, 0.1, 0.05],
-    "Sample" :100000000,
     "Sweep" : 10,
     "Toss" : 1000,
     "SqueezeFactor" : 10.0,
