@@ -7,8 +7,11 @@ then
       rm *.txt
   fi
 fi
+rm Message.txt
+rm statis_total.pkl
 rm *_statis.pkl
 rm *_para.txt
+rm Coordinates.txt
 rm *.log
 rm *.gv
 rm -rf infile
