@@ -30,8 +30,9 @@ public:
     void Reset(const std::string& state);
     inline real urn()
     {
-        static std::uniform_real_distribution<real> d(0.0, 1.0);
-        return d(_eng);
+        //        static std::uniform_real_distribution<real> d(0.0, 1.0);
+        //        return d(_eng);
+        return _eng();
     }
 
     //Generator integer random numbers in the closed interval [from, thru]

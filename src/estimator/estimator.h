@@ -38,13 +38,14 @@ public:
 template <typename T>
 class Estimator {
 private:
+    uint _interval;
+    uint _counter;
     uint _end;
     T _accumulator;
     real _norm;
     real _ratio;
     Estimate<T> _value;
     void _update();
-    //    std::vector<T> _history;
     T _history[SIZE];
 
 public:

@@ -87,6 +87,8 @@ Estimator<T>::Estimator(string name)
 template <typename T>
 void Estimator<T>::ClearStatistics()
 {
+    _interval = 1;
+    _counter = 0;
     _end = 0;
     _accumulator = 0.0;
     _ratio = 1.0;
@@ -180,9 +182,18 @@ void Estimator<T>::AddStatistics()
         for (uint i = 0; i < _end / 2; i++)
             _history[i] = _history[2 * i];
         _end /= 2;
+        _interval *= 2; //perform measurement for every _interval calls of AddStatistics
     }
-    _history[_end] = _accumulator / _norm;
-    _end++;
+    else if (_end < SIZE) {
+        _counter++;
+        if (_counter >= _interval) {
+            _history[_end] = _accumulator / _norm;
+            _end++;
+            _counter = 0;
+        }
+    }
+    else
+        ABORT("Exceed history memory!");
 }
 
 template <typename T>

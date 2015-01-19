@@ -23,3 +23,7 @@ def Assert(condition, info):
     if not condition:
         log.error(info)
         raise AssertionError
+
+def Abort(info):
+    log.error(info)
+    raise AssertionError

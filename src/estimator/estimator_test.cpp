@@ -57,7 +57,6 @@ void TestObservableComplex()
     QuanVector2.FromDict(dict);
     sput_fail_unless(Equal(QuanVector2[1].Estimate().Mean, -ExpectedResult.Mean, 1e-6),
                      "EstimatorVector:check the Mean value.");
-    auto i = QuanVector2[1].Estimate();
     sput_fail_unless(Equal(QuanVector2[1].Estimate().Error, ExpectedResult.Error, 1e-6),
                      "EstimatorVector:check the Error value.");
     sput_fail_unless(Equal(QuanVector2["2"].Estimate().Mean, -ExpectedResult.Mean, 1e-6),

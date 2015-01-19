@@ -28,7 +28,7 @@ int RunTest()
     //    TestTimer();  //Test the timer
     //    TestRNG();
     //    TestArray();
-    TEST(diag::TestDiagram);
+    //    TEST(diag::TestDiagram);
     //    TEST(mc::TestMarkov);
     //    TEST(mc::TestDiagCounter);
 

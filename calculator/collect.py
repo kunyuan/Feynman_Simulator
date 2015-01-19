@@ -142,6 +142,8 @@ def CollectStatis(_map, _order):
     SigmaTemp=SigmaSmoothT.Copy()
     PolarTemp=PolarSmoothT.Copy()
     _FileList=GetFileList()
+    if len(_FileList)==0:
+        Abort("No statistics files to read!") 
     log.info("Collect statistics from {0}".format(_FileList))
     for f in _FileList:
         log.info("Merging {0} ...".format(f));
