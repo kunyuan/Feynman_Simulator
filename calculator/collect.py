@@ -72,7 +72,7 @@ class WeightEstimator():
             log.info("Maximum at Order {0} is {1}".format(orderindex, RelativeError))
             if RelativeError>=ErrorThreshold:
                 break
-        NewOrderAccepted=orderindex+1
+        NewOrderAccepted=orderindex
         log.info("OrderAccepted={0}".format(NewOrderAccepted))
         return NewOrderAccepted
 
@@ -102,7 +102,6 @@ class WeightEstimator():
         plt.errorbar(x[mid], smooth[mid].imag, yerr=sigma.imag, 
                 label="Error {0:.2g}".format(sigma.imag))
         plt.legend().get_frame().set_alpha(0.5)
-        leg.get_frame().set_alpha(0.5)
         plt.xlabel("Tau")
         plt.savefig(os.path.join(path, "{0}_Smoothed_Order{1}.jpg".format(Name, Order)))
         #plt.show()
@@ -157,11 +156,10 @@ def CollectStatis(_map, _order):
 def UpdateWeight(SigmaSmoothT, PolarSmoothT, ErrorThreshold, OrderAccepted):
     SigmaOrder=SigmaSmoothT.GetNewOrderAccepted("Sigma", ErrorThreshold, OrderAccepted)
     PolarOrder=PolarSmoothT.GetNewOrderAccepted("Polar", ErrorThreshold, OrderAccepted)
-    NewOrderAccepted=min(SigmaOrder,PolarOrder)
-    log.info("Accepted Sigma order : {0}, accepted Polar order : {1}, new order accepted: {2}".
-            format(SigmaOrder, PolarOrder, NewOrderAccepted))
-    Sigma=SigmaSmoothT.GetWeight(NewOrderAccepted)
-    Polar=PolarSmoothT.GetWeight(NewOrderAccepted)
+    log.info("Accepted Sigma order : {0}; Accepted Polar order : {1}".
+            format(SigmaOrder, PolarOrder))
+    Sigma=SigmaSmoothT.GetWeight(SigmaOrder)
+    Polar=PolarSmoothT.GetWeight(PolarOrder)
     return Sigma, Polar
 
 if __name__=="__main__":

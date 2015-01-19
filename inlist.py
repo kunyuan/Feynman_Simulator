@@ -8,12 +8,13 @@ SLEEP = 1    #check job status for every SLEEP seconds
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" : 1,
+    "__Duplicate" : 4,
     "__IsCluster" : False,
     "__AutoRun" : True,
     "__KeepCPUBusy": True,
     },
-"Job": {"DoesLoad" : False}
+"Job": {"DoesLoad" : False,
+        "Sample" :1000000000}
 }
 
 Dyson={
@@ -21,7 +22,7 @@ Dyson={
     "__Execute" : ["python", "./calculator/main.py"],
     "__Duplicate" : 1,
     "__IsCluster" : False,
-    "__AutoRun" : True, 
+    "__AutoRun" : False, 
     "__KeepCPUBusy": False,
     },
 "Job": {"StartFromBare" : False}
@@ -39,7 +40,7 @@ Common={
 "Lattice":  {
     "Name": "Square",
     "NSublat": 1,
-    "L": [8,8],
+    "L": [4,4],
     #"Name": "Pyrochlore",
     #"NSublat": 4,
     #"L": [4,4,4]
@@ -57,10 +58,9 @@ Common={
 "Markov": {
     "Order": Order,
     #Start from order 0, so that OrderReWeight has Order+1 elements
-    "OrderReWeight" : [1.0, 0.1, 0.5, 0.1, 0.05],
-    "Sample" :100000000,
     "Sweep" : 10,
     "Toss" : 1000,
+    "OrderReWeight" : [1.0, 0.1, 0.5, 0.1, 0.05],
     "SqueezeFactor" : 10.0,
     "WormSpaceReweight" : 0.05,
     "OrderTimeRatio" : [1.0, 1.0, 1.0, 4.0, 4.0]

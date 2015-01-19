@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Kun Chen. All rights reserved.
 //
 
+#include <iostream>
 #include "rng.h"
 #include "logger.h"
 #include "sput.h"
@@ -20,8 +21,10 @@ void Test_RNG_IO()
     stringstream RngStr;
     RngStr << RNG;
     real a = RNG.urn();
-    for (int i = 0; i < 100; i++)
+    for (int i = 0; i < 100; i++){
         RNG.urn();
+        std::cout << RNG.urn() <<endl;
+    }
     RngStr >> RNG;
     sput_fail_unless(RNG.urn() == a, "import/export the RNG state");
 }

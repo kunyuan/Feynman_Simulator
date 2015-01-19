@@ -67,7 +67,7 @@ void MonteCarlo(const para::Job &Job)
     int sigma[MAX_ORDER] = {0};
     int polar[MAX_ORDER] = {0};
 
-    for (uint Step = 0; Step < Para.Sample; Step++) {
+    for (uint Step = 0; Step < Job.Sample; Step++) {
         //Don't use Para.Counter as counter
         Markov.Hop(Para.Sweep);
         MarkovMonitor.Measure();
@@ -92,7 +92,7 @@ void MonteCarlo(const para::Job &Job)
                 Env.AdjustOrderReWeight();
                 Env.Save();
             }
-            if (MessageTimer.check(600))
+            if (MessageTimer.check(100))
                 Env.ListenToMessage();
         }
     }

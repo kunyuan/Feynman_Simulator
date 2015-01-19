@@ -30,6 +30,7 @@ bool EnvMonteCarlo::BuildNew()
     Dictionary para_;
     para_.Load(Job.InputFile);
     Para.FromDict(para_.Get<Dictionary>(ParaKey));
+    
     //Load GW weight from a global file shared by other MC processes
     Dictionary GW_;
     GW_.BigLoad(Job.WeightFile);

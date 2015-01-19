@@ -48,6 +48,7 @@ public:
     long long Counter;
     int Toss;
     int Sample;
+    int PrevSample;
     int Sweep;
     int Seed;
     RandomFactory RNG;

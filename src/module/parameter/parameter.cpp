@@ -73,7 +73,6 @@ bool ParaMC::FromDict(const Dictionary &Para)
     Parameter::_FromDict(Para);
     auto _para = Para.Get<Dictionary>("Markov");
     GET(_para, Toss);
-    GET(_para, Sample);
     GET(_para, Sweep);
     GET(_para, WormSpaceReweight);
     GET(_para, OrderReWeight);
@@ -94,7 +93,6 @@ Dictionary ParaMC::ToDict()
 {
     Dictionary _para;
     SET(_para, Toss);
-    SET(_para, Sample);
     SET(_para, Sweep);
     SET(_para, WormSpaceReweight);
     SET(_para, OrderReWeight);

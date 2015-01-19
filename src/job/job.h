@@ -24,6 +24,7 @@ public:
 
     type Type;
     bool DoesLoad;
+    int Sample;
     int PID;
     std::string WeightFile;
     std::string MessageFile;
