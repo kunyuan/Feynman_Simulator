@@ -21,14 +21,6 @@ public:
     //Shape including ORDER
     uint* GetExtendedShape();
 
-    //The normalization factor is not considered in _WeightErrorEstimator,
-    //thus only relative error makes sense
-    Complex RelativeError(int order);
-
-    int OrderAcceptable(int StartFromOrder, real ErrorThreshold);
-    //update final weight density to WeightNoMeasure._Weight
-    void UpdateWeight(SmoothTMatrix&, int UpToOrder);
-
     //The internal _Beta will be changed, so do _WeightAccu, _DeltaWeightAccu and _NormAccu
     //all changed will be done to make sure GetWeightArray returns the reweighted weight function
     //(as for now, reweighted weight function is set to be the unreweighted weight function)
@@ -60,7 +52,6 @@ protected:
     //final weight function =_WeightAccu/_NormAccu*_Norm
     //final weight of each bin = (final weight of each bin)/MAX_BIN*Beta
     Array::array5<Complex> _WeightAccu; //dim=0 is order, than follows WeightNoMeasure::Shape()
-    EstimatorBundle<Complex> _WeightErrorEstimator;
     std::string _Name;
 };
 }

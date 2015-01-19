@@ -22,7 +22,7 @@ MarkovMonitor::MarkovMonitor()
 {
 }
 
-bool MarkovMonitor::BuildNew(ParaMC &para, Diagram &diag, weight::Weight &weight)
+bool MarkovMonitor::BuildNew(ParaMC& para, Diagram& diag, weight::Weight& weight)
 {
     Para = &para;
     Diag = &diag;
@@ -36,14 +36,14 @@ bool MarkovMonitor::BuildNew(ParaMC &para, Diagram &diag, weight::Weight &weight
     return true;
 }
 
-void MarkovMonitor::Reset(ParaMC &para, Diagram &diag, weight::Weight &weight)
+void MarkovMonitor::Reset(ParaMC& para, Diagram& diag, weight::Weight& weight)
 {
     Para = &para;
     Diag = &diag;
     Weight = &weight;
 }
 
-bool MarkovMonitor::FromDict(const Dictionary &dict, ParaMC &para, Diagram &diag, weight::Weight &weight)
+bool MarkovMonitor::FromDict(const Dictionary& dict, ParaMC& para, Diagram& diag, weight::Weight& weight)
 {
     Para = &para;
     Diag = &diag;
@@ -122,6 +122,4 @@ void MarkovMonitor::Measure()
 
 void MarkovMonitor::AddStatistics()
 {
-    Weight->Polar->Estimator.AddStatistics();
-    Weight->Sigma->Estimator.AddStatistics();
 }

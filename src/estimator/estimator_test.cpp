@@ -40,9 +40,9 @@ void TestObservableComplex()
     }
     Estimate<Complex> ExpectedResult(Complex(5.0, 5.0), Complex(1.5, 0.9));
     //!!!This two value only works if you set _norm=1.0 and ThrowRatio=1.0/3
-    sput_fail_unless(Equal(quan1.Estimate().Mean, ExpectedResult.Mean),
+    sput_fail_unless(Equal(quan1.Estimate().Mean, ExpectedResult.Mean, 1e-6),
                      "check the Mean value.");
-    sput_fail_unless(Equal(quan1.Estimate().Error, ExpectedResult.Error),
+    sput_fail_unless(Equal(quan1.Estimate().Error, ExpectedResult.Error, 1e-6),
                      "check the Error value.");
 
     //Estimator IO operation
@@ -55,14 +55,14 @@ void TestObservableComplex()
     QuanVector2.AddEstimator("1");
     QuanVector2.AddEstimator("2");
     QuanVector2.FromDict(dict);
-    system("rm TestObservable.npz");
-    sput_fail_unless(Equal(QuanVector2[1].Estimate().Mean, -ExpectedResult.Mean),
+    sput_fail_unless(Equal(QuanVector2[1].Estimate().Mean, -ExpectedResult.Mean, 1e-6),
                      "EstimatorVector:check the Mean value.");
-    sput_fail_unless(Equal(QuanVector2[1].Estimate().Error, ExpectedResult.Error),
+    auto i = QuanVector2[1].Estimate();
+    sput_fail_unless(Equal(QuanVector2[1].Estimate().Error, ExpectedResult.Error, 1e-6),
                      "EstimatorVector:check the Error value.");
-    sput_fail_unless(Equal(QuanVector2["2"].Estimate().Mean, -ExpectedResult.Mean),
+    sput_fail_unless(Equal(QuanVector2["2"].Estimate().Mean, -ExpectedResult.Mean, 1e-6),
                      "EstimatorVector:check the Mean value.");
-    sput_fail_unless(Equal(QuanVector2["2"].Estimate().Error, ExpectedResult.Error),
+    sput_fail_unless(Equal(QuanVector2["2"].Estimate().Error, ExpectedResult.Error, 1e-6),
                      "EstimatorVector:check the Error value.");
 }
 
@@ -78,8 +78,8 @@ void TestObservableReal()
     }
     Estimate<Complex> ExpectedResult(5.0, 1.5);
     //!!!This two value only works if you set _norm=1.0 and ThrowRatio=1.0/3
-    sput_fail_unless(Equal(quan1.Estimate().Mean, ExpectedResult.Mean),
+    sput_fail_unless(Equal(quan1.Estimate().Mean, ExpectedResult.Mean, 1e-6),
                      "check the Mean value.");
-    sput_fail_unless(Equal(quan1.Estimate().Error, ExpectedResult.Error),
+    sput_fail_unless(Equal(quan1.Estimate().Error, ExpectedResult.Error, 1e-6),
                      "check the Error value.");
 }

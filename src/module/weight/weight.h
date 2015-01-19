@@ -45,7 +45,6 @@ public:
     bool FromDict(const Dictionary&, flag, const para::ParaMC&);
     Dictionary ToDict(flag);
     void Anneal(const para::ParaMC&);
-    int UpdateSigmaPolarWeight(int OrderAccepted, real ErrorThreshold);
 
 private:
     void _AllocateGW(const para::ParaMC&);

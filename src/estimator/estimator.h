@@ -14,6 +14,8 @@
 #include <unordered_map>
 #include "utility/complex.h"
 
+#define SIZE 10000
+
 class Dictionary;
 /**
 *  \brief estimate with mean value and standard error
@@ -36,14 +38,16 @@ public:
 template <typename T>
 class Estimator {
 private:
+    uint _end;
     T _accumulator;
     real _norm;
     real _ratio;
     Estimate<T> _value;
     void _update();
+    //    std::vector<T> _history;
+    T _history[SIZE];
 
 public:
-    std::vector<T> _history;
     Estimator();
     Estimator(std::string);
     std::string Name;

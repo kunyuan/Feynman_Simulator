@@ -88,16 +88,6 @@ Dictionary weight::Weight::ToDict(flag _flag)
     return dict;
 }
 
-int weight::Weight::UpdateSigmaPolarWeight(int OrderAccepted, real ErrorThreshold)
-{
-    int SigmaOrder = Sigma->Estimator.OrderAcceptable(OrderAccepted, ErrorThreshold);
-    int PolarOrder = Polar->Estimator.OrderAcceptable(OrderAccepted, ErrorThreshold);
-    int NewOrderAccepted = (SigmaOrder < PolarOrder ? SigmaOrder : PolarOrder);
-    Sigma->UpdateWeight(NewOrderAccepted);
-    Polar->UpdateWeight(NewOrderAccepted);
-    return NewOrderAccepted;
-}
-
 void weight::Weight::SetTest(const ParaMC &para)
 {
     _AllocateGW(para);
