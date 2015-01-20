@@ -51,6 +51,7 @@ public:
     int Seed;
     RandomFactory RNG;
     real WormSpaceReweight;
+    real PolarReweight;
     real SqueezeFactor;
     std::vector<real> OrderReWeight;
     std::vector<real> OrderTimeRatio;

@@ -36,6 +36,7 @@ void Markov::_Initial(ParaMC &para, Diagram &diag, weight::Weight &weight)
     Lat = &para.Lat;
     OrderReWeight = para.OrderReWeight.data();
     WormSpaceReweight = &para.WormSpaceReweight;
+    PolarReweight = &para.PolarReweight;
     Diag = &diag;
     Worm = &diag.Worm;
     Sigma = weight.Sigma;
@@ -1290,7 +1291,7 @@ void Markov::ChangeMeasureFromGToW()
     Complex sgn = phase(weightRatio);
 
     //proposal probility: (1/2N)/(1/N)
-    prob *= 0.5 * ProbofCall[CHANGE_MEASURE_W2G] / (ProbofCall[CHANGE_MEASURE_G2W]);
+    prob *= 0.5 * (*PolarReweight)* ProbofCall[CHANGE_MEASURE_W2G] / (ProbofCall[CHANGE_MEASURE_G2W]);
 
     Proposed[CHANGE_MEASURE_G2W][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
@@ -1340,7 +1341,7 @@ void Markov::ChangeMeasureFromWToG()
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    prob *= ProbofCall[CHANGE_MEASURE_G2W] / (0.5 * ProbofCall[CHANGE_MEASURE_W2G]);
+    prob *= ProbofCall[CHANGE_MEASURE_G2W] / (0.5 * (*PolarReweight) * ProbofCall[CHANGE_MEASURE_W2G]);
 
     Proposed[CHANGE_MEASURE_W2G][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
