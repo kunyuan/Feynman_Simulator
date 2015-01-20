@@ -9,34 +9,23 @@
 #ifndef __Feynman_Simulator__array__
 #define __Feynman_Simulator__array__
 #include "utility/complex.h"
-#include <vector>
 class Dictionary;
-namespace weight {
-enum SpinNum {
-    SPIN2 = 2,
-    SPIN4 = 4
-};
-
-template <uint D>
+template <uint DIM>
 class Array {
+private:
+    uint _Cache[DIM];
+    uint _Shape[DIM];
+    Complex* _Data;
+    uint _Size;
+
 public:
-    Complex* Data;
-    uint Size;
-    uint Dim;
-    uint* Shape;
-    void BuildNew(const std::vector<uint>& Shape);
-    bool FromDict(const Dictionary&);
-    Dictionary ToDict();
+    Array()
+        : _Data(nullptr){};
+    ~Array() { Free(); };
+    uint* GetShape();
+    Complex* Data();
+    Complex& operator()(uint* index);
+    void Allocate(uint* Shape_, Complex* data = nullptr);
+    void Free();
 };
-//
-//class DeltaTArray : public Array {
-//public:
-//    DeltaTArray(SpinNum, IndexMap);
-//    bool FromDict(const Dictionary&);
-//    Dictionary ToDict();
-//};
-//
-//class SmoothTArray : public Array {
-//};
-}
 #endif /* defined(__Feynman_Simulator__array__) */
