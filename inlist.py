@@ -15,7 +15,7 @@ MonteCarlo={
     },
 "Job": {
     "DoesLoad" : False,
-    "Sample" :5000000000
+    "Sample" :10000000000
     }
 }
 
@@ -68,13 +68,14 @@ Common={
     "OrderReWeight" : [1.0, 0.1, 0.5, 0.1, 0.05, 0.05],
     "SqueezeFactor" : 10.0,
     "WormSpaceReweight" : 0.05,
+    "PolarReweight" : 2.0,
     "OrderTimeRatio" : [1.0, 1.0, 1.0, 4.0, 4.0, 4.0]
     },
 "Dyson": {
     "Order": Order,
     "OrderAccepted": 1,
     "ErrorThreshold": 0.5,
-    "SleepTime": 300
+    "SleepTime": 100
     }
 }
 import job_class as job

@@ -30,7 +30,7 @@ bool EnvMonteCarlo::BuildNew()
     Dictionary para_;
     para_.Load(Job.InputFile);
     Para.FromDict(para_.Get<Dictionary>(ParaKey));
-    
+
     //Load GW weight from a global file shared by other MC processes
     Dictionary GW_;
     GW_.BigLoad(Job.WeightFile);
@@ -95,6 +95,8 @@ void EnvMonteCarlo::AdjustOrderReWeight()
         for (int i = 0; i <= Para.Order; i++)
             str += ToString((Para.OrderReWeight[i])) + "  ";
         LOG_INFO("Reweighted to:\n" + str);
+        LOG_INFO("Worm Reweighted to:\n" + ToString(Para.WormSpaceReweight));
+        LOG_INFO("Polar Reweighted to:\n" + ToString(Para.PolarReweight));
     }
     else {
         LOG_INFO("Number of samples is too small, adjust later.\n");

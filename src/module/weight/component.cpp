@@ -20,38 +20,20 @@ G::G(const Lattice& lat, real beta, uint MaxTauBin, TauSymmetry Symmetry)
     //use _Shape[SP] to _Shape[TAU] to construct array3
     _MeasureWeight.Allocate(GetShape());
     //initialize _MeasureWeight to an unit function
-    _MeasureWeight = Complex(1.0, 0.0);
+    _MeasureWeight.Assign(Complex(1.0, 0.0));
 }
 
 void G::BuildTest(weight::model Model)
 {
-    if (Model == weight::Trivial) {
-        _SmoothTWeight = 0.0;
-        int spin_up = _Map.SpinIndex(UP, UP);
-        for (int sub = 0; sub < GetShape()[SUB]; sub++) {
-            if (!_Lat.IsOnSameSubLat(sub))
-                continue;
-            int coor = _Lat.Vec2Index({ 0, 0 });
-            for (int tau = 0; tau < _Shape[TAU]; tau++) {
-                Complex weight = exp(Complex(0.0, _Map.IndexToTau(tau)));
-                _SmoothTWeight[spin_up][sub][coor][tau] = weight;
-            }
-        }
-    }
-    else if (Model == weight::DiagCount) {
-        _SmoothTWeight = 0.0;
-        int spin_up = _Map.SpinIndex(UP, UP);
-        int spin_down = _Map.SpinIndex(DOWN, DOWN);
-
-        for (int sub = 0; sub < _Shape[SUB]; sub++) {
-            if (!_Lat.IsOnSameSubLat(sub))
-                continue;
-            int coor = _Lat.Vec2Index({ 0, 0 });
-            for (int tau = 0; tau < _Shape[TAU]; tau++) {
-                Complex weight = Complex(1.0, 0.0);
-                _SmoothTWeight[spin_up][sub][coor][tau] = weight;
-                _SmoothTWeight[spin_down][sub][coor][tau] = weight;
-            }
+    _SmoothTWeight.Assign(0.0);
+    uint spin_up = _Map.SpinIndex(UP, UP);
+    for (uint sub = 0; sub < GetShape()[SUB]; sub++) {
+        if (!_Lat.IsOnSameSubLat(sub))
+            continue;
+        uint coor = _Lat.Vec2Index({ 0, 0 });
+        for (uint tau = 0; tau < _Shape[TAU]; tau++) {
+            Complex weight = exp(Complex(0.0, _Map.IndexToTau(tau)));
+            _SmoothTWeight({ spin_up, sub, coor, tau }) = weight;
         }
     }
 }
@@ -69,71 +51,26 @@ W::W(const Lattice& lat, real Beta, uint MaxTauBin)
     //use _Shape[SP] to _Shape[VOL] to construct array3
     _MeasureWeight.Allocate(GetShape());
     //initialize _MeasureWeight to an unit function
-    _MeasureWeight = Complex(1.0, 0.0);
+    _MeasureWeight.Assign(Complex(1.0, 0.0));
 }
 
 void W::BuildTest(weight::model Model)
 {
-    if (Model == Trivial) {
-        int Lx = _Lat.Size[0], Ly = _Lat.Size[1];
-        ASSERT_ALLWAYS(Lx > 1 && Ly > 1, "System size should be bigger than 1!");
-        int spin_up = _Map.SpinIndex(UP, //InOfW/InOfVertex
-                                     UP, //InOfW/OutOfVertex
-                                     UP, //OutOfW/InOfVertex
-                                     UP); //OutOfW/OutOfVertex
+    int Lx = _Lat.Size[0], Ly = _Lat.Size[1];
+    ASSERT_ALLWAYS(Lx > 1 && Ly > 1, "System size should be bigger than 1!");
+    uint spin_up = _Map.SpinIndex(UP, //InOfW/InOfVertex
+                                  UP, //InOfW/OutOfVertex
+                                  UP, //OutOfW/InOfVertex
+                                  UP); //OutOfW/OutOfVertex
 
-        for (int sub = 0; sub < _Shape[SUB]; sub++) {
-            if (!_Lat.IsOnSameSubLat(sub))
-                continue;
-            int coor = _Lat.Vec2Index({ 0, 0 });
+    for (uint sub = 0; sub < _Shape[SUB]; sub++) {
+        if (!_Lat.IsOnSameSubLat(sub))
+            continue;
+        uint coor = _Lat.Vec2Index({ 0, 0 });
 
-            for (int tau = 0; tau < _Shape[TAU]; tau++) {
-                Complex weight = exp(Complex(0.0, -_Map.IndexToTau(tau)));
-                _SmoothTWeight[spin_up][sub][coor][tau] = weight;
-            }
-        }
-
-        for (auto i : _Map.GetSpinIndexVector(UpUp2UpUp))
-            _SmoothTWeight[i] = _SmoothTWeight[spin_up];
-
-        for (auto i : _Map.GetSpinIndexVector(UpDown2UpDown)) {
-            _SmoothTWeight[i] = _SmoothTWeight[spin_up];
-            _SmoothTWeight[i] *= -1.0;
-        }
-        for (auto i : _Map.GetSpinIndexVector(UpDown2DownUp)) {
-            _SmoothTWeight[i] = _SmoothTWeight[spin_up];
-            _SmoothTWeight[i] *= 2.0;
-        }
-    }
-    else if (Model == weight::DiagCount) {
-        _DeltaTWeight = 0.0;
-        _SmoothTWeight = 0.0;
-        int Lx = _Lat.Size[0], Ly = _Lat.Size[1];
-        ASSERT_ALLWAYS(Lx > 1 && Ly > 1, "System size should be bigger than 1!");
-        int spin_up = _Map.SpinIndex(UP, //InOfW/InOfVertex
-                                     UP, //InOfW/OutOfVertex
-                                     UP, //OutOfW/InOfVertex
-                                     UP); //OutOfW/OutOfVertex
-
-        for (int sub = 0; sub < _Shape[SUB]; sub++) {
-            if (!_Lat.IsOnSameSubLat(sub))
-                continue;
-            int coor = _Lat.Vec2Index({ 0, 0 });
-            for (int tau = 0; tau < _Shape[TAU]; tau++) {
-                Complex weight = Complex(1.0, 0.0);
-                _SmoothTWeight[spin_up][sub][coor][tau] = weight;
-            }
-        }
-        for (auto i : _Map.GetSpinIndexVector(UpUp2UpUp))
-            _SmoothTWeight[i] = _SmoothTWeight[spin_up];
-
-        for (auto i : _Map.GetSpinIndexVector(UpDown2UpDown)) {
-            _SmoothTWeight[i] = _SmoothTWeight[spin_up];
-//            _SmoothTWeight[i] *= -1.0;
-        }
-        for (auto i : _Map.GetSpinIndexVector(UpDown2DownUp)) {
-            _SmoothTWeight[i] = _SmoothTWeight[spin_up];
-//            _SmoothTWeight[i] *= 2.0;
+        for (uint tau = 0; tau < _Shape[TAU]; tau++) {
+            Complex weight = exp(Complex(0.0, -_Map.IndexToTau(tau)));
+            _SmoothTWeight({ spin_up, sub, coor, tau }) = weight;
         }
     }
 }

@@ -12,7 +12,6 @@
 #include "weight_estimator.h"
 
 using namespace std;
-using namespace Array;
 using namespace weight;
 
 /**********************   Weight Needs measuring  **************************/
@@ -53,14 +52,13 @@ void WeightEstimator::Measure(uint* Index, int Order, Complex weight)
 {
     if (DEBUGMODE && Order < 1)
         LOG_ERROR("Too small order=" << Order);
-    _WeightAccu[Order - 1][Index[SP]][Index[SUB]]
-               [Index[VOL]][Index[TAU]] += weight;
+    _WeightAccu(Order - 1, Index) += weight;
 }
 
 void WeightEstimator::ClearStatistics()
 {
     _NormAccu = 0.0;
-    _WeightAccu = 0.0;
+    _WeightAccu.Assign(0.0);
 }
 //TODO: you may have to replace int with size_t here
 
@@ -80,7 +78,7 @@ bool WeightEstimator::FromDict(const Dictionary& dict)
     _NormAccu = dict.Get<real>("NormAccu");
     auto arr = dict.Get<Python::ArrayObject>("WeightAccu");
     ASSERT_ALLWAYS(Equal(arr.Shape().data(), _MeaShape, 5), "Shape should match!");
-    _WeightAccu = arr.Data<Complex>();
+    _WeightAccu.Assign(arr.Data<Complex>());
     return true;
 }
 
@@ -89,6 +87,6 @@ Dictionary WeightEstimator::ToDict()
     Dictionary dict;
     dict["Norm"] = _Norm;
     dict["NormAccu"] = _NormAccu;
-    dict["WeightAccu"] = Python::ArrayObject(_WeightAccu(), _MeaShape, 5);
+    dict["WeightAccu"] = Python::ArrayObject(_WeightAccu.Data(), _MeaShape, 5);
     return dict;
 }

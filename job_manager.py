@@ -45,15 +45,20 @@ def construct_job_queue(to_do):
     '''construct JobAtom queue from Job class '''
     logging.info("Constructing the job queue...")
     job_queue = []
+    job_queue_back = []
     for JobClass in to_do:
         try:
             while True:
                 pid, para=JobClass.to_dict()
-                job_queue.append(JobAtom(JobClass.control, pid, para))
+                atom=JobAtom(JobClass.control, pid, para)
+                if atom.keep_cpu_busy:
+                    job_queue.append(atom)
+                else:
+                    job_queue_back.append(atom)
         except IndexError:
             pass
     logging.info("Constructed the job queue!")
-    return job_queue
+    return job_queue, job_queue_back
 
 def check_status():
     ''' check the status of submitted jobs,
@@ -141,11 +146,13 @@ def StopTheWorld(signum, frame):
 if __name__ == "__main__":
     logging.info("Jobs manage daemon is started...")
     try:
-        JOBQUEUE = construct_job_queue(inlist.TO_DO)
+        JOBQUEUE, JOBQUEUE_BACK = construct_job_queue(inlist.TO_DO)
         #print [e.keep_cpu_busy for e in JOBQUEUE]
         i = 0
         signal.signal(signal.SIGINT, StopTheWorld)
         signal.signal(signal.SIGTERM, StopTheWorld)
+        for ATOM in JOBQUEUE_BACK:
+            submit_job(ATOM)
         for ATOM in JOBQUEUE:
             while ATOM.is_cluster is False and len(PROCLIST)>=inlist.CPU:
                 check_status()

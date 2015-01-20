@@ -45,9 +45,13 @@ void CheckVec2Index(Lattice _Lat)
     }
 }
 
-Basic::Basic(const Lattice &lat, real beta, uint MaxTauBin, SpinNum spin_num,
+Basic::Basic(const Lattice& lat, real beta, uint MaxTauBin, SpinNum spin_num,
              TauSymmetry Symmetry, string name)
-    : _Lat(lat), _Beta(beta), _TauSymmetryFactor(int(Symmetry)), _Name(name), _SpinNum(int(spin_num))
+    : _Lat(lat)
+    , _Beta(beta)
+    , _TauSymmetryFactor(int(Symmetry))
+    , _Name(name)
+    , _SpinNum(int(spin_num))
 {
     _MaxTauBin = MaxTauBin;
     _dBeta = beta / _MaxTauBin;
@@ -55,23 +59,23 @@ Basic::Basic(const Lattice &lat, real beta, uint MaxTauBin, SpinNum spin_num,
     CheckVec2Index(lat);
 
     auto SpinVol = static_cast<uint>(pow(2, _SpinNum));
-    _Shape = vector<uint>({SpinVol, (uint)_Lat.SublatVol2, (uint)_Lat.Vol, _MaxTauBin});
+    _Shape = vector<uint>({ SpinVol, (uint)_Lat.SublatVol2, (uint)_Lat.Vol, _MaxTauBin });
     for (auto e : _Lat.Size)
         _SpaceTimeShape.push_back(e);
     _SpaceTimeShape.push_back(_MaxTauBin);
 
     _SmoothTWeight.Allocate(GetShape());
-    _SmoothTWeight = Complex(0.0, 0.0);
+    _SmoothTWeight.Assign(Complex(0.0, 0.0));
     _DeltaTWeight.Allocate(GetShape());
-    _DeltaTWeight = Complex(0.0, 0.0);
+    _DeltaTWeight.Assign(Complex(0.0, 0.0));
 }
 
-uint *Basic::GetShape()
+uint* Basic::GetShape()
 {
     return _Shape.data();
 }
 
-uint *Basic::GetSpaceTimeShape()
+uint* Basic::GetSpaceTimeShape()
 {
     return _SpaceTimeShape.data();
 }
@@ -92,19 +96,19 @@ int Basic::GetTauSymmetryFactor(real t_in, real t_out) const
 const string SMOOTH = "SmoothT";
 const string DELTA = "DeltaT";
 
-bool Basic::FromDict(const Dictionary &dict)
+bool Basic::FromDict(const Dictionary& dict)
 {
     bool flagSmooth = dict.HasKey(SMOOTH);
     bool flagDelta = dict.HasKey(DELTA);
     if (flagSmooth) {
         auto arr = dict.Get<Python::ArrayObject>(SMOOTH);
         ASSERT_ALLWAYS(Equal(arr.Shape().data(), GetShape(), 4), "Shape should match!");
-        _SmoothTWeight = arr.Data<Complex>();
+        _SmoothTWeight.Assign(arr.Data<Complex>());
     }
     if (flagDelta) {
         auto arr = dict.Get<Python::ArrayObject>(DELTA);
         ASSERT_ALLWAYS(Equal(arr.Shape().data(), GetShape(), 3), "Shape should match!");
-        _DeltaTWeight = arr.Data<Complex>();
+        _DeltaTWeight.Assign(arr.Data<Complex>());
     }
     ASSERT_ALLWAYS(flagSmooth || flagDelta, "Come on! Neither SmoothT nor DeltaT array exist!");
     return true;
@@ -113,7 +117,7 @@ bool Basic::FromDict(const Dictionary &dict)
 Dictionary Basic::ToDict()
 {
     Dictionary dict;
-    dict[SMOOTH] = Python::ArrayObject(_SmoothTWeight(), GetShape(), 4);
-    dict[DELTA] = Python::ArrayObject(_DeltaTWeight(), GetShape(), 3);
+    dict[SMOOTH] = Python::ArrayObject(_SmoothTWeight.Data(), GetShape(), 4);
+    dict[DELTA] = Python::ArrayObject(_DeltaTWeight.Data(), GetShape(), 3);
     return dict;
 }

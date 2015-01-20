@@ -37,13 +37,10 @@ enum Dim {
     VOL,
     TAU,
 };
-typedef Array::array3<Complex> DeltaTMatrix;
-typedef Array::array4<Complex> SmoothTMatrix;
+typedef Array<3> DeltaTMatrix;
+typedef Array<4> SmoothTMatrix;
 
 class Basic {
-    friend class GInitializer;
-    friend class WInitializer;
-
 public:
     bool FromDict(const Dictionary&);
     Dictionary ToDict();
