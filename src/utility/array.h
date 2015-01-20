@@ -36,7 +36,10 @@ public:
     void Copy(const Array& c);
     void Assign(const Complex& c);
     void Assign(const Complex* c);
-    void Assign(const std::initializer_list<Complex>& source);
+    void Assign(const std::vector<Complex>& source)
+    {
+        Assign(source.data());
+    }
 
     const uint* GetShape() const;
     Complex* Data() const;

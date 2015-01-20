@@ -17,13 +17,15 @@ G::G(const Lattice& lat, real beta, uint MaxTauBin, TauSymmetry Symmetry)
     : weight::Basic(lat, beta, MaxTauBin, SPIN2, Symmetry, "G")
     , _Map(IndexMapSPIN2(beta, MaxTauBin, lat))
 {
+    _SmoothTWeight.Allocate(GetShape());
+    _SmoothTWeight.Assign(Complex(0.0, 0.0));
     //use _Shape[SP] to _Shape[TAU] to construct array3
     _MeasureWeight.Allocate(GetShape());
     //initialize _MeasureWeight to an unit function
     _MeasureWeight.Assign(Complex(1.0, 0.0));
 }
 
-void G::BuildTest(weight::model Model)
+void G::BuildTest()
 {
     _SmoothTWeight.Assign(0.0);
     uint spin_up = _Map.SpinIndex(UP, UP);
@@ -44,17 +46,31 @@ void G::Reset(real Beta)
     _Map = IndexMapSPIN2(Beta, _MaxTauBin, _Lat);
 }
 
+bool G::FromDict(const Dictionary& dict)
+{
+    return _SmoothTWeight.FromDict(dict);
+}
+
+Dictionary G::ToDict()
+{
+    return _SmoothTWeight.ToDict();
+}
+
 W::W(const Lattice& lat, real Beta, uint MaxTauBin)
     : weight::Basic(lat, Beta, MaxTauBin, SPIN4, TauSymmetric, "W")
     , _Map(IndexMapSPIN4(Beta, MaxTauBin, lat))
 {
+    _SmoothTWeight.Allocate(GetShape());
+    _SmoothTWeight.Assign(Complex(0.0, 0.0));
+    _DeltaTWeight.Allocate(GetShape());
+    _DeltaTWeight.Assign(Complex(0.0, 0.0));
     //use _Shape[SP] to _Shape[VOL] to construct array3
     _MeasureWeight.Allocate(GetShape());
     //initialize _MeasureWeight to an unit function
     _MeasureWeight.Assign(Complex(1.0, 0.0));
 }
 
-void W::BuildTest(weight::model Model)
+void W::BuildTest()
 {
     int Lx = _Lat.Size[0], Ly = _Lat.Size[1];
     ASSERT_ALLWAYS(Lx > 1 && Ly > 1, "System size should be bigger than 1!");
@@ -79,6 +95,18 @@ void W::Reset(real Beta)
 {
     Basic::Reset(Beta);
     _Map = IndexMapSPIN4(Beta, _MaxTauBin, _Lat);
+}
+
+bool W::FromDict(const Dictionary& dict)
+{
+    return _SmoothTWeight.FromDict(dict) && _DeltaTWeight.FromDict(dict);
+}
+
+Dictionary W::ToDict()
+{
+    auto dict = _SmoothTWeight.ToDict();
+    dict.Update(_DeltaTWeight.ToDict());
+    return dict;
 }
 
 Sigma::Sigma(const Lattice& lat, real Beta, uint MaxTauBin,
@@ -108,13 +136,12 @@ void Sigma::Reset(real Beta)
 
 bool Sigma::FromDict(const Dictionary& dict)
 {
-    return Estimator.FromDict(dict.Get<Dictionary>("Histogram").Get<Dictionary>("SmoothT"))
-           && Basic::FromDict(dict);
+    return Estimator.FromDict(dict.Get<Dictionary>("Histogram").Get<Dictionary>("SmoothT"));
 }
 
 Dictionary Sigma::ToDict()
 {
-    Dictionary dict = Basic::ToDict();
+    Dictionary dict;
     dict["Histogram"] = Dictionary("SmoothT", Estimator.ToDict());
     return dict;
 }
@@ -145,13 +172,12 @@ void Polar::Reset(real Beta)
 
 bool Polar::FromDict(const Dictionary& dict)
 {
-    return Estimator.FromDict(dict.Get<Dictionary>("Histogram").Get<Dictionary>("SmoothT"))
-           && Basic::FromDict(dict);
+    return Estimator.FromDict(dict.Get<Dictionary>("Histogram").Get<Dictionary>("SmoothT"));
 }
 
 Dictionary Polar::ToDict()
 {
-    Dictionary dict = Basic::ToDict();
+    Dictionary dict;
     dict["Histogram"] = Dictionary("SmoothT", Estimator.ToDict());
     return dict;
 }

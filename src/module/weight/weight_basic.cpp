@@ -14,37 +14,6 @@
 using namespace std;
 using namespace weight;
 
-/**
-*  Check if the mapping between vector and index of the lattice looks like
-*            (i,j,k) -> k + n3*j + n2*n3*i;
-*     n1, n2, n3 : dimensions in three directions;
-*   which is required by fft on spatial dimensions
-*/
-void CheckVec2Index(Lattice _Lat)
-{
-    Vec<int> v;
-    bool flag = true;
-    for (int index = 0; index < _Lat.Vol; index++) {
-        int j = index;
-        for (int i = D - 1; i > 0; i--) {
-            v[i] = j % _Lat.Size[i];
-            j /= _Lat.Size[i];
-        }
-        v[0] = j;
-        if (v != _Lat.Index2Vec(index)) {
-            flag = false;
-            break;
-        }
-    }
-    if (!flag) {
-        string message = "The mapping between vector and index of \
-        the lattice should look like\n (i,j,k) -> k + n3*j + n2*n3*i; \
-        \n n1, n2, n3 : dimensions in three directions; \
-        which is required by fft on spatial dimensions";
-        ABORT(message);
-    }
-}
-
 Basic::Basic(const Lattice& lat, real beta, uint MaxTauBin, SpinNum spin_num,
              TauSymmetry Symmetry, string name)
     : _Lat(lat)
@@ -56,28 +25,14 @@ Basic::Basic(const Lattice& lat, real beta, uint MaxTauBin, SpinNum spin_num,
     _MaxTauBin = MaxTauBin;
     _dBeta = beta / _MaxTauBin;
     _dBetaInverse = 1.0 / _dBeta;
-    CheckVec2Index(lat);
 
     auto SpinVol = static_cast<uint>(pow(2, _SpinNum));
     _Shape = vector<uint>({ SpinVol, (uint)_Lat.SublatVol2, (uint)_Lat.Vol, _MaxTauBin });
-    for (auto e : _Lat.Size)
-        _SpaceTimeShape.push_back(e);
-    _SpaceTimeShape.push_back(_MaxTauBin);
-
-    _SmoothTWeight.Allocate(GetShape());
-    _SmoothTWeight.Assign(Complex(0.0, 0.0));
-    _DeltaTWeight.Allocate(GetShape());
-    _DeltaTWeight.Assign(Complex(0.0, 0.0));
 }
 
 uint* Basic::GetShape()
 {
     return _Shape.data();
-}
-
-uint* Basic::GetSpaceTimeShape()
-{
-    return _SpaceTimeShape.data();
 }
 
 void Basic::Reset(real beta)
@@ -96,28 +51,29 @@ int Basic::GetTauSymmetryFactor(real t_in, real t_out) const
 const string SMOOTH = "SmoothT";
 const string DELTA = "DeltaT";
 
-bool Basic::FromDict(const Dictionary& dict)
+bool DeltaTArray::FromDict(const Dictionary& dict)
 {
-    bool flagSmooth = dict.HasKey(SMOOTH);
-    bool flagDelta = dict.HasKey(DELTA);
-    if (flagSmooth) {
-        auto arr = dict.Get<Python::ArrayObject>(SMOOTH);
-        ASSERT_ALLWAYS(Equal(arr.Shape().data(), GetShape(), 4), "Shape should match!");
-        _SmoothTWeight.Assign(arr.Data<Complex>());
-    }
-    if (flagDelta) {
-        auto arr = dict.Get<Python::ArrayObject>(DELTA);
-        ASSERT_ALLWAYS(Equal(arr.Shape().data(), GetShape(), 3), "Shape should match!");
-        _DeltaTWeight.Assign(arr.Data<Complex>());
-    }
-    ASSERT_ALLWAYS(flagSmooth || flagDelta, "Come on! Neither SmoothT nor DeltaT array exist!");
+    auto arr = dict.Get<Python::ArrayObject>(DELTA);
+    ASSERT_ALLWAYS(Equal(arr.Shape().data(), GetShape(), 3), "Shape should match!");
+    Assign(arr.Data<Complex>());
     return true;
 }
-
-Dictionary Basic::ToDict()
+Dictionary DeltaTArray::ToDict()
 {
     Dictionary dict;
-    dict[SMOOTH] = Python::ArrayObject(_SmoothTWeight.Data(), GetShape(), 4);
-    dict[DELTA] = Python::ArrayObject(_DeltaTWeight.Data(), GetShape(), 3);
+    dict[DELTA] = Python::ArrayObject(Data(), GetShape(), 3);
+    return dict;
+}
+bool SmoothTArray::FromDict(const Dictionary& dict)
+{
+    auto arr = dict.Get<Python::ArrayObject>(SMOOTH);
+    ASSERT_ALLWAYS(Equal(arr.Shape().data(), GetShape(), 4), "Shape should match!");
+    Assign(arr.Data<Complex>());
+    return true;
+}
+Dictionary SmoothTArray::ToDict()
+{
+    Dictionary dict;
+    dict[SMOOTH] = Python::ArrayObject(Data(), GetShape(), 4);
     return dict;
 }

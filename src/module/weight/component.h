@@ -14,8 +14,6 @@
 #include "utility/complex.h"
 
 namespace weight {
-enum model { DiagCount = 0,
-             Trivial };
 
 class Worm {
 public:
@@ -37,14 +35,17 @@ class G : public Basic {
 public:
     G(const Lattice& lat, real beta, uint MaxTauBin,
       TauSymmetry TauSymmetry = TauAntiSymmetric);
-    void BuildTest(weight::model);
+    void BuildTest();
     void Reset(real Beta);
+    bool FromDict(const Dictionary&);
+    Dictionary ToDict();
 
     Complex Weight(const Site&, const Site&, real, real, spin, spin, bool) const;
     Complex Weight(int, const Site&, const Site&, real, real, spin, spin, bool) const;
 
 private:
-    weight::SmoothTMatrix _MeasureWeight;
+    SmoothTArray _SmoothTWeight;
+    weight::SmoothTArray _MeasureWeight;
     IndexMapSPIN2 _Map;
 };
 
@@ -55,15 +56,19 @@ private:
 class W : public Basic {
 public:
     W(const Lattice& lat, real Beta, uint MaxTauBin);
-    void BuildTest(weight::model);
+    void BuildTest();
     void WriteBareToASCII();
     void Reset(real Beta);
+    bool FromDict(const Dictionary&);
+    Dictionary ToDict();
 
     Complex Weight(const Site&, const Site&, real, real, spin*, spin*, bool, bool, bool) const;
     Complex Weight(int, const Site&, const Site&, real, real, spin*, spin*, bool, bool, bool) const;
 
 protected:
-    weight::SmoothTMatrix _MeasureWeight;
+    DeltaTArray _DeltaTWeight;
+    SmoothTArray _SmoothTWeight;
+    weight::SmoothTArray _MeasureWeight;
     IndexMapSPIN4 _Map;
 };
 
@@ -78,11 +83,8 @@ public:
     bool FromDict(const Dictionary&);
     Dictionary ToDict();
 
-    Complex Weight(const Site&, const Site&, real, real, spin, spin) const;
     void Measure(const Site&, const Site&, real, real, spin, spin,
                  int Order, const Complex&);
-    void UpdateWeight(int order);
-
     WeightEstimator Estimator;
 
 protected:
@@ -99,11 +101,8 @@ public:
     bool FromDict(const Dictionary&);
     Dictionary ToDict();
 
-    Complex Weight(const Site&, const Site&, real, real, spin*, spin*) const;
     void Measure(const Site&, const Site&, real, real, spin*, spin*,
                  int Order, const Complex&);
-    void UpdateWeight(int order);
-
     WeightEstimator Estimator;
 
 protected:

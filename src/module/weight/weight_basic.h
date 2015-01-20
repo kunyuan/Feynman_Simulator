@@ -26,11 +26,6 @@ enum SpinNum {
     SPIN4 = 4
 };
 
-enum FFT_Mode {
-    Spatial = 1,
-    Time = 2
-};
-
 enum Dim {
     SP,
     SUB,
@@ -39,19 +34,12 @@ enum Dim {
 };
 typedef Array<3> DeltaTMatrix;
 typedef Array<4> SmoothTMatrix;
-
 class Basic {
-public:
-    bool FromDict(const Dictionary&);
-    Dictionary ToDict();
-
 protected:
     Basic(const Lattice& lat, real Beta, uint MaxTauBin, SpinNum,
           TauSymmetry Symmetry, std::string);
 
     uint* GetShape(); //the shape of internal weight array
-    uint* GetSpaceShape(); //store Lx,Ly,Lz
-    uint* GetSpaceTimeShape(); //store Lx,Ly,Lz,Lt
     void Reset(real beta);
     int GetTauSymmetryFactor(real t_in, real t_out) const;
 
@@ -64,10 +52,28 @@ protected:
     Lattice _Lat;
     int _SpinNum;
     vector<uint> _Shape;
-    vector<uint> _SpaceTimeShape;
-
-    DeltaTMatrix _DeltaTWeight;
-    SmoothTMatrix _SmoothTWeight;
+};
+class DeltaTArray : public Array<3> {
+public:
+    DeltaTArray()
+        : Array<3>()
+    {
+    }
+    DeltaTArray(const DeltaTArray&) = delete;
+    DeltaTArray& operator=(const DeltaTArray& c) = delete;
+    bool FromDict(const Dictionary&);
+    Dictionary ToDict();
+};
+class SmoothTArray : public Array<4> {
+public:
+    SmoothTArray()
+        : Array<4>()
+    {
+    }
+    SmoothTArray(const SmoothTArray&) = delete;
+    SmoothTArray& operator=(const SmoothTArray& c) = delete;
+    bool FromDict(const Dictionary&);
+    Dictionary ToDict();
 };
 }
 
