@@ -14,6 +14,7 @@
 
 using namespace std;
 using namespace diag;
+using namespace weight;
 
 bool Diagram::IsWorm(vertex v)
 {
@@ -114,8 +115,11 @@ bool Diagram::FixDiagram()
     ASSERT_ALLWAYS(GWeight != nullptr && WWeight != nullptr, "G and W have been initialized yet!");
 
     Order = W.HowMany();
-    Worm.Exist = false;
     Worm.Weight = 1.0;
+    
+    if(Worm.Exist){
+        Worm.Weight = weight::Worm::Weight(Worm.Ira->R, Worm.Masha->R, Worm.Ira->Tau, Worm.Masha->Tau);
+    }
 
     Weight = Complex(1.0, 0.0);
     for (int index = 0; index < G.HowMany(); index++) {
@@ -135,7 +139,7 @@ bool Diagram::FixDiagram()
         vertex vin = w->NeighVer(IN);
         vertex vout = w->NeighVer(OUT);
 
-        w->IsWorm = false;
+        w->IsWorm = (vin==Worm.Ira || vin==Worm.Masha || vout==Worm.Ira ||vout==Worm.Masha);
 
         vin->nW = w;
         vin->Dir = IN;

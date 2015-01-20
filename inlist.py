@@ -75,11 +75,7 @@ Common={
     "Order": Order,
     "OrderAccepted": 1,
     "ErrorThreshold": 0.5,
-<<<<<<< HEAD
     "SleepTime": 10
-=======
-    "SleepTime": 100
->>>>>>> d961f3bce05462b5cf0757d5c1afec85c99956a2
     }
 }
 import job_class as job

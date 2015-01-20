@@ -149,8 +149,10 @@ bool Diagram::FromDict(const Dictionary& Config)
         _FromDict(dict, W.Add());
     for (auto& dict : Config.Get<vector<Dictionary> >("G"))
         _FromDict(dict, G.Add());
-    if (Config.HasKey("Worm"))
+    Worm.Exist = Config.HasKey("Worm");
+    if (Config.HasKey("Worm")){
         _FromDict(Config.Get<Dictionary>("Worm"), Worm);
+    }
     SignFermiLoop = Config.Get<real>("SignFermiLoop");
     FixDiagram();
     return true;
