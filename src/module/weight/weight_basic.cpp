@@ -65,9 +65,9 @@ Basic::Basic(const Lattice& lat, real beta, uint MaxTauBin, SpinNum spin_num,
     _SpaceTimeShape.push_back(_MaxTauBin);
 
     _SmoothTWeight.Allocate(GetShape());
-    _SmoothTWeight = Complex(0.0, 0.0);
+    _SmoothTWeight.Assign(Complex(0.0, 0.0));
     _DeltaTWeight.Allocate(GetShape());
-    _DeltaTWeight = Complex(0.0, 0.0);
+    _DeltaTWeight.Assign(Complex(0.0, 0.0));
 }
 
 uint* Basic::GetShape()
@@ -103,12 +103,12 @@ bool Basic::FromDict(const Dictionary& dict)
     if (flagSmooth) {
         auto arr = dict.Get<Python::ArrayObject>(SMOOTH);
         ASSERT_ALLWAYS(Equal(arr.Shape().data(), GetShape(), 4), "Shape should match!");
-        _SmoothTWeight = arr.Data<Complex>();
+        _SmoothTWeight.Assign(arr.Data<Complex>());
     }
     if (flagDelta) {
         auto arr = dict.Get<Python::ArrayObject>(DELTA);
         ASSERT_ALLWAYS(Equal(arr.Shape().data(), GetShape(), 3), "Shape should match!");
-        _DeltaTWeight = arr.Data<Complex>();
+        _DeltaTWeight.Assign(arr.Data<Complex>());
     }
     ASSERT_ALLWAYS(flagSmooth || flagDelta, "Come on! Neither SmoothT nor DeltaT array exist!");
     return true;

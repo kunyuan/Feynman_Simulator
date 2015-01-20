@@ -14,6 +14,7 @@
 #include "estimator/estimator.h"
 #include "module/weight/component.h"
 #include "utility/dictionary.h"
+#include "utility/array.h"
 
 using namespace std;
 
@@ -27,9 +28,9 @@ int RunTest()
     LOGGER_CONF("test.log", "test", Logger::file_on | Logger::screen_on, INFO, INFO);
     //    TestTimer();  //Test the timer
     //    TestRNG();
-    //    TestArray();
+    TestArray();
     //    TEST(diag::TestDiagram);
-    TEST(mc::TestMarkov);
+    //    TEST(mc::TestMarkov);
     //    TEST(mc::TestDiagCounter);
 
     //    TEST(TestLattice);

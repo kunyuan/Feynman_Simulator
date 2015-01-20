@@ -58,7 +58,7 @@ void WeightEstimator::Measure(uint* Index, int Order, Complex weight)
 void WeightEstimator::ClearStatistics()
 {
     _NormAccu = 0.0;
-    _WeightAccu = 0.0;
+    _WeightAccu.Assign(0.0);
 }
 //TODO: you may have to replace int with size_t here
 
@@ -78,7 +78,7 @@ bool WeightEstimator::FromDict(const Dictionary& dict)
     _NormAccu = dict.Get<real>("NormAccu");
     auto arr = dict.Get<Python::ArrayObject>("WeightAccu");
     ASSERT_ALLWAYS(Equal(arr.Shape().data(), _MeaShape, 5), "Shape should match!");
-    _WeightAccu = arr.Data<Complex>();
+    _WeightAccu.Assign(arr.Data<Complex>());
     return true;
 }
 

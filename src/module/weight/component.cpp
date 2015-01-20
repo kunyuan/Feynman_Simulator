@@ -20,12 +20,12 @@ G::G(const Lattice& lat, real beta, uint MaxTauBin, TauSymmetry Symmetry)
     //use _Shape[SP] to _Shape[TAU] to construct array3
     _MeasureWeight.Allocate(GetShape());
     //initialize _MeasureWeight to an unit function
-    _MeasureWeight = Complex(1.0, 0.0);
+    _MeasureWeight.Assign(Complex(1.0, 0.0));
 }
 
 void G::BuildTest(weight::model Model)
 {
-    _SmoothTWeight = 0.0;
+    _SmoothTWeight.Assign(0.0);
     uint spin_up = _Map.SpinIndex(UP, UP);
     for (uint sub = 0; sub < GetShape()[SUB]; sub++) {
         if (!_Lat.IsOnSameSubLat(sub))
@@ -51,7 +51,7 @@ W::W(const Lattice& lat, real Beta, uint MaxTauBin)
     //use _Shape[SP] to _Shape[VOL] to construct array3
     _MeasureWeight.Allocate(GetShape());
     //initialize _MeasureWeight to an unit function
-    _MeasureWeight = Complex(1.0, 0.0);
+    _MeasureWeight.Assign(Complex(1.0, 0.0));
 }
 
 void W::BuildTest(weight::model Model)

@@ -12,36 +12,43 @@
 #include "utility/dictionary.h"
 
 template <uint DIM>
-Array<DIM>::Array(const Array& source)
+void Array<DIM>::Copy(const Array& source)
 {
-    this->Allocate(source.GetShape(), source.Data());
+    if (&source == this)
+        return;
+    if (source.Data() == nullptr) {
+        Free();
+        return;
+    }
+    if (_Data == nullptr)
+        Allocate(source.GetShape());
+    else
+        ASSERT_ALLWAYS(Equal(_Shape, source.GetShape(), DIM), "Shape should be allocated first!");
+    Assign(source.Data());
 }
-
 template <uint DIM>
-Array<DIM>& Array<DIM>::operator=(const Complex& c)
+void Array<DIM>::Assign(const Complex& c)
 {
     ASSERT_ALLWAYS(_Data != nullptr, "Array should be allocated first!");
     for (uint i = 0; i < _Size; i++)
         _Data[i] = c;
-    return *this;
 }
 template <uint DIM>
-Array<DIM>& Array<DIM>::operator=(const Array& source)
+void Array<DIM>::Assign(const Complex* source)
 {
-    if (&source == this)
-        return *this;
-    *this = source.Data();
-    return *this;
-}
-template <uint DIM>
-Array<DIM>& Array<DIM>::operator=(const Complex* source)
-{
+    ASSERT_ALLWAYS(_Data != nullptr, "Array should be allocated first!");
     if (_Data == source)
-        return *this;
+        return;
     std::copy(source, source + _Size, _Data);
-    return *this;
 }
 
+template <uint DIM>
+void Array<DIM>::Assign(const std::initializer_list<Complex>& source)
+{
+    ASSERT_ALLWAYS(_Data != nullptr, "Array should be allocated first!");
+    for (uint i = 0; i < source.size(); i++)
+        _Data[i] = *(source.begin() + i);
+}
 template <uint DIM>
 const uint* Array<DIM>::GetShape() const
 {
@@ -55,20 +62,18 @@ Complex* Array<DIM>::Data() const
 }
 
 template <uint DIM>
-void Array<DIM>::Allocate(const uint* Shape_, const Complex* data)
+void Array<DIM>::Allocate(const uint* Shape_)
 {
     ASSERT_ALLWAYS(_Data == nullptr, "Please free Array first!");
     std::copy(Shape_, Shape_ + DIM, _Shape);
     _Size = 1;
-    for (uint i = 0; i < DIM; i++) {
+    for (auto i = 0; i < DIM; i++) {
         _Cache[DIM - 1 - i] = _Size;
-        _Size *= _Shape[i];
+        _Size *= _Shape[DIM - 1 - i];
     }
     _Data = new Complex[_Size];
     if (_Data == nullptr)
         THROW_ERROR(MemoryException, "Fail to allocate array!");
-    if (data != nullptr)
-        std::copy(data, data + DIM, _Data);
 }
 
 template <uint DIM>
@@ -83,11 +88,3 @@ template class Array<2>;
 template class Array<3>;
 template class Array<4>;
 template class Array<5>;
-
-void test()
-{
-    Array<2> a;
-    uint shape[2] = { 1, 2 };
-    a.Allocate(shape);
-    a(shape);
-}

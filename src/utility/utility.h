@@ -37,7 +37,7 @@ bool Zero(real x, real eps = eps0);
 bool Equal(real x1, real x2, real eps = eps0);
 bool Equal(uint x1, uint x2, real eps = eps0);
 template <typename T>
-bool Equal(T* x1, const T* x2, uint num, real eps = eps0)
+bool Equal(const T* x1, const T* x2, uint num, real eps = eps0)
 {
     for (uint i = 0; i < num; i++)
         if (!Equal(x1[i], x2[i], eps0))
