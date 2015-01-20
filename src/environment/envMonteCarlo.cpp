@@ -115,7 +115,7 @@ bool EnvMonteCarlo::ListenToMessage()
     }
     Para.UpdateWithMessage(Message_);
     Dictionary weight_;
-    weight_.Load(Job.WeightFile);
+    weight_.BigLoad(Job.WeightFile);
     Weight.FromDict(weight_, weight::GW, Para);
     Weight.Anneal(Para);
     Diag.Reset(Para.Lat, *Weight.G, *Weight.W);

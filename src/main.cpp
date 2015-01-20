@@ -22,8 +22,8 @@ const string HelpStr = "Usage:"
                        "-p N / --PID N   use N to construct input file path."
                        "or -f / --file PATH   use PATH as the input file path.";
 
-void MonteCarlo(const Job &);
-int main(int argc, const char *argv[])
+void MonteCarlo(const Job&);
+int main(int argc, const char* argv[])
 {
     Python::Initialize();
     Python::ArrayInitialize();
@@ -47,7 +47,7 @@ int main(int argc, const char *argv[])
     return 0;
 }
 
-void MonteCarlo(const para::Job &Job)
+void MonteCarlo(const para::Job& Job)
 {
     EnvMonteCarlo Env(Job);
     if (Job.DoesLoad)
@@ -55,18 +55,20 @@ void MonteCarlo(const para::Job &Job)
     else
         Env.BuildNew();
 
-    auto &Markov = Env.Markov;
-    auto &MarkovMonitor = Env.MarkovMonitor;
-    auto &Para = Env.Para;
+    auto& Markov = Env.Markov;
+    auto& MarkovMonitor = Env.MarkovMonitor;
+    auto& Para = Env.Para;
 
     timer PrinterTimer, DiskWriterTimer, MessageTimer;
     PrinterTimer.start();
     DiskWriterTimer.start();
     MessageTimer.start();
 
-    int sigma[MAX_ORDER] = {0};
-    int polar[MAX_ORDER] = {0};
+    int sigma[MAX_ORDER] = { 0 };
+    int polar[MAX_ORDER] = { 0 };
 
+    Env.ListenToMessage();
+    
     for (uint Step = 0; Step < Job.Sample; Step++) {
         //Don't use Para.Counter as counter
         Markov.Hop(Para.Sweep);
@@ -92,7 +94,7 @@ void MonteCarlo(const para::Job &Job)
                 Env.AdjustOrderReWeight();
                 Env.Save();
             }
-            if (MessageTimer.check(100))
+            if (MessageTimer.check(300))
                 Env.ListenToMessage();
         }
     }

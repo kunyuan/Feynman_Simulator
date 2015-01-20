@@ -42,11 +42,17 @@ void Test_RNG_Bound_And_Efficiency()
     timer T;
     T.start();
 
+    real mean = 0;
+    real std = 0;
     for (int i = 0; i < N; i++) {
-        RNG.urn();
+        real r = RNG.urn();
+        mean += r;
+        std += (r - 0.5) * (r - 0.5);
     }
     T.stop();
     LOG_INFO("Time for " << N << " real numbers: " << T);
+    sput_fail_unless(fabs(mean / N - 0.5) < 1 / sqrt(N), "test mean value of urn()");
+    sput_fail_unless(fabs(sqrt(std / N) - 0.5 / sqrt(3)) < 1 / sqrt(N), "test std value of urn()");
 
     LOG_INFO("Int random number generator 0 started...");
     T.restart();

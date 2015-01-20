@@ -5,10 +5,10 @@ import pprint
 
 def Load(FileName):
     log.info("Loading Parameters...")
-    d=IO.LoadDict(FileName)["Para"]
+    d=IO.LoadDict(FileName)
     log.info("Loaded parameters:\n"+pprint.pformat(d))
     Assert(d["Job"]["Type"]=="DYSON", "The job type should be DYSON, not {0}".format(d["Job"]["Type"]))
-    return d
+    return d["Job"], d["Para"]
 
 def Save(para, FileName, Mode="a"):
     log.info("Saving Parameters...")

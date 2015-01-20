@@ -164,8 +164,8 @@ void Diagram::BuildNew(Lattice &lat, weight::G &g, weight::W &w)
     Config.LoadFromString(
         "{'SignFermiLoop': 1.0,"
         "'Ver': "
-        "[{'Name': 0, 'Sublat': 0, 'Coordi': [1, 0], 'Tau': 0.0, 'SpinIn': 1, 'SpinOut' :1},"
-        "{'Name': 1, 'Sublat': 0, 'Coordi': [1, 0], 'Tau': 0.0, 'SpinIn': 1, 'SpinOut' :1}],"
+        "[{'Name': 0, 'Sublat': 0, 'Coordi': [1, 0, 0], 'Tau': 0.0, 'SpinIn': 1, 'SpinOut' :1},"
+        "{'Name': 1, 'Sublat': 0, 'Coordi': [1, 0, 0], 'Tau': 0.0, 'SpinIn': 1, 'SpinOut' :1}],"
         "'G':"
         "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsMeasure': True},"
         "{'IN': 1, 'OUT': 0, 'K': 2, 'IsMeasure': False}],"
@@ -182,8 +182,8 @@ void Diagram::SetTest(Lattice &lat, weight::G &g, weight::W &w)
     Config.LoadFromString(
         "{'SignFermiLoop': 1.0,"
         "'Ver': "
-        "[{'Name': 0, 'Sublat': 0, 'Coordi': [1, 0], 'Tau': 0.0, 'SpinIn': 1, 'SpinOut' :1},"
-        "{'Name': 1, 'Sublat': 0, 'Coordi': [1, 0], 'Tau': 0.0, 'SpinIn': 1, 'SpinOut' :1}],"
+        "[{'Name': 0, 'Sublat': 0, 'Coordi': [1, 0, 0], 'Tau': 0.0, 'SpinIn': 1, 'SpinOut' :1},"
+        "{'Name': 1, 'Sublat': 0, 'Coordi': [1, 0, 0], 'Tau': 0.0, 'SpinIn': 1, 'SpinOut' :1}],"
         "'G':"
         "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsMeasure': True},"
         "{'IN': 1, 'OUT': 0, 'K': 2, 'IsMeasure': False}],"

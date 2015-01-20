@@ -12,13 +12,13 @@
 
 using namespace weight;
 
-IndexMap::IndexMap(real Beta, uint MaxTauBin, const Lattice& lat)
+IndexMap::IndexMap(real Beta_, uint MaxTauBin_, const Lattice& lat)
 {
-    _MaxTauBin = MaxTauBin;
-    _Beta = Beta;
-    _dBeta = Beta / _MaxTauBin;
+    MaxTauBin = MaxTauBin_;
+    Beta = Beta_;
+    _dBeta = Beta / MaxTauBin;
     _dBetaInverse = 1.0 / _dBeta;
-    _Lat = lat;
+    Lat = lat;
 }
 
 int IndexMap::SublatIndex(const Distance& dist) const
@@ -33,18 +33,18 @@ int IndexMap::CoordiIndex(const Distance& dist) const
 
 int IndexMap::TauIndex(real tau) const
 {
-    if (DEBUGMODE && tau < -_Beta || tau >= _Beta)
+    if (DEBUGMODE && tau < -Beta || tau >= Beta)
         LOG_INFO("tau=" << tau << " is out of the range ["
-                        << -_Beta << "," << _Beta << ")");
+                        << -Beta << "," << Beta << ")");
     //TODO: mapping between tau and bin
 
-    int bin = tau < 0 ? floor(tau * _dBetaInverse) + _MaxTauBin
+    int bin = tau < 0 ? floor(tau * _dBetaInverse) + MaxTauBin
                       : floor(tau * _dBetaInverse);
-    if (DEBUGMODE && bin < 0 || bin >= _MaxTauBin) {
+    if (DEBUGMODE && bin < 0 || bin >= MaxTauBin) {
         LOG_INFO("tau=" << tau << " is out of the range ["
-                        << -_Beta << "," << _Beta << ")");
+                        << -Beta << "," << Beta << ")");
         LOG_INFO("bin=" << bin << " is out of the range ["
-                        << 0 << "," << _MaxTauBin << "]");
+                        << 0 << "," << MaxTauBin << "]");
     }
     return bin;
 }
@@ -73,7 +73,7 @@ bool IndexMapSPIN2::IsSameSpin(int spindex)
 void IndexMapSPIN2::Map(uint* result, spin SpinIn, spin SpinOut,
                         const Site& rin, const Site& rout, real tin, real tout) const
 {
-    auto dis = _Lat.Dist(rin, rout);
+    auto dis = Lat.Dist(rin, rout);
     result[0] = SpinIndex(SpinIn, SpinOut);
     result[1] = dis.SublatIndex;
     result[2] = dis.CoordiIndex;
@@ -82,7 +82,7 @@ void IndexMapSPIN2::Map(uint* result, spin SpinIn, spin SpinOut,
 void IndexMapSPIN2::MapDeltaT(uint* result, spin SpinIn, spin SpinOut,
                               const Site& rin, const Site& rout) const
 {
-    auto dis = _Lat.Dist(rin, rout);
+    auto dis = Lat.Dist(rin, rout);
     result[0] = SpinIndex(SpinIn, SpinOut);
     result[1] = dis.SublatIndex;
     result[2] = dis.CoordiIndex;
@@ -123,7 +123,7 @@ std::vector<int> IndexMapSPIN4::GetSpinIndexVector(SPIN4Filter filter)
 void IndexMapSPIN4::Map(uint* result, const spin* SpinIn, const spin* SpinOut,
                         const Site& rin, const Site& rout, real tin, real tout) const
 {
-    auto dis = _Lat.Dist(rin, rout);
+    auto dis = Lat.Dist(rin, rout);
     result[0] = SpinIndex(SpinIn, SpinOut);
     result[1] = dis.SublatIndex;
     result[2] = dis.CoordiIndex;
@@ -132,7 +132,7 @@ void IndexMapSPIN4::Map(uint* result, const spin* SpinIn, const spin* SpinOut,
 void IndexMapSPIN4::MapDeltaT(uint* result, const spin* SpinIn, const spin* SpinOut,
                               const Site& rin, const Site& rout) const
 {
-    auto dis = _Lat.Dist(rin, rout);
+    auto dis = Lat.Dist(rin, rout);
     result[0] = SpinIndex(SpinIn, SpinOut);
     result[1] = dis.SublatIndex;
     result[2] = dis.CoordiIndex;

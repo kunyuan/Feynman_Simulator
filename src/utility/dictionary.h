@@ -57,7 +57,7 @@ public:
     {
         T value;
         if (!HasKey(key))
-            THROW_ERROR(KeyInvalid, "key does not exist!");
+            THROW_ERROR(KeyInvalid, key + " key does not exist!");
         if (!Python::Convert(_Map.at(key), value))
             ABORT("Fail to convert " << key);
         return value;

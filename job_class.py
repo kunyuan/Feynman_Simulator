@@ -26,18 +26,19 @@ class Job:
             print "Something is wrong with the inlist! Abandon!"
             sys.exit()
         self.control=para.pop("Control")
+        self.job=para.pop("Job")
         self.pid = []
         self.para = para
 
     def to_dict(self):
         '''output the corresponding string of the job class'''
         pid=self.pid.pop(0)
-        self.control["__Type"]=self.para["Job"]["Type"]
-        self.para["Job"]["WeightFile"]="Weight"
-        self.para["Job"]["MessageFile"]="Message"
-        self.para["Job"]["PID"] = pid
+        self.control["__Type"]=self.job["Type"]
+        self.job["WeightFile"]="Weight"
+        self.job["MessageFile"]="Message"
+        self.job["PID"] = pid
         self.__set_model_specific__()
-        return pid, {"Para":copy.deepcopy(self.para)}
+        return pid, {"Job": copy.deepcopy(self.job), "Para":copy.deepcopy(self.para)}
 
     def __check_parameters__(self, para):
         if para["Control"]["__Execute"] is "":
@@ -55,11 +56,11 @@ class JobMonteCarlo(Job):
     '''job subclass for monte carlo jobs'''
     def __init__(self, para):
         Job.__init__(self, para)
-        self.para["Job"]["Type"] = "MC"
+        self.job["Type"] = "MC"
         #search folder for old jobs, the new pid=largest old pid+1
-        PIDList, NextPID=get_current_PID(self.para["Job"]["Type"])
-        if self.para["Job"]["DoesLoad"]:
-            self.pid=PIDList[len(PIDList)-self.control["__Duplicate"]:]
+        PIDList, NextPID=get_current_PID(self.job["Type"])
+        if self.job["DoesLoad"]:
+            self.pid=PIDList[:self.control["__Duplicate"]]
         else:
             self.pid=range(NextPID, NextPID+self.control["__Duplicate"])
 
@@ -69,23 +70,25 @@ class JobMonteCarlo(Job):
         if type(para["Markov"]["OrderReWeight"]) is not list:
             print "The Reweight should be a list!"
             return False
-        if para["Markov"]["Order"]+1 is not len(para["Markov"]["OrderReWeight"]):
-            print "The Reweight numbers should be equal to Order!"
+        if para["Markov"]["Order"]+1>len(para["Markov"]["OrderReWeight"]):
+            print "The Reweight numbers should be equal/larger than Order!"
             return False
 
     def to_dict(self):
         pid, Dict=Job.to_dict(self)
+        if self.job["DoesLoad"]:
+            Dict.pop("Para")
+        else:
         #set Seed here so that each job has it own rng seed
-        #search folder for old jobs, the new pid=largest old pid+1
-        Dict["Para"]["Markov"]["Seed"] = int(random.random()*2**30)
+            Dict["Para"]["Markov"]["Seed"] = int(random.random()*2**30)
         return pid, Dict
 
 class JobDyson(Job):
     '''job subclass for self consistent loop jobs'''
     def __init__(self, para):
         Job.__init__(self, para)
-        self.para["Job"]["Type"] = "DYSON"
-        PIDList, NextPID=get_current_PID(self.para["Job"]["Type"])
+        self.job["Type"] = "DYSON"
+        PIDList, NextPID=get_current_PID(self.job["Type"])
         self.pid=range(NextPID, NextPID+self.control["__Duplicate"])
 
     def to_dict(self):

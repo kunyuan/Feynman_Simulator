@@ -13,8 +13,10 @@ MonteCarlo={
     "__AutoRun" : True,
     "__KeepCPUBusy": True,
     },
-"Job": {"DoesLoad" : False,
-        "Sample" :1000000000}
+"Job": {
+    "DoesLoad" : False,
+    "Sample" :5000000000
+    }
 }
 
 Dyson={
@@ -22,14 +24,14 @@ Dyson={
     "__Execute" : ["python", "./calculator/main.py"],
     "__Duplicate" : 1,
     "__IsCluster" : False,
-    "__AutoRun" : False, 
+    "__AutoRun" : True, 
     "__KeepCPUBusy": False,
     },
 "Job": {"StartFromBare" : False}
 }
 
 beta=0.5
-Order=4
+Order=5
 Common={
 "Tau": {
     "MaxTauBin" : 64,
@@ -38,9 +40,12 @@ Common={
     "FinalBeta" :  beta,
     },
 "Lattice":  {
-    "Name": "Square",
+    #"Name": "Square",
+    #"NSublat": 1,
+    #"L": [4,4],
+    "Name": "Cubic",
     "NSublat": 1,
-    "L": [4,4],
+    "L": [8,8,8],
     #"Name": "Pyrochlore",
     #"NSublat": 4,
     #"L": [4,4,4]
@@ -60,10 +65,10 @@ Common={
     #Start from order 0, so that OrderReWeight has Order+1 elements
     "Sweep" : 10,
     "Toss" : 1000,
-    "OrderReWeight" : [1.0, 0.1, 0.5, 0.1, 0.05],
+    "OrderReWeight" : [1.0, 0.1, 0.5, 0.1, 0.05, 0.05],
     "SqueezeFactor" : 10.0,
     "WormSpaceReweight" : 0.05,
-    "OrderTimeRatio" : [1.0, 1.0, 1.0, 4.0, 4.0]
+    "OrderTimeRatio" : [1.0, 1.0, 1.0, 4.0, 4.0, 4.0]
     },
 "Dyson": {
     "Order": Order,

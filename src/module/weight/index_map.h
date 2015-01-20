@@ -29,12 +29,13 @@ public:
     int SublatIndex(const Distance& dist) const;
     int CoordiIndex(const Distance& dist) const;
 
+    real Beta;
+    Lattice Lat;
+    uint MaxTauBin;
+
 protected:
-    real _Beta;
     real _dBeta;
     real _dBetaInverse;
-    Lattice _Lat;
-    uint _MaxTauBin;
 };
 
 class IndexMapSPIN2 : public IndexMap {
