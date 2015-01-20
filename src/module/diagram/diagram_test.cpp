@@ -83,8 +83,8 @@ void Test_Diagram_IO()
     Lattice lat(Vec<int>(8));
     weight::G G(lat, 1.0, 32);
     weight::W W(lat, 1.0, 32);
-    G.BuildTest(weight::Trivial);
-    W.BuildTest(weight::Trivial);
+    G.BuildTest();
+    W.BuildTest();
     Diagram Diag;
 
     Diag.SetTest(lat, G, W);

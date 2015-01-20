@@ -43,13 +43,6 @@ void Array<DIM>::Assign(const Complex* source)
 }
 
 template <uint DIM>
-void Array<DIM>::Assign(const std::initializer_list<Complex>& source)
-{
-    ASSERT_ALLWAYS(_Data != nullptr, "Array should be allocated first!");
-    for (uint i = 0; i < source.size(); i++)
-        _Data[i] = *(source.begin() + i);
-}
-template <uint DIM>
 const uint* Array<DIM>::GetShape() const
 {
     return _Shape;

@@ -86,25 +86,11 @@ Complex W::Weight(int dir, const Site& r1, const Site& r2, real t1, real t2, spi
         return _SmoothTWeight.At(index);
 }
 
-Complex Sigma::Weight(const Site& rin, const Site& rout, real tin, real tout, spin SpinIn, spin SpinOut) const
-{
-    static uint index[4];
-    _Map.Map(index, SpinIn, SpinOut, rin, rout, tin, tout);
-    return GetTauSymmetryFactor(tin, tout) * _SmoothTWeight.At(index);
-}
-
 void Sigma::Measure(const Site& rin, const Site& rout, real tin, real tout, spin SpinIn, spin SpinOut, int order, const Complex& weight)
 {
     static uint index[4];
     _Map.Map(index, SpinIn, SpinOut, rin, rout, tin, tout);
     Estimator.Measure(index, order, weight * GetTauSymmetryFactor(tin, tout));
-}
-
-Complex Polar::Weight(const Site& rin, const Site& rout, real tin, real tout, spin* SpinIn, spin* SpinOut) const
-{
-    static uint index[4];
-    _Map.Map(index, SpinIn, SpinOut, rin, rout, tin, tout);
-    return _SmoothTWeight.At(index);
 }
 
 void Polar::Measure(const Site& rin, const Site& rout, real tin, real tout, spin* SpinIn, spin* SpinOut, int order, const Complex& weight)
