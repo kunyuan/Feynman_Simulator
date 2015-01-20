@@ -51,7 +51,11 @@ def Measure(G0, W0, G, W, Sigma, Polar):
     print "G=\n", G.Data[UP,0,UP,0,0,:]
     print "Sigma=\n", Sigma.Data[UP,0,UP,0,0,:]
     print "Polar=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
-    print "Chi=\n", Chi.Data[0,0,0,0,0,:]
+    Chi.FFT(1, "Space", "Time")
+    print "Chi=\n", Chi.Data[0,0,0,0,0,0]/Map.Vol/Map.Beta
+    print "Chi=\n", Chi.Data[0,0,0,0,Map.CoordiIndex((4,4,4)),0]/Map.Vol/Map.Beta
+    Chi.FFT(-1, "Space", "Time")
+
     data={}
     data["G"]=G.ToDict()
     data["W"]=W.ToDict()

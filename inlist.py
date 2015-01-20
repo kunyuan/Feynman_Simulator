@@ -31,7 +31,7 @@ Dyson={
 }
 
 beta=0.5
-Order=4
+Order=5
 Common={
 "Tau": {
     "MaxTauBin" : 64,
@@ -40,6 +40,9 @@ Common={
     "FinalBeta" :  beta,
     },
 "Lattice":  {
+    #"Name": "Square",
+    #"NSublat": 1,
+    #"L": [4,4],
     "Name": "Cubic",
     "NSublat": 1,
     "L": [8,8,8],
@@ -60,18 +63,23 @@ Common={
 "Markov": {
     "Order": Order,
     #Start from order 0, so that OrderReWeight has Order+1 elements
-    "OrderReWeight" : [1.0, 0.1, 0.5, 0.1, 0.05],
     "Sweep" : 10,
     "Toss" : 1000,
+    "OrderReWeight" : [1.0, 0.1, 0.5, 0.1, 0.05, 0.05],
     "SqueezeFactor" : 10.0,
     "WormSpaceReweight" : 0.05,
-    "OrderTimeRatio" : [1.0, 1.0, 1.0, 4.0, 4.0]
+    "PolarReweight" : 2.0,
+    "OrderTimeRatio" : [1.0, 1.0, 1.0, 4.0, 4.0, 4.0]
     },
 "Dyson": {
     "Order": Order,
     "OrderAccepted": 1,
     "ErrorThreshold": 0.5,
+<<<<<<< HEAD
     "SleepTime": 10
+=======
+    "SleepTime": 100
+>>>>>>> d961f3bce05462b5cf0757d5c1afec85c99956a2
     }
 }
 import job_class as job

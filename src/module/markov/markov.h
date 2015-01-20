@@ -41,6 +41,7 @@ class Markov {
     Lattice *Lat;
     real *OrderReWeight;
     real *WormSpaceReweight;
+    real *PolarReweight;
     diag::Diagram *Diag;
     diag::WormClass *Worm;
     weight::Sigma *Sigma;

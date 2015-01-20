@@ -22,6 +22,7 @@ para::Job::Job(string inputfile)
         ABORT("I don't know what is Job Type " << Type << "?");
 
     GET(_Para, DoesLoad);
+    GET(_Para, Sample);
     GET(_Para, PID);
     GET(_Para, Sample);
     GET(_Para, WeightFile);
