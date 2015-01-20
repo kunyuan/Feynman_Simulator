@@ -59,6 +59,7 @@ void MonteCarlo(const para::Job& Job)
     auto& MarkovMonitor = Env.MarkovMonitor;
     auto& Para = Env.Para;
 
+    LOG_INFO("Markov is started!");
     timer PrinterTimer, DiskWriterTimer, MessageTimer;
     PrinterTimer.start();
     DiskWriterTimer.start();
@@ -78,12 +79,10 @@ void MonteCarlo(const para::Job& Job)
                 polar[Markov.Diag->Order]++;
         }
 
-        if (Step % 10 == 0)
-            MarkovMonitor.AddStatistics();
-
         if (Step % 1000 == 0) {
-            if (!Env.Diag.Worm.Exist && Env.Diag.Order == 3)
-                Env.Diag.WriteDiagram2gv("diagram/" + ToString(Para.Counter) + ".gv");
+            MarkovMonitor.AddStatistics();
+            //            if (!Env.Diag.Worm.Exist && Env.Diag.Order == 3)
+            //                Env.Diag.WriteDiagram2gv("diagram/" + ToString(Para.Counter) + ".gv");
             if (PrinterTimer.check(10)) {
                 Env.Diag.CheckDiagram();
                 Markov.PrintDetailBalanceInfo();
@@ -92,11 +91,12 @@ void MonteCarlo(const para::Job& Job)
                 Env.AdjustOrderReWeight();
                 Env.Save();
             }
-            if (MessageTimer.check(600))
+            if (MessageTimer.check(10))
                 Env.ListenToMessage();
         }
     }
 
     //    Markov.PrintDetailBalanceInfo();
     Env.Save();
+    LOG_INFO("Markov is ended!");
 }

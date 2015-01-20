@@ -102,7 +102,6 @@ class WeightEstimator():
         plt.errorbar(x[mid], smooth[mid].imag, yerr=sigma.imag, 
                 label="Error {0:.2g}".format(sigma.imag))
         plt.legend().get_frame().set_alpha(0.5)
-        leg.get_frame().set_alpha(0.5)
         plt.xlabel("Tau")
         plt.savefig(os.path.join(path, "{0}_Smoothed_Order{1}.jpg".format(Name, Order)))
         #plt.show()

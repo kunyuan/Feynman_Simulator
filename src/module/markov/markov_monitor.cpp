@@ -48,8 +48,12 @@ bool MarkovMonitor::FromDict(const Dictionary& dict, ParaMC& para, Diagram& diag
     Para = &para;
     Diag = &diag;
     Weight = &weight;
+    for (int i = 0; i <= Para->Order; i++) {
+        WormEstimator.AddEstimator("Order" + ToString(i));
+        PhyEstimator.AddEstimator("Order" + ToString(i));
+    }
     //TODO: more observables
-    return WormEstimator.FromDict(dict.Get<Dictionary>("cEstimator")) || PhyEstimator.FromDict(dict.Get<Dictionary>("rEstimator"));
+    return WormEstimator.FromDict(dict.Get<Dictionary>("WormEstimator")) || PhyEstimator.FromDict(dict.Get<Dictionary>("PhyEstimator"));
 }
 Dictionary MarkovMonitor::ToDict()
 {
