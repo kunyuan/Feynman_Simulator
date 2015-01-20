@@ -14,7 +14,7 @@ MonteCarlo={
     "__KeepCPUBusy": True,
     },
 "Job": {
-    "DoesLoad" : True,
+    "DoesLoad" : False,
     "Sample" :100000000
     }
 }
@@ -22,7 +22,7 @@ MonteCarlo={
 Dyson={
 "Control": {
     "__Execute" : ["python", "./calculator/main.py"],
-    "__Duplicate" : 0,
+    "__Duplicate" : 1,
     "__IsCluster" : False,
     "__AutoRun" : True, 
     "__KeepCPUBusy": False,

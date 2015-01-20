@@ -34,8 +34,6 @@ public:
 };
 
 class G : public Basic {
-    friend class GInitializer;
-
 public:
     G(const Lattice& lat, real beta, uint MaxTauBin,
       TauSymmetry TauSymmetry = TauAntiSymmetric);
@@ -55,8 +53,6 @@ private:
     The mirror symmetry is only required on the level of the whole lattice, not within a unit cell.
 */
 class W : public Basic {
-    friend class WInitializer;
-
 public:
     W(const Lattice& lat, real Beta, uint MaxTauBin);
     void BuildTest(weight::model);

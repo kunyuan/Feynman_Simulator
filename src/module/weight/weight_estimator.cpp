@@ -12,7 +12,6 @@
 #include "weight_estimator.h"
 
 using namespace std;
-using namespace Array;
 using namespace weight;
 
 /**********************   Weight Needs measuring  **************************/
@@ -53,8 +52,7 @@ void WeightEstimator::Measure(uint* Index, int Order, Complex weight)
 {
     if (DEBUGMODE && Order < 1)
         LOG_ERROR("Too small order=" << Order);
-    _WeightAccu[Order - 1][Index[SP]][Index[SUB]]
-               [Index[VOL]][Index[TAU]] += weight;
+    _WeightAccu(Order - 1, Index) += weight;
 }
 
 void WeightEstimator::ClearStatistics()
@@ -89,6 +87,6 @@ Dictionary WeightEstimator::ToDict()
     Dictionary dict;
     dict["Norm"] = _Norm;
     dict["NormAccu"] = _NormAccu;
-    dict["WeightAccu"] = Python::ArrayObject(_WeightAccu(), _MeaShape, 5);
+    dict["WeightAccu"] = Python::ArrayObject(_WeightAccu.Data(), _MeaShape, 5);
     return dict;
 }

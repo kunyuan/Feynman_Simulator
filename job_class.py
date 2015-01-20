@@ -60,6 +60,9 @@ class JobMonteCarlo(Job):
         #search folder for old jobs, the new pid=largest old pid+1
         PIDList, NextPID=get_current_PID(self.job["Type"])
         if self.job["DoesLoad"]:
+            if len(PIDList)==0:
+                print "No para file is found to load!"
+                sys.exit(0)
             self.pid=PIDList[:self.control["__Duplicate"]]
         else:
             self.pid=range(NextPID, NextPID+self.control["__Duplicate"])

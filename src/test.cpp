@@ -29,7 +29,7 @@ int RunTest()
     //    TestRNG();
     //    TestArray();
     //    TEST(diag::TestDiagram);
-    //    TEST(mc::TestMarkov);
+    TEST(mc::TestMarkov);
     //    TEST(mc::TestDiagCounter);
 
     //    TEST(TestLattice);

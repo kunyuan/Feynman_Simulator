@@ -51,7 +51,7 @@ protected:
     real _NormAccu; //The normalization accumulation
     //final weight function =_WeightAccu/_NormAccu*_Norm
     //final weight of each bin = (final weight of each bin)/MAX_BIN*Beta
-    Array::array5<Complex> _WeightAccu; //dim=0 is order, than follows WeightNoMeasure::Shape()
+    Array<5> _WeightAccu; //dim=0 is order, than follows WeightNoMeasure::Shape()
     std::string _Name;
 };
 }
