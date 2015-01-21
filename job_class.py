@@ -36,6 +36,7 @@ class Job:
         self.control["__Type"]=self.job["Type"]
         self.job["WeightFile"]="Weight"
         self.job["MessageFile"]="Message"
+        self.job["OutputFile"]="Dyson_Output"
         self.job["PID"] = pid
         self.__set_model_specific__()
         return pid, {"Job": copy.deepcopy(self.job), "Para":copy.deepcopy(self.para)}

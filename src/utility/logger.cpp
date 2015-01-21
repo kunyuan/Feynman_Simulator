@@ -6,7 +6,7 @@
 #include "logger.h"
 
 // Definition (and initialization) of static attributes
-Logger *Logger::m_ = 0;
+Logger* Logger::m_ = 0;
 
 #ifdef LOGGER_MULTITHREAD
 pthread_mutex_t Logger::lock_ = PTHREAD_MUTEX_INITIALIZER;
@@ -52,8 +52,8 @@ Logger::Logger()
  * @param Verbosity threshold for file
  * @param Verbosity threshold for screen
  */
-void Logger::configure(const std::string &outputFile,
-                       const std::string &loggerName,
+void Logger::configure(const std::string& outputFile,
+                       const std::string& loggerName,
                        const loggerConf configuration,
                        const int fileVerbosityLevel,
                        const int screenVerbosityLevel)
@@ -101,7 +101,7 @@ Logger::~Logger()
  * It is a static method.
  * @return Reference to the object.
  */
-Logger &Logger::getInstance()
+Logger& Logger::getInstance()
 {
     Logger::lock();
     if (m_ == 0)
@@ -121,9 +121,9 @@ Logger &Logger::getInstance()
  * @param Message
  */
 void Logger::print(const unsigned int verbosityLevel,
-                   const std::string &file,
+                   const std::string& file,
                    const int line,
-                   const std::string &message)
+                   const std::string& message)
 {
     if (!configured_) {
         std::cerr << "ERROR: Logger not configured!" << std::endl;
@@ -135,21 +135,18 @@ void Logger::print(const unsigned int verbosityLevel,
     std::string str(ctime(&_time));
 
     std::ostringstream oss;
+    oss << loggerName_ << LOGSTR[verbosityLevel];
     time_t currTime;
     time(&currTime);
-    struct tm *currTm = localtime(&currTime);
-    oss << "[" << (currTm->tm_year - 100) << "/" << currTm->tm_mon << "/" << currTm->tm_mday << " " << currTm->tm_hour << ":" << currTm->tm_min << ":" << currTm->tm_sec << "]";
-    std::string time_str = oss.str();
+    struct tm* currTm = localtime(&currTime);
+    oss << "[" << (currTm->tm_year - 100) << "/" << currTm->tm_mon << "/" << currTm->tm_mday << " " << currTm->tm_hour << ":" << currTm->tm_min << ":" << currTm->tm_sec << "]\n";
+    oss << "@[" << file << ":" << line << "]"
+        << "\n" << message << std::endl;
+    std::string msg = oss.str();
     Logger::lock();
-
     if ((configuration_ & file_on) && (verbosityLevel >= fileVerbosityLevel_))
-        out_ << loggerName_ << LOGSTR[verbosityLevel] << time_str << "\n"
-             << "@[" << file << ":" << line << "]"
-             << "\n" << message << std::endl << std::endl;
-
+        out_ << msg << std::endl;
     if ((configuration_ & screen_on) && (verbosityLevel >= screenVerbosityLevel_))
-        std::cerr << loggerName_ << LOGSTR[verbosityLevel] << time_str << "\n"
-                  << "@[" << file << ":" << line << "]"
-                  << "\n" << message << std::endl << std::endl;
+        std::cout << msg << std::endl;
     Logger::unlock();
 }

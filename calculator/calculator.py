@@ -157,6 +157,7 @@ def Calculate_ChiTensor(W0, Polar, map):
 
     W0.FFT(1, "Space")
     Polar.FFT(1, "Space", "Time")
+
     ChiTensor.Data=Calculate_Denorminator(W0, Polar, map)
     ChiTensor.Inverse();
     ChiTensor.Data = np.einsum('ijklvt,klmnvt->ijmnvt', Polar.Data, ChiTensor.Data)

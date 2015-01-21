@@ -26,6 +26,7 @@ WeightPara={"NSublat": para["Lattice"]["NSublat"], "L":para["Lattice"]["L"],
 Map=weight.IndexMap(**WeightPara)
 Lat=lat.Lattice(para["Lattice"]["Name"], Map)
 
+
 if args.collect:
     MaxOrder=para["Dyson"]["Order"]
     SigmaMC, PolarMC=collect.CollectStatis(Map, MaxOrder)
@@ -51,10 +52,7 @@ def Measure(G0, W0, G, W, Sigma, Polar):
     print "G=\n", G.Data[UP,0,UP,0,0,:]
     print "Sigma=\n", Sigma.Data[UP,0,UP,0,0,:]
     print "Polar=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
-    Chi.FFT(1, "Space", "Time")
-    print "Chi=\n", Chi.Data[0,0,0,0,0,0]/Map.Vol/Map.Beta
-    print "Chi=\n", Chi.Data[0,0,0,0,Map.CoordiIndex((4,4,4)),0]/Map.Vol/Map.Beta
-    Chi.FFT(-1, "Space", "Time")
+    print "Chi=\n", Chi.Data[0,0,0,0,0,:]
 
     data={}
     data["G"]=G.ToDict()
@@ -64,14 +62,29 @@ def Measure(G0, W0, G, W, Sigma, Polar):
     data["Polar"]=Polar.ToDict()
     data["Chi"]=Chi.ToDict()
     IO.SaveBigDict(WeightFile, data)
+
     #plot what you are interested in
     try:
         plot.PlotSpatial(Chi, Lat, 0, 0)
     except:
         pass
 
+    return Chi
+
+MessageFile=job["MessageFile"]
+OutputFile=job["OutputFile"]
+hist={}
+hist["UnifChi"]=[]
+hist["StagChi"]=[]
+
+if len(Map.L)==2 :
+    stag = Map.CoordiIndex((Map.L[0]/2, Map.L[1]/2))
+elif len(Map.L)==3 :
+    stag = Map.CoordiIndex((Map.L[0]/2, Map.L[1]/2, Map.L[2]/2))
+
 if job["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is False:
     #start from bare
+    Version=0
     log.info("Start from G0 and W0 to do dyson...")
     G=G0.Copy()
     W=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric")
@@ -84,11 +97,19 @@ if job["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is False:
         G = calc.G_Dyson(G0, Sigma0, Sigma, Map)
         W = calc.W_Dyson(W0, Polar, Map)
         ###################################################
-    Measure(G0, W0, G, W, Sigma, Polar)
+    Chi=Measure(G0, W0, G, W, Sigma, Polar)
+
+    Chi.FFT(1, "Space", "Time")
+    hist["UnifChi"].append(Chi.Data[0,0,0,0,0,0]/Map.MaxTauBin*Map.Beta)
+    hist["StagChi"].append(Chi.Data[0,0,0,0,stag,0]/Map.MaxTauBin*Map.Beta)
+    IO.SaveDict(OutputFile, "w", hist)
+    Chi.FFT(-1, "Space", "Time")
+
+    parameter.BroadcastMessage(MessageFile, {"Version": Version, "Beta": Map.Beta})
+    log.info("#{0} is done!".format(Version))
 
 else:
     #########READ G,SIGMA,POLAR; CALCULATE SIGMA0 #################
-    MessageFile=job["MessageFile"]
     Version=parameter.GetVersion(MessageFile)
     while True:
         Version+=1
@@ -111,7 +132,14 @@ else:
             G = calc.G_Dyson(G0, Sigma0, Sigma, Map)
             W = calc.W_Dyson(W0, Polar,Map)
             ####### Measure ############
-            Measure(G0, W0, G, W, Sigma, Polar)
+            Chi=Measure(G0, W0, G, W, Sigma, Polar)
+
+            Chi.FFT(1, "Space", "Time")
+            hist["UnifChi"].append(Chi.Data[0,0,0,0,0,0]/Map.MaxTauBin*Map.Beta)
+            hist["StagChi"].append(Chi.Data[0,0,0,0,stag,0]/Map.MaxTauBin*Map.Beta)
+            IO.SaveDict(OutputFile, "w", hist)
+            Chi.FFT(-1, "Space", "Time")
+
             parameter.BroadcastMessage(MessageFile, {"Version": Version, "Beta": Map.Beta})
             log.info("#{0} is done!".format(Version))
         except:

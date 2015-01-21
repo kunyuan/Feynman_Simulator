@@ -44,7 +44,8 @@ class WeightEstimator():
         MaxTauBin=self.__Map.MaxTauBin
         x=range(0, MaxTauBin)
         Shape=self.OrderWeight.shape
-        for orderindex in range(OrderAccepted, Shape[0]):
+        Average0 = np.average(self.OrderWeight[0,0,0,0,:])
+        for orderindex in range(0, Shape[0]):
             # Order Index is equal to real Order-1
             RelativeError=0
             for sp in range(Shape[1]):
@@ -53,7 +54,8 @@ class WeightEstimator():
                         y=self.OrderWeight[orderindex,sp,sub,vol, :]
                         if not np.allclose(y, 0.0, 1e-10): 
                             smooth, sigma=Smooth(x, y)
-                            relative=abs(sigma)/abs(np.average(smooth))
+                            #relative=abs(sigma)/abs(np.average(smooth))
+                            relative=abs(sigma)/abs(Average0)
                             if abs(relative)>RelativeError:
                                 RelativeError=relative
                                 error=sigma
@@ -61,18 +63,23 @@ class WeightEstimator():
                                 Smoothed=smooth.copy()
                                 Position=(orderindex,sp,sub,vol)
                             self.OrderWeight[orderindex,sp,sub,vol, :]=smooth
-            try:
+            if orderindex>=OrderAccepted:
                 State="Accepted with relative error {0} (Threshold {1})".format(RelativeError, ErrorThreshold)
                 if RelativeError>=ErrorThreshold:
                     State="NOT "+State
-                self.__Plot(Name, x, Original, Smoothed, error, Position, State)
-            except:
-                raise
-                log.info("failed to plot")
-            log.info("Maximum at Order {0} is {1}".format(orderindex, RelativeError))
-            if RelativeError>=ErrorThreshold:
-                break
-        NewOrderAccepted=orderindex
+
+                try:
+                    self.__Plot(Name, x, Original, Smoothed, error, Position, State)
+                except:
+                    raise
+                    log.info("failed to plot")
+
+                log.info("Maximum at Order {0} is {1}".format(orderindex, RelativeError))
+                if RelativeError>=ErrorThreshold:
+                    orderindex -= 1
+                    break
+
+        NewOrderAccepted=orderindex+1
         log.info("OrderAccepted={0}".format(NewOrderAccepted))
         return NewOrderAccepted
 

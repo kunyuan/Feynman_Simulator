@@ -8,14 +8,14 @@ SLEEP = 1    #check job status for every SLEEP seconds
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" : 3,
+    "__Duplicate" : 1,
     "__IsCluster" : False,
     "__AutoRun" : True,
     "__KeepCPUBusy": True,
     },
 "Job": {
     "DoesLoad" : False,
-    "Sample" :5000000000
+    "Sample" : 100000000  ##0.8 min for 1000000(*1000) Samples in MC
     }
 }
 
@@ -27,11 +27,11 @@ Dyson={
     "__AutoRun" : True, 
     "__KeepCPUBusy": False,
     },
-"Job": {"StartFromBare" : True}
+"Job": {"StartFromBare" : False}
 }
 
 beta=0.5
-Order=5
+Order=3
 Common={
 "Tau": {
     "MaxTauBin" : 64,
@@ -43,12 +43,12 @@ Common={
     #"Name": "Square",
     #"NSublat": 1,
     #"L": [4,4],
-    "Name": "Cubic",
-    "NSublat": 1,
-    "L": [8,8,8],
-    #"Name": "Pyrochlore",
-    #"NSublat": 4,
-    #"L": [4,4,4]
+    #"Name": "Cubic",
+    #"NSublat": 1,
+    #"L": [8,8,8],
+    "Name": "Pyrochlore",
+    "NSublat": 4,
+    "L": [4,4,4]
     #"Name": "Checkboard",
     #"NSublat": 2,
     #"L": [8,8]
@@ -65,16 +65,16 @@ Common={
     #Start from order 0, so that OrderReWeight has Order+1 elements
     "Sweep" : 10,
     "Toss" : 1000,
-    "OrderReWeight" : [1.0, 0.1, 0.5, 0.1, 0.05, 0.05],
+    "OrderReWeight" : [1.0, 0.1, 0.5, 0.1],
     "SqueezeFactor" : 10.0,
     "WormSpaceReweight" : 0.05,
     "PolarReweight" : 2.0,
-    "OrderTimeRatio" : [1.0, 1.0, 1.0, 4.0, 4.0, 4.0]
+    "OrderTimeRatio" : [1.0, 1.0, 2.0, 4.0]
     },
 "Dyson": {
     "Order": Order,
     "OrderAccepted": 1,
-    "ErrorThreshold": 0.5,
+    "ErrorThreshold": 0.2,
     "SleepTime": 300
     }
 }
