@@ -9,6 +9,7 @@
 #ifndef __Feynman_Simulator__component__
 #define __Feynman_Simulator__component__
 
+#include "index_map.h"
 #include "weight_array.h"
 #include "weight_estimator.h"
 #include "utility/complex.h"
@@ -30,6 +31,9 @@ public:
         return 10.0;
     }
 };
+
+typedef WeightArray<DELTA_T_SIZE> DeltaTArray;
+typedef WeightArray<SMOOTH_T_SIZE> SmoothTArray;
 
 class G {
 public:

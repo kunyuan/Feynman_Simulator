@@ -11,16 +11,24 @@
 
 #include "utility/convention.h"
 #include "lattice/lattice.h"
-#include <vector>
 
 namespace weight {
+
+enum Dim {
+    SP1 = 0,
+    SUB1,
+    SP2,
+    SUB2,
+    VOL,
+    TAU,
+};
 enum TauSymmetry {
     TauSymmetric = 1,
     TauAntiSymmetric = -1
 };
 
-const uint DELTA_T_SIZE = 3;
-const uint SMOOTH_T_SIZE = 4;
+const uint DELTA_T_SIZE = 5;
+const uint SMOOTH_T_SIZE = 6;
 
 enum SPIN4Filter { UpUp2UpUp,
                    UpDown2UpDown,
@@ -40,7 +48,12 @@ public:
     real IndexToTau(int TauIndex) const;
 
 protected:
-    vector<uint> _Shape;
+    void _UpdateCache();
+    uint _Shape[SMOOTH_T_SIZE];
+    uint _CacheDeltaT[DELTA_T_SIZE];
+    uint _CacheSmoothT[SMOOTH_T_SIZE];
+    uint _SizeDeltaT;
+    uint _SizeSmoothT;
     int _TauSymmetryFactor;
     real _dBeta;
     real _dBetaInverse;
@@ -48,17 +61,13 @@ protected:
 
 class IndexMapSPIN2 : public IndexMap {
 public:
-    IndexMapSPIN2(real Beta, uint MaxTauBin, const Lattice& Lat, TauSymmetry Symmetry)
-        : IndexMap(Beta, MaxTauBin, Lat, Symmetry)
-    {
-        _Shape = std::vector<uint>({ 4, (uint)Lat.SublatVol2, (uint)Lat.Vol, MaxTauBin });
-    }
+    IndexMapSPIN2(real Beta, uint MaxTauBin, const Lattice& Lat, TauSymmetry Symmetry);
     static bool IsSameSpin(int spindex);
-    void Map(uint* result, spin in, spin out,
-             const Site& rin, const Site& rout,
-             real tin, real tout) const;
-    void MapDeltaT(uint* result, spin in, spin out,
-                   const Site& rin, const Site& rout) const;
+    uint GetIndex(spin in, spin out,
+                  const Site& rin, const Site& rout,
+                  real tin, real tout) const;
+    uint GetIndex(spin in, spin out,
+                  const Site& rin, const Site& rout) const;
 
 private:
     static int SpinIndex(spin SpinIn, spin SpinOut);
@@ -66,20 +75,16 @@ private:
 
 class IndexMapSPIN4 : public IndexMap {
 public:
-    IndexMapSPIN4(real Beta, uint MaxTauBin, const Lattice& Lat, TauSymmetry Symmetry)
-        : IndexMap(Beta, MaxTauBin, Lat, Symmetry)
-    {
-        _Shape = std::vector<uint>({ 16, (uint)Lat.SublatVol2, (uint)Lat.Vol, MaxTauBin });
-    }
+    IndexMapSPIN4(real Beta, uint MaxTauBin, const Lattice& Lat, TauSymmetry Symmetry);
     //First In/Out: direction of WLine; Second In/Out: direction of Vertex
-    static std::vector<int> GetSpinIndexVector(SPIN4Filter filter);
-    void Map(uint* result, const spin* in, const spin* out,
-             const Site& rin, const Site& rout,
-             real tin, real tout) const;
-    void MapDeltaT(uint* result, const spin* in, const spin* out,
-                   const Site& rin, const Site& rout) const;
+    uint GetIndex(const spin* in, const spin* out,
+                  const Site& rin, const Site& rout,
+                  real tin, real tout) const;
+    uint GetIndex(const spin* in, const spin* out,
+                  const Site& rin, const Site& rout) const;
 
 private:
+    static int SpinIndex(const spin* Spin);
     static int SpinIndex(spin SpinInIn, spin SpinInOut, spin SpinOutIn, spin SpinOutOut);
     static int SpinIndex(const spin* TwoSpinIn, const spin* TwoSpinOut);
 };

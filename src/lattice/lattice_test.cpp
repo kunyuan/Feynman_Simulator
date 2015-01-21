@@ -44,13 +44,4 @@ void Test_Lattice()
     s1.Sublattice = 1;
     s2.Coordinate = { 4, 3 };
     s2.Sublattice = 0;
-
-    Distance dis = lattice.Dist(s1, s2); //s1---->s2, equal to dis=s2-s1;
-
-    sput_fail_unless(lattice.GetSite(dis, IN) == Site(s1.Sublattice, { 0, 0 }),
-                     "Distance: distance=site1-site2, sublattices");
-    sput_fail_unless(lattice.GetSite(dis, OUT)
-                     == Site(s2.Sublattice, s2.Coordinate - s1.Coordinate),
-                     "Distance: distance=site1-site2, sublattices");
-    sput_fail_unless(dis.CoordiIndex == 1 * lattice.Size[1] + 2, "Distance: distance=site1-site2, Coordinates");
 }

@@ -16,9 +16,9 @@ using namespace std;
 G::G(const Lattice& lat, real beta, uint MaxTauBin, TauSymmetry Symmetry)
     : _Map(IndexMapSPIN2(beta, MaxTauBin, lat, Symmetry))
 {
-    _SmoothTWeight.Allocate(_Map.GetShape());
+    _SmoothTWeight.Allocate(_Map.GetShape(), SMOOTH);
     _SmoothTWeight.Assign(Complex(0.0, 0.0));
-    _MeasureWeight.Allocate(_Map.GetShape());
+    _MeasureWeight.Allocate(_Map.GetShape(), SMOOTH);
     //initialize _MeasureWeight to an unit function
     _MeasureWeight.Assign(Complex(1.0, 0.0));
 }
@@ -26,13 +26,12 @@ G::G(const Lattice& lat, real beta, uint MaxTauBin, TauSymmetry Symmetry)
 void G::BuildTest()
 {
     _SmoothTWeight.Assign(0.0);
-    uint Index[4];
     for (uint sub = 0; sub < _Map.Lat.SublatVol; sub++) {
         Site Local(sub, { 0, 0 });
         for (uint tau = 0; tau < _Map.MaxTauBin; tau++) {
             Complex weight = exp(Complex(0.0, _Map.IndexToTau(tau)));
-            _Map.Map(Index, UP, UP, Local, Local, 0, tau);
-            _SmoothTWeight(Index) = weight;
+            uint Index = _Map.GetIndex(UP, UP, Local, Local, 0, tau);
+            _SmoothTWeight[Index] = weight;
         }
     }
 }
@@ -55,11 +54,11 @@ Dictionary G::ToDict()
 W::W(const Lattice& lat, real Beta, uint MaxTauBin)
     : _Map(IndexMapSPIN4(Beta, MaxTauBin, lat, TauSymmetric))
 {
-    _SmoothTWeight.Allocate(_Map.GetShape());
+    _SmoothTWeight.Allocate(_Map.GetShape(), SMOOTH);
     _SmoothTWeight.Assign(Complex(0.0, 0.0));
-    _DeltaTWeight.Allocate(_Map.GetShape());
+    _DeltaTWeight.Allocate(_Map.GetShape(), DELTA);
     _DeltaTWeight.Assign(Complex(0.0, 0.0));
-    _MeasureWeight.Allocate(_Map.GetShape());
+    _MeasureWeight.Allocate(_Map.GetShape(), SMOOTH);
     //initialize _MeasureWeight to an unit function
     _MeasureWeight.Assign(Complex(1.0, 0.0));
 }
@@ -69,13 +68,12 @@ void W::BuildTest()
     _DeltaTWeight.Assign(0.0);
     _SmoothTWeight.Assign(0.0);
     spin UPUP[2] = { UP, UP };
-    uint Index[4];
     for (uint sub = 0; sub < _Map.Lat.SublatVol; sub++) {
         Site Local(sub, { 0, 0 });
         for (uint tau = 0; tau < _Map.MaxTauBin; tau++) {
             Complex weight = exp(Complex(0.0, -_Map.IndexToTau(tau)));
-            _Map.Map(Index, UPUP, UPUP, Local, Local, 0, tau);
-            _SmoothTWeight(Index) = weight;
+            uint Index = _Map.GetIndex(UPUP, UPUP, Local, Local, 0, tau);
+            _SmoothTWeight[Index] = weight;
         }
     }
 }

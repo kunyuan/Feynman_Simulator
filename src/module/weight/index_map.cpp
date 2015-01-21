@@ -8,6 +8,7 @@
 
 #include "index_map.h"
 #include "utility/logger.h"
+#include "utility/abort.h"
 #include <math.h>
 
 using namespace weight;
@@ -21,6 +22,10 @@ IndexMap::IndexMap(real Beta_, uint MaxTauBin_, const Lattice& lat, TauSymmetry 
     Lat = lat;
     Symmetry = Symmetry_;
     _TauSymmetryFactor = int(Symmetry);
+    _Shape[SUB1] = (uint)Lat.SublatVol;
+    _Shape[SUB2] = (uint)Lat.SublatVol;
+    _Shape[VOL] = (uint)Lat.Vol;
+    _Shape[TAU] = MaxTauBin;
 }
 
 int IndexMap::GetTauSymmetryFactor(real t_in, real t_out) const
@@ -59,7 +64,29 @@ real IndexMap::IndexToTau(int Bin) const
 
 const uint* IndexMap::GetShape() const
 {
-    return _Shape.data();
+    return _Shape;
+}
+
+void IndexMap::_UpdateCache()
+{
+    _SizeDeltaT = 1;
+    for (auto i = 0; i < DELTA_T_SIZE; i++) {
+        _CacheDeltaT[DELTA_T_SIZE - 1 - i] = _SizeDeltaT;
+        _SizeDeltaT *= _Shape[DELTA_T_SIZE - 1 - i];
+    }
+    _SizeSmoothT = 1;
+    for (auto i = 0; i < SMOOTH_T_SIZE; i++) {
+        _CacheSmoothT[SMOOTH_T_SIZE - 1 - i] = _SizeSmoothT;
+        _SizeSmoothT *= _Shape[SMOOTH_T_SIZE - 1 - i];
+    }
+}
+
+IndexMapSPIN2::IndexMapSPIN2(real Beta, uint MaxTauBin, const Lattice& Lat, TauSymmetry Symmetry)
+    : IndexMap(Beta, MaxTauBin, Lat, Symmetry)
+{
+    _Shape[SP1] = 2;
+    _Shape[SP2] = 2;
+    _UpdateCache();
 }
 
 int IndexMapSPIN2::SpinIndex(spin SpinIn, spin SpinOut)
@@ -72,22 +99,38 @@ bool IndexMapSPIN2::IsSameSpin(int spindex)
     return (spindex == 0 || spindex == 2);
 }
 
-void IndexMapSPIN2::Map(uint* result, spin SpinIn, spin SpinOut,
-                        const Site& rin, const Site& rout, real tin, real tout) const
+uint IndexMapSPIN2::GetIndex(spin in, spin out, const Site& rin, const Site& rout,
+                             real tin, real tout) const
 {
-    auto dis = Lat.Dist(rin, rout);
-    result[0] = SpinIndex(SpinIn, SpinOut);
-    result[1] = dis.SublatIndex;
-    result[2] = dis.CoordiIndex;
-    result[3] = TauIndex(tin, tout);
+    auto coord = Lat.CoordiIndex(rin, rout);
+    uint Index = in * _CacheSmoothT[SP1] + rin.Sublattice * _CacheSmoothT[SUB1]
+                 + out * _CacheSmoothT[SP2] + rout.Sublattice * _CacheSmoothT[SUB2]
+                 + coord * _CacheSmoothT[VOL] + TauIndex(tin, tout);
+    if (DEBUGMODE && Index >= _SizeSmoothT)
+        THROW_ERROR(IndexInvalid, "exceed array bound!");
+    return Index;
+    return Index;
 }
-void IndexMapSPIN2::MapDeltaT(uint* result, spin SpinIn, spin SpinOut,
-                              const Site& rin, const Site& rout) const
+
+uint IndexMapSPIN2::GetIndex(spin in, spin out,
+                             const Site& rin, const Site& rout) const
 {
-    auto dis = Lat.Dist(rin, rout);
-    result[0] = SpinIndex(SpinIn, SpinOut);
-    result[1] = dis.SublatIndex;
-    result[2] = dis.CoordiIndex;
+    auto coord = Lat.CoordiIndex(rin, rout);
+    uint Index = in * _CacheDeltaT[SP1] + rin.Sublattice * _CacheDeltaT[SUB1]
+                 + out * _CacheDeltaT[SP2] + rout.Sublattice * _CacheDeltaT[SUB2]
+                 + coord;
+    if (DEBUGMODE && Index >= _SizeDeltaT)
+        THROW_ERROR(IndexInvalid, "exceed array bound!");
+    return Index;
+    return Index;
+}
+
+IndexMapSPIN4::IndexMapSPIN4(real Beta, uint MaxTauBin, const Lattice& Lat, TauSymmetry Symmetry)
+    : IndexMap(Beta, MaxTauBin, Lat, Symmetry)
+{
+    _Shape[SP1] = 4;
+    _Shape[SP2] = 4;
+    _UpdateCache();
 }
 
 //First In/Out: direction of WLine; Second In/Out: direction of Vertex
@@ -101,41 +144,29 @@ int IndexMapSPIN4::SpinIndex(const spin* TwoSpinIn, const spin* TwoSpinOut)
                      TwoSpinOut[0], TwoSpinOut[1]);
 }
 
-std::vector<int> IndexMapSPIN4::GetSpinIndexVector(SPIN4Filter filter)
+int IndexMapSPIN4::SpinIndex(const spin* Spin)
 {
-    vector<int> list;
-    for (int InIn = 0; InIn < 2; InIn++)
-        for (int InOut = 0; InOut < 2; InOut++)
-            for (int OutIn = 0; OutIn < 2; OutIn++)
-                for (int OutOut = 0; OutOut < 2; OutOut++) {
-                    bool flag = false;
-                    if (filter == UpUp2UpUp && InIn == InOut && InIn == OutIn && InIn == OutOut)
-                        flag = true;
-                    if (filter == UpDown2UpDown && InIn == InOut && OutIn == OutOut && InIn == FLIP(OutIn))
-                        flag = true;
-                    if (filter == UpDown2DownUp && InIn == FLIP(InOut) && OutIn == FLIP(OutOut) && InIn == FLIP(OutIn))
-                        flag = true;
-                    if (flag)
-                        list.push_back(SpinIndex(spin(InIn), spin(InOut),
-                                                 spin(OutIn), spin(OutOut)));
-                }
-    return list;
+    return Spin[IN] * SPIN + Spin[OUT];
 }
 
-void IndexMapSPIN4::Map(uint* result, const spin* SpinIn, const spin* SpinOut,
-                        const Site& rin, const Site& rout, real tin, real tout) const
+uint IndexMapSPIN4::GetIndex(const spin* SpinIn, const spin* SpinOut, const Site& rin, const Site& rout, real tin, real tout) const
 {
-    auto dis = Lat.Dist(rin, rout);
-    result[0] = SpinIndex(SpinIn, SpinOut);
-    result[1] = dis.SublatIndex;
-    result[2] = dis.CoordiIndex;
-    result[3] = TauIndex(tin, tout);
+    auto coord = Lat.CoordiIndex(rin, rout);
+    uint Index = SpinIndex(SpinIn) * _CacheSmoothT[SP1] + rin.Sublattice * _CacheSmoothT[SUB1]
+                 + SpinIndex(SpinOut) * _CacheSmoothT[SP2] + rout.Sublattice * _CacheSmoothT[SUB2]
+                 + coord * _CacheSmoothT[VOL] + TauIndex(tin, tout);
+    if (DEBUGMODE && Index >= _SizeSmoothT)
+        THROW_ERROR(IndexInvalid, "exceed array bound!");
+    return Index;
 }
-void IndexMapSPIN4::MapDeltaT(uint* result, const spin* SpinIn, const spin* SpinOut,
-                              const Site& rin, const Site& rout) const
+
+uint IndexMapSPIN4::GetIndex(const spin* SpinIn, const spin* SpinOut, const Site& rin, const Site& rout) const
 {
-    auto dis = Lat.Dist(rin, rout);
-    result[0] = SpinIndex(SpinIn, SpinOut);
-    result[1] = dis.SublatIndex;
-    result[2] = dis.CoordiIndex;
+    auto coord = Lat.CoordiIndex(rin, rout);
+    uint Index = SpinIndex(SpinIn) * _CacheDeltaT[SP1] + rin.Sublattice * _CacheDeltaT[SUB1]
+                 + SpinIndex(SpinOut) * _CacheDeltaT[SP2] + rout.Sublattice * _CacheDeltaT[SUB2]
+                 + coord;
+    if (DEBUGMODE && Index >= _SizeDeltaT)
+        THROW_ERROR(IndexInvalid, "exceed array bound!");
+    return Index;
 }

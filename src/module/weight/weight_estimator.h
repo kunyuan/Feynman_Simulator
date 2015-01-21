@@ -9,8 +9,9 @@
 #ifndef __Feynman_Simulator__weight_estimator__
 #define __Feynman_Simulator__weight_estimator__
 
-#include "utility/array.h"
 #include "estimator/estimator.h"
+#include "index_map.h"
+#include "weight_array.h"
 
 class Dictionary;
 namespace weight {
@@ -27,7 +28,7 @@ public:
     void Anneal(real Beta);
 
     void MeasureNorm();
-    void Measure(uint* Index, int Order, Complex Weight);
+    void Measure(uint WeightIndex, int Order, Complex Weight);
 
     void ClearStatistics();
     void SqueezeStatistics(real factor);
@@ -41,7 +42,8 @@ protected:
     real _NormAccu; //The normalization accumulation
     //final weight function =_WeightAccu/_NormAccu*_Norm
     //final weight of each bin = (final weight of each bin)/MAX_BIN*Beta
-    Array<5> _WeightAccu; //dim=0 is order
+    WeightArray<SMOOTH_T_SIZE + 1> _WeightAccu; //dim=0 is order
+    uint _WeightSize;
 };
 }
 #endif /* defined(__Feynman_Simulator__weight_estimator__) */

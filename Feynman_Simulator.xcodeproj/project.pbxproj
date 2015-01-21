@@ -44,8 +44,6 @@
 		843DBBA21A4D07F9009DB448 /* libpython2.7.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 843DBBA11A4D07F9009DB448 /* libpython2.7.dylib */; };
 		84519AED19F2C57A007CB81B /* envMonteCarlo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84519AEC19F2C57A007CB81B /* envMonteCarlo.cpp */; };
 		84519AF219F33F22007CB81B /* complex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84519AF019F33F22007CB81B /* complex.cpp */; };
-		84538D961A6DCB2600920C28 /* array.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84538D951A6DCB2600920C28 /* array.cpp */; };
-		84538D981A6E8FDF00920C28 /* array_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84538D971A6E8FDF00920C28 /* array_test.cpp */; };
 		84B1D57A19DEFC19004C3A89 /* test.h in Sources */ = {isa = PBXBuildFile; fileRef = 84B1D57919DEFC19004C3A89 /* test.h */; };
 		84C86DD51A1FD2B3002A3D8D /* weight_array.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84C86DD31A1FD2B3002A3D8D /* weight_array.cpp */; };
 		84C86DDB1A214E33002A3D8D /* component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84C86DD91A214E33002A3D8D /* component.cpp */; };
@@ -503,8 +501,6 @@
 		84538D8F1A6C994800920C28 /* schema.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = schema.json; sourceTree = "<group>"; };
 		84538D901A6C994800920C28 /* setup.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = setup.py; sourceTree = "<group>"; };
 		84538D911A6C997E00920C28 /* IO.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = IO.py; sourceTree = SOURCE_ROOT; };
-		84538D951A6DCB2600920C28 /* array.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = array.cpp; sourceTree = "<group>"; };
-		84538D971A6E8FDF00920C28 /* array_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = array_test.cpp; sourceTree = "<group>"; };
 		845C92C719F834460066B590 /* job_manager.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = job_manager.py; sourceTree = SOURCE_ROOT; };
 		845C92C919F835590066B590 /* job_class.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = job_class.py; sourceTree = SOURCE_ROOT; };
 		847BCA691A5B97CC00A2562F /* plot.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = plot.py; sourceTree = "<group>"; };
@@ -520,7 +516,6 @@
 		84C86DF81A24310F002A3D8D /* component_MC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = component_MC.cpp; path = module/weight/component_MC.cpp; sourceTree = "<group>"; };
 		84C86DFB1A24E463002A3D8D /* weight_estimator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = weight_estimator.cpp; path = module/weight/weight_estimator.cpp; sourceTree = "<group>"; };
 		84C86DFC1A24E463002A3D8D /* weight_estimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = weight_estimator.h; path = module/weight/weight_estimator.h; sourceTree = "<group>"; };
-		84D7EFBB19F36361006B1CA5 /* array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = array.h; sourceTree = "<group>"; };
 		84FDE07019DDFC2F0092B441 /* Feynman_Simulator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Feynman_Simulator; sourceTree = BUILT_PRODUCTS_DIR; };
 		84FDE07319DDFC2F0092B441 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -559,9 +554,6 @@
 				843DBB3B1A3B535A009DB448 /* timer_test.cpp */,
 				843DBB3C1A3B535A009DB448 /* timer.cpp */,
 				843DBB3D1A3B535A009DB448 /* timer.h */,
-				84D7EFBB19F36361006B1CA5 /* array.h */,
-				84538D951A6DCB2600920C28 /* array.cpp */,
-				84538D971A6E8FDF00920C28 /* array_test.cpp */,
 				84519AF119F33F22007CB81B /* complex.h */,
 				84519AF019F33F22007CB81B /* complex.cpp */,
 				84B8FC3E19ECA449003D6DF6 /* convention.h */,
@@ -618,15 +610,15 @@
 			children = (
 				8422FE381A0A7ECA002EB44E /* weight.h */,
 				8422FE371A0A7ECA002EB44E /* weight.cpp */,
-				84C86DD41A1FD2B3002A3D8D /* weight_array.h */,
-				84C86DD31A1FD2B3002A3D8D /* weight_array.cpp */,
 				84C86DDA1A214E33002A3D8D /* component.h */,
 				84C86DD91A214E33002A3D8D /* component.cpp */,
 				84C86DF81A24310F002A3D8D /* component_MC.cpp */,
-				84C86DFC1A24E463002A3D8D /* weight_estimator.h */,
-				84C86DFB1A24E463002A3D8D /* weight_estimator.cpp */,
 				84C86DF41A23D9FD002A3D8D /* index_map.h */,
 				84C86DF31A23D9FD002A3D8D /* index_map.cpp */,
+				84C86DD41A1FD2B3002A3D8D /* weight_array.h */,
+				84C86DD31A1FD2B3002A3D8D /* weight_array.cpp */,
+				84C86DFC1A24E463002A3D8D /* weight_estimator.h */,
+				84C86DFB1A24E463002A3D8D /* weight_estimator.cpp */,
 			);
 			name = weight;
 			sourceTree = "<group>";
@@ -1215,14 +1207,12 @@
 				84519AF219F33F22007CB81B /* complex.cpp in Sources */,
 				8422FE311A0A7E7E002EB44E /* estimator.cpp in Sources */,
 				61266D7AEDBA61CFA3C84C6B /* rng.cpp in Sources */,
-				84538D961A6DCB2600920C28 /* array.cpp in Sources */,
 				1CFBB0BD1A16C1F900EE2E9E /* diagram_filter.cpp in Sources */,
 				843DBB901A44854E009DB448 /* pywrapper.cpp in Sources */,
 				8422FE111A09C112002EB44E /* diagram_IO.cpp in Sources */,
 				8422FE271A09C13D002EB44E /* markov.cpp in Sources */,
 				84519AED19F2C57A007CB81B /* envMonteCarlo.cpp in Sources */,
 				8422FDFE1A09C0ED002EB44E /* parameter.cpp in Sources */,
-				84538D981A6E8FDF00920C28 /* array_test.cpp in Sources */,
 				61266E5CDE0355C1306E9EBD /* rng_test.cpp in Sources */,
 				6126638BECC823E2FECDBE1A /* utility.cpp in Sources */,
 				843DBB991A472AB1009DB448 /* object.cpp in Sources */,

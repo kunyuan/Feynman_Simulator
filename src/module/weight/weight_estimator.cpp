@@ -10,7 +10,6 @@
 #include "utility/scopeguard.h"
 #include "utility/dictionary.h"
 #include "weight_estimator.h"
-#include "index_map.h"
 
 using namespace std;
 using namespace weight;
@@ -30,7 +29,8 @@ void WeightEstimator::Allocate(const IndexMap& map, int order, real Norm)
     uint MeaShape[SMOOTH_T_SIZE + 1];
     MeaShape[0] = order;
     std::copy(map.GetShape(), map.GetShape() + SMOOTH_T_SIZE, &MeaShape[1]);
-    _WeightAccu.Allocate(MeaShape);
+    _WeightAccu.Allocate(MeaShape, SMOOTH);
+    _WeightSize = _WeightAccu.GetSize() / order;
     ClearStatistics();
 }
 
@@ -48,11 +48,12 @@ void WeightEstimator::MeasureNorm()
     _NormAccu += 1.0;
 }
 
-void WeightEstimator::Measure(uint* Index, int Order, Complex weight)
+void WeightEstimator::Measure(uint WeightIndex, int Order, Complex weight)
 {
     if (DEBUGMODE && Order < 1)
         LOG_ERROR("Too small order=" << Order);
-    _WeightAccu(Order - 1, Index) += weight;
+    uint Index = (Order - 1) * _WeightSize + WeightIndex;
+    _WeightAccu[Index] += weight;
 }
 
 void WeightEstimator::ClearStatistics()

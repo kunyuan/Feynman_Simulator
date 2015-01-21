@@ -25,7 +25,6 @@ void Lattice::Initialize(const Vec<int>& size, int NSublat)
         Vol *= Size[i];
     }
     SublatVol = NSublat;
-    SublatVol2 = NSublat * NSublat;
 }
 
 bool operator==(const Site& v1, const Site& v2)
@@ -40,25 +39,6 @@ bool operator==(const Site& v1, const Site& v2)
 bool operator!=(const Site& v1, const Site& v2)
 {
     return !(v1 == v2);
-}
-
-/**
- *  get a vector within system size L
- *
- *  @param vec the initial vector
- *
- *  @return new variable within [0, L]
- */
-Vec<int> Lattice::Shift(const Vec<int>& vec) const
-{
-    Vec<int> newvec(vec);
-    for (int i = 0; i < D; i++) {
-        if (vec[i] < 0)
-            newvec[i] = vec[i] + Size[i];
-        if (vec[i] >= Size[i])
-            newvec[i] = vec[i] - Size[i];
-    }
-    return newvec;
 }
 
 /**
@@ -88,51 +68,25 @@ Vec<int> Lattice::Index2Vec(int index) const
     v[0] = index;
     return v;
 }
-
 /**
- *  get the sublattice index from In to Out
+ *  get a vector within system size L
  *
- *  @para Out: the outgoing sublattice In: the incoming sublattice
+ *  @param vec the initial vector
  *
- *  @return [0, NSublattice**2-1]
+ *  @return new variable within [0, L]
  */
-int Lattice::Sublat2Index(int InSub, int OutSub) const
+void Lattice::Shift(Vec<int>& vec) const
 {
-    return InSub * SublatVol + OutSub;
+    for (int i = 0; i < D; i++) {
+        if (vec[i] < 0)
+            vec[i] += Size[i];
+        if (vec[i] >= Size[i])
+            vec[i] -= Size[i];
+    }
 }
-
-int Lattice::Index2Sublat(int index, int dir) const
+int Lattice::CoordiIndex(const Site& in, const Site& out) const
 {
-    if (dir == IN)
-        return index / SublatVol;
-    else
-        return index % SublatVol;
-}
-
-bool Lattice::IsOnSameSubLat(int Index)
-{
-    return Index2Sublat(Index, IN) == Index2Sublat(Index, OUT);
-}
-
-/**
- *  get the corresponding site of a name [0, Vol)
- *
- *  @param i name of a site [0, NSublattice*Vol)
- *
- *  @return a site struct
- */
-
-Distance Lattice::Dist(const Site& SiteIn, const Site& SiteOut) const
-{
-    int sub = Sublat2Index(SiteIn.Sublattice, SiteOut.Sublattice);
-    int coord = Vec2Index(Shift(SiteOut.Coordinate - SiteIn.Coordinate));
-    return Distance(sub, coord);
-}
-
-Site Lattice::GetSite(const Distance& dis, int direction) const
-{
-    if (direction == IN)
-        return Site(Index2Sublat(dis.SublatIndex, direction), Vec<int>(0));
-    else
-        return Site(Index2Sublat(dis.SublatIndex, direction), Index2Vec(dis.CoordiIndex));
+    auto v = out.Coordinate - in.Coordinate;
+    Shift(v);
+    return Vec2Index(v);
 }
