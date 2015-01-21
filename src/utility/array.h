@@ -32,6 +32,7 @@ public:
     {
         Allocate(Shape_.data());
     }
+    bool IsAllocated() const { return _Data != nullptr; }
     void Free();
     void Copy(const Array& c);
     void Assign(const Complex& c);
@@ -41,6 +42,7 @@ public:
         Assign(source.data());
     }
 
+    uint GetDim() const { return DIM; }
     const uint* GetShape() const;
     Complex* Data() const;
     Complex& operator()(const std::vector<uint> index)

@@ -10,27 +10,27 @@
 #include "utility/scopeguard.h"
 #include "utility/dictionary.h"
 #include "weight_estimator.h"
+#include "index_map.h"
 
 using namespace std;
 using namespace weight;
 
 /**********************   Weight Needs measuring  **************************/
 
-WeightEstimator::WeightEstimator(const Lattice& lat, real beta, int order, string name, real Norm, const uint* Shape)
+WeightEstimator::WeightEstimator()
 {
-    _Vol = lat.Vol;
-    _SublatVol = lat.SublatVol;
-    _MaxTauBin = Shape[TAU];
-    _Beta = beta;
-    _dBeta = beta / _MaxTauBin;
-    _dBetaInverse = 1.0 / _dBeta;
-    _Order = order;
-    _Name = name;
-    _MeaShape[0] = _Order;
-    std::copy(Shape, Shape + 4, &_MeaShape[1]);
-    //use _MeaShape[0] to _MeaShape[TAU] to construct array5
-    _WeightAccu.Allocate(_MeaShape);
-    _Norm = Norm * (_MaxTauBin / _Beta) / _Beta / _Vol / _SublatVol;
+}
+
+void WeightEstimator::Allocate(const IndexMap& map, int order, real Norm)
+{
+    int Vol = map.Lat.Vol;
+    int SublatVol = map.Lat.SublatVol;
+    _Beta = map.Beta;
+    _Norm = Norm * (map.MaxTauBin / _Beta) / _Beta / Vol / SublatVol;
+    uint MeaShape[SMOOTH_T_SIZE + 1];
+    MeaShape[0] = order;
+    std::copy(map.GetShape(), map.GetShape() + SMOOTH_T_SIZE, &MeaShape[1]);
+    _WeightAccu.Allocate(MeaShape);
     ClearStatistics();
 }
 
@@ -77,7 +77,7 @@ bool WeightEstimator::FromDict(const Dictionary& dict)
     _Norm = dict.Get<real>("Norm");
     _NormAccu = dict.Get<real>("NormAccu");
     auto arr = dict.Get<Python::ArrayObject>("WeightAccu");
-    ASSERT_ALLWAYS(Equal(arr.Shape().data(), _MeaShape, 5), "Shape should match!");
+    ASSERT_ALLWAYS(Equal(arr.Shape().data(), _WeightAccu.GetShape(), _WeightAccu.GetDim()), "Shape should match!");
     _WeightAccu.Assign(arr.Data<Complex>());
     return true;
 }
@@ -87,6 +87,6 @@ Dictionary WeightEstimator::ToDict()
     Dictionary dict;
     dict["Norm"] = _Norm;
     dict["NormAccu"] = _NormAccu;
-    dict["WeightAccu"] = Python::ArrayObject(_WeightAccu.Data(), _MeaShape, 5);
+    dict["WeightAccu"] = Python::ArrayObject(_WeightAccu.Data(), _WeightAccu.GetShape(), _WeightAccu.GetDim());
     return dict;
 }

@@ -20,7 +20,7 @@ Complex G::Weight(const Site& rin, const Site& rout, real tin, real tout, spin S
     if (IsMeasure)
         return _MeasureWeight.At(index);
     else
-        return GetTauSymmetryFactor(tin, tout) * _SmoothTWeight.At(index);
+        return _Map.GetTauSymmetryFactor(tin, tout) * _SmoothTWeight.At(index);
 }
 
 Complex G::Weight(int dir, const Site& r1, const Site& r2, real t1, real t2, spin Spin1, spin Spin2, bool IsMeasure) const
@@ -29,11 +29,11 @@ Complex G::Weight(int dir, const Site& r1, const Site& r2, real t1, real t2, spi
     int symmetryfactor;
     if (dir == IN) {
         _Map.Map(index, Spin1, Spin2, r1, r2, t1, t2);
-        symmetryfactor = GetTauSymmetryFactor(t1, t2);
+        symmetryfactor = _Map.GetTauSymmetryFactor(t1, t2);
     }
     else {
         _Map.Map(index, Spin2, Spin1, r2, r1, t2, t1);
-        symmetryfactor = GetTauSymmetryFactor(t2, t1);
+        symmetryfactor = _Map.GetTauSymmetryFactor(t2, t1);
     }
 
     if (IsMeasure)
@@ -90,7 +90,7 @@ void Sigma::Measure(const Site& rin, const Site& rout, real tin, real tout, spin
 {
     static uint index[4];
     _Map.Map(index, SpinIn, SpinOut, rin, rout, tin, tout);
-    Estimator.Measure(index, order, weight * GetTauSymmetryFactor(tin, tout));
+    Estimator.Measure(index, order, weight * _Map.GetTauSymmetryFactor(tin, tout));
 }
 
 void Polar::Measure(const Site& rin, const Site& rout, real tin, real tout, spin* SpinIn, spin* SpinOut, int order, const Complex& weight)

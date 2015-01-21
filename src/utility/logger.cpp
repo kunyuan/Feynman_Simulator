@@ -121,14 +121,20 @@ Logger& Logger::getInstance()
  * @param Message
  */
 void Logger::print(const unsigned int verbosityLevel,
-                   const std::string& file,
+                   const std::string& path,
                    const int line,
                    const std::string& message)
 {
     if (!configured_) {
-        std::cerr << "ERROR: Logger not configured!" << std::endl;
+        std::cout << "ERROR: Logger not configured!" << std::endl;
         return;
     }
+
+    size_t sep = path.find_last_of("\\/");
+    std::string file;
+    if (sep != std::string::npos)
+        file = path.substr(sep + 1, path.size() - sep - 1);
+
     struct timeval currentTime;
     gettimeofday(&currentTime, NULL);
     time_t _time = time(NULL);
@@ -139,9 +145,8 @@ void Logger::print(const unsigned int verbosityLevel,
     time_t currTime;
     time(&currTime);
     struct tm* currTm = localtime(&currTime);
-    oss << "[" << (currTm->tm_year - 100) << "/" << currTm->tm_mon << "/" << currTm->tm_mday << " " << currTm->tm_hour << ":" << currTm->tm_min << ":" << currTm->tm_sec << "]\n";
-    oss << "@[" << file << ":" << line << "]"
-        << "\n" << message << std::endl;
+    oss << "[" << (currTm->tm_year - 100) << "/" << currTm->tm_mon << "/" << currTm->tm_mday << " " << currTm->tm_hour << ":" << currTm->tm_min << ":" << currTm->tm_sec << "]";
+    oss << "@[" << file << ":" << line << "]\n" << message << std::endl;
     std::string msg = oss.str();
     Logger::lock();
     if ((configuration_ & file_on) && (verbosityLevel >= fileVerbosityLevel_))

@@ -16,47 +16,24 @@
 class Dictionary;
 namespace weight {
 
-enum TauSymmetry {
-    TauSymmetric = 1,
-    TauAntiSymmetric = -1
-};
-
 enum SpinNum {
     SPIN2 = 2,
     SPIN4 = 4
 };
 
 enum Dim {
-    SP,
-    SUB,
+    SP1 = 0,
+    SUB1,
+    SP2,
+    SUB2,
     VOL,
     TAU,
 };
-typedef Array<3> DeltaTMatrix;
-typedef Array<4> SmoothTMatrix;
-class Basic {
-protected:
-    Basic(const Lattice& lat, real Beta, uint MaxTauBin, SpinNum,
-          TauSymmetry Symmetry, std::string);
 
-    uint* GetShape(); //the shape of internal weight array
-    void Reset(real beta);
-    int GetTauSymmetryFactor(real t_in, real t_out) const;
-
-    int _TauSymmetryFactor;
-    std::string _Name;
-    real _Beta;
-    real _dBeta; //_Beta/MAX_TAU
-    real _dBetaInverse;
-    uint _MaxTauBin;
-    Lattice _Lat;
-    int _SpinNum;
-    vector<uint> _Shape;
-};
-class DeltaTArray : public Array<3> {
+class DeltaTArray : public Array<DELTA_T_SIZE> {
 public:
     DeltaTArray()
-        : Array<3>()
+        : Array<DELTA_T_SIZE>()
     {
     }
     DeltaTArray(const DeltaTArray&) = delete;
@@ -64,10 +41,10 @@ public:
     bool FromDict(const Dictionary&);
     Dictionary ToDict();
 };
-class SmoothTArray : public Array<4> {
+class SmoothTArray : public Array<SMOOTH_T_SIZE> {
 public:
     SmoothTArray()
-        : Array<4>()
+        : Array<SMOOTH_T_SIZE>()
     {
     }
     SmoothTArray(const SmoothTArray&) = delete;

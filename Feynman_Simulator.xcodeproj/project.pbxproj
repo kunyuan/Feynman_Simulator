@@ -47,7 +47,7 @@
 		84538D961A6DCB2600920C28 /* array.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84538D951A6DCB2600920C28 /* array.cpp */; };
 		84538D981A6E8FDF00920C28 /* array_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84538D971A6E8FDF00920C28 /* array_test.cpp */; };
 		84B1D57A19DEFC19004C3A89 /* test.h in Sources */ = {isa = PBXBuildFile; fileRef = 84B1D57919DEFC19004C3A89 /* test.h */; };
-		84C86DD51A1FD2B3002A3D8D /* weight_basic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84C86DD31A1FD2B3002A3D8D /* weight_basic.cpp */; };
+		84C86DD51A1FD2B3002A3D8D /* weight_array.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84C86DD31A1FD2B3002A3D8D /* weight_array.cpp */; };
 		84C86DDB1A214E33002A3D8D /* component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84C86DD91A214E33002A3D8D /* component.cpp */; };
 		84C86DF51A23D9FD002A3D8D /* index_map.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84C86DF31A23D9FD002A3D8D /* index_map.cpp */; };
 		84C86DFA1A24310F002A3D8D /* component_MC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84C86DF81A24310F002A3D8D /* component_MC.cpp */; };
@@ -511,8 +511,8 @@
 		8499DB0919FEECEC00AABA1E /* scopeguard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = scopeguard.h; sourceTree = "<group>"; };
 		84B1D57919DEFC19004C3A89 /* test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = test.h; sourceTree = "<group>"; };
 		84B8FC3E19ECA449003D6DF6 /* convention.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = convention.h; sourceTree = "<group>"; };
-		84C86DD31A1FD2B3002A3D8D /* weight_basic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = weight_basic.cpp; path = module/weight/weight_basic.cpp; sourceTree = "<group>"; };
-		84C86DD41A1FD2B3002A3D8D /* weight_basic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = weight_basic.h; path = module/weight/weight_basic.h; sourceTree = "<group>"; };
+		84C86DD31A1FD2B3002A3D8D /* weight_array.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = weight_array.cpp; path = module/weight/weight_array.cpp; sourceTree = "<group>"; };
+		84C86DD41A1FD2B3002A3D8D /* weight_array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = weight_array.h; path = module/weight/weight_array.h; sourceTree = "<group>"; };
 		84C86DD91A214E33002A3D8D /* component.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = component.cpp; path = module/weight/component.cpp; sourceTree = "<group>"; };
 		84C86DDA1A214E33002A3D8D /* component.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = component.h; path = module/weight/component.h; sourceTree = "<group>"; };
 		84C86DF31A23D9FD002A3D8D /* index_map.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = index_map.cpp; path = module/weight/index_map.cpp; sourceTree = "<group>"; };
@@ -618,8 +618,8 @@
 			children = (
 				8422FE381A0A7ECA002EB44E /* weight.h */,
 				8422FE371A0A7ECA002EB44E /* weight.cpp */,
-				84C86DD41A1FD2B3002A3D8D /* weight_basic.h */,
-				84C86DD31A1FD2B3002A3D8D /* weight_basic.cpp */,
+				84C86DD41A1FD2B3002A3D8D /* weight_array.h */,
+				84C86DD31A1FD2B3002A3D8D /* weight_array.cpp */,
 				84C86DDA1A214E33002A3D8D /* component.h */,
 				84C86DD91A214E33002A3D8D /* component.cpp */,
 				84C86DF81A24310F002A3D8D /* component_MC.cpp */,
@@ -1200,7 +1200,7 @@
 				8422FE101A09C112002EB44E /* diagram_check.cpp in Sources */,
 				8422FE121A09C112002EB44E /* diagram_test.cpp in Sources */,
 				84B1D57A19DEFC19004C3A89 /* test.h in Sources */,
-				84C86DD51A1FD2B3002A3D8D /* weight_basic.cpp in Sources */,
+				84C86DD51A1FD2B3002A3D8D /* weight_array.cpp in Sources */,
 				841D511319EB6DD900FDB7FF /* logger.cpp in Sources */,
 				8422FE0D1A09C112002EB44E /* component_bundle.cpp in Sources */,
 				843DBB3F1A3B535A009DB448 /* timer.cpp in Sources */,

@@ -12,13 +12,20 @@
 
 using namespace weight;
 
-IndexMap::IndexMap(real Beta_, uint MaxTauBin_, const Lattice& lat)
+IndexMap::IndexMap(real Beta_, uint MaxTauBin_, const Lattice& lat, TauSymmetry Symmetry_)
 {
     MaxTauBin = MaxTauBin_;
     Beta = Beta_;
     _dBeta = Beta / MaxTauBin;
     _dBetaInverse = 1.0 / _dBeta;
     Lat = lat;
+    Symmetry = Symmetry_;
+    _TauSymmetryFactor = int(Symmetry);
+}
+
+int IndexMap::GetTauSymmetryFactor(real t_in, real t_out) const
+{
+    return (t_out > t_in) ? 1 : _TauSymmetryFactor;
 }
 
 int IndexMap::TauIndex(real tau) const
@@ -48,6 +55,11 @@ real IndexMap::IndexToTau(int Bin) const
 {
     //TODO: mapping between tau and bin
     return Bin * _dBeta + _dBeta / 2;
+}
+
+const uint* IndexMap::GetShape() const
+{
+    return _Shape.data();
 }
 
 int IndexMapSPIN2::SpinIndex(spin SpinIn, spin SpinOut)
