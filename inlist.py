@@ -14,8 +14,8 @@ MonteCarlo={
     "__KeepCPUBusy": True,
     },
 "Job": {
-    "DoesLoad" : True,
-    "Sample" :100000000
+    "DoesLoad" : False,
+    "Sample" :5000000000
     }
 }
 
@@ -27,7 +27,7 @@ Dyson={
     "__AutoRun" : True, 
     "__KeepCPUBusy": False,
     },
-"Job": {"StartFromBare" : False}
+"Job": {"StartFromBare" : True}
 }
 
 beta=0.5
@@ -75,7 +75,7 @@ Common={
     "Order": Order,
     "OrderAccepted": 1,
     "ErrorThreshold": 0.5,
-    "SleepTime": 10
+    "SleepTime": 300
     }
 }
 import job_class as job

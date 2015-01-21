@@ -69,8 +69,6 @@ void MonteCarlo(const para::Job &Job)
     int polar[MAX_ORDER] = {0};
 
     Env.ListenToMessage();
-    Env.Diag.WriteDiagram2gv("diagram/" + ToString(Para.Counter) + ".gv");
-    Env.Diag.CheckDiagram();
 
     for (uint Step = 0; Step < Job.Sample; Step++) {
         //Don't use Para.Counter as counter
@@ -95,7 +93,7 @@ void MonteCarlo(const para::Job &Job)
                 Env.AdjustOrderReWeight();
                 Env.Save();
             }
-            if (MessageTimer.check(10))
+            if (MessageTimer.check(300))
                 Env.ListenToMessage();
         }
     }
