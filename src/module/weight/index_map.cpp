@@ -21,16 +21,6 @@ IndexMap::IndexMap(real Beta_, uint MaxTauBin_, const Lattice& lat)
     Lat = lat;
 }
 
-int IndexMap::SublatIndex(const Distance& dist) const
-{
-    return dist.SublatIndex;
-}
-
-int IndexMap::CoordiIndex(const Distance& dist) const
-{
-    return dist.CoordiIndex;
-}
-
 int IndexMap::TauIndex(real tau) const
 {
     if (DEBUGMODE && tau < -Beta || tau >= Beta)

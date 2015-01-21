@@ -28,14 +28,13 @@ G::G(const Lattice& lat, real beta, uint MaxTauBin, TauSymmetry Symmetry)
 void G::BuildTest()
 {
     _SmoothTWeight.Assign(0.0);
-    uint spin_up = _Map.SpinIndex(UP, UP);
-    for (uint sub = 0; sub < GetShape()[SUB]; sub++) {
-        if (!_Lat.IsOnSameSubLat(sub))
-            continue;
-        uint coor = _Lat.Vec2Index({ 0, 0 });
-        for (uint tau = 0; tau < _Shape[TAU]; tau++) {
+    uint Index[4];
+    for (uint sub = 0; sub < _Map.Lat.SublatVol; sub++) {
+        Site Local(sub, { 0, 0 });
+        for (uint tau = 0; tau < _Map.MaxTauBin; tau++) {
             Complex weight = exp(Complex(0.0, _Map.IndexToTau(tau)));
-            _SmoothTWeight({ spin_up, sub, coor, tau }) = weight;
+            _Map.Map(Index, UP, UP, Local, Local, 0, tau);
+            _SmoothTWeight(Index) = weight;
         }
     }
 }
@@ -72,21 +71,16 @@ W::W(const Lattice& lat, real Beta, uint MaxTauBin)
 
 void W::BuildTest()
 {
-    int Lx = _Lat.Size[0], Ly = _Lat.Size[1];
-    ASSERT_ALLWAYS(Lx > 1 && Ly > 1, "System size should be bigger than 1!");
-    uint spin_up = _Map.SpinIndex(UP, //InOfW/InOfVertex
-                                  UP, //InOfW/OutOfVertex
-                                  UP, //OutOfW/InOfVertex
-                                  UP); //OutOfW/OutOfVertex
-
-    for (uint sub = 0; sub < _Shape[SUB]; sub++) {
-        if (!_Lat.IsOnSameSubLat(sub))
-            continue;
-        uint coor = _Lat.Vec2Index({ 0, 0 });
-
-        for (uint tau = 0; tau < _Shape[TAU]; tau++) {
+    _DeltaTWeight.Assign(0.0);
+    _SmoothTWeight.Assign(0.0);
+    spin UPUP[2] = { UP, UP };
+    uint Index[4];
+    for (uint sub = 0; sub < _Map.Lat.SublatVol; sub++) {
+        Site Local(sub, { 0, 0 });
+        for (uint tau = 0; tau < _Map.MaxTauBin; tau++) {
             Complex weight = exp(Complex(0.0, -_Map.IndexToTau(tau)));
-            _SmoothTWeight({ spin_up, sub, coor, tau }) = weight;
+            _Map.Map(Index, UPUP, UPUP, Local, Local, 0, tau);
+            _SmoothTWeight(Index) = weight;
         }
     }
 }
