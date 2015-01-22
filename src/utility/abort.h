@@ -33,7 +33,7 @@ EXCEPTION(RunTimeException);
     do {                                                                            \
         std::ostringstream ss;                                                      \
         ss << msg;                                                                  \
-        LOGGER(priority, "Exception throwed: " << msg);                             \
+        LOGGER(priority, "Exception throwed: " << ss.str());                        \
         std::ostringstream __stream_more__;                                         \
         __stream_more__ << "@[" << __FILE__ << ":" << __LINE__ << "] " << ss.str(); \
         throw exception(__stream_more__.str());                                     \

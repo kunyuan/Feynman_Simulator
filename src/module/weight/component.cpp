@@ -14,13 +14,11 @@ using namespace weight;
 using namespace std;
 
 G::G(const Lattice& lat, real beta, uint MaxTauBin, TauSymmetry Symmetry)
-    : weight::Basic(lat, beta, MaxTauBin, SPIN2, Symmetry, "G")
-    , _Map(IndexMapSPIN2(beta, MaxTauBin, lat))
+    : _Map(IndexMapSPIN2(beta, MaxTauBin, lat, Symmetry))
 {
-    _SmoothTWeight.Allocate(GetShape());
+    _SmoothTWeight.Allocate(_Map.GetShape(), SMOOTH);
     _SmoothTWeight.Assign(Complex(0.0, 0.0));
-    //use _Shape[SP] to _Shape[TAU] to construct array3
-    _MeasureWeight.Allocate(GetShape());
+    _MeasureWeight.Allocate(_Map.GetShape(), SMOOTH);
     //initialize _MeasureWeight to an unit function
     _MeasureWeight.Assign(Complex(1.0, 0.0));
 }
@@ -28,21 +26,19 @@ G::G(const Lattice& lat, real beta, uint MaxTauBin, TauSymmetry Symmetry)
 void G::BuildTest()
 {
     _SmoothTWeight.Assign(0.0);
-    uint Index[4];
     for (uint sub = 0; sub < _Map.Lat.SublatVol; sub++) {
         Site Local(sub, { 0, 0 });
         for (uint tau = 0; tau < _Map.MaxTauBin; tau++) {
             Complex weight = exp(Complex(0.0, _Map.IndexToTau(tau)));
-            _Map.Map(Index, UP, UP, Local, Local, 0, tau);
-            _SmoothTWeight(Index) = weight;
+            uint Index = _Map.GetIndex(UP, UP, Local, Local, 0, tau);
+            _SmoothTWeight[Index] = weight;
         }
     }
 }
 
 void G::Reset(real Beta)
 {
-    Basic::Reset(Beta);
-    _Map = IndexMapSPIN2(Beta, _MaxTauBin, _Lat);
+    _Map = IndexMapSPIN2(Beta, _Map.MaxTauBin, _Map.Lat, _Map.Symmetry);
 }
 
 bool G::FromDict(const Dictionary& dict)
@@ -56,15 +52,13 @@ Dictionary G::ToDict()
 }
 
 W::W(const Lattice& lat, real Beta, uint MaxTauBin)
-    : weight::Basic(lat, Beta, MaxTauBin, SPIN4, TauSymmetric, "W")
-    , _Map(IndexMapSPIN4(Beta, MaxTauBin, lat))
+    : _Map(IndexMapSPIN4(Beta, MaxTauBin, lat, TauSymmetric))
 {
-    _SmoothTWeight.Allocate(GetShape());
+    _SmoothTWeight.Allocate(_Map.GetShape(), SMOOTH);
     _SmoothTWeight.Assign(Complex(0.0, 0.0));
-    _DeltaTWeight.Allocate(GetShape());
+    _DeltaTWeight.Allocate(_Map.GetShape(), DELTA);
     _DeltaTWeight.Assign(Complex(0.0, 0.0));
-    //use _Shape[SP] to _Shape[VOL] to construct array3
-    _MeasureWeight.Allocate(GetShape());
+    _MeasureWeight.Allocate(_Map.GetShape(), SMOOTH);
     //initialize _MeasureWeight to an unit function
     _MeasureWeight.Assign(Complex(1.0, 0.0));
 }
@@ -74,21 +68,19 @@ void W::BuildTest()
     _DeltaTWeight.Assign(0.0);
     _SmoothTWeight.Assign(0.0);
     spin UPUP[2] = { UP, UP };
-    uint Index[4];
     for (uint sub = 0; sub < _Map.Lat.SublatVol; sub++) {
         Site Local(sub, { 0, 0 });
         for (uint tau = 0; tau < _Map.MaxTauBin; tau++) {
             Complex weight = exp(Complex(0.0, -_Map.IndexToTau(tau)));
-            _Map.Map(Index, UPUP, UPUP, Local, Local, 0, tau);
-            _SmoothTWeight(Index) = weight;
+            uint Index = _Map.GetIndex(UPUP, UPUP, Local, Local, 0, tau);
+            _SmoothTWeight[Index] = weight;
         }
     }
 }
 
 void W::Reset(real Beta)
 {
-    Basic::Reset(Beta);
-    _Map = IndexMapSPIN4(Beta, _MaxTauBin, _Lat);
+    _Map = IndexMapSPIN4(Beta, _Map.MaxTauBin, _Map.Lat, _Map.Symmetry);
 }
 
 bool W::FromDict(const Dictionary& dict)
@@ -105,10 +97,9 @@ Dictionary W::ToDict()
 
 Sigma::Sigma(const Lattice& lat, real Beta, uint MaxTauBin,
              int MaxOrder, TauSymmetry Symmetry, real Norm)
-    : weight::Basic(lat, Beta, MaxTauBin, SPIN2, Symmetry, "Sigma")
-    , _Map(IndexMapSPIN2(Beta, MaxTauBin, lat))
-    , Estimator(lat, Beta, MaxOrder, "Sigma", Norm, GetShape())
+    : _Map(IndexMapSPIN2(Beta, MaxTauBin, lat, Symmetry))
 {
+    Estimator.Allocate(_Map, MaxOrder, Norm);
 }
 
 void Sigma::BuildNew()
@@ -123,8 +114,7 @@ void Sigma::BuildTest()
 
 void Sigma::Reset(real Beta)
 {
-    Basic::Reset(Beta);
-    _Map = IndexMapSPIN2(Beta, _MaxTauBin, _Lat);
+    _Map = IndexMapSPIN2(Beta, _Map.MaxTauBin, _Map.Lat, _Map.Symmetry);
     Estimator.Anneal(Beta);
 }
 
@@ -141,10 +131,9 @@ Dictionary Sigma::ToDict()
 }
 
 Polar::Polar(const Lattice& lat, real Beta, uint MaxTauBin, int MaxOrder, real Norm)
-    : weight::Basic(lat, Beta, MaxTauBin, SPIN4, TauSymmetric, "Polar")
-    , _Map(IndexMapSPIN4(Beta, MaxTauBin, lat))
-    , Estimator(lat, Beta, MaxOrder, "Polar", Norm, GetShape())
+    : _Map(IndexMapSPIN4(Beta, MaxTauBin, lat, TauSymmetric))
 {
+    Estimator.Allocate(_Map, MaxOrder, Norm);
 }
 
 void Polar::BuildNew()
@@ -159,8 +148,7 @@ void Polar::BuildTest()
 
 void Polar::Reset(real Beta)
 {
-    Basic::Reset(Beta);
-    _Map = IndexMapSPIN4(Beta, _MaxTauBin, _Lat);
+    _Map = IndexMapSPIN4(Beta, _Map.MaxTauBin, _Map.Lat, _Map.Symmetry);
     Estimator.Anneal(Beta);
 }
 

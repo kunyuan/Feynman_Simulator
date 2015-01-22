@@ -14,7 +14,6 @@
 #include "estimator/estimator.h"
 #include "module/weight/component.h"
 #include "utility/dictionary.h"
-#include "utility/array.h"
 
 using namespace std;
 

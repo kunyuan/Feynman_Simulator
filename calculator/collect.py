@@ -17,7 +17,7 @@ def Smooth(x,y):
 
 class WeightEstimator():
     def __init__(self, Weight, Order): 
-        self.Shape=[Order, Weight.NSpin**2, Weight.NSublat**2]+Weight.Shape[Weight.VOLDIM:]
+        self.Shape=[Order,]+Weight.Shape
         self.__Map=Weight.Map
         self.__Weight=Weight
         self.WeightAccu=np.zeros(self.Shape, dtype=complex)
@@ -44,40 +44,39 @@ class WeightEstimator():
         MaxTauBin=self.__Map.MaxTauBin
         x=range(0, MaxTauBin)
         Shape=self.OrderWeight.shape
-        Average0 = np.average(self.OrderWeight[0,0,0,0,:])
+        Average0 = np.average(self.OrderWeight[0,0,0,0,0,0,:])
         for orderindex in range(0, Shape[0]):
             # Order Index is equal to real Order-1
             RelativeError=0
-            for sp in range(Shape[1]):
-                for sub in range(Shape[2]):
-                    for vol in range(Shape[3]):
-                        y=self.OrderWeight[orderindex,sp,sub,vol, :]
-                        if not np.allclose(y, 0.0, 1e-10): 
-                            smooth, sigma=Smooth(x, y)
-                            #relative=abs(sigma)/abs(np.average(smooth))
-                            relative=abs(sigma)/abs(Average0)
-                            if abs(relative)>RelativeError:
-                                RelativeError=relative
-                                error=sigma
-                                Original=y.copy()
-                                Smoothed=smooth.copy()
-                                Position=(orderindex,sp,sub,vol)
-                            self.OrderWeight[orderindex,sp,sub,vol, :]=smooth
-            if orderindex>=OrderAccepted:
-                State="Accepted with relative error {0} (Threshold {1})".format(RelativeError, ErrorThreshold)
-                if RelativeError>=ErrorThreshold:
-                    State="NOT "+State
+            for sp1 in range(Shape[1]):
+                for sub1 in range(Shape[2]):
+                    for sp2 in range(Shape[3]):
+                        for sub2 in range(Shape[4]):
+                            for vol in range(Shape[5]):
+                                y=self.OrderWeight[orderindex,sp1,sub1,sp2,sub2,vol, :]
+                                if not np.allclose(y, 0.0, 1e-10): 
+                                    smooth, sigma=Smooth(x, y)
+                                    relative=abs(sigma)/abs(Average0)
+                                    if abs(relative)>RelativeError:
+                                        RelativeError=relative
+                                        error=sigma
+                                        Original=y.copy()
+                                        Smoothed=smooth.copy()
+                                        Position=(orderindex,(sp1,sp2),(sub1,sub2),vol)
+                                    self.OrderWeight[orderindex,sp1,sub1,sp2,sub2,vol, :]=smooth
+            State="Accepted with relative error {0} (Threshold {1})".format(RelativeError, ErrorThreshold)
+            if RelativeError>=ErrorThreshold:
+                State="NOT "+State
+            try:
+                self.__Plot(Name, x, Original, Smoothed, error, Position, State)
+            except:
+                raise
+                log.info("failed to plot")
 
-                try:
-                    self.__Plot(Name, x, Original, Smoothed, error, Position, State)
-                except:
-                    raise
-                    log.info("failed to plot")
-
-                log.info("Maximum at Order {0} is {1}".format(orderindex, RelativeError))
-                if RelativeError>=ErrorThreshold:
-                    orderindex -= 1
-                    break
+            log.info("Maximum at Order {0} is {1}".format(orderindex, RelativeError))
+            if RelativeError>=ErrorThreshold:
+                orderindex -= 1
+                break
 
         NewOrderAccepted=orderindex+1
         log.info("OrderAccepted={0}".format(NewOrderAccepted))
@@ -100,9 +99,7 @@ class WeightEstimator():
         plt.errorbar(x[mid], smooth[mid].real, yerr=sigma.real,
                 label="Error {0:.2g}".format(sigma.imag))
         plt.title("Order {0} at Spin:{1}, Sublat:{2}, Coordi:{3}\n{4}".format(Order, 
-            self.__Map.IndexToSpin4(Position[1]), 
-            self.__Map.IndexToSublat(Position[2]),
-            self.__Map.IndexToCoordi(Position[3]), State))
+            Position[1], Position[2], self.__Map.IndexToCoordi(Position[3]), State))
         plt.legend().get_frame().set_alpha(0.5)
         plt.subplot(2, 1, 2)
         plt.plot(x, y.imag, 'ro', x, smooth.imag, 'b-')

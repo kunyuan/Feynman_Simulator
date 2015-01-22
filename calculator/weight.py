@@ -188,12 +188,12 @@ class Weight():
             log.info("Load {0}".format(self.Name))
             datamat = data[self.Name]
             ######RESHAPE data[self.Name]
-            OldShape=[self.NSpin**2, self.NSublat**2]+self.__OriginShape[self.VOLDIM:]
-            MidShape=[self.NSpin, self.NSpin, self.NSublat,self.NSublat]+self.__OriginShape[self.VOLDIM:]
-            NewShape=self.__OriginShape
-            self.__AssertShape(datamat.shape, OldShape)
-            datamat=datamat.reshape(MidShape).swapaxes(1,2).reshape(NewShape)
-            self.__AssertShape(self.Shape, datamat.shape)
+            #OldShape=[self.NSpin**2, self.NSublat**2]+self.__OriginShape[self.VOLDIM:]
+            #MidShape=[self.NSpin, self.NSpin, self.NSublat,self.NSublat]+self.__OriginShape[self.VOLDIM:]
+            #NewShape=self.__OriginShape
+            #self.__AssertShape(datamat.shape, OldShape)
+            #datamat=datamat.reshape(MidShape).swapaxes(1,2).reshape(NewShape)
+            #self.__AssertShape(self.Shape, datamat.shape)
             self.Data=datamat
         else:
             Assert(False, "{0} not found!").format(self.Name)
@@ -203,11 +203,11 @@ class Weight():
         data={}
         data[self.Name]=self.Data
         #######RESHAPE
-        OldShape=self.__OriginShape
-        MidShape=[self.NSpin, self.NSublat,self.NSpin, self.NSublat]+self.__OriginShape[self.VOLDIM:]
-        NewShape=[self.NSpin**2, self.NSublat**2]+self.__OriginShape[self.VOLDIM:]
-        self.__AssertShape(OldShape, data[self.Name].shape)
-        data[self.Name]=data[self.Name].reshape(MidShape).swapaxes(1,2).reshape(NewShape)
+        #OldShape=self.__OriginShape
+        #MidShape=[self.NSpin, self.NSublat,self.NSpin, self.NSublat]+self.__OriginShape[self.VOLDIM:]
+        #NewShape=[self.NSpin**2, self.NSublat**2]+self.__OriginShape[self.VOLDIM:]
+        #self.__AssertShape(OldShape, data[self.Name].shape)
+        #data[self.Name]=data[self.Name].reshape(MidShape).swapaxes(1,2).reshape(NewShape)
         return data
 
     def __InverseSpinAndSublat(self):

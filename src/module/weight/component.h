@@ -9,7 +9,8 @@
 #ifndef __Feynman_Simulator__component__
 #define __Feynman_Simulator__component__
 
-#include "weight_basic.h"
+#include "index_map.h"
+#include "weight_array.h"
 #include "weight_estimator.h"
 #include "utility/complex.h"
 
@@ -31,7 +32,10 @@ public:
     }
 };
 
-class G : public Basic {
+typedef WeightArray<DELTA_T_SIZE> DeltaTArray;
+typedef WeightArray<SMOOTH_T_SIZE> SmoothTArray;
+
+class G {
 public:
     G(const Lattice& lat, real beta, uint MaxTauBin,
       TauSymmetry TauSymmetry = TauAntiSymmetric);
@@ -53,7 +57,7 @@ private:
 *  W is the interaction. An assumption is made here: translational and \emp{MIRROR} symmetry of the lattice (constructed by unit cells) are imposed on interaction.
     The mirror symmetry is only required on the level of the whole lattice, not within a unit cell.
 */
-class W : public Basic {
+class W {
 public:
     W(const Lattice& lat, real Beta, uint MaxTauBin);
     void BuildTest();
@@ -72,7 +76,7 @@ protected:
     IndexMapSPIN4 _Map;
 };
 
-class Sigma : public Basic {
+class Sigma {
 public:
     Sigma(const Lattice&, real Beta, uint MaxTauBin, int MaxOrder,
           TauSymmetry Symmetry = TauAntiSymmetric, real Norm = Norm::Weight());
@@ -91,7 +95,7 @@ protected:
     IndexMapSPIN2 _Map;
 };
 
-class Polar : public Basic {
+class Polar {
 public:
     Polar(const Lattice&, real Beta, uint MaxTauBin, int MaxOrder, real Norm = Norm::Weight());
     void BuildNew();

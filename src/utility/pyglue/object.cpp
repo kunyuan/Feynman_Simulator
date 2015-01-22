@@ -40,21 +40,19 @@ void PrintPyObject(PyObject* obj)
 
 std::string GetPyErrorStr()
 {
-    PyErr_Print();
-    return "hello";
-    //    PyObject* ptype;
-    //    PyObject* pvalue;
-    //    PyObject* ptraceback;
-    //    PyErr_Fetch(&ptype, &pvalue, &ptraceback);
-    //    PyErr_NormalizeException(&ptype, &pvalue, &ptraceback);
-    //    Object type = PyObject_Str(ptype);
-    //    Object value = PyObject_Str(pvalue);
-    //    auto result = std::string(PyString_AsString(type.Get()))
-    //                  + std::string(PyString_AsString(value.Get()));
-    //    Py_XDECREF(ptype);
-    //    Py_XDECREF(pvalue);
-    //    Py_XDECREF(ptraceback);
-    //    return result;
+    PyObject* ptype;
+    PyObject* pvalue;
+    PyObject* ptraceback;
+    PyErr_Fetch(&ptype, &pvalue, &ptraceback);
+    PyErr_NormalizeException(&ptype, &pvalue, &ptraceback);
+    Object type = PyObject_Str(ptype);
+    Object value = PyObject_Str(pvalue);
+    auto result = std::string(PyString_AsString(type.Get()))
+                  + std::string(PyString_AsString(value.Get()));
+    Py_XDECREF(ptype);
+    Py_XDECREF(pvalue);
+    Py_XDECREF(ptraceback);
+    return result;
 }
 
 void PropagatePyError()

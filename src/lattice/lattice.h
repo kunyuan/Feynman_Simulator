@@ -32,44 +32,6 @@ bool operator==(const Site& v1, const Site& v2);
 bool operator!=(const Site& v1, const Site& v2);
 
 /**
- *  class Distance defines Site1-Site2 using the vector: Dr and sublattice of Site1 and Site2: Sublattice[0] and Sublattice[1].
- */
-
-class Distance {
-public:
-    int SublatIndex;
-    int CoordiIndex;
-
-    Distance()
-        : SublatIndex(0)
-        , CoordiIndex(0)
-    {
-    }
-
-    Distance(int sublat, int coordi)
-        : SublatIndex(sublat)
-        , CoordiIndex(coordi)
-    {
-    }
-
-    bool operator==(const Distance& v2)
-    {
-        if (SublatIndex != v2.SublatIndex)
-            return false;
-        if (CoordiIndex != v2.CoordiIndex)
-            return false;
-        return true;
-    }
-
-    bool operator!=(const Distance& v2)
-    {
-        if (*this == v2)
-            return false;
-        return true;
-    }
-};
-
-/**
  *  class Lattice includes three set of vectors: 1) LatticeVec (unit cell lattice vector); 2)ReLatticeVec (reciprocal lattice vector for k); 3) SublatticeVec (vectors between different sublattices in the same unit cell).
  */
 class Lattice {
@@ -77,7 +39,6 @@ public:
     int Dimension;
     int Vol;
     int SublatVol;
-    int SublatVol2;
     Vec<int> Size;
 
     Lattice(const Vec<int>& size = Vec<int>(4), int NSublat = 2);
@@ -86,18 +47,8 @@ public:
     int Vec2Index(const Vec<int>&) const;
     int Vec2Index(std::initializer_list<int> list) const;
     Vec<int> Index2Vec(int) const;
-
-    int Sublat2Index(int, int) const;
-    int Index2Sublat(int, int direction) const;
-    //return true if the Index represent a pair between the same sublattice
-    bool IsOnSameSubLat(int Index);
-
-    Site GetSite(const Distance& dis, int direction) const;
-
-    Distance Dist(const Site&, const Site&) const;
-
-private:
-    Vec<int> Shift(const Vec<int>& vec) const;
+    int CoordiIndex(const Site& in, const Site& out) const;
+    void Shift(Vec<int>& vec) const;
 };
 
 int TestLattice();

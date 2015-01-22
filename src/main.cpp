@@ -98,7 +98,7 @@ void MonteCarlo(const para::Job &Job)
                     Env.AdjustOrderReWeight();
                     Env.Save();
                 }
-                if (MessageTimer.check(600))
+                if (MessageTimer.check(100))
                     Env.ListenToMessage();
             }
         }
