@@ -69,34 +69,38 @@ void MonteCarlo(const para::Job &Job)
     int polar[MAX_ORDER] = {0};
 
     Env.ListenToMessage();
-    Env.Diag.WriteDiagram2gv("diagram/" + ToString(Para.Counter) + ".gv");
-    Env.Diag.CheckDiagram();
 
-    for (uint Step = 0; Step < Job.Sample; Step++) {
-        //Don't use Para.Counter as counter
+    for (uint Step = 0; Step < Para.Toss; Step++) {
         Markov.Hop(Para.Sweep);
-        MarkovMonitor.Measure();
-        if (!Markov.Diag->Worm.Exist) {
-            if (Markov.Diag->MeasureGLine)
-                sigma[Markov.Diag->Order]++;
-            else
-                polar[Markov.Diag->Order]++;
-        }
+    }
 
-        if (Step % 1000 == 0) {
-            MarkovMonitor.AddStatistics();
-            //            if (!Env.Diag.Worm.Exist && Env.Diag.Order == 3)
-            //                Env.Diag.WriteDiagram2gv("diagram/" + ToString(Para.Counter) + ".gv");
-            if (PrinterTimer.check(10)) {
-                Env.Diag.CheckDiagram();
-                Markov.PrintDetailBalanceInfo();
+    for (uint i = 0; i < 1000; i++) {
+        for (uint Step = 0; Step < Job.Sample; Step++) {
+            //Don't use Para.Counter as counter
+            Markov.Hop(Para.Sweep);
+            MarkovMonitor.Measure();
+            if (!Markov.Diag->Worm.Exist) {
+                if (Markov.Diag->MeasureGLine)
+                    sigma[Markov.Diag->Order]++;
+                else
+                    polar[Markov.Diag->Order]++;
             }
-            if (DiskWriterTimer.check(60)) {
-                Env.AdjustOrderReWeight();
-                Env.Save();
+
+            if (Step % 1000 == 0) {
+                MarkovMonitor.AddStatistics();
+                //            if (!Env.Diag.Worm.Exist && Env.Diag.Order == 3)
+                //                Env.Diag.WriteDiagram2gv("diagram/" + ToString(Para.Counter) + ".gv");
+                if (PrinterTimer.check(120)) {
+                    Env.Diag.CheckDiagram();
+                    Markov.PrintDetailBalanceInfo();
+                }
+                if (DiskWriterTimer.check(300)) {
+                    Env.AdjustOrderReWeight();
+                    Env.Save();
+                }
+                if (MessageTimer.check(100))
+                    Env.ListenToMessage();
             }
-            if (MessageTimer.check(10))
-                Env.ListenToMessage();
         }
     }
 

@@ -161,6 +161,7 @@ void Markov::PrintDetailBalanceInfo()
 {
     string Output = "";
     Output = string(60, '=') + "\n";
+    Output += "DiagCounter: " + ToString(*Counter) +"\n";
     Output += _DetailBalanceStr(CREATE_WORM);
     Output += _DetailBalanceStr(DELETE_WORM);
     Output += _DetailBalanceStr(MOVE_WORM_G);
@@ -294,7 +295,7 @@ void Markov::CreateWorm()
 
     real wormWeight = weight::Worm::Weight(vin->R, vout->R, vin->Tau, vout->Tau);
 
-    prob *= ProbofCall[DELETE_WORM] / ProbofCall[CREATE_WORM] * (*WormSpaceReweight)* wormWeight * Diag->Order * 2.0;
+    prob *= ProbofCall[DELETE_WORM] / ProbofCall[CREATE_WORM] * (*WormSpaceReweight) * wormWeight * Diag->Order * 2.0;
 
     Proposed[CREATE_WORM][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
@@ -342,7 +343,7 @@ void Markov::DeleteWorm()
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    prob *= ProbofCall[CREATE_WORM] / (ProbofCall[DELETE_WORM] *(*WormSpaceReweight)* Worm->Weight * Diag->Order * 2.0);
+    prob *= ProbofCall[CREATE_WORM] / (ProbofCall[DELETE_WORM] * (*WormSpaceReweight) * Worm->Weight * Diag->Order * 2.0);
 
     Proposed[DELETE_WORM][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
@@ -1291,7 +1292,7 @@ void Markov::ChangeMeasureFromGToW()
     Complex sgn = phase(weightRatio);
 
     //proposal probility: (1/2N)/(1/N)
-    prob *= 0.5 * (*PolarReweight)* ProbofCall[CHANGE_MEASURE_W2G] / (ProbofCall[CHANGE_MEASURE_G2W]);
+    prob *= 0.5 * (*PolarReweight) * ProbofCall[CHANGE_MEASURE_W2G] / (ProbofCall[CHANGE_MEASURE_G2W]);
 
     Proposed[CHANGE_MEASURE_G2W][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
@@ -1496,7 +1497,7 @@ void Markov::JumpToOrder0()
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    prob *= (ProbofCall[JUMP_BACK_TO_ORDER1] * ProbSite(Ver1->R) * ProbTau(Ver1->Tau) * ProbTau(Ver2->Tau) * 0.5 * 0.5 *OrderReWeight[0]) / (ProbofCall[JUMP_TO_ORDER0]*OrderReWeight[1]);
+    prob *= (ProbofCall[JUMP_BACK_TO_ORDER1] * ProbSite(Ver1->R) * ProbTau(Ver1->Tau) * ProbTau(Ver2->Tau) * 0.5 * 0.5 * OrderReWeight[0]) / (ProbofCall[JUMP_TO_ORDER0] * OrderReWeight[1]);
 
     Proposed[JUMP_TO_ORDER0][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
@@ -1535,7 +1536,7 @@ void Markov::JumpBackToOrder1()
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    prob *= ProbofCall[JUMP_TO_ORDER0] *OrderReWeight[1] / (ProbofCall[JUMP_BACK_TO_ORDER1] * OrderReWeight[0]*ProbSite(R) * ProbTau(Tau1) * ProbTau(Tau2) * 0.5 * 0.5);
+    prob *= ProbofCall[JUMP_TO_ORDER0] * OrderReWeight[1] / (ProbofCall[JUMP_BACK_TO_ORDER1] * OrderReWeight[0] * ProbSite(R) * ProbTau(Tau1) * ProbTau(Tau2) * 0.5 * 0.5);
 
     Proposed[JUMP_BACK_TO_ORDER1][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
