@@ -35,8 +35,7 @@ class IndexMap:
 
     def GetLocalSublatTuple(self):
         return ((i,i) for i in range(self.NSublat))
-    def IndexToSublat(self, index):
-        return (index%self.NSublat, index/self.NSublat)
+
     def CoordiIndex(self, Out):
         #Out[0]*L1*L2+Out[1]*L2+Out[2] with In=(0,0,0)
         Index=Out[0]
@@ -63,18 +62,8 @@ class IndexMap:
     def LatIndex(self, Coordi, Sublat):
         return self.CoordiIndex(Coordi)*self.NSublat+Sublat
 
-    def Spin2Index(self, SpinIN, SpinOUT):
-        return SpinIN*SPIN+SpinOUT
-    def IndexToSpin2(self, index):
-        return (index/SPIN, index%SPIN)
-    def IndexToSpin4(self, index):
-        SpinInIn=index/SPIN3
-        index%=SPIN3
-        SpinInOut=index/SPIN2
-        index%=SPIN2
-        SpinOutIn=index/SPIN
-        SpinOutOut=index%SPIN
-        return ((SpinInIn, SpinInOut), (SpinOutIn, SpinOutOut))
+    def Spin2Index(self, SpinIn, SpinOut):
+        return SpinIn*SPIN+SpinOut
 
     def Pauli(self):
         return (np.array([[0, 1], [-1, 0]]), np.array([[0, 1j], [-1j, 0]]), np.array([[1,0],[0,-1]]))
