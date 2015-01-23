@@ -39,7 +39,8 @@ if args.collect:
 ##########INITIALIZATION ##########################
 Factory=model.BareFactory(Map, para["Model"])
 G0,W0=Factory.Build(para["Model"]["Name"], para["Lattice"]["Name"])
-#IO.SaveDict("Coordinates","w", Factory.ToDict())
+IO.SaveDict("Coordinates","w", Factory.ToDict())
+
 def Measure(G0, W0, G, W, Sigma, Polar):
     log.info("Measuring...")
     calc.Check_Denorminator(W0, Polar, Map)
