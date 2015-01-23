@@ -94,12 +94,16 @@ void EnvMonteCarlo::AdjustOrderReWeight()
         string str;
         for (int i = 0; i <= Para.Order; i++)
             str += ToString((Para.OrderReWeight[i])) + "  ";
-        LOG_INFO("Reweighted to:\n" + str);
-        LOG_INFO("Worm Reweighted to:\n" + ToString(Para.WormSpaceReweight));
-        LOG_INFO("Polar Reweighted to:\n" + ToString(Para.PolarReweight));
+        LOG_INFO("Reweighted to:\n" + str +
+                 "\nWorm Reweighted to:\n" + ToString(Para.WormSpaceReweight) +
+                 "\nPolar Reweighted to:\n" + ToString(Para.PolarReweight));
     }
     else {
-        LOG_INFO("Number of samples is too small, adjust later.\n");
+        string str;
+        for (int i = 0; i <= Para.Order; i++)
+            str += ToString((MarkovMonitor.PhyEstimator[i].Norm())) + "  ";
+        LOG_INFO("Number of samples is too small, adjust later.\n"
+                 << "Norm of different orders: " << str);
     }
 }
 /**

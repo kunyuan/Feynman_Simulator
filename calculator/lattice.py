@@ -11,6 +11,8 @@ class Lattice:
         print Name
         if Name=="Checkboard":
             self.__Checkboard()
+        if Name=="3DCheckboard":
+            self.__3DCheckboard()
         elif Name=="Honeycomb":
             self.__Honeycomb()
         elif Name=="Square":
@@ -34,6 +36,18 @@ class Lattice:
                                  [0.5,0.5]])
         self.ReciprocalLatVec =np.array([[2.0 * np.pi, 0.0],
                                          [0.0, 2.0 * np.pi]])
+    def __3DCheckboard(self):
+        self.Dim=3
+        self.__AssertDim()
+        self.NSublat=2
+        self.__AssertNSublat()
+        self.LatVec=np.array([[1.0,1.0,0.0],
+                              [1.0,-1.0,0.0],
+                              [1.0,0.0,1.0]])
+        self.SubLatVec=np.array([[0.0,0.0,0.0],
+                                 [1.0,0.0,0.0]])
+        #self.ReciprocalLatVec =np.array([[2.0 * np.pi, 0.0],
+                                         #[0.0, 2.0 * np.pi]])
     def __Square(self):
         self.Dim=2
         self.__AssertDim()

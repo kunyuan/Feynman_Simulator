@@ -127,6 +127,32 @@ class BareFactory:
                 for j in range(4):
                     for e in coord[i][j]:
                         self.BareW.Data[spin,i,spin,j,self.__Map.CoordiIndex(e)] = J1/4;
+        elif LatName=="3DCheckboard":
+        #NSublat: 2
+            Lx,Ly,Lz=self.__Map.L
+            subA=0
+            subB=1
+            coordA2B=[(0, 0, 0),(0,Ly-1,0),(Lx-1,0,0),(Lx-1,Ly-1,0),(Lx-1,Ly-1,1),(0,0,Lz-1)]
+            coordB2A=[(0, 0, 0),(0,   1,0),(1,   0,0),(   1,   1,0),(0,0,1),(1,1,Lz-1)]
+            coordA2A=[(0,1,0),(1,0,0),(0,Ly-1,0),(Lx-1,0,0),
+                    (Lx-1,Ly-1,1),(0,0,Lz-1),(1,1,Lz-1),(0,0,1),
+                    (0,Ly-1,1),(0,1,Lz-1),(1,0,Lz-1),(Lx-1,0,1)]
+            coordB2B=[(0,1,0),(1,0,0),(0,Ly-1,0),(Lx-1,0,0),
+                    (Lx-1,Ly-1,1),(1,1,Lz-1),(0,0,Lz-1),(0,0,1),
+                    (1,0,Lz-1),(0,1,Lz-1),(Lx-1,0,1),(0,Ly-1,1)]
+
+            #J1 interaction A-->B, B-->A
+            for i in coordA2B:
+                self.BareW.Data[spin,subA,spin,subB,self.__Map.CoordiIndex(i)] = J1/4;
+
+            for i in coordB2A:
+                self.BareW.Data[spin,subB,spin,subA,self.__Map.CoordiIndex(i)] = J1/4;
+
+            ##J2 interaction A-->A, B-->B
+            for i in coordA2A:
+                self.BareW.Data[spin,subA,spin,subA,self.__Map.CoordiIndex(i)] = J2/4;
+            for i in coordB2B:
+                self.BareW.Data[spin,subB,spin,subB,self.__Map.CoordiIndex(i)] = J2/4;
         else:
             Assert(False, "Not implemented yet!")
 

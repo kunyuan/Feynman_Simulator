@@ -8,7 +8,7 @@ SLEEP = 1    #check job status for every SLEEP seconds
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" : 0,
+    "__Duplicate" : 4,
     "__IsCluster" : False,
     "__AutoRun" : True,
     "__KeepCPUBusy": True,
@@ -30,7 +30,7 @@ Dyson={
 "Job": {"StartFromBare" : False}
 }
 
-beta=0.9
+beta=0.6
 Order=2
 Common={
 "Tau": {
@@ -52,11 +52,14 @@ Common={
     #"Name": "Checkboard",
     #"NSublat": 2,
     #"L": [8,8]
+    #"Name": "3DCheckboard",
+    #"NSublat": 2,
+    #"L": [4,4,4]
     },
 "Model": {
     "Name": "J1J2",
     "Interaction": [1.0,0.0],
-    "ExternalField": [0.2, 0.0, 0.0, 0.0]
+    "ExternalField": [0.0, 0.0, 0.0, 0.0]
     #ExternalField on Sublattice A and B
     },
 
@@ -75,7 +78,7 @@ Common={
     "Order": Order,
     "OrderAccepted": 1,
     "ErrorThreshold": 0.1,
-    "SleepTime": 150
+    "SleepTime": 100
     }
 }
 import job_class as job

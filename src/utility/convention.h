@@ -12,9 +12,10 @@
 typedef double real;
 typedef unsigned int uint;
 
-//#define NDEBUG
+#define NDEBUG
 //turn off all assert
-const bool DEBUGMODE = true;
+//const bool DEBUGMODE = true;
+const bool DEBUGMODE = false;
 //#define NDEBUG
 //define NDEBUG will turn off debug checking, including the boundary check in array.h
 

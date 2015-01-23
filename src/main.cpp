@@ -60,10 +60,11 @@ void MonteCarlo(const para::Job &Job)
     auto &Para = Env.Para;
 
     LOG_INFO("Markov is started!");
-    timer PrinterTimer, DiskWriterTimer, MessageTimer;
+    timer ReweightTimer, PrinterTimer, DiskWriterTimer, MessageTimer;
     PrinterTimer.start();
     DiskWriterTimer.start();
     MessageTimer.start();
+    ReweightTimer.start();
 
     int sigma[MAX_ORDER] = {0};
     int polar[MAX_ORDER] = {0};
@@ -94,13 +95,17 @@ void MonteCarlo(const para::Job &Job)
                     Env.Diag.CheckDiagram();
                     Markov.PrintDetailBalanceInfo();
                 }
-                if (DiskWriterTimer.check(150)) {
-                    Env.AdjustOrderReWeight();
+
+                //                if (ReweightTimer.check(300)) {
+                //                    Env.AdjustOrderReWeight();
+                //                }
+
+                if (DiskWriterTimer.check(100))
                     Env.Save();
-                }
-                if (MessageTimer.check(150))
+
+                if (MessageTimer.check(100))
                     Env.ListenToMessage();
-                    MarkovMonitor.SqueezeStatistics(2.0);
+                //                    MarkovMonitor.SqueezeStatistics(2.0);
             }
         }
     }
