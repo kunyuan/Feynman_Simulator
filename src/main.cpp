@@ -90,15 +90,15 @@ void MonteCarlo(const para::Job &Job)
                 MarkovMonitor.AddStatistics();
                 //            if (!Env.Diag.Worm.Exist && Env.Diag.Order == 3)
                 //                Env.Diag.WriteDiagram2gv("diagram/" + ToString(Para.Counter) + ".gv");
-                if (PrinterTimer.check(120)) {
+                if (PrinterTimer.check(60)) {
                     Env.Diag.CheckDiagram();
                     Markov.PrintDetailBalanceInfo();
                 }
-                if (DiskWriterTimer.check(300)) {
+                if (DiskWriterTimer.check(150)) {
                     Env.AdjustOrderReWeight();
                     Env.Save();
                 }
-                if (MessageTimer.check(100))
+                if (MessageTimer.check(150))
                     Env.ListenToMessage();
             }
         }

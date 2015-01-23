@@ -186,3 +186,8 @@ class BareFactory:
                                       self.__Map.LatIndex(coord, sub[OUT]))
                     BareWList.append([vec, coord, sub[IN]])
         return BareWList
+
+    def DecreaseExternalField(self, ratio):
+        for i in range(self.__Map.NSublat):
+            self.__ExternalField[i] *= ratio
+        log.info("Change ExternalField to {0} the next time \n".format(self.__ExternalField[0:self.__Map.NSublat]))

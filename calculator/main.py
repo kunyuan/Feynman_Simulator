@@ -41,16 +41,19 @@ Factory=model.BareFactory(Map, para["Model"])
 G0,W0=Factory.Build(para["Model"]["Name"], para["Lattice"]["Name"])
 IO.SaveDict("Coordinates","w", Factory.ToDict())
 
-def Measure(G0, W0, G, W, Sigma, Polar):
+def Measure(G0, W0, G, W, Sigma0, Sigma, Polar):
     log.info("Measuring...")
     calc.Check_Denorminator(W0, Polar, Map)
     ChiTensor = calc.Calculate_ChiTensor(W0, Polar, Map)
     Chi, _ = calc.Calculate_Chi(ChiTensor, Map)
+
     ##########OUTPUT AND FILE SAVE ####################
     spinUP=Map.Spin2Index(UP,UP)
+    spinDOWN=Map.Spin2Index(DOWN,DOWN)
     print "Polar=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
     print "W=\n", W.Data[spinUP,0,spinUP,0,0,:]
     print "G=\n", G.Data[UP,0,UP,0,0,:]
+    print "Sigma0=\n", Sigma0.Data[UP,0,UP,0,0]
     print "Sigma=\n", Sigma.Data[UP,0,UP,0,0,:]
     print "Polar=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
     print "Chi=\n", Chi.Data[0,0,0,0,0,:]
@@ -59,6 +62,7 @@ def Measure(G0, W0, G, W, Sigma, Polar):
     data["G"]=G.ToDict()
     data["W"]=W.ToDict()
     data["W"].update(W0.ToDict())
+    data["Sigma0"]=Sigma0.ToDict()
     data["Sigma"]=Sigma.ToDict()
     data["Polar"]=Polar.ToDict()
     data["Chi"]=Chi.ToDict()
@@ -91,14 +95,14 @@ if job["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is False:
     W=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric")
     for i in range(10):
         log.info("Round #{0}...".format(i))
-        Sigma=calc.Sigma_FirstOrder(G, W, Map)
-        Sigma0=calc.Sigma0_FirstOrder(G, W0, Map)
+        Sigma=calc.SigmaSmoothT_FirstOrder(G, W, Map)
+        Sigma0=calc.SigmaDeltaT_FirstOrder(G, W0, Map)
         Polar=calc.Polar_FirstOrder(G, Map)
         #######DYSON FOR W AND G###########################
         G = calc.G_Dyson(G0, Sigma0, Sigma, Map)
         W = calc.W_Dyson(W0, Polar, Map)
         ###################################################
-    Chi=Measure(G0, W0, G, W, Sigma, Polar)
+    Chi=Measure(G0, W0, G, W, Sigma0, Sigma, Polar)
 
     Chi.FFT(1, "Space", "Time")
     hist["UnifChi"].append(Chi.Data[0,0,0,0,0,0]/Map.MaxTauBin*Map.Beta)
@@ -118,6 +122,7 @@ else:
         try:
             log.info("Load Sigma/Polar and G to do dyson...")
             G0,W0=Factory.Build(para["Model"]["Name"], para["Lattice"]["Name"])
+            print "G0:\n", G0.Data[UP,0,UP,0,0,:]
             #reinitialize G0, W0 to kill accumulated error
             data=IO.LoadBigDict(WeightFile)
             G=weight.Weight("SmoothT", Map, "TwoSpins", "AntiSymmetric").FromDict(data["G"])
@@ -125,15 +130,22 @@ else:
             MaxOrder=paraDyson["Order"]
             log.info("Collecting Sigma/Polar statistics...")
             SigmaMC, PolarMC=collect.CollectStatis(Map, MaxOrder)
-            Sigma,Polar=collect.UpdateWeight(SigmaMC, PolarMC, 
+
+            Sigma,Polar,SigmaOrder, PolarOrder=collect.UpdateWeight(SigmaMC, PolarMC, 
                     paraDyson["ErrorThreshold"], paraDyson["OrderAccepted"])
-            Sigma0=calc.Sigma0_FirstOrder(G, W0, Map)
+            if SigmaOrder==0 or PolarOrder==0:
+                log.info("#{0} fails due to Sigma or Polar not accepted. \n".format(Version))
+                continue
+                
+            Sigma0=calc.SigmaDeltaT_FirstOrder(G, W0, Map)
             log.info("Dyson GW...")
+
             #######DYSON FOR W AND G###########################
             G = calc.G_Dyson(G0, Sigma0, Sigma, Map)
             W = calc.W_Dyson(W0, Polar,Map)
+
             ####### Measure ############
-            Chi=Measure(G0, W0, G, W, Sigma, Polar)
+            Chi=Measure(G0, W0, G, W, Sigma0, Sigma, Polar)
 
             Chi.FFT(1, "Space", "Time")
             hist["UnifChi"].append(Chi.Data[0,0,0,0,0,0]/Map.MaxTauBin*Map.Beta)
@@ -143,6 +155,9 @@ else:
 
             parameter.BroadcastMessage(MessageFile, {"Version": Version, "Beta": Map.Beta})
             log.info("#{0} is done!".format(Version))
+
+            Factory.DecreaseExternalField(0.5)
+
         except:
             log.info("#{0} fails due to\n {1}".format(Version, traceback.format_exc()))
         finally:

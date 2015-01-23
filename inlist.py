@@ -14,7 +14,7 @@ MonteCarlo={
     "__KeepCPUBusy": True,
     },
 "Job": {
-    "DoesLoad" : False,
+    "DoesLoad" : True,
     "Sample" : 100000000  ##0.8 min for 1000000(*1000) Samples in MC
     }
 }
@@ -30,8 +30,8 @@ Dyson={
 "Job": {"StartFromBare" : True}
 }
 
-beta=0.5
-Order=3
+beta=1.0
+Order=2
 Common={
 "Tau": {
     "MaxTauBin" : 64,
@@ -40,15 +40,15 @@ Common={
     "FinalBeta" :  beta,
     },
 "Lattice":  {
-    #"Name": "Square",
-    #"NSublat": 1,
-    #"L": [4,4],
+    "Name": "Square",
+    "NSublat": 1,
+    "L": [4,4],
     #"Name": "Cubic",
     #"NSublat": 1,
     #"L": [8,8,8],
-    "Name": "Pyrochlore",
-    "NSublat": 4,
-    "L": [4,4,4]
+    #"Name": "Pyrochlore",
+    #"NSublat": 4,
+    #"L": [4,4,4]
     #"Name": "Checkboard",
     #"NSublat": 2,
     #"L": [8,8]
@@ -56,7 +56,7 @@ Common={
 "Model": {
     "Name": "J1J2",
     "Interaction": [1.0,0.0],
-    "ExternalField": [0.0, 0.0, 0.0, 0.0]
+    "ExternalField": [1.0, 0.0, 0.0, 0.0]
     #ExternalField on Sublattice A and B
     },
 
@@ -65,17 +65,17 @@ Common={
     #Start from order 0, so that OrderReWeight has Order+1 elements
     "Sweep" : 10,
     "Toss" : 1000,
-    "OrderReWeight" : [1.0, 0.1, 0.5, 0.1],
+    "OrderReWeight" : [1.0, 0.1, 0.5],
     "SqueezeFactor" : 10.0,
     "WormSpaceReweight" : 0.05,
     "PolarReweight" : 2.0,
-    "OrderTimeRatio" : [1.0, 1.0, 2.0, 4.0]
+    "OrderTimeRatio" : [1.0, 1.0, 2.0]
     },
 "Dyson": {
     "Order": Order,
     "OrderAccepted": 1,
-    "ErrorThreshold": 0.2,
-    "SleepTime": 100
+    "ErrorThreshold": 0.1,
+    "SleepTime": 150
     }
 }
 import job_class as job
