@@ -14,7 +14,7 @@ MonteCarlo={
     "__KeepCPUBusy": True,
     },
 "Job": {
-    "DoesLoad" : True,
+    "DoesLoad" : False,
     "Sample" : 100000000  ##0.8 min for 1000000(*1000) Samples in MC
     }
 }
@@ -27,10 +27,10 @@ Dyson={
     "__AutoRun" : True, 
     "__KeepCPUBusy": False,
     },
-"Job": {"StartFromBare" : True}
+"Job": {"StartFromBare" : False}
 }
 
-beta=1.0
+beta=0.9
 Order=2
 Common={
 "Tau": {
@@ -40,12 +40,12 @@ Common={
     "FinalBeta" :  beta,
     },
 "Lattice":  {
-    "Name": "Square",
-    "NSublat": 1,
-    "L": [4,4],
-    #"Name": "Cubic",
+    #"Name": "Square",
     #"NSublat": 1,
-    #"L": [8,8,8],
+    #"L": [8,8],
+    "Name": "Cubic",
+    "NSublat": 1,
+    "L": [8,8,8],
     #"Name": "Pyrochlore",
     #"NSublat": 4,
     #"L": [4,4,4]
@@ -56,7 +56,7 @@ Common={
 "Model": {
     "Name": "J1J2",
     "Interaction": [1.0,0.0],
-    "ExternalField": [1.0, 0.0, 0.0, 0.0]
+    "ExternalField": [0.2, 0.0, 0.0, 0.0]
     #ExternalField on Sublattice A and B
     },
 

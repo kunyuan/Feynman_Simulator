@@ -100,6 +100,7 @@ void MonteCarlo(const para::Job &Job)
                 }
                 if (MessageTimer.check(150))
                     Env.ListenToMessage();
+                    MarkovMonitor.SqueezeStatistics(2.0);
             }
         }
     }
