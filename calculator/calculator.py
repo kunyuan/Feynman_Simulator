@@ -12,8 +12,7 @@ def PlotTime(array, Beta):
     plt.plot(x,array,'-')
     plt.show()
 
-
-def Sigma_FirstOrder(G, W, map):
+def SigmaSmoothT_FirstOrder(G, W, map):
     '''Fock diagram'''
     Sigma=weight.Weight("SmoothT", map, "TwoSpins", "AntiSymmetric")
 
@@ -29,8 +28,9 @@ def Sigma_FirstOrder(G, W, map):
                     *W.Data[spinW[IN], :, spinW[OUT], :, :]
     return Sigma
 
-def Sigma0_FirstOrder(G, W0, map):
-    '''Hatree diagram'''
+def SigmaDeltaT_FirstOrder(G, W0, map):
+    '''Hatree-Fock diagram'''
+    ########Fock Diagram
     Sigma0=weight.Weight("DeltaT", map, "TwoSpins", "AntiSymmetric")
     for spin1 in range(2):
         for spin2 in range(2):
@@ -41,6 +41,16 @@ def Sigma0_FirstOrder(G, W0, map):
             Sigma0.Data[spinSigma[IN], :, spinSigma[OUT], :, :]  \
                     -= G.Data[spinG[IN], :, spinG[OUT], :, :, -1]\
                     *W0.Data[spinW[IN], :, spinW[OUT], :, :]
+    ########Hatree Diagram
+    for spin1 in range(2):
+        for spin2 in range(2):
+            spinW = (map.Spin2Index(spin1,spin1), map.Spin2Index(spin2,spin2))
+            spinG = (spin2,spin2)
+            spinSigma = (spin1, spin1)
+            for r in range(map.Vol):
+                Sigma0.Data[spinSigma[IN], :, spinSigma[OUT], :, 0] \
+                        -= -G.Data[spinG[IN], :, spinG[OUT], :, 0, -1] \
+                        *W0.Data[spinW[IN], :, spinW[OUT], :, r]
     return Sigma0
 
 

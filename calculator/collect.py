@@ -44,7 +44,7 @@ class WeightEstimator():
         MaxTauBin=self.__Map.MaxTauBin
         x=range(0, MaxTauBin)
         Shape=self.OrderWeight.shape
-        Average0 = np.average(self.OrderWeight[0,0,0,0,0,0,:])
+        Average0 = np.average(abs(np.sum(self.OrderWeight[:,0,0,0,0,0,:], axis=0)))
         for orderindex in range(0, Shape[0]):
             # Order Index is equal to real Order-1
             RelativeError=0
@@ -164,7 +164,7 @@ def UpdateWeight(SigmaSmoothT, PolarSmoothT, ErrorThreshold, OrderAccepted):
             format(SigmaOrder, PolarOrder))
     Sigma=SigmaSmoothT.GetWeight(SigmaOrder)
     Polar=PolarSmoothT.GetWeight(PolarOrder)
-    return Sigma, Polar
+    return Sigma, Polar, SigmaOrder, PolarOrder
 
 if __name__=="__main__":
     WeightPara={"NSublat": 1, "L":[4, 4],
