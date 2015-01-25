@@ -62,7 +62,7 @@ def PlotChi(Chi, lat, DoesSave=True):
     KList=[]
     offset=0
     ticks=[0]
-    Chi.FFT(1, "Time")
+    Chi.FFT("R", "W")
     for i in range(0, len(lat.Path)-1):
         start=np.array(lat.Path[i])
         end=np.array(lat.Path[i+1])
@@ -110,6 +110,6 @@ def PlotChi(Chi, lat, DoesSave=True):
     #plt.clf()
     #plt.cla()
     #plt.close()
-    Chi.FFT(-1, "Time")
+    Chi.FFT("R", "T")
 
 

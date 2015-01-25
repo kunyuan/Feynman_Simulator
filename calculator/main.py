@@ -48,29 +48,35 @@ IO.SaveDict("Coordinates","w", Factory.ToDict())
 
 Observable=measure.Observable(Map, Lat)
 
-def Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ):
+def Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor):
     log.info("Measuring...")
-    ChiTensor = calc.Calculate_ChiTensor(W0, Polar, Map)
-    Chi, _ = calc.Calculate_Chi(ChiTensor, Map)
 
     ##########OUTPUT AND FILE SAVE ####################
     spinUP=Map.Spin2Index(UP,UP)
     spinDOWN=Map.Spin2Index(DOWN,DOWN)
+    Polar.FFT("R","T")
     print "Polar=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
+    W.FFT("R","T")
     print "W=\n", W.Data[spinUP,0,spinUP,0,0,:]
+    G.FFT("R","T")
     print "G[UP,UP]=\n", G.Data[UP,0,UP,0,0,:]
-    print "G[DOWN,DOWN]=\n", G.Data[UP,0,UP,0,0,:]
-    #print "Sigma0=\n", Sigma0.Data[UP,0,UP,0,0]
-    #print "Sigma=\n", Sigma.Data[UP,0,UP,0,0,:]
+    #print "G[DOWN,DOWN]=\n", G.Data[UP,0,UP,0,0,:]
+    Sigma0.FFT("R")
+    print "Sigma0=\n", Sigma0.Data[UP,0,UP,0,0]
+    Sigma.FFT("R","T")
+    print "Sigma=\n", Sigma.Data[UP,0,UP,0,0,:]
+
+    Chi, _ = calc.Calculate_Chi(ChiTensor, Map)
+    Chi.FFT("R","T")
     print "Chi=\n", Chi.Data[0,0,0,0,1,:]
 
     data={}
-    data["G"]=G.ToDict()
-    data["W"]=W.ToDict()
-    data["W"].update(W0.ToDict())
-    data["Sigma0"]=Sigma0.ToDict()
-    data["Sigma"]=Sigma.ToDict()
-    data["Polar"]=Polar.ToDict()
+    #data["G"]=G.ToDict()
+    #data["W"]=W.ToDict()
+    #data["W"].update(W0.ToDict())
+    #data["Sigma0"]=Sigma0.ToDict()
+    #data["Sigma"]=Sigma.ToDict()
+    #data["Polar"]=Polar.ToDict()
     data["Chi"]=Chi.ToDict()
     IO.SaveBigDict(WeightFile, data)
     parameter.Save(ParaFile, para)  #Save Parameters
@@ -89,8 +95,8 @@ if job["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is False:
     Version=0
     log.info("Start from G0 and W0 to do dyson...")
     G=G0.Copy()
-    W=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric")
-    for i in range(10):
+    W=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
+    for i in range(1):
         log.info("Round #{0}...".format(i))
         Sigma=calc.SigmaSmoothT_FirstOrder(G, W, Map)
         Sigma0=calc.SigmaDeltaT_FirstOrder(G, W0, Map)
@@ -98,10 +104,12 @@ if job["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is False:
         #### Check Denorminator before G,W are contaminated #####
         Determ=calc.Check_Denorminator(W0, Polar, Map)
         #######DYSON FOR W AND G###########################
+        print "calculating G..."
         G = calc.G_Dyson(G0, Sigma0, Sigma, Map)
-        W = calc.W_Dyson(W0, Polar, Map)
+        print "calculating W..."
+        W, ChiTensor = calc.W_Dyson(W0, Polar, Map)
         ###################################################
-        Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ)
+        Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor)
 
     parameter.BroadcastMessage(MessageFile, {"Version": Version, "Beta": Map.Beta})
     log.info("Version {0} is done!".format(Version))
@@ -138,9 +146,9 @@ else:
             Determ=calc.Check_Denorminator(W0, Polar, Map)
             #######DYSON FOR W AND G###########################
             G = calc.G_Dyson(G0, Sigma0, Sigma, Map)
-            W = calc.W_Dyson(W0, Polar,Map)
+            W, ChiTensor = calc.W_Dyson(W0, Polar,Map)
             ####### Measure ############
-            Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ)
+            Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor)
 
             log.info("Version {0} is done!".format(Version))
             parameter.BroadcastMessage(MessageFile, {"Version": Version, "Beta": Map.Beta})

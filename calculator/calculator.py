@@ -8,10 +8,10 @@ from logger import *
 
 def SigmaSmoothT_FirstOrder(G, W, map):
     '''Fock diagram'''
-    Sigma=weight.Weight("SmoothT", map, "TwoSpins", "AntiSymmetric")
-
+    Sigma=weight.Weight("SmoothT", map, "TwoSpins", "AntiSymmetric", "R", "T")
     TauRange = range(map.MaxTauBin)
-
+    G.FFT("R", "T")
+    W.FFT("R", "T")
     for spin1 in range(2):
         for spin2 in range(2):
             spinW = (map.Spin2Index(spin1,spin2),map.Spin2Index(spin2,spin1))
@@ -25,7 +25,9 @@ def SigmaSmoothT_FirstOrder(G, W, map):
 def SigmaDeltaT_FirstOrder(G, W0, map):
     '''Hatree-Fock diagram'''
     ########Fock Diagram
-    Sigma0=weight.Weight("DeltaT", map, "TwoSpins", "AntiSymmetric")
+    Sigma0=weight.Weight("DeltaT", map, "TwoSpins", "AntiSymmetric", "R","T")
+    G.FFT("R", "T")
+    W0.FFT("R")
     for spin1 in range(2):
         for spin2 in range(2):
             #############G(tau==-0)
@@ -49,7 +51,8 @@ def SigmaDeltaT_FirstOrder(G, W0, map):
 
 
 def Polar_FirstOrder(G, map):
-    Polar=weight.Weight("SmoothT", map, "FourSpins","Symmetric")
+    Polar=weight.Weight("SmoothT", map, "FourSpins","Symmetric", "R","T")
+    G.FFT("R","T")
     NSublat = map.NSublat
     NSpin = G.NSpin
     SubList=[(a,b) for a in range(NSublat) for b in range(NSublat)]
@@ -66,7 +69,9 @@ def Polar_FirstOrder(G, map):
     return Polar
 
 def W_FirstOrder(W0, Polar, map):
-    W=weight.Weight("SmoothT", map, "FourSpins", "Symmetric")
+    W=weight.Weight("SmoothT", map, "FourSpins", "Symmetric", "K","W")
+    W0.FFT("K")
+    Polar.FFT("K","W")
     Beta=map.Beta
     TauRange = range(map.MaxTauBin)
     SubRange=range(W.NSublat)
@@ -75,9 +80,6 @@ def W_FirstOrder(W0, Polar, map):
                                   for Polartuple in map.GetConservedSpinTuple("FourSpins") \
                                   if map.IsConserved(4, (Wtuple[IN], Polartuple[IN]))] 
     #make sure spin conservation on W0
-
-    W0.FFT(1, "Space")
-    Polar.FFT(1, "Space")
 
     for spWt,spPolart in SpinList:
         spW0L=(map.Spin2Index(*spWt[IN]), map.Spin2Index(*spPolart[IN]))
@@ -90,14 +92,12 @@ def W_FirstOrder(W0, Polar, map):
                         W0.Data[spW0L[IN],e[0],spW0L[OUT],e[1],:] \
                         *Polar.Data[spPolar[IN],e[1],spPolar[OUT],e[2],:,tau]\
                         *W0.Data[spW0R[IN],e[2],spW0R[OUT],e[3],:]
-    
-    W0.FFT(-1, "Space")
-    Polar.FFT(-1, "Space")
-    W.FFT(-1, "Space")
     return W
 
 def Calculate_Denorminator(W0, Polar, map):
     """require W0 and Polar to be in k, omega space"""
+    W0.FFT("K")
+    Polar.FFT("K","W")
     Beta=map.Beta
     NSpin, NSub=W0.NSpin, W0.NSublat
     JP=np.einsum("ijklv,klmnvt->ijmnvt",W0.Data, Polar.Data)
@@ -109,27 +109,25 @@ def Calculate_Denorminator(W0, Polar, map):
     return I[...,np.newaxis,np.newaxis]-JP
 
 def W_Dyson(W0, Polar, map):
-    W=weight.Weight("SmoothT", map, "FourSpins", "Symmetric")
-    W0.FFT(1, "Space")
-    Polar.FFT(1, "Space", "Time")
+    W=weight.Weight("SmoothT", map, "FourSpins", "Symmetric", "K","W")
+    ChiTensor=weight.Weight("SmoothT", map, "FourSpins", "Symmetric", "K","W")
+    W0.FFT("K")
+    Polar.FFT("K","W")
 
     JP=np.einsum("ijklv,klmnvt->ijmnvt",W0.Data, Polar.Data)
     JPJ=np.einsum("ijklvt,klmnv->ijmnvt", JP, W0.Data)
     W.Data=Calculate_Denorminator(W0, Polar, map)
     W.Inverse();
+    ChiTensor.Data = -np.einsum('ijklvt,klmnvt->ijmnvt', Polar.Data, W.Data)
     W.Data = np.einsum('ijklvt,klmnvt->ijmnvt', W.Data,JPJ)
-
-    W.FFT(-1, "Space", "Time")
-    Polar.FFT(-1, "Space", "Time")
-    W0.FFT(-1, "Space")
-    return W
+    return W, ChiTensor
 
 def G_Dyson(G0, Sigma0, Sigma, map):
     Beta=map.Beta
-    G=weight.Weight("SmoothT", map, "TwoSpins", "AntiSymmetric")
-    G0.FFT(1, "Space", "Time")
-    Sigma0.FFT(1, "Space")
-    Sigma.FFT(1, "Space", "Time")
+    G=weight.Weight("SmoothT", map, "TwoSpins", "AntiSymmetric", "K","W")
+    G0.FFT("K", "W")
+    Sigma0.FFT("K")
+    Sigma.FFT("K", "W")
 
     NSpin, NSub=G.NSpin, G.NSublat
 
@@ -148,28 +146,7 @@ def G_Dyson(G0, Sigma0, Sigma, map):
     G.Data=I[...,np.newaxis,np.newaxis]-GS
     G.Inverse();
     G.Data=np.einsum('ijklvt,klmnvt->ijmnvt', G.Data,G0.Data)
-
-    G.FFT(-1, "Space", "Time")
-    Sigma0.FFT(-1, "Space")
-    Sigma.FFT(-1, "Space", "Time")
-    G0.FFT(-1, "Space","Time")
     return G
-
-
-def Calculate_ChiTensor(W0, Polar, map):
-    ChiTensor=weight.Weight("SmoothT", map, "FourSpins", "Symmetric")
-
-    W0.FFT(1, "Space")
-    Polar.FFT(1, "Space", "Time")
-
-    ChiTensor.Data=Calculate_Denorminator(W0, Polar, map)
-    ChiTensor.Inverse();
-    ChiTensor.Data = -np.einsum('ijklvt,klmnvt->ijmnvt', Polar.Data, ChiTensor.Data)
-
-    ChiTensor.FFT(-1, "Space", "Time")
-    Polar.FFT(-1, "Space", "Time")
-    W0.FFT(-1, "Space")
-    return ChiTensor
 
 def Calculate_Chi(ChiTensor, map):
     NSpin, NSublat=ChiTensor.NSpin, ChiTensor.NSublat
@@ -186,7 +163,7 @@ def Calculate_Chi(ChiTensor, map):
     SySy[UD, DU]= SySy[DU, UD]=1
     SzSz[UU, UU]= SzSz[DD, DD]=1
     SzSz[UU, DD]= SzSz[DD, UU]=-1
-    Chi=weight.Weight("SmoothT", map, "NoSpin", "Symmetric")
+    Chi=weight.Weight("SmoothT", map, "NoSpin", "Symmetric", ChiTensor.SpaceDomain, ChiTensor.TimeDomain)
     Chi_ss=[Chi.Copy(), Chi.Copy(), Chi.Copy()]
     SS=[SxSx/4.0, SySy/4.0, SzSz/4.0]
     for i in range(3):
@@ -198,8 +175,8 @@ def Calculate_Chi(ChiTensor, map):
 def Check_Denorminator(W0, Polar, map):
     """return tuple ((position, smallest 1-JP determinant), 1-JP in omega,k domain)"""
     log.info("Check Denorminator...")
-    W0.FFT(1, "Space")
-    Polar.FFT(1, "Space", "Time")
+    W0.FFT("K")
+    Polar.FFT("K", "W")
     NSpin, NSub=Polar.NSpin, Polar.NSublat
     Denorm=Calculate_Denorminator(W0, Polar, map)
     Denorm=Denorm.reshape([NSpin*NSub, NSpin*NSub]+Polar.Shape[Polar.VOLDIM:])
@@ -210,8 +187,6 @@ def Check_Denorminator(W0, Polar, map):
     pos=np.where(Determ==Determ.min())
     x,t=pos[0][0], pos[1][0]
     log.info("The minmum {0} is at K={1} and Omega={2}".format(Determ.min(), map.IndexToCoordi(x), t))
-    W0.FFT(-1, "Space")
-    Polar.FFT(-1, "Space", "Time")
     if Determ.min()<0.0:
         log.warning("Denorminator touch zero with value {0}".format(Determ.min()))
         raise ValueError

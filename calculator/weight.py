@@ -104,10 +104,12 @@ class Weight():
     """Assumpations of Data:
        TAU axis always follows VOL axis
     """
-    def __init__(self, Name, Map, NSpin, Symmetry=None):
+    def __init__(self, Name, Map, NSpin, Symmetry=None, SpaceDomain="R", TimeDomain="T"):
         """Name: 'SmoothT' or 'DeltaT'
            NSpin: 'NoSpin', 'TwoSpins' or 'FourSpins'
            Symmetry: 'Symmetric' or 'AntiSymmetric', only be checked if TauDep is 'SmoothT'
+           SpaceDomain: 'R' or 'K'
+           TimeDomain: 'T' or 'W'
         """
         self.Map=Map
         self.Name=Name
@@ -147,16 +149,29 @@ class Weight():
 
         self.Data=np.zeros(self.Shape, dtype=complex)
         self.__OriginShape=list(self.Shape) #get a copy of self.Shape
+        Assert(SpaceDomain in ['R', 'K'], "SpaceDomain is either R or K")
+        Assert(TimeDomain in ['T', 'W'], "TimeDomain is either T or W")
+        self.SpaceDomain=SpaceDomain
+        self.TimeDomain=TimeDomain
+        
     def Copy(self):
         """return a deep copy of Weight instance"""
         import copy
         return copy.deepcopy(self)
 
-    def FFT(self, BackForth, *SpaceOrTime):
-        if "Space" in SpaceOrTime:
-            self.__fftSpace(BackForth)
-        if "Time" in SpaceOrTime:
-            self.__fftTime(BackForth)
+    def FFT(self, *SpaceOrTime):
+        if "R" in SpaceOrTime and self.SpaceDomain is "K":
+            self.__fftSpace(-1)
+            self.SpaceDomain="R"
+        if "K" in SpaceOrTime and self.SpaceDomain is "R":
+            self.__fftSpace(1)
+            self.SpaceDomain="K"
+        if "T" in SpaceOrTime and self.TimeDomain is "W":
+            self.__fftTime(-1)
+            self.TimeDomain="T"
+        if "W" in SpaceOrTime and self.TimeDomain is "T":
+            self.__fftTime(1)
+            self.TimeDomain="W"
     def ChangeSymmetry(self,BackForth):
         ''' the transformation has to be done in continuous tau representation, namely using  
         exp(-i*Pi*Tau_n/Beta)(e.g. exp(-i*Pi*(n+1/2)/N)) as the phase factor
@@ -176,29 +191,13 @@ class Weight():
         log.info("Loading {0} Matrix...".format(self.Name));
         if self.Name in data:
             log.info("Load {0}".format(self.Name))
-            datamat = data[self.Name]
-            ######RESHAPE data[self.Name]
-            #OldShape=[self.NSpin**2, self.NSublat**2]+self.__OriginShape[self.VOLDIM:]
-            #MidShape=[self.NSpin, self.NSpin, self.NSublat,self.NSublat]+self.__OriginShape[self.VOLDIM:]
-            #NewShape=self.__OriginShape
-            #self.__AssertShape(datamat.shape, OldShape)
-            #datamat=datamat.reshape(MidShape).swapaxes(1,2).reshape(NewShape)
-            #self.__AssertShape(self.Shape, datamat.shape)
-            self.Data=datamat
+            self.Data=data[self.Name]
         else:
             Assert(False, "{0} not found!").format(self.Name)
         return self
     def ToDict(self):
         log.info("Saving {0} Matrix...".format(self.Name));
-        data={}
-        data[self.Name]=self.Data
-        #######RESHAPE
-        #OldShape=self.__OriginShape
-        #MidShape=[self.NSpin, self.NSublat,self.NSpin, self.NSublat]+self.__OriginShape[self.VOLDIM:]
-        #NewShape=[self.NSpin**2, self.NSublat**2]+self.__OriginShape[self.VOLDIM:]
-        #self.__AssertShape(OldShape, data[self.Name].shape)
-        #data[self.Name]=data[self.Name].reshape(MidShape).swapaxes(1,2).reshape(NewShape)
-        return data
+        return {self.Name: self.Data}
 
     def __InverseSpinAndSublat(self):
         Sp, Sub = self.NSpin, self.NSublat
@@ -267,7 +266,7 @@ class TestIndexMap(unittest.TestCase):
 class TestWeightFFT(unittest.TestCase):
     def setUp(self):
         self.Map=IndexMap(Beta=1.0, L=[8,8], NSublat=2, MaxTauBin=64)
-        self.G=Weight("SmoothT", self.Map, "TwoSpins", "AntiSymmetric")
+        self.G=Weight("SmoothT", self.Map, "TwoSpins", "AntiSymmetric","R","T")
         TauGrid=np.linspace(0.0, self.G.Beta, self.G.Shape[self.G.TAUDIM], endpoint=False)/self.G.Beta
         #last point<self.Beta!!!
         self.gTau=np.exp(TauGrid)
@@ -278,24 +277,24 @@ class TestWeightFFT(unittest.TestCase):
     def test_matrix_IO(self):
         FileName="test.npz"
         self.G.Save(FileName)
-        newG=Weight("SmoothT", self.Map, "TwoSpins", "AntiSymmetric")
+        newG=Weight("SmoothT", self.Map, "TwoSpins", "AntiSymmetric", "R","T")
         newG.Load(FileName)
         self.assertTrue(np.allclose(self.G.Data,newG.Data))
         os.system("rm "+FileName)
     def test_fft_backforth(self):
-        self.G.FFT(1, "Time")
-        self.G.FFT(-1, "Time")
+        self.G.FFT("W")
+        self.G.FFT("T")
         self.assertTrue(np.allclose(self.G.Data[0,0,:,:], self.z.reshape(self.G.Shape[self.G.VOLDIM:])))
     def test_fft_symmetry(self):
         self.G.ChangeSymmetry(-1)
-        self.G.FFT(1, "Time") #fftTime(1) will call ChangeSymmetry(1)
+        self.G.FFT("W") #fftTime(1) will call ChangeSymmetry(1)
         self.assertTrue(np.allclose(self.G.Data[0,0,0,:], np.fft.fft(self.gTau)))
-        self.G.FFT(-1, "Time")
+        self.G.FFT("T")
         self.G.ChangeSymmetry(1)
     def test_fft_spatial(self):
         old=self.G.Data.copy()
-        self.G.FFT(1, "Space")
+        self.G.FFT("K")
         zzz=np.fft.fftn(self.z, axes=(0,1))
         self.assertTrue(np.allclose(self.G.Data[0,0,:,:], zzz.reshape(self.G.Shape[self.G.VOLDIM:])))
-        self.G.FFT(-1, "Space")
+        self.G.FFT("R")
         self.assertTrue(np.allclose(self.G.Data, old))
