@@ -49,10 +49,10 @@ Common={
     #"Name": "Pyrochlore",
     #"NSublat": 4,
     #"L": [4,4,4]
-    #"Name": "Checkboard",
+    #"Name": "Checkerboard",
     #"NSublat": 2,
     #"L": [8,8]
-    "Name": "3DCheckboard",
+    "Name": "3DCheckerboard",
     "NSublat": 2,
     "L": [8,8,8]
     },

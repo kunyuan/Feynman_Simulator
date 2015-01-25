@@ -5,12 +5,14 @@ import lattice as lat
 import collect
 from weight import UP,DOWN,IN,OUT
 from logger import *
-import os, sys, model, weight, parameter, plot, argparse, time, traceback
+import os, sys, model, weight, measure, parameter, plot, argparse, time, traceback
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-p", "--PID", help="use PID to find the input file")
 parser.add_argument("-f", "--file", help="use file path to find the input file")
 parser.add_argument("-c", "--collect", action="store_true", help="collect all the _statis.pkl file into statis_total.pkl")
+
+########## Environment INITIALIZATION ##########################
 args = parser.parse_args()
 if args.PID:
     InputFile=os.path.join(workspace, "infile/_in_DYSON_"+str(args.PID))
@@ -20,7 +22,11 @@ else:
     Assert(False, "Do not understand the argument!")
 
 job, para=parameter.Load(InputFile)
+ParaFile="{0}_para".format(job["PID"])
 WeightFile=job["WeightFile"]
+MessageFile=job["MessageFile"]
+OutputFile=job["OutputFile"]
+StatisFile=os.path.join(workspace, "statis_total")
 WeightPara={"NSublat": para["Lattice"]["NSublat"], "L":para["Lattice"]["L"],
             "Beta": para["Tau"]["Beta"], "MaxTauBin": para["Tau"]["MaxTauBin"]}
 Map=weight.IndexMap(**WeightPara)
@@ -33,13 +39,15 @@ if args.collect:
     data ={}
     data["Sigma"] = {"Histogram": SigmaMC.ToDict()}
     data["Polar"] = {"Histogram": PolarMC.ToDict()}
-    IO.SaveBigDict(workspace+"/statis_total", data)
+    IO.SaveBigDict(StatisFile, data)
     sys.exit(0)
 
-##########INITIALIZATION ##########################
+########## Calulation INITIALIZATION ##########################
 Factory=model.BareFactory(Map, para["Model"])
 G0,W0=Factory.Build(para["Model"]["Name"], para["Lattice"]["Name"])
 IO.SaveDict("Coordinates","w", Factory.ToDict())
+
+Observable=measure.Observable(Map, Lat)
 
 def Measure(G0, W0, G, W, Sigma0, Sigma, Polar):
     log.info("Measuring...")
@@ -67,28 +75,16 @@ def Measure(G0, W0, G, W, Sigma0, Sigma, Polar):
     data["Polar"]=Polar.ToDict()
     data["Chi"]=Chi.ToDict()
     IO.SaveBigDict(WeightFile, data)
+    parameter.Save(ParaFile, para)  #Save Parameters
 
-    stag, t, denorm=mimum
-    Chi.FFT(1, "Space", "Time")
-    #hist["UnifChi"].append((Chi.Data[0,0,0,0,0,0]+Chi.Data[0,0,0,1,0,0])/Map.MaxTauBin*Map.Beta)
-    #hist["StagChi"].append((Chi.Data[0,0,0,0,stag,0]-Chi.Data[0,0,0,1,stag,0])/Map.MaxTauBin*Map.Beta)
-    hist["1-JP"].append(denorm)
-    IO.SaveDict(OutputFile, "w", hist)
-    Chi.FFT(-1, "Space", "Time")
+    Observable.Measure(Chi, Determ)
+    Observable.Save(OutputFile)
     #plot what you are interested in
-    #try:
-    plot.PlotSpatial(Chi, Lat, 0, 0)
-    plot.PlotArray(Determ[stag,:], Map.Beta, "1-JP") 
-    plot.PlotChi(Chi,Lat)
-    #except:
-        #pass
-
-MessageFile=job["MessageFile"]
-OutputFile=job["OutputFile"]
-hist={}
-hist["UnifChi"]=[]
-hist["StagChi"]=[]
-hist["1-JP"]=[]
+    try:
+        plot.PlotSpatial(Chi, Lat, 0, 0)
+        plot.PlotChi(Chi,Lat)
+    except:
+        pass
 
 if job["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is False:
     #start from bare
@@ -113,6 +109,7 @@ if job["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is False:
 else:
     #########READ G,SIGMA,POLAR; CALCULATE SIGMA0 #################
     Version=parameter.GetVersion(MessageFile)
+    Observable.Load(OutputFile)
     while True:
         Version+=1
         log.info("Start #{0}...".format(Version))
@@ -141,13 +138,14 @@ else:
             G = calc.G_Dyson(G0, Sigma0, Sigma, Map)
             W = calc.W_Dyson(W0, Polar,Map)
 
-            ####### Measure ############
-            Measure(G0, W0, G, W, Sigma0, Sigma, Polar)
-
             parameter.BroadcastMessage(MessageFile, {"Version": Version, "Beta": Map.Beta})
             log.info("#{0} is done!".format(Version))
 
-            Factory.DecreaseExternalField(0.5)
+            ExternalField=Factory.DecreaseExternalField(0.5)
+            para["Model"]["ExternalField"]=list(ExternalField)
+
+            ####### Measure ############
+            Measure(G0, W0, G, W, Sigma0, Sigma, Polar)
 
         except:
             log.info("#{0} fails due to\n {1}".format(Version, traceback.format_exc()))

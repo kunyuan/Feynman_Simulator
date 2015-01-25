@@ -9,10 +9,10 @@ class Lattice:
         self.__Map=Map
         self.L=np.array(Map.L)
         self.Name=Name
-        if Name=="Checkboard":
-            self.__Checkboard()
-        elif Name=="3DCheckboard":
-            self.__3DCheckboard()
+        if Name=="Checkerboard":
+            self.__Checkerboard()
+        elif Name=="3DCheckerboard":
+            self.__3DCheckerboard()
         elif Name=="Honeycomb":
             self.__Honeycomb()
         elif Name=="Square":
@@ -22,10 +22,10 @@ class Lattice:
         elif Name=="Pyrochlore":
             self.__Pyrochlore()
         else:
-            Assert(False, "Not implemented!")
+            Assert(False, "Lattice {0} has not been implemented!".format(self.Name))
 
     #2D lattice
-    def __Checkboard(self):
+    def __Checkerboard(self):
         self.Dim=2
         self.__AssertDim()
         self.NSublat=2
@@ -39,22 +39,6 @@ class Lattice:
         self.Path=[(0,0),(PI,0),(PI,PI),(0,0)]
         self.PathNum=[self.L[0]/2, self.L[1]/2, self.L[0]/2]
         self.PathName=["\Gamma", "\Chi", "M","\Gamma"]
-
-    def __3DCheckboard(self):
-        self.Dim=3
-        self.__AssertDim()
-        self.NSublat=2
-        self.__AssertNSublat()
-        self.LatVec=np.array([[1.0,1.0,0.0],
-                              [1.0,-1.0,0.0],
-                              [1.0,0.0,1.0]])
-        self.SubLatVec=np.array([[0.0,0.0,0.0],
-                                 [1.0,0.0,0.0]])
-        #self.ReciprocalLatVec =np.array([[2.0 * np.pi, 0.0],
-                                         #[0.0, 2.0 * np.pi]])
-        self.Path=[(0,0,0),(PI,0,0),(PI,PI,0),(0,0,0),(PI,PI,PI),(PI,0,0)]
-        self.PathNum=[self.L[0]/2, self.L[1]/2, self.L[0]/2, self.L[0]/2, self.L[2]/2]
-        self.PathName=["\Gamma", "\Chi", "M","\Gamma", "\R", "\Chi"]
 
     def __Square(self):
         self.Dim=2
@@ -96,6 +80,23 @@ class Lattice:
         self.ReciprocalLatVec =np.array([[2.0 * np.pi, 0.0, 0.0],
                                          [0.0, 2.0 * np.pi, 0.0],
                                          [0.0, 0.0, 2.0 * np.pi]])
+
+    def __3DCheckerboard(self):
+        self.Dim=3
+        self.__AssertDim()
+        self.NSublat=2
+        self.__AssertNSublat()
+        self.LatVec=np.array([[1.0,1.0,0.0],
+                              [1.0,-1.0,0.0],
+                              [1.0,0.0,1.0]])
+        self.SubLatVec=np.array([[0.0,0.0,0.0],
+                                 [1.0,0.0,0.0]])
+        #self.ReciprocalLatVec =np.array([[2.0 * np.pi, 0.0],
+                                         #[0.0, 2.0 * np.pi]])
+        self.Path=[(0,0,0),(PI,0,0),(PI,PI,0),(0,0,0),(PI,PI,PI),(PI,0,0)]
+        self.PathNum=[self.L[0]/2, self.L[1]/2, self.L[0]/2, self.L[0]/2, self.L[2]/2]
+        self.PathName=["\Gamma", "\Chi", "M","\Gamma", "\R", "\Chi"]
+
     def __Pyrochlore(self):
         self.Dim=3
         self.__AssertDim()

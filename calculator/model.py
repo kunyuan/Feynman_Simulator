@@ -53,7 +53,7 @@ class BareFactory:
         #Bare W
         #Dimension: 2
         spin=self.__Map.Spin2Index(UP,UP)
-        if LatName=="Checkboard":
+        if LatName=="Checkerboard":
         #NSublat: 2
             Lx,Ly=self.__Map.L
             subA=0
@@ -127,7 +127,7 @@ class BareFactory:
                 for j in range(4):
                     for e in coord[i][j]:
                         self.BareW.Data[spin,i,spin,j,self.__Map.CoordiIndex(e)] = J1/4;
-        elif LatName=="3DCheckboard":
+        elif LatName=="3DCheckerboard":
         #NSublat: 2
             Lx,Ly,Lz=self.__Map.L
             subA=0
@@ -154,7 +154,7 @@ class BareFactory:
             for i in coordB2B:
                 self.BareW.Data[spin,subB,spin,subB,self.__Map.CoordiIndex(i)] = J2/4;
         else:
-            Assert(False, "Not implemented yet!")
+            Assert(False, "Lattice {0} has not been implemented yet!".format(LatName))
 
         #Generate other non-zero spin configuration
         for e in self.__Map.GetSpin4SimilarTuples((UP,UP),(UP,UP)):
@@ -216,4 +216,5 @@ class BareFactory:
     def DecreaseExternalField(self, ratio):
         for i in range(self.__Map.NSublat):
             self.__ExternalField[i] *= ratio
+        return self.__ExternalField
         log.info("Change ExternalField to {0} the next time \n".format(self.__ExternalField[0:self.__Map.NSublat]))
