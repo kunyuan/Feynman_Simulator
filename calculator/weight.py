@@ -11,6 +11,7 @@ class IndexMap:
     def __init__(self, Beta, L, NSublat, MaxTauBin):
         self.MaxTauBin=MaxTauBin
         self.Beta=Beta
+        self.Dim=len(L)
         self.L=L
         self.Vol=1
         for e in self.L:

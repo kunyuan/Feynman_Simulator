@@ -43,7 +43,7 @@ IO.SaveDict("Coordinates","w", Factory.ToDict())
 
 def Measure(G0, W0, G, W, Sigma0, Sigma, Polar):
     log.info("Measuring...")
-    calc.Check_Denorminator(W0, Polar, Map)
+    mimum, Determ=calc.Check_Denorminator(W0, Polar, Map)
     ChiTensor = calc.Calculate_ChiTensor(W0, Polar, Map)
     Chi, _ = calc.Calculate_Chi(ChiTensor, Map)
 
@@ -52,11 +52,11 @@ def Measure(G0, W0, G, W, Sigma0, Sigma, Polar):
     spinDOWN=Map.Spin2Index(DOWN,DOWN)
     print "Polar=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
     print "W=\n", W.Data[spinUP,0,spinUP,0,0,:]
-    print "G=\n", G.Data[UP,0,UP,0,0,:]
-    print "Sigma0=\n", Sigma0.Data[UP,0,UP,0,0]
-    print "Sigma=\n", Sigma.Data[UP,0,UP,0,0,:]
-    print "Polar=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
-    print "Chi=\n", Chi.Data[0,0,0,0,0,:]
+    print "G[UP,UP]=\n", G.Data[UP,0,UP,0,0,:]
+    print "G[DOWN,DOWN]=\n", G.Data[UP,0,UP,0,0,:]
+    #print "Sigma0=\n", Sigma0.Data[UP,0,UP,0,0]
+    #print "Sigma=\n", Sigma.Data[UP,0,UP,0,0,:]
+    print "Chi=\n", Chi.Data[0,0,0,0,1,:]
 
     data={}
     data["G"]=G.ToDict()
@@ -68,24 +68,27 @@ def Measure(G0, W0, G, W, Sigma0, Sigma, Polar):
     data["Chi"]=Chi.ToDict()
     IO.SaveBigDict(WeightFile, data)
 
+    stag, t, denorm=mimum
+    Chi.FFT(1, "Space", "Time")
+    #hist["UnifChi"].append((Chi.Data[0,0,0,0,0,0]+Chi.Data[0,0,0,1,0,0])/Map.MaxTauBin*Map.Beta)
+    #hist["StagChi"].append((Chi.Data[0,0,0,0,stag,0]-Chi.Data[0,0,0,1,stag,0])/Map.MaxTauBin*Map.Beta)
+    hist["1-JP"].append(denorm)
+    IO.SaveDict(OutputFile, "w", hist)
+    Chi.FFT(-1, "Space", "Time")
     #plot what you are interested in
-    try:
-        plot.PlotSpatial(Chi, Lat, 0, 0)
-    except:
-        pass
-
-    return Chi
+    #try:
+    plot.PlotSpatial(Chi, Lat, 0, 0)
+    plot.PlotArray(Determ[stag,:], Map.Beta, "1-JP") 
+    plot.PlotChi(Chi,Lat)
+    #except:
+        #pass
 
 MessageFile=job["MessageFile"]
 OutputFile=job["OutputFile"]
 hist={}
 hist["UnifChi"]=[]
 hist["StagChi"]=[]
-
-if len(Map.L)==2 :
-    stag = Map.CoordiIndex((Map.L[0]/2, Map.L[1]/2))
-elif len(Map.L)==3 :
-    stag = Map.CoordiIndex((Map.L[0]/2, Map.L[1]/2, Map.L[2]/2))
+hist["1-JP"]=[]
 
 if job["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is False:
     #start from bare
@@ -102,13 +105,7 @@ if job["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is False:
         G = calc.G_Dyson(G0, Sigma0, Sigma, Map)
         W = calc.W_Dyson(W0, Polar, Map)
         ###################################################
-    Chi=Measure(G0, W0, G, W, Sigma0, Sigma, Polar)
-
-    Chi.FFT(1, "Space", "Time")
-    hist["UnifChi"].append(Chi.Data[0,0,0,0,0,0]/Map.MaxTauBin*Map.Beta)
-    hist["StagChi"].append(Chi.Data[0,0,0,0,stag,0]/Map.MaxTauBin*Map.Beta)
-    IO.SaveDict(OutputFile, "w", hist)
-    Chi.FFT(-1, "Space", "Time")
+        Measure(G0, W0, G, W, Sigma0, Sigma, Polar)
 
     parameter.BroadcastMessage(MessageFile, {"Version": Version, "Beta": Map.Beta})
     log.info("#{0} is done!".format(Version))
@@ -145,13 +142,7 @@ else:
             W = calc.W_Dyson(W0, Polar,Map)
 
             ####### Measure ############
-            Chi=Measure(G0, W0, G, W, Sigma0, Sigma, Polar)
-
-            Chi.FFT(1, "Space", "Time")
-            hist["UnifChi"].append(Chi.Data[0,0,0,0,0,0]/Map.MaxTauBin*Map.Beta)
-            hist["StagChi"].append(Chi.Data[0,0,0,0,stag,0]/Map.MaxTauBin*Map.Beta)
-            IO.SaveDict(OutputFile, "w", hist)
-            Chi.FFT(-1, "Space", "Time")
+            Measure(G0, W0, G, W, Sigma0, Sigma, Polar)
 
             parameter.BroadcastMessage(MessageFile, {"Version": Version, "Beta": Map.Beta})
             log.info("#{0} is done!".format(Version))

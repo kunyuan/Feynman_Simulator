@@ -6,12 +6,6 @@ from weight import UP,DOWN,IN,OUT
 import weight
 from logger import *
 
-def PlotTime(array, Beta):
-    import matplotlib.pyplot as plt
-    x=np.linspace(0, Beta, len(array))
-    plt.plot(x,array,'-')
-    plt.show()
-
 def SigmaSmoothT_FirstOrder(G, W, map):
     '''Fock diagram'''
     Sigma=weight.Weight("SmoothT", map, "TwoSpins", "AntiSymmetric")
@@ -170,7 +164,7 @@ def Calculate_ChiTensor(W0, Polar, map):
 
     ChiTensor.Data=Calculate_Denorminator(W0, Polar, map)
     ChiTensor.Inverse();
-    ChiTensor.Data = np.einsum('ijklvt,klmnvt->ijmnvt', Polar.Data, ChiTensor.Data)
+    ChiTensor.Data = -np.einsum('ijklvt,klmnvt->ijmnvt', Polar.Data, ChiTensor.Data)
 
     ChiTensor.FFT(-1, "Space", "Time")
     Polar.FFT(-1, "Space", "Time")
@@ -202,6 +196,7 @@ def Calculate_Chi(ChiTensor, map):
     return Chi, Chi_ss
 
 def Check_Denorminator(W0, Polar, map):
+    """return tuple ((position, smallest 1-JP determinant), 1-JP in omega,k domain)"""
     log.info("Check Denorminator...")
     W0.FFT(1, "Space")
     Polar.FFT(1, "Space", "Time")
@@ -213,10 +208,8 @@ def Check_Denorminator(W0, Polar, map):
         for t in range(map.MaxTauBin):
             Determ[x,t]=np.linalg.det(Denorm[:,:,x,t])
     pos=np.where(Determ==Determ.min())
-    log.info("The minmum {0} is at K={1} and Omega={2}".format(Determ.min(), map.IndexToCoordi(pos[0][0]), pos[1][0]))
-
+    x,t=pos[0][0], pos[1][0]
+    log.info("The minmum {0} is at K={1} and Omega={2}".format(Determ.min(), map.IndexToCoordi(x), t))
     W0.FFT(-1, "Space")
     Polar.FFT(-1, "Space", "Time")
-
-
-
+    return (x, t, Determ.min()), Determ

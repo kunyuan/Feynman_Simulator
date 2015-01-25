@@ -8,7 +8,7 @@ SLEEP = 1    #check job status for every SLEEP seconds
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" : 4,
+    "__Duplicate" : 0,
     "__IsCluster" : False,
     "__AutoRun" : True,
     "__KeepCPUBusy": True,
@@ -27,7 +27,7 @@ Dyson={
     "__AutoRun" : True, 
     "__KeepCPUBusy": False,
     },
-"Job": {"StartFromBare" : False}
+"Job": {"StartFromBare" : True}
 }
 
 beta=0.6
@@ -43,18 +43,18 @@ Common={
     #"Name": "Square",
     #"NSublat": 1,
     #"L": [8,8],
-    "Name": "Cubic",
-    "NSublat": 1,
-    "L": [8,8,8],
+    #"Name": "Cubic",
+    #"NSublat": 1,
+    #"L": [8,8,8],
     #"Name": "Pyrochlore",
     #"NSublat": 4,
     #"L": [4,4,4]
     #"Name": "Checkboard",
     #"NSublat": 2,
     #"L": [8,8]
-    #"Name": "3DCheckboard",
-    #"NSublat": 2,
-    #"L": [4,4,4]
+    "Name": "3DCheckboard",
+    "NSublat": 2,
+    "L": [8,8,8]
     },
 "Model": {
     "Name": "J1J2",
