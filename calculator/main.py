@@ -32,7 +32,6 @@ WeightPara={"NSublat": para["Lattice"]["NSublat"], "L":para["Lattice"]["L"],
 Map=weight.IndexMap(**WeightPara)
 Lat=lat.Lattice(para["Lattice"]["Name"], Map)
 
-
 if args.collect:
     MaxOrder=para["Dyson"]["Order"]
     SigmaMC, PolarMC=collect.CollectStatis(Map, MaxOrder)
@@ -49,9 +48,8 @@ IO.SaveDict("Coordinates","w", Factory.ToDict())
 
 Observable=measure.Observable(Map, Lat)
 
-def Measure(G0, W0, G, W, Sigma0, Sigma, Polar):
+def Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ):
     log.info("Measuring...")
-    mimum, Determ=calc.Check_Denorminator(W0, Polar, Map)
     ChiTensor = calc.Calculate_ChiTensor(W0, Polar, Map)
     Chi, _ = calc.Calculate_Chi(ChiTensor, Map)
 
@@ -97,14 +95,16 @@ if job["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is False:
         Sigma=calc.SigmaSmoothT_FirstOrder(G, W, Map)
         Sigma0=calc.SigmaDeltaT_FirstOrder(G, W0, Map)
         Polar=calc.Polar_FirstOrder(G, Map)
+        #### Check Denorminator before G,W are contaminated #####
+        Determ=calc.Check_Denorminator(W0, Polar, Map)
         #######DYSON FOR W AND G###########################
         G = calc.G_Dyson(G0, Sigma0, Sigma, Map)
         W = calc.W_Dyson(W0, Polar, Map)
         ###################################################
-        Measure(G0, W0, G, W, Sigma0, Sigma, Polar)
+        Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ)
 
     parameter.BroadcastMessage(MessageFile, {"Version": Version, "Beta": Map.Beta})
-    log.info("#{0} is done!".format(Version))
+    log.info("Version {0} is done!".format(Version))
 
 else:
     #########READ G,SIGMA,POLAR; CALCULATE SIGMA0 #################
@@ -134,19 +134,18 @@ else:
             Sigma0=calc.SigmaDeltaT_FirstOrder(G, W0, Map)
             log.info("Dyson GW...")
 
+            #### Check Denorminator before G,W are contaminated #####
+            Determ=calc.Check_Denorminator(W0, Polar, Map)
             #######DYSON FOR W AND G###########################
             G = calc.G_Dyson(G0, Sigma0, Sigma, Map)
             W = calc.W_Dyson(W0, Polar,Map)
+            ####### Measure ############
+            Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ)
 
+            log.info("Version {0} is done!".format(Version))
             parameter.BroadcastMessage(MessageFile, {"Version": Version, "Beta": Map.Beta})
-            log.info("#{0} is done!".format(Version))
-
             ExternalField=Factory.DecreaseExternalField(0.5)
             para["Model"]["ExternalField"]=list(ExternalField)
-
-            ####### Measure ############
-            Measure(G0, W0, G, W, Sigma0, Sigma, Polar)
-
         except:
             log.info("#{0} fails due to\n {1}".format(Version, traceback.format_exc()))
         finally:

@@ -212,4 +212,7 @@ def Check_Denorminator(W0, Polar, map):
     log.info("The minmum {0} is at K={1} and Omega={2}".format(Determ.min(), map.IndexToCoordi(x), t))
     W0.FFT(-1, "Space")
     Polar.FFT(-1, "Space", "Time")
-    return (x, t, Determ.min()), Determ
+    if Determ.min()<0.0:
+        log.warning("Denorminator touch zero with value {0}".format(Determ.min()))
+        raise ValueError
+    return Determ
