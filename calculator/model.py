@@ -13,10 +13,11 @@ class BareFactory:
         self.__Hopping=np.array(Hamiltonian["Hopping"])
         self.__MaxTauBin=self.__Map.MaxTauBin
         self.__Beta=self.__Map.Beta
-        self.BareG=weight.Weight("SmoothT", self.__Map, "TwoSpins", "AntiSymmetric")
-        self.BareW=weight.Weight("DeltaT", self.__Map, "FourSpins", "Symmetric")
 
     def Build(self, Model, LatName=None):
+        #self.BareG and self.BareW must be reinitialized at every time Build() is called
+        self.BareG=weight.Weight("SmoothT", self.__Map, "TwoSpins", "AntiSymmetric", "R", "T")
+        self.BareW=weight.Weight("DeltaT", self.__Map, "FourSpins", "Symmetric", "R", "T")
         self.Lat=lat.Lattice(LatName, self.__Map)
         if Model=="Heisenberg":
             self.__Heisenberg(LatName)
@@ -25,6 +26,9 @@ class BareFactory:
         elif Model=="DiagCount":
             self.__DiagCount()
         return (self.BareG,self.BareW)
+
+    def Reset(self, ExternalField):
+        self.__ExternalField=ExternalField
 
     def __Heisenberg(self, LatName):
         Assert(len(self.__Interaction)==1, "Heisenberg model only has one coupling!")

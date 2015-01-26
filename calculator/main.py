@@ -54,21 +54,21 @@ def Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor):
     ##########OUTPUT AND FILE SAVE ####################
     spinUP=Map.Spin2Index(UP,UP)
     spinDOWN=Map.Spin2Index(DOWN,DOWN)
-    Polar.FFT("R","T")
-    print "Polar=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
-    W.FFT("R","T")
-    print "W=\n", W.Data[spinUP,0,spinUP,0,0,:]
+    #Polar.FFT("R","T")
+    #print "Polar=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
+    #W.FFT("R","T")
+    #print "W=\n", W.Data[spinUP,0,spinUP,0,0,:]
     G.FFT("R","T")
     print "G[UP,UP]=\n", G.Data[UP,0,UP,0,0,:]
-    #print "G[DOWN,DOWN]=\n", G.Data[UP,0,UP,0,0,:]
-    Sigma0.FFT("R")
-    print "Sigma0=\n", Sigma0.Data[UP,0,UP,0,0]
-    Sigma.FFT("R","T")
-    print "Sigma=\n", Sigma.Data[UP,0,UP,0,0,:]
+    print "G[DOWN,DOWN]=\n", G.Data[UP,0,UP,0,0,:]
+    #Sigma0.FFT("R")
+    #print "Sigma0=\n", Sigma0.Data[UP,0,UP,0,0]
+    #Sigma.FFT("R","T")
+    #print "Sigma=\n", Sigma.Data[UP,0,UP,0,0,:]
 
     Chi, _ = calc.Calculate_Chi(ChiTensor, Map)
-    Chi.FFT("R","T")
-    print "Chi=\n", Chi.Data[0,0,0,0,1,:]
+    #Chi.FFT("R","T")
+    #print "Chi=\n", Chi.Data[0,0,0,0,1,:]
 
     data={}
     #data["G"]=G.ToDict()
@@ -96,8 +96,11 @@ if job["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is False:
     log.info("Start from G0 and W0 to do dyson...")
     G=G0.Copy()
     W=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
-    for i in range(1):
+    for i in range(30):
         log.info("Round #{0}...".format(i))
+        G0,W0=Factory.Build(para["Model"]["Name"], para["Lattice"]["Name"])
+        G0.FFT("R","T")
+        print "G0[UP,UP]=\n", G0.Data[UP,0,UP,0,0,:]
         Sigma=calc.SigmaSmoothT_FirstOrder(G, W, Map)
         Sigma0=calc.SigmaDeltaT_FirstOrder(G, W0, Map)
         Polar=calc.Polar_FirstOrder(G, Map)
@@ -110,6 +113,12 @@ if job["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is False:
         W, ChiTensor = calc.W_Dyson(W0, Polar, Map)
         ###################################################
         Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor)
+        Field=para["Model"]["ExternalField"]
+        if abs(Field[0])>1e-3:
+            Field=[Field[0]-0.1, Field[1]+0.1]
+        print "ExternalField={0}".format(Field)
+        para["Model"]["ExternalField"]=Field
+        Factory.Reset(Field)
 
     parameter.BroadcastMessage(MessageFile, {"Version": Version, "Beta": Map.Beta})
     log.info("Version {0} is done!".format(Version))
