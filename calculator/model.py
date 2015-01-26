@@ -2,6 +2,7 @@ import weight
 import lattice as lat
 from weight import UP,DOWN,IN,OUT
 import numpy as np
+import math
 from logger import *
 
 class BareFactory:
@@ -215,5 +216,8 @@ class BareFactory:
 
     def DecreaseExternalField(self, ratio):
         for i in range(self.__Map.NSublat):
-            self.__ExternalField[i] *= ratio
+            if self.__ExternalField[i] is not 0.0:
+                self.__ExternalField[i] -= math.copysign(ratio, self.__ExternalField[i])
+            #self.__ExternalField[i] *= ratio
         log.info("Change ExternalField to {0} the next time \n".format(self.__ExternalField[0:self.__Map.NSublat]))
+

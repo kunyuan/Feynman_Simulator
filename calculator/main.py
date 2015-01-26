@@ -50,21 +50,18 @@ def Measure(G0, W0, G, W, Sigma0, Sigma, Polar):
     ##########OUTPUT AND FILE SAVE ####################
     spinUP=Map.Spin2Index(UP,UP)
     spinDOWN=Map.Spin2Index(DOWN,DOWN)
-    print "Polar=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
-    print "W=\n", W.Data[spinUP,0,spinUP,0,0,:]
-    print "G=\n", G.Data[UP,0,UP,0,0,:]
-    print "Sigma0=\n", Sigma0.Data[UP,0,UP,0,0]
-    print "Sigma=\n", Sigma.Data[UP,0,UP,0,0,:]
-    print "Polar=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
-    print "Chi=\n", Chi.Data[0,0,0,0,0,:]
+    #print "Polar=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
+    #print "W=\n", W.Data[spinUP,0,spinUP,0,0,:]
+    #print "G=\n", G.Data[UP,0,UP,0,0,:]
+    #print "Sigma0=\n", Sigma0.Data[UP,0,UP,0,0]
+    #print "Sigma=\n", Sigma.Data[UP,0,UP,0,0,:]
+    #print "Polar=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
+    #print "Chi=\n", Chi.Data[0,0,0,0,0,:]
 
     data={}
     data["G"]=G.ToDict()
     data["W"]=W.ToDict()
     data["W"].update(W0.ToDict())
-    data["Sigma0"]=Sigma0.ToDict()
-    data["Sigma"]=Sigma.ToDict()
-    data["Polar"]=Polar.ToDict()
     data["Chi"]=Chi.ToDict()
     IO.SaveBigDict(WeightFile, data)
 
@@ -122,7 +119,7 @@ else:
         try:
             log.info("Load Sigma/Polar and G to do dyson...")
             G0,W0=Factory.Build(para["Model"]["Name"], para["Lattice"]["Name"])
-            print "G0:\n", G0.Data[UP,0,UP,0,0,:]
+            #print "G0:\n", G0.Data[UP,0,UP,0,0,:]
             #reinitialize G0, W0 to kill accumulated error
             data=IO.LoadBigDict(WeightFile)
             G=weight.Weight("SmoothT", Map, "TwoSpins", "AntiSymmetric").FromDict(data["G"])
@@ -156,7 +153,8 @@ else:
             parameter.BroadcastMessage(MessageFile, {"Version": Version, "Beta": Map.Beta})
             log.info("#{0} is done!".format(Version))
 
-            Factory.DecreaseExternalField(0.5)
+            Factory.DecreaseExternalField(0.02)
+            Factory.IncreaseBeta(0.0)
 
         except:
             log.info("#{0} fails due to\n {1}".format(Version, traceback.format_exc()))

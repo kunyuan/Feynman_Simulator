@@ -8,7 +8,7 @@ SLEEP = 1    #check job status for every SLEEP seconds
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" : 4,
+    "__Duplicate" : 0,
     "__IsCluster" : False,
     "__AutoRun" : True,
     "__KeepCPUBusy": True,
@@ -27,10 +27,10 @@ Dyson={
     "__AutoRun" : True, 
     "__KeepCPUBusy": False,
     },
-"Job": {"StartFromBare" : False}
+"Job": {"StartFromBare" : True}
 }
 
-beta=0.6
+beta=1.6
 Order=2
 Common={
 "Tau": {
@@ -43,12 +43,12 @@ Common={
     #"Name": "Square",
     #"NSublat": 1,
     #"L": [8,8],
-    "Name": "Cubic",
-    "NSublat": 1,
-    "L": [8,8,8],
-    #"Name": "Pyrochlore",
-    #"NSublat": 4,
-    #"L": [4,4,4]
+    #"Name": "Cubic",
+    #"NSublat": 1,
+    #"L": [8,8,8],
+    "Name": "Pyrochlore",
+    "NSublat": 4,
+    "L": [8,8,8]
     #"Name": "Checkboard",
     #"NSublat": 2,
     #"L": [8,8]
@@ -78,7 +78,7 @@ Common={
     "Order": Order,
     "OrderAccepted": 1,
     "ErrorThreshold": 0.1,
-    "SleepTime": 100
+    "SleepTime": 300
     }
 }
 import job_class as job
