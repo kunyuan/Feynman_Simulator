@@ -200,6 +200,8 @@ class Weight():
         return self
     def ToDict(self):
         log.info("Saving {0} Matrix...".format(self.Name));
+        #assert self.Data.flags['C_CONTIGUOUS'] is True
+        print "contiguous", self.Data.flags['C_CONTIGUOUS']
         return {self.Name: self.Data}
 
     def __InverseSpinAndSublat(self):
