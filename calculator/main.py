@@ -71,12 +71,12 @@ def Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor):
     #print "Chi=\n", Chi.Data[0,0,0,0,1,:]
 
     data={}
-    data["G"]=G.ToDict()
-    data["W"]=W.ToDict()
-    data["W"].update(W0.ToDict())
-    data["Sigma0"]=Sigma0.ToDict()
-    data["Sigma"]=Sigma.ToDict()
-    data["Polar"]=Polar.ToDict()
+    #data["G"]=G.ToDict()
+    #data["W"]=W.ToDict()
+    #data["W"].update(W0.ToDict())
+    #data["Sigma0"]=Sigma0.ToDict()
+    #data["Sigma"]=Sigma.ToDict()
+    #data["Polar"]=Polar.ToDict()
     data["Chi"]=Chi.ToDict()
     IO.SaveBigDict(WeightFile, data)
     parameter.Save(ParaFile, para)  #Save Parameters

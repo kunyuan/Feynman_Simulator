@@ -200,13 +200,10 @@ class Weight():
         return self
     def ToDict(self):
         log.info("Saving {0} Matrix...".format(self.Name));
-        #assert self.Data.flags['C_CONTIGUOUS'] is True
-        print "contiguous", self.Data.flags['C_CONTIGUOUS']
         return {self.Name: self.Data}
 
     def __InverseSpinAndSublat(self):
         Sp, Sub = self.NSpin, self.NSublat
-        OriginShape = self.Shape
         self.Data = self.Data.reshape([Sp*Sub, Sp*Sub, self.__SpaceTimeVol])
         for index in range(self.__SpaceTimeVol):
             try:
@@ -214,7 +211,7 @@ class Weight():
             except:
                 log.error("Fail to inverse matrix :,:,{0}\n{1}".format(index, self.Data[index].shape))
                 sys.exit(0)
-        self.Data = self.Data.reshape([Sp,Sub,Sp,Sub]+OriginShape[self.VOLDIM:])
+        self.Data = self.Data.reshape(self.__OriginShape)
     def __AssertShape(self, shape1, shape2):
         Assert(tuple(shape1)==tuple(shape2), \
                 "Shape {0} is expected instead of shape {1}!".format(shape1, shape2))
