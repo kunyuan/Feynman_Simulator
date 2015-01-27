@@ -14,10 +14,11 @@ class BareFactory:
         self.__Hopping=np.array(Hamiltonian["Hopping"])
         self.__MaxTauBin=self.__Map.MaxTauBin
         self.__Beta=self.__Map.Beta
-        self.BareG=weight.Weight("SmoothT", self.__Map, "TwoSpins", "AntiSymmetric")
-        self.BareW=weight.Weight("DeltaT", self.__Map, "FourSpins", "Symmetric")
 
     def Build(self, Model, LatName=None):
+        #self.BareG and self.BareW must be reinitialized at every time Build() is called
+        self.BareG=weight.Weight("SmoothT", self.__Map, "TwoSpins", "AntiSymmetric", "R", "T")
+        self.BareW=weight.Weight("DeltaT", self.__Map, "FourSpins", "Symmetric", "R", "T")
         self.Lat=lat.Lattice(LatName, self.__Map)
         if Model=="Heisenberg":
             self.__Heisenberg(LatName)
@@ -26,6 +27,28 @@ class BareFactory:
         elif Model=="DiagCount":
             self.__DiagCount()
         return (self.BareG,self.BareW)
+
+    def Reset(self, ExternalField):
+        self.__ExternalField=ExternalField
+
+    def DecreaseField(self, para):
+        Field=para["Model"]["ExternalField"]
+        Decrease = para["Dyson"]["ExternalFieldDecrease"]
+        if abs(Field[0])>1e-3:
+            for i in range(self.__Map.NSublat):
+                Field[i]=Field[i]-np.copysign(Decrease, Field[i])
+        print "ExternalField decreased to: {0}".format(Field)
+        para["Model"]["ExternalField"]=Field
+        self.Reset(Field)
+
+    def RevertField(self, para):
+        Field=para["Model"]["ExternalField"]
+        Increase = para["Dyson"]["ExternalFieldDecrease"]/2.0
+        for i in range(self.__Map.NSublat):
+            Field[i]=Field[i]+np.copysign(Increase, Field[i])
+        print "ExternalField reverted to: {0}".format(Field)
+        para["Model"]["ExternalField"]=Field
+        self.Reset(Field)
 
     def __Heisenberg(self, LatName):
         Assert(len(self.__Interaction)==1, "Heisenberg model only has one coupling!")
@@ -54,7 +77,7 @@ class BareFactory:
         #Bare W
         #Dimension: 2
         spin=self.__Map.Spin2Index(UP,UP)
-        if LatName=="Checkboard":
+        if LatName=="Checkerboard":
         #NSublat: 2
             Lx,Ly=self.__Map.L
             subA=0
@@ -128,7 +151,7 @@ class BareFactory:
                 for j in range(4):
                     for e in coord[i][j]:
                         self.BareW.Data[spin,i,spin,j,self.__Map.CoordiIndex(e)] = J1/4;
-        elif LatName=="3DCheckboard":
+        elif LatName=="3DCheckerboard":
         #NSublat: 2
             Lx,Ly,Lz=self.__Map.L
             subA=0
@@ -155,7 +178,7 @@ class BareFactory:
             for i in coordB2B:
                 self.BareW.Data[spin,subB,spin,subB,self.__Map.CoordiIndex(i)] = J2/4;
         else:
-            Assert(False, "Not implemented yet!")
+            Assert(False, "Lattice {0} has not been implemented yet!".format(LatName))
 
         #Generate other non-zero spin configuration
         for e in self.__Map.GetSpin4SimilarTuples((UP,UP),(UP,UP)):
@@ -213,11 +236,4 @@ class BareFactory:
                                       self.__Map.LatIndex(coord, sub[OUT]))
                     BareWList.append([vec, coord, sub[IN]])
         return BareWList
-
-    def DecreaseExternalField(self, ratio):
-        for i in range(self.__Map.NSublat):
-            if self.__ExternalField[i] is not 0.0:
-                self.__ExternalField[i] -= math.copysign(ratio, self.__ExternalField[i])
-            #self.__ExternalField[i] *= ratio
-        log.info("Change ExternalField to {0} the next time \n".format(self.__ExternalField[0:self.__Map.NSublat]))
 

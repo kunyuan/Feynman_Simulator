@@ -10,10 +10,10 @@ def Load(FileName):
     Assert(d["Job"]["Type"]=="DYSON", "The job type should be DYSON, not {0}".format(d["Job"]["Type"]))
     return d["Job"], d["Para"]
 
-def Save(para, FileName, Mode="a"):
+def Save(FileName, para):
     log.info("Saving Parameters...")
     root={"Para":para}
-    IO.SaveDict(FileName, Mode, root)
+    IO.SaveDict(FileName, "w", root)
 
 def GetVersion(MessageFile):
     try:

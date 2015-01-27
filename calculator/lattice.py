@@ -2,17 +2,17 @@
 import numpy as np
 import math
 from logger import *
+PI=np.pi
 
 class Lattice:
     def __init__(self, Name, Map):
         self.__Map=Map
         self.L=np.array(Map.L)
         self.Name=Name
-        print Name
-        if Name=="Checkboard":
-            self.__Checkboard()
-        if Name=="3DCheckboard":
-            self.__3DCheckboard()
+        if Name=="Checkerboard":
+            self.__Checkerboard()
+        elif Name=="3DCheckerboard":
+            self.__3DCheckerboard()
         elif Name=="Honeycomb":
             self.__Honeycomb()
         elif Name=="Square":
@@ -22,32 +22,24 @@ class Lattice:
         elif Name=="Pyrochlore":
             self.__Pyrochlore()
         else:
-            Assert(False, "Not implemented!")
+            Assert(False, "Lattice {0} has not been implemented!".format(self.Name))
 
     #2D lattice
-    def __Checkboard(self):
+    def __Checkerboard(self):
         self.Dim=2
         self.__AssertDim()
         self.NSublat=2
         self.__AssertNSublat()
-        self.LatVec=np.array([[1.0,0.0],
-                              [0.0,1.0]])
+        self.LatVec=np.array([[1.0,1.0],
+                              [1.0,-1.0]])
         self.SubLatVec=np.array([[0.0,0.0],
-                                 [0.5,0.5]])
-        self.ReciprocalLatVec =np.array([[2.0 * np.pi, 0.0],
-                                         [0.0, 2.0 * np.pi]])
-    def __3DCheckboard(self):
-        self.Dim=3
-        self.__AssertDim()
-        self.NSublat=2
-        self.__AssertNSublat()
-        self.LatVec=np.array([[1.0,1.0,0.0],
-                              [1.0,-1.0,0.0],
-                              [1.0,0.0,1.0]])
-        self.SubLatVec=np.array([[0.0,0.0,0.0],
-                                 [1.0,0.0,0.0]])
-        #self.ReciprocalLatVec =np.array([[2.0 * np.pi, 0.0],
-                                         #[0.0, 2.0 * np.pi]])
+                                 [1.0,0.0]])
+        self.ReciprocalLatVec =np.array([[PI, -PI],
+                                         [PI,  PI]])
+        self.Path=[(0,0),(PI,0),(PI,PI),(0,0)]
+        self.PathNum=[self.L[0]/2, self.L[1]/2, self.L[0]/2]
+        self.PathName=["\Gamma", "\Chi", "M","\Gamma"]
+
     def __Square(self):
         self.Dim=2
         self.__AssertDim()
@@ -56,8 +48,12 @@ class Lattice:
         self.LatVec=np.array([[1.0,0.0],
                               [0.0,1.0]])
         self.SubLatVec=np.array([[0.0,0.0]])
-        self.ReciprocalLatVec =np.array([[2.0 * np.pi, 0.0],
-                                         [0.0, 2.0 * np.pi]])
+        self.ReciprocalLatVec =np.array([[2.0 * PI, 0.0],
+                                         [0.0, 2.0 * PI]])
+        self.Path=[(0,0),(PI,0),(PI,PI),(0,0)]
+        self.PathNum=[self.L[0]/2, self.L[1]/2, self.L[0]/2]
+        self.PathName=["\Gamma", "\Chi", "M","\Gamma"]
+
     def __Honeycomb(self):
         self.Dim=2
         self.__AssertDim()
@@ -84,6 +80,23 @@ class Lattice:
         self.ReciprocalLatVec =np.array([[2.0 * np.pi, 0.0, 0.0],
                                          [0.0, 2.0 * np.pi, 0.0],
                                          [0.0, 0.0, 2.0 * np.pi]])
+
+    def __3DCheckerboard(self):
+        self.Dim=3
+        self.__AssertDim()
+        self.NSublat=2
+        self.__AssertNSublat()
+        self.LatVec=np.array([[1.0,1.0,0.0],
+                              [1.0,-1.0,0.0],
+                              [1.0,0.0,1.0]])
+        self.SubLatVec=np.array([[0.0,0.0,0.0],
+                                 [1.0,0.0,0.0]])
+        #self.ReciprocalLatVec =np.array([[2.0 * np.pi, 0.0],
+                                         #[0.0, 2.0 * np.pi]])
+        self.Path=[(0,0,0),(PI,0,0),(PI,PI,0),(0,0,0),(PI,PI,PI),(PI,0,0)]
+        self.PathNum=[self.L[0]/2, self.L[1]/2, self.L[0]/2, self.L[0]/2, self.L[2]/2]
+        self.PathName=["\Gamma", "\Chi", "M","\Gamma", "\R", "\Chi"]
+
     def __Pyrochlore(self):
         self.Dim=3
         self.__AssertDim()
@@ -112,6 +125,28 @@ class Lattice:
             if v[i]>=self.L[i]:
                 v[i]-=self.L[i]
         return v
+
+    def FourierTransformation_RealSpace(self, Data, KCoordi, KType="Integer"):
+        DataK=[]
+        K=[]
+        LatPoints=[]
+        points,_=self.GetSitesList(False)
+        for vec, coord, sub in points:
+            LatPoints.append((np.array(vec), self.__Map.CoordiIndex(coord), sub))
+        for p in KCoordi:
+            if KType=="Integer":
+                KVec=0
+                for i in range(self.Dim):
+                    KVec+=self.ReciprocalLatVec[i]*p[i]/self.L[i]
+            elif KType=="Real":
+                KVec=np.array(p)
+            f=0
+            for vec, coord, sub in LatPoints:
+                f+=Data[sub,coord]*np.exp(-1j*np.dot(vec,KVec))
+            K.append(KVec)
+            DataK.append(f.real)
+        return K, DataK
+
     def GetRealVec(self, Coordi, SubLat, offset):
         '''
            Coordi: D-dimensional vector of coordinates
@@ -119,15 +154,18 @@ class Lattice:
         '''
         v=self.__Shift(Coordi+offset)
         return tuple(np.einsum("ij,i->j",self.LatVec,v)+self.SubLatVec[SubLat])
-    def GetSitesList(self):
+    def GetSitesList(self, HasOffset=True):
         """
         return: list of all sites, with format 
                 [tuple of real space vectors of sites, tuple of integer vectors of coordinates, SubLat] 
         """
-        offset=self.L/2-1
+        if HasOffset:
+            offset=self.L/2-1
+        else:
+            offset=np.array([0 for e in self.L])
         Points=[None,]*(self.__Map.Vol*self.__Map.NSublat)
         LinesInUnitCell=[]
-        Origin=[0 for e in self.L]
+        #Origin=[0 for e in self.L]
         for coord in self.__Map.GetAllCoordi():
             for sub in range(self.NSublat):
                 Points[self.__Map.LatIndex(coord, sub)]=[tuple(self.GetRealVec(coord,sub,offset)),coord,sub]

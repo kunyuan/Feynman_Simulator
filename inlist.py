@@ -30,7 +30,7 @@ Dyson={
 "Job": {"StartFromBare" : True}
 }
 
-beta=1.6
+beta=0.9
 Order=2
 Common={
 "Tau": {
@@ -46,20 +46,20 @@ Common={
     #"Name": "Cubic",
     #"NSublat": 1,
     #"L": [8,8,8],
-    "Name": "Pyrochlore",
-    "NSublat": 4,
-    "L": [8,8,8]
+    #"Name": "Pyrochlore",
+    #"NSublat": 4,
+    #"L": [8,8,8]
     #"Name": "Checkboard",
     #"NSublat": 2,
     #"L": [8,8]
-    #"Name": "3DCheckboard",
-    #"NSublat": 2,
-    #"L": [4,4,4]
+    "Name": "3DCheckerboard",
+    "NSublat": 2,
+    "L": [8,8,8]
     },
 "Model": {
     "Name": "J1J2",
     "Interaction": [1.0,0.0],
-    "ExternalField": [0.0, 0.0, 0.0, 0.0]
+    "ExternalField": [0.7, -0.7, 0.0, 0.0]
     #ExternalField on Sublattice A and B
     },
 
@@ -78,6 +78,8 @@ Common={
     "Order": Order,
     "OrderAccepted": 1,
     "ErrorThreshold": 0.1,
+    "ExternalFieldDecrease": 0.05,
+    "BetaIncrease": 0.0,
     "SleepTime": 300
     }
 }
