@@ -86,7 +86,7 @@ def Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor):
     #plot what you are interested in
     try:
         plot.PlotSpatial(Chi, Lat, 0, 0)
-        plot.PlotChi(Chi,Lat,False)
+        plot.PlotChi(Chi,Lat)
     except:
         pass
 
@@ -105,12 +105,12 @@ if job["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is False:
         Sigma0=calc.SigmaDeltaT_FirstOrder(G, W0, Map)
         Polar=calc.Polar_FirstOrder(G, Map)
         #### Check Denorminator before G,W are contaminated #####
-        Determ=calc.Check_Denorminator(W0, Polar, Map)
+        #Determ=calc.Check_Denorminator(W0, Polar, Map)
         #######DYSON FOR W AND G###########################
         print "calculating G..."
         G = calc.G_Dyson(G0, Sigma0, Sigma, Map)
         print "calculating W..."
-        W, ChiTensor = calc.W_Dyson(W0, Polar, Map)
+        W, ChiTensor, Determ = calc.W_Dyson(W0, Polar, Map)
         ###################################################
         Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor)
         Field=para["Model"]["ExternalField"]

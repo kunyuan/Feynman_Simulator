@@ -102,25 +102,30 @@ def Calculate_Denorminator(W0, Polar, map):
     NSpin, NSub=W0.NSpin, W0.NSublat
     JP=np.einsum("ijklv,klmnvt->ijmnvt",W0.Data, Polar.Data)
     #JP shape: NSpin,NSub,NSpin,NSub,Vol,Tau
-    JP *= Beta/map.MaxTauBin
+    Temp=JP*Beta/map.MaxTauBin
     for tau in range(map.MaxTauBin):
-        JP[...,tau] *= np.cos(tau*np.pi/map.MaxTauBin)
+        Temp[...,tau] *= np.cos(tau*np.pi/map.MaxTauBin)
     I=np.eye(NSpin*NSub).reshape([NSpin,NSub,NSpin,NSub])
-    return I[...,np.newaxis,np.newaxis]-JP
+    return I[...,np.newaxis,np.newaxis]-Temp, JP
 
 def W_Dyson(W0, Polar, map):
     W=weight.Weight("SmoothT", map, "FourSpins", "Symmetric", "K","W")
     ChiTensor=weight.Weight("SmoothT", map, "FourSpins", "Symmetric", "K","W")
     W0.FFT("K")
     Polar.FFT("K","W")
-
-    JP=np.einsum("ijklv,klmnvt->ijmnvt",W0.Data, Polar.Data)
+    Denorm,JP=Calculate_Denorminator(W0, Polar, map)
     JPJ=np.einsum("ijklvt,klmnv->ijmnvt", JP, W0.Data)
-    W.Data=Calculate_Denorminator(W0, Polar, map)
-    W.Inverse();
-    ChiTensor.Data = -np.einsum('ijklvt,klmnvt->ijmnvt', Polar.Data, W.Data)
-    W.Data = np.einsum('ijklvt,klmnvt->ijmnvt', W.Data,JPJ)
-    return W, ChiTensor
+    lu,Determ=weight.LUFactor(Denorm)
+    Check_Denorminator(Determ,map)
+    ChiTensor.LUSolve(lu, -Polar.Data)
+    W.LUSolve(lu, JPJ)
+
+    #W.Data=Calculate_Denorminator(W0, Polar, map)
+    #W.Inverse()
+    #ChiTensor.Data = -np.einsum('ijklvt,klmnvt->ijmnvt', Polar.Data, W.Data)
+    #W.Data = np.einsum('ijklvt,klmnvt->ijmnvt', W.Data,JPJ)
+
+    return W, ChiTensor, Determ
 
 def G_Dyson(G0, Sigma0, Sigma, map):
     Beta=map.Beta
@@ -173,22 +178,30 @@ def Calculate_Chi(ChiTensor, map):
     Chi.Data=Chi.Data.reshape([1, NSublat, 1, NSublat, map.Vol, map.MaxTauBin]) 
     return Chi
 
-def Check_Denorminator(W0, Polar, map):
-    """return tuple ((position, smallest 1-JP determinant), 1-JP in omega,k domain)"""
-    log.info("Check Denorminator...")
-    W0.FFT("K")
-    Polar.FFT("K", "W")
-    NSpin, NSub=Polar.NSpin, Polar.NSublat
-    Denorm=Calculate_Denorminator(W0, Polar, map)
-    Denorm=Denorm.reshape([NSpin*NSub, NSpin*NSub]+Polar.Shape[Polar.VOLDIM:])
-    Determ=np.zeros((map.Vol,map.MaxTauBin))*1j
-    for x in range(map.Vol):
-        for t in range(map.MaxTauBin):
-            Determ[x,t]=np.linalg.det(Denorm[:,:,x,t])
+def Check_Denorminator(Determ, map):
     pos=np.where(Determ==Determ.min())
     x,t=pos[0][0], pos[1][0]
     log.info("The minmum {0} is at K={1} and Omega={2}".format(Determ.min(), map.IndexToCoordi(x), t))
     if Determ.min()<0.0:
         log.warning("Denorminator touch zero with value {0}".format(Determ.min()))
         raise ValueError
-    return Determ
+
+#def Check_Denorminator(W0, Polar, map):
+    #"""return tuple ((position, smallest 1-JP determinant), 1-JP in omega,k domain)"""
+    #log.info("Check Denorminator...")
+    #W0.FFT("K")
+    #Polar.FFT("K", "W")
+    #NSpin, NSub=Polar.NSpin, Polar.NSublat
+    #Denorm=Calculate_Denorminator(W0, Polar, map)
+    #Denorm=Denorm.reshape([NSpin*NSub, NSpin*NSub]+Polar.Shape[Polar.VOLDIM:])
+    #Determ=np.zeros((map.Vol,map.MaxTauBin))*1j
+    #for x in range(map.Vol):
+        #for t in range(map.MaxTauBin):
+            #Determ[x,t]=np.linalg.det(Denorm[:,:,x,t])
+    #pos=np.where(Determ==Determ.min())
+    #x,t=pos[0][0], pos[1][0]
+    #log.info("The minmum {0} is at K={1} and Omega={2}".format(Determ.min(), map.IndexToCoordi(x), t))
+    #if Determ.min()<0.0:
+        #log.warning("Denorminator touch zero with value {0}".format(Determ.min()))
+        #raise ValueError
+    #return Determ

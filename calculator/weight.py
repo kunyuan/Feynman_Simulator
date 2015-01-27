@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 import numpy as np
+import scipy.linalg.lapack as lapack
+#import numpy.linalg.lapack_lite as lapack
 import sys, os, unittest, math
 from logger import *
 
@@ -202,6 +204,19 @@ class Weight():
         log.info("Saving {0} Matrix...".format(self.Name));
         return {self.Name: self.Data}
 
+    def LUSolve(self, lu_piv , b):
+        """solv ax=b, self.Data will be from lu of a to x"""
+        SpSub = self.NSpin*self.NSublat
+        lu, piv=lu_piv
+        self.Data = self.Data.reshape([SpSub, SpSub, self.__SpaceTimeVol])
+        b = b.reshape([SpSub, SpSub, self.__SpaceTimeVol])
+        for index in range(self.__SpaceTimeVol):
+            self.Data[:,:,index],info = lapack.zgetrs(lu[index,:,:], piv[index,:], b[:,:,index])
+            if info is not 0:
+                raise ValueError('illegal value in %d-th argument of internal gesv|posv'% -info)
+        self.Data = self.Data.reshape(self.__OriginShape)
+        b = b.reshape(self.__OriginShape)
+
     def __InverseSpinAndSublat(self):
         Sp, Sub = self.NSpin, self.NSublat
         self.Data = self.Data.reshape([Sp*Sub, Sp*Sub, self.__SpaceTimeVol])
@@ -209,8 +224,8 @@ class Weight():
             try:
                 self.Data[:,:,index] = np.linalg.inv(self.Data[:,:,index])
             except:
-                log.error("Fail to inverse matrix :,:,{0}\n{1}".format(index, self.Data[index].shape))
-                sys.exit(0)
+                log.error("Fail to inverse matrix :,:,{0}\n{1}".format(index, self.Data[:,:,index]))
+                raise
         self.Data = self.Data.reshape(self.__OriginShape)
     def __AssertShape(self, shape1, shape2):
         Assert(tuple(shape1)==tuple(shape2), \
@@ -252,6 +267,30 @@ class Weight():
         SpatialShape=shape[0:InsertPos]+self.L+shape[InsertPos+1:]
         return range(InsertPos, InsertPos+len(self.L)), SpatialShape
 
+def LUFactor(arr):
+    SpSub=arr.shape[0]*arr.shape[1]
+    Vol,Time=arr.shape[-2],arr.shape[-1]
+    SpaceTime=Vol*Time
+    arr=arr.reshape([SpSub,SpSub,SpaceTime])
+    Piv=np.zeros((SpaceTime,SpSub))
+    Det=np.ones(SpaceTime)+0*1j
+    lu=np.empty_like(arr).reshape([SpaceTime,SpSub,SpSub])
+    diagrange=range(SpSub)
+    for index in range(SpaceTime):
+        lu[index,:,:],Piv[index,:],info=lapack.zgetrf(arr[:,:,index])
+        for i in diagrange:
+            if Piv[index, i] is not i:
+                Det[index] *=-lu[index,i,i]
+            else:
+                Det[index] *=lu[index,i,i]
+        if info < 0:
+            raise ValueError('illegal value in %d-th argument of internal getrf' % -info)
+        elif info > 0:
+            raise ValueError("Diagonal number %d is exactly zero. Singular matrix." % -info)
+    Assert(abs(np.linalg.det(arr[:,:,0])-Det[0])<1e-4, "Determinate is wrong!")
+    Assert(abs(np.linalg.det(arr[:,:,-1])-Det[-1])<1e-4, "Determinate is wrong!")
+    Det=Det.reshape([Vol,Time])
+    return (lu, Piv), Det
 
 class TestIndexMap(unittest.TestCase):
     def setUp(self):
