@@ -138,7 +138,6 @@ def G_Dyson(G0, Sigma0, Sigma, map):
     for tau in range(map.MaxTauBin):
         G0Sigma0[...,tau]*= np.cos(np.pi*map.IndexToTau(tau)/Beta)
 
-    #GS  = Beta/map.MaxTauBin*(Beta/map.MaxTauBin*G0Sigma + G0Sigma0)
     GS  = Beta/map.MaxTauBin*(Beta/map.MaxTauBin*G0Sigma) 
     #GS shape: NSpin,NSub,NSpin,NSub,Vol,Tau
 
@@ -164,13 +163,15 @@ def Calculate_Chi(ChiTensor, map):
     SzSz[UU, UU]= SzSz[DD, DD]=1
     SzSz[UU, DD]= SzSz[DD, UU]=-1
     Chi=weight.Weight("SmoothT", map, "NoSpin", "Symmetric", ChiTensor.SpaceDomain, ChiTensor.TimeDomain)
-    Chi_ss=[Chi.Copy(), Chi.Copy(), Chi.Copy()]
+    #Chi_ss=[Chi.Copy(), Chi.Copy(), Chi.Copy()]
     SS=[SxSx/4.0, SySy/4.0, SzSz/4.0]
-    for i in range(3):
-        temp=np.einsum("ik, kminvt->mnvt", SS[i], ChiTensor.Data)
-        Chi_ss[i].Data=temp.reshape([1, NSublat, 1, NSublat, map.Vol, map.MaxTauBin]) 
-    Chi.Data=Chi_ss[0].Data+Chi_ss[1].Data+Chi_ss[2].Data
-    return Chi, Chi_ss
+    #for i in range(3):
+        #temp=np.einsum("ik, kminvt->mnvt", SS[i], ChiTensor.Data)
+        #Chi_ss[i].Data=temp.reshape([1, NSublat, 1, NSublat, map.Vol, map.MaxTauBin]) 
+    #Chi.Data=Chi_ss[0].Data+Chi_ss[1].Data+Chi_ss[2].Data
+    Chi.Data=np.einsum("ik, kminvt->mnvt", SS[2], ChiTensor.Data)
+    Chi.Data=Chi.Data.reshape([1, NSublat, 1, NSublat, map.Vol, map.MaxTauBin]) 
+    return Chi
 
 def Check_Denorminator(W0, Polar, map):
     """return tuple ((position, smallest 1-JP determinant), 1-JP in omega,k domain)"""

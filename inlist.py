@@ -30,7 +30,7 @@ Dyson={
 "Job": {"StartFromBare" : True}
 }
 
-beta=0.9
+beta=0.6
 Order=2
 Common={
 "Tau": {
@@ -54,12 +54,12 @@ Common={
     #"L": [8,8]
     "Name": "3DCheckerboard",
     "NSublat": 2,
-    "L": [8,8,8]
+    "L": [16,16,16]
     },
 "Model": {
     "Name": "J1J2",
     "Interaction": [1.0,0.0],
-    "ExternalField": [1.0, -1.0, 0.0, 0.0]
+    "ExternalField": [0.0, -0.0, 0.0, 0.0]
     #ExternalField on Sublattice A and B
     },
 

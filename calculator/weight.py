@@ -135,6 +135,8 @@ class Weight():
             self.__HasTau=True
             self.__SpaceTimeIndex=[[k,v] for k in range(self.Shape[self.VOLDIM]) 
                                          for v in range(self.Shape[self.TAUDIM])]
+            self.__SpaceTimeVol=self.Shape[self.VOLDIM]*self.Shape[self.TAUDIM]
+
             if Symmetry is "Symmetric":
                 self.IsSymmetric=True
             elif Symmetry is "AntiSymmetric":
@@ -144,6 +146,7 @@ class Weight():
         elif Name=="DeltaT":
             self.__HasTau=False
             self.__SpaceTimeIndex=[[k,] for k in range(self.Shape[self.VOLDIM])]
+            self.__SpaceTimeVol=self.Shape[self.VOLDIM]
         else:
             Assert(False, "Should be either .SmoothT or .DeltaT in Name, not {0}".format(Name))
 
@@ -202,11 +205,10 @@ class Weight():
     def __InverseSpinAndSublat(self):
         Sp, Sub = self.NSpin, self.NSublat
         OriginShape = self.Shape
-        self.Data = self.Data.reshape([Sp*Sub, Sp*Sub]+OriginShape[self.VOLDIM:])
-        for j in self.__SpaceTimeIndex:
-            index=[Ellipsis,]+j
+        self.Data = self.Data.reshape([Sp*Sub, Sp*Sub, self.__SpaceTimeVol])
+        for index in range(self.__SpaceTimeVol):
             try:
-                self.Data[index] = np.linalg.inv(self.Data[index])
+                self.Data[:,:,index] = np.linalg.inv(self.Data[:,:,index])
             except:
                 log.error("Fail to inverse matrix :,:,{0}\n{1}".format(index, self.Data[index].shape))
                 sys.exit(0)

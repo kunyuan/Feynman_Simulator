@@ -66,7 +66,7 @@ def Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor):
     #Sigma.FFT("R","T")
     #print "Sigma=\n", Sigma.Data[UP,0,UP,0,0,:]
 
-    Chi, _ = calc.Calculate_Chi(ChiTensor, Map)
+    Chi = calc.Calculate_Chi(ChiTensor, Map)
     #Chi.FFT("R","T")
     #print "Chi=\n", Chi.Data[0,0,0,0,1,:]
 
@@ -86,7 +86,7 @@ def Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor):
     #plot what you are interested in
     try:
         plot.PlotSpatial(Chi, Lat, 0, 0)
-        plot.PlotChi(Chi,Lat)
+        plot.PlotChi(Chi,Lat,False)
     except:
         pass
 
@@ -96,11 +96,11 @@ if job["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is False:
     log.info("Start from G0 and W0 to do dyson...")
     G=G0.Copy()
     W=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
-    for i in range(30):
+    for i in range(1):
         log.info("Round #{0}...".format(i))
         G0,W0=Factory.Build(para["Model"]["Name"], para["Lattice"]["Name"])
-        G0.FFT("R","T")
-        print "G0[UP,UP]=\n", G0.Data[UP,0,UP,0,0,:]
+        #G0.FFT("R","T")
+        #print "G0[UP,UP]=\n", G0.Data[UP,0,UP,0,0,:]
         Sigma=calc.SigmaSmoothT_FirstOrder(G, W, Map)
         Sigma0=calc.SigmaDeltaT_FirstOrder(G, W0, Map)
         Polar=calc.Polar_FirstOrder(G, Map)
@@ -114,8 +114,8 @@ if job["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is False:
         ###################################################
         Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor)
         Field=para["Model"]["ExternalField"]
-        if abs(Field[0])>1e-3:
-            Field=[Field[0]-0.1, Field[1]+0.1]
+        if abs(Field[0])>1e-10:
+            Field=[Field[0]-0.1, Field[1]-0.1]
         print "ExternalField={0}".format(Field)
         para["Model"]["ExternalField"]=Field
         Factory.Reset(Field)
