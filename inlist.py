@@ -54,8 +54,8 @@ Common={
     #"L": [8,8]
     "Name": "3DCheckerboard",
     "NSublat": 2,
-    "L": [16,16,16]
-    #"L": [8,8,8]
+    #"L": [16,16,16]
+    "L": [8,8,8]
     },
 "Model": {
     "Name": "J1J2",

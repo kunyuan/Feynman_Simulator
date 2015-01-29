@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 import numpy as np
-import scipy.linalg.lapack as lapack
-import numpy.linalg.lapack_lite as lapack_lite
 from numpy.core import intc
 import sys, os, unittest, math
 from logger import *
-import solver.lu as solver
+try:
+    import solver.lu_fast as solver
+except:
+    import solver.lu_slow as solver
 
 SPIN,SPIN2,SPIN3=2,4,8
 IN,OUT=0,1
@@ -188,9 +189,6 @@ class Weight():
         PhaseFactor=np.exp(-1j*BackForth*np.pi*tau/self.Beta)
         self.Data*=PhaseFactor
 
-    def Inverse(self):
-        self.__InverseSpinAndSublat()
-
     def FromDict(self, data):
         log.info("Loading {0} Matrix...".format(self.Name));
         if self.Name in data:
@@ -204,7 +202,7 @@ class Weight():
         return {self.Name: self.Data}
 
     def LUSolve(self, lu_piv , b):
-        """solv ax=b, self.Data will be from lu of a to x"""
+        """solve ax=b, self.Data will be from lu of a to x"""
         SpSub = self.NSpin*self.NSublat
         lu,piv=lu_piv
         self.Data = np.swapaxes(self.Data.reshape([SpSub, SpSub, self.__SpaceTimeVol]),0,2)
@@ -212,7 +210,7 @@ class Weight():
         self.Data = solver.lu_solve(lu,piv,b)
         self.Data = np.swapaxes(self.Data,0,2).reshape(self.__OriginShape)
 
-    def __InverseSpinAndSublat(self):
+    def Inverse(self):
         Sp, Sub = self.NSpin, self.NSublat
         self.Data = self.Data.reshape([Sp*Sub, Sp*Sub, self.__SpaceTimeVol])
         for index in range(self.__SpaceTimeVol):
@@ -222,6 +220,7 @@ class Weight():
                 log.error("Fail to inverse matrix :,:,{0}\n{1}".format(index, self.Data[:,:,index]))
                 raise
         self.Data = self.Data.reshape(self.__OriginShape)
+
     def __AssertShape(self, shape1, shape2):
         Assert(tuple(shape1)==tuple(shape2), \
                 "Shape {0} is expected instead of shape {1}!".format(shape1, shape2))
@@ -268,7 +267,7 @@ def LUFactor(arr):
     lu, piv=solver.lu_factor(arr)
     det=solver.lu_det(lu,piv)
     det=det.reshape([Vol,Time])
-    return (lu, piv),det
+    return (lu, piv), det
 
 class TestIndexMap(unittest.TestCase):
     def setUp(self):

@@ -19,6 +19,10 @@ cdef extern void zgetrs_(char *TRANS, int *N, int *NRHS, cComplex *A, int *LDA, 
 #*  by ZGETRF.
 
 def lu_factor(np.ndarray[cComplex, ndim=3] arr):
+    """
+       arr: complex type array with [M, N, N], it may be altered!!!
+       return: (lu, piv): lu decomposition of array arr
+    """
     if arr.shape[1] != arr.shape[2]:
         raise TypeError("the input array must have shape [:, N, N]")
     cdef int size= arr.shape[0];
@@ -30,13 +34,22 @@ def lu_factor(np.ndarray[cComplex, ndim=3] arr):
     piv=np.empty((size, N), dtype=np.intc)
     #make arr c contiguous!
     arr=np.ascontiguousarray(arr)
-    for i in range(size):
     #for i in prange(size, nogil=True):
+    for i in range(size):
         zgetrf_(&N, &N, &arr[i,0,0], &LDA, &piv[i,0], &info);
+        if info < 0:
+            raise ValueError('illegal value in %d-th argument of internal getrf' % -info)
+        elif info > 0:
+            raise ValueError("Diagonal number %d is exactly zero. Singular matrix." % -info)
     #piv stores pivot indices with fortran convention, meaning indices start from 1
     return arr,piv-1
 
 def lu_solve(np.ndarray[cComplex, ndim=3] lu, np.ndarray[int, ndim=2] piv, np.ndarray[cComplex, ndim=3] b):
+    """
+       lu, piv: lu decomposition of array arr
+       b: shape [M, N, N], it will be altered!!!
+       return: the solve of aX=b, an array with shape [M,N,N]
+    """
     if lu.shape[1] != lu.shape[2]:
         raise TypeError("the lu array must have shape [:, N, N]")
     if lu.shape[0] != piv.shape[0]:
@@ -58,6 +71,8 @@ def lu_solve(np.ndarray[cComplex, ndim=3] lu, np.ndarray[int, ndim=2] piv, np.nd
     #for i in prange(size, nogil=True):
     for i in range(size):
         zgetrs_(&trans, &N, &nrhs, &lu[i,0,0], &LDA, &piv[i,0], &b[i,0,0], &LDB, &info);
+        if info is not 0:
+            raise ValueError('illegal value in %d-th argument of internal gesv|posv'% -info)
     return b
 
 def lu_det(np.ndarray[cComplex, ndim=3] lu, np.ndarray[int, ndim=2] piv):
@@ -71,8 +86,6 @@ def lu_det(np.ndarray[cComplex, ndim=3] lu, np.ndarray[int, ndim=2] piv):
     cdef int size= lu.shape[0];
     cdef int N = lu.shape[1];
     det=np.ones(size, dtype=Complex)
-    det[0]=1
-    print det[0]
     for i in range(size):
         for j in range(N):
             if piv[i, j]!=j:
