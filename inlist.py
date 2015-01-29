@@ -30,7 +30,7 @@ Dyson={
 "Job": {"StartFromBare" : True}
 }
 
-beta=0.6
+beta=0.8
 Order=2
 Common={
 "Tau": {
@@ -60,7 +60,7 @@ Common={
 "Model": {
     "Name": "J1J2",
     "Interaction": [1.0,0.0],
-    "ExternalField": [0.0, -0.0, 0.0, 0.0]
+    "ExternalField": [1.0, -1.0, 0.0, 0.0]
     #ExternalField on Sublattice A and B
     },
 

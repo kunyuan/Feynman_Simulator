@@ -96,7 +96,7 @@ if job["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is False:
     log.info("Start from G0 and W0 to do dyson...")
     G=G0.Copy()
     W=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
-    for i in range(10):
+    for i in range(30):
         log.info("Round #{0}...".format(i))
         G0,W0=Factory.Build(para["Model"]["Name"], para["Lattice"]["Name"])
         Sigma=calc.SigmaSmoothT_FirstOrder(G, W, Map)
@@ -111,7 +111,7 @@ if job["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is False:
         Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor)
         Field=para["Model"]["ExternalField"]
         if abs(Field[0])>1e-10:
-            Field=[Field[0]-0.1, Field[1]-0.1]
+            Field=[Field[0]-0.1, Field[1]+0.1]
         print "ExternalField={0}".format(Field)
         para["Model"]["ExternalField"]=Field
         Factory.Reset(Field)
