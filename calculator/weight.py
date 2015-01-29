@@ -4,6 +4,7 @@ from numpy.core import intc
 import sys, os, unittest, math
 from logger import *
 try:
+    #much faster Ax=b solver, but you have to run ./solver/compiler.sh to compile
     import solver.lu_fast as solver
 except:
     import solver.lu_slow as solver
