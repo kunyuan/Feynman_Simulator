@@ -22,6 +22,7 @@ else:
     Assert(False, "Do not understand the argument!")
 
 job, para=parameter.Load(InputFile)
+print para
 ParaFile="{0}_para".format(job["PID"])
 WeightFile=job["WeightFile"]
 MessageFile=job["MessageFile"]
@@ -71,9 +72,9 @@ def Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor):
     #print "Chi=\n", Chi.Data[0,0,0,0,1,:]
 
     data={}
-    #data["G"]=G.ToDict()
-    #data["W"]=W.ToDict()
-    #data["W"].update(W0.ToDict())
+    data["G"]=G.ToDict()
+    data["W"]=W.ToDict()
+    data["W"].update(W0.ToDict())
     #data["Sigma0"]=Sigma0.ToDict()
     #data["Sigma"]=Sigma.ToDict()
     #data["Polar"]=Polar.ToDict()
@@ -96,25 +97,41 @@ if job["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is False:
     log.info("Start from G0 and W0 to do dyson...")
     G=G0.Copy()
     W=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
-    for i in range(10):
+    Gold = G
+    Wold = W
+    Sigma=weight.Weight("SmoothT", Map, "TwoSpins", "AntiSymmetric","R","T")
+    Sigma0=weight.Weight("DeltaT", Map, "TwoSpins", "AntiSymmetric","R","T")
+    Polar=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
+    for i in range(1):
+        ratio = i/(i+1.0)
         log.info("Round #{0}...".format(i))
         G0,W0=Factory.Build(para["Model"]["Name"], para["Lattice"]["Name"])
-        Sigma=calc.SigmaSmoothT_FirstOrder(G, W, Map)
-        Sigma0=calc.SigmaDeltaT_FirstOrder(G, W0, Map)
-        Polar=calc.Polar_FirstOrder(G, Map)
+
+        Sigma.Merge(ratio, calc.SigmaSmoothT_FirstOrder(G, W, Map))
+        Sigma0.Merge(ratio, calc.SigmaDeltaT_FirstOrder(G, W0, Map))
+        Polar.Merge(ratio, calc.Polar_FirstOrder(G, Map))
+
+        #### Check Denorminator before G,W are contaminated #####
+        try:
+            Determ=calc.Check_Denorminator(W0, Polar, Map)
+        except:
+            Factory.RevertField(para)
+            G = Gold
+            W = Wold
+            continue
+
         #######DYSON FOR W AND G###########################
         print "calculating G..."
+        Gold = G
         G = calc.G_Dyson(G0, Sigma0, Sigma, Map)
         print "calculating W..."
-        W, ChiTensor, Determ = calc.W_Dyson(W0, Polar, Map)
+        Wold = W
+        W, ChiTensor = calc.W_Dyson(W0, Polar, Map)
+
         ###################################################
         Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor)
-        Field=para["Model"]["ExternalField"]
-        if abs(Field[0])>1e-10:
-            Field=[Field[0]-0.1, Field[1]-0.1]
-        print "ExternalField={0}".format(Field)
-        para["Model"]["ExternalField"]=Field
-        Factory.Reset(Field)
+
+        Factory.DecreaseField(para)
 
     parameter.BroadcastMessage(MessageFile, {"Version": Version, "Beta": Map.Beta})
     log.info("Version {0} is done!".format(Version))
@@ -129,7 +146,7 @@ else:
         try:
             log.info("Load Sigma/Polar and G to do dyson...")
             G0,W0=Factory.Build(para["Model"]["Name"], para["Lattice"]["Name"])
-            print "G0:\n", G0.Data[UP,0,UP,0,0,:]
+            #print "G0:\n", G0.Data[UP,0,UP,0,0,:]
             #reinitialize G0, W0 to kill accumulated error
             data=IO.LoadBigDict(WeightFile)
             G=weight.Weight("SmoothT", Map, "TwoSpins", "AntiSymmetric").FromDict(data["G"])
@@ -148,7 +165,12 @@ else:
             log.info("Dyson GW...")
 
             #### Check Denorminator before G,W are contaminated #####
-            Determ=calc.Check_Denorminator(W0, Polar, Map)
+            try:
+                Determ=calc.Check_Denorminator(W0, Polar, Map)
+            except:
+                Factory.RevertField(para)
+                continue
+
             #######DYSON FOR W AND G###########################
             G = calc.G_Dyson(G0, Sigma0, Sigma, Map)
             W, ChiTensor = calc.W_Dyson(W0, Polar,Map)
@@ -157,8 +179,9 @@ else:
 
             log.info("Version {0} is done!".format(Version))
             parameter.BroadcastMessage(MessageFile, {"Version": Version, "Beta": Map.Beta})
-            ExternalField=Factory.DecreaseExternalField(0.5)
-            para["Model"]["ExternalField"]=list(ExternalField)
+
+            Factory.DecreaseField(para)
+
         except:
             log.info("#{0} fails due to\n {1}".format(Version, traceback.format_exc()))
         finally:

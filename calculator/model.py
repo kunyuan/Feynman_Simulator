@@ -2,6 +2,7 @@ import weight
 import lattice as lat
 from weight import UP,DOWN,IN,OUT
 import numpy as np
+import math
 from logger import *
 
 class BareFactory:
@@ -29,6 +30,25 @@ class BareFactory:
 
     def Reset(self, ExternalField):
         self.__ExternalField=ExternalField
+
+    def DecreaseField(self, para):
+        Field=para["Model"]["ExternalField"]
+        Decrease = para["Dyson"]["ExternalFieldDecrease"]
+        if abs(Field[0])>1e-3:
+            for i in range(self.__Map.NSublat):
+                Field[i]=Field[i]-np.copysign(Decrease, Field[i])
+        print "ExternalField decreased to: {0}".format(Field)
+        para["Model"]["ExternalField"]=Field
+        self.Reset(Field)
+
+    def RevertField(self, para):
+        Field=para["Model"]["ExternalField"]
+        Increase = para["Dyson"]["ExternalFieldDecrease"]/2.0
+        for i in range(self.__Map.NSublat):
+            Field[i]=Field[i]+np.copysign(Increase, Field[i])
+        print "ExternalField reverted to: {0}".format(Field)
+        para["Model"]["ExternalField"]=Field
+        self.Reset(Field)
 
     def __Heisenberg(self, LatName):
         Assert(len(self.__Interaction)==1, "Heisenberg model only has one coupling!")
@@ -217,8 +237,3 @@ class BareFactory:
                     BareWList.append([vec, coord, sub[IN]])
         return BareWList
 
-    def DecreaseExternalField(self, ratio):
-        for i in range(self.__Map.NSublat):
-            self.__ExternalField[i] *= ratio
-        return self.__ExternalField
-        log.info("Change ExternalField to {0} the next time \n".format(self.__ExternalField[0:self.__Map.NSublat]))

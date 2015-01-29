@@ -48,8 +48,8 @@ Common={
     #"L": [8,8,8],
     #"Name": "Pyrochlore",
     #"NSublat": 4,
-    #"L": [4,4,4]
-    #"Name": "Checkerboard",
+    #"L": [8,8,8]
+    #"Name": "Checkboard",
     #"NSublat": 2,
     #"L": [8,8]
     "Name": "3DCheckerboard",
@@ -79,7 +79,9 @@ Common={
     "Order": Order,
     "OrderAccepted": 1,
     "ErrorThreshold": 0.1,
-    "SleepTime": 100
+    "ExternalFieldDecrease": 0.05,
+    "BetaIncrease": 0.0,
+    "SleepTime": 300
     }
 }
 import job_class as job

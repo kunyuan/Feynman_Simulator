@@ -165,6 +165,11 @@ class Weight():
         import copy
         return copy.deepcopy(self)
 
+    def Merge(self, ratio, newWeight):
+        """return a summation of oldWeight and newWeight"""
+        self.FFT("R","T")
+        self.Data = ratio*self.Data + (1.0-ratio)*newWeight.Data
+
     def FFT(self, *SpaceOrTime):
         if "R" in SpaceOrTime and self.SpaceDomain is "K":
             self.__fftSpace(-1)

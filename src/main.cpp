@@ -103,7 +103,7 @@ void MonteCarlo(const para::Job &Job)
                 if (DiskWriterTimer.check(100))
                     Env.Save();
 
-                if (MessageTimer.check(100))
+                if (MessageTimer.check(300))
                     Env.ListenToMessage();
                 //                    MarkovMonitor.SqueezeStatistics(2.0);
             }
