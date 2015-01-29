@@ -30,6 +30,7 @@
 *.log
 *.gv
 *.txt
+*.pstats
 
 # Figure
 *.png
@@ -39,6 +40,7 @@
 *.pdf
 *.svg
 
+*.zip
 *.npy
 *.pkl
 *.npz

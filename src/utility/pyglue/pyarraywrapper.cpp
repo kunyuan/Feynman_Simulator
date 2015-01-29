@@ -28,16 +28,25 @@ bool Convert(Object obj, ArrayObject& array)
 }
 
 ArrayObject::ArrayObject(const Object& obj)
-    : Object(obj)
 {
     if (!PyArray_Check(obj.Get()))
         ABORT("PyArray object is expected!");
+    if (PyArray_IS_C_CONTIGUOUS(obj.Get()))
+        _PyPtr = obj.Get(NewRef);
+    else
+        //NewCopy return a new reference
+        _PyPtr = PyArray_NewCopy((PyArrayObject*)obj.Get(), NPY_CORDER);
 }
 ArrayObject::ArrayObject(PyObject* obj, OwnerShip ownership)
-    : Object(obj, ownership)
 {
+    Object temp(obj, ownership);
     if (!PyArray_Check(obj))
         ABORT("PyArray object is expected!");
+    if (PyArray_IS_C_CONTIGUOUS(obj))
+        _PyPtr = temp.Get(NewRef);
+    else
+        //NewCopy return a new reference
+        _PyPtr = PyArray_NewCopy((PyArrayObject*)temp.Get(), NPY_CORDER);
 }
 
 void ArrayObject::_Construct(Complex* data, const uint* Shape, const int Dim)
@@ -53,6 +62,9 @@ void ArrayObject::_Construct(Complex* data, const uint* Shape, const int Dim)
     for (int i = 0; i < Dim; i++)
         _Shape.push_back((npy_intp)Shape[i]);
     PyObject* array = PyArray_SimpleNewFromData(Dim, _Shape.data(), TypeName, (void*)data);
+    //A new reference to an ndarray is returned, but the ndarray will not own its data.
+    //When this ndarray is deallocated, the pointer will not be freed.
+    //You should ensure that the provided memory is not freed while the returned array is in existence.
     *this = Object(array);
 }
 
@@ -69,6 +81,9 @@ void ArrayObject::_Construct(real* data, const uint* Shape, const int Dim)
     for (int i = 0; i < Dim; i++)
         _Shape.push_back((npy_intp)Shape[i]);
     PyObject* array = PyArray_SimpleNewFromData(Dim, _Shape.data(), TypeName, (void*)data);
+    //A new reference to an ndarray is returned, but the ndarray will not own its data.
+    //When this ndarray is deallocated, the pointer will not be freed.
+    //You should ensure that the provided memory is not freed while the returned array is in existence.
     *this = Object(array);
 }
 

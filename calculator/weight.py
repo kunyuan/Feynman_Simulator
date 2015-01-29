@@ -1,7 +1,12 @@
 #!/usr/bin/env python
 import numpy as np
+from numpy.core import intc
 import sys, os, unittest, math
 from logger import *
+try:
+    import solver.lu_fast as solver
+except:
+    import solver.lu_slow as solver
 
 SPIN,SPIN2,SPIN3=2,4,8
 IN,OUT=0,1
@@ -133,8 +138,8 @@ class Weight():
             self.Beta=self.Map.Beta
             self.Shape.append(self.Map.MaxTauBin)
             self.__HasTau=True
-            self.__SpaceTimeIndex=[[k,v] for k in range(self.Shape[self.VOLDIM]) 
-                                         for v in range(self.Shape[self.TAUDIM])]
+            self.__SpaceTimeVol=self.Shape[self.VOLDIM]*self.Shape[self.TAUDIM]
+
             if Symmetry is "Symmetric":
                 self.IsSymmetric=True
             elif Symmetry is "AntiSymmetric":
@@ -143,7 +148,7 @@ class Weight():
                 Assert(False, "Should be either Symmetric or AntiSymmetric, not {0}".format(Symmetry))
         elif Name=="DeltaT":
             self.__HasTau=False
-            self.__SpaceTimeIndex=[[k,] for k in range(self.Shape[self.VOLDIM])]
+            self.__SpaceTimeVol=self.Shape[self.VOLDIM]
         else:
             Assert(False, "Should be either .SmoothT or .DeltaT in Name, not {0}".format(Name))
 
@@ -189,9 +194,6 @@ class Weight():
         PhaseFactor=np.exp(-1j*BackForth*np.pi*tau/self.Beta)
         self.Data*=PhaseFactor
 
-    def Inverse(self):
-        self.__InverseSpinAndSublat()
-
     def FromDict(self, data):
         log.info("Loading {0} Matrix...".format(self.Name));
         if self.Name in data:
@@ -204,18 +206,26 @@ class Weight():
         log.info("Saving {0} Matrix...".format(self.Name));
         return {self.Name: self.Data}
 
-    def __InverseSpinAndSublat(self):
+    def LUSolve(self, lu_piv , b):
+        """solve ax=b, self.Data will be from lu of a to x"""
+        SpSub = self.NSpin*self.NSublat
+        lu,piv=lu_piv
+        self.Data = np.swapaxes(self.Data.reshape([SpSub, SpSub, self.__SpaceTimeVol]),0,2)
+        b = np.swapaxes(b.reshape([SpSub, SpSub, self.__SpaceTimeVol]),0,2)
+        self.Data = solver.lu_solve(lu,piv,b)
+        self.Data = np.swapaxes(self.Data,0,2).reshape(self.__OriginShape)
+
+    def Inverse(self):
         Sp, Sub = self.NSpin, self.NSublat
-        OriginShape = self.Shape
-        self.Data = self.Data.reshape([Sp*Sub, Sp*Sub]+OriginShape[self.VOLDIM:])
-        for j in self.__SpaceTimeIndex:
-            index=[Ellipsis,]+j
+        self.Data = self.Data.reshape([Sp*Sub, Sp*Sub, self.__SpaceTimeVol])
+        for index in range(self.__SpaceTimeVol):
             try:
-                self.Data[index] = np.linalg.inv(self.Data[index])
+                self.Data[:,:,index] = np.linalg.inv(self.Data[:,:,index])
             except:
-                log.error("Fail to inverse matrix :,:,{0}\n{1}".format(index, self.Data[index].shape))
-                sys.exit(0)
-        self.Data = self.Data.reshape([Sp,Sub,Sp,Sub]+OriginShape[self.VOLDIM:])
+                log.error("Fail to inverse matrix :,:,{0}\n{1}".format(index, self.Data[:,:,index]))
+                raise
+        self.Data = self.Data.reshape(self.__OriginShape)
+
     def __AssertShape(self, shape1, shape2):
         Assert(tuple(shape1)==tuple(shape2), \
                 "Shape {0} is expected instead of shape {1}!".format(shape1, shape2))
@@ -256,6 +266,13 @@ class Weight():
         SpatialShape=shape[0:InsertPos]+self.L+shape[InsertPos+1:]
         return range(InsertPos, InsertPos+len(self.L)), SpatialShape
 
+def LUFactor(arr):
+    SpSub,Vol,Time=arr.shape[0]*arr.shape[1], arr.shape[-2], arr.shape[-1]
+    arr=np.swapaxes(arr.reshape([SpSub,SpSub,Vol*Time]),0,2)
+    lu, piv=solver.lu_factor(arr)
+    det=solver.lu_det(lu,piv)
+    det=det.reshape([Vol,Time])
+    return (lu, piv), det
 
 class TestIndexMap(unittest.TestCase):
     def setUp(self):

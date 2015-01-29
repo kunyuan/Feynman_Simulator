@@ -67,7 +67,7 @@ def Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor):
     #Sigma.FFT("R","T")
     #print "Sigma=\n", Sigma.Data[UP,0,UP,0,0,:]
 
-    Chi, _ = calc.Calculate_Chi(ChiTensor, Map)
+    Chi = calc.Calculate_Chi(ChiTensor, Map)
     #Chi.FFT("R","T")
     #print "Chi=\n", Chi.Data[0,0,0,0,1,:]
 
@@ -106,8 +106,6 @@ if job["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is False:
         ratio = i/(i+1.0)
         log.info("Round #{0}...".format(i))
         G0,W0=Factory.Build(para["Model"]["Name"], para["Lattice"]["Name"])
-        G0.FFT("R","T")
-        print "G0[UP,UP]=\n", G0.Data[UP,0,UP,0,0,:]
 
         Sigma.Merge(ratio, calc.SigmaSmoothT_FirstOrder(G, W, Map))
         Sigma0.Merge(ratio, calc.SigmaDeltaT_FirstOrder(G, W0, Map))
