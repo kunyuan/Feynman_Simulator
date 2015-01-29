@@ -59,9 +59,9 @@ def Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor):
     #print "Polar=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
     #W.FFT("R","T")
     #print "W=\n", W.Data[spinUP,0,spinUP,0,0,:]
-    G.FFT("R","T")
-    print "G[UP,UP]=\n", G.Data[UP,0,UP,0,0,:]
-    print "G[DOWN,DOWN]=\n", G.Data[UP,0,UP,0,0,:]
+    #G.FFT("R","T")
+    #print "G[UP,UP]=\n", G.Data[UP,0,UP,0,0,:]
+    #print "G[DOWN,DOWN]=\n", G.Data[UP,0,UP,0,0,:]
     #Sigma0.FFT("R")
     #print "Sigma0=\n", Sigma0.Data[UP,0,UP,0,0]
     #Sigma.FFT("R","T")
@@ -101,8 +101,8 @@ if job["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is False:
     Sigma=weight.Weight("SmoothT", Map, "TwoSpins", "AntiSymmetric","R","T")
     Sigma0=weight.Weight("DeltaT", Map, "TwoSpins", "AntiSymmetric","R","T")
     Polar=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
-    for i in range(2):
-        ratio = i/(i+1.0)
+    for i in range(30):
+        ratio = i/(i+10.0)
         log.info("Round #{0}...".format(i))
         G0,W0=Factory.Build(para["Model"]["Name"], para["Lattice"]["Name"])
 
