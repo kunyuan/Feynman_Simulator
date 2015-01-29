@@ -75,6 +75,9 @@ def lu_solve(np.ndarray[cComplex, ndim=3] lu, np.ndarray[int, ndim=2] piv, np.nd
             raise ValueError('illegal value in %d-th argument of internal gesv|posv'% -info)
     return b
 
+#@cython.wraparound(False)
+#@cython.boundscheck(False)
+#@cython.nonecheck(False)
 def lu_det(np.ndarray[cComplex, ndim=3] lu, np.ndarray[int, ndim=2] piv):
     if lu.shape[1] != lu.shape[2]:
         raise TypeError("the lu array must have shape [:, N, N]")
@@ -93,25 +96,6 @@ def lu_det(np.ndarray[cComplex, ndim=3] lu, np.ndarray[int, ndim=2] piv):
             else:
                 det[i]=det[i]*lu[i,j,j]
     return det
-
-#def mydot(np.ndarray[cDOUBLE, ndim=2] a, np.ndarray[cDOUBLE, ndim=2] b):
-    #cdef np.ndarray[cDOUBLE, ndim=2] c
-    #cdef int i, M, N, K
-    #c = np.zeros((a.shape[0], b.shape[1]), dtype=DOUBLE)
-    #M = a.shape[0]
-    #N = a.shape[1]
-    #K = b.shape[1]
-    #for i in prange(M, nogil=True):
-        #multiply(&a[i,0], &b[0,0], &c[i,0], N, K)
-    #return c
-#@cython.wraparound(False)
-#@cython.boundscheck(False)
-#@cython.nonecheck(False)
-#cdef void multiply(double *a, double *b, double *c, int N, int K) nogil:
-    #cdef int j, k
-    #for j in range(N):
-        #for k in range(K):
-            #c[k] += a[j]*b[k+j*K]
 
 #*     SUBROUTINE ZGETRF( M, N, A, LDA, IPIV, INFO )
 #*
