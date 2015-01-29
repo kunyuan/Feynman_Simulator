@@ -168,7 +168,7 @@ def Calculate_Chi(ChiTensor, map):
         #temp=np.einsum("ik, kminvt->mnvt", SS[i], ChiTensor.Data)
         #Chi_ss[i].Data=temp.reshape([1, NSublat, 1, NSublat, map.Vol, map.MaxTauBin]) 
     #Chi.Data=Chi_ss[0].Data+Chi_ss[1].Data+Chi_ss[2].Data
-    Chi.Data=np.einsum("ik, kminvt->mnvt", SS[2], ChiTensor.Data)
+    Chi.Data=np.einsum("ik, kminvt->mnvt", SS[2], ChiTensor.Data)*3
     Chi.Data=Chi.Data.reshape([1, NSublat, 1, NSublat, map.Vol, map.MaxTauBin]) 
     return Chi
 
