@@ -99,13 +99,9 @@ if job["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is False:
     for i in range(1):
         log.info("Round #{0}...".format(i))
         G0,W0=Factory.Build(para["Model"]["Name"], para["Lattice"]["Name"])
-        #G0.FFT("R","T")
-        #print "G0[UP,UP]=\n", G0.Data[UP,0,UP,0,0,:]
         Sigma=calc.SigmaSmoothT_FirstOrder(G, W, Map)
         Sigma0=calc.SigmaDeltaT_FirstOrder(G, W0, Map)
         Polar=calc.Polar_FirstOrder(G, Map)
-        #### Check Denorminator before G,W are contaminated #####
-        #Determ=calc.Check_Denorminator(W0, Polar, Map)
         #######DYSON FOR W AND G###########################
         print "calculating G..."
         G = calc.G_Dyson(G0, Sigma0, Sigma, Map)

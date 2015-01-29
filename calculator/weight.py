@@ -5,6 +5,7 @@ import numpy.linalg.lapack_lite as lapack_lite
 from numpy.core import intc
 import sys, os, unittest, math
 from logger import *
+import solver.lu as solver
 
 SPIN,SPIN2,SPIN3=2,4,8
 IN,OUT=0,1
@@ -136,8 +137,6 @@ class Weight():
             self.Beta=self.Map.Beta
             self.Shape.append(self.Map.MaxTauBin)
             self.__HasTau=True
-            self.__SpaceTimeIndex=[[k,v] for k in range(self.Shape[self.VOLDIM]) 
-                                         for v in range(self.Shape[self.TAUDIM])]
             self.__SpaceTimeVol=self.Shape[self.VOLDIM]*self.Shape[self.TAUDIM]
 
             if Symmetry is "Symmetric":
@@ -148,7 +147,6 @@ class Weight():
                 Assert(False, "Should be either Symmetric or AntiSymmetric, not {0}".format(Symmetry))
         elif Name=="DeltaT":
             self.__HasTau=False
-            self.__SpaceTimeIndex=[[k,] for k in range(self.Shape[self.VOLDIM])]
             self.__SpaceTimeVol=self.Shape[self.VOLDIM]
         else:
             Assert(False, "Should be either .SmoothT or .DeltaT in Name, not {0}".format(Name))
@@ -208,14 +206,11 @@ class Weight():
     def LUSolve(self, lu_piv , b):
         """solv ax=b, self.Data will be from lu of a to x"""
         SpSub = self.NSpin*self.NSublat
-        lu, piv=lu_piv
-        self.Data = np.ascontiguousarray(np.swapaxes(self.Data.reshape([SpSub, SpSub, self.__SpaceTimeVol]),0,2))
-        b = np.ascontiguousarray(np.swapaxes(b.reshape([SpSub, SpSub, self.__SpaceTimeVol]),0,2))
-        for index in range(self.__SpaceTimeVol):
-            self.Data[index,:,:],info = lapack.zgetrs(lu[index,:,:], piv[index,:], b[index,:,:])
-            if info is not 0:
-                raise ValueError('illegal value in %d-th argument of internal gesv|posv'% -info)
-        self.Data = np.ascontiguousarray(np.swapaxes(self.Data,0,2)).reshape(self.__OriginShape)
+        lu,piv=lu_piv
+        self.Data = np.swapaxes(self.Data.reshape([SpSub, SpSub, self.__SpaceTimeVol]),0,2)
+        b = np.swapaxes(b.reshape([SpSub, SpSub, self.__SpaceTimeVol]),0,2)
+        self.Data = solver.lu_solve(lu,piv,b)
+        self.Data = np.swapaxes(self.Data,0,2).reshape(self.__OriginShape)
 
     def __InverseSpinAndSublat(self):
         Sp, Sub = self.NSpin, self.NSublat
@@ -268,33 +263,12 @@ class Weight():
         return range(InsertPos, InsertPos+len(self.L)), SpatialShape
 
 def LUFactor(arr):
-    SpSub=arr.shape[0]*arr.shape[1]
-    Vol,Time=arr.shape[-2],arr.shape[-1]
-    SpaceTime=Vol*Time
-    #arr=arr.reshape([SpSub,SpSub,SpaceTime])
-    arr=np.ascontiguousarray(np.swapaxes(arr.reshape([SpSub,SpSub,SpaceTime]),0,2))
-    Piv=np.zeros((SpaceTime,SpSub), intc)
-    Det=np.ones(SpaceTime)+0*1j
-    lu=np.empty_like(arr)
-    diagrange=range(SpSub)
-    for index in range(SpaceTime):
-        #arr[index,:,:],Piv[index,:],info=lapack.zgetrf(arr[index,:,:])
-        _,Piv[index,:],info=lapack.zgetrf(arr[index,:,:],True)
-        #results=lapack_lite.zgetrf(SpSub,SpSub,arr[index,:,:],SpSub,Piv[index,:],0)
-        if info < 0:
-            raise ValueError('illegal value in %d-th argument of internal getrf' % -info)
-        elif info > 0:
-            raise ValueError("Diagonal number %d is exactly zero. Singular matrix." % -info)
-        for i in diagrange:
-            if Piv[index, i] is not i:
-                Det[index] *=-arr[index,i,i]
-            else:
-                Det[index] *=arr[index,i,i]
-    #print arr[0,:,:], Det[0], np.linalg.det(arr[0,:,:])
-    #Assert(abs(np.linalg.det(arr[0,:,:])-Det[0])<1e-4, "Determinate is wrong!")
-    #Assert(abs(np.linalg.det(arr[-1,:,:])-Det[-1])<1e-4, "Determinate is wrong!")
-    Det=Det.reshape([Vol,Time])
-    return (arr, Piv), Det
+    SpSub,Vol,Time=arr.shape[0]*arr.shape[1], arr.shape[-2], arr.shape[-1]
+    arr=np.swapaxes(arr.reshape([SpSub,SpSub,Vol*Time]),0,2)
+    lu, piv=solver.lu_factor(arr)
+    det=solver.lu_det(lu,piv)
+    det=det.reshape([Vol,Time])
+    return (lu, piv),det
 
 class TestIndexMap(unittest.TestCase):
     def setUp(self):

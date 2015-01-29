@@ -115,16 +115,10 @@ def W_Dyson(W0, Polar, map):
     Polar.FFT("K","W")
     Denorm,JP=Calculate_Denorminator(W0, Polar, map)
     JPJ=np.einsum("ijklvt,klmnv->ijmnvt", JP, W0.Data)
-    lu,Determ=weight.LUFactor(Denorm)
+    lu_piv,Determ=weight.LUFactor(Denorm)
     Check_Denorminator(Determ,map)
-    ChiTensor.LUSolve(lu, -Polar.Data)
-    W.LUSolve(lu, JPJ)
-
-    #W.Data=Calculate_Denorminator(W0, Polar, map)
-    #W.Inverse()
-    #ChiTensor.Data = -np.einsum('ijklvt,klmnvt->ijmnvt', Polar.Data, W.Data)
-    #W.Data = np.einsum('ijklvt,klmnvt->ijmnvt', W.Data,JPJ)
-
+    ChiTensor.LUSolve(lu_piv, -Polar.Data)
+    W.LUSolve(lu_piv, JPJ)
     return W, ChiTensor, Determ
 
 def G_Dyson(G0, Sigma0, Sigma, map):
@@ -147,9 +141,9 @@ def G_Dyson(G0, Sigma0, Sigma, map):
     #GS shape: NSpin,NSub,NSpin,NSub,Vol,Tau
 
     I=np.eye(NSpin*NSub).reshape([NSpin,NSub,NSpin,NSub])
-    G.Data=I[...,np.newaxis,np.newaxis]-GS
-    G.Inverse();
-    G.Data=np.einsum('ijklvt,klmnvt->ijmnvt', G.Data,G0.Data)
+    Denorm=I[...,np.newaxis,np.newaxis]-GS
+    lu_piv,Determ=weight.LUFactor(Denorm)
+    G.LUSolve(lu_piv, G0.Data);
     return G
 
 def Calculate_Chi(ChiTensor, map):

@@ -27,7 +27,7 @@ def lu_factor(np.ndarray[cComplex, ndim=3] arr):
     cdef int info;
     cdef int i;
     cdef np.ndarray[int, ndim=2] piv;
-    piv=np.empty((size, arr.shape[1]), dtype=np.intc)
+    piv=np.empty((size, N), dtype=np.intc)
     #make arr c contiguous!
     arr=np.ascontiguousarray(arr)
     for i in range(size):
@@ -59,6 +59,27 @@ def lu_solve(np.ndarray[cComplex, ndim=3] lu, np.ndarray[int, ndim=2] piv, np.nd
     for i in range(size):
         zgetrs_(&trans, &N, &nrhs, &lu[i,0,0], &LDA, &piv[i,0], &b[i,0,0], &LDB, &info);
     return b
+
+def lu_det(np.ndarray[cComplex, ndim=3] lu, np.ndarray[int, ndim=2] piv):
+    if lu.shape[1] != lu.shape[2]:
+        raise TypeError("the lu array must have shape [:, N, N]")
+    if lu.shape[0] != piv.shape[0]:
+        raise TypeError("require lu.shape[0]==piv.shape[0]")
+    if lu.shape[1] != piv.shape[1]:
+        raise TypeError("require lu.shape[1]==piv.shape[1]")
+    cdef np.ndarray[cComplex, ndim=1] det
+    cdef int size= lu.shape[0];
+    cdef int N = lu.shape[1];
+    det=np.ones(size, dtype=Complex)
+    det[0]=1
+    print det[0]
+    for i in range(size):
+        for j in range(N):
+            if piv[i, j]!=j:
+                det[i]=-det[i]*lu[i,j,j]
+            else:
+                det[i]=det[i]*lu[i,j,j]
+    return det
 
 #def mydot(np.ndarray[cDOUBLE, ndim=2] a, np.ndarray[cDOUBLE, ndim=2] b):
     #cdef np.ndarray[cDOUBLE, ndim=2] c
