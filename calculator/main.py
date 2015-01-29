@@ -97,12 +97,11 @@ if job["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is False:
     log.info("Start from G0 and W0 to do dyson...")
     G=G0.Copy()
     W=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
-    Gold = G
-    Wold = W
+    Gold, Wold = G, W
     Sigma=weight.Weight("SmoothT", Map, "TwoSpins", "AntiSymmetric","R","T")
     Sigma0=weight.Weight("DeltaT", Map, "TwoSpins", "AntiSymmetric","R","T")
     Polar=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
-    for i in range(1):
+    for i in range(2):
         ratio = i/(i+1.0)
         log.info("Round #{0}...".format(i))
         G0,W0=Factory.Build(para["Model"]["Name"], para["Lattice"]["Name"])
@@ -111,27 +110,23 @@ if job["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is False:
         Sigma0.Merge(ratio, calc.SigmaDeltaT_FirstOrder(G, W0, Map))
         Polar.Merge(ratio, calc.Polar_FirstOrder(G, Map))
 
-        #### Check Denorminator before G,W are contaminated #####
         try:
-            Determ=calc.Check_Denorminator(W0, Polar, Map)
+            #######DYSON FOR W AND G###########################
+            print "calculating W..."
+            W, ChiTensor, Determ = calc.W_Dyson(W0, Polar, Map)
+            print "calculating G..."
+            G = calc.G_Dyson(G0, Sigma0, Sigma, Map)
         except:
             Factory.RevertField(para)
             G = Gold
             W = Wold
-            continue
-
-        #######DYSON FOR W AND G###########################
-        print "calculating G..."
-        Gold = G
-        G = calc.G_Dyson(G0, Sigma0, Sigma, Map)
-        print "calculating W..."
-        Wold = W
-        W, ChiTensor = calc.W_Dyson(W0, Polar, Map)
+        else:
+            Gold = G
+            Wold = W
+            Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor)
+            Factory.DecreaseField(para)
 
         ###################################################
-        Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor)
-
-        Factory.DecreaseField(para)
 
     parameter.BroadcastMessage(MessageFile, {"Version": Version, "Beta": Map.Beta})
     log.info("Version {0} is done!".format(Version))
