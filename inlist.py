@@ -60,7 +60,7 @@ Common={
 "Model": {
     "Name": "J1J2",
     "Interaction": [1.0,0.0],
-    "ExternalField": [1.0, -1.0, 0.0, 0.0]
+    "ExternalField": [0.0, 0.0, 0.0, 0.0]
     #ExternalField on Sublattice A and B
     },
 
@@ -79,9 +79,12 @@ Common={
     "Order": Order,
     "OrderAccepted": 1,
     "ErrorThreshold": 0.1,
-    "ExternalFieldDecrease": 0.1,
     "BetaIncrease": 0.0,
     "SleepTime": 300
+    "Annealing": {
+        "DeltaField": [1.0, -1.0, 0.0, 0.0]
+        "Interval": [-0.1, 0.1, 0.0, 0.0]
+        }
     }
 }
 import job_class as job
