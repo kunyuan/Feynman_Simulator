@@ -99,14 +99,19 @@ if job["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is False:
     W=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
     Gold = G
     Wold = W
-    for i in range(30):
+    Sigma=weight.Weight("SmoothT", Map, "TwoSpins", "AntiSymmetric","R","T")
+    Sigma0=weight.Weight("DeltaT", Map, "TwoSpins", "AntiSymmetric","R","T")
+    Polar=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
+    for i in range(1):
+        ratio = i/(i+1.0)
         log.info("Round #{0}...".format(i))
         G0,W0=Factory.Build(para["Model"]["Name"], para["Lattice"]["Name"])
         G0.FFT("R","T")
         print "G0[UP,UP]=\n", G0.Data[UP,0,UP,0,0,:]
-        Sigma=calc.SigmaSmoothT_FirstOrder(G, W, Map)
-        Sigma0=calc.SigmaDeltaT_FirstOrder(G, W0, Map)
-        Polar=calc.Polar_FirstOrder(G, Map)
+
+        Sigma.Merge(ratio, calc.SigmaSmoothT_FirstOrder(G, W, Map))
+        Sigma0.Merge(ratio, calc.SigmaDeltaT_FirstOrder(G, W0, Map))
+        Polar.Merge(ratio, calc.Polar_FirstOrder(G, Map))
 
         #### Check Denorminator before G,W are contaminated #####
         try:
