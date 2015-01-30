@@ -43,7 +43,7 @@ if args.collect:
     sys.exit(0)
 
 ########## Calulation INITIALIZATION ##########################
-Factory=model.BareFactory(Map, para["Model"])
+Factory=model.BareFactory(Map, para["Model"], para["Dyson"]["Annealing"])
 G0,W0=Factory.Build(para["Model"]["Name"], para["Lattice"]["Name"])
 IO.SaveDict("Coordinates","w", Factory.ToDict())
 
@@ -84,6 +84,7 @@ def Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor):
 
     Observable.Measure(Chi, Determ)
     Observable.Save(OutputFile)
+
     #plot what you are interested in
     try:
         plot.PlotSpatial(Chi, Lat, 0, 0)
@@ -117,12 +118,15 @@ if job["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is False:
             print "calculating G..."
             G = calc.G_Dyson(G0, Sigma0, Sigma, Map)
         except:
-            Factory.RevertField(para)
-            G, W = Gold, Wold
+            Factory.RevertField(para["Dyson"]["Annealing"])
+            G = Gold
+            W = Wold
         else:
-            Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor)
-            Factory.DecreaseField(para)
             Gold, Wold = G, W
+            Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor)
+            Factory.DecreaseField(para["Dyson"]["Annealing"])
+
+        ###################################################
 
     parameter.BroadcastMessage(MessageFile, {"Version": Version, "Beta": Map.Beta})
     log.info("Version {0} is done!".format(Version))
@@ -131,6 +135,9 @@ else:
     #########READ G,SIGMA,POLAR; CALCULATE SIGMA0 #################
     Version=parameter.GetVersion(MessageFile)
     Observable.Load(OutputFile)
+    data=IO.LoadBigDict(WeightFile)
+    G=weight.Weight("SmoothT", Map, "TwoSpins", "AntiSymmetric").FromDict(data["G"])
+
     while True:
         Version+=1
         log.info("Start #{0}...".format(Version))
@@ -139,8 +146,7 @@ else:
             G0,W0=Factory.Build(para["Model"]["Name"], para["Lattice"]["Name"])
             #print "G0:\n", G0.Data[UP,0,UP,0,0,:]
             #reinitialize G0, W0 to kill accumulated error
-            data=IO.LoadBigDict(WeightFile)
-            G=weight.Weight("SmoothT", Map, "TwoSpins", "AntiSymmetric").FromDict(data["G"])
+
             paraDyson=para["Dyson"]
             MaxOrder=paraDyson["Order"]
             log.info("Collecting Sigma/Polar statistics...")
@@ -148,6 +154,7 @@ else:
 
             Sigma,Polar,SigmaOrder, PolarOrder=collect.UpdateWeight(SigmaMC, PolarMC, 
                     paraDyson["ErrorThreshold"], paraDyson["OrderAccepted"])
+
             if SigmaOrder==0 or PolarOrder==0:
                 log.info("#{0} fails due to Sigma or Polar not accepted. \n".format(Version))
                 continue
@@ -155,23 +162,24 @@ else:
             Sigma0=calc.SigmaDeltaT_FirstOrder(G, W0, Map)
             log.info("Dyson GW...")
 
-            #### Check Denorminator before G,W are contaminated #####
             try:
-                Determ=calc.Check_Denorminator(W0, Polar, Map)
+                #######DYSON FOR W AND G###########################
+                print "calculating W..."
+                W, ChiTensor, Determ = calc.W_Dyson(W0, Polar, Map)
+                print "calculating G..."
+                G = calc.G_Dyson(G0, Sigma0, Sigma, Map)
             except:
-                Factory.RevertField(para)
-                continue
-
-            #######DYSON FOR W AND G###########################
-            G = calc.G_Dyson(G0, Sigma0, Sigma, Map)
-            W, ChiTensor = calc.W_Dyson(W0, Polar,Map)
-            ####### Measure ############
-            Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor)
+                Factory.RevertField(para["Dyson"]["Annealing"])
+                G = Gold
+                W = Wold
+            else:
+                Gold = G
+                Wold = W
+                Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor)
+                Factory.DecreaseField(para["Dyson"]["Annealing"])
 
             log.info("Version {0} is done!".format(Version))
             parameter.BroadcastMessage(MessageFile, {"Version": Version, "Beta": Map.Beta})
-
-            Factory.DecreaseField(para)
 
         except:
             log.info("#{0} fails due to\n {1}".format(Version, traceback.format_exc()))
