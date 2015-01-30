@@ -80,10 +80,10 @@ Common={
     "OrderAccepted": 1,
     "ErrorThreshold": 0.1,
     "BetaIncrease": 0.0,
-    "SleepTime": 300, 
+    "SleepTime": 300,
     "Annealing": {
-        "DeltaField": [0.0, -0.0, 0.0, 0.0],
-        "Interval": 0.0
+        "DeltaField": [1.0, -1.0, 0.0, 0.0],
+        "Interval": [-0.1, 0.1, 0.0, 0.0]
         }
     }
 }
