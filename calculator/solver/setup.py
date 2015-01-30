@@ -5,8 +5,9 @@ import numpy
  
 ext_modules = Extension("lu_fast",["lu_fast.pyx"],\
     include_dirs=[numpy.get_include()],
-    extra_compile_args=['-llapack -O3'],
+    extra_compile_args=['-static -O3'],
     #extra_link_args=['-fopenmp']
+    extra_link_args=['-llapack']
     )
  
 setup(
