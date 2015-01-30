@@ -30,7 +30,7 @@ Dyson={
 "Job": {"StartFromBare" : False}
 }
 
-beta=1.18
+beta=0.8
 Order=2
 Common={
 "Tau": {
@@ -79,10 +79,6 @@ Common={
     "Order": Order,
     "OrderAccepted": 1,
     "ErrorThreshold": 0.1,
-    "Annealing":{
-        "DeltaField": [1.0, -1.0, 0.0,0.0],
-        "Interval": 0.10
-        },
     "BetaIncrease": 0.0,
     "SleepTime": 300,
     "Annealing": {

@@ -57,6 +57,7 @@ def PlotSpatial(weight, lattice, SpinIn, SpinOut, Tau=0, DoesSave=True):
     plt.close()
 
 def PlotChi(Chi, lat, DoesSave=True):
+    omega=1
     map=Chi.Map
     x=[]
     KList=[]
@@ -78,7 +79,7 @@ def PlotChi(Chi, lat, DoesSave=True):
             KList.append(path[:,k])
         offset+=np.linalg.norm(end-start)
         ticks.append(offset)
-    k, y=lat.FourierTransformation_RealSpace(Chi.Data[0,0,0,:,:,0]*map.Beta/map.MaxTauBin, KList, "Real")
+    k, y=lat.FourierTransformation_RealSpace(Chi.Data[0,0,0,:,:,omega]*map.Beta/map.MaxTauBin, KList, "Real")
     plt.plot(x,y,'o')
     plt.xticks(ticks, lat.PathName)
     if DoesSave:
@@ -93,7 +94,7 @@ def PlotChi(Chi, lat, DoesSave=True):
     #for i in range(-2*lat.L[0], 2*lat.L[0]):
         #for j in range(-2*lat.L[1], 2*lat.L[1]):
             #KList.append((i,j,0))
-    #k, ChiK=lat.FourierTransformation_RealSpace(Chi.Data[0,0,0,:,:,0]*map.Beta/map.MaxTauBin, KList, "Integer")
+    #k, ChiK=lat.FourierTransformation_RealSpace(Chi.Data[0,0,0,:,:,omega]*map.Beta/map.MaxTauBin, KList, "Integer")
     #x=[]
     #y=[]
     #for e in k:

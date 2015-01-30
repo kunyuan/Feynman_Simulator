@@ -119,8 +119,7 @@ if job["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is False:
             G = calc.G_Dyson(G0, Sigma0, Sigma, Map)
         except:
             Factory.RevertField(para["Dyson"]["Annealing"])
-            G = Gold
-            W = Wold
+            G, W = Gold, Wold
         else:
             Gold, Wold = G, W
             Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor)
@@ -177,7 +176,6 @@ else:
                 Wold = W
                 Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor)
                 Factory.DecreaseField(para["Dyson"]["Annealing"])
-
             log.info("Version {0} is done!".format(Version))
             parameter.BroadcastMessage(MessageFile, {"Version": Version, "Beta": Map.Beta})
 
