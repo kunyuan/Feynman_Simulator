@@ -8,7 +8,7 @@ SLEEP = 1    #check job status for every SLEEP seconds
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" : 0,
+    "__Duplicate" : 1,
     "__IsCluster" : False,
     "__AutoRun" : True,
     "__KeepCPUBusy": True,
@@ -27,10 +27,10 @@ Dyson={
     "__AutoRun" : True, 
     "__KeepCPUBusy": False,
     },
-"Job": {"StartFromBare" : True}
+"Job": {"StartFromBare" : False}
 }
 
-beta=0.8
+beta=1.18
 Order=2
 Common={
 "Tau": {
@@ -60,7 +60,7 @@ Common={
 "Model": {
     "Name": "J1J2",
     "Interaction": [1.0,0.0],
-    "ExternalField": [1.0, -1.0, 0.0, 0.0]
+    "ExternalField": [0.0, -0.0, 0.0, 0.0]
     #ExternalField on Sublattice A and B
     },
 
@@ -79,7 +79,10 @@ Common={
     "Order": Order,
     "OrderAccepted": 1,
     "ErrorThreshold": 0.1,
-    "ExternalFieldDecrease": 0.1,
+    "Annealing":{
+        "DeltaField": [1.0, -1.0, 0.0,0.0],
+        "Interval": 0.10
+        },
     "BetaIncrease": 0.0,
     "SleepTime": 300
     }

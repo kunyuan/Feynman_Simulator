@@ -6,10 +6,11 @@ import math
 from logger import *
 
 class BareFactory:
-    def __init__(self, map, Hamiltonian):
+    def __init__(self, map, Hamiltonian, Anneal):
         self.__Map=map
         self.__Interaction=np.array(Hamiltonian["Interaction"])
         self.__ExternalField=np.array(Hamiltonian["ExternalField"])
+        self.__CurrentField=np.array(Hamiltonian["ExternalField"])+np.array(Anneal["DeltaField"])
         self.__Mu=np.array(Hamiltonian["ChemicalPotential"])
         self.__Hopping=np.array(Hamiltonian["Hopping"])
         self.__MaxTauBin=self.__Map.MaxTauBin
@@ -28,27 +29,21 @@ class BareFactory:
             self.__DiagCount()
         return (self.BareG,self.BareW)
 
-    def Reset(self, ExternalField):
-        self.__ExternalField=ExternalField
-
-    def DecreaseField(self, para):
-        Field=para["Model"]["ExternalField"]
-        Decrease = para["Dyson"]["ExternalFieldDecrease"]
-        if abs(Field[0])>1e-3:
+    def DecreaseField(self, Anneal):
+        Decrease = Anneal["Interval"]
+        if abs(self.__CurrentField[0]-self.__ExternalField[0])>1e-3:
             for i in range(self.__Map.NSublat):
-                Field[i]=Field[i]-np.copysign(Decrease, Field[i])
-        print "ExternalField decreased to: {0}".format(Field)
-        para["Model"]["ExternalField"]=Field
-        self.Reset(Field)
+                self.__CurrentField[i]=self.__CurrentField[i] \
+                      -np.copysign(Decrease, self.__CurrentField[i])
+        print "ExternalField decreased to: {0}".format(self.__CurrentField)
 
-    def RevertField(self, para):
-        Field=para["Model"]["ExternalField"]
-        Increase = para["Dyson"]["ExternalFieldDecrease"]/2.0
+    def RevertField(self, Anneal):
+        Anneal["Interval"]/=2.0
+        Increase = Anneal["Interval"]
         for i in range(self.__Map.NSublat):
-            Field[i]=Field[i]+np.copysign(Increase, Field[i])
-        print "ExternalField reverted to: {0}".format(Field)
-        para["Model"]["ExternalField"]=Field
-        self.Reset(Field)
+            self.__CurrentField[i]=self.__CurrentField[i] \
+                      +np.copysign(Increase, self.__CurrentField[i])
+        print "ExternalField reverted to: {0}".format(self.__CurrentField)
 
     def __Heisenberg(self, LatName):
         Assert(len(self.__Interaction)==1, "Heisenberg model only has one coupling!")
@@ -69,7 +64,7 @@ class BareFactory:
         Pauli_Z=self.__Map.Pauli()[2]
         for sub in range(self.__Map.NSublat):
             for sp in range(2):
-                Mu=1j*np.pi/2.0/Beta+Pauli_Z[sp, sp]*self.__ExternalField[sub]
+                Mu=1j*np.pi/2.0/Beta+Pauli_Z[sp, sp]*self.__CurrentField[sub]
                 self.BareG.Data[sp,sub,sp,sub,0,:]=np.exp(Mu*TauGrid)/(1.0+np.exp(Mu*Beta))
 
         Interaction=list(self.__Interaction)+[0,0,0,0,0]

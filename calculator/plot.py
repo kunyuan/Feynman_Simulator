@@ -1,7 +1,7 @@
 import lattice as lat
 import numpy as np
 import weight
-from mpl_toolkits.mplot3d import Axes3D
+#from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 from logger import *
 
