@@ -122,8 +122,7 @@ if job["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is False:
             G = Gold
             W = Wold
         else:
-            Gold = G
-            Wold = W
+            Gold, Wold = G, W
             Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor)
             Factory.DecreaseField(para["Dyson"]["Annealing"])
 

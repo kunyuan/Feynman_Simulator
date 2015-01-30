@@ -85,6 +85,10 @@ Common={
         },
     "BetaIncrease": 0.0,
     "SleepTime": 300
+    "Annealing": {
+        "DeltaField": [1.0, -1.0, 0.0, 0.0]
+        "Interval": [-0.1, 0.1, 0.0, 0.0]
+        }
     }
 }
 import job_class as job
