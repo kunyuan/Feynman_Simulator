@@ -70,6 +70,7 @@ bool EnvMonteCarlo::Load()
 
 void EnvMonteCarlo::Save()
 {
+    LOG_INFO("Start saving data...");
     Dictionary para_;
     para_[ParaKey] = Para.ToDict();
     para_[ConfigKey] = Diag.ToDict();
@@ -78,7 +79,9 @@ void EnvMonteCarlo::Save()
     Dictionary statis_ = Weight.ToDict(weight::GW | weight::SigmaPolar);
     statis_.Update(MarkovMonitor.ToDict());
     statis_.BigSave(Job.StatisticsFile);
+    LOG_INFO("Saving data is done!");
 }
+
 void EnvMonteCarlo::DeleteSavedFiles()
 {
     system(("rm " + Job.ParaFile).c_str());
