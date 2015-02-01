@@ -2,13 +2,15 @@ import weight
 import lattice as lat
 from weight import UP,DOWN,IN,OUT
 import numpy as np
+import math
 from logger import *
 
 class BareFactory:
-    def __init__(self, map, Hamiltonian):
+    def __init__(self, map, Hamiltonian, Anneal):
         self.__Map=map
         self.__Interaction=np.array(Hamiltonian["Interaction"])
         self.__ExternalField=np.array(Hamiltonian["ExternalField"])
+        self.__DeltaField=np.array(Anneal["DeltaField"])
         self.__Mu=np.array(Hamiltonian["ChemicalPotential"])
         self.__Hopping=np.array(Hamiltonian["Hopping"])
         self.__MaxTauBin=self.__Map.MaxTauBin
@@ -27,8 +29,19 @@ class BareFactory:
             self.__DiagCount()
         return (self.BareG,self.BareW)
 
-    def Reset(self, ExternalField):
-        self.__ExternalField=ExternalField
+    def DecreaseField(self, Anneal):
+        if abs(self.__DeltaField[0])>1e-5:
+            for i in range(len(self.__DeltaField)):
+                self.__DeltaField[i] += Anneal["Interval"][i]
+                Anneal["DeltaField"][i] += Anneal["Interval"][i] 
+        log.info("ExternalField decreased to: {0}".format(self.__DeltaField))
+
+    def RevertField(self, Anneal):
+        for i in range(len(self.__DeltaField)):
+            Anneal["Interval"][i]/=2.0
+            self.__DeltaField[i] -= Anneal["Interval"][i]
+            Anneal["DeltaField"][i] -= Anneal["Interval"][i]
+        log.info("ExternalField reverted to: {0}".format(self.__DeltaField))
 
     def __Heisenberg(self, LatName):
         Assert(len(self.__Interaction)==1, "Heisenberg model only has one coupling!")
@@ -49,7 +62,7 @@ class BareFactory:
         Pauli_Z=self.__Map.Pauli()[2]
         for sub in range(self.__Map.NSublat):
             for sp in range(2):
-                Mu=1j*np.pi/2.0/Beta+Pauli_Z[sp, sp]*self.__ExternalField[sub]
+                Mu=1j*np.pi/2.0/Beta+Pauli_Z[sp, sp]*(self.__DeltaField[sub]+self.__ExternalField[sub])
                 self.BareG.Data[sp,sub,sp,sub,0,:]=np.exp(Mu*TauGrid)/(1.0+np.exp(Mu*Beta))
 
         Interaction=list(self.__Interaction)+[0,0,0,0,0]
@@ -217,8 +230,3 @@ class BareFactory:
                     BareWList.append([vec, coord, sub[IN]])
         return BareWList
 
-    def DecreaseExternalField(self, ratio):
-        for i in range(self.__Map.NSublat):
-            self.__ExternalField[i] *= ratio
-        return self.__ExternalField
-        log.info("Change ExternalField to {0} the next time \n".format(self.__ExternalField[0:self.__Map.NSublat]))

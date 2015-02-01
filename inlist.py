@@ -27,7 +27,7 @@ Dyson={
     "__AutoRun" : True, 
     "__KeepCPUBusy": False,
     },
-"Job": {"StartFromBare" : True}
+"Job": {"StartFromBare" : False}
 }
 
 beta=0.8
@@ -40,22 +40,22 @@ Common={
     "FinalBeta" :  beta,
     },
 "Lattice":  {
-    #"Name": "Square",
-    #"NSublat": 1,
-    #"L": [8,8],
+    "Name": "Square",
+    "NSublat": 1,
+    "L": [8,8],
     #"Name": "Cubic",
     #"NSublat": 1,
     #"L": [8,8,8],
     #"Name": "Pyrochlore",
     #"NSublat": 4,
-    #"L": [4,4,4]
-    #"Name": "Checkerboard",
+    #"L": [8,8,8]
+    #"Name": "Checkboard",
     #"NSublat": 2,
     #"L": [8,8]
-    "Name": "3DCheckerboard",
-    "NSublat": 2,
+    #"Name": "3DCheckerboard",
+    #"NSublat": 2,
     #"L": [16,16,16]
-    "L": [8,8,8]
+    #"L": [8,8,8]
     },
 "Model": {
     "Name": "J1J2",
@@ -79,7 +79,12 @@ Common={
     "Order": Order,
     "OrderAccepted": 1,
     "ErrorThreshold": 0.1,
-    "SleepTime": 100
+    "BetaIncrease": 0.0,
+    "SleepTime": 300,
+    "Annealing": {
+        "DeltaField": [1.0, -1.0, 0.0, 0.0],
+        "Interval": [-0.1, 0.1, 0.0, 0.0]
+        }
     }
 }
 import job_class as job

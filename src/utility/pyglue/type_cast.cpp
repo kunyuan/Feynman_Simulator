@@ -10,12 +10,20 @@
 #include "utility/rng.h"
 #include "utility/momentum.h"
 #include "type_cast.h"
+
 namespace Python {
 bool Convert(Object obj, std::string& val)
 {
-    if (!PyString_Check(obj.Get()))
+    if (PyString_Check(obj.Get()))
+        val = PyString_AsString(obj.Get());
+    else if (PyUnicode_Check(obj.Get())) {
+        Object sobj = PyUnicode_AsUTF8String(obj.Get());
+        if (sobj.Get() == nullptr)
+            return false;
+        val = PyString_AsString(sobj.Get());
+    }
+    else
         return false;
-    val = PyString_AsString(obj.Get());
     return true;
 }
 bool Convert(Object obj, bool& value)

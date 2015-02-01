@@ -35,14 +35,14 @@ int IndexMap::GetTauSymmetryFactor(real t_in, real t_out) const
 
 int IndexMap::TauIndex(real tau) const
 {
-    if (DEBUGMODE && tau < -Beta || tau >= Beta)
+    if (DEBUGMODE && (tau < -Beta || tau >= Beta))
         LOG_INFO("tau=" << tau << " is out of the range ["
                         << -Beta << "," << Beta << ")");
     //TODO: mapping between tau and bin
 
     int bin = tau < 0 ? floor(tau * _dBetaInverse) + MaxTauBin
                       : floor(tau * _dBetaInverse);
-    if (DEBUGMODE && bin < 0 || bin >= MaxTauBin) {
+    if (DEBUGMODE && (bin < 0 || bin >= MaxTauBin)) {
         LOG_INFO("tau=" << tau << " is out of the range ["
                         << -Beta << "," << Beta << ")");
         LOG_INFO("bin=" << bin << " is out of the range ["
@@ -109,7 +109,6 @@ uint IndexMapSPIN2::GetIndex(spin in, spin out, const Site& rin, const Site& rou
     if (DEBUGMODE && Index >= _SizeSmoothT)
         THROW_ERROR(IndexInvalid, "exceed array bound!");
     return Index;
-    return Index;
 }
 
 uint IndexMapSPIN2::GetIndex(spin in, spin out,
@@ -121,7 +120,6 @@ uint IndexMapSPIN2::GetIndex(spin in, spin out,
                  + coord;
     if (DEBUGMODE && Index >= _SizeDeltaT)
         THROW_ERROR(IndexInvalid, "exceed array bound!");
-    return Index;
     return Index;
 }
 
@@ -153,8 +151,7 @@ uint IndexMapSPIN4::GetIndex(const spin* SpinIn, const spin* SpinOut, const Site
 {
     auto coord = Lat.CoordiIndex(rin, rout);
     uint Index = SpinIndex(SpinIn) * _CacheSmoothT[SP1] + rin.Sublattice * _CacheSmoothT[SUB1]
-                 + SpinIndex(SpinOut) * _CacheSmoothT[SP2] + rout.Sublattice * _CacheSmoothT[SUB2]
-                 + coord * _CacheSmoothT[VOL] + TauIndex(tin, tout);
+                 + SpinIndex(SpinOut) * _CacheSmoothT[SP2] + rout.Sublattice * _CacheSmoothT[SUB2] + coord * _CacheSmoothT[VOL] + TauIndex(tin, tout);
     if (DEBUGMODE && Index >= _SizeSmoothT)
         THROW_ERROR(IndexInvalid, "exceed array bound!");
     return Index;

@@ -11,7 +11,7 @@ def lu_factor(arr):
     piv=np.zeros((arr.shape[0],arr.shape[1]))
     arr=np.ascontiguousarray(arr)
     for index in range(arr.shape[0]):
-        arr[index,:,:],piv[index,:],info=lapack.zgetrf(arr[index,:,:])
+        arr[index,:,:],piv[index,:],info=lapack.zgetrf(arr[index,:,:],overwrite_a=True)
         if info < 0:
             raise ValueError('illegal value in %d-th argument of internal getrf' % -info)
         elif info > 0:
@@ -37,7 +37,7 @@ def lu_solve(lu, piv , b):
     piv=np.ascontiguousarray(piv)
     b=np.ascontiguousarray(b)
     for index in range(lu.shape[0]):
-        b[index,:,:],info = lapack.zgetrs(lu[index,:,:], piv[index,:], b[index,:,:])
+        b[index,:,:],info = lapack.zgetrs(lu[index,:,:], piv[index,:], b[index,:,:], overwrite_b=False)
         if info is not 0:
             raise ValueError('illegal value in %d-th argument of internal gesv|posv'% -info)
     return b

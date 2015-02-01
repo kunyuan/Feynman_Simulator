@@ -40,6 +40,7 @@ class WeightEstimator():
             Assert(self.Norm==_WeightEstimator.Norm, "Norm have to be the same to merge statistics")
     
     def GetNewOrderAccepted(self, Name, ErrorThreshold, OrderAccepted):
+        print self.NormAccu
         self.OrderWeight=self.WeightAccu/self.NormAccu*self.Norm
         MaxTauBin=self.__Map.MaxTauBin
         x=range(0, MaxTauBin)

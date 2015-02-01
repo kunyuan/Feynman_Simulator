@@ -4,6 +4,7 @@ from numpy.core import intc
 import sys, os, unittest, math
 from logger import *
 try:
+    #much faster Ax=b solver, but you have to run ./solver/compiler.sh to compile
     import solver.lu_fast as solver
 except:
     import solver.lu_slow as solver
@@ -163,6 +164,11 @@ class Weight():
         """return a deep copy of Weight instance"""
         import copy
         return copy.deepcopy(self)
+
+    def Merge(self, ratio, newWeight):
+        """return a summation of oldWeight and newWeight"""
+        self.FFT("R","T")
+        self.Data = ratio*self.Data + (1.0-ratio)*newWeight.Data
 
     def FFT(self, *SpaceOrTime):
         if "R" in SpaceOrTime and self.SpaceDomain is "K":

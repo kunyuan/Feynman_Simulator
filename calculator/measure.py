@@ -22,7 +22,14 @@ class Observable:
             StagKIndex=self.__Map.CoordiIndex([0 for e in self.__Map.L])
             self.__History["UnifChi"].append((Chi.Data[0,0,0,0,0,0]+Chi.Data[0,0,0,1,0,0])*Factor)
             self.__History["StagChi"].append((Chi.Data[0,0,0,0,StagKIndex,0]-Chi.Data[0,0,0,1,StagKIndex,0])*Factor)
+        elif self.__Lat.Name in ["Pyrochlore"]:
+            return
+            #StagKIndex=self.__Map.CoordiIndex([0 for e in self.__Map.L])
+            #self.__History["UnifChi"].append((Chi.Data[0,0,0,0,0,0]+Chi.Data[0,0,0,1,0,0])*Factor)
+            #self.__History["StagChi"].append((Chi.Data[0,0,0,0,StagKIndex,0]-Chi.Data[0,0,0,1,StagKIndex,0])*Factor)
+
         log.info("Uniform Chi={0}\nStag Chi={1}".format(self.__History["UnifChi"][-1], self.__History["StagChi"][-1]))
+
     def Load(self, FileName):
         try:
             Dict=IO.LoadDict(FileName)

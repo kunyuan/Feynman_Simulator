@@ -1,9 +1,13 @@
 #!/usr/bin/env python
 import logging
-import os, sys
-sys.path.append("../") #add the root dir into PYTHONPATH
+
+import os,sys,inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0,parentdir) 
+#add parentdir into PYTHONPATH, where IO module can be found
 import IO
-workspace = os.path.abspath(os.path.dirname(IO.__file__))
+workspace = parentdir
 
 log = logging.getLogger()
 log.setLevel(logging.INFO)

@@ -14,6 +14,7 @@ using namespace std;
 
 para::Job::Job(string inputfile)
 {
+
     Dictionary _Para;
     _Para.Load(inputfile);
     _Para = _Para.Get<Dictionary>("Job");
