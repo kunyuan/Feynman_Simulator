@@ -119,8 +119,7 @@ if job["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is False:
             G = calc.G_Dyson(G0, Sigma0, Sigma, Map)
         except:
             Factory.RevertField(para["Dyson"]["Annealing"])
-            G = Gold
-            W = Wold
+            G, W = Gold, Wold
         else:
             Gold, Wold = G, W
             Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor)
@@ -144,8 +143,7 @@ else:
         try:
             log.info("Load Sigma/Polar and G to do dyson...")
             G0,W0=Factory.Build(para["Model"]["Name"], para["Lattice"]["Name"])
-            #print "G0:\n", G0.Data[UP,0,UP,0,0,:]
-            #reinitialize G0, W0 to kill accumulated error
+            #reinitialize G0, W0 to kill accumulated error, and change with externalfield
 
             paraDyson=para["Dyson"]
             MaxOrder=paraDyson["Order"]
@@ -170,11 +168,9 @@ else:
                 G = calc.G_Dyson(G0, Sigma0, Sigma, Map)
             except:
                 Factory.RevertField(para["Dyson"]["Annealing"])
-                G = Gold
-                W = Wold
+                G, W = Gold, Wold
             else:
-                Gold = G
-                Wold = W
+                Gold, Wold = G, W
                 Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor)
                 Factory.DecreaseField(para["Dyson"]["Annealing"])
 

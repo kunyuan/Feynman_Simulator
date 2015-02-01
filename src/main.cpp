@@ -100,7 +100,7 @@ void MonteCarlo(const para::Job &Job)
                 //                    Env.AdjustOrderReWeight();
                 //                }
 
-                if (DiskWriterTimer.check(70))
+                if (DiskWriterTimer.check(200))
                     Env.Save();
 
                 if (MessageTimer.check(300))
