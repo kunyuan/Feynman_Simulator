@@ -10,7 +10,7 @@ import os, sys, model, weight, measure, parameter, plot, argparse, time, traceba
 parser = argparse.ArgumentParser()
 parser.add_argument("-p", "--PID", help="use PID to find the input file")
 parser.add_argument("-f", "--file", help="use file path to find the input file")
-parser.add_argument("-c", "--collect", action="store_true", help="collect all the _statis.pkl file into statis_total.pkl")
+parser.add_argument("-c", "--collect", action="store_true", help="collect all the _statis.* file into statis_total.*")
 
 ########## Environment INITIALIZATION ##########################
 args = parser.parse_args()
@@ -55,16 +55,16 @@ def Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor):
     ##########OUTPUT AND FILE SAVE ####################
     spinUP=Map.Spin2Index(UP,UP)
     spinDOWN=Map.Spin2Index(DOWN,DOWN)
-    #Polar.FFT("R","T")
-    #print "Polar=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
+    Polar.FFT("R","T")
     W.FFT("R","T")
-    print "W=\n", W.Data[spinUP,0,spinUP,0,0,:]
-    #G.FFT("R","T")
+    G.FFT("R","T")
+    Sigma0.FFT("R")
+    Sigma.FFT("R","T")
+    #print "Polar=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
+    #print "W=\n", W.Data[spinUP,0,spinUP,0,0,:]
     #print "G[UP,UP]=\n", G.Data[UP,0,UP,0,0,:]
     #print "G[DOWN,DOWN]=\n", G.Data[UP,0,UP,0,0,:]
-    #Sigma0.FFT("R")
     #print "Sigma0=\n", Sigma0.Data[UP,0,UP,0,0]
-    #Sigma.FFT("R","T")
     #print "Sigma=\n", Sigma.Data[UP,0,UP,0,0,:]
 
     Chi = calc.Calculate_Chi(ChiTensor, Map)
@@ -76,21 +76,22 @@ def Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor):
     data["G"]=G.ToDict()
     data["W"]=W.ToDict()
     data["W"].update(W0.ToDict())
-    #data["Sigma0"]=Sigma0.ToDict()
-    #data["Sigma"]=Sigma.ToDict()
-    #data["Polar"]=Polar.ToDict()
+    data["Sigma0"]=Sigma0.ToDict()
+    data["Sigma"]=Sigma.ToDict()
+    data["Polar"]=Polar.ToDict()
     IO.SaveBigDict(WeightFile, data)
+    a=IO.LoadBigDict(WeightFile)
     parameter.Save(ParaFile, para)  #Save Parameters
 
     Observable.Measure(Chi, Determ)
     Observable.Save(OutputFile)
 
     #plot what you are interested in
-    #try:
-    plot.PlotSpatial(Chi, Lat, 0, 0)
-    plot.PlotChi(Chi,Lat,False)
-    #except:
-        #pass
+    try:
+        plot.PlotSpatial(Chi, Lat, 0, 0)
+        plot.PlotChi(Chi,Lat)
+    except:
+        pass
 
 if job["StartFromBare"] is True or os.path.exists(WeightFile+".hkl") is False:
     #start from bare
@@ -143,8 +144,6 @@ else:
         try:
             log.info("Load Sigma/Polar and G to do dyson...")
             G0,W0=Factory.Build(para["Model"]["Name"], para["Lattice"]["Name"])
-            #print "G0:\n", G0.Data[UP,0,UP,0,0,:]
-            #reinitialize G0, W0 to kill accumulated error
 
             paraDyson=para["Dyson"]
             MaxOrder=paraDyson["Order"]

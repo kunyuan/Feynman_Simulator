@@ -1313,15 +1313,12 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				INSTALL_PATH = "~/project/Feynman_Simulator";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/usr/local/Cellar/python/2.7.9/Frameworks/Python.framework/Versions/2.7/lib/python2.7/config,
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_CPLUSPLUSFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PRODUCT_NAME = Feynman_Simulator;
-				USER_HEADER_SEARCH_PATHS = "src /Library/Python/2.7/site-packages/numpy-1.9.1-py2.7-macosx-10.10-intel.egg/numpy/core/include /usr/local/Cellar/python/2.7.9/Frameworks/Python.framework/Versions/2.7/include/python2.7";
+				USER_HEADER_SEARCH_PATHS = "src /Library/Python/2.7/site-packages/numpy/core/include /usr/local/Cellar/python/2.7.9/Frameworks/Python.framework/Versions/2.7/include/python2.7";
 			};
 			name = Debug;
 		};
@@ -1330,16 +1327,13 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				INSTALL_PATH = "~/project/Feynman_Simulator";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/usr/local/Cellar/python/2.7.9/Frameworks/Python.framework/Versions/2.7/lib/python2.7/config,
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_CPLUSPLUSFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PRODUCT_NAME = Feynman_Simulator;
-				USER_HEADER_SEARCH_PATHS = "src /usr/local/Cellar/python/2.7.9/Frameworks/Python.framework/Versions/2.7/include/python2.7 /Library/Python/2.7/site-packages/numpy-1.9.1-py2.7-macosx-10.10-intel.egg/numpy/core/include";
-				"USER_HEADER_SEARCH_PATHS[arch=*]" = "src /usr/local/Cellar/python/2.7.9/Frameworks/Python.framework/Versions/2.7/include/python2.7 /Library/Python/2.7/site-packages/numpy-1.9.1-py2.7-macosx-10.10-intel.egg/numpy/core/includ";
+				USER_HEADER_SEARCH_PATHS = "src /usr/local/Cellar/python/2.7.9/Frameworks/Python.framework/Versions/2.7/include/python2.7 /Library/Python/2.7/site-packages/numpy/core/include";
+				"USER_HEADER_SEARCH_PATHS[arch=*]" = "src /usr/local/Cellar/python/2.7.9/Frameworks/Python.framework/Versions/2.7/include/python2.7 /Library/Python/2.7/site-packages/numpy/core/include";
 			};
 			name = Release;
 		};

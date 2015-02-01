@@ -1,9 +1,13 @@
+#!/usr/bin/env python
 # Visualizing data from a molecular dynamics simulation
 # Data provided by Daniel Spangberg
 from vtk import *
-import sys, argparse, os
-sys.path.append("../") #add the root dir into PYTHONPATH
+import argparse, os, sys
+sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
+#add parentdir into PYTHONPATH, where IO module can be found
 import IO
+
+version=vtkVersion().GetVTKMajorVersion()
 
 def Read(filename):
     Dict=IO.LoadDict(filename)
@@ -56,7 +60,10 @@ def Plot(InputFile, HasCaption):
     ball.SetPhiResolution(8)
 
     ballGlyph = vtk.vtkGlyph3D()
-    ballGlyph.SetInput(data)
+    if version<=5:
+        ballGlyph.SetInput(data)
+    else:
+        ballGlyph.SetInputData(data)
     ballGlyph.SetSourceConnection(ball.GetOutputPort())
     ballGlyph.SetScaleModeToDataScalingOff()
     ballGlyph.SetColorModeToColorByScalar()
@@ -78,7 +85,10 @@ def Plot(InputFile, HasCaption):
 
 #lines within unit cell
     tubeFilter = vtkTubeFilter()
-    tubeFilter.SetInput(data)
+    if version<=5:
+        tubeFilter.SetInput(data)
+    else:
+        tubeFilter.SetInputData(data)
     tubeFilter.SetRadius(0.01)
     tubeFilter.SetNumberOfSides(7)
     tubeMapper = vtkPolyDataMapper()
@@ -92,7 +102,10 @@ def Plot(InputFile, HasCaption):
 
 #Interaction lines
     tube2 = vtkTubeFilter()
-    tube2.SetInput(data2)
+    if version<=5:
+        tube2.SetInput(data2)
+    else:
+        tube2.SetInputData(data2)
     tube2.SetRadius(0.02)
     tube2.SetNumberOfSides(7)
     mapper = vtkPolyDataMapper()
