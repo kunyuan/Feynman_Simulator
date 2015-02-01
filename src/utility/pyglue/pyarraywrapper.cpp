@@ -16,11 +16,16 @@ namespace Python {
 
 void ArrayInitialize()
 {
-    import_array();
+    if (_import_array() < 0) {
+        PropagatePyError();
+        PyErr_Print();
+        PyErr_SetString(PyExc_ImportError, "numpy.core.multiarray failed to import");
+    }
 }
 
 bool Convert(Object obj, ArrayObject& array)
 {
+    //    if (array_init == 0)
     if (!PyArray_Check(obj.Get()))
         return false;
     array = obj;

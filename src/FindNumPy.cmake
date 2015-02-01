@@ -4,6 +4,8 @@
 #
 # TODO: Update to provide the libraries and paths for linking npymath lib.
 #
+#  PYTHON_LIBRARIES
+#  PYTHON_INCLUDE_DIR
 #  NUMPY_FOUND               - was NumPy found
 #  NUMPY_VERSION             - the version of NumPy found as a string
 #  NUMPY_VERSION_MAJOR       - the major version number of NumPy
@@ -38,19 +40,22 @@
 #
 #============================================================================
 
+# Finding Python libs/includes
+execute_process(COMMAND python-config --ldflags
+                OUTPUT_VARIABLE PYTHON_LIBRARIES
+                OUTPUT_STRIP_TRAILING_WHITESPACE
+                ERROR_QUIET)
+execute_process(COMMAND python-config --includes
+                OUTPUT_VARIABLE PYTHON_INCLUDE_DIR
+                OUTPUT_STRIP_TRAILING_WHITESPACE
+                ERROR_QUIET)
+
+string(REGEX REPLACE "^[-I]" "" PYTHON_INCLUDE_DIR "${PYTHON_INCLUDE_DIR}")
+string(REGEX REPLACE "[ ]-I" " " PYTHON_INCLUDE_DIR "${PYTHON_INCLUDE_DIR}")
+separate_arguments(PYTHON_INCLUDE_DIR)
+
 # Finding NumPy involves calling the Python interpreter
-if(NumPy_FIND_REQUIRED)
-    find_package(PythonInterp REQUIRED)
-else()
-    find_package(PythonInterp)
-endif()
-
-if(NOT PYTHONINTERP_FOUND)
-    set(NUMPY_FOUND FALSE)
-    return()
-endif()
-
-execute_process(COMMAND "${PYTHON_EXECUTABLE}" "-c"
+execute_process(COMMAND "python" "-c"
     "import numpy as n; print(n.__version__); print(n.get_include());"
     RESULT_VARIABLE _NUMPY_SEARCH_SUCCESS
     OUTPUT_VARIABLE _NUMPY_VALUES_OUTPUT
@@ -94,7 +99,10 @@ string(REGEX MATCH "[0-9]*" NUMPY_VERSION_PATCH ${NUMPY_VERSION_PATCH})
 math(EXPR NUMPY_VERSION_DECIMAL
     "(${NUMPY_VERSION_MAJOR} * 10000) + (${NUMPY_VERSION_MINOR} * 100) + ${NUMPY_VERSION_PATCH}")
 
-find_package_message(NUMPY
+#find_package_message(NUMPY
+    #"Found NumPy: version \"${NUMPY_VERSION}\" ${NUMPY_INCLUDE_DIRS}"
+    #"${NUMPY_INCLUDE_DIRS}${NUMPY_VERSION}")
+message(NUMPY
     "Found NumPy: version \"${NUMPY_VERSION}\" ${NUMPY_INCLUDE_DIRS}"
     "${NUMPY_INCLUDE_DIRS}${NUMPY_VERSION}")
 

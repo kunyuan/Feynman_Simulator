@@ -14,10 +14,13 @@ file(GLOB_RECURSE HDRS *.h)
 ADD_EXECUTABLE(simulator.exe  ${SRCS} ${HDRS})
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR})
-find_package(PythonInterp REQUIRED)
-#find_package(PythonLibsNew REQUIRED)
-find_package(PythonDev REQUIRED)
+
 find_package(NumPy REQUIRED)
+message("python include dir:" ${PYTHON_INCLUDE_DIR})
+message("python libraries:" ${PYTHON_LIBRARIES})
+message("numpy version:" ${NUMPY_VERSION})
+message("numpy include dir:" ${NUMPY_INCLUDE_DIRS})
+
 # Require version >= 1.6
 #if(NUMPY_VERSION_DECIMAL LESS 10600)
     #message(FATAL_ERROR,
@@ -28,9 +31,5 @@ include_directories(
     ${PYTHON_INCLUDE_DIR}
     ${NUMPY_INCLUDE_DIRS}
     )
-message(${PYTHON_INCLUDE_DIR})
-message(${PYTHON_LIBRARIES})
-message(${NUMPY_VERSION})
-message(${NUMPY_INCLUDE_DIRS})
 target_link_libraries(simulator.exe ${PYTHON_LIBRARIES})
 install (TARGETS simulator.exe DESTINATION ${PROJECT_SOURCE_DIR}/..)

@@ -22,8 +22,8 @@ const string HelpStr = "Usage:"
                        "-p N / --PID N   use N to construct input file path."
                        "or -f / --file PATH   use PATH as the input file path.";
 
-void MonteCarlo(const Job &);
-int main(int argc, const char *argv[])
+void MonteCarlo(const Job&);
+int main(int argc, const char* argv[])
 {
     Python::Initialize();
     Python::ArrayInitialize();
@@ -47,17 +47,18 @@ int main(int argc, const char *argv[])
     return 0;
 }
 
-void MonteCarlo(const para::Job &Job)
+void MonteCarlo(const para::Job& Job)
 {
     EnvMonteCarlo Env(Job);
+
     if (Job.DoesLoad)
         Env.Load();
     else
         Env.BuildNew();
 
-    auto &Markov = Env.Markov;
-    auto &MarkovMonitor = Env.MarkovMonitor;
-    auto &Para = Env.Para;
+    auto& Markov = Env.Markov;
+    auto& MarkovMonitor = Env.MarkovMonitor;
+    auto& Para = Env.Para;
 
     LOG_INFO("Markov is started!");
     timer ReweightTimer, PrinterTimer, DiskWriterTimer, MessageTimer;
@@ -66,8 +67,8 @@ void MonteCarlo(const para::Job &Job)
     MessageTimer.start();
     ReweightTimer.start();
 
-    int sigma[MAX_ORDER] = {0};
-    int polar[MAX_ORDER] = {0};
+    int sigma[MAX_ORDER] = { 0 };
+    int polar[MAX_ORDER] = { 0 };
 
     Env.ListenToMessage();
 

@@ -51,34 +51,36 @@ Observable=measure.Observable(Map, Lat)
 
 def Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor):
     log.info("Measuring...")
+    Chi = calc.Calculate_Chi(ChiTensor, Map)
 
     ##########OUTPUT AND FILE SAVE ####################
     spinUP=Map.Spin2Index(UP,UP)
     spinDOWN=Map.Spin2Index(DOWN,DOWN)
-    #Polar.FFT("R","T")
+
+    Polar.FFT("R","T")
+    W0.FFT("R")
+    W.FFT("R","T")
+    G.FFT("R","T")
+    Sigma0.FFT("R")
+    Sigma.FFT("R","T")
+    Chi.FFT("R","T")
+
     #print "Polar=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
-    #W.FFT("R","T")
-    #print "W=\n", W.Data[spinUP,0,spinUP,0,0,:]
-    #G.FFT("R","T")
+    print "W=\n", W.Data[spinUP,0,spinUP,0,0,:]
     #print "G[UP,UP]=\n", G.Data[UP,0,UP,0,0,:]
     #print "G[DOWN,DOWN]=\n", G.Data[UP,0,UP,0,0,:]
-    #Sigma0.FFT("R")
     #print "Sigma0=\n", Sigma0.Data[UP,0,UP,0,0]
-    #Sigma.FFT("R","T")
     #print "Sigma=\n", Sigma.Data[UP,0,UP,0,0,:]
-
-    Chi = calc.Calculate_Chi(ChiTensor, Map)
-    #Chi.FFT("R","T")
     #print "Chi=\n", Chi.Data[0,0,0,0,1,:]
 
     data={}
+    data["Chi"]=Chi.ToDict()
     data["G"]=G.ToDict()
     data["W"]=W.ToDict()
     data["W"].update(W0.ToDict())
-    #data["Sigma0"]=Sigma0.ToDict()
-    #data["Sigma"]=Sigma.ToDict()
-    #data["Polar"]=Polar.ToDict()
-    data["Chi"]=Chi.ToDict()
+    data["Sigma0"]=Sigma0.ToDict()
+    data["Sigma"]=Sigma.ToDict()
+    data["Polar"]=Polar.ToDict()
     IO.SaveBigDict(WeightFile, data)
     parameter.Save(ParaFile, para)  #Save Parameters
 
@@ -92,7 +94,7 @@ def Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor):
     except:
         pass
 
-if job["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is False:
+if job["StartFromBare"] is True or os.path.exists(WeightFile+".hkl") is False:
     #start from bare
     Version=0
     log.info("Start from G0 and W0 to do dyson...")
@@ -150,7 +152,7 @@ else:
             log.info("Collecting Sigma/Polar statistics...")
             SigmaMC, PolarMC=collect.CollectStatis(Map, MaxOrder)
 
-            Sigma,Polar,SigmaOrder, PolarOrder=collect.UpdateWeight(SigmaMC, PolarMC, 
+            Sigma, Polar, SigmaOrder, PolarOrder=collect.UpdateWeight(SigmaMC, PolarMC, 
                     paraDyson["ErrorThreshold"], paraDyson["OrderAccepted"])
 
             if SigmaOrder==0 or PolarOrder==0:
@@ -173,7 +175,6 @@ else:
                 Gold, Wold = G, W
                 Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor)
                 Factory.DecreaseField(para["Dyson"]["Annealing"])
-
             log.info("Version {0} is done!".format(Version))
             parameter.BroadcastMessage(MessageFile, {"Version": Version, "Beta": Map.Beta})
 
