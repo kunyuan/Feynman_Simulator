@@ -1,8 +1,9 @@
 #!/usr/bin/env python
-import sys
 import numpy as np
 import pprint
-sys.path.append("../") #add the root dir into PYTHONPATH
+import os.path, sys
+sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
+#add parentdir into PYTHONPATH, where IO module can be found
 import IO
 
 def InspectDict(Dict):

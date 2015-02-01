@@ -48,6 +48,7 @@ void Dictionary::LoadFromString(const std::string& script)
 void Dictionary::Load(const std::string& FileName)
 {
     ModuleObject LoadDict;
+
     LoadDict.LoadModule("IO.py");
     Object result = LoadDict.CallFunction("LoadDict", FileName);
     PropagatePyError();
@@ -70,7 +71,7 @@ void Dictionary::BigLoad(const std::string& FileName)
     Object result = LoadBigDict.CallFunction("LoadBigDict", FileName);
     PropagatePyError();
     if (!FromPy(result))
-        ABORT("Fail to read file!");
+        ABORT("Fail to read file " << FileName);
 }
 void Dictionary::BigSave(const std::string& FileName)
 {

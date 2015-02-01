@@ -57,7 +57,7 @@ def PlotSpatial(weight, lattice, SpinIn, SpinOut, Tau=0, DoesSave=True):
     plt.close()
 
 def PlotChi(Chi, lat, DoesSave=True):
-    omega=1
+    omega=0
     map=Chi.Map
     x=[]
     KList=[]
@@ -85,6 +85,7 @@ def PlotChi(Chi, lat, DoesSave=True):
     if DoesSave:
         plt.savefig("chi.jpg")
     else:
+        print "show plot"
         plt.show()
     plt.clf()
     plt.cla()

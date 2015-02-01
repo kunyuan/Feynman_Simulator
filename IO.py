@@ -2,6 +2,9 @@
 import pprint
 import cPickle as pickle
 import gzip
+import sys
+print sys.version
+import hickle as hkl
 from numpy import *
 #all numpy symbols have to be imported as * in order to read "array([...])" in .txt file with LoadDict function
 
@@ -20,17 +23,23 @@ def LoadDict(filename):
         return eval(f.read())
 
 def SaveBigDict(filename, root):
+    if filename[-4:]!=".hkl":
+        filename+=".hkl"
+    hkl.dump(root, filename, mode='w', compression='gzip')
     #TODO: better to add an file read-lock here
-    if filename[-4:]!=".pkl":
-        filename+=".pkl"
-    with gzip.open(filename, "w") as f:
-        pickle.dump(root, f, pickle.HIGHEST_PROTOCOL)
+    #if filename[-4:]!=".pkl":
+        #filename+=".pkl"
+    #with gzip.open(filename, "w") as f:
+        #pickle.dump(root, f, pickle.HIGHEST_PROTOCOL)
 
 def LoadBigDict(filename):
-    if filename[-4:]!=".pkl":
-        filename+=".pkl"
-    with gzip.open(filename, "r") as f:
-        root=pickle.load(f)
+    if filename[-4:]!=".hkl":
+        filename+=".hkl"
+    root=hkl.load(filename)
+    #if filename[-4:]!=".pkl":
+        #filename+=".pkl"
+    #with gzip.open(filename, "r") as f:
+        #root=pickle.load(f)
     return root
 
 

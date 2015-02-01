@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 '''This is the job manage script.
    This is a quite universal code for all different type of simulations'''
 import os, sys, copy, signal

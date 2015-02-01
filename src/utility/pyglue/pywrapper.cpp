@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <fstream>
 #include "pywrapper.h"
+#include <iostream>
 
 using std::string;
 

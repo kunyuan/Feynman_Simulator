@@ -57,8 +57,8 @@ def Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor):
     spinDOWN=Map.Spin2Index(DOWN,DOWN)
     #Polar.FFT("R","T")
     #print "Polar=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
-    #W.FFT("R","T")
-    #print "W=\n", W.Data[spinUP,0,spinUP,0,0,:]
+    W.FFT("R","T")
+    print "W=\n", W.Data[spinUP,0,spinUP,0,0,:]
     #G.FFT("R","T")
     #print "G[UP,UP]=\n", G.Data[UP,0,UP,0,0,:]
     #print "G[DOWN,DOWN]=\n", G.Data[UP,0,UP,0,0,:]
@@ -72,13 +72,13 @@ def Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor):
     #print "Chi=\n", Chi.Data[0,0,0,0,1,:]
 
     data={}
+    data["Chi"]=Chi.ToDict()
     data["G"]=G.ToDict()
     data["W"]=W.ToDict()
     data["W"].update(W0.ToDict())
     #data["Sigma0"]=Sigma0.ToDict()
     #data["Sigma"]=Sigma.ToDict()
     #data["Polar"]=Polar.ToDict()
-    data["Chi"]=Chi.ToDict()
     IO.SaveBigDict(WeightFile, data)
     parameter.Save(ParaFile, para)  #Save Parameters
 
@@ -86,13 +86,13 @@ def Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor):
     Observable.Save(OutputFile)
 
     #plot what you are interested in
-    try:
-        plot.PlotSpatial(Chi, Lat, 0, 0)
-        plot.PlotChi(Chi,Lat)
-    except:
-        pass
+    #try:
+    plot.PlotSpatial(Chi, Lat, 0, 0)
+    plot.PlotChi(Chi,Lat,False)
+    #except:
+        #pass
 
-if job["StartFromBare"] is True or os.path.exists(WeightFile+".pkl") is False:
+if job["StartFromBare"] is True or os.path.exists(WeightFile+".hkl") is False:
     #start from bare
     Version=0
     log.info("Start from G0 and W0 to do dyson...")
