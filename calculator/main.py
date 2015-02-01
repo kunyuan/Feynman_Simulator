@@ -51,24 +51,26 @@ Observable=measure.Observable(Map, Lat)
 
 def Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor):
     log.info("Measuring...")
+    Chi = calc.Calculate_Chi(ChiTensor, Map)
 
     ##########OUTPUT AND FILE SAVE ####################
     spinUP=Map.Spin2Index(UP,UP)
     spinDOWN=Map.Spin2Index(DOWN,DOWN)
+
     Polar.FFT("R","T")
+    W0.FFT("R")
     W.FFT("R","T")
     G.FFT("R","T")
     Sigma0.FFT("R")
     Sigma.FFT("R","T")
+    Chi.FFT("R","T")
+
     #print "Polar=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
-    #print "W=\n", W.Data[spinUP,0,spinUP,0,0,:]
+    print "W=\n", W.Data[spinUP,0,spinUP,0,0,:]
     #print "G[UP,UP]=\n", G.Data[UP,0,UP,0,0,:]
     #print "G[DOWN,DOWN]=\n", G.Data[UP,0,UP,0,0,:]
     #print "Sigma0=\n", Sigma0.Data[UP,0,UP,0,0]
     #print "Sigma=\n", Sigma.Data[UP,0,UP,0,0,:]
-
-    Chi = calc.Calculate_Chi(ChiTensor, Map)
-    #Chi.FFT("R","T")
     #print "Chi=\n", Chi.Data[0,0,0,0,1,:]
 
     data={}
@@ -144,13 +146,17 @@ else:
         try:
             log.info("Load Sigma/Polar and G to do dyson...")
             G0,W0=Factory.Build(para["Model"]["Name"], para["Lattice"]["Name"])
+<<<<<<< HEAD
+=======
+            #reinitialize G0, W0 to kill accumulated error, and change with externalfield
+>>>>>>> ec4425a7f078a41a6751f115e5f1660d8d941d65
 
             paraDyson=para["Dyson"]
             MaxOrder=paraDyson["Order"]
             log.info("Collecting Sigma/Polar statistics...")
             SigmaMC, PolarMC=collect.CollectStatis(Map, MaxOrder)
 
-            Sigma,Polar,SigmaOrder, PolarOrder=collect.UpdateWeight(SigmaMC, PolarMC, 
+            Sigma, Polar, SigmaOrder, PolarOrder=collect.UpdateWeight(SigmaMC, PolarMC, 
                     paraDyson["ErrorThreshold"], paraDyson["OrderAccepted"])
 
             if SigmaOrder==0 or PolarOrder==0:
@@ -168,11 +174,9 @@ else:
                 G = calc.G_Dyson(G0, Sigma0, Sigma, Map)
             except:
                 Factory.RevertField(para["Dyson"]["Annealing"])
-                G = Gold
-                W = Wold
+                G, W = Gold, Wold
             else:
-                Gold = G
-                Wold = W
+                Gold, Wold = G, W
                 Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor)
                 Factory.DecreaseField(para["Dyson"]["Annealing"])
             log.info("Version {0} is done!".format(Version))

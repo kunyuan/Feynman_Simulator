@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1C30BE361A7E949C00EEF07C /* libpython2.7.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C30BE351A7E949C00EEF07C /* libpython2.7.dylib */; };
 		1CA021B91A0A897D00A18085 /* momentum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CA021B71A0A897D00A18085 /* momentum.cpp */; };
 		1CA5CF3819ED6F1B00212E20 /* lattice_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CA5CF3719ED6F1B00212E20 /* lattice_test.cpp */; };
 		1CA5CF3A19ED6F3F00212E20 /* lattice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CA5CF3919ED6F3F00212E20 /* lattice.cpp */; };
@@ -49,7 +50,6 @@
 		84C86DF51A23D9FD002A3D8D /* index_map.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84C86DF31A23D9FD002A3D8D /* index_map.cpp */; };
 		84C86DFA1A24310F002A3D8D /* component_MC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84C86DF81A24310F002A3D8D /* component_MC.cpp */; };
 		84C86DFD1A24E463002A3D8D /* weight_estimator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84C86DFB1A24E463002A3D8D /* weight_estimator.cpp */; };
-		84E8AE6C1A7E80B300556396 /* libpython2.7.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 84E8AE6B1A7E80B300556396 /* libpython2.7.dylib */; };
 		84FDE07419DDFC2F0092B441 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84FDE07319DDFC2F0092B441 /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -66,6 +66,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1C30BE351A7E949C00EEF07C /* libpython2.7.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpython2.7.dylib; path = ../../../../usr/local/Cellar/python/2.7.9/Frameworks/Python.framework/Versions/2.7/lib/python2.7/config/libpython2.7.dylib; sourceTree = "<group>"; };
 		1CA021B71A0A897D00A18085 /* momentum.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = momentum.cpp; sourceTree = "<group>"; };
 		1CA021B81A0A897D00A18085 /* momentum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = momentum.h; sourceTree = "<group>"; };
 		1CA5CF3719ED6F1B00212E20 /* lattice_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lattice_test.cpp; path = lattice/lattice_test.cpp; sourceTree = "<group>"; };
@@ -515,7 +516,6 @@
 		84C86DF81A24310F002A3D8D /* component_MC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = component_MC.cpp; path = module/weight/component_MC.cpp; sourceTree = "<group>"; };
 		84C86DFB1A24E463002A3D8D /* weight_estimator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = weight_estimator.cpp; path = module/weight/weight_estimator.cpp; sourceTree = "<group>"; };
 		84C86DFC1A24E463002A3D8D /* weight_estimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = weight_estimator.h; path = module/weight/weight_estimator.h; sourceTree = "<group>"; };
-		84E8AE6B1A7E80B300556396 /* libpython2.7.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpython2.7.dylib; path = ../../../../usr/local/Cellar/python/2.7.9/Frameworks/Python.framework/Versions/2.7/lib/python2.7/config/libpython2.7.dylib; sourceTree = "<group>"; };
 		84FDE07019DDFC2F0092B441 /* Feynman_Simulator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Feynman_Simulator; sourceTree = BUILT_PRODUCTS_DIR; };
 		84FDE07319DDFC2F0092B441 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -525,7 +525,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				84E8AE6C1A7E80B300556396 /* libpython2.7.dylib in Frameworks */,
+				1C30BE361A7E949C00EEF07C /* libpython2.7.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1095,7 +1095,7 @@
 		84FDE06719DDFC2F0092B441 = {
 			isa = PBXGroup;
 			children = (
-				84E8AE6B1A7E80B300556396 /* libpython2.7.dylib */,
+				1C30BE351A7E949C00EEF07C /* libpython2.7.dylib */,
 				84FDE07219DDFC2F0092B441 /* Feynman_Simulator */,
 				84FDE07119DDFC2F0092B441 /* Products */,
 			);
@@ -1318,7 +1318,7 @@
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PRODUCT_NAME = Feynman_Simulator;
-				USER_HEADER_SEARCH_PATHS = "src /Library/Python/2.7/site-packages/numpy/core/include /usr/local/Cellar/python/2.7.9/Frameworks/Python.framework/Versions/2.7/include/python2.7";
+				USER_HEADER_SEARCH_PATHS = "src /Library/Python/2.7/site-packages/numpy/core/include /usr/local/lib/python2.7/site-packages/numpy/core/include /usr/local/Cellar/python/2.7.9/Frameworks/Python.framework/Versions/2.7/include/python2.7";
 			};
 			name = Debug;
 		};
@@ -1332,8 +1332,8 @@
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PRODUCT_NAME = Feynman_Simulator;
-				USER_HEADER_SEARCH_PATHS = "src /usr/local/Cellar/python/2.7.9/Frameworks/Python.framework/Versions/2.7/include/python2.7 /Library/Python/2.7/site-packages/numpy/core/include";
-				"USER_HEADER_SEARCH_PATHS[arch=*]" = "src /usr/local/Cellar/python/2.7.9/Frameworks/Python.framework/Versions/2.7/include/python2.7 /Library/Python/2.7/site-packages/numpy/core/include";
+				USER_HEADER_SEARCH_PATHS = "src /usr/local/Cellar/python/2.7.9/Frameworks/Python.framework/Versions/2.7/include/python2.7 /Library/Python/2.7/site-packages/numpy/core/include /usr/local/lib/python2.7/site-packages/numpy/core/include";
+				"USER_HEADER_SEARCH_PATHS[arch=*]" = "src /usr/local/Cellar/python/2.7.9/Frameworks/Python.framework/Versions/2.7/include/python2.7 /Library/Python/2.7/site-packages/numpy/core/include /usr/local/lib/python2.7/site-packages/numpy/core/include";
 			};
 			name = Release;
 		};

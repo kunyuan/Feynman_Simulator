@@ -43,6 +43,7 @@
 *.zip
 *.npy
 *.pkl
+*.hkl
 *.npz
 *.pyc
 *.xccheckout
