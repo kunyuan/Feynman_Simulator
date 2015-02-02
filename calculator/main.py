@@ -5,7 +5,7 @@ import lattice as lat
 import collect
 from weight import UP,DOWN,IN,OUT
 from logger import *
-import os, sys, model, weight, measure, parameter, plot, argparse, time, traceback
+import os, sys, model, weight, measure, parameter, plot, argparse, time, traceback, signal
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-p", "--PID", help="use PID to find the input file")
@@ -20,6 +20,11 @@ elif args.file:
     InputFile=os.path.abspath(args.file)
 else:
     Assert(False, "Do not understand the argument!")
+
+#def handler(signal, frame):
+    #print "ctrl-c received"
+    #sys.exit(0)
+#signal.signal(signal.SIGINT, handler)
 
 job, para=parameter.Load(InputFile)
 ParaFile="{0}_DYSON_para".format(job["PID"])
@@ -90,20 +95,14 @@ def Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor):
     data["Sigma"]=Sigma.ToDict()
     data["Polar"]=Polar.ToDict()
     Observable.Measure(Chi, Determ)
-    try:
-        log.info("Save weights into {0}".format(WeightFile))
+
+    with DelayedKeyboardInterrupt():
+        log.info("Save weights into {0} File".format(WeightFile))
         IO.SaveBigDict(WeightFile, data)
         parameter.Save(ParaFile, para)  #Save Parameters
         Observable.Save(OutputFile)
-    except SystemExit:
-        raise
 
     #plot what you are interested in
-    try:
-        plot.PlotSpatial(Chi, Lat, 0, 0)
-        plot.PlotChi(Chi,Lat)
-    except:
-        pass
 
 #if MessageFile does not exist, Version will be 0
 Version=parameter.GetVersion(MessageFile)
@@ -155,6 +154,8 @@ while Version<30:
             W, ChiTensor, Determ = calc.W_Dyson(W0, Polar, Map)
             print "calculating G..."
             G = calc.G_Dyson(G0, Sigma0, Sigma, Map)
+        except KeyboardInterrupt, SystemExit:
+            raise
         except:
             Factory.RevertField(ParaDyson["Annealing"])
             G, W = Gold, Wold
@@ -164,8 +165,11 @@ while Version<30:
             Factory.DecreaseField(ParaDyson["Annealing"])
         log.info("Version {0} is done!".format(Version))
         parameter.BroadcastMessage(MessageFile, {"Version": Version, "Beta": Map.Beta})
+    except KeyboardInterrupt, SystemExit:
+        log.info("Terminating Dyson\n {1}".format(Version, traceback.format_exc()))
+        sys.exit(0)
     except:
-        log.info("#{0} fails due to\n {1}".format(Version, traceback.format_exc()))
+        log.info("Version {0} fails due to\n {1}".format(Version, traceback.format_exc()))
     finally:
         if job["DysonOnly"] is False:
             time.sleep(ParaDyson["SleepTime"])
