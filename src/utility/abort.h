@@ -11,7 +11,7 @@
 
 #include "logger.h"
 #include "convention.h"
-#include <exception>
+#include <stdexcept>
 
 #define EXCEPTION(name)                                        \
     class name : public std::runtime_error {                   \

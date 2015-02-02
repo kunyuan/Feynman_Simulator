@@ -28,7 +28,7 @@ using namespace mc;
 bool CanNotMoveWorm(int dspin, spin sin, spin sout);
 bool CanNotMoveWorm(int dspin, spin sin, int dir);
 
-void Markov::_Initial(ParaMC &para, Diagram &diag, weight::Weight &weight)
+void Markov::_Initial(ParaMC& para, Diagram& diag, weight::Weight& weight)
 {
     Beta = para.Beta;
     Order = para.Order;
@@ -44,11 +44,16 @@ void Markov::_Initial(ParaMC &para, Diagram &diag, weight::Weight &weight)
     G = weight.G;
     W = weight.W;
     RNG = &para.RNG;
+    InitialArray(ProbofCall, 0.0, NUpdates);
+    InitialArray(SumofProbofCall, 0.0, NUpdates);
+    InitialArray(&Accepted[0][0], 0.0, NUpdates * MAX_ORDER);
+    InitialArray(&Proposed[0][0], 0.0, NUpdates * MAX_ORDER);
 }
 
-bool Markov::BuildNew(ParaMC &para, Diagram &diag, weight::Weight &weight)
+bool Markov::BuildNew(ParaMC& para, Diagram& diag, weight::Weight& weight)
 {
     _Initial(para, diag, weight);
+    ASSERT_ALLWAYS(NUpdates >= (int)Operations::END, "NUpdates " << NUpdates << " should larger than " << (int)Operations::END);
 
     for (int i = 0; i < NUpdates; i++) {
         ProbofCall[i] = 1.0 / real(NUpdates);
@@ -77,7 +82,7 @@ bool Markov::BuildNew(ParaMC &para, Diagram &diag, weight::Weight &weight)
     return true;
 }
 
-void Markov::Reset(ParaMC &para, Diagram &diag, weight::Weight &weight)
+void Markov::Reset(ParaMC& para, Diagram& diag, weight::Weight& weight)
 {
     _Initial(para, diag, weight);
 }
@@ -161,7 +166,7 @@ void Markov::PrintDetailBalanceInfo()
 {
     string Output = "";
     Output = string(60, '=') + "\n";
-    Output += "DiagCounter: " + ToString(*Counter) +"\n";
+    Output += "DiagCounter: " + ToString(*Counter) + "\n";
     Output += _DetailBalanceStr(CREATE_WORM);
     Output += _DetailBalanceStr(DELETE_WORM);
     Output += _DetailBalanceStr(MOVE_WORM_G);
@@ -324,8 +329,8 @@ void Markov::DeleteWorm()
 {
     if (Diag->Order == 0 || !Worm->Exist)
         return;
-    vertex &Ira = Worm->Ira;
-    vertex &Masha = Worm->Masha;
+    vertex& Ira = Worm->Ira;
+    vertex& Masha = Worm->Masha;
 
     wLine w = Ira->NeighW();
     if (!(w == Masha->NeighW()))
@@ -368,8 +373,8 @@ void Markov::MoveWormOnG()
     if (Diag->Order == 0 || !Worm->Exist)
         return;
 
-    vertex &Ira = Worm->Ira;
-    vertex &Masha = Worm->Masha;
+    vertex& Ira = Worm->Ira;
+    vertex& Masha = Worm->Masha;
 
     int dir = RandomPickDir();
     gLine g = Ira->NeighG(dir);
@@ -389,7 +394,7 @@ void Markov::MoveWormOnG()
     else
         isWormW1 = Diag->IsWorm(vW1);
 
-    spin spinV1[2] = {Ira->Spin(0), Ira->Spin(1)};
+    spin spinV1[2] = { Ira->Spin(0), Ira->Spin(1) };
     spinV1[dir] = FLIP(spinV1[dir]);
 
     Complex w1Weight = W->Weight(Ira->Dir, Ira->R, vW1->R, Ira->Tau, vW1->Tau,
@@ -398,7 +403,7 @@ void Markov::MoveWormOnG()
     wLine w2 = v2->NeighW();
     vertex vW2 = w2->NeighVer(INVERSE(v2->Dir));
 
-    spin spinV2[2] = {v2->Spin(0), v2->Spin(1)};
+    spin spinV2[2] = { v2->Spin(0), v2->Spin(1) };
     spinV2[INVERSE(dir)] = FLIP(spinV2[INVERSE(dir)]);
 
     Complex w2Weight = W->Weight(v2->Dir, v2->R, vW2->R, v2->Tau, vW2->Tau,
@@ -449,8 +454,8 @@ void Markov::MoveWormOnW()
     if (Diag->Order == 0 || !Worm->Exist)
         return;
 
-    vertex &Ira = Worm->Ira;
-    vertex &Masha = Worm->Masha;
+    vertex& Ira = Worm->Ira;
+    vertex& Masha = Worm->Masha;
 
     wLine w = Ira->NeighW();
     vertex v2 = w->NeighVer(INVERSE(Ira->Dir));
@@ -571,14 +576,14 @@ void Markov::AddInteraction()
 
     real tauA = RandomPickTau(), tauB = RandomPickTau();
 
-    spin spinA[2] = {GIC->Spin(), GIC->Spin()};
-    spin spinB[2] = {GMD->Spin(), GMD->Spin()};
+    spin spinA[2] = { GIC->Spin(), GIC->Spin() };
+    spin spinB[2] = { GMD->Spin(), GMD->Spin() };
     vertex vC = GIC->NeighVer(dir), vD = GMD->NeighVer(dir);
     Site RA = vC->R, RB = vD->R;
 
     Complex wWeight = W->Weight(dirW, RA, RB, tauA, tauB, spinA, spinB,
-                                false,  //IsWorm
-                                false,  //IsMeasure
+                                false, //IsWorm
+                                false, //IsMeasure
                                 false); //IsDelta
 
     Complex GIAWeight = G->Weight(INVERSE(dir), Ira->R, RA, Ira->Tau, tauA,
@@ -640,8 +645,8 @@ void Markov::AddInteraction()
         WAB->nVer[dirW] = vA;
         WAB->nVer[INVERSE(dirW)] = vB;
         WAB->SetWLine(kW, wWeight,
-                      false,  //IsWorm
-                      false,  //IsMeasure
+                      false, //IsWorm
+                      false, //IsMeasure
                       false); //IsDelta
 
         Diag->AddWHash(kW);
@@ -782,8 +787,8 @@ void Markov::AddDeltaInteraction()
 
     real tauA = RandomPickTau();
 
-    spin spinA[2] = {GIC->Spin(), GIC->Spin()};
-    spin spinB[2] = {GMD->Spin(), GMD->Spin()};
+    spin spinA[2] = { GIC->Spin(), GIC->Spin() };
+    spin spinB[2] = { GMD->Spin(), GMD->Spin() };
     vertex vC = GIC->NeighVer(dir), vD = GMD->NeighVer(dir);
     Site RA = vC->R, RB = vD->R;
 
@@ -1044,10 +1049,10 @@ void Markov::ChangeSpinOnVertex()
     vertex v2 = g->NeighVer(dir);
     wLine w2 = v2->NeighW();
 
-    spin spinv1[2] = {v1->Spin(IN), v1->Spin(OUT)};
+    spin spinv1[2] = { v1->Spin(IN), v1->Spin(OUT) };
     spinv1[dir] = FLIP(spinv1[dir]);
 
-    spin spinv2[2] = {v2->Spin(IN), v2->Spin(OUT)};
+    spin spinv2[2] = { v2->Spin(IN), v2->Spin(OUT) };
     spinv2[INVERSE(dir)] = FLIP(spinv2[INVERSE(dir)]);
 
     spin spinv[2];
@@ -1180,9 +1185,9 @@ void Markov::ChangeRLoop()
     //TODO: If G is not a local function, return;
     //TODO: use key word 'static' here to save time
     ASSERT_ALLWAYS(Order <= MAX_ORDER, "Order is too high!");
-    vertex v[2 * MAX_ORDER] = {nullptr};
-    bool flagVer[2 * MAX_ORDER] = {false};
-    int flagW[MAX_ORDER] = {0};
+    vertex v[2 * MAX_ORDER] = { nullptr };
+    bool flagVer[2 * MAX_ORDER] = { false };
+    int flagW[MAX_ORDER] = { 0 };
     int n = 0;
     v[0] = Diag->Ver.RandomPick(*RNG);
     Site oldR = v[0]->R;
@@ -1203,8 +1208,8 @@ void Markov::ChangeRLoop()
     wLine w = nullptr;
 
     //TODO: use key word 'static' here to save time
-    Complex GWeight[2 * MAX_ORDER] = {Complex(1.0, 0.0)};
-    Complex WWeight[2 * MAX_ORDER] = {Complex(1.0, 0.0)};
+    Complex GWeight[2 * MAX_ORDER] = { Complex(1.0, 0.0) };
+    Complex WWeight[2 * MAX_ORDER] = { Complex(1.0, 0.0) };
 
     Complex oldWeight(1.0, 0.0);
     Complex newWeight(1.0, 0.0);
@@ -1525,8 +1530,8 @@ void Markov::JumpBackToOrder1()
     gLine G2 = Ver2->NeighG(OUT);
     wLine W1 = Ver1->NeighW();
 
-    spin SpinV1[2] = {SpinG2, SpinG1};
-    spin SpinV2[2] = {SpinG1, SpinG2};
+    spin SpinV1[2] = { SpinG2, SpinG1 };
+    spin SpinV2[2] = { SpinG1, SpinG2 };
 
     Complex weightG1 = G->Weight(R, R, Tau1, Tau2, SpinG1, SpinG1, G1->IsMeasure);
     Complex weightG2 = G->Weight(R, R, Tau2, Tau1, SpinG2, SpinG2, G2->IsMeasure);
@@ -1602,7 +1607,7 @@ Site Markov::RandomPickSite()
     return (Site(RNG->irn(0, Lat->SublatVol - 1), coord));
 }
 
-real Markov::ProbSite(const Site &site)
+real Markov::ProbSite(const Site& site)
 {
 
     return 1.0 / (Lat->Vol * Lat->SublatVol);
