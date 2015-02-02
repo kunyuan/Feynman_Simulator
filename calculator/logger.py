@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import logging
-
+import signal
 import os,sys,inspect
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
@@ -31,3 +31,20 @@ def Assert(condition, info):
 def Abort(info):
     log.error(info)
     raise AssertionError
+
+class DelayedKeyboardInterrupt(object):
+    def __enter__(self):
+        print "enter sigint"
+        self.signal_received = False
+        self.old_handler = signal.getsignal(signal.SIGINT)
+        signal.signal(signal.SIGINT, self.handler)
+
+    def handler(self, signal, frame):
+        self.signal_received = (signal, frame)
+        log.info('SIGINT received. Delaying KeyboardInterrupt...')
+
+    def __exit__(self, type, value, traceback):
+        print "leave sigint"
+        signal.signal(signal.SIGINT, self.old_handler)
+        if self.signal_received:
+            self.old_handler(*self.signal_received)
