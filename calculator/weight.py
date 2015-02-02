@@ -196,7 +196,6 @@ class Weight():
         self.Data*=PhaseFactor
 
     def FromDict(self, data):
-        log.info("Loading {0} Matrix...".format(self.Name));
         if self.Name in data:
             log.info("Load {0}".format(self.Name))
             self.Data=data[self.Name]
@@ -204,7 +203,6 @@ class Weight():
             Assert(False, "{0} not found!").format(self.Name)
         return self
     def ToDict(self):
-        log.info("Saving {0} Matrix...".format(self.Name));
         return {self.Name: self.Data}
 
     def LUSolve(self, lu_piv , b):

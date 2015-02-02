@@ -6,8 +6,10 @@ import math
 from logger import *
 
 class BareFactory:
-    def __init__(self, map, Hamiltonian, Anneal):
+    def __init__(self, map, Lat, Hamiltonian, Anneal):
+        self.Lat=Lat
         self.__Map=map
+        self.__Model=Hamiltonian["Name"]
         self.__Interaction=np.array(Hamiltonian["Interaction"])
         self.__ExternalField=np.array(Hamiltonian["ExternalField"])
         self.__DeltaField=np.array(Anneal["DeltaField"])
@@ -16,16 +18,16 @@ class BareFactory:
         self.__MaxTauBin=self.__Map.MaxTauBin
         self.__Beta=self.__Map.Beta
 
-    def Build(self, Model, LatName=None):
+    def Build(self):
         #self.BareG and self.BareW must be reinitialized at every time Build() is called
         self.BareG=weight.Weight("SmoothT", self.__Map, "TwoSpins", "AntiSymmetric", "R", "T")
         self.BareW=weight.Weight("DeltaT", self.__Map, "FourSpins", "Symmetric", "R", "T")
-        self.Lat=lat.Lattice(LatName, self.__Map)
-        if Model=="Heisenberg":
+        LatName=self.Lat.Name
+        if self.__Model=="Heisenberg":
             self.__Heisenberg(LatName)
-        if Model=="J1J2":
+        if self.__Model=="J1J2":
             self.__J1J2(LatName)
-        elif Model=="DiagCount":
+        elif self.__Model=="DiagCount":
             self.__DiagCount()
         return (self.BareG,self.BareW)
 

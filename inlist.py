@@ -27,10 +27,13 @@ Dyson={
     "__AutoRun" : True, 
     "__KeepCPUBusy": False,
     },
-"Job": {"StartFromBare" : False}
+"Job": {
+    "StartFromBare" : False,
+    "DysonOnly": True
+    }
 }
 
-beta=0.8
+beta=1.0
 Order=2
 Common={
 "Tau": {
@@ -40,9 +43,9 @@ Common={
     "FinalBeta" :  beta,
     },
 "Lattice":  {
-    "Name": "Square",
-    "NSublat": 1,
-    "L": [8,8],
+    #"Name": "Square",
+    #"NSublat": 1,
+    #"L": [8,8],
     #"Name": "Cubic",
     #"NSublat": 1,
     #"L": [8,8,8],
@@ -52,15 +55,15 @@ Common={
     #"Name": "Checkboard",
     #"NSublat": 2,
     #"L": [8,8]
-    #"Name": "3DCheckerboard",
-    #"NSublat": 2,
+    "Name": "3DCheckerboard",
+    "NSublat": 2,
     #"L": [16,16,16]
-    #"L": [8,8,8]
+    "L": [8,8,8]
     },
 "Model": {
     "Name": "J1J2",
     "Interaction": [1.0,0.0],
-    "ExternalField": [1.0, -1.0, 0.0, 0.0]
+    "ExternalField": [0.0, -0.0, 0.0, 0.0]
     #ExternalField on Sublattice A and B
     },
 
