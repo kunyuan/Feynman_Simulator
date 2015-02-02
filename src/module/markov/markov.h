@@ -33,25 +33,26 @@ class RandomFactory;
 class Momentum;
 
 namespace mc {
+const int NUpdates = 19;
 class Markov {
-  public:
-    long long *Counter;
+public:
+    long long* Counter;
     real Beta;
     int Order;
-    Lattice *Lat;
-    real *OrderReWeight;
-    real *WormSpaceReweight;
-    real *PolarReweight;
-    diag::Diagram *Diag;
-    diag::WormClass *Worm;
-    weight::Sigma *Sigma;
-    weight::Polar *Polar;
-    weight::G *G;
-    weight::W *W;
-    RandomFactory *RNG;
+    Lattice* Lat;
+    real* OrderReWeight;
+    real* WormSpaceReweight;
+    real* PolarReweight;
+    diag::Diagram* Diag;
+    diag::WormClass* Worm;
+    weight::Sigma* Sigma;
+    weight::Polar* Polar;
+    weight::G* G;
+    weight::W* W;
+    RandomFactory* RNG;
 
-    bool BuildNew(para::ParaMC &, diag::Diagram &, weight::Weight &);
-    void Reset(para::ParaMC &, diag::Diagram &, weight::Weight &);
+    bool BuildNew(para::ParaMC&, diag::Diagram&, weight::Weight&);
+    void Reset(para::ParaMC&, diag::Diagram&, weight::Weight&);
     void Hop(int);
     void PrintDetailBalanceInfo();
 
@@ -75,13 +76,12 @@ class Markov {
     void ChangeContinuousToDelta();
     void ChangeSpinOnVertex();
 
-  private:
-    const static int NUpdates = 19;
-    real ProbofCall[NUpdates] = {0.0};
-    real SumofProbofCall[NUpdates] = {0.0};
+private:
+    real ProbofCall[NUpdates];
+    real SumofProbofCall[NUpdates];
     std::string OperationName[NUpdates];
-    real Accepted[NUpdates][MAX_ORDER] = {0.0};
-    real Proposed[NUpdates][MAX_ORDER] = {0.0};
+    real Accepted[NUpdates][MAX_ORDER];
+    real Proposed[NUpdates][MAX_ORDER];
 
     int RandomPickDeltaSpin();
     spin RandomPickSpin();
@@ -90,7 +90,7 @@ class Markov {
     real RandomPickTau();
     real ProbTau(real);
     Site RandomPickSite();
-    real ProbSite(const Site &);
+    real ProbSite(const Site&);
     bool RandomPickBool();
     enum Operations {
         CREATE_WORM = 0,
@@ -111,11 +111,12 @@ class Markov {
         CHANGE_CONTINUS2DELTA,
         CHANGE_SPIN_VERTEX,
         JUMP_TO_ORDER0,
-        JUMP_BACK_TO_ORDER1
+        JUMP_BACK_TO_ORDER1,
+        END
     };
     std::string _DetailBalanceStr(Operations op);
     std::string _CheckBalance(Operations op1, Operations op2);
-    void _Initial(para::ParaMC &, diag::Diagram &, weight::Weight &);
+    void _Initial(para::ParaMC&, diag::Diagram&, weight::Weight&);
 };
 
 int TestMarkov();

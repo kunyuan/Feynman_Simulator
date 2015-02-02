@@ -74,7 +74,7 @@ void AssignFromTo(T* source, T* target, int size)
 }
 
 template <typename T>
-void InitialArray(T* target, T t, int size)
+void InitialArray(T* target, T t, const int& size)
 {
     for (int i = 0; i < size; i++)
         target[i] = t;

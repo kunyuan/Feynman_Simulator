@@ -10,7 +10,8 @@
 #include <iostream>
 #include "utility/abort.h"
 #include "utility/scopeguard.h"
-#include <Python/Python.h>
+//#include <Python/Python.h>
+#include <Python.h>
 
 namespace Python {
 void Initialize()
