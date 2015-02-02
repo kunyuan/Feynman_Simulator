@@ -8,7 +8,7 @@
 
 #include "utility/complex.h"
 #include "pyarraywrapper.h"
-#include <Python/Python.h>
+#include <Python.h>
 #include <numpy/arrayobject.h>
 
 using namespace std;
