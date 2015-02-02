@@ -14,5 +14,5 @@ if [ -n "$1" ]
     cmake -DCMAKE_BUILD_TYPE=$type -DCMAKE_CXX_COMPILER=$compiler ../src
   fi
 fi
-make -j4
+make -j
 make install
