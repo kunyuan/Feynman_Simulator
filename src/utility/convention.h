@@ -40,6 +40,6 @@ const int MAX_ORDER = 10;
 
 //define your lattice here
 
-const int D = 2;
+const int D = 3;
 
 #endif

@@ -136,7 +136,7 @@ def StopTheWorld(signum, frame):
     ##terminate all background process here
     try:
         for elem in PROCLIST_BACK+PROCLIST:
-            if elem in PROCLIST_BACK:
+            if len(PROCLIST)==0:
                 os.kill(elem[0].pid, signal.CTRL_C_EVENT)
             else:
                 elem[0].terminate()

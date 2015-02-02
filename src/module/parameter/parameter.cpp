@@ -9,6 +9,7 @@
 #include "parameter.h"
 #include "utility/utility.h"
 #include "utility/dictionary.h"
+#include <vector>
 using namespace para;
 
 Message Parameter::GenerateMessage()
@@ -35,8 +36,11 @@ bool Parameter::_FromDict(const Dictionary& Para)
     GET(_para, FinalBeta);
     GET(_para, MaxTauBin);
     _para = Para.Get<Dictionary>("Lattice");
-    GET(_para, L);
     GET(_para, NSublat);
+    GET(_para, L);
+    auto Lnew = _para.Get<std::vector<int> >("L");
+    ASSERT_ALLWAYS(D == Lnew.size(), "MC dimension is " << D << ", not " << Lnew.size());
+    L = Vec<int>(Lnew.data());
 
     Lat.Initialize(L, NSublat);
     T = 1.0 / Beta;

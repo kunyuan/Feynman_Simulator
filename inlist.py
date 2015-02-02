@@ -28,7 +28,6 @@ Dyson={
     "__KeepCPUBusy": False,
     },
 "Job": {
-    "StartFromBare" : False,
     "DysonOnly": False
     }
 }
