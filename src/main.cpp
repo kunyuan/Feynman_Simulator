@@ -22,8 +22,8 @@ const string HelpStr = "Usage:"
                        "-p N / --PID N   use N to construct input file path."
                        "or -f / --file PATH   use PATH as the input file path.";
 
-void MonteCarlo(const Job&);
-int main(int argc, const char* argv[])
+void MonteCarlo(const Job &);
+int main(int argc, const char *argv[])
 {
     Python::Initialize();
     Python::ArrayInitialize();
@@ -47,7 +47,7 @@ int main(int argc, const char* argv[])
     return 0;
 }
 
-void MonteCarlo(const para::Job& Job)
+void MonteCarlo(const para::Job &Job)
 {
     EnvMonteCarlo Env(Job);
 
@@ -56,9 +56,9 @@ void MonteCarlo(const para::Job& Job)
     else
         Env.BuildNew();
 
-    auto& Markov = Env.Markov;
-    auto& MarkovMonitor = Env.MarkovMonitor;
-    auto& Para = Env.Para;
+    auto &Markov = Env.Markov;
+    auto &MarkovMonitor = Env.MarkovMonitor;
+    auto &Para = Env.Para;
 
     LOG_INFO("Markov is started!");
     timer ReweightTimer, PrinterTimer, DiskWriterTimer, MessageTimer;
@@ -67,8 +67,8 @@ void MonteCarlo(const para::Job& Job)
     MessageTimer.start();
     ReweightTimer.start();
 
-    int sigma[MAX_ORDER] = { 0 };
-    int polar[MAX_ORDER] = { 0 };
+    int sigma[MAX_ORDER] = {0};
+    int polar[MAX_ORDER] = {0};
 
     Env.ListenToMessage();
 
@@ -76,42 +76,44 @@ void MonteCarlo(const para::Job& Job)
         Markov.Hop(Para.Sweep);
     }
 
-    for (uint i = 0; i < 1000; i++) {
-        for (uint Step = 0; Step < Job.Sample; Step++) {
-            //Don't use Para.Counter as counter
-            Markov.Hop(Para.Sweep);
-            MarkovMonitor.Measure();
-            if (!Markov.Diag->Worm.Exist) {
-                if (Markov.Diag->MeasureGLine)
-                    sigma[Markov.Diag->Order]++;
-                else
-                    polar[Markov.Diag->Order]++;
+    //    for (uint i = 0; i < 1000; i++) {
+    //        for (uint Step = 0; Step < Job.Sample; Step++) {
+    uint Step = 0;
+    while (true) {
+        //Don't use Para.Counter as counter
+        Step++;
+        Markov.Hop(Para.Sweep);
+        MarkovMonitor.Measure();
+        if (!Markov.Diag->Worm.Exist) {
+            if (Markov.Diag->MeasureGLine)
+                sigma[Markov.Diag->Order]++;
+            else
+                polar[Markov.Diag->Order]++;
+        }
+
+        if (Step % 100 == 0) {
+            MarkovMonitor.AddStatistics();
+
+            if (PrinterTimer.check(100)) {
+                Env.Diag.CheckDiagram();
+                Markov.PrintDetailBalanceInfo();
             }
 
-            if (Step % 1000 == 0) {
-                MarkovMonitor.AddStatistics();
-                //            if (!Env.Diag.Worm.Exist && Env.Diag.Order == 3)
-                //                Env.Diag.WriteDiagram2gv("diagram/" + ToString(Para.Counter) + ".gv");
-                if (PrinterTimer.check(60)) {
-                    Env.Diag.CheckDiagram();
-                    Markov.PrintDetailBalanceInfo();
-                }
+            if (DiskWriterTimer.check(256))
+                Env.Save();
 
-                //                if (ReweightTimer.check(300)) {
-                //                    Env.AdjustOrderReWeight();
-                //                }
+            if (MessageTimer.check(350))
+                Env.ListenToMessage();
+            //                    MarkovMonitor.SqueezeStatistics(2.0);
 
-                if (DiskWriterTimer.check(200))
-                    Env.Save();
-
-                if (MessageTimer.check(300))
-                    Env.ListenToMessage();
-                //                    MarkovMonitor.SqueezeStatistics(2.0);
-            }
+            if (ReweightTimer.check(600))
+                Env.AdjustOrderReWeight();
         }
     }
+    //        }
+    //    }
 
     //    Markov.PrintDetailBalanceInfo();
-    Env.Save();
-    LOG_INFO("Markov is ended!");
+    //    Env.Save();
+    //    LOG_INFO("Markov is ended!");
 }

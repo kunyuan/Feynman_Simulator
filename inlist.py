@@ -32,7 +32,7 @@ Dyson={
     }
 }
 
-beta=1.0
+beta=0.8
 Order=2
 Common={
 "Tau": {
@@ -42,9 +42,9 @@ Common={
     "FinalBeta" :  beta,
     },
 "Lattice":  {
-    #"Name": "Square",
-    #"NSublat": 1,
-    #"L": [8,8],
+    "Name": "Square",
+    "NSublat": 1,
+    "L": [8,8],
     #"Name": "Cubic",
     #"NSublat": 1,
     #"L": [8,8,8],
@@ -54,10 +54,10 @@ Common={
     #"Name": "Checkboard",
     #"NSublat": 2,
     #"L": [8,8]
-    "Name": "3DCheckerboard",
-    "NSublat": 2,
+    #"Name": "3DCheckerboard",
+    #"NSublat": 2,
     #"L": [16,16,16]
-    "L": [8,8,8]
+    #"L": [8,8,8]
     },
 "Model": {
     "Name": "J1J2",
