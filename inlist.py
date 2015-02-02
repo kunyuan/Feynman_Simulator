@@ -32,8 +32,8 @@ Dyson={
     }
 }
 
-beta=0.8
-Order=2
+beta=1.5
+Order=3
 Common={
 "Tau": {
     "MaxTauBin" : 64,
@@ -42,15 +42,15 @@ Common={
     "FinalBeta" :  beta,
     },
 "Lattice":  {
-    "Name": "Square",
-    "NSublat": 1,
-    "L": [8,8],
+    #"Name": "Square",
+    #"NSublat": 1,
+    #"L": [8,8],
     #"Name": "Cubic",
     #"NSublat": 1,
     #"L": [8,8,8],
-    #"Name": "Pyrochlore",
-    #"NSublat": 4,
-    #"L": [8,8,8]
+    "Name": "Pyrochlore",
+    "NSublat": 4,
+    "L": [8,8,8]
     #"Name": "Checkboard",
     #"NSublat": 2,
     #"L": [8,8]
@@ -71,11 +71,11 @@ Common={
     #Start from order 0, so that OrderReWeight has Order+1 elements
     "Sweep" : 10,
     "Toss" : 1000,
-    "OrderReWeight" : [1.0, 0.1, 0.5],
+    "OrderReWeight" : [1.0, 0.1, 0.5, 0.1],
     "SqueezeFactor" : 10.0,
     "WormSpaceReweight" : 0.05,
     "PolarReweight" : 2.0,
-    "OrderTimeRatio" : [1.0, 1.0, 2.0]
+    "OrderTimeRatio" : [1.0, 1.0, 1.0, 2.0]
     },
 "Dyson": {
     "Order": Order,
@@ -84,7 +84,7 @@ Common={
     "BetaIncrease": 0.0,
     "SleepTime": 300,
     "Annealing": {
-        "DeltaField": [1.0, -1.0, 0.0, 0.0],
+        "DeltaField": [0.0, -0.0, 0.0, 0.0],
         "Interval": [-0.1, 0.1, 0.0, 0.0]
         }
     }

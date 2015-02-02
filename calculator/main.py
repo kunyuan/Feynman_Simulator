@@ -127,8 +127,8 @@ if (job["DysonOnly"] is True) or (DoesWeightFileExist is False):
     Sigma=weight.Weight("SmoothT", Map, "TwoSpins", "AntiSymmetric","R","T")
     Polar=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
 
-#while True:
-while Version<30:
+while True:
+#while Version<30:
     Version+=1
     log.info("Start Version {0}...".format(Version))
     try:
@@ -164,6 +164,7 @@ while Version<30:
             Gold, Wold = G, W
             Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor)
             Factory.DecreaseField(ParaDyson["Annealing"])
+
         log.info("Version {0} is done!".format(Version))
         parameter.BroadcastMessage(MessageFile, {"Version": Version, "Beta": Map.Beta})
     except KeyboardInterrupt, SystemExit:
@@ -172,7 +173,7 @@ while Version<30:
     except:
         log.info("Version {0} fails due to\n {1}".format(Version, traceback.format_exc()))
     finally:
-        if job["DysonOnly"] is False:
+        if (job["DysonOnly"] is False) and (DoesWeightFileExist is True):
             time.sleep(ParaDyson["SleepTime"])
 
 #if job["StartFromBare"] is True or os.path.exists(WeightFile+".hkl") is False:
