@@ -118,10 +118,11 @@ else:
     log.info("Start from bare G, W")
     G=G0.Copy()
     W=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
+
 Gold, Wold = G, W
 Sigma0=weight.Weight("DeltaT", Map, "TwoSpins", "AntiSymmetric","R","T")
 
-if job["DysonOnly"] is True:
+if (job["DysonOnly"] is True) or (DoesWeightFileExist is False):
     #not load StatisFile
     Sigma=weight.Weight("SmoothT", Map, "TwoSpins", "AntiSymmetric","R","T")
     Polar=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
@@ -135,7 +136,7 @@ while Version<30:
         G0,W0=Factory.Build()
         Sigma0.Merge(ratio, calc.SigmaDeltaT_FirstOrder(G, W0, Map))
 
-        if job["DysonOnly"] is True:
+        if (job["DysonOnly"] is True) or (DoesWeightFileExist is False):
             log.info("accumulating Sigma/Polar statistics...")
             Sigma.Merge(ratio, calc.SigmaSmoothT_FirstOrder(G, W, Map))
             Polar.Merge(ratio, calc.Polar_FirstOrder(G, Map))
