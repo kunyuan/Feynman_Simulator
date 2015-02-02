@@ -96,7 +96,7 @@ def Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor):
     data["Polar"]=Polar.ToDict()
     Observable.Measure(Chi, Determ)
 
-    with DelayedKeyboardInterrupt():
+    with DelayedInterrupt():
         log.info("Save weights into {0} File".format(WeightFile))
         IO.SaveBigDict(WeightFile, data)
         parameter.Save(ParaFile, para)  #Save Parameters
