@@ -93,7 +93,9 @@ class JobDyson(Job):
         Job.__init__(self, para)
         self.job["Type"] = "DYSON"
         PIDList, NextPID=get_current_PID(self.job["Type"])
-        self.pid=range(NextPID, NextPID+self.control["__Duplicate"])
+        if self.control["__Duplicate"] >0:
+            self.pid=range(1)
+        #self.pid=range(NextPID, NextPID+self.control["__Duplicate"])
 
     def to_dict(self):
         return Job.to_dict(self)

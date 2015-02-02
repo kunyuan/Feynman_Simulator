@@ -10,7 +10,7 @@ fi
 rm Message.txt
 rm statis_total.hkl
 rm *_statis.hkl
-rm *_para.txt
+rm *_MC_para.txt
 rm Coordinates.txt
 rm *.log
 rm *.gv

@@ -30,7 +30,10 @@ StatisFile=os.path.join(workspace, "statis_total")
 
 DoesWeightFileExist=os.path.exists(WeightFile+".hkl")
 if DoesWeightFileExist:
-    para=IO.LoadDict(ParaFile)["Para"]
+    try:
+        para=IO.LoadDict(ParaFile)["Para"]
+    except:
+        pass
 
 WeightPara={"NSublat": para["Lattice"]["NSublat"], "L":para["Lattice"]["L"],
             "Beta": para["Tau"]["Beta"], "MaxTauBin": para["Tau"]["MaxTauBin"]}
@@ -124,8 +127,8 @@ if job["DysonOnly"] is True:
     Sigma=weight.Weight("SmoothT", Map, "TwoSpins", "AntiSymmetric","R","T")
     Polar=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
 
-while True:
-#while Version<30:
+#while True:
+while Version<30:
     Version+=1
     log.info("Start Version {0}...".format(Version))
     try:
