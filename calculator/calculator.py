@@ -25,7 +25,7 @@ def SigmaSmoothT_FirstOrder(G, W, map):
 def SigmaDeltaT_FirstOrder(G, W0, map):
     '''Hatree-Fock diagram'''
     ########Fock Diagram
-    Sigma0=weight.Weight("DeltaT", map, "TwoSpins", "AntiSymmetric", "R","T")
+    SigmaDeltaT=weight.Weight("DeltaT", map, "TwoSpins", "AntiSymmetric", "R")
     G.FFT("R", "T")
     W0.FFT("R")
     for spin1 in range(2):
@@ -34,20 +34,21 @@ def SigmaDeltaT_FirstOrder(G, W0, map):
             spinW = (map.Spin2Index(spin1,spin2),map.Spin2Index(spin2,spin1))
             spinG = (spin2, spin2)
             spinSigma = (spin1, spin1)
-            Sigma0.Data[spinSigma[IN], :, spinSigma[OUT], :, :]  \
+            SigmaDeltaT.Data[spinSigma[IN], :, spinSigma[OUT], :, :]  \
                     -= G.Data[spinG[IN], :, spinG[OUT], :, :, -1]\
                     *W0.Data[spinW[IN], :, spinW[OUT], :, :]
-    ########Hatree Diagram
+    ########Hatree Diagram, or bubble diagram
     for spin1 in range(2):
         for spin2 in range(2):
             spinW = (map.Spin2Index(spin1,spin1), map.Spin2Index(spin2,spin2))
             spinG = (spin2,spin2)
             spinSigma = (spin1, spin1)
             for r in range(map.Vol):
-                Sigma0.Data[spinSigma[IN], :, spinSigma[OUT], :, 0] \
-                        -= -G.Data[spinG[IN], :, spinG[OUT], :, 0, -1] \
+                FermiLoopSign=-1
+                SigmaDeltaT.Data[spinSigma[IN], :, spinSigma[OUT], :, 0] \
+                        -= FermiLoopSign*G.Data[spinG[IN], :, spinG[OUT], :, 0, -1] \
                         *W0.Data[spinW[IN], :, spinW[OUT], :, r]
-    return Sigma0
+    return SigmaDeltaT
 
 
 def Polar_FirstOrder(G, map):
@@ -121,21 +122,21 @@ def W_Dyson(W0, Polar, map):
     W.LUSolve(lu_piv, JPJ)
     return W, ChiTensor, Determ
 
-def G_Dyson(G0, Sigma0, Sigma, map):
+def G_Dyson(G0, SigmaDeltaT, Sigma, map):
     Beta=map.Beta
     G=weight.Weight("SmoothT", map, "TwoSpins", "AntiSymmetric", "K","W")
     G0.FFT("K", "W")
-    Sigma0.FFT("K")
+    SigmaDeltaT.FFT("K")
     Sigma.FFT("K", "W")
 
     NSpin, NSub=G.NSpin, G.NSublat
 
-    G0Sigma0=np.einsum("ijklvt,klmnv->ijmnvt",G0.Data, Sigma0.Data)
+    G0SigmaDeltaT=np.einsum("ijklvt,klmnv->ijmnvt",G0.Data, SigmaDeltaT.Data)
     G0Sigma=np.einsum("ijklvt,klmnvt->ijmnvt",G0.Data, Sigma.Data)
 
     ####correction term
     for tau in range(map.MaxTauBin):
-        G0Sigma0[...,tau]*= np.cos(np.pi*map.IndexToTau(tau)/Beta)
+        G0SigmaDeltaT[...,tau]*= np.cos(np.pi*map.IndexToTau(tau)/Beta)
 
     GS  = Beta/map.MaxTauBin*(Beta/map.MaxTauBin*G0Sigma) 
     #GS shape: NSpin,NSub,NSpin,NSub,Vol,Tau
@@ -179,23 +180,3 @@ def Check_Denorminator(Determ, map):
     if Determ.min()<0.0:
         log.warning("Denorminator touch zero with value {0}".format(Determ.min()))
         raise ValueError
-
-#def Check_Denorminator(W0, Polar, map):
-    #"""return tuple ((position, smallest 1-JP determinant), 1-JP in omega,k domain)"""
-    #log.info("Check Denorminator...")
-    #W0.FFT("K")
-    #Polar.FFT("K", "W")
-    #NSpin, NSub=Polar.NSpin, Polar.NSublat
-    #Denorm=Calculate_Denorminator(W0, Polar, map)
-    #Denorm=Denorm.reshape([NSpin*NSub, NSpin*NSub]+Polar.Shape[Polar.VOLDIM:])
-    #Determ=np.zeros((map.Vol,map.MaxTauBin))*1j
-    #for x in range(map.Vol):
-        #for t in range(map.MaxTauBin):
-            #Determ[x,t]=np.linalg.det(Denorm[:,:,x,t])
-    #pos=np.where(Determ==Determ.min())
-    #x,t=pos[0][0], pos[1][0]
-    #log.info("The minmum {0} is at K={1} and Omega={2}".format(Determ.min(), map.IndexToCoordi(x), t))
-    #if Determ.min()<0.0:
-        #log.warning("Denorminator touch zero with value {0}".format(Determ.min()))
-        #raise ValueError
-    #return Determ
