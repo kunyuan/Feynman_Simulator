@@ -32,19 +32,21 @@ def Abort(info):
     log.error(info)
     raise AssertionError
 
-class DelayedKeyboardInterrupt(object):
+class DelayedInterrupt(object):
     def __enter__(self):
-        print "enter sigint"
         self.signal_received = False
-        self.old_handler = signal.getsignal(signal.SIGINT)
+        self.old_handler_int = signal.getsignal(signal.SIGINT)
+        self.old_handler_term = signal.getsignal(signal.SIGTERM)
         signal.signal(signal.SIGINT, self.handler)
+        signal.signal(signal.SIGTERM, self.handler)
 
     def handler(self, signal, frame):
         self.signal_received = (signal, frame)
-        log.info('SIGINT received. Delaying KeyboardInterrupt...')
+        log.info('SIG {0} received. Delaying Interrupt...'.format(signal))
 
     def __exit__(self, type, value, traceback):
-        print "leave sigint"
-        signal.signal(signal.SIGINT, self.old_handler)
+        signal.signal(signal.SIGINT, self.old_handler_int)
+        signal.signal(signal.SIGTERM, self.old_handler_term)
         if self.signal_received:
-            self.old_handler(*self.signal_received)
+            log.info('Interrupt successfully dealyed!')
+            self.old_handler_int(*self.signal_received)

@@ -71,17 +71,6 @@ public:
     void _PrintDebug() const;
     std::string PrettyString();
     void MakeSureNotNull();
-    /**
-         * \brief Constructs a Python::Object from a script string.
-         * 
-         * The returned Object will be the evaluation of the
-         * script. If any errors are encountered while loading this 
-         * script, an ERRORCODE is thrown.
-         * 
-         * \param script The string of the script to be evaluated.
-         * \return Object representing the evaluated script.
-         */
-    void EvalScript(const std::string& script);
 
 protected:
     PyObject* _PyPtr;

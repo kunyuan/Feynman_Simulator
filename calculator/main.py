@@ -22,11 +22,6 @@ elif args.file:
 else:
     Assert(False, "Do not understand the argument!")
 
-#def handler(signal, frame):
-    #print "ctrl-c received"
-    #sys.exit(0)
-#signal.signal(signal.SIGINT, handler)
-
 job, para=parameter.Load(InputFile)
 ParaFile="{0}_DYSON_para".format(job["PID"])
 WeightFile=job["WeightFile"]
@@ -37,23 +32,25 @@ StatisFile=os.path.join(workspace, "statis_total")
 DoesWeightFileExist=os.path.exists(WeightFile+".hkl")
 if DoesWeightFileExist:
     try:
+        log.info("Load previous DYSHON_para file")
         para=IO.LoadDict(ParaFile)["Para"]
     except:
-        pass
+        log.info("Previous DYSHON_para file, use _in_DYSON_ file as para instead")
 
 WeightPara={"NSublat": para["Lattice"]["NSublat"], "L":para["Lattice"]["L"],
-            "Beta": para["Tau"]["Beta"], "MaxTauBin": para["Tau"]["MaxTauBin"]}
+            "Beta": float(para["Tau"]["Beta"]), "MaxTauBin": para["Tau"]["MaxTauBin"]}
 ParaDyson=para["Dyson"]
 Map=weight.IndexMap(**WeightPara)
 Lat=lat.Lattice(para["Lattice"]["Name"], Map)
 
 if args.collect:
-    MaxOrder=para["Dyson"]["Order"]
-    SigmaMC, PolarMC=collect.CollectStatis(Map, MaxOrder)
+    log.info("Collect statistics only...")
+    SigmaMC, PolarMC=collect.CollectStatis(Map, ParaDysob["Order"])
     data ={}
     data["Sigma"] = {"Histogram": SigmaMC.ToDict()}
     data["Polar"] = {"Histogram": PolarMC.ToDict()}
-    IO.SaveBigDict(StatisFile, data)
+    with DelayedInterrupt():
+        IO.SaveBigDict(StatisFile, data)
     sys.exit(0)
 
 ########## Calulation INITIALIZATION ##########################
@@ -63,7 +60,7 @@ IO.SaveDict("Coordinates","w", Factory.ToDict())
 
 Observable=measure.Observable(Map, Lat)
 
-def Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor):
+def Measure(G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor):
     log.info("Measuring...")
     Chi = calc.Calculate_Chi(ChiTensor, Map)
 
@@ -75,7 +72,7 @@ def Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor):
     W0.FFT("R")
     W.FFT("R","T")
     G.FFT("R","T")
-    Sigma0.FFT("R")
+    SigmaDeltaT.FFT("R")
     Sigma.FFT("R","T")
     Chi.FFT("R","T")
 
@@ -83,7 +80,7 @@ def Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor):
     #print "W=\n", W.Data[spinUP,0,spinUP,0,0,:]
     #print "G[UP,UP]=\n", G.Data[UP,0,UP,0,0,:]
     #print "G[DOWN,DOWN]=\n", G.Data[UP,0,UP,0,0,:]
-    #print "Sigma0=\n", Sigma0.Data[UP,0,UP,0,0]
+    #print "SigmaDeltaT=\n", SigmaDeltaT.Data[UP,0,UP,0,0]
     #print "Sigma=\n", Sigma.Data[UP,0,UP,0,0,:]
     #print "Chi=\n", Chi.Data[0,0,0,0,1,:]
 
@@ -92,12 +89,12 @@ def Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor):
     data["G"]=G.ToDict()
     data["W"]=W.ToDict()
     data["W"].update(W0.ToDict())
-    data["Sigma0"]=Sigma0.ToDict()
+    data["SigmaDeltaT"]=SigmaDeltaT.ToDict()
     data["Sigma"]=Sigma.ToDict()
     data["Polar"]=Polar.ToDict()
-    Observable.Measure(Chi, Determ)
+    Observable.Measure(Chi, Determ, G)
 
-    with DelayedKeyboardInterrupt():
+    with DelayedInterrupt():
         log.info("Save weights into {0} File".format(WeightFile))
         IO.SaveBigDict(WeightFile, data)
         parameter.Save(ParaFile, para)  #Save Parameters
@@ -122,21 +119,21 @@ else:
     W=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
 
 Gold, Wold = G, W
-Sigma0=weight.Weight("DeltaT", Map, "TwoSpins", "AntiSymmetric","R","T")
+SigmaDeltaT=weight.Weight("DeltaT", Map, "TwoSpins", "AntiSymmetric","R")
 
 if (job["DysonOnly"] is True) or (DoesWeightFileExist is False):
     #not load StatisFile
     Sigma=weight.Weight("SmoothT", Map, "TwoSpins", "AntiSymmetric","R","T")
     Polar=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
 
-while True:
-#while Version<30:
+#while True:
+while Version<2:
     Version+=1
     log.info("Start Version {0}...".format(Version))
     try:
         ratio = Version/(Version+10.0)
         G0,W0=Factory.Build()
-        Sigma0.Merge(ratio, calc.SigmaDeltaT_FirstOrder(G, W0, Map))
+        SigmaDeltaT.Merge(ratio, calc.SigmaDeltaT_FirstOrder(G, W0, Map))
 
         if (job["DysonOnly"] is True) or (DoesWeightFileExist is False):
             log.info("accumulating Sigma/Polar statistics...")
@@ -156,7 +153,7 @@ while True:
             print "calculating W..."
             W, ChiTensor, Determ = calc.W_Dyson(W0, Polar, Map)
             print "calculating G..."
-            G = calc.G_Dyson(G0, Sigma0, Sigma, Map)
+            G = calc.G_Dyson(G0, SigmaDeltaT, Sigma, Map)
         except KeyboardInterrupt, SystemExit:
             raise
         except:
@@ -164,7 +161,7 @@ while True:
             G, W = Gold, Wold
         else:
             Gold, Wold = G, W
-            Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor)
+            Measure(G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor)
             Factory.DecreaseField(ParaDyson["Annealing"])
 
         log.info("Version {0} is done!".format(Version))
@@ -177,91 +174,3 @@ while True:
     finally:
         if (job["DysonOnly"] is False) and (DoesWeightFileExist is True):
             time.sleep(ParaDyson["SleepTime"])
-
-#if job["StartFromBare"] is True or os.path.exists(WeightFile+".hkl") is False:
-    ##start from bare
-    #Version=0
-    #log.info("Start from G0 and W0 to do dyson...")
-    #G=G0.Copy()
-    #W=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
-    #Gold, Wold = G, W
-    #Sigma=weight.Weight("SmoothT", Map, "TwoSpins", "AntiSymmetric","R","T")
-    #Sigma0=weight.Weight("DeltaT", Map, "TwoSpins", "AntiSymmetric","R","T")
-    #Polar=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
-    #for i in range(30):
-        #ratio = i/(i+10.0)
-        #log.info("Round #{0}...".format(i))
-        #G0,W0=Factory.Build(para["Model"]["Name"], para["Lattice"]["Name"])
-
-        #Sigma.Merge(ratio, calc.SigmaSmoothT_FirstOrder(G, W, Map))
-        #Sigma0.Merge(ratio, calc.SigmaDeltaT_FirstOrder(G, W0, Map))
-        #Polar.Merge(ratio, calc.Polar_FirstOrder(G, Map))
-
-        #try:
-            ########DYSON FOR W AND G###########################
-            #print "calculating W..."
-            #W, ChiTensor, Determ = calc.W_Dyson(W0, Polar, Map)
-            #print "calculating G..."
-            #G = calc.G_Dyson(G0, Sigma0, Sigma, Map)
-        #except:
-            #Factory.RevertField(para["Dyson"]["Annealing"])
-            #G, W = Gold, Wold
-        #else:
-            #Gold, Wold = G, W
-            #Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor)
-            #Factory.DecreaseField(para["Dyson"]["Annealing"])
-
-        ####################################################
-
-    #parameter.BroadcastMessage(MessageFile, {"Version": Version, "Beta": Map.Beta})
-    #log.info("Version {0} is done!".format(Version))
-
-#else:
-    ##########READ G,SIGMA,POLAR; CALCULATE SIGMA0 #################
-    #Version=parameter.GetVersion(MessageFile)
-    #Observable.Load(OutputFile)
-    #data=IO.LoadBigDict(WeightFile)
-    #G=weight.Weight("SmoothT", Map, "TwoSpins", "AntiSymmetric").FromDict(data["G"])
-
-    #while True:
-        #Version+=1
-        #log.info("Start #{0}...".format(Version))
-        #try:
-            #log.info("Load Sigma/Polar and G to do dyson...")
-            #G0,W0=Factory.Build(para["Model"]["Name"], para["Lattice"]["Name"])
-            ##reinitialize G0, W0 to kill accumulated error, and change with externalfield
-            #paraDyson=para["Dyson"]
-            #MaxOrder=paraDyson["Order"]
-            #log.info("Collecting Sigma/Polar statistics...")
-            #SigmaMC, PolarMC=collect.CollectStatis(Map, MaxOrder)
-
-            #Sigma, Polar, SigmaOrder, PolarOrder=collect.UpdateWeight(SigmaMC, PolarMC, 
-                    #paraDyson["ErrorThreshold"], paraDyson["OrderAccepted"])
-
-            #if SigmaOrder==0 or PolarOrder==0:
-                #log.info("#{0} fails due to Sigma or Polar not accepted. \n".format(Version))
-                #continue
-                
-            #Sigma0=calc.SigmaDeltaT_FirstOrder(G, W0, Map)
-            #log.info("Dyson GW...")
-
-            #try:
-                ########DYSON FOR W AND G###########################
-                #print "calculating W..."
-                #W, ChiTensor, Determ = calc.W_Dyson(W0, Polar, Map)
-                #print "calculating G..."
-                #G = calc.G_Dyson(G0, Sigma0, Sigma, Map)
-            #except:
-                #Factory.RevertField(para["Dyson"]["Annealing"])
-                #G, W = Gold, Wold
-            #else:
-                #Gold, Wold = G, W
-                #Measure(G0, W0, G, W, Sigma0, Sigma, Polar, Determ, ChiTensor)
-                #Factory.DecreaseField(para["Dyson"]["Annealing"])
-            #log.info("Version {0} is done!".format(Version))
-            #parameter.BroadcastMessage(MessageFile, {"Version": Version, "Beta": Map.Beta})
-
-        #except:
-            #log.info("#{0} fails due to\n {1}".format(Version, traceback.format_exc()))
-        #finally:
-            #time.sleep(para["Dyson"]["SleepTime"])

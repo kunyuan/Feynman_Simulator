@@ -56,6 +56,11 @@ public:
     std::vector<real> OrderReWeight;
     std::vector<real> OrderTimeRatio;
 
+    int PrinterTimer;
+    int DiskWriterTimer;
+    int MessageTimer;
+    int ReweightTimer;
+
     bool BuildNew(const std::string& InputFile);
     bool FromDict(const Dictionary&);
     Dictionary ToDict();

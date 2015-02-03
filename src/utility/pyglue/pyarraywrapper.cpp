@@ -56,6 +56,8 @@ ArrayObject::ArrayObject(PyObject* obj, OwnerShip ownership)
 
 void ArrayObject::_Construct(Complex* data, const uint* Shape, const int Dim)
 {
+    ASSERT_ALLWAYS(data != nullptr, "data pointer shouldn't be null!");
+    ASSERT_ALLWAYS(Shape != nullptr, "Shape pointer shouldn't be null!");
     int TypeName;
     if (sizeof(data[0]) == 8)
         TypeName = NPY_COMPLEX64;
@@ -70,11 +72,15 @@ void ArrayObject::_Construct(Complex* data, const uint* Shape, const int Dim)
     //A new reference to an ndarray is returned, but the ndarray will not own its data.
     //When this ndarray is deallocated, the pointer will not be freed.
     //You should ensure that the provided memory is not freed while the returned array is in existence.
+    PropagatePyError();
+    ASSERT_ALLWAYS(array != nullptr, "Failed to create python array!");
     *this = Object(array);
 }
 
 void ArrayObject::_Construct(real* data, const uint* Shape, const int Dim)
 {
+    ASSERT_ALLWAYS(data != nullptr, "data pointer shouldn't be null!");
+    ASSERT_ALLWAYS(Shape != nullptr, "Shape pointer shouldn't be null!");
     int TypeName;
     if (sizeof(data[0]) == 4)
         TypeName = NPY_FLOAT32;
@@ -89,23 +95,28 @@ void ArrayObject::_Construct(real* data, const uint* Shape, const int Dim)
     //A new reference to an ndarray is returned, but the ndarray will not own its data.
     //When this ndarray is deallocated, the pointer will not be freed.
     //You should ensure that the provided memory is not freed while the returned array is in existence.
+    PropagatePyError();
+    ASSERT_ALLWAYS(array != nullptr, "Failed to create python array!");
     *this = Object(array);
 }
 
 template <>
 Complex* ArrayObject::Data<Complex>()
 {
+    ASSERT_ALLWAYS(_PyPtr != nullptr, "ArrayObject is still empty!");
     return reinterpret_cast<Complex*>(PyArray_DATA(_PyPtr));
 }
 template <>
 real* ArrayObject::Data<real>()
 {
+    ASSERT_ALLWAYS(_PyPtr != nullptr, "ArrayObject is still empty!");
     return reinterpret_cast<real*>(PyArray_DATA(_PyPtr));
 }
 
 std::vector<uint> ArrayObject::Shape()
 {
     vector<uint> _Shape;
+    ASSERT_ALLWAYS(_PyPtr != nullptr, "ArrayObject is still empty!");
     auto dim = PyArray_DIMS(_PyPtr);
     for (int i = 0; i < Dim(); i++)
         _Shape.push_back((uint)dim[i]);
@@ -114,6 +125,7 @@ std::vector<uint> ArrayObject::Shape()
 
 int ArrayObject::Dim()
 {
+    ASSERT_ALLWAYS(_PyPtr != nullptr, "ArrayObject is still empty!");
     return PyArray_NDIM(_PyPtr);
 }
 }
