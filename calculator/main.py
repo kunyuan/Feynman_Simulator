@@ -5,7 +5,7 @@ import lattice as lat
 import collect
 from weight import UP,DOWN,IN,OUT
 from logger import *
-import os, sys, model, weight, measure, parameter, plot, argparse, time, traceback, signal
+import os, sys, model, weight, measure, parameter, plot, argparse, time, traceback
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-p", "--PID", help="use PID to find the input file")
@@ -34,7 +34,7 @@ if DoesWeightFileExist:
         log.info("Load previous DYSHON_para file")
         para=IO.LoadDict(ParaFile)["Para"]
     except:
-        log.info("Previous DYSHON_para file, use _in_DYSON_ file as para instead")
+        log.warning(red("Previous DYSHON_para file, use _in_DYSON_ file as para instead"))
 
 WeightPara={"NSublat": para["Lattice"]["NSublat"], "L":para["Lattice"]["L"],
             "Beta": float(para["Tau"]["Beta"]), "MaxTauBin": para["Tau"]["MaxTauBin"]}
@@ -75,11 +75,12 @@ def Measure(G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor):
     Sigma.FFT("R","T")
     Chi.FFT("R","T")
 
-    #print "Polar=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
+    print "Polar=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
     #print "W=\n", W.Data[spinUP,0,spinUP,0,0,:]
-    #print "G[UP,UP]=\n", G.Data[UP,0,UP,0,0,:]
-    #print "G[DOWN,DOWN]=\n", G.Data[UP,0,UP,0,0,:]
-    #print "SigmaDeltaT=\n", SigmaDeltaT.Data[UP,0,UP,0,0]
+    print "G[UP,UP]=\n", G.Data[UP,0,UP,0,0,:]
+    print "G[DOWN,DOWN]=\n", G.Data[DOWN,0,DOWN,0,0,:]
+    print "SigmaDeltaT[UP,UP]=\n", SigmaDeltaT.Data[UP,0,UP,0,0]
+    print "SigmaDeltaT[DOWN,DOWN]=\n", SigmaDeltaT.Data[DOWN,0,DOWN,0,0]
     #print "Sigma=\n", Sigma.Data[UP,0,UP,0,0,:]
     #print "Chi=\n", Chi.Data[0,0,0,0,1,:]
 
@@ -100,6 +101,7 @@ def Measure(G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor):
         Observable.Save(OutputFile)
 
     #plot what you are interested in
+    plot.PlotChi(Chi, Lat)
 
 #if MessageFile does not exist, Version will be 0
 Version=parameter.GetVersion(MessageFile)
@@ -124,8 +126,8 @@ if (job["DysonOnly"] is True) or (DoesWeightFileExist is False):
     Sigma=weight.Weight("SmoothT", Map, "TwoSpins", "AntiSymmetric","R","T")
     Polar=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
 
-#while True:
-while Version<2:
+while True:
+#while Version<10:
     Version+=1
     log.info("Start Version {0}...".format(Version))
     try:
@@ -136,6 +138,7 @@ while Version<2:
         if (job["DysonOnly"] is True) or (DoesWeightFileExist is False):
             log.info("accumulating Sigma/Polar statistics...")
             Sigma.Merge(ratio, calc.SigmaSmoothT_FirstOrder(G, W, Map))
+            G = calc.G_Dyson(G0, SigmaDeltaT, Sigma, Map)
             Polar.Merge(ratio, calc.Polar_FirstOrder(G, Map))
         else:
             log.info("Collecting Sigma/Polar statistics...")

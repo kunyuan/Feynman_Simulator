@@ -35,23 +35,26 @@ def SigmaDeltaT_FirstOrder(G, W0, map):
             spinG = (spin2, spin2)
             spinSigma = (spin1, spin1)
             SigmaDeltaT.Data[spinSigma[IN], :, spinSigma[OUT], :, :]  \
-                    -= G.Data[spinG[IN], :, spinG[OUT], :, :, -1]\
+                    -= -G.Data[spinG[IN], :, spinG[OUT], :, :, -1]\
                     *W0.Data[spinW[IN], :, spinW[OUT], :, :]
     ########Hatree Diagram, or bubble diagram
-    for spin1 in range(2):
-        for spin2 in range(2):
-            spinW = (map.Spin2Index(spin1,spin1), map.Spin2Index(spin2,spin2))
-            spinG = (spin2,spin2)
-            spinSigma = (spin1, spin1)
-            for r in range(map.Vol):
-                FermiLoopSign=-1
-                SigmaDeltaT.Data[spinSigma[IN], :, spinSigma[OUT], :, 0] \
-                        -= FermiLoopSign*G.Data[spinG[IN], :, spinG[OUT], :, 0, -1] \
-                        *W0.Data[spinW[IN], :, spinW[OUT], :, r]
+    FermiLoopSign=-1
+    AntiSymmetricFactor=-1
+    for sp1 in range(2):
+        for sp2 in range(2):
+            spinW = (map.Spin2Index(sp1,sp1), map.Spin2Index(sp2,sp2))
+            for sub1 in range(map.NSublat):
+                for sub2 in range(map.NSublat):
+                    for r in range(map.Vol):
+                        SigmaDeltaT.Data[sp1, sub1, sp1, sub1, 0] \
+                            -= FermiLoopSign*AntiSymmetricFactor*G.Data[sp2, sub2, sp2, sub2, 0, -1] \
+                            *W0.Data[spinW[IN], sub1, spinW[OUT], sub2, r]
     return SigmaDeltaT
 
 
 def Polar_FirstOrder(G, map):
+    FermiLoopSign=-1
+    AntiSymmetricFactor=-1
     Polar=weight.Weight("SmoothT", map, "FourSpins","Symmetric", "R","T")
     G.FFT("R","T")
     NSublat = map.NSublat
@@ -65,7 +68,7 @@ def Polar_FirstOrder(G, map):
         for subA,subB in SubList:
             Polar.Data[map.Spin2Index(*spinPolar[IN]),subA, \
                     map.Spin2Index(*spinPolar[OUT]),subB,:,:]\
-                    = (-1.0)*G.Data[spinG1[IN], subB, spinG1[OUT], subA, :, ::-1]  \
+                    -= FermiLoopSign*AntiSymmetricFactor*G.Data[spinG1[IN], subB, spinG1[OUT], subA, :, ::-1]  \
                     *G.Data[spinG2[IN], subA, spinG2[OUT], subB, :, :]
     return Polar
 
@@ -138,7 +141,7 @@ def G_Dyson(G0, SigmaDeltaT, Sigma, map):
     for tau in range(map.MaxTauBin):
         G0SigmaDeltaT[...,tau]*= np.cos(np.pi*map.IndexToTau(tau)/Beta)
 
-    GS  = Beta/map.MaxTauBin*(Beta/map.MaxTauBin*G0Sigma) 
+    GS  = Beta/map.MaxTauBin*(Beta/map.MaxTauBin*G0Sigma+G0SigmaDeltaT) 
     #GS shape: NSpin,NSub,NSpin,NSub,Vol,Tau
 
     I=np.eye(NSpin*NSub).reshape([NSpin,NSub,NSpin,NSub])
@@ -178,5 +181,5 @@ def Check_Denorminator(Determ, map):
     x,t=pos[0][0], pos[1][0]
     log.info("The minmum {0} is at K={1} and Omega={2}".format(Determ.min(), map.IndexToCoordi(x), t))
     if Determ.min()<0.0:
-        log.warning("Denorminator touch zero with value {0}".format(Determ.min()))
+        log.warning(red("Denorminator touch zero with value {0}".format(Determ.min())))
         raise ValueError

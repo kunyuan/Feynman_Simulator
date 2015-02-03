@@ -36,14 +36,14 @@ class BareFactory:
             for i in range(len(self.__DeltaField)):
                 self.__DeltaField[i] += Anneal["Interval"][i]
                 Anneal["DeltaField"][i] += Anneal["Interval"][i] 
-        log.info("ExternalField decreased to: {0}".format(self.__DeltaField))
+        log.info(green("ExternalField decreased to: {0}".format(self.__DeltaField)))
 
     def RevertField(self, Anneal):
         for i in range(len(self.__DeltaField)):
             Anneal["Interval"][i]/=2.0
             self.__DeltaField[i] -= Anneal["Interval"][i]
             Anneal["DeltaField"][i] -= Anneal["Interval"][i]
-        log.info("ExternalField reverted to: {0}".format(self.__DeltaField))
+        log.info(green("ExternalField reverted to: {0}".format(self.__DeltaField)))
 
     def __Heisenberg(self, LatName):
         Assert(len(self.__Interaction)==1, "Heisenberg model only has one coupling!")

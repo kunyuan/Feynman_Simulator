@@ -167,8 +167,14 @@ class Weight():
 
     def Merge(self, ratio, newWeight):
         """return a summation of oldWeight and newWeight"""
-        self.FFT("R","T")
-        self.Data = ratio*self.Data + (1.0-ratio)*newWeight.Data
+        newWeight.FFT(self.SpaceDomain, self.TimeDomain)
+        if hasattr(self, "Norm"):
+            self.AccuData+=ratio*newWeight.Data
+            self.Norm+=ratio
+        else:
+            self.AccuData=ratio*newWeight.Data
+            self.Norm=ratio
+        self.Data = self.AccuData/self.Norm
 
     def FFT(self, *SpaceOrTime):
         if "R" in SpaceOrTime and self.SpaceDomain is "K":

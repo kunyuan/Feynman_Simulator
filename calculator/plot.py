@@ -112,6 +112,5 @@ def PlotChi(Chi, lat, DoesSave=True):
     #plt.clf()
     #plt.cla()
     #plt.close()
-    Chi.FFT("R", "T")
 
 
