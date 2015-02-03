@@ -22,8 +22,8 @@ const string HelpStr = "Usage:"
                        "-p N / --PID N   use N to construct input file path."
                        "or -f / --file PATH   use PATH as the input file path.";
 
-void MonteCarlo(const Job &);
-int main(int argc, const char *argv[])
+void MonteCarlo(const Job&);
+int main(int argc, const char* argv[])
 {
     Python::Initialize();
     Python::ArrayInitialize();
@@ -47,7 +47,7 @@ int main(int argc, const char *argv[])
     return 0;
 }
 
-void MonteCarlo(const para::Job &Job)
+void MonteCarlo(const para::Job& Job)
 {
     EnvMonteCarlo Env(Job);
 
@@ -56,9 +56,9 @@ void MonteCarlo(const para::Job &Job)
     else
         Env.BuildNew();
 
-    auto &Markov = Env.Markov;
-    auto &MarkovMonitor = Env.MarkovMonitor;
-    auto &Para = Env.Para;
+    auto& Markov = Env.Markov;
+    auto& MarkovMonitor = Env.MarkovMonitor;
+    auto& Para = Env.Para;
 
     LOG_INFO("Markov is started!");
     timer ReweightTimer, PrinterTimer, DiskWriterTimer, MessageTimer;
@@ -67,8 +67,8 @@ void MonteCarlo(const para::Job &Job)
     MessageTimer.start();
     ReweightTimer.start();
 
-    int sigma[MAX_ORDER] = {0};
-    int polar[MAX_ORDER] = {0};
+    int sigma[MAX_ORDER] = { 0 };
+    int polar[MAX_ORDER] = { 0 };
 
     Env.ListenToMessage();
 
@@ -94,26 +94,21 @@ void MonteCarlo(const para::Job &Job)
         if (Step % 100 == 0) {
             MarkovMonitor.AddStatistics();
 
-            if (PrinterTimer.check(100)) {
+            if (PrinterTimer.check(Para.PrinterTimer)) {
                 Env.Diag.CheckDiagram();
                 Markov.PrintDetailBalanceInfo();
             }
 
-            if (DiskWriterTimer.check(256))
+            if (DiskWriterTimer.check(Para.DiskWriterTimer))
                 Env.Save();
 
-            if (MessageTimer.check(350))
+            if (MessageTimer.check(Para.MessageTimer))
                 Env.ListenToMessage();
             //                    MarkovMonitor.SqueezeStatistics(2.0);
 
-            if (ReweightTimer.check(600))
+            if (ReweightTimer.check(Para.ReweightTimer))
                 Env.AdjustOrderReWeight();
         }
     }
-    //        }
-    //    }
-
-    //    Markov.PrintDetailBalanceInfo();
-    //    Env.Save();
-    //    LOG_INFO("Markov is ended!");
+    LOG_INFO("Markov is ended!");
 }

@@ -25,6 +25,7 @@
 #include "type_cast.h"
 #include "pyarraywrapper.h"
 #include "object.h"
+#include "utility/scopeguard.h"
 
 namespace Python {
 class AnyObject;
@@ -65,15 +66,18 @@ public:
     /**
          * \brief Constructs a Python::Object from a script string.
          * 
-         * The returned Object will be the evaluation of the
+         * *this be the evaluation of the
          * script. If any errors are encountered while loading this 
-         * script, an ERRORCODE is thrown.
+         * script, an exception is thrown.
          * 
          * \param script The string of the script to be evaluated.
-         * \return Object representing the evaluated script.
          */
     void EvalScript(const std::string& script);
 };
+
+/**
+    *  After ModuleObject construction, you need to call LoadModule to fill it
+    */
 
 class ModuleObject : Object {
 public:
@@ -86,6 +90,17 @@ public:
     }
     ModuleObject(const Object& obj);
     ModuleObject& operator=(const ModuleObject& obj);
+
+    /**
+         * \brief Constructs a Python::Object from a script file.
+         * 
+         * *this will be the representation of the loaded
+         * script. If any errors are encountered while loading this 
+         * script, an ERRORCODE is thrown.
+         * 
+         * \param script_path The path of the script to be loaded.
+         */
+    void LoadModule(const std::string& script_path);
 
     /**
          * \brief Calls the callable attribute "name" using the provided
@@ -102,14 +117,16 @@ public:
     template <typename... Args>
     Object CallFunction(const std::string& name, const Args&... args)
     {
-        Object func = load_function(name);
-        func.MakeSureNotNull();
+        //ensure global interpreter lock is aquired
+        PyGILState_STATE state = PyGILState_Ensure();
+        ON_SCOPE_EXIT([&] {PyGILState_Release(state); });
+        Object func = GetAttr(name);
+        ASSERT_ALLWAYS(PyCallable_Check(func.Get()), name << " is not a callable function!");
         // Create the tuple argument
         Object tup = PyTuple_New(sizeof...(args));
         add_tuple_vars(tup, args...);
-        // Call our object
         Object result = PyObject_CallObject(func.Get(), tup.Get());
-        //        MakeSureNoPyError(ERR_GENERAL);
+        PropagatePyError();
         return result;
     }
     //
@@ -153,21 +170,7 @@ public:
          * \return The PyObject* which this Object is representing.
          */
 
-    /**
-         * \brief Constructs a Python::Object from a script file.
-         * 
-         * The returned Object will be the representation of the loaded
-         * script. If any errors are encountered while loading this 
-         * script, an ERRORCODE is thrown.
-         * 
-         * \param script_path The path of the script to be loaded.
-         * \return Object representing the loaded script.
-         */
-    void LoadModule(const std::string& script_path);
-
 private:
-    Object load_function(const std::string& name);
-
     // Variadic template method to add items to a tuple
     template <typename First, typename... Rest>
     void add_tuple_vars(Object& tup, const First& head, const Rest&... tail)

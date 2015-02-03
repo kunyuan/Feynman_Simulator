@@ -8,7 +8,7 @@ SLEEP = 1    #check job status for every SLEEP seconds
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" : 0,
+    "__Duplicate" : 4,
     "__IsCluster" : False,
     "__AutoRun" : True,
     "__KeepCPUBusy": True,
@@ -75,7 +75,13 @@ Common={
     "SqueezeFactor" : 10.0,
     "WormSpaceReweight" : 0.05,
     "PolarReweight" : 2.0,
-    "OrderTimeRatio" : [1.0, 1.0, 1.0, 2.0]
+    "OrderTimeRatio" : [1.0, 1.0, 1.0, 2.0],
+    "Timer": {
+        "PrinterTimer": 100,
+        "DiskWriterTimer": 256,
+        "MessageTimer": 350,
+        "ReweightTimer": 600
+        },
     },
 "Dyson": {
     "Order": Order,

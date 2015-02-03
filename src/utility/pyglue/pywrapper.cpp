@@ -37,6 +37,8 @@ bool Convert(Object obj, AnyObject& any)
 }
 void AnyObject::EvalScript(const std::string& script)
 {
+    PyGILState_STATE state = PyGILState_Ensure();
+    ON_SCOPE_EXIT([&] {PyGILState_Release(state); });
     Object main = Object(PyImport_AddModule("__main__"), NoRef);
     Object global = Object(PyModule_GetDict(main.Get()), NoRef); //borrowed reference
     Object local = PyDict_New();
@@ -78,23 +80,17 @@ void ModuleObject::LoadModule(const string& script_path)
     /* We don't need that string value anymore, so deref it */
     Object module = PyImport_ImportModule(file_path.c_str());
     PropagatePyError();
+    ASSERT_ALLWAYS(module.Get() != nullptr, "Failed to import module " << script_path);
     *this = module;
-}
-
-Object ModuleObject::load_function(const std::string& name)
-{
-    Object obj = PyObject_GetAttrString(_PyPtr, name.c_str());
-    obj.MakeSureNotNull();
-    PropagatePyError();
-    return obj;
 }
 
 Object ModuleObject::CallFunction(const std::string& name)
 {
-    Object func = load_function(name);
-    //    Object func = load_function(name);
-    Object ret = PyObject_CallObject(func.Get(), 0);
-    //    MakeSureNoPyError(ERR_GENERAL);
+    PyGILState_STATE state = PyGILState_Ensure();
+    ON_SCOPE_EXIT([&] {PyGILState_Release(state); });
+    Object func = GetAttr(name);
+    ASSERT_ALLWAYS(PyCallable_Check(func.Get()), name << " is not a callable function!");
+    Object ret = PyObject_CallObject(func.Get(), nullptr);
     PropagatePyError();
     return { ret };
 }
@@ -103,6 +99,7 @@ Object ModuleObject::GetAttr(const std::string& name)
 {
     Object obj = PyObject_GetAttrString(_PyPtr, name.c_str());
     PropagatePyError();
+    ASSERT_ALLWAYS(obj.Get() != nullptr, "Failed to get attribute: " << name);
     return { obj };
 }
 

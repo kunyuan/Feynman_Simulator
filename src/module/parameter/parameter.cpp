@@ -92,6 +92,12 @@ bool ParaMC::FromDict(const Dictionary& Para)
         RNG.Reset(Seed);
     ASSERT_ALLWAYS(Order < MAX_ORDER, "Order can not be bigger than " << MAX_ORDER);
     ASSERT_ALLWAYS(OrderReWeight.size() >= Order + 1, "OrderReWeight should have Order+1 elementes!");
+
+    auto _timer = _para.Get<Dictionary>("Timer");
+    GET(_timer, PrinterTimer);
+    GET(_timer, DiskWriterTimer);
+    GET(_timer, MessageTimer);
+    GET(_timer, ReweightTimer);
     return true;
 }
 Dictionary ParaMC::ToDict()
@@ -107,8 +113,14 @@ Dictionary ParaMC::ToDict()
     SET(_para, Counter);
     SET(_para, RNG);
     SET(_para, Order);
+    Dictionary _timer;
+    SET(_timer, PrinterTimer);
+    SET(_timer, DiskWriterTimer);
+    SET(_timer, MessageTimer);
+    SET(_timer, ReweightTimer);
     Dictionary Para;
     Para["Markov"] = _para;
+    Para["Timer"] = _timer;
     Para.Update(Parameter::_ToDict());
     return Para;
 }

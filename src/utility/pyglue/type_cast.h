@@ -20,7 +20,6 @@
 #include "utility/vector.h"
 #include "type_cast_interface.h"
 #include "utility/convention.h"
-//#include <Python/Python.h>
 #include <Python.h>
 
 class Complex;
