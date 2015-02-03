@@ -6,6 +6,7 @@ import collect
 from weight import UP,DOWN,IN,OUT
 from logger import *
 import os, sys, model, weight, measure, parameter, plot, argparse, time, traceback
+import plot
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-p", "--PID", help="use PID to find the input file")
@@ -101,7 +102,10 @@ def Measure(G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor):
         Observable.Save(OutputFile)
 
     #plot what you are interested in
-    plot.PlotChi(Chi, Lat)
+    try:
+        plot.PlotChi(Chi, Lat)
+    except:
+        pass
 
 #if MessageFile does not exist, Version will be 0
 Version=parameter.GetVersion(MessageFile)
