@@ -102,16 +102,19 @@ class Lattice:
         self.__AssertDim()
         self.NSublat=4
         self.__AssertNSublat()
-        self.LatVec=np.array([[0.5,0.5,0.0],
-                              [0.0,0.5,0.5],
-                              [0.5,0.0,0.5]])
+        self.LatVec=np.array([[0.5,0.0,0.5],
+                              [0.5,0.5,0.0],
+                              [0.0,0.5,0.5]])
         self.SubLatVec=np.array([[0.25,0.25,0.25],
                                  [0.0,0.25,0.25],
                                  [0.25,0.0,0.25],
                                  [0.25,0.25,0]])
+        self.ReciprocalLatVec=np.array([[2*PI, -2*PI, 2*PI],
+                                        [2*PI, 2*PI, -2*PI],
+                                        [-2*PI, 2*PI, 2*PI]])
         self.Path=[(0,2*PI,0),(PI/2,2*PI,PI/2),(PI,PI,PI),(0,0,0),(0,2*PI,0),(PI,2*PI,0), \
                 (3*PI/2,3*PI/2,0)]
-        self.PathNum=[self.L[0]/4, self.L[0]/4, self.L[0]/2, self.L[0]/2, self.L[0]/4, self.L[1]/4]
+        self.PathNum=[self.L[0]/8, self.L[0]/8, self.L[0]/2, self.L[0]/2, self.L[0]/4, self.L[1]/8]
         self.PathName=["X", "U", "L","\Gamma", "X", "W", "K"]
 
 

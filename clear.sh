@@ -5,10 +5,10 @@ then
   elif [ $1 = "-a" ] || [ $1 = "--all" ]; then
       rm *.hkl
       rm *.txt
+      rm statis_total.hkl
   fi
 fi
 rm Message.txt
-rm statis_total.hkl
 rm *_statis.hkl
 rm *_MC_para.txt
 rm Coordinates.txt

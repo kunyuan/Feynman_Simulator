@@ -101,7 +101,10 @@ def Measure(G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor):
         Observable.Save(OutputFile)
 
     #plot what you are interested in
-    plot.PlotChi(Chi, Lat)
+    try:
+        plot.PlotChi(Chi, Lat)
+    except:
+        pass
 
 #if MessageFile does not exist, Version will be 0
 Version=parameter.GetVersion(MessageFile)
@@ -127,7 +130,7 @@ if (job["DysonOnly"] is True) or (DoesWeightFileExist is False):
     Polar=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
 
 #while True:
-while Version<2:
+while Version<30:
     Version+=1
     log.info("Start Version {0}...".format(Version))
     try:
