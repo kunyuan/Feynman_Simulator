@@ -100,12 +100,13 @@ def Measure(G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor):
         IO.SaveBigDict(WeightFile, data)
         parameter.Save(ParaFile, para)  #Save Parameters
         Observable.Save(OutputFile)
+        #plot what you are interested in
+        try:
+            plot.PlotChi(Chi, Lat)
+            plot.PlotSpatial(Chi, Lat, 0, 0, 0) 
+        except:
+            log.info("Ploting fails due to\n {0}".format(traceback.format_exc()))
 
-    #plot what you are interested in
-    try:
-        plot.PlotChi(Chi, Lat)
-    except:
-        pass
 
 #if MessageFile does not exist, Version will be 0
 Version=parameter.GetVersion(MessageFile)

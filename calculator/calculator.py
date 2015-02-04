@@ -47,7 +47,7 @@ def SigmaDeltaT_FirstOrder(G, W0, map):
                 for sub2 in range(map.NSublat):
                     for r in range(map.Vol):
                         SigmaDeltaT.Data[sp1, sub1, sp1, sub1, 0] \
-                            -= FermiLoopSign*AntiSymmetricFactor*G.Data[sp2, sub2, sp2, sub2, 0, -1] \
+                            -= -FermiLoopSign*AntiSymmetricFactor*G.Data[sp2, sub2, sp2, sub2, 0, -1] \
                             *W0.Data[spinW[IN], sub1, spinW[OUT], sub2, r]
     return SigmaDeltaT
 

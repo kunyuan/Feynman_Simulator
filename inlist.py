@@ -51,13 +51,13 @@ Common={
     #"Name": "Pyrochlore",
     #"NSublat": 4,
     #"L": [8,8,8]
-    #"Name": "Checkboard",
+    "Name": "Checkerboard",
+    "NSublat": 2,
+    "L": [8,8]
+    #"Name": "3DCheckerboard",
     #"NSublat": 2,
-    #"L": [8,8]
-    "Name": "3DCheckerboard",
-    #"NSublat": 2,
-    "L": [16,16,16]
-    "L": [8,8,8]
+    #"L": [16,16,16]
+    #"L": [8,8,8]
     },
 "Model": {
     "Name": "J1J2",
@@ -90,7 +90,7 @@ Common={
     "BetaIncrease": 0.0,
     "SleepTime": 300,
     "Annealing": {
-        "DeltaField": [1.0, -1.0, 0.0, 0.0],
+        "DeltaField": [2.0, -2.0, 0.0, 0.0],
         "Interval": [-0.1, 0.1, 0.0, 0.0]
         }
     }
