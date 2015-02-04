@@ -6,22 +6,20 @@ import pprint
 def Load(FileName):
     log.info("Loading Parameters...")
     d=IO.LoadDict(FileName)
-    log.info("Loaded parameters:\n"+pprint.pformat(d))
+    #log.info("Loaded parameters:\n"+pprint.pformat(d))
     Assert(d["Job"]["Type"]=="DYSON", "The job type should be DYSON, not {0}".format(d["Job"]["Type"]))
     return d["Job"], d["Para"]
+
+def LoadPara(FileName):
+    log.info("Loading Parameters...")
+    d=IO.LoadDict(FileName)
+    #log.info("Loaded parameters:\n"+pprint.pformat(d))
+    return d["Para"]
 
 def Save(FileName, para):
     log.info("Saving Parameters...")
     root={"Para":para}
     IO.SaveDict(FileName, "w", root)
-
-def GetVersion(MessageFile):
-    try:
-        Version=IO.LoadDict(MessageFile)["Version"]
-    except:
-        Version=0
-    finally:
-        return Version
 
 def BroadcastMessage(MessageFile, Dict):
     log.info("Broadcast Message")

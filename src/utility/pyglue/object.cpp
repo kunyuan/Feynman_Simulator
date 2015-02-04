@@ -48,7 +48,7 @@ std::string GetPyErrorStr()
     PyErr_NormalizeException(&ptype, &pvalue, &ptraceback);
     Object type = PyObject_Str(ptype);
     Object value = PyObject_Str(pvalue);
-    auto result = std::string(PyString_AsString(type.Get()))
+    auto result = std::string(PyString_AsString(type.Get())) + "\n"
                   + std::string(PyString_AsString(value.Get()));
     Py_XDECREF(ptype);
     Py_XDECREF(pvalue);

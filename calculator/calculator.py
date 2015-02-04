@@ -176,10 +176,17 @@ def Calculate_Chi(ChiTensor, map):
     Chi.Data=Chi.Data.reshape([1, NSublat, 1, NSublat, map.Vol, map.MaxTauBin]) 
     return Chi
 
+class DenorminatorTouchZero(Exception):
+    def __init__(self, value, pos, freq):
+       self.value = value
+       self.position=pos
+       self.frequency=freq
+    def __str__(self):
+        return "Denorminator touch zero, minmum {0} is at K={1} and Omega={2}".format(self.value, self.position, self.frequency)
+
 def Check_Denorminator(Determ, map):
     pos=np.where(Determ==Determ.min())
     x,t=pos[0][0], pos[1][0]
     log.info("The minmum {0} is at K={1} and Omega={2}".format(Determ.min(), map.IndexToCoordi(x), t))
     if Determ.min()<0.0:
-        log.warning(red("Denorminator touch zero with value {0}".format(Determ.min())))
-        raise ValueError
+        raise DenorminatorTouchZero(Determ.min(), map.IndexToCoordi(x), t)

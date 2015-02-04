@@ -8,13 +8,13 @@ with ANSI color codes for the appropriate color.
 
 For example, to print some text as green on supporting terminals::
 
-    from fabric.colors import green
+    from colors import green
 
     print(green("This text is green!"))
 
 Because these functions simply return modified strings, you can nest them::
 
-    from fabric.colors import red, green
+    from colors import red, green
 
     print(red("This sentence is red, except for " + \
           green("these words, which are green") + "."))
@@ -31,7 +31,7 @@ def _wrap_with(code):
         c = code
         if bold:
             c = "1;%s" % c
-        return "\033[%sm%s\033[0m" % (c, text)
+        return "\033[%sm %s \033[0m" % (c, text)
     return inner
 
 red = _wrap_with('31')
