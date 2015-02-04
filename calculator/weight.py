@@ -203,7 +203,6 @@ class Weight():
 
     def FromDict(self, data):
         if self.Name in data:
-            log.info("Load {0}".format(self.Name))
             self.Data=data[self.Name]
         else:
             Assert(False, "{0} not found!").format(self.Name)

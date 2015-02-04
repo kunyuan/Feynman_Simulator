@@ -32,7 +32,7 @@ Dyson={
     }
 }
 
-beta=2.0
+beta=0.9
 Order=3
 Common={
 "Tau": {
@@ -62,11 +62,13 @@ Common={
 "Model": {
     "Name": "J1J2",
     "Interaction": [1.0,0.0],
-    "ExternalField": [0.0, -0.0, 0.0, 0.0]
+    "ExternalField": [0.3, -0.3, 0.0, 0.0]
+    #"ExternalField": [0.0, -0.0, 0.0, 0.0]
     #ExternalField on Sublattice A and B
     },
+}
 
-"Markov": {
+MonteCarlo["Markov"]={
     "Order": Order,
     #Start from order 0, so that OrderReWeight has Order+1 elements
     "Sweep" : 10,
@@ -82,19 +84,20 @@ Common={
         "MessageTimer": 350,
         "ReweightTimer": 600
         },
-    },
-"Dyson": {
+    }
+
+Dyson["Dyson"]={
     "Order": Order,
     "OrderAccepted": 1,
     "ErrorThreshold": 0.1,
     "BetaIncrease": 0.0,
     "SleepTime": 300,
     "Annealing": {
-        "DeltaField": [2.0, -2.0, 0.0, 0.0],
+        "DeltaField": [0.0, -0.0, 0.0, 0.0],
         "Interval": [-0.1, 0.1, 0.0, 0.0]
         }
     }
-}
+
 import job_class as job
 TO_DO = []
 MonteCarlo.update(Common)

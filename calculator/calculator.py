@@ -25,6 +25,8 @@ def SigmaSmoothT_FirstOrder(G, W, map):
 def SigmaDeltaT_FirstOrder(G, W0, map):
     '''Hatree-Fock diagram'''
     ########Fock Diagram
+    OrderSign=-1
+    AntiSymmetricFactor=-1
     SigmaDeltaT=weight.Weight("DeltaT", map, "TwoSpins", "AntiSymmetric", "R")
     G.FFT("R", "T")
     W0.FFT("R")
@@ -34,25 +36,25 @@ def SigmaDeltaT_FirstOrder(G, W0, map):
             spinW = (map.Spin2Index(spin1,spin2),map.Spin2Index(spin2,spin1))
             spinG = (spin2, spin2)
             spinSigma = (spin1, spin1)
-            SigmaDeltaT.Data[spinSigma[IN], :, spinSigma[OUT], :, :]  \
-                    -= -G.Data[spinG[IN], :, spinG[OUT], :, :, -1]\
+            SigmaDeltaT.Data[spinSigma[IN], :, spinSigma[OUT], :, :]+= OrderSign \
+                    *AntiSymmetricFactor*G.Data[spinG[IN], :, spinG[OUT], :, :, -1]\
                     *W0.Data[spinW[IN], :, spinW[OUT], :, :]
     ########Hatree Diagram, or bubble diagram
     FermiLoopSign=-1
-    AntiSymmetricFactor=-1
     for sp1 in range(2):
         for sp2 in range(2):
             spinW = (map.Spin2Index(sp1,sp1), map.Spin2Index(sp2,sp2))
             for sub1 in range(map.NSublat):
                 for sub2 in range(map.NSublat):
                     for r in range(map.Vol):
-                        SigmaDeltaT.Data[sp1, sub1, sp1, sub1, 0] \
-                            -= -FermiLoopSign*AntiSymmetricFactor*G.Data[sp2, sub2, sp2, sub2, 0, -1] \
+                        SigmaDeltaT.Data[sp1, sub1, sp1, sub1, 0]+= OrderSign*FermiLoopSign \
+                            *AntiSymmetricFactor*G.Data[sp2, sub2, sp2, sub2, 0, -1] \
                             *W0.Data[spinW[IN], sub1, spinW[OUT], sub2, r]
     return SigmaDeltaT
 
 
 def Polar_FirstOrder(G, map):
+    OrderSign=-1
     FermiLoopSign=-1
     AntiSymmetricFactor=-1
     Polar=weight.Weight("SmoothT", map, "FourSpins","Symmetric", "R","T")
@@ -67,8 +69,8 @@ def Polar_FirstOrder(G, map):
         spinG2 = (spin2, spin2)
         for subA,subB in SubList:
             Polar.Data[map.Spin2Index(*spinPolar[IN]),subA, \
-                    map.Spin2Index(*spinPolar[OUT]),subB,:,:]\
-                    -= FermiLoopSign*AntiSymmetricFactor*G.Data[spinG1[IN], subB, spinG1[OUT], subA, :, ::-1]  \
+                    map.Spin2Index(*spinPolar[OUT]),subB,:,:]+=OrderSign*FermiLoopSign \
+                    *AntiSymmetricFactor*G.Data[spinG1[IN], subB, spinG1[OUT], subA, :, ::-1]  \
                     *G.Data[spinG2[IN], subA, spinG2[OUT], subB, :, :]
     return Polar
 

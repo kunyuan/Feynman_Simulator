@@ -32,7 +32,7 @@ StatisFile=os.path.join(workspace, "statis_total")
 DoesWeightFileExist=os.path.exists(WeightFile+".hkl")
 if DoesWeightFileExist:
     try:
-        log.info("Load previous DYSHON_para file")
+        log.info(green("Load previous DYSHON_para file"))
         para=parameter.LoadPara(ParaFile)
     except:
         log.warning(red("Previous DYSHON_para file, use _in_DYSON_ file as para instead"))
@@ -84,6 +84,7 @@ def Measure(Version, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor)
     #print "SigmaDeltaT[DOWN,DOWN]=\n", SigmaDeltaT.Data[DOWN,0,DOWN,0,0]
     #print "Sigma=\n", Sigma.Data[UP,0,UP,0,0,:]
     #print "Chi=\n", Chi.Data[0,0,0,0,1,:]
+    #print "Chi=\n", Chi.Data[0,0,0,0,:,0]
 
     data={}
     data["Chi"]=Chi.ToDict()
@@ -136,18 +137,21 @@ else:
 while True:
 #while Version<10:
     Version+=1
-    log.info("Start Version {0}...".format(Version))
+    log.info(green("Start Version {0}...".format(Version)))
     try:
         ratio = Version/(Version+10.0)
         G0,W0=Factory.Build()
-        SigmaDeltaT.Merge(ratio, calc.SigmaDeltaT_FirstOrder(G, W0, Map))
+        #SigmaDeltaT.Merge(ratio, calc.SigmaDeltaT_FirstOrder(G, W0, Map))
+        SigmaDeltaT=calc.SigmaDeltaT_FirstOrder(G, W0, Map)
 
         if job["DysonOnly"] or (DoesWeightFileExist is False):
             log.info("accumulating Sigma/Polar statistics...")
-            Sigma.Merge(ratio, calc.SigmaSmoothT_FirstOrder(G, W, Map))
+            #Sigma.Merge(ratio, calc.SigmaSmoothT_FirstOrder(G, W, Map))
+            Sigma=calc.SigmaSmoothT_FirstOrder(G, W, Map)
             log.info("calculating G...")
             G = calc.G_Dyson(G0, SigmaDeltaT, Sigma, Map)
-            Polar.Merge(ratio, calc.Polar_FirstOrder(G, Map))
+            #Polar.Merge(ratio, calc.Polar_FirstOrder(G, Map))
+            Polar=calc.Polar_FirstOrder(G, Map)
         else:
             log.info("Collecting Sigma/Polar statistics...")
             Statis=collect.CollectStatis(Map, ParaDyson["Order"])
@@ -161,11 +165,11 @@ while True:
     except calc.DenorminatorTouchZero as err:
         #failure due to denorminator touch zero
         Factory.RevertField(ParaDyson["Annealing"])
-        log.warning(green("Version {0} fails due to:\n{1}".format(err)))
+        log.warning(green("Version {0} fails due to:\n{1}".format(Version,err)))
         G, W = Gold, Wold
     except collect.CollectStatisFailure as err:
         #failure due to statis files collection
-        log.warning(green("Version {0} fails due to:\n{1}".format(err)))
+        log.warning(green("Version {0} fails due to:\n{1}".format(Version,err)))
         G, W = Gold, Wold
     except KeyboardInterrupt, SystemExit:
         #exit

@@ -38,10 +38,11 @@ def PlotSpatial(weight, lattice, SpinIn, SpinOut, Tau=0, DoesSave=True):
     for vec, coord, sub in points:
         x.append(vec[0])
         y.append(vec[1])
-        #if coord[0]==coord[1]==sub==0:
-            #z.append(0.0)
-        #else:
-        z.append(weight.Data[SpinIn,0,SpinOut,sub,map.CoordiIndex(coord),map.TauIndex(0.0,Tau)].real)
+        if coord[0]==coord[1]==sub==0:
+            z.append(0.0)
+        else:
+            z.append(weight.Data[SpinIn,0,SpinOut,sub,map.CoordiIndex(coord),map.TauIndex(0.0,Tau)].real)
+    log.info("Max:{0}, Min: {1}".format(max(z), min(z)))
     plt.figure()
     plt.scatter(x,y,s=100,c=z)
     c = plt.colorbar(orientation='horizontal')
@@ -86,25 +87,26 @@ def PlotChi(Chi, lat, DoesSave=True):
         plt.show()
     plt.close()
 
-    KList=[]
-    for i in range(-2*lat.L[0], 2*lat.L[0]):
-        for j in range(-2*lat.L[1], 2*lat.L[1]):
-            KList.append((i,j,0))
-    k, ChiK=lat.FourierTransformation_RealSpace(Chi.Data[0,0,0,:,:,omega]*map.Beta/map.MaxTauBin, KList, "Integer")
-    x=[]
-    y=[]
-    for e in k:
-        x.append(e[0])
-        y.append(e[1])
-    plt.figure()
-    plt.scatter(x,y,c=ChiK)
-    c = plt.colorbar(orientation='horizontal')
-    c.set_label("magnitude")
-    plt.axis('equal')
-    if DoesSave:
-        plt.savefig("chiK.jpg")
-    else:
-        plt.show()
-    plt.close()
+    if lat.Name=="Checkerboard":
+        KList=[]
+        for i in range(-2*lat.L[0], 2*lat.L[0]):
+            for j in range(-2*lat.L[1], 2*lat.L[1]):
+                KList.append((i,j,0))
+        k, ChiK=lat.FourierTransformation_RealSpace(Chi.Data[0,0,0,:,:,omega]*map.Beta/map.MaxTauBin, KList, "Integer")
+        x=[]
+        y=[]
+        for e in k:
+            x.append(e[0])
+            y.append(e[1])
+        plt.figure()
+        plt.scatter(x,y,c=ChiK)
+        c = plt.colorbar(orientation='horizontal')
+        c.set_label("magnitude")
+        plt.axis('equal')
+        if DoesSave:
+            plt.savefig("chiK.jpg")
+        else:
+            plt.show()
+        plt.close()
 
 
