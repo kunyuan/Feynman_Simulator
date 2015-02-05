@@ -3,7 +3,7 @@ import sys
 import numpy as np
 import parameter as para
 from weight import UP,DOWN,IN,OUT
-import weight
+import weight, plot
 from logger import *
 
 def SigmaSmoothT_FirstOrder(G, W, map):
@@ -114,17 +114,32 @@ def Calculate_Denorminator(W0, Polar, map):
     I=np.eye(NSpin*NSub).reshape([NSpin,NSub,NSpin,NSub])
     return I[...,np.newaxis,np.newaxis]-Temp, JP
 
-def W_Dyson(W0, Polar, map):
+def W_Dyson(W0, Polar, map, Lat):
     W=weight.Weight("SmoothT", map, "FourSpins", "Symmetric", "K","W")
     ChiTensor=weight.Weight("SmoothT", map, "FourSpins", "Symmetric", "K","W")
-    W0.FFT("K")
+
     Polar.FFT("K","W")
     Denorm,JP=Calculate_Denorminator(W0, Polar, map)
+
+    W0.FFT("K")
     JPJ=np.einsum("ijklvt,klmnv->ijmnvt", JP, W0.Data)
     lu_piv,Determ=weight.LUFactor(Denorm)
     Check_Denorminator(Determ,map)
     ChiTensor.LUSolve(lu_piv, -Polar.Data)
     W.LUSolve(lu_piv, JPJ)
+
+    #NSpin, NSub=W0.NSpin, W0.NSublat
+    #I=np.eye(NSpin*NSub).reshape([NSpin,NSub,NSpin,NSub])
+    #Den.LUSolve(lu_piv, I)
+    #Den.Inverse()
+    #Den.Data=np.einsum("ijklvt,klmn->ijmnvt", Den.Data, -Polar.Data[:,:,:,:,0,0])
+    ##Chi = Calculate_Chi(ChiTensor, map)
+    #spinUP=map.Spin2Index(UP,UP)
+    #spinDOWN=map.Spin2Index(DOWN,DOWN)
+    #print "Polar[UP,UP]=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
+    #print "Polar[DOWN, DOWN]=\n", Polar.Data[spinDOWN,0,spinDOWN,0,0,:]
+    #print "Den=\n", Polar.Data[spinDOWN,0,spinDOWN,0,0,:]
+    #plot.PlotChi(Den, Lat)
     return W, ChiTensor, Determ
 
 def G_Dyson(G0, SigmaDeltaT, Sigma, map):
@@ -168,13 +183,13 @@ def Calculate_Chi(ChiTensor, map):
     SzSz[UU, UU]= SzSz[DD, DD]=1
     SzSz[UU, DD]= SzSz[DD, UU]=-1
     Chi=weight.Weight("SmoothT", map, "NoSpin", "Symmetric", ChiTensor.SpaceDomain, ChiTensor.TimeDomain)
-    #Chi_ss=[Chi.Copy(), Chi.Copy(), Chi.Copy()]
+    Chi_ss=[Chi.Copy(), Chi.Copy(), Chi.Copy()]
     SS=[SxSx/4.0, SySy/4.0, SzSz/4.0]
-    #for i in range(3):
-        #temp=np.einsum("ik, kminvt->mnvt", SS[i], ChiTensor.Data)
-        #Chi_ss[i].Data=temp.reshape([1, NSublat, 1, NSublat, map.Vol, map.MaxTauBin]) 
-    #Chi.Data=Chi_ss[0].Data+Chi_ss[1].Data+Chi_ss[2].Data
-    Chi.Data=np.einsum("ik, kminvt->mnvt", SS[2], ChiTensor.Data)*3
+    for i in range(3):
+        temp=np.einsum("ik, kminvt->mnvt", SS[i], ChiTensor.Data)
+        Chi_ss[i].Data=temp.reshape([1, NSublat, 1, NSublat, map.Vol, map.MaxTauBin]) 
+    Chi.Data=Chi_ss[0].Data+Chi_ss[1].Data+Chi_ss[2].Data
+    #Chi.Data=np.einsum("ik, kminvt->mnvt", SS[2], ChiTensor.Data)*3
     Chi.Data=Chi.Data.reshape([1, NSublat, 1, NSublat, map.Vol, map.MaxTauBin]) 
     return Chi
 

@@ -38,47 +38,47 @@ bool Convert(Object obj, bool& value)
 }
 bool IsInt(const Object& obj)
 {
-    return (!PyInt_Check(obj.Get()) && !PyLong_Check(obj.Get()));
+    return PyInt_Check(obj.Get()) || PyLong_Check(obj.Get());
 }
 
 bool Convert(Object obj, int& value)
 {
-    if (IsInt(obj))
+    if (!IsInt(obj))
         return false;
     value = (int)PyLong_AsLong(obj.Get());
     return true;
 }
 bool Convert(Object obj, unsigned int& value)
 {
-    if (IsInt(obj))
+    if (!IsInt(obj))
         return false;
     value = (unsigned int)PyLong_AsUnsignedLong(obj.Get());
     return true;
 }
 bool Convert(Object obj, long& value)
 {
-    if (IsInt(obj))
+    if (!IsInt(obj))
         return false;
     value = PyLong_AsLong(obj.Get());
     return true;
 }
 bool Convert(Object obj, unsigned long& value)
 {
-    if (IsInt(obj))
+    if (!IsInt(obj))
         return false;
     value = PyLong_AsUnsignedLong(obj.Get());
     return true;
 }
 bool Convert(Object obj, long long& value)
 {
-    if (IsInt(obj))
+    if (!IsInt(obj))
         return false;
     value = PyLong_AsLongLong(obj.Get());
     return true;
 }
 bool Convert(Object obj, unsigned long long& value)
 {
-    if (IsInt(obj))
+    if (!IsInt(obj))
         return false;
     value = PyLong_AsUnsignedLongLong(obj.Get());
     return true;

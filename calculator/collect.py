@@ -48,6 +48,8 @@ class WeightEstimator():
     
     def GetNewOrderAccepted(self, Name, ErrorThreshold, OrderAccepted):
         self.OrderWeight=self.WeightAccu/self.NormAccu*self.Norm
+        if abs(self.NormAccu)<1e-3:
+            raise CollectStatisFailure("{0} 's NormAccu is 0.0!".format(Name))
         MaxTauBin=self.__Map.MaxTauBin
         x=range(0, MaxTauBin)
         Shape=self.OrderWeight.shape

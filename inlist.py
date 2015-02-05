@@ -8,7 +8,7 @@ SLEEP = 1    #check job status for every SLEEP seconds
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" : 0,
+    "__Duplicate" : 3,
     "__IsCluster" : False,
     "__AutoRun" : True,
     "__KeepCPUBusy": True,
@@ -28,11 +28,11 @@ Dyson={
     "__KeepCPUBusy": False,
     },
 "Job": {
-    "DysonOnly": True
+    "DysonOnly": MonteCarlo["Control"]["__Duplicate"]==0
     }
 }
 
-beta=0.9
+beta=2
 Order=3
 Common={
 "Tau": {
@@ -51,18 +51,18 @@ Common={
     #"Name": "Pyrochlore",
     #"NSublat": 4,
     #"L": [8,8,8]
-    "Name": "Checkerboard",
-    "NSublat": 2,
-    "L": [8,8]
-    #"Name": "3DCheckerboard",
+    #"Name": "Checkerboard",
     #"NSublat": 2,
+    #"L": [8,8]
+    "Name": "3DCheckerboard",
+    "NSublat": 2,
     #"L": [16,16,16]
-    #"L": [8,8,8]
+    "L": [8,8,8]
     },
 "Model": {
     "Name": "J1J2",
     "Interaction": [1.0,0.0],
-    "ExternalField": [0.3, -0.3, 0.0, 0.0]
+    "ExternalField": [0.1, -0.1, 0.0, 0.0]
     #"ExternalField": [0.0, -0.0, 0.0, 0.0]
     #ExternalField on Sublattice A and B
     },
@@ -79,10 +79,10 @@ MonteCarlo["Markov"]={
     "PolarReweight" : 2.0,
     "OrderTimeRatio" : [1.0, 1.0, 1.0, 2.0],
     "Timer": {
-        "PrinterTimer": 100,
-        "DiskWriterTimer": 256,
-        "MessageTimer": 350,
-        "ReweightTimer": 600
+        "PrinterTimer": 10,
+        "DiskWriterTimer": 30,
+        "MessageTimer": 30,
+        "ReweightTimer": 200
         },
     }
 
@@ -91,9 +91,9 @@ Dyson["Dyson"]={
     "OrderAccepted": 1,
     "ErrorThreshold": 0.1,
     "BetaIncrease": 0.0,
-    "SleepTime": 300,
+    "SleepTime": 30,
     "Annealing": {
-        "DeltaField": [0.0, -0.0, 0.0, 0.0],
+        "DeltaField": [1.0, -1.0, 0.0, 0.0],
         "Interval": [-0.1, 0.1, 0.0, 0.0]
         }
     }

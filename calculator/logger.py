@@ -13,7 +13,7 @@ workspace = parentdir
 log = logging.getLogger()
 log.setLevel(logging.INFO)
 ch = logging.StreamHandler(sys.stdout)
-fh = logging.FileHandler(os.path.join(workspace,'project.log'))
+fh = logging.FileHandler(os.path.join(workspace,'0_DYSON.log'))
 
 ch.setLevel(logging.INFO)
 fh.setLevel(logging.INFO)

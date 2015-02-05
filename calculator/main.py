@@ -76,7 +76,8 @@ def Measure(Version, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor)
     Sigma.FFT("R","T")
     Chi.FFT("R","T")
 
-    #print "Polar=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
+    #print "Polar[UP,UP]=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
+    #print "Polar[DOWN, DOWN]=\n", Polar.Data[spinDOWN,0,spinDOWN,0,0,:]
     #print "W=\n", W.Data[spinUP,0,spinUP,0,0,:]
     #print "G[UP,UP]=\n", G.Data[UP,0,UP,0,0,:]
     #print "G[DOWN,DOWN]=\n", G.Data[DOWN,0,DOWN,0,0,:]
@@ -135,14 +136,14 @@ else:
     Version=para["Version"]
 
 while True:
-#while Version<10:
+#while Version<1:
     Version+=1
     log.info(green("Start Version {0}...".format(Version)))
     try:
         ratio = Version/(Version+10.0)
         G0,W0=Factory.Build()
-        #SigmaDeltaT.Merge(ratio, calc.SigmaDeltaT_FirstOrder(G, W0, Map))
-        SigmaDeltaT=calc.SigmaDeltaT_FirstOrder(G, W0, Map)
+        SigmaDeltaT.Merge(ratio, calc.SigmaDeltaT_FirstOrder(G, W0, Map))
+        #SigmaDeltaT=calc.SigmaDeltaT_FirstOrder(G, W0, Map)
 
         if job["DysonOnly"] or (DoesWeightFileExist is False):
             log.info("accumulating Sigma/Polar statistics...")
@@ -160,7 +161,7 @@ while True:
             G = calc.G_Dyson(G0, SigmaDeltaT, Sigma, Map)
         #######DYSON FOR W AND G###########################
         log.info("calculating W...")
-        W, ChiTensor, Determ = calc.W_Dyson(W0, Polar, Map)
+        W, ChiTensor, Determ = calc.W_Dyson(W0, Polar, Map, Lat)
 
     except calc.DenorminatorTouchZero as err:
         #failure due to denorminator touch zero
