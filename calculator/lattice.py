@@ -137,11 +137,14 @@ class Lattice:
     def FourierTransformation_RealSpace(self, Data, KCoordi, KType="Integer"):
         DataK=[]
         K=[]
-        LatPoints=[]
         points,_=self.GetSitesList(False)
-        for vec, coord, sub in points:
-            #if sub==0:
-                LatPoints.append((np.array(vec), self.__Map.CoordiIndex(coord), sub))
+        vec=np.zeros((len(points), self.Dim))
+        data=np.zeros(len(points))+0*1j
+        for i in range(len(points)):
+        #for vec, coord, sub in points:
+            vec[i,:]=points[i][0]
+            data[i]=Data[points[i][2], self.__Map.CoordiIndex(points[i][1])]
+                
         for p in KCoordi:
             if KType=="Integer":
                 KVec=0
@@ -150,9 +153,7 @@ class Lattice:
             elif KType=="Real":
                 KVec=np.array(p)
             f=0
-            for vec, coord, sub in LatPoints:
-                #if sub==0:
-                    f+=Data[sub,coord]*np.exp(-1j*np.dot(vec,KVec))
+            f+=np.dot(data, np.exp(-1j*np.dot(vec[:,:], KVec)))
             K.append(KVec)
             DataK.append(f.real)
         return K, DataK
