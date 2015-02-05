@@ -106,7 +106,7 @@ class Lattice:
         self.LatVec=np.array([[0.5,0.0,0.5],
                               [0.5,0.5,0.0],
                               [0.0,0.5,0.5]])
-        self.SubLatVec=np.array([[0.25,0.25,0.25],
+        self.SubLatVec=np.array([[0.0,0.0,0.0],
                                  [0.0,0.25,0.25],
                                  [0.25,0.0,0.25],
                                  [0.25,0.25,0]])

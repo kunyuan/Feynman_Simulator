@@ -141,11 +141,8 @@ def PlotChi_2D(Chi, lat, DoesSave=True):
         plt.scatter(x_hl0,y_hl0,c=ChiK_hl0, s=10, edgecolor="black", linewidth=0)
         c = plt.colorbar(orientation='horizontal')
         c.set_label("magnitude")
-        #plt.axis('equal')
-        ax1.set_xlim(-40,40)
-        #ax1.set_ylim(-40,40)
-        ax2.set_xlim(-40,40)
-        #ax2.set_ylim(-40,40)
+        #ax1.set_xlim(-40,40)
+        #ax2.set_xlim(-40,40)
 
         if DoesSave:
             plt.savefig("chiK_Pyrochlore.jpg")
