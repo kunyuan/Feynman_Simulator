@@ -56,13 +56,13 @@ Common={
     #"L": [8,8]
     #"Name": "3DCheckerboard",
     #"NSublat": 2,
-    ##"L": [16,16,16]
+    #"L": [16,16,16]
     #"L": [8,8,8]
     },
 "Model": {
     "Name": "J1J2",
     "Interaction": [1.0,0.0],
-    "ExternalField": [0.1, -0.1, 0.0, 0.0]
+    "ExternalField": [0.0, -0.0, 0.0, 0.0]
     #"ExternalField": [0.0, -0.0, 0.0, 0.0]
     #ExternalField on Sublattice A and B
     },
@@ -79,10 +79,10 @@ MonteCarlo["Markov"]={
     "PolarReweight" : 2.0,
     "OrderTimeRatio" : [1.0, 1.0, 1.0, 2.0],
     "Timer": {
-        "PrinterTimer": 10,
+        "PrinterTimer": 30,
         "DiskWriterTimer": 30,
         "MessageTimer": 30,
-        "ReweightTimer": 200
+        "ReweightTimer": 100
         },
     }
 
@@ -94,7 +94,7 @@ Dyson["Dyson"]={
     "SleepTime": 30,
     "Annealing": {
         "DeltaField": [0.0,  0.0, 0.0, 0.0],
-        "Interval": [-0.0, 0.0, 0.0, 0.0]
+        "Interval": [-0.1, 0.1, 0.0, 0.0]
         }
     }
 
