@@ -119,8 +119,8 @@ Dictionary ParaMC::ToDict()
     SET(_timer, MessageTimer);
     SET(_timer, ReweightTimer);
     Dictionary Para;
+    _para["Timer"] = _timer;
     Para["Markov"] = _para;
-    Para["Timer"] = _timer;
     Para.Update(Parameter::_ToDict());
     return Para;
 }

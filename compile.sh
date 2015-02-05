@@ -1,6 +1,6 @@
 #!/bin/bash
-compiler=clang++
-#compiler=icpc
+#compiler=clang++
+compiler=icpc
 #compiler=g++
 #type=Debug
 type=Release

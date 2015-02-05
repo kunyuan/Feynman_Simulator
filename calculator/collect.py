@@ -3,8 +3,15 @@ import numpy as np
 import os, sys, weight
 from logger import *
 import parameter as para
+import traceback
 
 StatisFilePattern="_statis"
+
+class CollectStatisFailure(Exception):
+    def __init__(self, msg):
+       self.Message = msg
+    def __str__(self):
+        return str(self.Message)
 
 def Smooth(x,y):
     """return: smoothed funciton s(x) and estimation of sigma of y for one data point"""
@@ -40,8 +47,9 @@ class WeightEstimator():
             Assert(self.Norm==_WeightEstimator.Norm, "Norm have to be the same to merge statistics")
     
     def GetNewOrderAccepted(self, Name, ErrorThreshold, OrderAccepted):
-        print self.NormAccu
         self.OrderWeight=self.WeightAccu/self.NormAccu*self.Norm
+        if abs(self.NormAccu)<1e-3:
+            raise CollectStatisFailure("{0} 's NormAccu is 0.0!".format(Name))
         MaxTauBin=self.__Map.MaxTauBin
         x=range(0, MaxTauBin)
         Shape=self.OrderWeight.shape
@@ -71,15 +79,16 @@ class WeightEstimator():
             try:
                 self.__Plot(Name, x, Original, Smoothed, error, Position, State)
             except:
-                raise
-                log.info("failed to plot")
-
+                log.warning("Failed to plot statistics of {0} at order {1}".format(Name, Position[0]))
             log.info("Maximum at Order {0} is {1}".format(orderindex, RelativeError))
             if RelativeError>=ErrorThreshold:
                 orderindex -= 1
                 break
 
-        NewOrderAccepted=orderindex+1
+        if orderindex+1>OrderAccepted:
+            NewOrderAccepted=orderindex+1
+        else:
+            NewOrderAccepted=OrderAccepted
         log.info("OrderAccepted={0}".format(NewOrderAccepted))
         return NewOrderAccepted
 
@@ -147,25 +156,38 @@ def CollectStatis(_map, _order):
     PolarTemp=PolarSmoothT.Copy()
     _FileList=GetFileList()
     if len(_FileList)==0:
-        Abort("No statistics files to read!") 
+        raise CollectStatisFailure("No statistics files to read!") 
     log.info("Collect statistics from {0}".format(_FileList))
+    Total=len(_FileList)
+    Success=0.0
     for f in _FileList:
-        log.info("Merging {0} ...".format(f));
-        Dict=IO.LoadBigDict(f)
-        SigmaTemp.FromDict(Dict['Sigma']['Histogram'])
-        PolarTemp.FromDict(Dict['Polar']['Histogram'])
-        SigmaSmoothT.Merge(SigmaTemp)
-        PolarSmoothT.Merge(PolarTemp)
+        try:
+            log.info("Merging {0} ...".format(f));
+            Dict=IO.LoadBigDict(f)
+            SigmaTemp.FromDict(Dict['Sigma']['Histogram'])
+            PolarTemp.FromDict(Dict['Polar']['Histogram'])
+            SigmaSmoothT.Merge(SigmaTemp)
+            PolarSmoothT.Merge(PolarTemp)
+        except:
+            log.info("Fails to merge\n {0}".format(traceback.format_exc()))
+        else:
+            Success+=1.0
+    log.info("{0}/{1} statistics files read!".format(int(Success), Total))
+    if Success/Total<2.0/3:
+        raise CollectStatisFailure("less than 2/3 statistics files read successfully!") 
     return (SigmaSmoothT, PolarSmoothT)
 
-def UpdateWeight(SigmaSmoothT, PolarSmoothT, ErrorThreshold, OrderAccepted):
+def UpdateWeight(StatisCollected, ErrorThreshold, OrderAccepted):
+    SigmaSmoothT, PolarSmoothT=StatisCollected
     SigmaOrder=SigmaSmoothT.GetNewOrderAccepted("Sigma", ErrorThreshold, OrderAccepted)
     PolarOrder=PolarSmoothT.GetNewOrderAccepted("Polar", ErrorThreshold, OrderAccepted)
     log.info("Accepted Sigma order : {0}; Accepted Polar order : {1}".
             format(SigmaOrder, PolarOrder))
     Sigma=SigmaSmoothT.GetWeight(SigmaOrder)
     Polar=PolarSmoothT.GetWeight(PolarOrder)
-    return Sigma, Polar, SigmaOrder, PolarOrder
+    if SigmaOrder==0 or PolarOrder==0:
+        raise CollectStatisFailure("Either Sigma or Polar's OrderAccepted is still zero!")
+    return Sigma, Polar
 
 if __name__=="__main__":
     WeightPara={"NSublat": 1, "L":[4, 4],

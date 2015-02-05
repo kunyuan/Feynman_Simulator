@@ -140,7 +140,8 @@ class Lattice:
         LatPoints=[]
         points,_=self.GetSitesList(False)
         for vec, coord, sub in points:
-            LatPoints.append((np.array(vec), self.__Map.CoordiIndex(coord), sub))
+            #if sub==0:
+                LatPoints.append((np.array(vec), self.__Map.CoordiIndex(coord), sub))
         for p in KCoordi:
             if KType=="Integer":
                 KVec=0
@@ -150,7 +151,8 @@ class Lattice:
                 KVec=np.array(p)
             f=0
             for vec, coord, sub in LatPoints:
-                f+=Data[sub,coord]*np.exp(-1j*np.dot(vec,KVec))
+                #if sub==0:
+                    f+=Data[sub,coord]*np.exp(-1j*np.dot(vec,KVec))
             K.append(KVec)
             DataK.append(f.real)
         return K, DataK

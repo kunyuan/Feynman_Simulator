@@ -28,11 +28,11 @@ Dyson={
     "__KeepCPUBusy": False,
     },
 "Job": {
-    "DysonOnly": True
+    "DysonOnly": MonteCarlo["Control"]["__Duplicate"]==0
     }
 }
 
-beta=0.5
+beta=0.6
 Order=3
 Common={
 "Tau": {
@@ -48,25 +48,27 @@ Common={
     #"Name": "Cubic",
     #"NSublat": 1,
     #"L": [8,8,8],
-    "Name": "Pyrochlore",
-    "NSublat": 4,
-    "L": [8,8,8]
+    #"Name": "Pyrochlore",
+    #"NSublat": 4,
+    #"L": [8,8,8]
     #"Name": "Checkboard",
     #"NSublat": 2,
     #"L": [8,8]
-    #"Name": "3DCheckerboard",
-    #"NSublat": 2,
-    ##"L": [16,16,16]
-    #"L": [8,8,8]
+    "Name": "3DCheckerboard",
+    "NSublat": 2,
+    #"L": [16,16,16]
+    "L": [8,8,8]
     },
 "Model": {
     "Name": "J1J2",
     "Interaction": [1.0,0.0],
-    "ExternalField": [0.0, -0.0, 0.0, 0.0]
+    "ExternalField": [0.1, -0.1, 0.0, 0.0]
+    #"ExternalField": [0.0, -0.0, 0.0, 0.0]
     #ExternalField on Sublattice A and B
     },
+}
 
-"Markov": {
+MonteCarlo["Markov"]={
     "Order": Order,
     #Start from order 0, so that OrderReWeight has Order+1 elements
     "Sweep" : 10,
@@ -77,24 +79,25 @@ Common={
     "PolarReweight" : 2.0,
     "OrderTimeRatio" : [1.0, 1.0, 1.0, 2.0],
     "Timer": {
-        "PrinterTimer": 100,
-        "DiskWriterTimer": 256,
-        "MessageTimer": 350,
-        "ReweightTimer": 600
+        "PrinterTimer": 10,
+        "DiskWriterTimer": 30,
+        "MessageTimer": 30,
+        "ReweightTimer": 200
         },
-    },
-"Dyson": {
+    }
+
+Dyson["Dyson"]={
     "Order": Order,
     "OrderAccepted": 1,
     "ErrorThreshold": 0.1,
     "BetaIncrease": 0.0,
-    "SleepTime": 300,
+    "SleepTime": 30,
     "Annealing": {
         "DeltaField": [0.0,  0.0, 0.0, 0.0],
         "Interval": [-0.0, 0.0, 0.0, 0.0]
         }
     }
-}
+
 import job_class as job
 TO_DO = []
 MonteCarlo.update(Common)

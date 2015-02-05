@@ -28,38 +28,23 @@ using namespace mc;
 bool CanNotMoveWorm(int dspin, spin sin, spin sout);
 bool CanNotMoveWorm(int dspin, spin sin, int dir);
 
-void Markov::_Initial(ParaMC& para, Diagram& diag, weight::Weight& weight)
-{
-    Beta = para.Beta;
-    Order = para.Order;
-    Counter = &para.Counter;
-    Lat = &para.Lat;
-    OrderReWeight = para.OrderReWeight.data();
-    WormSpaceReweight = &para.WormSpaceReweight;
-    PolarReweight = &para.PolarReweight;
-    Diag = &diag;
-    Worm = &diag.Worm;
-    Sigma = weight.Sigma;
-    Polar = weight.Polar;
-    G = weight.G;
-    W = weight.W;
-    RNG = &para.RNG;
-    InitialArray(ProbofCall, 0.0, NUpdates);
-    InitialArray(SumofProbofCall, 0.0, NUpdates);
-    InitialArray(&Accepted[0][0], 0.0, NUpdates * MAX_ORDER);
-    InitialArray(&Proposed[0][0], 0.0, NUpdates * MAX_ORDER);
-}
-
 bool Markov::BuildNew(ParaMC& para, Diagram& diag, weight::Weight& weight)
 {
-    _Initial(para, diag, weight);
+    Reset(para, diag, weight);
     ASSERT_ALLWAYS(NUpdates >= (int)Operations::END, "NUpdates " << NUpdates << " should larger than " << (int)Operations::END);
 
+    InitialArray(ProbofCall, 0.0, NUpdates);
+    InitialArray(SumofProbofCall, 0.0, NUpdates);
+    
     for (int i = 0; i < NUpdates; i++) {
         ProbofCall[i] = 1.0 / real(NUpdates);
         for (int j = i; j < NUpdates; j++)
             SumofProbofCall[j] += ProbofCall[i];
     }
+    
+    InitialArray(&Accepted[0][0], 0.0, NUpdates * MAX_ORDER);
+    InitialArray(&Proposed[0][0], 0.0, NUpdates * MAX_ORDER);
+    
     OperationName[CREATE_WORM] = NAME(CREATE_WORM);
     OperationName[DELETE_WORM] = NAME(DELETE_WORM);
     OperationName[MOVE_WORM_G] = NAME(MOVE_WORM_G);
@@ -84,7 +69,20 @@ bool Markov::BuildNew(ParaMC& para, Diagram& diag, weight::Weight& weight)
 
 void Markov::Reset(ParaMC& para, Diagram& diag, weight::Weight& weight)
 {
-    _Initial(para, diag, weight);
+    Beta = para.Beta;
+    Order = para.Order;
+    Counter = &para.Counter;
+    Lat = &para.Lat;
+    OrderReWeight = para.OrderReWeight.data();
+    WormSpaceReweight = &para.WormSpaceReweight;
+    PolarReweight = &para.PolarReweight;
+    Diag = &diag;
+    Worm = &diag.Worm;
+    Sigma = weight.Sigma;
+    Polar = weight.Polar;
+    G = weight.G;
+    W = weight.W;
+    RNG = &para.RNG;
 }
 
 std::string Markov::_DetailBalanceStr(Operations op)

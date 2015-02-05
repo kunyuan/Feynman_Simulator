@@ -3,7 +3,7 @@ import sys
 import numpy as np
 import parameter as para
 from weight import UP,DOWN,IN,OUT
-import weight
+import weight, plot
 from logger import *
 
 def SigmaSmoothT_FirstOrder(G, W, map):
@@ -25,6 +25,8 @@ def SigmaSmoothT_FirstOrder(G, W, map):
 def SigmaDeltaT_FirstOrder(G, W0, map):
     '''Hatree-Fock diagram'''
     ########Fock Diagram
+    OrderSign=-1
+    AntiSymmetricFactor=-1
     SigmaDeltaT=weight.Weight("DeltaT", map, "TwoSpins", "AntiSymmetric", "R")
     G.FFT("R", "T")
     W0.FFT("R")
@@ -34,25 +36,28 @@ def SigmaDeltaT_FirstOrder(G, W0, map):
             spinW = (map.Spin2Index(spin1,spin2),map.Spin2Index(spin2,spin1))
             spinG = (spin2, spin2)
             spinSigma = (spin1, spin1)
-            SigmaDeltaT.Data[spinSigma[IN], :, spinSigma[OUT], :, :]  \
-                    -= G.Data[spinG[IN], :, spinG[OUT], :, :, -1]\
+            SigmaDeltaT.Data[spinSigma[IN], :, spinSigma[OUT], :, :]+= OrderSign \
+                    *AntiSymmetricFactor*G.Data[spinG[IN], :, spinG[OUT], :, :, -1]\
                     *W0.Data[spinW[IN], :, spinW[OUT], :, :]
 
     ########Hatree Diagram, or bubble diagram
-    for spin1 in range(2):
-        for spin2 in range(2):
-            spinW = (map.Spin2Index(spin1,spin1), map.Spin2Index(spin2,spin2))
-            spinG = (spin2,spin2)
-            spinSigma = (spin1, spin1)
-            for r in range(map.Vol):
-                FermiLoopSign=-1
-                SigmaDeltaT.Data[spinSigma[IN], :, spinSigma[OUT], :, 0] \
-                        -= FermiLoopSign*G.Data[spinG[IN], :, spinG[OUT], :, 0, -1] \
-                        *W0.Data[spinW[IN], :, spinW[OUT], :, r]
+    FermiLoopSign=-1
+    for sp1 in range(2):
+        for sp2 in range(2):
+            spinW = (map.Spin2Index(sp1,sp1), map.Spin2Index(sp2,sp2))
+            for sub1 in range(map.NSublat):
+                for sub2 in range(map.NSublat):
+                    for r in range(map.Vol):
+                        SigmaDeltaT.Data[sp1, sub1, sp1, sub1, 0]+= OrderSign*FermiLoopSign \
+                            *AntiSymmetricFactor*G.Data[sp2, sub2, sp2, sub2, 0, -1] \
+                            *W0.Data[spinW[IN], sub1, spinW[OUT], sub2, r]
     return SigmaDeltaT
 
 
 def Polar_FirstOrder(G, map):
+    OrderSign=-1
+    FermiLoopSign=-1
+    AntiSymmetricFactor=-1
     Polar=weight.Weight("SmoothT", map, "FourSpins","Symmetric", "R","T")
     G.FFT("R","T")
     NSublat = map.NSublat
@@ -65,8 +70,8 @@ def Polar_FirstOrder(G, map):
         spinG2 = (spin2, spin2)
         for subA,subB in SubList:
             Polar.Data[map.Spin2Index(*spinPolar[IN]),subA, \
-                    map.Spin2Index(*spinPolar[OUT]),subB,:,:]\
-                    = (-1.0)*G.Data[spinG1[IN], subB, spinG1[OUT], subA, :, ::-1]  \
+                    map.Spin2Index(*spinPolar[OUT]),subB,:,:]+=OrderSign*FermiLoopSign \
+                    *AntiSymmetricFactor*G.Data[spinG1[IN], subB, spinG1[OUT], subA, :, ::-1]  \
                     *G.Data[spinG2[IN], subA, spinG2[OUT], subB, :, :]
     return Polar
 
@@ -110,17 +115,32 @@ def Calculate_Denorminator(W0, Polar, map):
     I=np.eye(NSpin*NSub).reshape([NSpin,NSub,NSpin,NSub])
     return I[...,np.newaxis,np.newaxis]-Temp, JP
 
-def W_Dyson(W0, Polar, map):
+def W_Dyson(W0, Polar, map, Lat):
     W=weight.Weight("SmoothT", map, "FourSpins", "Symmetric", "K","W")
     ChiTensor=weight.Weight("SmoothT", map, "FourSpins", "Symmetric", "K","W")
-    W0.FFT("K")
+
     Polar.FFT("K","W")
     Denorm,JP=Calculate_Denorminator(W0, Polar, map)
+
+    W0.FFT("K")
     JPJ=np.einsum("ijklvt,klmnv->ijmnvt", JP, W0.Data)
     lu_piv,Determ=weight.LUFactor(Denorm)
     Check_Denorminator(Determ,map)
     ChiTensor.LUSolve(lu_piv, -Polar.Data)
     W.LUSolve(lu_piv, JPJ)
+
+    #NSpin, NSub=W0.NSpin, W0.NSublat
+    #I=np.eye(NSpin*NSub).reshape([NSpin,NSub,NSpin,NSub])
+    #Den.LUSolve(lu_piv, I)
+    #Den.Inverse()
+    #Den.Data=np.einsum("ijklvt,klmn->ijmnvt", Den.Data, -Polar.Data[:,:,:,:,0,0])
+    ##Chi = Calculate_Chi(ChiTensor, map)
+    #spinUP=map.Spin2Index(UP,UP)
+    #spinDOWN=map.Spin2Index(DOWN,DOWN)
+    #print "Polar[UP,UP]=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
+    #print "Polar[DOWN, DOWN]=\n", Polar.Data[spinDOWN,0,spinDOWN,0,0,:]
+    #print "Den=\n", Polar.Data[spinDOWN,0,spinDOWN,0,0,:]
+    #plot.PlotChi(Den, Lat)
     return W, ChiTensor, Determ
 
 def G_Dyson(G0, SigmaDeltaT, Sigma, map):
@@ -139,7 +159,7 @@ def G_Dyson(G0, SigmaDeltaT, Sigma, map):
     for tau in range(map.MaxTauBin):
         G0SigmaDeltaT[...,tau]*= np.cos(np.pi*map.IndexToTau(tau)/Beta)
 
-    GS  = Beta/map.MaxTauBin*(Beta/map.MaxTauBin*G0Sigma) 
+    GS  = Beta/map.MaxTauBin*(Beta/map.MaxTauBin*G0Sigma+G0SigmaDeltaT) 
     #GS shape: NSpin,NSub,NSpin,NSub,Vol,Tau
 
     I=np.eye(NSpin*NSub).reshape([NSpin,NSub,NSpin,NSub])
@@ -164,20 +184,27 @@ def Calculate_Chi(ChiTensor, map):
     SzSz[UU, UU]= SzSz[DD, DD]=1
     SzSz[UU, DD]= SzSz[DD, UU]=-1
     Chi=weight.Weight("SmoothT", map, "NoSpin", "Symmetric", ChiTensor.SpaceDomain, ChiTensor.TimeDomain)
-    #Chi_ss=[Chi.Copy(), Chi.Copy(), Chi.Copy()]
+    Chi_ss=[Chi.Copy(), Chi.Copy(), Chi.Copy()]
     SS=[SxSx/4.0, SySy/4.0, SzSz/4.0]
-    #for i in range(3):
-        #temp=np.einsum("ik, kminvt->mnvt", SS[i], ChiTensor.Data)
-        #Chi_ss[i].Data=temp.reshape([1, NSublat, 1, NSublat, map.Vol, map.MaxTauBin]) 
-    #Chi.Data=Chi_ss[0].Data+Chi_ss[1].Data+Chi_ss[2].Data
-    Chi.Data=np.einsum("ik, kminvt->mnvt", SS[2], ChiTensor.Data)*3
+    for i in range(3):
+        temp=np.einsum("ik, kminvt->mnvt", SS[i], ChiTensor.Data)
+        Chi_ss[i].Data=temp.reshape([1, NSublat, 1, NSublat, map.Vol, map.MaxTauBin]) 
+    Chi.Data=Chi_ss[0].Data+Chi_ss[1].Data+Chi_ss[2].Data
+    #Chi.Data=np.einsum("ik, kminvt->mnvt", SS[2], ChiTensor.Data)*3
     Chi.Data=Chi.Data.reshape([1, NSublat, 1, NSublat, map.Vol, map.MaxTauBin]) 
     return Chi
+
+class DenorminatorTouchZero(Exception):
+    def __init__(self, value, pos, freq):
+       self.value = value
+       self.position=pos
+       self.frequency=freq
+    def __str__(self):
+        return "Denorminator touch zero, minmum {0} is at K={1} and Omega={2}".format(self.value, self.position, self.frequency)
 
 def Check_Denorminator(Determ, map):
     pos=np.where(Determ==Determ.min())
     x,t=pos[0][0], pos[1][0]
     log.info("The minmum {0} is at K={1} and Omega={2}".format(Determ.min(), map.IndexToCoordi(x), t))
     if Determ.min()<0.0:
-        log.warning("Denorminator touch zero with value {0}".format(Determ.min()))
-        raise ValueError
+        raise DenorminatorTouchZero(Determ.min(), map.IndexToCoordi(x), t)
