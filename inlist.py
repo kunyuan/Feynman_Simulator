@@ -8,7 +8,7 @@ SLEEP = 1    #check job status for every SLEEP seconds
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" : 3,
+    "__Duplicate" : 0,
     "__IsCluster" : False,
     "__AutoRun" : True,
     "__KeepCPUBusy": True,
@@ -62,7 +62,7 @@ Common={
 "Model": {
     "Name": "J1J2",
     "Interaction": [1.0,0.0],
-    "ExternalField": [0.1, -0.1, 0.0, 0.0]
+    "ExternalField": [0.0, -0.0, 0.0, 0.0]
     #"ExternalField": [0.0, -0.0, 0.0, 0.0]
     #ExternalField on Sublattice A and B
     },
@@ -79,10 +79,10 @@ MonteCarlo["Markov"]={
     "PolarReweight" : 2.0,
     "OrderTimeRatio" : [1.0, 1.0, 1.0, 2.0],
     "Timer": {
-        "PrinterTimer": 10,
+        "PrinterTimer": 30,
         "DiskWriterTimer": 30,
         "MessageTimer": 30,
-        "ReweightTimer": 200
+        "ReweightTimer": 100
         },
     }
 

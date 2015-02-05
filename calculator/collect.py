@@ -6,6 +6,7 @@ import parameter as para
 import traceback
 
 StatisFilePattern="_statis"
+AcceptRatio=0.5
 
 class CollectStatisFailure(Exception):
     def __init__(self, msg):
@@ -173,8 +174,8 @@ def CollectStatis(_map, _order):
         else:
             Success+=1.0
     log.info("{0}/{1} statistics files read!".format(int(Success), Total))
-    if Success/Total<2.0/3:
-        raise CollectStatisFailure("less than 2/3 statistics files read successfully!") 
+    if float(Success)/Total<AcceptRatio:
+        raise CollectStatisFailure("More than {0} statistics files fail to read!".format(AcceptRatio)) 
     return (SigmaSmoothT, PolarSmoothT)
 
 def UpdateWeight(StatisCollected, ErrorThreshold, OrderAccepted):
