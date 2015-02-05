@@ -101,10 +101,10 @@ def Measure(G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor):
         Observable.Save(OutputFile)
 
     #plot what you are interested in
-    try:
-        plot.PlotChi(Chi, Lat)
-    except:
-        pass
+    #try:
+        plot.PlotChi_2D(Chi, Lat, False)
+    #except:
+        #pass
 
 #if MessageFile does not exist, Version will be 0
 Version=parameter.GetVersion(MessageFile)

@@ -91,8 +91,9 @@ class Lattice:
                               [1.0,0.0,1.0]])
         self.SubLatVec=np.array([[0.0,0.0,0.0],
                                  [1.0,0.0,0.0]])
-        #self.ReciprocalLatVec =np.array([[2.0 * np.pi, 0.0],
-                                         #[0.0, 2.0 * np.pi]])
+        self.ReciprocalLatVec =np.array([[PI, PI,-PI],
+                                         [PI,-PI,-PI],
+                                         [ 0, 0,2*PI]])
         self.Path=[(0,0,0),(PI,0,0),(PI,PI,0),(0,0,0),(PI,PI,PI),(PI,0,0)]
         self.PathNum=[self.L[0]/2, self.L[1]/2, self.L[0]/2, self.L[0]/2, self.L[2]/2]
         self.PathName=["\Gamma", "\Chi", "M","\Gamma", "\R", "\Chi"]
