@@ -96,9 +96,9 @@ def PlotChi_2D(Chi, lat, DoesSave=True):
         #####Pyrochlore
         KList_hhl=[]
         KList_hl0=[]
-        for i in range(-lat.L[0]*2, lat.L[0]*2+1):
-            for j in range(-lat.L[1]*2, lat.L[1]*2+1):
-                for k in range(-lat.L[2]*2, lat.L[2]*2+1):
+        for i in range(-lat.L[0]/2, lat.L[0]/2+1):
+            for j in range(-lat.L[1]/2, lat.L[1]/2+1):
+                for k in range(-lat.L[2]/2, lat.L[2]/2+1):
                     kpoint = i*lat.ReciprocalLatVec[0]+j*lat.ReciprocalLatVec[1]+ \
                             k*lat.ReciprocalLatVec[2]
                     if np.abs(kpoint[0]-kpoint[1])<1e-5:
