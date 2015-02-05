@@ -132,17 +132,20 @@ def PlotChi_2D(Chi, lat, DoesSave=True):
             y_hl0.append(kpoint[1])
 
         plt.figure(1)
-        plt.subplot(121)
+        ax1=plt.subplot(121,aspect='equal')
         plt.scatter(x_hhl,y_hhl,c=ChiK_hhl, s=10, edgecolor="black", linewidth=0)
         c = plt.colorbar(orientation='horizontal')
         c.set_label("magnitude")
-        #plt.axis('equal')
 
-        plt.subplot(122)
+        ax2=plt.subplot(122,aspect='equal')
         plt.scatter(x_hl0,y_hl0,c=ChiK_hl0, s=10, edgecolor="black", linewidth=0)
         c = plt.colorbar(orientation='horizontal')
         c.set_label("magnitude")
-        plt.axis('equal')
+        #plt.axis('equal')
+        ax1.set_xlim(-40,40)
+        #ax1.set_ylim(-40,40)
+        ax2.set_xlim(-40,40)
+        #ax2.set_ylim(-40,40)
 
         if DoesSave:
             plt.savefig("chiK_Pyrochlore.jpg")
