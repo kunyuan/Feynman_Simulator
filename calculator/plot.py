@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import lattice as lat
 import numpy as np
 import weight
@@ -96,9 +97,9 @@ def PlotChi_2D(Chi, lat, DoesSave=True):
         #####Pyrochlore
         KList_hhl=[]
         KList_hl0=[]
-        for i in range(-lat.L[0]/2, lat.L[0]/2+1):
-            for j in range(-lat.L[1]/2, lat.L[1]/2+1):
-                for k in range(-lat.L[2]/2, lat.L[2]/2+1):
+        for i in range(-lat.L[0]*2, lat.L[0]*2+1):
+            for j in range(-lat.L[1]*2, lat.L[1]*2+1):
+                for k in range(-lat.L[2]*2, lat.L[2]*2+1):
                     kpoint = i*lat.ReciprocalLatVec[0]+j*lat.ReciprocalLatVec[1]+ \
                             k*lat.ReciprocalLatVec[2]
                     if np.abs(kpoint[0]-kpoint[1])<1e-5:
@@ -116,8 +117,8 @@ def PlotChi_2D(Chi, lat, DoesSave=True):
             kpoint  = e[0] * lat.ReciprocalLatVec[0]/2/np.pi
             kpoint += e[1] * lat.ReciprocalLatVec[1]/2/np.pi
             kpoint += e[2] * lat.ReciprocalLatVec[2]/2/np.pi
-            x_hhl.append(np.sqrt(2.0)*kpoint[0])
-            y_hhl.append(kpoint[2])
+            x_hhl.append(np.sqrt(2.0)*kpoint[0]/2/np.pi)
+            y_hhl.append(kpoint[2]/2/np.pi)
 
         ######hl0
         k_hl0, ChiK_hl0=lat.FourierTransformation_RealSpace(Chi.Data[0,0,0,:,:,omega]*map.Beta/map.MaxTauBin, KList_hl0, "Integer")
@@ -128,8 +129,8 @@ def PlotChi_2D(Chi, lat, DoesSave=True):
             kpoint  = e[0] * lat.ReciprocalLatVec[0]/2/np.pi
             kpoint += e[1] * lat.ReciprocalLatVec[1]/2/np.pi
             kpoint += e[2] * lat.ReciprocalLatVec[2]/2/np.pi
-            x_hl0.append(kpoint[0])
-            y_hl0.append(kpoint[1])
+            x_hl0.append(kpoint[0]/2/np.pi)
+            y_hl0.append(kpoint[1]/2/np.pi)
 
         plt.figure(1)
         ax1=plt.subplot(121,aspect='equal')
@@ -223,4 +224,18 @@ def PlotChi_2D(Chi, lat, DoesSave=True):
         log.warn("Lattice PlotChi_2D not implemented yet!")
     log.info("Plotting done!")
 
+
+if __name__=="__main__":
+    import weight
+    import IO
+
+    WeightPara={"NSublat": 4, "L":[16,16, 16],
+            "Beta": 1.5, "MaxTauBin":64}
+    Map=weight.IndexMap(**WeightPara)
+    l=lat.Lattice("Pyrochlore", Map)
+
+    Dict = IO.LoadBigDict("Weight")["Chi"]
+    Chi=weight.Weight("SmoothT", Map, "NoSpin", "Symmetric","R","T").FromDict(Dict)
+
+    PlotChi_2D(Chi, l, False)
 

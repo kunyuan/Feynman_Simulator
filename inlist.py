@@ -50,7 +50,7 @@ Common={
     #"L": [8,8,8],
     "Name": "Pyrochlore",
     "NSublat": 4,
-    "L": [8,8,8]
+    "L": [16,16,16]
     #"Name": "Checkboard",
     #"NSublat": 2,
     #"L": [8,8]
