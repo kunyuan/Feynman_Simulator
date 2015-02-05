@@ -91,8 +91,9 @@ class Lattice:
                               [1.0,0.0,1.0]])
         self.SubLatVec=np.array([[0.0,0.0,0.0],
                                  [1.0,0.0,0.0]])
-        #self.ReciprocalLatVec =np.array([[2.0 * np.pi, 0.0],
-                                         #[0.0, 2.0 * np.pi]])
+        self.ReciprocalLatVec =np.array([[PI, PI,-PI],
+                                         [PI,-PI,-PI],
+                                         [ 0, 0,2*PI]])
         self.Path=[(0,0,0),(PI,0,0),(PI,PI,0),(0,0,0),(PI,PI,PI),(PI,0,0)]
         self.PathNum=[self.L[0]/2, self.L[1]/2, self.L[0]/2, self.L[0]/2, self.L[2]/2]
         self.PathName=["\Gamma", "\Chi", "M","\Gamma", "\R", "\Chi"]
@@ -139,7 +140,8 @@ class Lattice:
         LatPoints=[]
         points,_=self.GetSitesList(False)
         for vec, coord, sub in points:
-            LatPoints.append((np.array(vec), self.__Map.CoordiIndex(coord), sub))
+            #if sub==0:
+                LatPoints.append((np.array(vec), self.__Map.CoordiIndex(coord), sub))
         for p in KCoordi:
             if KType=="Integer":
                 KVec=0
@@ -149,7 +151,8 @@ class Lattice:
                 KVec=np.array(p)
             f=0
             for vec, coord, sub in LatPoints:
-                f+=Data[sub,coord]*np.exp(-1j*np.dot(vec,KVec))
+                #if sub==0:
+                    f+=Data[sub,coord]*np.exp(-1j*np.dot(vec,KVec))
             K.append(KVec)
             DataK.append(f.real)
         return K, DataK

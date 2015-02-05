@@ -39,6 +39,7 @@ def SigmaDeltaT_FirstOrder(G, W0, map):
             SigmaDeltaT.Data[spinSigma[IN], :, spinSigma[OUT], :, :]+= OrderSign \
                     *AntiSymmetricFactor*G.Data[spinG[IN], :, spinG[OUT], :, :, -1]\
                     *W0.Data[spinW[IN], :, spinW[OUT], :, :]
+
     ########Hatree Diagram, or bubble diagram
     FermiLoopSign=-1
     for sp1 in range(2):

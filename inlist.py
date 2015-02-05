@@ -32,7 +32,7 @@ Dyson={
     }
 }
 
-beta=2
+beta=0.6
 Order=3
 Common={
 "Tau": {
@@ -51,7 +51,7 @@ Common={
     #"Name": "Pyrochlore",
     #"NSublat": 4,
     #"L": [8,8,8]
-    #"Name": "Checkerboard",
+    #"Name": "Checkboard",
     #"NSublat": 2,
     #"L": [8,8]
     "Name": "3DCheckerboard",
@@ -93,8 +93,8 @@ Dyson["Dyson"]={
     "BetaIncrease": 0.0,
     "SleepTime": 30,
     "Annealing": {
-        "DeltaField": [1.0, -1.0, 0.0, 0.0],
-        "Interval": [-0.1, 0.1, 0.0, 0.0]
+        "DeltaField": [0.0,  0.0, 0.0, 0.0],
+        "Interval": [-0.0, 0.0, 0.0, 0.0]
         }
     }
 

@@ -105,8 +105,9 @@ def Measure(Version, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor)
             parameter.Save(ParaFile, para)  #Save Parameters
             Observable.Save(OutputFile)
             #plot what you are interested in
-            plot.PlotChi(Chi, Lat)
-            plot.PlotSpatial(Chi, Lat, 0, 0, 0) 
+            #plot.PlotChi(Chi, Lat)
+            #plot.PlotSpatial(Chi, Lat, 0, 0, 0) 
+            plot.PlotChi_2D(Chi, Lat, False)
         except:
             log.info("Output fails due to\n {0}".format(traceback.format_exc()))
 
