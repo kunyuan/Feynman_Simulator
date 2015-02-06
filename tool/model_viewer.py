@@ -140,8 +140,8 @@ def Plot(InputFile, HasCaption):
         txt.SetCaption(content)
         txt.SetWidth(0.05)
         txt.SetHeight(0.04)
-        txt.GetProperty().SetColor(0, 0, 0)
-        txt.GetProperty().SetOpacity(0.5)
+        txt.GetProperty().SetColor(0.0, 0.0, 0.0)
+        txt.GetProperty().SetOpacity(0.9)
         txtActor.append(txt)
 
     legend=vtkLegendBoxActor()

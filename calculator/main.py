@@ -6,7 +6,40 @@ import collect
 from weight import UP,DOWN,IN,OUT
 from logger import *
 import os, sys, model, weight, measure, parameter, plot, argparse, time, traceback
-import plot
+import plot, gc
+
+def debug_log_common_objects():
+    print "Logging common objects"
+    import gc
+    print "garbage collector got", gc.collect()
+    import objgraph
+ 
+    # Reimplement show_most_common_types, but write to file
+    import operator
+    stats = sorted(objgraph.typestats().items(), key=operator.itemgetter(1),
+                   reverse=True)
+    limit = 30
+    if limit:
+        stats = stats[:limit]
+    width = max(len(name) for name, count in stats)
+    out=["#START %s" % time.time()] + ["%s %s" % (name.ljust(width), count) for name, count in stats[:limit]]
+    f=open("most_common_object.txt", "a")
+    f.write("\n".join(out) + "\n")
+    f.close()
+    print "Logging common objects - done"
+
+def start_pdb(signal, trace):
+    import pdb
+    pdb.set_trace()
+
+import signal
+signal.signal(signal.SIGINT, start_pdb)
+
+#gc.enable()
+#gc.set_debug(gc.DEBUG_LEAK)
+# show the dirt ;-)
+#dump_garbage()
+#gc.collect()
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-p", "--PID", help="use PID to find the input file")
@@ -20,7 +53,9 @@ if args.PID:
 elif args.file:
     InputFile=os.path.abspath(args.file)
 else:
-    Assert(False, "Do not understand the argument!")
+    InputFile=os.path.join(workspace, "infile/_in_DYSON_0")
+
+    #Assert(False, "Do not understand the argument!")
 
 job, para=parameter.Load(InputFile)
 ParaFile="{0}_DYSON_para".format(job["PID"])
@@ -95,7 +130,7 @@ def Measure(Version, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor)
     data["SigmaDeltaT"]=SigmaDeltaT.ToDict()
     data["Sigma"]=Sigma.ToDict()
     data["Polar"]=Polar.ToDict()
-    Observable.Measure(Chi, Determ, G)
+    #Observable.Measure(Chi, Determ, G)
 
     with DelayedInterrupt():
         try:
@@ -192,3 +227,9 @@ while True:
     finally:
         if (job["DysonOnly"] is False) and (DoesWeightFileExist is True):
             time.sleep(ParaDyson["SleepTime"])
+        gc.collect()
+        gc.collect()
+        debug_log_common_objects()
+
+
+

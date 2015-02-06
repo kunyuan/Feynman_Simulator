@@ -32,7 +32,7 @@ Dyson={
     }
 }
 
-beta=1.5
+beta=0.6
 Order=3
 Common={
 "Tau": {
@@ -45,12 +45,12 @@ Common={
     #"Name": "Square",
     #"NSublat": 1,
     #"L": [8,8],
-    #"Name": "Cubic",
-    #"NSublat": 1,
-    #"L": [8,8,8],
-    "Name": "Pyrochlore",
-    "NSublat": 4,
-    "L": [4,4,4]
+    "Name": "Cubic",
+    "NSublat": 1,
+    "L": [8,8,8],
+    #"Name": "Pyrochlore",
+    #"NSublat": 4,
+    #"L": [8,8,8]
     #"Name": "Checkboard",
     #"NSublat": 2,
     #"L": [8,8]
