@@ -97,9 +97,9 @@ def PlotChi_2D(Chi, lat, DoesSave=True):
         #####Pyrochlore
         KList_hhl=[]
         KList_hl0=[]
-        for i in range(-lat.L[0]*2, lat.L[0]*2+1):
-            for j in range(-lat.L[1]*2, lat.L[1]*2+1):
-                for k in range(-lat.L[2]*2, lat.L[2]*2+1):
+        for i in range(-lat.L[0]*4, lat.L[0]*4+1):
+            for j in range(-lat.L[1]*4, lat.L[1]*4+1):
+                for k in range(-lat.L[2]*4, lat.L[2]*4+1):
                     kpoint = i*lat.ReciprocalLatVec[0]+j*lat.ReciprocalLatVec[1]+ \
                             k*lat.ReciprocalLatVec[2]
                     if np.abs(kpoint[0]-kpoint[1])<1e-5:
@@ -135,20 +135,42 @@ def PlotChi_2D(Chi, lat, DoesSave=True):
         plt.figure(1)
         ax1=plt.subplot(121,aspect='equal')
         plt.scatter(x_hhl,y_hhl,c=ChiK_hhl, s=10, edgecolor="black", linewidth=0)
+
+        sqrt2 = np.sqrt(2.0)
+        xlist = sqrt2*np.array([-0.75,-0.25, 0.25, 0.75, 0.25,-0.25,-0.75])
+        ylist = np.array([          0,    1,    1,    0,   -1,   -1,    0])
+        plt.plot(xlist, ylist, color="black")
+        plt.plot(xlist, ylist+2, color="black")
+        plt.plot(xlist, ylist-2, color="black")
+        plt.plot(xlist+sqrt2, ylist+1, color="black")
+        plt.plot(xlist-sqrt2, ylist+1, color="black")
+        plt.plot(xlist+sqrt2, ylist-1, color="black")
+        plt.plot(xlist-sqrt2, ylist-1, color="black")
+        plt.plot(xlist+2*sqrt2, ylist, color="black")
+        plt.plot(xlist+2*sqrt2, ylist+2, color="black")
+        plt.plot(xlist+2*sqrt2, ylist-2, color="black")
         c = plt.colorbar(orientation='horizontal')
         c.set_label("magnitude")
 
         ax2=plt.subplot(122,aspect='equal')
         plt.scatter(x_hl0,y_hl0,c=ChiK_hl0, s=10, edgecolor="black", linewidth=0)
+        #plt.plot([],[])
+        xlist = np.array([-1.0,-0.5, 0.5, 1.0, 1.0, 0.5,-0.5,-1.0,-1.0])
+        ylist = np.array([ 0.5, 1.0, 1.0, 0.5,-0.5,-1.0,-1.0,-0.5, 0.5])
+        plt.plot(xlist, ylist, color="black")
+        plt.plot(xlist+2, ylist, color="black")
+        plt.plot(xlist, ylist+2, color="black")
+        plt.plot(xlist+2, ylist+2, color="black")
         c = plt.colorbar(orientation='horizontal')
         c.set_label("magnitude")
         #ax1.set_xlim(-40,40)
         #ax2.set_xlim(-40,40)
 
         if DoesSave:
-            plt.savefig("chiK_Pyrochlore.jpg")
+            plt.savefig("chiK_Pyrochlore.pdf")
         else:
             plt.show()
+            plt.savefig("chiK_Pyrochlore.jpg")
         plt.close()
 
     elif lat.Name=="Checkerboard":
@@ -170,9 +192,10 @@ def PlotChi_2D(Chi, lat, DoesSave=True):
         c.set_label("magnitude")
         plt.axis('equal')
         if DoesSave:
-            plt.savefig("chiK_2DChecker.jpg")
+            plt.savefig("chiK_2DChecker.pdf")
         else:
             plt.show()
+            plt.savefig("chiK_2DChecker.jpg")
         plt.close()
 
     elif lat.Name=="3DCheckerboard":
@@ -216,9 +239,10 @@ def PlotChi_2D(Chi, lat, DoesSave=True):
         plt.axis('equal')
 
         if DoesSave:
-            plt.savefig("chiK_3DChecker.jpg")
+            plt.savefig("chiK_3DChecker.pdf")
         else:
             plt.show()
+            plt.savefig("chiK_3DChecker.jpg")
         plt.close()
     else:
         log.warn("Lattice PlotChi_2D not implemented yet!")

@@ -129,18 +129,18 @@ class BareFactory:
                 coord.append([])
                 for j in range(4):
                     coord[i].append([])
-            coord[A][B]=[(0,0,0),(0,Ly-1,0)]
-            coord[A][C]=[(0,0,0),(0,0,Lz-1)]
-            coord[A][D]=[(0,0,0),(Lx-1,0,0)]
-            coord[B][A]=[(0,0,0),(0,1,0)]
-            coord[B][C]=[(0,0,0),(0,1,Lz-1)]
-            coord[B][D]=[(0,0,0),(Lx-1,1,0)]
-            coord[C][A]=[(0,0,0),(0,0,1)]
-            coord[C][B]=[(0,0,0),(0,Ly-1,1)]
-            coord[C][D]=[(0,0,0),(Lx-1,0,1)]
-            coord[D][A]=[(0,0,0),(1,0,0)]
-            coord[D][B]=[(0,0,0),(1,Ly-1,0)]
-            coord[D][C]=[(0,0,0),(1,0,Lz-1)]
+            coord[A][B]=[(0,0,0),(0,0,Lz-1)]
+            coord[A][C]=[(0,0,0),(Lx-1,0,0)]
+            coord[A][D]=[(0,0,0),(0,Ly-1,0)]
+            coord[B][A]=[(0,0,0),(0,0,1)]
+            coord[B][C]=[(0,0,0),(Lx-1,0,1)]
+            coord[B][D]=[(0,0,0),(0,Ly-1,1)]
+            coord[C][A]=[(0,0,0),(1,0,0)]
+            coord[C][B]=[(0,0,0),(1,0,Lz-1)]
+            coord[C][D]=[(0,0,0),(1,Ly-1,0)]
+            coord[D][A]=[(0,0,0),(0,1,0)]
+            coord[D][B]=[(0,0,0),(0,1,Lz-1)]
+            coord[D][C]=[(0,0,0),(Lx-1,1,0)]
 
             for i in range(4):
                 for j in range(4):
