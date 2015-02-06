@@ -142,7 +142,7 @@ def Measure(Version, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor)
             #plot what you are interested in
             #plot.PlotChi(Chi, Lat)
             #plot.PlotSpatial(Chi, Lat, 0, 0, 0) 
-            plot.PlotChi_2D(Chi, Lat)
+            #plot.PlotChi_2D(Chi, Lat)
         except:
             log.info("Output fails due to\n {0}".format(traceback.format_exc()))
 

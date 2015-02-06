@@ -2,6 +2,7 @@
 import numpy as np
 import math
 from logger import *
+from numba import jit
 PI=np.pi
 
 class Lattice:
@@ -134,10 +135,14 @@ class Lattice:
                 v[i]-=self.L[i]
         return v
 
+    @jit
     def FourierTransformation_RealSpace(self, Data, KCoordi, KType="Integer"):
         DataK=[]
         K=[]
         points,_=self.GetSitesList(False)
+        #for vec, coord, sub in points:
+            #if sub==1:
+                #LatPoints.append((np.array(vec), self.__Map.CoordiIndex(coord), sub))
         vec=np.zeros((len(points), self.Dim))
         data=np.zeros(len(points))+0*1j
         for i in range(len(points)):
@@ -154,6 +159,9 @@ class Lattice:
                 KVec=np.array(p)
             f=0
             f+=np.dot(data, np.exp(-1j*np.dot(vec[:,:], KVec)))
+            #for vec, coord, sub in LatPoints:
+                #if sub==1:
+                    #f+=Data[sub,coord]*np.exp(-1j*np.dot(vec,KVec))
             K.append(KVec)
             DataK.append(f.real)
         return K, DataK

@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import lattice as lat
 import numpy as np
 import weight
@@ -96,9 +97,9 @@ def PlotChi_2D(Chi, lat, DoesSave=True):
         #####Pyrochlore
         KList_hhl=[]
         KList_hl0=[]
-        for i in range(-lat.L[0]/2, lat.L[0]/2+1):
-            for j in range(-lat.L[1]/2, lat.L[1]/2+1):
-                for k in range(-lat.L[2]/2, lat.L[2]/2+1):
+        for i in range(-lat.L[0]*4, lat.L[0]*4+1):
+            for j in range(-lat.L[1]*4, lat.L[1]*4+1):
+                for k in range(-lat.L[2]*4, lat.L[2]*4+1):
                     kpoint = i*lat.ReciprocalLatVec[0]+j*lat.ReciprocalLatVec[1]+ \
                             k*lat.ReciprocalLatVec[2]
                     if np.abs(kpoint[0]-kpoint[1])<1e-5:
@@ -116,8 +117,8 @@ def PlotChi_2D(Chi, lat, DoesSave=True):
             kpoint  = e[0] * lat.ReciprocalLatVec[0]/2/np.pi
             kpoint += e[1] * lat.ReciprocalLatVec[1]/2/np.pi
             kpoint += e[2] * lat.ReciprocalLatVec[2]/2/np.pi
-            x_hhl.append(np.sqrt(2.0)*kpoint[0])
-            y_hhl.append(kpoint[2])
+            x_hhl.append(np.sqrt(2.0)*kpoint[0]/2/np.pi)
+            y_hhl.append(kpoint[2]/2/np.pi)
 
         ######hl0
         k_hl0, ChiK_hl0=lat.FourierTransformation_RealSpace(Chi.Data[0,0,0,:,:,omega]*map.Beta/map.MaxTauBin, KList_hl0, "Integer")
@@ -128,24 +129,46 @@ def PlotChi_2D(Chi, lat, DoesSave=True):
             kpoint  = e[0] * lat.ReciprocalLatVec[0]/2/np.pi
             kpoint += e[1] * lat.ReciprocalLatVec[1]/2/np.pi
             kpoint += e[2] * lat.ReciprocalLatVec[2]/2/np.pi
-            x_hl0.append(kpoint[0])
-            y_hl0.append(kpoint[1])
+            x_hl0.append(kpoint[0]/2/np.pi)
+            y_hl0.append(kpoint[1]/2/np.pi)
 
         plt.figure(1)
         ax1=plt.subplot(121,aspect='equal')
         plt.scatter(x_hhl,y_hhl,c=ChiK_hhl, s=10, edgecolor="black", linewidth=0)
+
+        sqrt2 = np.sqrt(2.0)
+        xlist = sqrt2*np.array([-0.75,-0.25, 0.25, 0.75, 0.25,-0.25,-0.75])
+        ylist = np.array([          0,    1,    1,    0,   -1,   -1,    0])
+        plt.plot(xlist, ylist, color="black")
+        plt.plot(xlist, ylist+2, color="black")
+        plt.plot(xlist, ylist-2, color="black")
+        plt.plot(xlist+sqrt2, ylist+1, color="black")
+        plt.plot(xlist-sqrt2, ylist+1, color="black")
+        plt.plot(xlist+sqrt2, ylist-1, color="black")
+        plt.plot(xlist-sqrt2, ylist-1, color="black")
+        plt.plot(xlist+2*sqrt2, ylist, color="black")
+        plt.plot(xlist+2*sqrt2, ylist+2, color="black")
+        plt.plot(xlist+2*sqrt2, ylist-2, color="black")
         c = plt.colorbar(orientation='horizontal')
         c.set_label("magnitude")
 
         ax2=plt.subplot(122,aspect='equal')
         plt.scatter(x_hl0,y_hl0,c=ChiK_hl0, s=10, edgecolor="black", linewidth=0)
+        #plt.plot([],[])
+        xlist = np.array([-1.0,-0.5, 0.5, 1.0, 1.0, 0.5,-0.5,-1.0,-1.0])
+        ylist = np.array([ 0.5, 1.0, 1.0, 0.5,-0.5,-1.0,-1.0,-0.5, 0.5])
+        plt.plot(xlist, ylist, color="black")
+        plt.plot(xlist+2, ylist, color="black")
+        plt.plot(xlist, ylist+2, color="black")
+        plt.plot(xlist+2, ylist+2, color="black")
         c = plt.colorbar(orientation='horizontal')
         c.set_label("magnitude")
 
         if DoesSave:
-            plt.savefig("chiK_Pyrochlore.jpg")
+            plt.savefig("chiK_Pyrochlore.pdf")
         else:
             plt.show()
+            plt.savefig("chiK_Pyrochlore.jpg")
         plt.close()
 
     elif lat.Name=="Checkerboard":
@@ -167,9 +190,10 @@ def PlotChi_2D(Chi, lat, DoesSave=True):
         c.set_label("magnitude")
         plt.axis('equal')
         if DoesSave:
-            plt.savefig("chiK_2DChecker.jpg")
+            plt.savefig("chiK_2DChecker.pdf")
         else:
             plt.show()
+            plt.savefig("chiK_2DChecker.jpg")
         plt.close()
 
     elif lat.Name=="3DCheckerboard":
@@ -213,12 +237,27 @@ def PlotChi_2D(Chi, lat, DoesSave=True):
         plt.axis('equal')
 
         if DoesSave:
-            plt.savefig("chiK_3DChecker.jpg")
+            plt.savefig("chiK_3DChecker.pdf")
         else:
             plt.show()
+            plt.savefig("chiK_3DChecker.jpg")
         plt.close()
     else:
         log.warn("Lattice PlotChi_2D not implemented yet!")
     log.info("Plotting done!")
 
+
+if __name__=="__main__":
+    import weight
+    import IO
+
+    WeightPara={"NSublat": 4, "L":[16,16, 16],
+            "Beta": 1.5, "MaxTauBin":64}
+    Map=weight.IndexMap(**WeightPara)
+    l=lat.Lattice("Pyrochlore", Map)
+
+    Dict = IO.LoadBigDict("Weight")["Chi"]
+    Chi=weight.Weight("SmoothT", Map, "NoSpin", "Symmetric","R","T").FromDict(Dict)
+
+    PlotChi_2D(Chi, l, False)
 
