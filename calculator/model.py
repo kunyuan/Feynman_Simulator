@@ -106,6 +106,23 @@ class BareFactory:
             #J2 interaction on next nearest neighbors
             for i in coordnnn:
                 self.BareW.Data[spin,sub,spin,sub,self.__Map.CoordiIndex(i)] = J2/4.0;
+
+        if LatName=="Honeycomb":
+            #NSublat: 2
+            Lx,Ly=self.__Map.L
+            Lx,Ly=self.__Map.L
+            subA=0
+            subB=1
+            coordA2B=[(0, 0), (Lx-1, 0), (Lx-1,Ly-1)]
+            coordB2A=[(0, 0), (1,0), (1,1)]
+
+            #J1 interaction A-->B, B-->A
+            for i in coordA2B:
+                self.BareW.Data[spin,subA,spin,subB,self.__Map.CoordiIndex(i)] = J1/4;
+            for i in coordB2A:
+                self.BareW.Data[spin,subB,spin,subA,self.__Map.CoordiIndex(i)] = J1/4;
+            ##J2 interaction A-->A, B-->B
+
         elif LatName=="Cubic":
         #NSublat: 1
             Lx,Ly,Lz=self.__Map.L

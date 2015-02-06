@@ -171,6 +171,28 @@ def PlotChi_2D(Chi, lat, DoesSave=True):
             plt.savefig("chiK_Pyrochlore.jpg")
         plt.close()
 
+    elif lat.Name=="Honeycomb":
+        KList=[]
+        for i in range(-2*lat.L[0], 2*lat.L[0]):
+            for j in range(-2*lat.L[1], 2*lat.L[1]):
+                KList.append((i,j))
+        k, ChiK=lat.FourierTransformation_RealSpace(Chi.Data[0,0,0,:,:,omega]*map.Beta/map.MaxTauBin, KList, "Integer")
+        x=[]
+        y=[]
+        for e in k:
+            x.append(e[0])
+            y.append(e[1])
+        plt.figure()
+        plt.scatter(x,y,c=ChiK)
+        c = plt.colorbar(orientation='horizontal')
+        c.set_label("magnitude")
+        plt.axis('equal')
+        if DoesSave:
+            plt.savefig("chiK_Honeycomb.pdf")
+        else:
+            plt.show()
+        plt.close()
+
     elif lat.Name=="Checkerboard":
         ####2D Checkerboard
         KList=[]

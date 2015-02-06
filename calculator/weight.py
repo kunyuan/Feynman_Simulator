@@ -210,7 +210,6 @@ class Weight():
     def ToDict(self):
         return {self.Name: self.Data}
 
-    @profile
     def LUSolve(self, lu_piv , b):
         """solve ax=b, self.Data will be from lu of a to x"""
         SpSub = self.NSpin*self.NSublat
@@ -271,7 +270,6 @@ class Weight():
         SpatialShape=shape[0:InsertPos]+self.L+shape[InsertPos+1:]
         return range(InsertPos, InsertPos+len(self.L)), SpatialShape
 
-@profile
 def LUFactor(arr):
     SpSub,Vol,Time=arr.shape[0]*arr.shape[1], arr.shape[-2], arr.shape[-1]
     arr=np.swapaxes(arr.reshape([SpSub,SpSub,Vol*Time]),0,2)

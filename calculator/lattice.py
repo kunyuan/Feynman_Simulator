@@ -2,7 +2,6 @@
 import numpy as np
 import math
 from logger import *
-from numba import jit
 PI=np.pi
 
 class Lattice:
@@ -62,12 +61,15 @@ class Lattice:
         self.__AssertNSublat()
         root3=math.sqrt(3)
         PI2=2.0*np.pi
-        self.LatVec=([[0.0,1.0],
-                      [root3/2,-0.5]])
-        self.SubLatVec=([[PI2/root3,PI2],
-                         [PI2*2.0/root3,0.0]])
-        self.ReciprocalLatVec = ([[0.0, 0.0],
+        self.LatVec=np.array([[0.0,1.0],
+                             [root3/2,-0.5]])
+        self.SubLatVec = np.array([[0.0, 0.0],
                                   [1.0/2.0/root3, 0.5]])
+        self.ReciprocalLatVec=np.array([[PI2/root3,PI2],
+                                       [PI2*2.0/root3,0.0]])
+        self.Path=[(0,0),(PI2/root3,0)]
+        self.PathNum=[self.L[0]/2]
+        self.PathName=["\Gamma", "M"]
     #3D lattice
     def __Cubic(self):
         self.Dim=3
@@ -135,7 +137,6 @@ class Lattice:
                 v[i]-=self.L[i]
         return v
 
-    @jit
     def FourierTransformation_RealSpace(self, Data, KCoordi, KType="Integer"):
         DataK=[]
         K=[]
@@ -152,9 +153,9 @@ class Lattice:
                 
         for p in KCoordi:
             if KType=="Integer":
-                KVec=0
-                for i in range(self.Dim):
-                    KVec+=self.ReciprocalLatVec[i]*p[i]/self.L[i]
+                KVec=self.ReciprocalLatVec[0,:]*p[0]/self.L[0]
+                for i in range(1,self.Dim):
+                    KVec+=self.ReciprocalLatVec[i,:]*p[i]/self.L[i]
             elif KType=="Real":
                 KVec=np.array(p)
             f=0
