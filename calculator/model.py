@@ -107,9 +107,8 @@ class BareFactory:
             for i in coordnnn:
                 self.BareW.Data[spin,sub,spin,sub,self.__Map.CoordiIndex(i)] = J2/4.0;
 
-        if LatName=="Honeycomb":
+        elif LatName=="Honeycomb":
             #NSublat: 2
-            Lx,Ly=self.__Map.L
             Lx,Ly=self.__Map.L
             subA=0
             subB=1
@@ -122,7 +121,25 @@ class BareFactory:
             for i in coordB2A:
                 self.BareW.Data[spin,subB,spin,subA,self.__Map.CoordiIndex(i)] = J1/4;
             ##J2 interaction A-->A, B-->B
-
+        elif LatName=="Kagome":
+            #NSublat: 2
+            Lx,Ly=self.__Map.L
+            A,B,C=0,1,2
+            coord=[]
+            for i in range(3):
+                coord.append([])
+                for j in range(3):
+                    coord[i].append([])
+            coord[A][B]=[(0, 0), (1, Ly-1)]
+            coord[A][C]=[(0, 0), (0, Ly-1)]
+            coord[B][A]=[(0, 0), (Lx-1, 1)]
+            coord[B][C]=[(0, 0), (Lx-1, 0)]
+            coord[C][A]=[(0, 0), (0, 1)]
+            coord[C][B]=[(0, 0), (1, 0)]
+            for i in range(3):
+                for j in range(3):
+                    for e in coord[i][j]:
+                        self.BareW.Data[spin,i,spin,j,self.__Map.CoordiIndex(e)] = J1/4;
         elif LatName=="Cubic":
         #NSublat: 1
             Lx,Ly,Lz=self.__Map.L
@@ -242,8 +259,9 @@ class BareFactory:
                 weight=self.BareW.Data[Spin,sub[IN],Spin,sub[OUT],self.__Map.CoordiIndex(coord)]
                 if weight*weight>1.0e-10:
                     n=self.__Map.LatIndex(coord, sub[OUT])
-                    vec=(self.Lat.GetRealVec(Origin, sub[IN], offset), \
-                                    self.Lat.GetRealVec(coord, sub[OUT], offset))
+                    # vec is (real vector of in-site, real vector of out-site) 
+                    vec=(self.Lat.GetRealVec(Origin,0, sub[IN], offset), \
+                                    self.Lat.GetRealVec(coord,0, sub[OUT], offset))
                     coord=(self.__Map.LatIndex(Origin, sub[IN]), \
                                       self.__Map.LatIndex(coord, sub[OUT]))
                     BareWList.append([vec, coord, sub[IN]])

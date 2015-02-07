@@ -15,6 +15,8 @@ class Lattice:
             self.__3DCheckerboard()
         elif Name=="Honeycomb":
             self.__Honeycomb()
+        elif Name=="Kagome":
+            self.__Kagome()
         elif Name=="Square":
             self.__Square()
         elif Name=="Cubic":
@@ -67,9 +69,29 @@ class Lattice:
                                   [1.0/2.0/root3, 0.5]])
         self.ReciprocalLatVec=np.array([[PI2/root3,PI2],
                                        [PI2*2.0/root3,0.0]])
+        #TODO: self.Path is not correct yet
         self.Path=[(0,0),(PI2/root3,0)]
         self.PathNum=[self.L[0]/2]
         self.PathName=["\Gamma", "M"]
+    def __Kagome(self):
+        self.Dim=2
+        self.__AssertDim()
+        self.NSublat=3
+        self.__AssertNSublat()
+        root3=math.sqrt(3)
+        PI2=2.0*np.pi
+        self.LatVec=np.array([[1.0,0.0],
+                             [0.5,root3/2]])
+        self.SubLatVec = np.array([[0.5, 0.0],
+                                  [1.0/4.0, root3/4],
+                                  [3.0/4.0, root3/4]])
+        self.ReciprocalLatVec=np.array([[0.0, PI2*2.0/root3],
+                                        [PI2, -PI2/root3]])
+        #TODO: self.Path is not correct yet
+        self.Path=[(0,0),(PI2/root3,0)]
+        self.PathNum=[self.L[0]/2]
+        self.PathName=["\Gamma", "M"]
+
     #3D lattice
     def __Cubic(self):
         self.Dim=3
@@ -137,19 +159,21 @@ class Lattice:
                 v[i]-=self.L[i]
         return v
 
-    def FourierTransformation_RealSpace(self, Data, KCoordi, KType="Integer"):
+    def FourierTransformation_RealSpace(self, Data, KCoordi, KType="Integer", bound=None):
         DataK=[]
         K=[]
-        points,_=self.GetSitesList(False)
-        #for vec, coord, sub in points:
-            #if sub==1:
-                #LatPoints.append((np.array(vec), self.__Map.CoordiIndex(coord), sub))
-        vec=np.zeros((len(points), self.Dim))
-        data=np.zeros(len(points))+0*1j
-        for i in range(len(points)):
-        #for vec, coord, sub in points:
-            vec[i,:]=points[i][0]
-            data[i]=Data[points[i][2], self.__Map.CoordiIndex(points[i][1])]
+        SiteNum=self.__Map.Vol*self.__Map.NSublat
+        vec=np.zeros((SiteNum, self.Dim))
+        data=np.zeros(SiteNum)+0*1j
+        index=0
+        for SubLatIn in range(self.NSublat):
+            points,_=self.GetSitesList(HasOffset=False, SubLatIn=SubLatIn)
+            for i in range(self.__Map.Vol):
+                RealVec, Coord, SubLatOut=points[i]
+                vec[index,:]=RealVec
+                data[index]=Data[SubLatIn, SubLatOut, self.__Map.CoordiIndex(Coord)]
+                index+=1
+        Assert(index==SiteNum, "{0} is expected for the total number of sites, not {1}!".format(SiteNum, index))
                 
         for p in KCoordi:
             if KType=="Integer":
@@ -158,23 +182,28 @@ class Lattice:
                     KVec+=self.ReciprocalLatVec[i,:]*p[i]/self.L[i]
             elif KType=="Real":
                 KVec=np.array(p)
-            f=0
-            f+=np.dot(data, np.exp(-1j*np.dot(vec[:,:], KVec)))
-            #for vec, coord, sub in LatPoints:
-                #if sub==1:
-                    #f+=Data[sub,coord]*np.exp(-1j*np.dot(vec,KVec))
-            K.append(KVec)
-            DataK.append(f.real)
+            flag=True
+            if bound is not None:
+                bound=np.array(bound)
+                for d in range(0, bound.shape[0]):
+                    if KVec[d]<bound[d][0] or KVec[d]>bound[d][1]:
+                        flag=False
+                        break
+            if flag:
+                f=0
+                f+=np.dot(data, np.exp(-1j*np.dot(vec[:,:], KVec)))
+                K.append(KVec)
+                DataK.append(f.real)
         return K, DataK
 
-    def GetRealVec(self, Coordi, SubLat, offset):
+    def GetRealVec(self, Coordi, SubLatIn, SubLatOut, offset):
         '''
            Coordi: D-dimensional vector of coordinates
            SubLat: only the OUT sublattice is needed, IN sublattice is assumed to be 0
         '''
         v=self.__Shift(Coordi+offset)
-        return tuple(np.einsum("ij,i->j",self.LatVec,v)+self.SubLatVec[SubLat])
-    def GetSitesList(self, HasOffset=True):
+        return tuple(np.einsum("ij,i->j",self.LatVec,v)+self.SubLatVec[SubLatOut]-self.SubLatVec[SubLatIn])
+    def GetSitesList(self, HasOffset=True, SubLatIn=0):
         """
         return: list of all sites, with format 
                 [tuple of real space vectors of sites, tuple of integer vectors of coordinates, SubLat] 
@@ -187,11 +216,12 @@ class Lattice:
         LinesInUnitCell=[]
         #Origin=[0 for e in self.L]
         for coord in self.__Map.GetAllCoordi():
-            for sub in range(self.NSublat):
-                Points[self.__Map.LatIndex(coord, sub)]=[tuple(self.GetRealVec(coord,sub,offset)),coord,sub]
-                for subN in range(sub, self.NSublat):
-                    LinesInUnitCell.append([(self.__Map.LatIndex(coord, sub), \
-                                              self.__Map.LatIndex(coord, subN)), sub])
+            for SubLatOut in range(self.NSublat):
+                Points[self.__Map.LatIndex(coord, SubLatOut)]=[self.GetRealVec(coord,SubLatIn,SubLatOut,offset), \
+                        coord,SubLatOut]
+                for subN in range(SubLatOut, self.NSublat):
+                    LinesInUnitCell.append([(self.__Map.LatIndex(coord, SubLatOut), \
+                                              self.__Map.LatIndex(coord, subN)), SubLatOut])
         return Points, LinesInUnitCell
 
 if __name__=="__main__":

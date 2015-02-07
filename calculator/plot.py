@@ -27,6 +27,7 @@ def PlotTime(weight, SpinIn, SubIn, SpinOut, SubOut, Vol, DoesSave=True):
     plt.close()
 
 def PlotSpatial(weight, lattice, SpinIn, SpinOut, Tau=0, DoesSave=True):
+    OriginalSubLat=2
     if lattice.Dim>2:
         log.warning("Can not plot for Dimension>3!")
         return
@@ -39,18 +40,19 @@ def PlotSpatial(weight, lattice, SpinIn, SpinOut, Tau=0, DoesSave=True):
     for vec, coord, sub in points:
         x.append(vec[0])
         y.append(vec[1])
-        if coord[0]==coord[1]==sub==0:
+        if coord[0]==coord[1]==0 and sub==OriginalSubLat:
             z.append(0.0)
         else:
-            z.append(weight.Data[SpinIn,0,SpinOut,sub,map.CoordiIndex(coord),map.TauIndex(0.0,Tau)].real)
+            z.append(weight.Data[SpinIn,OriginalSubLat,SpinOut,sub,map.CoordiIndex(coord),map.TauIndex(0.0,Tau)].real)
     log.info("Max:{0}, Min: {1}".format(max(z), min(z)))
     plt.figure()
-    plt.scatter(x,y,s=100,c=z)
+    plt.scatter(x,y,c=z, s=10, edgecolor="black", linewidth=0,vmin=-7, vmax=7)
     c = plt.colorbar(orientation='horizontal')
     c.set_label("magnitude")
     plt.axis('equal')
+    #plt.show()
     if DoesSave:
-        plt.savefig("spatial.jpg")
+        plt.savefig("spatial_sub{0}.png".format(OriginalSubLat))
     else:
         plt.show()
     plt.close()
@@ -106,29 +108,24 @@ def PlotChi_2D(Chi, lat, DoesSave=True):
                         KList_hhl.append((i,j,k))
                     if np.abs(kpoint[2])<1e-5:
                         KList_hl0.append((i,j,k))
-                #KList_hl0.append((i*2*np.pi/lat.L[0],j*2*np.pi/lat.L[1],0))
 
         ######hhl
-        k_hhl, ChiK_hhl=lat.FourierTransformation_RealSpace(Chi.Data[0,0,0,:,:,omega]*map.Beta/map.MaxTauBin, KList_hhl, "Integer")
+        k_hhl, ChiK_hhl=lat.FourierTransformation_RealSpace(Chi.Data[0,:,0,:,:,omega]*map.Beta/map.MaxTauBin, \
+                KList_hhl, "Integer", bound=[[-10,10],[-10,10]])
 
         x_hhl=[]
         y_hhl=[]
         for e in k_hhl:
-            kpoint  = e[0] * lat.ReciprocalLatVec[0]/2/np.pi
-            kpoint += e[1] * lat.ReciprocalLatVec[1]/2/np.pi
-            kpoint += e[2] * lat.ReciprocalLatVec[2]/2/np.pi
             x_hhl.append(np.sqrt(2.0)*kpoint[0]/2/np.pi)
             y_hhl.append(kpoint[2]/2/np.pi)
 
         ######hl0
-        k_hl0, ChiK_hl0=lat.FourierTransformation_RealSpace(Chi.Data[0,0,0,:,:,omega]*map.Beta/map.MaxTauBin, KList_hl0, "Integer")
+        k_hl0, ChiK_hl0=lat.FourierTransformation_RealSpace(Chi.Data[0,:,0,:,:,omega]*map.Beta/map.MaxTauBin, \
+                KList_hl0, "Integer", bound=[[-10,10],[-10,10]])
         x_hl0=[]
         y_hl0=[]
 
         for e in k_hl0:
-            kpoint  = e[0] * lat.ReciprocalLatVec[0]/2/np.pi
-            kpoint += e[1] * lat.ReciprocalLatVec[1]/2/np.pi
-            kpoint += e[2] * lat.ReciprocalLatVec[2]/2/np.pi
             x_hl0.append(kpoint[0]/2/np.pi)
             y_hl0.append(kpoint[1]/2/np.pi)
 
@@ -154,7 +151,6 @@ def PlotChi_2D(Chi, lat, DoesSave=True):
 
         ax2=plt.subplot(122,aspect='equal')
         plt.scatter(x_hl0,y_hl0,c=ChiK_hl0, s=10, edgecolor="black", linewidth=0)
-        #plt.plot([],[])
         xlist = np.array([-1.0,-0.5, 0.5, 1.0, 1.0, 0.5,-0.5,-1.0,-1.0])
         ylist = np.array([ 0.5, 1.0, 1.0, 0.5,-0.5,-1.0,-1.0,-0.5, 0.5])
         plt.plot(xlist, ylist, color="black")
@@ -168,54 +164,25 @@ def PlotChi_2D(Chi, lat, DoesSave=True):
             plt.savefig("chiK_Pyrochlore.pdf")
         else:
             plt.show()
-            plt.savefig("chiK_Pyrochlore.jpg")
         plt.close()
 
-    elif lat.Name=="Honeycomb":
+    elif lat.Dim==2:
         KList=[]
-        for i in range(-2*lat.L[0], 2*lat.L[0]):
-            for j in range(-2*lat.L[1], 2*lat.L[1]):
+        for i in range(-4*lat.L[0], 4*lat.L[0]):
+            for j in range(-4*lat.L[1], 4*lat.L[1]):
                 KList.append((i,j))
-        k, ChiK=lat.FourierTransformation_RealSpace(Chi.Data[0,0,0,:,:,omega]*map.Beta/map.MaxTauBin, KList, "Integer")
-        x=[]
-        y=[]
-        for e in k:
-            x.append(e[0])
-            y.append(e[1])
+        k, ChiK=lat.FourierTransformation_RealSpace(Chi.Data[0,:,0,:,:,omega]*map.Beta/map.MaxTauBin,
+                KList, "Integer", bound=[[-20,20], [-20,20]])
+        k=np.array(k)
         plt.figure()
-        plt.scatter(x,y,c=ChiK)
+        plt.scatter(k[:, 0],k[:, 1],c=ChiK, s=10, edgecolor="black", linewidth=0)
         c = plt.colorbar(orientation='horizontal')
         c.set_label("magnitude")
         plt.axis('equal')
         if DoesSave:
-            plt.savefig("chiK_Honeycomb.pdf")
+            plt.savefig("chiK_{0}.png".format(lat.Name))
         else:
             plt.show()
-        plt.close()
-
-    elif lat.Name=="Checkerboard":
-        ####2D Checkerboard
-        KList=[]
-        for i in range(-2*lat.L[0], 2*lat.L[0]):
-            for j in range(-2*lat.L[1], 2*lat.L[1]):
-                KList.append((i,j,0))
-        k, ChiK=lat.FourierTransformation_RealSpace(Chi.Data[0,0,0,:,:,omega]*map.Beta/map.MaxTauBin, KList, "Integer")
-        x=[]
-        y=[]
-        for e in k:
-            x.append(e[0])
-            y.append(e[1])
-
-        plt.figure()
-        plt.scatter(x,y,c=ChiK)
-        c = plt.colorbar(orientation='horizontal')
-        c.set_label("magnitude")
-        plt.axis('equal')
-        if DoesSave:
-            plt.savefig("chiK_2DChecker.pdf")
-        else:
-            plt.show()
-            plt.savefig("chiK_2DChecker.jpg")
         plt.close()
 
     elif lat.Name=="3DCheckerboard":
@@ -229,9 +196,9 @@ def PlotChi_2D(Chi, lat, DoesSave=True):
             for k in range(-2*lat.L[2], 2*lat.L[2]+1):
                 KList_hhl.append((i*2*np.pi/lat.L[0],i*2*np.pi/lat.L[1],k*2*np.pi/lat.L[2]))
 
-        k_hl0, ChiK_hl0=lat.FourierTransformation_RealSpace(Chi.Data[0,0,0,:,:,omega]*map.Beta/map.MaxTauBin, KList_hl0, "Real")
+        k_hl0, ChiK_hl0=lat.FourierTransformation_RealSpace(Chi.Data[0,:,0,:,:,omega]*map.Beta/map.MaxTauBin, KList_hl0, "Real")
 
-        k_hhl, ChiK_hhl=lat.FourierTransformation_RealSpace(Chi.Data[0,0,0,:,:,omega]*map.Beta/map.MaxTauBin, KList_hhl, "Real")
+        k_hhl, ChiK_hhl=lat.FourierTransformation_RealSpace(Chi.Data[0,:,0,:,:,omega]*map.Beta/map.MaxTauBin, KList_hhl, "Real")
 
         x_hl0=[]
         y_hl0=[]
@@ -273,7 +240,7 @@ if __name__=="__main__":
     import weight
     import IO
 
-    WeightPara={"NSublat": 4, "L":[16,16, 16],
+    WeightPara={"NSublat": 4, "L":[16,16,16],
             "Beta": 1.5, "MaxTauBin":64}
     Map=weight.IndexMap(**WeightPara)
     l=lat.Lattice("Pyrochlore", Map)
