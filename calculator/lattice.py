@@ -147,8 +147,9 @@ class Lattice:
         data=np.zeros(len(points))+0*1j
         for i in range(len(points)):
         #for vec, coord, sub in points:
-            vec[i,:]=points[i][0]
-            data[i]=Data[points[i][2], self.__Map.CoordiIndex(points[i][1])]
+            if points[i][2]==0:
+                vec[i,:]=points[i][0]
+                data[i]=Data[points[i][2], self.__Map.CoordiIndex(points[i][1])]
                 
         for p in KCoordi:
             if KType=="Integer":
