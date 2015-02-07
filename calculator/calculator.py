@@ -128,19 +128,6 @@ def W_Dyson(W0, Polar, map, Lat):
     Check_Denorminator(Determ,map)
     ChiTensor.LUSolve(lu_piv, -Polar.Data)
     W.LUSolve(lu_piv, JPJ)
-
-    #NSpin, NSub=W0.NSpin, W0.NSublat
-    #I=np.eye(NSpin*NSub).reshape([NSpin,NSub,NSpin,NSub])
-    #Den.LUSolve(lu_piv, I)
-    #Den.Inverse()
-    #Den.Data=np.einsum("ijklvt,klmn->ijmnvt", Den.Data, -Polar.Data[:,:,:,:,0,0])
-    ##Chi = Calculate_Chi(ChiTensor, map)
-    #spinUP=map.Spin2Index(UP,UP)
-    #spinDOWN=map.Spin2Index(DOWN,DOWN)
-    #print "Polar[UP,UP]=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
-    #print "Polar[DOWN, DOWN]=\n", Polar.Data[spinDOWN,0,spinDOWN,0,0,:]
-    #print "Den=\n", Polar.Data[spinDOWN,0,spinDOWN,0,0,:]
-    #plot.PlotChi(Den, Lat)
     return W, ChiTensor, Determ
 
 def G_Dyson(G0, SigmaDeltaT, Sigma, map):
