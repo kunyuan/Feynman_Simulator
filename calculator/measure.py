@@ -4,6 +4,7 @@ import lattice as lat
 from weight import UP,DOWN,IN,OUT
 from logger import *
 import os, sys, weight
+PI=np.pi
 
 class Observable:
     def __init__(self, Map, lat):
@@ -18,13 +19,14 @@ class Observable:
 
     def Measure(self, Chi, Determinate, G):
         self.Append("1-JP", Determinate.min())
-        Chi.FFT("K", "W")
         Factor=self.__Map.Beta/self.__Map.MaxTauBin
         if self.__Lat.Name in ["Square", "Cubic"]:
+            Chi.FFT("K", "W")
             StagKIndex=self.__Map.CoordiIndex([e/2 for e in self.__Map.L])
             self.Append("UnifChi", Chi.Data[0,0,0,0,0,0]*Factor)
             self.Append("StagChi", Chi.Data[0,0,0,0,StagKIndex,0]*Factor)
         elif self.__Lat.Name in ["Checkerboard", "3DCheckerboard"]:
+            Chi.FFT("K", "W")
             StagKIndex=self.__Map.CoordiIndex([0 for e in self.__Map.L])
             self.Append("UnifChi", (Chi.Data[0,0,0,0,0,0]+Chi.Data[0,0,0,1,0,0])*Factor)
             self.Append("StagChi", (Chi.Data[0,0,0,0,StagKIndex,0]-Chi.Data[0,0,0,1,StagKIndex,0])*Factor)
@@ -32,10 +34,10 @@ class Observable:
             self.Append("<S^z_A>", 0.5*(G.Data[UP,0,UP,0,0,-1]-G.Data[DOWN,0,DOWN,0,0,-1]))
             self.Append("<S^z_B>", 0.5*(G.Data[UP,1,UP,1,0,-1]-G.Data[DOWN,1,DOWN,1,0,-1]))
         elif self.__Lat.Name in ["Pyrochlore"]:
-            return
-            #StagKIndex=self.__Map.CoordiIndex([0 for e in self.__Map.L])
-            #self.__History["UnifChi"].append((Chi.Data[0,0,0,0,0,0]+Chi.Data[0,0,0,1,0,0])*Factor)
-            #self.__History["StagChi"].append((Chi.Data[0,0,0,0,StagKIndex,0]-Chi.Data[0,0,0,1,StagKIndex,0])*Factor)
+            Chi.FFT("R", "W")
+            K=(4*PI, 2*PI ,0) #High symmetry point with strongest order
+            self.Append("Chi_X(4Pi,2Pi,0)", 
+                    self.__Lat.FourierTransformation(Chi.Data[0,:,0,:,:,0]*Factor, [K,],"Real"))
         else:
             Assert(False, "model not implemented!")
 

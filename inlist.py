@@ -99,8 +99,8 @@ Dyson["Dyson"]={
     "BetaIncrease": 0.0,
     "SleepTime": 30,
     "Annealing": {
-        "DeltaField": [0.0,  0.0, 0.0, 0.0],
-        "Interval": [-0.1, 0.1, 0.0, 0.0]
+        "DeltaField": [0.5, 0.5, 0.5, 0.5],
+        "Interval": [-0.1, -0.1, -0.1, -0.1]
         }
     }
 

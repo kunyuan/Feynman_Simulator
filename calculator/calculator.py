@@ -193,5 +193,5 @@ def Check_Denorminator(Determ, map):
     pos=np.where(Determ==Determ.min())
     x,t=pos[0][0], pos[1][0]
     log.info("The minmum {0} is at K={1} and Omega={2}".format(Determ.min(), map.IndexToCoordi(x), t))
-    if Determ.min()<0.0:
+    if Determ.min().real<0.0 and Determ.min().imag<1e-4:
         raise DenorminatorTouchZero(Determ.min(), map.IndexToCoordi(x), t)

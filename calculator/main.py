@@ -50,7 +50,7 @@ def Measure(para, Observable, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, C
     data["SigmaDeltaT"]=SigmaDeltaT.ToDict()
     data["Sigma"]=Sigma.ToDict()
     data["Polar"]=Polar.ToDict()
-    #Observable.Measure(Chi, Determ, G)
+    Observable.Measure(Chi, Determ, G)
 
     with DelayedInterrupt():
         try:
@@ -59,8 +59,8 @@ def Measure(para, Observable, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, C
             parameter.Save(ParaFile, para)  #Save Parameters
             Observable.Save(OutputFile)
             #plot what you are interested in
-            #plot.PlotChi(Chi, Lat)
-            plot.PlotSpatial(Chi, Lat, 0, 0, 0) 
+            plot.PlotChiAlongPath(Chi, Lat)
+            #plot.PlotSpatial(Chi, Lat, 0, 0, 0) 
             plot.PlotChi_2D(Chi, Lat)
         except:
             log.info("Output fails due to\n {0}".format(traceback.format_exc()))
@@ -105,12 +105,12 @@ def Dyson(IsDysonOnly, IsNewCalculation, para, Map, Lat):
 
             if IsDysonOnly or IsNewCalculation:
                 log.info("accumulating Sigma/Polar statistics...")
-                #Sigma.Merge(ratio, calc.SigmaSmoothT_FirstOrder(G, W, Map))
-                Sigma=calc.SigmaSmoothT_FirstOrder(G, W, Map)
+                Sigma.Merge(ratio, calc.SigmaSmoothT_FirstOrder(G, W, Map))
+                #Sigma=calc.SigmaSmoothT_FirstOrder(G, W, Map)
                 log.info("calculating G...")
                 G = calc.G_Dyson(G0, SigmaDeltaT, Sigma, Map)
-                #Polar.Merge(ratio, calc.Polar_FirstOrder(G, Map))
-                Polar=calc.Polar_FirstOrder(G, Map)
+                Polar.Merge(ratio, calc.Polar_FirstOrder(G, Map))
+                #Polar=calc.Polar_FirstOrder(G, Map)
             else:
                 log.info("Collecting Sigma/Polar statistics...")
                 Statis=collect.CollectStatis(Map, ParaDyson["Order"])

@@ -175,7 +175,7 @@ def CollectStatis(_map, _order):
             Success+=1.0
     log.info("{0}/{1} statistics files read!".format(int(Success), Total))
     if float(Success)/Total<AcceptRatio:
-        raise CollectStatisFailure("More than {0} statistics files fail to read!".format(AcceptRatio)) 
+        raise CollectStatisFailure("More than {0}% statistics files fail to read!".format(100.0*AcceptRatio)) 
     return (SigmaSmoothT, PolarSmoothT)
 
 def UpdateWeight(StatisCollected, ErrorThreshold, OrderAccepted):
