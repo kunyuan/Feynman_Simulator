@@ -23,7 +23,7 @@ Dyson={
 "Control": {
     "__Execute" : ["python", "./calculator/main.py"],
     "__Duplicate" : 1,
-    "__IsCluster" : True,
+    "__IsCluster" : MonteCarlo["Control"]["__IsCluster"],
     "__AutoRun" : True, 
     "__KeepCPUBusy": False,
     },

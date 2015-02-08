@@ -82,6 +82,10 @@ class JobMonteCarlo(Job):
         else:
         #set Seed here so that each job has it own rng seed
             Dict["Para"]["Markov"]["Seed"] = int(random.random()*2**30)
+        Timer=Dict["Para"]["Markov"]["Timer"]
+        #don't let MC process output at the same time
+        for e in Timer.keys():
+            Timer[e]*=random.uniform(0.8, 1.2)
         return pid, Dict
 
 class JobDyson(Job):
