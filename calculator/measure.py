@@ -39,12 +39,12 @@ class Observable:
             self.Append("Chi_X(4Pi,2Pi,0)", 
                     self.__Lat.FourierTransformation(Chi.Data[0,:,0,:,:,0]*Factor, [K,],"Real"))
             Chi.FFT("R","T")
-            energy=[0 for i in range(self.__Map.MaxTauBin)]
+            energy=np.zeros(self.__Map.MaxTauBin)
             for i in range(self.__Lat.NSublat):
                 for j in range(self.__Lat.NSublat):
                     for l in NN[i][j]:
-                        energy[:]+=Chi.Data[0,i,0,j,self.__Map.CoordiIndex(l),:]/4.0
-            self.Append("Energy", energy[0])
+                        energy+=Chi.Data[0,i,0,j,self.__Map.CoordiIndex(l),:]/4.0
+            self.Append("Energy", np.mean(energy))
         else:
             Assert(False, "model not implemented!")
 
