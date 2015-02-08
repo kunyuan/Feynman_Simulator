@@ -15,7 +15,7 @@ import plot, gc
 #import signal
 #signal.signal(signal.SIGINT, start_pdb)
 
-def Measure(para, Observable, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor):
+def Measure(para, Observable, NearestNeighbor, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor):
     log.info("Measuring...")
     Chi = calc.Calculate_Chi(ChiTensor, Map)
 
@@ -50,7 +50,7 @@ def Measure(para, Observable, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, C
     data["SigmaDeltaT"]=SigmaDeltaT.ToDict()
     data["Sigma"]=Sigma.ToDict()
     data["Polar"]=Polar.ToDict()
-    Observable.Measure(Chi, Determ, G)
+    Observable.Measure(Chi, Determ, G, NearestNeighbor)
 
     with DelayedInterrupt():
         try:
@@ -142,7 +142,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, para, Map, Lat):
         else:
             #everything works prefectly 
             Gold, Wold = G, W
-            Measure(para, Observable, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor)
+            Measure(para, Observable, Factory.NearestNeighbor, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor)
             Factory.DecreaseField(ParaDyson["Annealing"])
             log.info("Version {0} is done!".format(para["Version"]))
             parameter.BroadcastMessage(MessageFile, {"Version": para["Version"], "Beta": Map.Beta})

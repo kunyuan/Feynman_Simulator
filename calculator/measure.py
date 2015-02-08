@@ -17,7 +17,7 @@ class Observable:
             self.__History[Name]=[]
         self.__History[Name].append(Value)
 
-    def Measure(self, Chi, Determinate, G):
+    def Measure(self, Chi, Determinate, G, NN):
         self.Append("1-JP", Determinate.min())
         Factor=self.__Map.Beta/self.__Map.MaxTauBin
         if self.__Lat.Name in ["Square", "Cubic"]:
@@ -38,6 +38,13 @@ class Observable:
             K=(4*PI, 2*PI ,0) #High symmetry point with strongest order
             self.Append("Chi_X(4Pi,2Pi,0)", 
                     self.__Lat.FourierTransformation(Chi.Data[0,:,0,:,:,0]*Factor, [K,],"Real"))
+            Chi.FFT("R","T")
+            energy=[0 for i in range(self.__Map.MaxTauBin)]
+            for i in range(self.__Lat.NSublat):
+                for j in range(self.__Lat.NSublat):
+                    for l in NN[i][j]:
+                        energy[:]+=Chi.Data[0,i,0,j,self.__Map.CoordiIndex(l),:]/4.0
+            self.Append("Energy", energy[0])
         else:
             Assert(False, "model not implemented!")
 

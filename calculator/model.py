@@ -18,6 +18,19 @@ class BareFactory:
         self.__MaxTauBin=self.__Map.MaxTauBin
         self.__Beta=self.__Map.Beta
 
+        self.NearestNeighbor=[]
+        for i in range(Lat.NSublat):
+            self.NearestNeighbor.append([])
+            for j in range(Lat.NSublat):
+                self.NearestNeighbor[i].append([])
+
+        self.NextNearestNeighbor=[]
+        for i in range(Lat.NSublat):
+            self.NextNearestNeighbor.append([])
+            for j in range(Lat.NSublat):
+                self.NextNearestNeighbor[i].append([])
+        
+
     def Build(self):
         #self.BareG and self.BareW must be reinitialized at every time Build() is called
         self.BareG=weight.Weight("SmoothT", self.__Map, "TwoSpins", "AntiSymmetric", "R", "T")
@@ -75,137 +88,132 @@ class BareFactory:
         if LatName=="Checkerboard":
         #NSublat: 2
             Lx,Ly=self.__Map.L
-            subA=0
-            subB=1
-            coordA2B=[(0, 0),(0,Ly-1),(Lx-1,0),(Lx-1,Ly-1)]
-            coordB2A=[(0, 0),(0,   1),(1,   0),(   1,   1)]
-            coordA2A=[(0, 1),(1,   0),(0,Ly-1),(Lx-1,   0)]
-            coordB2B=[(0, 1),(1,   0),(0,Ly-1),(Lx-1,   0)]
+            A,B=0,1
+            self.NearestNeighbor[A][B]=[(0, 0),(0,Ly-1),(Lx-1,0),(Lx-1,Ly-1)]
+            self.NearestNeighbor[B][A]=[(0, 0),(0,   1),(1,   0),(   1,   1)]
+
+            self.NextNearestNeighbor[A][A]=[(0, 1),(1,   0),(0,Ly-1),(Lx-1,   0)]
+            self.NextNearestNeighbor[B][B]=[(0, 1),(1,   0),(0,Ly-1),(Lx-1,   0)]
 
             #J1 interaction A-->B, B-->A
-            for i in coordA2B:
-                self.BareW.Data[spin,subA,spin,subB,self.__Map.CoordiIndex(i)] = J1/4;
-
-            for i in coordB2A:
-                self.BareW.Data[spin,subB,spin,subA,self.__Map.CoordiIndex(i)] = J1/4;
+            for i in range(2):
+                for j in range(2):
+                    for e in self.NearestNeighbor[i][j]:
+                        self.BareW.Data[spin,i,spin,j,self.__Map.CoordiIndex(e)] = J1/4;
 
             #J2 interaction A-->A, B-->B
-            for i in coordA2A:
-                self.BareW.Data[spin,subA,spin,subA,self.__Map.CoordiIndex(i)] = J2/4;
-            for i in coordB2B:
-                self.BareW.Data[spin,subB,spin,subB,self.__Map.CoordiIndex(i)] = J2/4;
+            for i in range(2):
+                for j in range(2):
+                    for e in self.NextNearestNeighbor[i][j]:
+                        self.BareW.Data[spin,i,spin,j,self.__Map.CoordiIndex(e)] = J2/4;
         elif LatName=="Square":
         #NSublat: 1
             Lx,Ly=self.__Map.L
             sub=0
-            coordnn=[(0,1),(1,0),(Lx-1,0),(0,Ly-1)]
-            coordnnn=[(1,1),(Lx-1,1),(1,Ly-1),(Lx-1,Ly-1)]
+
+            self.NearestNeighbor[0][0]=[(0,1),(1,0),(Lx-1,0),(0,Ly-1)]
+            self.NextNearestNeighbor[0][0]=[(1,1),(Lx-1,1),(1,Ly-1),(Lx-1,Ly-1)]
+
             #J1 interaction on nearest neighbors
-            for i in coordnn:
+            for i in self.NearestNeighbor[0][0]:
                 self.BareW.Data[spin,sub,spin,sub,self.__Map.CoordiIndex(i)] = J1/4.0;
             #J2 interaction on next nearest neighbors
-            for i in coordnnn:
+            for i in self.NextNearestNeighbor[0][0]:
                 self.BareW.Data[spin,sub,spin,sub,self.__Map.CoordiIndex(i)] = J2/4.0;
 
         elif LatName=="Honeycomb":
             #NSublat: 2
             Lx,Ly=self.__Map.L
-            subA=0
-            subB=1
-            coordA2B=[(0, 0), (Lx-1, 0), (Lx-1,Ly-1)]
-            coordB2A=[(0, 0), (1,0), (1,1)]
+            A,B=0,1
+            self.NearestNeighbor[A][B]=[(0, 0), (Lx-1, 0), (Lx-1,Ly-1)]
+            self.NearestNeighbor[B][A]=[(0, 0), (1,0), (1,1)]
 
             #J1 interaction A-->B, B-->A
-            for i in coordA2B:
-                self.BareW.Data[spin,subA,spin,subB,self.__Map.CoordiIndex(i)] = J1/4;
-            for i in coordB2A:
-                self.BareW.Data[spin,subB,spin,subA,self.__Map.CoordiIndex(i)] = J1/4;
+            for i in range(2):
+                for j in range(2):
+                    for e in self.NearestNeighbor[i][j]:
+                        self.BareW.Data[spin,i,spin,j,self.__Map.CoordiIndex(e)] = J1/4;
             ##J2 interaction A-->A, B-->B
         elif LatName=="Kagome":
             #NSublat: 2
             Lx,Ly=self.__Map.L
             A,B,C=0,1,2
-            coord=[]
-            for i in range(3):
-                coord.append([])
-                for j in range(3):
-                    coord[i].append([])
-            coord[A][B]=[(0, 0), (1, Ly-1)]
-            coord[A][C]=[(0, 0), (0, Ly-1)]
-            coord[B][A]=[(0, 0), (Lx-1, 1)]
-            coord[B][C]=[(0, 0), (Lx-1, 0)]
-            coord[C][A]=[(0, 0), (0, 1)]
-            coord[C][B]=[(0, 0), (1, 0)]
+            self.NearestNeighbor[A][B]=[(0, 0), (1, Ly-1)]
+            self.NearestNeighbor[A][C]=[(0, 0), (0, Ly-1)]
+            self.NearestNeighbor[B][A]=[(0, 0), (Lx-1, 1)]
+            self.NearestNeighbor[B][C]=[(0, 0), (Lx-1, 0)]
+            self.NearestNeighbor[C][A]=[(0, 0), (0, 1)]
+            self.NearestNeighbor[C][B]=[(0, 0), (1, 0)]
             for i in range(3):
                 for j in range(3):
-                    for e in coord[i][j]:
+                    for e in self.NearestNeighbor[i][j]:
                         self.BareW.Data[spin,i,spin,j,self.__Map.CoordiIndex(e)] = J1/4;
+
         elif LatName=="Cubic":
         #NSublat: 1
             Lx,Ly,Lz=self.__Map.L
             sub=0
-            coordnn=[(1,0,0),(0,1,0),(0,0,1),(Lx-1,0,0),(0,Ly-1,0),(0,0,Lz-1)]
-            #coordnnn=[(1,1),(Lx-1,1),(1,Ly-1),(Lx-1,Ly-1)]
-            coordnnn=[]
+            self.NearestNeighbor[0][0]=[(1,0,0),(0,1,0),(0,0,1),(Lx-1,0,0),(0,Ly-1,0),(0,0,Lz-1)]
+            self.NextNearestNeighbor[0][0]=[]
             #J1 interaction on nearest neighbors
-            for i in coordnn:
+            for i in NearestNeighbor[0][0]:
                 self.BareW.Data[spin,sub,spin,sub,self.__Map.CoordiIndex(i)] = J1/4.0;
             #J2 interaction on next nearest neighbors
-            for i in coordnnn:
+            for i in self.NextNearestNeighbor[0][0]:
                 self.BareW.Data[spin,sub,spin,sub,self.__Map.CoordiIndex(i)] = J2/4.0;
             pass
+
         elif LatName=="Pyrochlore":
         #NSublat: 4
             Lx,Ly,Lz=self.__Map.L
             A,B,C,D=0,1,2,3
-            coord=[]
-            for i in range(4):
-                coord.append([])
-                for j in range(4):
-                    coord[i].append([])
-            coord[A][B]=[(0,0,0),(0,0,Lz-1)]
-            coord[A][C]=[(0,0,0),(Lx-1,0,0)]
-            coord[A][D]=[(0,0,0),(0,Ly-1,0)]
-            coord[B][A]=[(0,0,0),(0,0,1)]
-            coord[B][C]=[(0,0,0),(Lx-1,0,1)]
-            coord[B][D]=[(0,0,0),(0,Ly-1,1)]
-            coord[C][A]=[(0,0,0),(1,0,0)]
-            coord[C][B]=[(0,0,0),(1,0,Lz-1)]
-            coord[C][D]=[(0,0,0),(1,Ly-1,0)]
-            coord[D][A]=[(0,0,0),(0,1,0)]
-            coord[D][B]=[(0,0,0),(0,1,Lz-1)]
-            coord[D][C]=[(0,0,0),(Lx-1,1,0)]
+
+            self.NearestNeighbor[A][B]=[(0,0,0),(0,0,Lz-1)]
+            self.NearestNeighbor[A][C]=[(0,0,0),(Lx-1,0,0)]
+            self.NearestNeighbor[A][D]=[(0,0,0),(0,Ly-1,0)]
+            self.NearestNeighbor[B][A]=[(0,0,0),(0,0,1)]
+            self.NearestNeighbor[B][C]=[(0,0,0),(Lx-1,0,1)]
+            self.NearestNeighbor[B][D]=[(0,0,0),(0,Ly-1,1)]
+            self.NearestNeighbor[C][A]=[(0,0,0),(1,0,0)]
+            self.NearestNeighbor[C][B]=[(0,0,0),(1,0,Lz-1)]
+            self.NearestNeighbor[C][D]=[(0,0,0),(1,Ly-1,0)]
+            self.NearestNeighbor[D][A]=[(0,0,0),(0,1,0)]
+            self.NearestNeighbor[D][B]=[(0,0,0),(0,1,Lz-1)]
+            self.NearestNeighbor[D][C]=[(0,0,0),(Lx-1,1,0)]
 
             for i in range(4):
                 for j in range(4):
-                    for e in coord[i][j]:
+                    for e in self.NearestNeighbor[i][j]:
                         self.BareW.Data[spin,i,spin,j,self.__Map.CoordiIndex(e)] = J1/4;
+
         elif LatName=="3DCheckerboard":
         #NSublat: 2
             Lx,Ly,Lz=self.__Map.L
-            subA=0
-            subB=1
-            coordA2B=[(0, 0, 0),(0,Ly-1,0),(Lx-1,0,0),(Lx-1,Ly-1,0),(Lx-1,Ly-1,1),(0,0,Lz-1)]
-            coordB2A=[(0, 0, 0),(0,   1,0),(1,   0,0),(   1,   1,0),(0,0,1),(1,1,Lz-1)]
-            coordA2A=[(0,1,0),(1,0,0),(0,Ly-1,0),(Lx-1,0,0),
+            A,B=0,1
+
+            self.NearestNeighbor[A][B]=[(0, 0, 0),(0,Ly-1,0),(Lx-1,0,0), \
+                    (Lx-1,Ly-1,0),(Lx-1,Ly-1,1),(0,0,Lz-1)]
+            self.NearestNeighbor[B][A]=[(0, 0, 0),(0,   1,0),(1,   0,0), \
+                    (   1,   1,0),(0,0,1),(1,1,Lz-1)]
+
+            self.NextNearestNeighbor[A][A]=[(0,1,0),(1,0,0),(0,Ly-1,0),(Lx-1,0,0),
                     (Lx-1,Ly-1,1),(0,0,Lz-1),(1,1,Lz-1),(0,0,1),
                     (0,Ly-1,1),(0,1,Lz-1),(1,0,Lz-1),(Lx-1,0,1)]
-            coordB2B=[(0,1,0),(1,0,0),(0,Ly-1,0),(Lx-1,0,0),
+
+            self.NextNearestNeighbor[B][B]=[(0,1,0),(1,0,0),(0,Ly-1,0),(Lx-1,0,0),
                     (Lx-1,Ly-1,1),(1,1,Lz-1),(0,0,Lz-1),(0,0,1),
                     (1,0,Lz-1),(0,1,Lz-1),(Lx-1,0,1),(0,Ly-1,1)]
 
             #J1 interaction A-->B, B-->A
-            for i in coordA2B:
-                self.BareW.Data[spin,subA,spin,subB,self.__Map.CoordiIndex(i)] = J1/4;
-
-            for i in coordB2A:
-                self.BareW.Data[spin,subB,spin,subA,self.__Map.CoordiIndex(i)] = J1/4;
-
+            for i in range(2):
+                for j in range(2):
+                    for e in self.NearestNeighbor[i][j]:
+                        self.BareW.Data[spin,i,spin,j,self.__Map.CoordiIndex(e)] = J1/4;
             ##J2 interaction A-->A, B-->B
-            for i in coordA2A:
-                self.BareW.Data[spin,subA,spin,subA,self.__Map.CoordiIndex(i)] = J2/4;
-            for i in coordB2B:
-                self.BareW.Data[spin,subB,spin,subB,self.__Map.CoordiIndex(i)] = J2/4;
+            for i in range(2):
+                for j in range(2):
+                    for e in self.NextNearestNeighbor[i][j]:
+                        self.BareW.Data[spin,i,spin,j,self.__Map.CoordiIndex(e)] = J2/4;
         else:
             Assert(False, "Lattice {0} has not been implemented yet!".format(LatName))
 
