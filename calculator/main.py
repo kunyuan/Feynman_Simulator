@@ -13,6 +13,7 @@ import plot, gc
     #pdb.set_trace()
 
 #import signal
+#start in pdb mode after Ctrl-C
 #signal.signal(signal.SIGINT, start_pdb)
 
 def Measure(para, Observable, NearestNeighbor, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor):
@@ -149,15 +150,9 @@ def Dyson(IsDysonOnly, IsNewCalculation, para, Map, Lat):
         finally:
             if not IsDysonOnly and not IsNewCalculation:
                 time.sleep(ParaDyson["SleepTime"])
-            print red("Memory Usage before collecting: {0} MB".format(memory_usage()))
-            with open("mem_before.txt", "a") as f:
-                f.write(str(memory_usage())+"\n")
+            log.info(green("Memory Usage before collecting: {0} MB".format(memory_usage())))
             gc.collect()
-            gc.collect()
-            print "Garbage lefted:", gc.garbage
-            print red("Memory Usage : {0} MB".format(memory_usage()))
-            with open("mem.txt", "a") as f:
-                f.write(str(memory_usage())+"\n")
+            log.info(green("Memory Usage : {0} MB".format(memory_usage())))
 
 if __name__=="__main__":
     parser = argparse.ArgumentParser()
@@ -172,9 +167,7 @@ if __name__=="__main__":
     elif args.file:
         InputFile=os.path.abspath(args.file)
     else:
-        InputFile=os.path.join(workspace, "infile/_in_DYSON_0")
-
-        #Assert(False, "Do not understand the argument!")
+        Assert(False, "Do not understand the argument!")
 
     job, para=parameter.Load(InputFile)
     global ParaFile
