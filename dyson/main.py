@@ -1,11 +1,14 @@
 #!/usr/bin/env python
+from logger import *
+import sys
+#log.info("Python Version: {0}".format(sys.version))
 import numpy as np
 import calculator as calc
+print dir(calc)
 import lattice as lat
 import collect
 from weight import UP,DOWN,IN,OUT
-from logger import *
-import os, sys, model, weight, measure, parameter, plot, argparse, time, traceback
+import os, model, weight, measure, parameter, plot, argparse, time, traceback
 import plot, gc
 
 #def start_pdb(signal, trace):
@@ -92,6 +95,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, para, Map, Lat):
 
     if IsDysonOnly or IsNewCalculation:
         #not load StatisFile
+	log.info("Do not load statisfile...")
         Sigma=weight.Weight("SmoothT", Map, "TwoSpins", "AntiSymmetric","R","T")
         Polar=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
     while True:
@@ -102,7 +106,9 @@ def Dyson(IsDysonOnly, IsNewCalculation, para, Map, Lat):
             #ratio=None   #set this will not use accumulation!
             ratio = para["Version"]/(para["Version"]+10.0)
             G0,W0=Factory.Build()
+	    log.info("calculating SigmaDeltaT..")
             SigmaDeltaT.Merge(ratio, calc.SigmaDeltaT_FirstOrder(G, W0, Map))
+	    log.info("SigmaDeltaT is done")
 
             if IsDysonOnly or IsNewCalculation:
                 log.info("accumulating Sigma/Polar statistics...")
@@ -122,7 +128,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, para, Map, Lat):
 
         except calc.DenorminatorTouchZero as err:
             #failure due to denorminator touch zero
-            log.warning(green("Version {0} fails due to:\n{1}".format(para["Version"],err)))
+            log.info(green("Version {0} fails due to:\n{1}".format(para["Version"],err)))
             Factory.RevertField(ParaDyson["Annealing"])
             G, W = Gold, Wold
             SigmaDeltaT.RollBack()
@@ -130,7 +136,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, para, Map, Lat):
             Polar.RollBack()
         except collect.CollectStatisFailure as err:
             #failure due to statis files collection
-            log.warning(green("Version {0} fails due to:\n{1}".format(para["Version"],err)))
+            log.info(green("Version {0} fails due to:\n{1}".format(para["Version"],err)))
             G, W = Gold, Wold
             SigmaDeltaT.RollBack()
             Sigma.RollBack()
@@ -141,22 +147,22 @@ def Dyson(IsDysonOnly, IsNewCalculation, para, Map, Lat):
             sys.exit(0)
         except:
             #unknown reason failure, just fail dyson completely for safty
-            log.error(red("Dyson fails due to\n {1}".format(para["Version"], traceback.format_exc())))
-            G, W = Gold, Wold
+            log.info(red("Dyson fails due to\n {1}".format(para["Version"], traceback.format_exc())))
             sys.exit(0)
         else:
             #everything works prefectly 
+	    log.info("everything is going well!")
             Gold, Wold = G, W
             Measure(para, Observable, Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor)
             Factory.DecreaseField(ParaDyson["Annealing"])
             log.info("Version {0} is done!".format(para["Version"]))
             parameter.BroadcastMessage(MessageFile, {"Version": para["Version"], "Beta": Map.Beta})
         finally:
-            if not IsDysonOnly and not IsNewCalculation:
-                time.sleep(ParaDyson["SleepTime"])
             log.info(green("Memory Usage before collecting: {0} MB".format(memory_usage())))
             gc.collect()
             log.info(green("Memory Usage : {0} MB".format(memory_usage())))
+            if not IsDysonOnly and not IsNewCalculation:
+                time.sleep(ParaDyson["SleepTime"])
 
 if __name__=="__main__":
     parser = argparse.ArgumentParser()

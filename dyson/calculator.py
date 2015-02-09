@@ -5,6 +5,7 @@ import parameter as para
 from weight import UP,DOWN,IN,OUT
 import weight, plot
 from logger import *
+print "calculator"
 
 def SigmaSmoothT_FirstOrder(G, W, map):
     '''Fock diagram'''

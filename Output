@@ -1,0 +1,1853 @@
+2.7.9 |Continuum Analytics, Inc.| (default, Dec 15 2014, 10:33:51) 
+[GCC 4.4.7 20120313 (Red Hat 4.4.7-1)]
+{'IsMeasure': False, 'K': 1, 'OUT': 1, 'IsDelta': False, 'IN': 0}
+[MC][INFO][15/1/9 22:55:59]@[main.cpp:63]
+Markov is started!
+
+[MC][INFO][15/1/9 22:55:59]@[envMonteCarlo.cpp:117]
+Start Annealing...
+
+[MC][INFO][15/1/9 22:55:59]@[envMonteCarlo.cpp:134]
+Annealled to:
+{'Beta': 0.8, 'Version': 248}
+
+[MC][INFO][15/1/9 22:56:32]@[markov.cpp:195]
+============================================================
+DiagCounter: 250810000
+CREATE_WORM:
+	   Order 1:         113531           9983      0.0879319
+	   Order 2:         107736          19150       0.177749
+	   Order 3:         151130          37911        0.25085
+	 Summation:         372397          67044       0.180034
+DELETE_WORM:
+	   Order 1:           9982           9982              1
+	   Order 2:          19150          19150              1
+	   Order 3:          37911          37911              1
+	 Summation:          67043          67043              1
+MOVE_WORM_G:
+	   Order 2:         620611         560656       0.903394
+	   Order 3:          94994          79049       0.832147
+	 Summation:         715605         639705       0.893936
+MOVE_WORM_W:
+	   Order 2:          98052          98052              1
+	   Order 3:         103796         103796              1
+	 Summation:         201848         201848              1
+RECONNECT:
+	   Order 1:          13966          13363       0.956824
+	   Order 2:          72860          71197       0.977175
+	   Order 3:          57870          56487       0.976102
+	 Summation:         144696         141047       0.974782
+ADD_INTERACTION:
+	   Order 1:    1.14911e+07         158436      0.0137877
+	   Order 2:         986146           6905     0.00700201
+	 Summation:    1.24773e+07         165341      0.0132514
+DEL_INTERACTION:
+	   Order 2:         158463         158463              1
+	   Order 3:           6847           6847              1
+	 Summation:         165310         165310              1
+ADD_DELTA_INTERACTION:
+	   Order 1:    1.14872e+07          35525     0.00309257
+	   Order 2:         986201           3557     0.00360677
+	 Summation:    1.24734e+07          39082     0.00313323
+DEL_DELTA_INTERACTION:
+	   Order 2:          35498          35498              1
+	   Order 3:           3615           3615              1
+	 Summation:          39113          39113              1
+CHANGE_TAU_VERTEX:
+	   Order 1:         160726         155749       0.969034
+	   Order 2:         134235         131117       0.976772
+	   Order 3:         133710         130824       0.978416
+	 Summation:         428671         417690       0.974384
+CHANGE_R_VERTEX:
+	None
+CHANGE_R_LOOP:
+	   Order 1:         161272         161272              1
+	   Order 2:         134142         134142              1
+	   Order 3:         205856          28710       0.139466
+	 Summation:         501270         324124       0.646606
+CHANGE_MEASURE_G2W:
+	   Order 1:          81310          66033       0.812114
+	   Order 2:          61796          54696       0.885106
+	   Order 3:          51152          48548       0.949093
+	 Summation:         194258         169277       0.871403
+CHANGE_MEASURE_W2G:
+	   Order 1:          78584          65986       0.839687
+	   Order 2:          72155          54739       0.758631
+	   Order 3:         109964          48551       0.441517
+	 Summation:         260703         169276       0.649306
+CHANGE_CONTINUS2DELTA:
+	   Order 2:          97510              0              0
+	   Order 3:          97556          39744       0.407397
+	 Summation:         195066          39744       0.203746
+CHANGE_DELTA2CONTINUS:
+	   Order 3:          73301          39713        0.54178
+	 Summation:          73301          39713        0.54178
+CHANGE_SPIN_VERTEX:
+	None
+JUMP_TO_ORDER0:
+	   Order 1:         161071          34845       0.216333
+	 Summation:         161071          34845       0.216333
+JUMP_BACK_TO_ORDER1:
+	   Order 0:          34845          34845              1
+	 Summation:          34845          34845              1
+------------------------------------------------------------
+ADD_INTERACTION<------>DEL_INTERACTION:
+	   Order 1:         158436         158463      0.0479627
+	   Order 2:           6905           6847        0.49459
+	 Summation:         165341         165310      0.0539109
+ADD_DELTA_INTERACTION<------>DEL_DELTA_INTERACTION:
+	   Order 1:          35525          35498       0.101313
+	   Order 2:           3557           3615        0.68487
+	 Summation:          39082          39113       0.110859
+CHANGE_MEASURE_G2W<------>CHANGE_MEASURE_W2G:
+	   Order 1:          66033          65986       0.129354
+	   Order 2:          54696          54739       0.129984
+	   Order 3:          48548          48551     0.00962751
+	 Summation:         169277         169276     0.00171865
+CHANGE_CONTINUS2DELTA<------>CHANGE_DELTA2CONTINUS:
+	   Order 3:          39744          39713       0.109975
+	 Summation:          39744          39713       0.109975
+============================================================
+
+
+[MC][INFO][15/1/9 22:56:33]@[envMonteCarlo.cpp:117]
+Start Annealing...
+
+[MC][INFO][15/1/9 22:56:33]@[envMonteCarlo.cpp:122]
+Status has not been updated yet since the last annealing!
+
+[MC][INFO][15/1/9 22:56:34]@[envMonteCarlo.cpp:73]
+Start saving data...
+
+dumping <type 'dict'> to file <HDF5 file "0_MC_statis.hkl" (mode r+)>
+[MC][INFO][15/1/9 22:56:34]@[envMonteCarlo.cpp:82]
+Saving data is done!
+
+[MC][INFO][15/1/9 22:57:5]@[markov.cpp:195]
+============================================================
+DiagCounter: 496938000
+CREATE_WORM:
+	   Order 1:         302634          26609      0.0879247
+	   Order 2:         289525          51953       0.179442
+	   Order 3:         371762          93101       0.250432
+	 Summation:         963921         171663       0.178088
+DELETE_WORM:
+	   Order 1:          26608          26608              1
+	   Order 2:          51953          51953              1
+	   Order 3:          93101          93101              1
+	 Summation:         171662         171662              1
+MOVE_WORM_G:
+	   Order 2:    1.43294e+06    1.30214e+06       0.908714
+	   Order 3:         235095         195352       0.830949
+	 Summation:    1.66804e+06    1.49749e+06       0.897754
+MOVE_WORM_W:
+	   Order 2:         263980         263980              1
+	   Order 3:         259153         259153              1
+	 Summation:         523133         523133              1
+RECONNECT:
+	   Order 1:          37517          35890       0.956633
+	   Order 2:         196602         191890       0.976033
+	   Order 3:         145468         141887       0.975383
+	 Summation:         379587         369667       0.973866
+ADD_INTERACTION:
+	   Order 1:    2.19839e+07         378464      0.0172155
+	   Order 2:      2.311e+06          17045     0.00737559
+	 Summation:    2.42949e+07         395509      0.0162795
+DEL_INTERACTION:
+	   Order 2:         378430         378430              1
+	   Order 3:          17051          17051              1
+	 Summation:         395481         395481              1
+ADD_DELTA_INTERACTION:
+	   Order 1:    2.19882e+07          85661     0.00389577
+	   Order 2:     2.3126e+06           8751     0.00378404
+	 Summation:    2.43008e+07          94412     0.00388514
+DEL_DELTA_INTERACTION:
+	   Order 2:          85694          85694              1
+	   Order 3:           8745           8745              1
+	 Summation:          94439          94439              1
+CHANGE_TAU_VERTEX:
+	   Order 1:         429460         416075       0.968833
+	   Order 2:         360473         351949       0.976353
+	   Order 3:         334290         327249       0.978937
+	 Summation:    1.12422e+06    1.09527e+06       0.974249
+CHANGE_R_VERTEX:
+	None
+CHANGE_R_LOOP:
+	   Order 1:         430160         430160              1
+	   Order 2:         359704         359704              1
+	   Order 3:         508917          75732        0.14881
+	 Summation:    1.29878e+06         865596       0.666468
+CHANGE_MEASURE_G2W:
+	   Order 1:         217970         176799       0.811116
+	   Order 2:         165850         147019       0.886458
+	   Order 3:         129332         122223       0.945033
+	 Summation:         513152         446041       0.869218
+CHANGE_MEASURE_W2G:
+	   Order 1:         210575         176789       0.839554
+	   Order 2:         193977         147055       0.758105
+	   Order 3:         270401         122196       0.451907
+	 Summation:         674953         446040       0.660846
+CHANGE_CONTINUS2DELTA:
+	   Order 2:         262725              0              0
+	   Order 3:         244390          96189       0.393588
+	 Summation:         507115          96189       0.189679
+CHANGE_DELTA2CONTINUS:
+	   Order 3:         176914          96162       0.543552
+	 Summation:         176914          96162       0.543552
+CHANGE_SPIN_VERTEX:
+	None
+JUMP_TO_ORDER0:
+	   Order 1:         429210          92087        0.21455
+	 Summation:         429210          92087        0.21455
+JUMP_BACK_TO_ORDER1:
+	   Order 0:          92087          92087              1
+	 Summation:          92087          92087              1
+------------------------------------------------------------
+ADD_INTERACTION<------>DEL_INTERACTION:
+	   Order 1:         378464         378430      0.0390806
+	   Order 2:          17045          17051      0.0324937
+	 Summation:         395509         395481      0.0314827
+ADD_DELTA_INTERACTION<------>DEL_DELTA_INTERACTION:
+	   Order 1:          85661          85694      0.0797197
+	   Order 2:           8751           8745      0.0453609
+	 Summation:          94412          94439      0.0621304
+CHANGE_MEASURE_G2W<------>CHANGE_MEASURE_W2G:
+	   Order 1:         176799         176789      0.0168171
+	   Order 2:         147019         147055      0.0663856
+	   Order 3:         122223         122196       0.054613
+	 Summation:         446041         446040     0.00105876
+CHANGE_CONTINUS2DELTA<------>CHANGE_DELTA2CONTINUS:
+	   Order 3:          96189          96162      0.0615625
+	 Summation:          96189          96162      0.0615625
+============================================================
+
+
+[MC][INFO][15/1/9 22:57:7]@[envMonteCarlo.cpp:117]
+Start Annealing...
+
+[MC][INFO][15/1/9 22:57:7]@[envMonteCarlo.cpp:122]
+Status has not been updated yet since the last annealing!
+
+[MC][INFO][15/1/9 22:57:9]@[envMonteCarlo.cpp:73]
+Start saving data...
+
+dumping <type 'dict'> to file <HDF5 file "0_MC_statis.hkl" (mode r+)>
+[MC][INFO][15/1/9 22:57:9]@[envMonteCarlo.cpp:82]
+Saving data is done!
+
+[MC][INFO][15/1/9 22:57:31]@[envMonteCarlo.cpp:94]
+Start adjusting OrderReweight...
+
+[MC][INFO][15/1/9 22:57:31]@[envMonteCarlo.cpp:102]
+Reweighted to:
+1  2.63814e-05  0.000988873  0.00184668  
+Worm Reweighted to:
+0.00281224
+Polar Reweighted to:
+0.0471383
+
+[MC][INFO][15/1/9 22:57:38]@[markov.cpp:195]
+============================================================
+DiagCounter: 762781000
+CREATE_WORM:
+	   Order 1:         507381          44173      0.0870608
+	   Order 2:         496239          85716       0.172731
+	   Order 3:         867874         163983       0.188948
+	 Summation:    1.87149e+06         293872       0.157025
+DELETE_WORM:
+	   Order 1:          44173          44173              1
+	   Order 2:          85716          85716              1
+	   Order 3:         163983         163983              1
+	 Summation:         293872         293872              1
+MOVE_WORM_G:
+	   Order 2:    2.38845e+06    2.16291e+06        0.90557
+	   Order 3:         410505         340754       0.830085
+	 Summation:    2.79896e+06    2.50367e+06       0.894499
+MOVE_WORM_W:
+	   Order 2:         431331         431331              1
+	   Order 3:         451273         451273              1
+	 Summation:         882604         882604              1
+RECONNECT:
+	   Order 1:          62319          59606       0.956466
+	   Order 2:         321398         313769       0.976263
+	   Order 3:         252436         246287       0.975641
+	 Summation:         636153         619662       0.974077
+ADD_INTERACTION:
+	   Order 1:    2.90024e+07         597221      0.0205921
+	   Order 2:    3.84839e+06          29033      0.0075442
+	 Summation:    3.28508e+07         626254      0.0190636
+DEL_INTERACTION:
+	   Order 2:         597219         597125       0.999843
+	   Order 3:          29026          29026              1
+	 Summation:         626245         626151        0.99985
+ADD_DELTA_INTERACTION:
+	   Order 1:    2.90062e+07         147526     0.00508601
+	   Order 2:    3.84828e+06          15467      0.0040192
+	 Summation:    3.28545e+07         162993     0.00496105
+DEL_DELTA_INTERACTION:
+	   Order 2:         147768         147622       0.999012
+	   Order 3:          15474          15474              1
+	 Summation:         163242         163096       0.999106
+CHANGE_TAU_VERTEX:
+	   Order 1:         720364         697812       0.968694
+	   Order 2:         618145         603577       0.976433
+	   Order 3:         749999         734233       0.978979
+	 Summation:    2.08851e+06    2.03562e+06       0.974678
+CHANGE_R_VERTEX:
+	None
+CHANGE_R_LOOP:
+	   Order 1:         721901         721901              1
+	   Order 2:         617047         617047              1
+	   Order 3:    1.19943e+06         175660       0.146452
+	 Summation:    2.53838e+06    1.51461e+06       0.596682
+CHANGE_MEASURE_G2W:
+	   Order 1:         367960         294726       0.800973
+	   Order 2:         296610         242760       0.818448
+	   Order 3:         390080         217927       0.558673
+	 Summation:    1.05465e+06         755413       0.716269
+CHANGE_MEASURE_W2G:
+	   Order 1:         350925         294775       0.839994
+	   Order 2:         320240         242733       0.757972
+	   Order 3:         475720         217905       0.458053
+	 Summation:    1.14688e+06         755413       0.658665
+CHANGE_CONTINUS2DELTA:
+	   Order 2:         456196              0              0
+	   Order 3:         591856         246475       0.416444
+	 Summation:    1.04805e+06         246475       0.235174
+CHANGE_DELTA2CONTINUS:
+	   Order 3:         452919         246372       0.543965
+	 Summation:         452919         246372       0.543965
+CHANGE_SPIN_VERTEX:
+	None
+JUMP_TO_ORDER0:
+	   Order 1:         720817         158556       0.219967
+	 Summation:         720817         158556       0.219967
+JUMP_BACK_TO_ORDER1:
+	   Order 0:    3.94784e+06         158555      0.0401625
+	 Summation:    3.94784e+06         158555      0.0401625
+------------------------------------------------------------
+ADD_INTERACTION<------>DEL_INTERACTION:
+	   Order 1:         597221         597125      0.0878428
+	   Order 2:          29033          29026      0.0290511
+	 Summation:         626254         626151      0.0920375
+ADD_DELTA_INTERACTION<------>DEL_DELTA_INTERACTION:
+	   Order 1:         147526         147622       0.176706
+	   Order 2:          15467          15474      0.0397952
+	 Summation:         162993         163096       0.180372
+CHANGE_MEASURE_G2W<------>CHANGE_MEASURE_W2G:
+	   Order 1:         294726         294775      0.0638196
+	   Order 2:         242760         242733      0.0387501
+	   Order 3:         217927         217905      0.0333245
+	 Summation:         755413         755413              0
+CHANGE_CONTINUS2DELTA<------>CHANGE_DELTA2CONTINUS:
+	   Order 3:         246475         246372       0.146717
+	 Summation:         246475         246372       0.146717
+============================================================
+
+
+[MC][INFO][15/1/9 22:57:41]@[envMonteCarlo.cpp:117]
+Start Annealing...
+
+[MC][INFO][15/1/9 22:57:41]@[envMonteCarlo.cpp:122]
+Status has not been updated yet since the last annealing!
+
+[MC][INFO][15/1/9 22:57:44]@[envMonteCarlo.cpp:73]
+Start saving data...
+
+dumping <type 'dict'> to file <HDF5 file "0_MC_statis.hkl" (mode r+)>
+[MC][INFO][15/1/9 22:57:44]@[envMonteCarlo.cpp:82]
+Saving data is done!
+
+[MC][INFO][15/1/9 22:58:11]@[markov.cpp:195]
+============================================================
+DiagCounter: 1141305000
+CREATE_WORM:
+	   Order 1:         523121          44226      0.0845426
+	   Order 2:         553521          86274       0.155864
+	   Order 3:    1.54386e+06         173118       0.112134
+	 Summation:     2.6205e+06         303618       0.115863
+DELETE_WORM:
+	   Order 1:          44226          44226              1
+	   Order 2:          86274          86274              1
+	   Order 3:         173118         173118              1
+	 Summation:         303618         303618              1
+MOVE_WORM_G:
+	   Order 2:    2.39661e+06     2.1699e+06       0.905403
+	   Order 3:         433345         358947       0.828317
+	 Summation:    2.82996e+06    2.52884e+06       0.893599
+MOVE_WORM_W:
+	   Order 2:         433695         433695              1
+	   Order 3:         476458         476458              1
+	 Summation:         910153         910153              1
+RECONNECT:
+	   Order 1:          62399          59683       0.956474
+	   Order 2:         323177         315502       0.976251
+	   Order 3:         265870         259401       0.975669
+	 Summation:         651446         634586       0.974119
+ADD_INTERACTION:
+	   Order 1:    2.90034e+07         598110      0.0206221
+	   Order 2:    3.86246e+06          30428     0.00787787
+	 Summation:    3.28658e+07         628538      0.0191244
+DEL_INTERACTION:
+	   Order 2:         598499         598016       0.999193
+	   Order 3:          30415          30415              1
+	 Summation:         628914         628431       0.999232
+ADD_DELTA_INTERACTION:
+	   Order 1:    2.90072e+07         147843     0.00509677
+	   Order 2:     3.8622e+06          16350     0.00423334
+	 Summation:    3.28694e+07         164193     0.00499532
+DEL_DELTA_INTERACTION:
+	   Order 2:         148568         147937       0.995753
+	   Order 3:          16363          16363              1
+	 Summation:         164931         164300       0.996174
+CHANGE_TAU_VERTEX:
+	   Order 1:         744056         720680       0.968583
+	   Order 2:         690065         673755       0.976365
+	   Order 3:    1.24197e+06    1.21612e+06       0.979185
+	 Summation:    2.67609e+06    2.61055e+06        0.97551
+CHANGE_R_VERTEX:
+	None
+CHANGE_R_LOOP:
+	   Order 1:         745623         745623              1
+	   Order 2:         689360         689360              1
+	   Order 3:    2.13756e+06         282013       0.131932
+	 Summation:    3.57254e+06      1.717e+06       0.480609
+CHANGE_MEASURE_G2W:
+	   Order 1:         390895         295229       0.755264
+	   Order 2:         366898         244710        0.66697
+	   Order 3:         864920         242316        0.28016
+	 Summation:    1.62271e+06         782255       0.482066
+CHANGE_MEASURE_W2G:
+	   Order 1:         351428         295278       0.840223
+	   Order 2:         322189         244682       0.759436
+	   Order 3:         500156         242295       0.484439
+	 Summation:    1.17377e+06         782255       0.666445
+CHANGE_CONTINUS2DELTA:
+	   Order 2:         527455              0              0
+	   Order 3:    1.07476e+06         490370       0.456259
+	 Summation:    1.60222e+06         490370       0.306057
+CHANGE_DELTA2CONTINUS:
+	   Order 3:         900705         490263        0.54431
+	 Summation:         900705         490263        0.54431
+CHANGE_SPIN_VERTEX:
+	None
+JUMP_TO_ORDER0:
+	   Order 1:         744328         182067       0.244606
+	 Summation:         744328         182067       0.244606
+JUMP_BACK_TO_ORDER1:
+	   Order 0:    2.27735e+07         182066     0.00799466
+	 Summation:    2.27735e+07         182066     0.00799466
+------------------------------------------------------------
+ADD_INTERACTION<------>DEL_INTERACTION:
+	   Order 1:         598110         598016      0.0859487
+	   Order 2:          30428          30415      0.0527033
+	 Summation:         628538         628431       0.095438
+ADD_DELTA_INTERACTION<------>DEL_DELTA_INTERACTION:
+	   Order 1:         147843         147937        0.17284
+	   Order 2:          16350          16363      0.0718759
+	 Summation:         164193         164300        0.18669
+CHANGE_MEASURE_G2W<------>CHANGE_MEASURE_W2G:
+	   Order 1:         295229         295278      0.0637652
+	   Order 2:         244710         244682      0.0400248
+	   Order 3:         242316         242295      0.0301663
+	 Summation:         782255         782255              0
+CHANGE_CONTINUS2DELTA<------>CHANGE_DELTA2CONTINUS:
+	   Order 3:         490370         490263       0.108051
+	 Summation:         490370         490263       0.108051
+============================================================
+
+
+[MC][INFO][15/1/9 22:58:15]@[envMonteCarlo.cpp:117]
+Start Annealing...
+
+[MC][INFO][15/1/9 22:58:15]@[envMonteCarlo.cpp:122]
+Status has not been updated yet since the last annealing!
+
+[MC][INFO][15/1/9 22:58:19]@[envMonteCarlo.cpp:73]
+Start saving data...
+
+dumping <type 'dict'> to file <HDF5 file "0_MC_statis.hkl" (mode r+)>
+[MC][INFO][15/1/9 22:58:19]@[envMonteCarlo.cpp:82]
+Saving data is done!
+
+[MC][INFO][15/1/9 22:58:44]@[markov.cpp:195]
+============================================================
+DiagCounter: 1514040000
+CREATE_WORM:
+	   Order 1:         538308          44281      0.0822596
+	   Order 2:         619468          86944       0.140353
+	   Order 3:    2.36368e+06         183972       0.077833
+	 Summation:    3.52145e+06         315197      0.0895077
+DELETE_WORM:
+	   Order 1:          44281          44281              1
+	   Order 2:          86944          86944              1
+	   Order 3:         183972         183972              1
+	 Summation:         315197         315197              1
+MOVE_WORM_G:
+	   Order 2:    2.40696e+06    2.17874e+06       0.905182
+	   Order 3:         459724         380076       0.826748
+	 Summation:    2.86669e+06    2.55882e+06       0.892604
+MOVE_WORM_W:
+	   Order 2:         436506         436506              1
+	   Order 3:         505347         505347              1
+	 Summation:         941853         941853              1
+RECONNECT:
+	   Order 1:          62455          59738       0.956497
+	   Order 2:         325224         317501       0.976253
+	   Order 3:         281906         275107       0.975882
+	 Summation:         669585         652346       0.974254
+ADD_INTERACTION:
+	   Order 1:    2.90052e+07         599101      0.0206549
+	   Order 2:    3.87915e+06          32072     0.00826779
+	 Summation:    3.28844e+07         631173      0.0191937
+DEL_INTERACTION:
+	   Order 2:         599937         599009       0.998453
+	   Order 3:          32090          32090              1
+	 Summation:         632027         631099       0.998532
+ADD_DELTA_INTERACTION:
+	   Order 1:     2.9009e+07         148291      0.0051119
+	   Order 2:    3.87919e+06          17395     0.00448418
+	 Summation:    3.28882e+07         165686     0.00503786
+DEL_DELTA_INTERACTION:
+	   Order 2:         149677         148383       0.991355
+	   Order 3:          17377          17377              1
+	 Summation:         167054         165760       0.992254
+CHANGE_TAU_VERTEX:
+	   Order 1:         767167         743010       0.968511
+	   Order 2:         772223         753923       0.976302
+	   Order 3:    1.85227e+06     1.8139e+06       0.979282
+	 Summation:    3.39166e+06    3.31083e+06       0.976167
+CHANGE_R_VERTEX:
+	None
+CHANGE_R_LOOP:
+	   Order 1:         768678         768678              1
+	   Order 2:         772781         772781              1
+	   Order 3:    3.27914e+06         419195       0.127837
+	 Summation:     4.8206e+06    1.96065e+06       0.406724
+CHANGE_MEASURE_G2W:
+	   Order 1:         413462         295744       0.715287
+	   Order 2:         447251         246924       0.552093
+	   Order 3:    1.45292e+06         272126       0.187296
+	 Summation:    2.31364e+06         814794        0.35217
+CHANGE_MEASURE_W2G:
+	   Order 1:         351943         295793       0.840457
+	   Order 2:         324405         246898        0.76108
+	   Order 3:         530022         272103       0.513381
+	 Summation:    1.20637e+06         814794        0.67541
+CHANGE_CONTINUS2DELTA:
+	   Order 2:         608696              0              0
+	   Order 3:    1.67502e+06         779080       0.465117
+	 Summation:    2.28372e+06         779080       0.341146
+CHANGE_DELTA2CONTINUS:
+	   Order 3:    1.43149e+06         779006       0.544192
+	 Summation:    1.43149e+06         779006       0.544192
+CHANGE_SPIN_VERTEX:
+	None
+JUMP_TO_ORDER0:
+	   Order 1:         767230         204969       0.267155
+	 Summation:         767230         204969       0.267155
+JUMP_BACK_TO_ORDER1:
+	   Order 0:    4.10768e+07         204968     0.00498988
+	 Summation:    4.10768e+07         204968     0.00498988
+------------------------------------------------------------
+ADD_INTERACTION<------>DEL_INTERACTION:
+	   Order 1:         599101         599009      0.0840503
+	   Order 2:          32072          32090      0.0710614
+	 Summation:         631173         631099      0.0658651
+ADD_DELTA_INTERACTION<------>DEL_DELTA_INTERACTION:
+	   Order 1:         148291         148383       0.168907
+	   Order 2:          17395          17377       0.096529
+	 Summation:         165686         165760       0.128536
+CHANGE_MEASURE_G2W<------>CHANGE_MEASURE_W2G:
+	   Order 1:         295744         295793      0.0637096
+	   Order 2:         246924         246898      0.0369988
+	   Order 3:         272126         272103      0.0311772
+	 Summation:         814794         814794              0
+CHANGE_CONTINUS2DELTA<------>CHANGE_DELTA2CONTINUS:
+	   Order 3:         779080         779006      0.0592838
+	 Summation:         779080         779006      0.0592838
+============================================================
+
+
+[MC][INFO][15/1/9 22:58:49]@[envMonteCarlo.cpp:117]
+Start Annealing...
+
+[MC][INFO][15/1/9 22:58:49]@[envMonteCarlo.cpp:122]
+Status has not been updated yet since the last annealing!
+
+[MC][INFO][15/1/9 22:58:54]@[envMonteCarlo.cpp:73]
+Start saving data...
+
+dumping <type 'dict'> to file <HDF5 file "0_MC_statis.hkl" (mode r+)>
+[MC][INFO][15/1/9 22:58:54]@[envMonteCarlo.cpp:82]
+Saving data is done!
+
+[MC][INFO][15/1/9 22:59:3]@[envMonteCarlo.cpp:94]
+Start adjusting OrderReweight...
+
+[MC][INFO][15/1/9 22:59:3]@[envMonteCarlo.cpp:102]
+Reweighted to:
+1  0.000439267  0.00275511  0.00339529  
+Worm Reweighted to:
+0.0274445
+Polar Reweighted to:
+1.39214
+
+[MC][INFO][15/1/9 22:59:17]@[markov.cpp:195]
+============================================================
+DiagCounter: 1849232000
+CREATE_WORM:
+	   Order 1:         601542          46895       0.077958
+	   Order 2:         742763          93681       0.126125
+	   Order 3:    3.45825e+06         265768      0.0768505
+	 Summation:    4.80255e+06         406344        0.08461
+DELETE_WORM:
+	   Order 1:          46895          46895              1
+	   Order 2:          93681          93681              1
+	   Order 3:         265768         265768              1
+	 Summation:         406344         406344              1
+MOVE_WORM_G:
+	   Order 2:    2.58756e+06    2.34056e+06       0.904541
+	   Order 3:         659975         544668       0.825286
+	 Summation:    3.24754e+06    2.88523e+06       0.888435
+MOVE_WORM_W:
+	   Order 2:         470258         470258              1
+	   Order 3:         724679         724679              1
+	 Summation:    1.19494e+06    1.19494e+06              1
+RECONNECT:
+	   Order 1:          66000          63138       0.956636
+	   Order 2:         350737         342424       0.976298
+	   Order 3:         405466         395674        0.97585
+	 Summation:         822203         801236       0.974499
+ADD_INTERACTION:
+	   Order 1:     3.0421e+07         640710      0.0210614
+	   Order 2:    4.16863e+06          46007      0.0110365
+	 Summation:    3.45897e+07         686717      0.0198532
+DEL_INTERACTION:
+	   Order 2:         641900         640592       0.997962
+	   Order 3:          46052          46052              1
+	 Summation:         687952         686644       0.998099
+ADD_DELTA_INTERACTION:
+	   Order 1:    3.04243e+07         159212     0.00523305
+	   Order 2:    4.16853e+06          25064     0.00601267
+	 Summation:    3.45929e+07         184276       0.005327
+DEL_DELTA_INTERACTION:
+	   Order 2:         161058         159330       0.989271
+	   Order 3:          25019          25019              1
+	 Summation:         186077         184349       0.990714
+CHANGE_TAU_VERTEX:
+	   Order 1:         857502         830500       0.968511
+	   Order 2:         924162         902159       0.976191
+	   Order 3:    2.73131e+06    2.67444e+06        0.97918
+	 Summation:    4.51297e+06     4.4071e+06       0.976541
+CHANGE_R_VERTEX:
+	None
+CHANGE_R_LOOP:
+	   Order 1:         858924         858924              1
+	   Order 2:         925502         925502              1
+	   Order 3:    4.79165e+06         624081       0.130243
+	 Summation:    6.57608e+06    2.40851e+06       0.366253
+CHANGE_MEASURE_G2W:
+	   Order 1:         472596         327358        0.69268
+	   Order 2:         562205         283673       0.504572
+	   Order 3:    2.06911e+06         492629       0.238087
+	 Summation:    3.10391e+06    1.10366e+06       0.355571
+CHANGE_MEASURE_W2G:
+	   Order 1:         383970         327431       0.852752
+	   Order 2:         362034         283638       0.783457
+	   Order 3:         879044         492591       0.560371
+	 Summation:    1.62505e+06    1.10366e+06       0.679155
+CHANGE_CONTINUS2DELTA:
+	   Order 2:         742405              0              0
+	   Order 3:    2.43885e+06    1.12426e+06       0.460977
+	 Summation:    3.18126e+06    1.12426e+06         0.3534
+CHANGE_DELTA2CONTINUS:
+	   Order 3:    2.06596e+06    1.12418e+06       0.544144
+	 Summation:    2.06596e+06    1.12418e+06       0.544144
+CHANGE_SPIN_VERTEX:
+	None
+JUMP_TO_ORDER0:
+	   Order 1:         857938         295677       0.344637
+	 Summation:         857938         295677       0.344637
+JUMP_BACK_TO_ORDER1:
+	   Order 0:    5.48637e+07         295676     0.00538928
+	 Summation:    5.48637e+07         295676     0.00538928
+------------------------------------------------------------
+ADD_INTERACTION<------>DEL_INTERACTION:
+	   Order 1:         640710         640592       0.104245
+	   Order 2:          46007          46052       0.148313
+	 Summation:         686717         686644      0.0622917
+ADD_DELTA_INTERACTION<------>DEL_DELTA_INTERACTION:
+	   Order 1:         159212         159330       0.209073
+	   Order 2:          25064          25019       0.201079
+	 Summation:         184276         184349       0.120235
+CHANGE_MEASURE_G2W<------>CHANGE_MEASURE_W2G:
+	   Order 1:         327358         327431      0.0902136
+	   Order 2:         283673         283638      0.0464684
+	   Order 3:         492629         492591       0.038284
+	 Summation:    1.10366e+06    1.10366e+06              0
+CHANGE_CONTINUS2DELTA<------>CHANGE_DELTA2CONTINUS:
+	   Order 3:    1.12426e+06    1.12418e+06      0.0486836
+	 Summation:    1.12426e+06    1.12418e+06      0.0486836
+============================================================
+
+
+[MC][INFO][15/1/9 22:59:23]@[envMonteCarlo.cpp:117]
+Start Annealing...
+
+[MC][INFO][15/1/9 22:59:23]@[envMonteCarlo.cpp:122]
+Status has not been updated yet since the last annealing!
+
+[MC][INFO][15/1/9 22:59:29]@[envMonteCarlo.cpp:73]
+Start saving data...
+
+dumping <type 'dict'> to file <HDF5 file "0_MC_statis.hkl" (mode r+)>
+[MC][INFO][15/1/9 22:59:29]@[envMonteCarlo.cpp:82]
+Saving data is done!
+
+[MC][INFO][15/1/9 22:59:50]@[markov.cpp:195]
+============================================================
+DiagCounter: 2144477000
+CREATE_WORM:
+	   Order 1:         730879          52962      0.0724634
+	   Order 2:         906692         109820       0.121122
+	   Order 3:    4.76758e+06         444409      0.0932148
+	 Summation:    6.40515e+06         607191      0.0947973
+DELETE_WORM:
+	   Order 1:          52962          52962              1
+	   Order 2:         109820         109820              1
+	   Order 3:         444409         444409              1
+	 Summation:         607191         607191              1
+MOVE_WORM_G:
+	   Order 2:    2.98971e+06     2.7021e+06         0.9038
+	   Order 3:    1.10506e+06         911823       0.825134
+	 Summation:    4.09477e+06    3.61392e+06        0.88257
+MOVE_WORM_W:
+	   Order 2:         550217         550217              1
+	   Order 3:      1.212e+06      1.212e+06              1
+	 Summation:    1.76222e+06    1.76222e+06              1
+RECONNECT:
+	   Order 1:          74421          71212        0.95688
+	   Order 2:         409977         400297       0.976389
+	   Order 3:         678551         662237       0.975958
+	 Summation:    1.16295e+06    1.13375e+06       0.974889
+ADD_INTERACTION:
+	   Order 1:    3.32309e+07         730930      0.0219955
+	   Order 2:     4.8213e+06          77039      0.0159789
+	 Summation:    3.80522e+07         807969      0.0212332
+DEL_INTERACTION:
+	   Order 2:         732160         730852       0.998214
+	   Order 3:          76989          76989              1
+	 Summation:         809149         807841       0.998383
+ADD_DELTA_INTERACTION:
+	   Order 1:    3.32321e+07         184781     0.00556032
+	   Order 2:    4.82008e+06          42043     0.00872247
+	 Summation:    3.80521e+07         226824     0.00596087
+DEL_DELTA_INTERACTION:
+	   Order 2:         186587         184859       0.990739
+	   Order 3:          42093          42093              1
+	 Summation:         228680         226952       0.992444
+CHANGE_TAU_VERTEX:
+	   Order 1:    1.04349e+06    1.01064e+06       0.968513
+	   Order 2:    1.12796e+06    1.10122e+06       0.976288
+	   Order 3:    3.86774e+06     3.7871e+06       0.979151
+	 Summation:     6.0392e+06    5.89896e+06       0.976779
+CHANGE_R_VERTEX:
+	None
+CHANGE_R_LOOP:
+	   Order 1:    1.04424e+06    1.04424e+06              1
+	   Order 2:    1.12929e+06    1.12929e+06              1
+	   Order 3:    6.59959e+06         870401       0.131887
+	 Summation:    8.77311e+06    3.04392e+06        0.34696
+CHANGE_MEASURE_G2W:
+	   Order 1:         583509         401038       0.687287
+	   Order 2:         675334         373250       0.552689
+	   Order 3:    2.60608e+06         979324       0.375784
+	 Summation:    3.86492e+06    1.75361e+06       0.453725
+CHANGE_MEASURE_W2G:
+	   Order 1:         458566         401084       0.874648
+	   Order 2:         453775         373246       0.822535
+	   Order 3:    1.67017e+06         979281       0.586338
+	 Summation:    2.58251e+06    1.75361e+06       0.679034
+CHANGE_CONTINUS2DELTA:
+	   Order 2:         901205              0              0
+	   Order 3:    3.30968e+06    1.49095e+06       0.450483
+	 Summation:    4.21088e+06    1.49095e+06       0.354071
+CHANGE_DELTA2CONTINUS:
+	   Order 3:    2.73953e+06    1.49082e+06        0.54419
+	 Summation:    2.73953e+06    1.49082e+06        0.54419
+CHANGE_SPIN_VERTEX:
+	None
+JUMP_TO_ORDER0:
+	   Order 1:    1.04373e+06         481470       0.461297
+	 Summation:    1.04373e+06         481470       0.461297
+JUMP_BACK_TO_ORDER1:
+	   Order 0:     6.3876e+07         481469     0.00753756
+	 Summation:     6.3876e+07         481469     0.00753756
+------------------------------------------------------------
+ADD_INTERACTION<------>DEL_INTERACTION:
+	   Order 1:         730930         730852      0.0645139
+	   Order 2:          77039          76989         0.1274
+	 Summation:         807969         807841       0.100697
+ADD_DELTA_INTERACTION<------>DEL_DELTA_INTERACTION:
+	   Order 1:         184781         184859       0.128294
+	   Order 2:          42043          42093       0.172377
+	 Summation:         226824         226952       0.190016
+CHANGE_MEASURE_G2W<------>CHANGE_MEASURE_W2G:
+	   Order 1:         401038         401084      0.0513615
+	   Order 2:         373250         373246     0.00462963
+	   Order 3:         979324         979281      0.0307252
+	 Summation:    1.75361e+06    1.75361e+06    0.000533972
+CHANGE_CONTINUS2DELTA<------>CHANGE_DELTA2CONTINUS:
+	   Order 3:    1.49095e+06    1.49082e+06      0.0741263
+	 Summation:    1.49095e+06    1.49082e+06      0.0741263
+============================================================
+
+
+[MC][INFO][15/1/9 22:59:57]@[envMonteCarlo.cpp:117]
+Start Annealing...
+
+[MC][INFO][15/1/9 22:59:57]@[envMonteCarlo.cpp:122]
+Status has not been updated yet since the last annealing!
+
+[MC][INFO][15/1/9 23:0:4]@[envMonteCarlo.cpp:73]
+Start saving data...
+
+dumping <type 'dict'> to file <HDF5 file "0_MC_statis.hkl" (mode r+)>
+[MC][INFO][15/1/9 23:0:4]@[envMonteCarlo.cpp:82]
+Saving data is done!
+
+[MC][INFO][15/1/9 23:0:23]@[markov.cpp:195]
+============================================================
+DiagCounter: 2445764000
+CREATE_WORM:
+	   Order 1:         877943          59832      0.0681502
+	   Order 2:    1.08094e+06         126851       0.117353
+	   Order 3:    6.16849e+06         634787       0.102908
+	 Summation:    8.12737e+06         821470       0.101075
+DELETE_WORM:
+	   Order 1:          59832          59832              1
+	   Order 2:         126851         126851              1
+	   Order 3:         634787         634787              1
+	 Summation:         821470         821470              1
+MOVE_WORM_G:
+	   Order 2:    3.40213e+06    3.07138e+06        0.90278
+	   Order 3:    1.58163e+06    1.30405e+06       0.824498
+	 Summation:    4.98376e+06    4.37542e+06       0.877937
+MOVE_WORM_W:
+	   Order 2:         634098         634098              1
+	   Order 3:    1.73568e+06    1.73568e+06              1
+	 Summation:    2.36978e+06    2.36978e+06              1
+RECONNECT:
+	   Order 1:          84244          80620       0.956982
+	   Order 2:         472819         461679       0.976439
+	   Order 3:         973222         949717       0.975848
+	 Summation:    1.53028e+06    1.49202e+06       0.974992
+ADD_INTERACTION:
+	   Order 1:    3.49219e+07         817364      0.0234055
+	   Order 2:    5.49286e+06         109870      0.0200023
+	 Summation:    4.04147e+07         927234       0.022943
+DEL_INTERACTION:
+	   Order 2:         818571         817263       0.998402
+	   Order 3:         109743         109743              1
+	 Summation:         928314         927006       0.998591
+ADD_DELTA_INTERACTION:
+	   Order 1:    3.49204e+07         212080     0.00607324
+	   Order 2:    5.49305e+06          60006       0.010924
+	 Summation:    4.04135e+07         272086     0.00673256
+DEL_DELTA_INTERACTION:
+	   Order 2:         213909         212181       0.991922
+	   Order 3:          60133          60133              1
+	 Summation:         274042         272314       0.993694
+CHANGE_TAU_VERTEX:
+	   Order 1:    1.25299e+06    1.21346e+06        0.96845
+	   Order 2:    1.34409e+06    1.31241e+06       0.976432
+	   Order 3:    5.07708e+06    4.97112e+06       0.979131
+	 Summation:    7.67415e+06    7.49699e+06       0.976914
+CHANGE_R_VERTEX:
+	None
+CHANGE_R_LOOP:
+	   Order 1:    1.25402e+06    1.25402e+06              1
+	   Order 2:    1.34525e+06    1.34525e+06              1
+	   Order 3:    8.53418e+06    1.13709e+06       0.133239
+	 Summation:    1.11334e+07    3.73636e+06       0.335597
+CHANGE_MEASURE_G2W:
+	   Order 1:         708437         484171       0.683436
+	   Order 2:         794417         468066       0.589194
+	   Order 3:    3.18236e+06    1.50078e+06       0.471592
+	 Summation:    4.68522e+06    2.45301e+06       0.523565
+CHANGE_MEASURE_W2G:
+	   Order 1:         542736         484242       0.892224
+	   Order 2:         550995         468050       0.849463
+	   Order 3:    2.51567e+06    1.50072e+06        0.59655
+	 Summation:     3.6094e+06    2.45301e+06       0.679618
+CHANGE_CONTINUS2DELTA:
+	   Order 2:    1.06878e+06              0              0
+	   Order 3:    4.23855e+06    1.88437e+06       0.444579
+	 Summation:    5.30733e+06    1.88437e+06       0.355051
+CHANGE_DELTA2CONTINUS:
+	   Order 3:    3.46197e+06    1.88415e+06       0.544241
+	 Summation:    3.46197e+06    1.88415e+06       0.544241
+CHANGE_SPIN_VERTEX:
+	None
+JUMP_TO_ORDER0:
+	   Order 1:     1.2535e+06         691241       0.551448
+	 Summation:     1.2535e+06         691241       0.551448
+JUMP_BACK_TO_ORDER1:
+	   Order 0:    7.40801e+07         691240     0.00933098
+	 Summation:    7.40801e+07         691240     0.00933098
+------------------------------------------------------------
+ADD_INTERACTION<------>DEL_INTERACTION:
+	   Order 1:         817364         817263      0.0789973
+	   Order 2:         109870         109743       0.271003
+	 Summation:         927234         927006       0.167437
+ADD_DELTA_INTERACTION<------>DEL_DELTA_INTERACTION:
+	   Order 1:         212080         212181       0.155062
+	   Order 2:          60006          60133       0.366405
+	 Summation:         272086         272314       0.309012
+CHANGE_MEASURE_G2W<------>CHANGE_MEASURE_W2G:
+	   Order 1:         484171         484242      0.0721486
+	   Order 2:         468066         468050      0.0165369
+	   Order 3:    1.50078e+06    1.50072e+06      0.0317463
+	 Summation:    2.45301e+06    2.45301e+06              0
+CHANGE_CONTINUS2DELTA<------>CHANGE_DELTA2CONTINUS:
+	   Order 3:    1.88437e+06    1.88415e+06       0.117449
+	 Summation:    1.88437e+06    1.88415e+06       0.117449
+============================================================
+
+
+[MC][INFO][15/1/9 23:0:31]@[envMonteCarlo.cpp:117]
+Start Annealing...
+
+[MC][INFO][15/1/9 23:0:31]@[envMonteCarlo.cpp:122]
+Status has not been updated yet since the last annealing!
+
+[MC][INFO][15/1/9 23:0:35]@[envMonteCarlo.cpp:94]
+Start adjusting OrderReweight...
+
+[MC][INFO][15/1/9 23:0:35]@[envMonteCarlo.cpp:102]
+Reweighted to:
+1  0.000111529  0.00180636  0.00267309  
+Worm Reweighted to:
+0.00932931
+Polar Reweighted to:
+0.235511
+
+[MC][INFO][15/1/9 23:0:39]@[envMonteCarlo.cpp:73]
+Start saving data...
+
+dumping <type 'dict'> to file <HDF5 file "0_MC_statis.hkl" (mode r+)>
+[MC][INFO][15/1/9 23:0:39]@[envMonteCarlo.cpp:82]
+Saving data is done!
+
+[MC][INFO][15/1/9 23:0:56]@[markov.cpp:195]
+============================================================
+DiagCounter: 2766460000
+CREATE_WORM:
+	   Order 1:         960906          62685      0.0652353
+	   Order 2:    1.24239e+06         136309       0.109715
+	   Order 3:     7.5953e+06         741256      0.0975941
+	 Summation:     9.7986e+06         940250      0.0959576
+DELETE_WORM:
+	   Order 1:          62685          62685              1
+	   Order 2:         136309         136309              1
+	   Order 3:         741256         741256              1
+	 Summation:         940250         940250              1
+MOVE_WORM_G:
+	   Order 2:    3.59669e+06     3.2445e+06       0.902079
+	   Order 3:    1.84495e+06    1.51994e+06       0.823839
+	 Summation:    5.44164e+06    4.76444e+06       0.875552
+MOVE_WORM_W:
+	   Order 2:         680833         680833              1
+	   Order 3:    2.02603e+06    2.02603e+06              1
+	 Summation:    2.70687e+06    2.70687e+06              1
+RECONNECT:
+	   Order 1:          88366          84579       0.957144
+	   Order 2:         507737         495791       0.976472
+	   Order 3:    1.13805e+06    1.11067e+06       0.975936
+	 Summation:    1.73416e+06    1.69104e+06       0.975135
+ADD_INTERACTION:
+	   Order 1:    3.60075e+07         855866      0.0237691
+	   Order 2:    5.81288e+06         128166      0.0220486
+	 Summation:    4.18203e+07         984032        0.02353
+DEL_INTERACTION:
+	   Order 2:         857583         855766       0.997881
+	   Order 3:         128035         128035              1
+	 Summation:         985618         983801       0.998156
+ADD_DELTA_INTERACTION:
+	   Order 1:    3.60072e+07         225605     0.00626556
+	   Order 2:    5.81317e+06          69693      0.0119888
+	 Summation:    4.18203e+07         295298     0.00706111
+DEL_DELTA_INTERACTION:
+	   Order 2:         227815         225705       0.990738
+	   Order 3:          69824          69824              1
+	 Summation:         297639         295529       0.992911
+CHANGE_TAU_VERTEX:
+	   Order 1:    1.37246e+06    1.32904e+06       0.968363
+	   Order 2:    1.54449e+06    1.50806e+06       0.976414
+	   Order 3:    6.24174e+06    6.11117e+06       0.979081
+	 Summation:    9.15869e+06    8.94827e+06       0.977025
+CHANGE_R_VERTEX:
+	None
+CHANGE_R_LOOP:
+	   Order 1:    1.37339e+06    1.37339e+06              1
+	   Order 2:    1.54456e+06    1.54456e+06              1
+	   Order 3:    1.05204e+07     1.4224e+06       0.135204
+	 Summation:    1.34384e+07    4.34035e+06       0.322982
+CHANGE_MEASURE_G2W:
+	   Order 1:         794442         517692       0.651642
+	   Order 2:         944384         516984        0.54743
+	   Order 3:     4.0175e+06    1.82827e+06       0.455077
+	 Summation:    5.75633e+06    2.86295e+06       0.497357
+CHANGE_MEASURE_W2G:
+	   Order 1:         576633         517781       0.897939
+	   Order 2:         600784         516974       0.860499
+	   Order 3:    2.95062e+06    1.82819e+06       0.619595
+	 Summation:    4.12804e+06    2.86295e+06       0.693537
+CHANGE_CONTINUS2DELTA:
+	   Order 2:    1.24405e+06              0              0
+	   Order 3:     5.2577e+06    2.32991e+06       0.443142
+	 Summation:    6.50176e+06    2.32991e+06        0.35835
+CHANGE_DELTA2CONTINUS:
+	   Order 3:    4.28031e+06    2.32968e+06       0.544277
+	 Summation:    4.28031e+06    2.32968e+06       0.544277
+CHANGE_SPIN_VERTEX:
+	None
+JUMP_TO_ORDER0:
+	   Order 1:    1.37372e+06         811456       0.590701
+	 Summation:    1.37372e+06         811456       0.590701
+JUMP_BACK_TO_ORDER1:
+	   Order 0:    8.67344e+07         811455     0.00935563
+	 Summation:    8.67344e+07         811455     0.00935563
+------------------------------------------------------------
+ADD_INTERACTION<------>DEL_INTERACTION:
+	   Order 1:         855866         855766      0.0764354
+	   Order 2:         128166         128035        0.25881
+	 Summation:         984032         983801       0.164671
+ADD_DELTA_INTERACTION<------>DEL_DELTA_INTERACTION:
+	   Order 1:         225605         225705       0.148855
+	   Order 2:          69693          69824       0.350718
+	 Summation:         295298         295529       0.300526
+CHANGE_MEASURE_G2W<------>CHANGE_MEASURE_W2G:
+	   Order 1:         517692         517781      0.0874622
+	   Order 2:         516984         516974     0.00983442
+	   Order 3:    1.82827e+06    1.82819e+06      0.0413139
+	 Summation:    2.86295e+06    2.86295e+06              0
+CHANGE_CONTINUS2DELTA<------>CHANGE_DELTA2CONTINUS:
+	   Order 3:    2.32991e+06    2.32968e+06       0.107013
+	 Summation:    2.32991e+06    2.32968e+06       0.107013
+============================================================
+
+
+[MC][INFO][15/1/9 23:1:5]@[envMonteCarlo.cpp:117]
+Start Annealing...
+
+[MC][INFO][15/1/9 23:1:5]@[envMonteCarlo.cpp:122]
+Status has not been updated yet since the last annealing!
+
+[MC][INFO][15/1/9 23:1:14]@[envMonteCarlo.cpp:73]
+Start saving data...
+
+dumping <type 'dict'> to file <HDF5 file "0_MC_statis.hkl" (mode r+)>
+[MC][INFO][15/1/9 23:1:14]@[envMonteCarlo.cpp:82]
+Saving data is done!
+
+[MC][INFO][15/1/9 23:1:29]@[markov.cpp:195]
+============================================================
+DiagCounter: 3103139000
+CREATE_WORM:
+	   Order 1:    1.01389e+06          63447      0.0625779
+	   Order 2:    1.41697e+06         141848       0.100106
+	   Order 3:    9.06318e+06         807459      0.0890923
+	 Summation:     1.1494e+07    1.01275e+06      0.0881112
+DELETE_WORM:
+	   Order 1:          63447          63447              1
+	   Order 2:         141848         141848              1
+	   Order 3:         807459         807459              1
+	 Summation:    1.01275e+06    1.01275e+06              1
+MOVE_WORM_G:
+	   Order 2:    3.69247e+06    3.32947e+06       0.901692
+	   Order 3:     2.0064e+06    1.65045e+06       0.822593
+	 Summation:    5.69887e+06    4.97992e+06       0.873843
+MOVE_WORM_W:
+	   Order 2:         706497         706497              1
+	   Order 3:    2.20204e+06    2.20204e+06              1
+	 Summation:    2.90854e+06    2.90854e+06              1
+RECONNECT:
+	   Order 1:          89472          85663       0.957428
+	   Order 2:         526660         514296       0.976524
+	   Order 3:    1.23995e+06    1.21022e+06       0.976022
+	 Summation:    1.85608e+06    1.81017e+06       0.975268
+ADD_INTERACTION:
+	   Order 1:    3.60863e+07         872377      0.0241747
+	   Order 2:    5.97321e+06         139177      0.0233002
+	 Summation:    4.20596e+07    1.01155e+06      0.0240505
+DEL_INTERACTION:
+	   Order 2:         874908         872296       0.997015
+	   Order 3:         139031         139031              1
+	 Summation:    1.01394e+06    1.01133e+06       0.997424
+ADD_DELTA_INTERACTION:
+	   Order 1:     3.6086e+07         233400     0.00646788
+	   Order 2:     5.9734e+06          76003      0.0127236
+	 Summation:    4.20594e+07         309403     0.00735633
+DEL_DELTA_INTERACTION:
+	   Order 2:         236191         233481       0.988526
+	   Order 3:          76149          76149              1
+	 Summation:         312340         309630       0.991324
+CHANGE_TAU_VERTEX:
+	   Order 1:    1.45176e+06    1.40577e+06       0.968316
+	   Order 2:    1.76234e+06    1.72064e+06       0.976336
+	   Order 3:    7.37934e+06    7.22473e+06       0.979048
+	 Summation:    1.05934e+07    1.03511e+07       0.977126
+CHANGE_R_VERTEX:
+	None
+CHANGE_R_LOOP:
+	   Order 1:    1.45238e+06    1.45238e+06              1
+	   Order 2:    1.76287e+06    1.76287e+06              1
+	   Order 3:    1.25466e+07    1.70312e+06       0.135744
+	 Summation:    1.57618e+07    4.91837e+06       0.312043
+CHANGE_MEASURE_G2W:
+	   Order 1:         865221         525693       0.607582
+	   Order 2:    1.13529e+06         543481       0.478717
+	   Order 3:    4.97544e+06    2.06188e+06       0.414411
+	 Summation:    6.97595e+06    3.13105e+06       0.448835
+CHANGE_MEASURE_W2G:
+	   Order 1:         584638         525786       0.899336
+	   Order 2:         627286         543476       0.866393
+	   Order 3:    3.18851e+06    2.06179e+06       0.646631
+	 Summation:    4.40044e+06    3.13105e+06       0.711532
+CHANGE_CONTINUS2DELTA:
+	   Order 2:    1.44892e+06              0              0
+	   Order 3:    6.31768e+06    2.81355e+06       0.445346
+	 Summation:     7.7666e+06    2.81355e+06       0.362263
+CHANGE_DELTA2CONTINUS:
+	   Order 3:    5.16975e+06    2.81332e+06        0.54419
+	 Summation:    5.16975e+06    2.81332e+06        0.54419
+CHANGE_SPIN_VERTEX:
+	None
+JUMP_TO_ORDER0:
+	   Order 1:    1.45268e+06         890416       0.612948
+	 Summation:    1.45268e+06         890416       0.612948
+JUMP_BACK_TO_ORDER1:
+	   Order 0:    1.01578e+08         890415     0.00876586
+	 Summation:    1.01578e+08         890415     0.00876586
+------------------------------------------------------------
+ADD_INTERACTION<------>DEL_INTERACTION:
+	   Order 1:         872377         872296      0.0613237
+	   Order 2:         139177         139031       0.276801
+	 Summation:    1.01155e+06    1.01133e+06       0.159603
+ADD_DELTA_INTERACTION<------>DEL_DELTA_INTERACTION:
+	   Order 1:         233400         233481       0.118545
+	   Order 2:          76003          76149       0.374295
+	 Summation:         309403         309630       0.288515
+CHANGE_MEASURE_G2W<------>CHANGE_MEASURE_W2G:
+	   Order 1:         525693         525786      0.0906949
+	   Order 2:         543481         543476     0.00479583
+	   Order 3:    2.06188e+06    2.06179e+06      0.0433352
+	 Summation:    3.13105e+06    3.13105e+06              0
+CHANGE_CONTINUS2DELTA<------>CHANGE_DELTA2CONTINUS:
+	   Order 3:    2.81355e+06    2.81332e+06      0.0956956
+	 Summation:    2.81355e+06    2.81332e+06      0.0956956
+============================================================
+
+
+[MC][INFO][15/1/9 23:1:39]@[envMonteCarlo.cpp:117]
+Start Annealing...
+
+[MC][INFO][15/1/9 23:1:39]@[envMonteCarlo.cpp:122]
+Status has not been updated yet since the last annealing!
+
+[MC][INFO][15/1/9 23:1:49]@[envMonteCarlo.cpp:73]
+Start saving data...
+
+dumping <type 'dict'> to file <HDF5 file "0_MC_statis.hkl" (mode r+)>
+[MC][INFO][15/1/9 23:1:50]@[envMonteCarlo.cpp:82]
+Saving data is done!
+
+[MC][INFO][15/1/9 23:2:2]@[markov.cpp:195]
+============================================================
+DiagCounter: 3434208000
+CREATE_WORM:
+	   Order 1:    1.06488e+06          64184      0.0602733
+	   Order 2:    1.56001e+06         146498      0.0939085
+	   Order 3:    1.05366e+07         873928      0.0829423
+	 Summation:    1.31615e+07    1.08461e+06       0.082408
+DELETE_WORM:
+	   Order 1:          64183          64183              1
+	   Order 2:         146498         146498              1
+	   Order 3:         873928         873928              1
+	 Summation:    1.08461e+06    1.08461e+06              1
+MOVE_WORM_G:
+	   Order 2:    3.78081e+06    3.40627e+06       0.900937
+	   Order 3:    2.16635e+06    1.77925e+06       0.821314
+	 Summation:    5.94716e+06    5.18552e+06       0.871933
+MOVE_WORM_W:
+	   Order 2:         730321         730321              1
+	   Order 3:    2.37633e+06    2.37633e+06              1
+	 Summation:    3.10665e+06    3.10665e+06              1
+RECONNECT:
+	   Order 1:          90459          86619        0.95755
+	   Order 2:         544182         531408       0.976526
+	   Order 3:      1.338e+06    1.30602e+06       0.976097
+	 Summation:    1.97264e+06    1.92405e+06       0.975365
+ADD_INTERACTION:
+	   Order 1:    3.62545e+07         887948      0.0244921
+	   Order 2:    6.12166e+06         149658      0.0244473
+	 Summation:    4.23761e+07    1.03761e+06      0.0244856
+DEL_INTERACTION:
+	   Order 2:         891207         887890       0.996278
+	   Order 3:         149470         149470              1
+	 Summation:    1.04068e+06    1.03736e+06       0.996813
+ADD_DELTA_INTERACTION:
+	   Order 1:    3.62542e+07         240571     0.00663568
+	   Order 2:    6.12151e+06          82278      0.0134408
+	 Summation:    4.23757e+07         322849     0.00761873
+DEL_DELTA_INTERACTION:
+	   Order 2:         243805         240628       0.986969
+	   Order 3:          82466          82466              1
+	 Summation:         326271         323094       0.990263
+CHANGE_TAU_VERTEX:
+	   Order 1:    1.52781e+06    1.47929e+06       0.968239
+	   Order 2:    1.94202e+06     1.8959e+06       0.976254
+	   Order 3:    8.52013e+06    8.34166e+06       0.979052
+	 Summation:      1.199e+07    1.17168e+07       0.977221
+CHANGE_R_VERTEX:
+	None
+CHANGE_R_LOOP:
+	   Order 1:    1.52875e+06    1.52875e+06              1
+	   Order 2:    1.94173e+06    1.94173e+06              1
+	   Order 3:    1.45985e+07    1.97702e+06       0.135426
+	 Summation:     1.8069e+07     5.4475e+06       0.301483
+CHANGE_MEASURE_G2W:
+	   Order 1:         933637         533491       0.571412
+	   Order 2:      1.293e+06         565246       0.437158
+	   Order 3:    5.93739e+06    2.29704e+06       0.386876
+	 Summation:    8.16403e+06    3.39577e+06       0.415943
+CHANGE_MEASURE_W2G:
+	   Order 1:         592452         533600       0.900664
+	   Order 2:         649045         565235       0.870872
+	   Order 3:     3.4281e+06    2.29694e+06       0.670032
+	 Summation:     4.6696e+06    3.39577e+06       0.727209
+CHANGE_CONTINUS2DELTA:
+	   Order 2:    1.61714e+06              0              0
+	   Order 3:     7.3787e+06    3.30729e+06       0.448221
+	 Summation:    8.99584e+06    3.30729e+06       0.367647
+CHANGE_DELTA2CONTINUS:
+	   Order 3:    6.07775e+06    3.30705e+06       0.544124
+	 Summation:    6.07775e+06    3.30705e+06       0.544124
+CHANGE_SPIN_VERTEX:
+	None
+JUMP_TO_ORDER0:
+	   Order 1:    1.52892e+06         966661        0.63225
+	 Summation:    1.52892e+06         966661        0.63225
+JUMP_BACK_TO_ORDER1:
+	   Order 0:    1.16071e+08         966661     0.00832821
+	 Summation:    1.16071e+08         966661     0.00832821
+------------------------------------------------------------
+ADD_INTERACTION<------>DEL_INTERACTION:
+	   Order 1:         887948         887890      0.0435238
+	   Order 2:         149658         149470       0.343739
+	 Summation:    1.03761e+06    1.03736e+06       0.170777
+ADD_DELTA_INTERACTION<------>DEL_DELTA_INTERACTION:
+	   Order 1:         240571         240628      0.0821699
+	   Order 2:          82278          82466       0.463183
+	 Summation:         322849         323094       0.304838
+CHANGE_MEASURE_G2W<------>CHANGE_MEASURE_W2G:
+	   Order 1:         533491         533600       0.105518
+	   Order 2:         565246         565235      0.0103457
+	   Order 3:    2.29704e+06    2.29694e+06      0.0457227
+	 Summation:    3.39577e+06    3.39577e+06              0
+CHANGE_CONTINUS2DELTA<------>CHANGE_DELTA2CONTINUS:
+	   Order 3:    3.30729e+06    3.30705e+06      0.0952627
+	 Summation:    3.30729e+06    3.30705e+06      0.0952627
+============================================================
+
+
+[MC][INFO][15/1/9 23:2:7]@[envMonteCarlo.cpp:94]
+Start adjusting OrderReweight...
+
+[MC][INFO][15/1/9 23:2:7]@[envMonteCarlo.cpp:102]
+Reweighted to:
+1  0.000120151  0.0017252  0.00247547  
+Worm Reweighted to:
+0.0103351
+Polar Reweighted to:
+0.349136
+
+[MC][INFO][15/1/9 23:2:13]@[envMonteCarlo.cpp:117]
+Start Annealing...
+
+[MC][INFO][15/1/9 23:2:13]@[envMonteCarlo.cpp:122]
+Status has not been updated yet since the last annealing!
+
+[MC][INFO][15/1/9 23:2:24]@[envMonteCarlo.cpp:73]
+Start saving data...
+
+dumping <type 'dict'> to file <HDF5 file "0_MC_statis.hkl" (mode r+)>
+[MC][INFO][15/1/9 23:2:25]@[envMonteCarlo.cpp:82]
+Saving data is done!
+
+[MC][INFO][15/1/9 23:2:35]@[markov.cpp:195]
+============================================================
+DiagCounter: 3765522000
+CREATE_WORM:
+	   Order 1:    1.12023e+06          65055      0.0580728
+	   Order 2:    1.71189e+06         151931      0.0887504
+	   Order 3:    1.19076e+07         941901      0.0791011
+	 Summation:    1.47397e+07    1.15889e+06      0.0786236
+DELETE_WORM:
+	   Order 1:          65055          65055              1
+	   Order 2:         151931         151931              1
+	   Order 3:         941901         941901              1
+	 Summation:    1.15889e+06    1.15889e+06              1
+MOVE_WORM_G:
+	   Order 2:    3.88387e+06    3.49557e+06       0.900022
+	   Order 3:    2.32794e+06    1.90971e+06       0.820342
+	 Summation:    6.21181e+06    5.40527e+06       0.870161
+MOVE_WORM_W:
+	   Order 2:         755739         755739              1
+	   Order 3:    2.54903e+06    2.54903e+06              1
+	 Summation:    3.30476e+06    3.30476e+06              1
+RECONNECT:
+	   Order 1:          91657          87770       0.957592
+	   Order 2:         562943         549740       0.976546
+	   Order 3:    1.43811e+06    1.40368e+06       0.976057
+	 Summation:    2.09271e+06    2.04119e+06        0.97538
+ADD_INTERACTION:
+	   Order 1:    3.65014e+07         907242       0.024855
+	   Order 2:    6.29146e+06         160229      0.0254677
+	 Summation:    4.27929e+07    1.06747e+06      0.0249451
+DEL_INTERACTION:
+	   Order 2:         911064         907195       0.995753
+	   Order 3:         160039         160039              1
+	 Summation:     1.0711e+06    1.06723e+06       0.996388
+ADD_DELTA_INTERACTION:
+	   Order 1:    3.65019e+07         248534      0.0068088
+	   Order 2:     6.2923e+06          88701      0.0140968
+	 Summation:    4.27942e+07         337235     0.00788039
+DEL_DELTA_INTERACTION:
+	   Order 2:         251942         248581        0.98666
+	   Order 3:          88891          88891              1
+	 Summation:         340833         337472       0.990139
+CHANGE_TAU_VERTEX:
+	   Order 1:    1.60904e+06    1.55788e+06         0.9682
+	   Order 2:    2.13215e+06     2.0813e+06       0.976151
+	   Order 3:    9.59549e+06    9.39446e+06       0.979049
+	 Summation:    1.33367e+07    1.30336e+07       0.977277
+CHANGE_R_VERTEX:
+	None
+CHANGE_R_LOOP:
+	   Order 1:    1.61009e+06    1.61009e+06              1
+	   Order 2:      2.132e+06      2.132e+06              1
+	   Order 3:    1.65015e+07    2.23284e+06       0.135311
+	 Summation:    2.02436e+07    5.97493e+06       0.295151
+CHANGE_MEASURE_G2W:
+	   Order 1:     1.0039e+06         544770       0.542656
+	   Order 2:    1.45238e+06         596182       0.410486
+	   Order 3:    6.78874e+06     2.5849e+06       0.380763
+	 Summation:    9.24501e+06    3.72585e+06       0.403012
+CHANGE_MEASURE_W2G:
+	   Order 1:         603742         544890       0.902521
+	   Order 2:         679990         596180       0.876748
+	   Order 3:    3.72439e+06    2.58478e+06       0.694015
+	 Summation:    5.00812e+06    3.72585e+06       0.743962
+CHANGE_CONTINUS2DELTA:
+	   Order 2:    1.79214e+06              0              0
+	   Order 3:    8.35585e+06    3.75887e+06       0.449849
+	 Summation:     1.0148e+07    3.75887e+06       0.370405
+CHANGE_DELTA2CONTINUS:
+	   Order 3:    6.90764e+06    3.75863e+06       0.544127
+	 Summation:    6.90764e+06    3.75863e+06       0.544127
+CHANGE_SPIN_VERTEX:
+	None
+JUMP_TO_ORDER0:
+	   Order 1:     1.6104e+06    1.04814e+06       0.650857
+	 Summation:     1.6104e+06    1.04814e+06       0.650857
+JUMP_BACK_TO_ORDER1:
+	   Order 0:    1.30595e+08    1.04814e+06      0.0080259
+	 Summation:    1.30595e+08    1.04814e+06      0.0080259
+------------------------------------------------------------
+ADD_INTERACTION<------>DEL_INTERACTION:
+	   Order 1:         907242         907195      0.0348921
+	   Order 2:         160229         160039       0.335735
+	 Summation:    1.06747e+06    1.06723e+06       0.162211
+ADD_DELTA_INTERACTION<------>DEL_DELTA_INTERACTION:
+	   Order 1:         248534         248581      0.0666606
+	   Order 2:          88701          88891        0.45086
+	 Summation:         337235         337472        0.28853
+CHANGE_MEASURE_G2W<------>CHANGE_MEASURE_W2G:
+	   Order 1:         544770         544890       0.114957
+	   Order 2:         596182         596180     0.00183158
+	   Order 3:     2.5849e+06    2.58478e+06      0.0518979
+	 Summation:    3.72585e+06    3.72585e+06              0
+CHANGE_CONTINUS2DELTA<------>CHANGE_DELTA2CONTINUS:
+	   Order 3:    3.75887e+06    3.75863e+06      0.0864394
+	 Summation:    3.75887e+06    3.75863e+06      0.0864394
+============================================================
+
+
+[MC][INFO][15/1/9 23:2:47]@[envMonteCarlo.cpp:117]
+Start Annealing...
+
+[MC][INFO][15/1/9 23:2:47]@[envMonteCarlo.cpp:122]
+Status has not been updated yet since the last annealing!
+
+[MC][INFO][15/1/9 23:2:59]@[envMonteCarlo.cpp:73]
+Start saving data...
+
+dumping <type 'dict'> to file <HDF5 file "0_MC_statis.hkl" (mode r+)>
+[MC][INFO][15/1/9 23:3:0]@[envMonteCarlo.cpp:82]
+Saving data is done!
+
+[MC][INFO][15/1/9 23:3:8]@[markov.cpp:195]
+============================================================
+DiagCounter: 4107897000
+CREATE_WORM:
+	   Order 1:    1.17983e+06          65977      0.0559209
+	   Order 2:    1.86101e+06         157440      0.0845993
+	   Order 3:    1.31983e+07    1.00666e+06      0.0762719
+	 Summation:    1.62391e+07    1.23008e+06      0.0757476
+DELETE_WORM:
+	   Order 1:          65977          65977              1
+	   Order 2:         157440         157440              1
+	   Order 3:    1.00666e+06    1.00666e+06              1
+	 Summation:    1.23008e+06    1.23008e+06              1
+MOVE_WORM_G:
+	   Order 2:     3.9737e+06    3.57469e+06       0.899589
+	   Order 3:    2.48871e+06    2.03983e+06       0.819632
+	 Summation:    6.46241e+06    5.61452e+06       0.868797
+MOVE_WORM_W:
+	   Order 2:         782302         782302              1
+	   Order 3:    2.72624e+06    2.72624e+06              1
+	 Summation:    3.50854e+06    3.50854e+06              1
+RECONNECT:
+	   Order 1:          92833          88910       0.957741
+	   Order 2:         582537         568884       0.976563
+	   Order 3:    1.53786e+06    1.50107e+06       0.976076
+	 Summation:    2.21323e+06    2.15887e+06       0.975435
+ADD_INTERACTION:
+	   Order 1:    3.65696e+07         922974      0.0252388
+	   Order 2:    6.44312e+06         170963      0.0265342
+	 Summation:    4.30127e+07    1.09394e+06      0.0254329
+DEL_INTERACTION:
+	   Order 2:         927351         922957       0.995262
+	   Order 3:         170711         170711              1
+	 Summation:    1.09806e+06    1.09367e+06       0.995998
+ADD_DELTA_INTERACTION:
+	   Order 1:    3.65702e+07         256189     0.00700541
+	   Order 2:    6.44408e+06          94757      0.0147045
+	 Summation:    4.30143e+07         350946     0.00815883
+DEL_DELTA_INTERACTION:
+	   Order 2:         259674         256206       0.986645
+	   Order 3:          95009          95009              1
+	 Summation:         354683         351215       0.990222
+CHANGE_TAU_VERTEX:
+	   Order 1:    1.69715e+06    1.64309e+06       0.968147
+	   Order 2:    2.31903e+06    2.26366e+06       0.976123
+	   Order 3:    1.06256e+07     1.0403e+07       0.979054
+	 Summation:    1.46418e+07    1.43098e+07       0.977325
+CHANGE_R_VERTEX:
+	None
+CHANGE_R_LOOP:
+	   Order 1:    1.69819e+06    1.69819e+06              1
+	   Order 2:    2.31881e+06    2.31881e+06              1
+	   Order 3:     1.8291e+07     2.4949e+06       0.136401
+	 Summation:     2.2308e+07     6.5119e+06       0.291909
+CHANGE_MEASURE_G2W:
+	   Order 1:     1.0795e+06         557538       0.516479
+	   Order 2:    1.60717e+06         627601       0.390501
+	   Order 3:    7.59725e+06     2.8696e+06       0.377716
+	 Summation:    1.02839e+07    4.05474e+06        0.39428
+CHANGE_MEASURE_W2G:
+	   Order 1:         616523         557671       0.904542
+	   Order 2:         711402         627592        0.88219
+	   Order 3:    4.01715e+06    2.86947e+06       0.714306
+	 Summation:    5.34508e+06    4.05474e+06       0.758593
+CHANGE_CONTINUS2DELTA:
+	   Order 2:    1.96293e+06              0              0
+	   Order 3:    9.28935e+06    4.17312e+06       0.449237
+	 Summation:    1.12523e+07    4.17312e+06       0.370869
+CHANGE_DELTA2CONTINUS:
+	   Order 3:    7.66826e+06    4.17285e+06       0.544172
+	 Summation:    7.66826e+06    4.17285e+06       0.544172
+CHANGE_SPIN_VERTEX:
+	None
+JUMP_TO_ORDER0:
+	   Order 1:    1.69819e+06    1.13593e+06       0.668906
+	 Summation:    1.69819e+06    1.13593e+06       0.668906
+JUMP_BACK_TO_ORDER1:
+	   Order 0:    1.46016e+08    1.13593e+06     0.00777951
+	 Summation:    1.46016e+08    1.13593e+06     0.00777951
+------------------------------------------------------------
+ADD_INTERACTION<------>DEL_INTERACTION:
+	   Order 1:         922974         922957      0.0125124
+	   Order 2:         170963         170711       0.431116
+	 Summation:    1.09394e+06    1.09367e+06       0.181873
+ADD_DELTA_INTERACTION<------>DEL_DELTA_INTERACTION:
+	   Order 1:         256189         256206      0.0237491
+	   Order 2:          94757          95009       0.578484
+	 Summation:         350946         351215       0.321021
+CHANGE_MEASURE_G2W<------>CHANGE_MEASURE_W2G:
+	   Order 1:         557538         557671       0.125943
+	   Order 2:         627601         627592     0.00803318
+	   Order 3:     2.8696e+06    2.86947e+06      0.0517608
+	 Summation:    4.05474e+06    4.05474e+06              0
+CHANGE_CONTINUS2DELTA<------>CHANGE_DELTA2CONTINUS:
+	   Order 3:    4.17312e+06    4.17285e+06      0.0931137
+	 Summation:    4.17312e+06    4.17285e+06      0.0931137
+============================================================
+
+
+[MC][INFO][15/1/9 23:3:21]@[envMonteCarlo.cpp:117]
+Start Annealing...
+
+[MC][INFO][15/1/9 23:3:21]@[envMonteCarlo.cpp:122]
+Status has not been updated yet since the last annealing!
+
+[MC][INFO][15/1/9 23:3:34]@[envMonteCarlo.cpp:73]
+Start saving data...
+
+dumping <type 'dict'> to file <HDF5 file "0_MC_statis.hkl" (mode r+)>
+[MC][INFO][15/1/9 23:3:34]@[envMonteCarlo.cpp:82]
+Saving data is done!
+
+[MC][INFO][15/1/9 23:3:39]@[envMonteCarlo.cpp:94]
+Start adjusting OrderReweight...
+
+[MC][INFO][15/1/9 23:3:39]@[envMonteCarlo.cpp:102]
+Reweighted to:
+1  0.000114842  0.00170045  0.00242061  
+Worm Reweighted to:
+0.0100567
+Polar Reweighted to:
+0.322402
+
+[MC][INFO][15/1/9 23:3:41]@[markov.cpp:195]
+============================================================
+DiagCounter: 4446090000
+CREATE_WORM:
+	   Order 1:    1.23683e+06          66811      0.0540179
+	   Order 2:    2.00875e+06         162755      0.0810229
+	   Order 3:    1.45854e+07    1.07646e+06      0.0738039
+	 Summation:     1.7831e+07    1.30603e+06      0.0732447
+DELETE_WORM:
+	   Order 1:          66811          66811              1
+	   Order 2:         162755         162755              1
+	   Order 3:    1.07646e+06    1.07646e+06              1
+	 Summation:    1.30603e+06    1.30603e+06              1
+MOVE_WORM_G:
+	   Order 2:    4.07205e+06     3.6617e+06       0.899227
+	   Order 3:    2.65328e+06    2.17278e+06       0.818904
+	 Summation:    6.72533e+06    5.83448e+06       0.867538
+MOVE_WORM_W:
+	   Order 2:         805297         805297              1
+	   Order 3:    2.90261e+06    2.90261e+06              1
+	 Summation:    3.70791e+06    3.70791e+06              1
+RECONNECT:
+	   Order 1:          93982          90019       0.957832
+	   Order 2:         599857         585865       0.976674
+	   Order 3:    1.63881e+06    1.59955e+06       0.976044
+	 Summation:    2.33265e+06    2.27544e+06       0.975473
+ADD_INTERACTION:
+	   Order 1:    3.67842e+07         942209      0.0256145
+	   Order 2:      6.604e+06         181311      0.0274547
+	 Summation:    4.33882e+07    1.12352e+06      0.0258946
+DEL_INTERACTION:
+	   Order 2:         947048         942185       0.994865
+	   Order 3:         180999         180999              1
+	 Summation:    1.12805e+06    1.12318e+06       0.995689
+ADD_DELTA_INTERACTION:
+	   Order 1:    3.67846e+07         264969     0.00720326
+	   Order 2:    6.60536e+06         101375      0.0153474
+	 Summation:    4.33899e+07         366344     0.00844306
+DEL_DELTA_INTERACTION:
+	   Order 2:         268576         264993       0.986659
+	   Order 3:         101687         101687              1
+	 Summation:         370263         366680       0.990323
+CHANGE_TAU_VERTEX:
+	   Order 1:    1.78161e+06     1.7248e+06       0.968116
+	   Order 2:    2.50408e+06    2.44423e+06         0.9761
+	   Order 3:    1.17214e+07    1.14757e+07       0.979036
+	 Summation:    1.60071e+07    1.56447e+07       0.977361
+CHANGE_R_VERTEX:
+	None
+CHANGE_R_LOOP:
+	   Order 1:    1.78272e+06    1.78272e+06              1
+	   Order 2:    2.50392e+06    2.50392e+06              1
+	   Order 3:    2.02138e+07    2.75877e+06       0.136479
+	 Summation:    2.45005e+07     7.0454e+06       0.287562
+CHANGE_MEASURE_G2W:
+	   Order 1:    1.15142e+06         569604       0.494696
+	   Order 2:    1.76054e+06         658714       0.374153
+	   Order 3:    8.45438e+06     3.1731e+06        0.37532
+	 Summation:    1.13663e+07    4.40142e+06       0.387232
+CHANGE_MEASURE_W2G:
+	   Order 1:         628583         569731       0.906374
+	   Order 2:         742489         658679       0.887123
+	   Order 3:    4.32988e+06    3.17301e+06       0.732815
+	 Summation:    5.70096e+06    4.40142e+06       0.772049
+CHANGE_CONTINUS2DELTA:
+	   Order 2:    2.13358e+06              0              0
+	   Order 3:    1.02795e+07    4.62516e+06       0.449938
+	 Summation:    1.24131e+07    4.62516e+06       0.372603
+CHANGE_DELTA2CONTINUS:
+	   Order 3:    8.49923e+06    4.62482e+06       0.544146
+	 Summation:    8.49923e+06    4.62482e+06       0.544146
+CHANGE_SPIN_VERTEX:
+	None
+JUMP_TO_ORDER0:
+	   Order 1:    1.78247e+06    1.22021e+06       0.684561
+	 Summation:    1.78247e+06    1.22021e+06       0.684561
+JUMP_BACK_TO_ORDER1:
+	   Order 0:    1.60926e+08    1.22021e+06     0.00758244
+	 Summation:    1.60926e+08    1.22021e+06     0.00758244
+------------------------------------------------------------
+ADD_INTERACTION<------>DEL_INTERACTION:
+	   Order 1:         942209         942185      0.0174834
+	   Order 2:         181311         180999        0.51834
+	 Summation:    1.12352e+06    1.12318e+06       0.224164
+ADD_DELTA_INTERACTION<------>DEL_DELTA_INTERACTION:
+	   Order 1:         264969         264993      0.0329677
+	   Order 2:         101375         101687       0.692373
+	 Summation:         366344         366680       0.392446
+CHANGE_MEASURE_G2W<------>CHANGE_MEASURE_W2G:
+	   Order 1:         569604         569731       0.118981
+	   Order 2:         658714         658679      0.0304937
+	   Order 3:     3.1731e+06    3.17301e+06      0.0365203
+	 Summation:    4.40142e+06    4.40142e+06              0
+CHANGE_CONTINUS2DELTA<------>CHANGE_DELTA2CONTINUS:
+	   Order 3:    4.62516e+06    4.62482e+06       0.110476
+	 Summation:    4.62516e+06    4.62482e+06       0.110476
+============================================================
+
+
+[MC][INFO][15/1/9 23:3:55]@[envMonteCarlo.cpp:117]
+Start Annealing...
+
+[MC][INFO][15/1/9 23:3:55]@[envMonteCarlo.cpp:122]
+Status has not been updated yet since the last annealing!
+
+[MC][INFO][15/1/9 23:4:9]@[envMonteCarlo.cpp:73]
+Start saving data...
+
+dumping <type 'dict'> to file <HDF5 file "0_MC_statis.hkl" (mode r+)>
+[MC][INFO][15/1/9 23:4:9]@[envMonteCarlo.cpp:82]
+Saving data is done!
+
+[MC][INFO][15/1/9 23:4:14]@[markov.cpp:195]
+============================================================
+DiagCounter: 4783167000
+CREATE_WORM:
+	   Order 1:    1.29237e+06          67655      0.0523496
+	   Order 2:    2.15382e+06         167829      0.0779216
+	   Order 3:    1.59939e+07    1.14496e+06      0.0715873
+	 Summation:      1.944e+07    1.38044e+06      0.0710102
+DELETE_WORM:
+	   Order 1:          67655          67655              1
+	   Order 2:         167829         167829              1
+	   Order 3:    1.14496e+06    1.14496e+06              1
+	 Summation:    1.38044e+06    1.38044e+06              1
+MOVE_WORM_G:
+	   Order 2:    4.16354e+06    3.74034e+06       0.898357
+	   Order 3:    2.81525e+06     2.3032e+06       0.818116
+	 Summation:    6.97879e+06    6.04354e+06       0.865987
+MOVE_WORM_W:
+	   Order 2:         830442         830442              1
+	   Order 3:    3.07742e+06    3.07742e+06              1
+	 Summation:    3.90786e+06    3.90786e+06              1
+RECONNECT:
+	   Order 1:          95119          91126       0.958021
+	   Order 2:         618680         604254       0.976683
+	   Order 3:    1.73592e+06    1.69436e+06       0.976059
+	 Summation:    2.44972e+06    2.38974e+06       0.975516
+ADD_INTERACTION:
+	   Order 1:    3.68359e+07         956572      0.0259685
+	   Order 2:    6.75768e+06         191800      0.0283825
+	 Summation:    4.35936e+07    1.14837e+06      0.0263427
+DEL_INTERACTION:
+	   Order 2:         961897         956469       0.994357
+	   Order 3:         191420         191420              1
+	 Summation:    1.15332e+06    1.14789e+06       0.995294
+ADD_DELTA_INTERACTION:
+	   Order 1:    3.68365e+07         272790     0.00740542
+	   Order 2:    6.75805e+06         107689      0.0159349
+	 Summation:    4.35946e+07         380479     0.00872767
+DEL_DELTA_INTERACTION:
+	   Order 2:         276656         272893       0.986398
+	   Order 3:         108069         108069              1
+	 Summation:         384725         380962       0.990219
+CHANGE_TAU_VERTEX:
+	   Order 1:    1.86307e+06    1.80353e+06        0.96804
+	   Order 2:    2.68639e+06    2.62213e+06       0.976078
+	   Order 3:    1.28362e+07    1.25672e+07       0.979042
+	 Summation:    1.73857e+07    1.69929e+07       0.977405
+CHANGE_R_VERTEX:
+	None
+CHANGE_R_LOOP:
+	   Order 1:    1.86486e+06    1.86486e+06              1
+	   Order 2:    2.68639e+06    2.68639e+06              1
+	   Order 3:    2.21835e+07    3.01393e+06       0.135864
+	 Summation:    2.67347e+07    7.56518e+06       0.282972
+CHANGE_MEASURE_G2W:
+	   Order 1:    1.22207e+06         580377       0.474913
+	   Order 2:    1.91423e+06         687280       0.359037
+	   Order 3:    9.34372e+06    3.46509e+06       0.370847
+	 Summation:      1.248e+07    4.73275e+06       0.379226
+CHANGE_MEASURE_W2G:
+	   Order 1:         639359         580507       0.907952
+	   Order 2:         771061         687251       0.891306
+	   Order 3:    4.62981e+06    3.46499e+06       0.748408
+	 Summation:    6.04023e+06    4.73275e+06       0.783537
+CHANGE_CONTINUS2DELTA:
+	   Order 2:     2.3014e+06              0              0
+	   Order 3:    1.12927e+07    5.09003e+06       0.450737
+	 Summation:    1.35941e+07    5.09003e+06       0.374429
+CHANGE_DELTA2CONTINUS:
+	   Order 3:      9.354e+06    5.08955e+06       0.544104
+	 Summation:      9.354e+06    5.08955e+06       0.544104
+CHANGE_SPIN_VERTEX:
+	None
+JUMP_TO_ORDER0:
+	   Order 1:    1.86408e+06    1.30182e+06       0.698372
+	 Summation:    1.86408e+06    1.30182e+06       0.698372
+JUMP_BACK_TO_ORDER1:
+	   Order 0:    1.75914e+08    1.30182e+06     0.00740032
+	 Summation:    1.75914e+08    1.30182e+06     0.00740032
+------------------------------------------------------------
+ADD_INTERACTION<------>DEL_INTERACTION:
+	   Order 1:         956572         956469      0.0744689
+	   Order 2:         191800         191420       0.613846
+	 Summation:    1.14837e+06    1.14789e+06        0.31874
+ADD_DELTA_INTERACTION<------>DEL_DELTA_INTERACTION:
+	   Order 1:         272790         272893       0.139433
+	   Order 2:         107689         108069       0.818088
+	 Summation:         380479         380962       0.553514
+CHANGE_MEASURE_G2W<------>CHANGE_MEASURE_W2G:
+	   Order 1:         580377         580507       0.120656
+	   Order 2:         687280         687251      0.0247355
+	   Order 3:    3.46509e+06    3.46499e+06      0.0383665
+	 Summation:    4.73275e+06    4.73275e+06              0
+CHANGE_CONTINUS2DELTA<------>CHANGE_DELTA2CONTINUS:
+	   Order 3:    5.09003e+06    5.08955e+06       0.151385
+	 Summation:    5.09003e+06    5.08955e+06       0.151385
+============================================================
+
+
+[MC][INFO][15/1/9 23:4:29]@[envMonteCarlo.cpp:117]
+Start Annealing...
+
+[MC][INFO][15/1/9 23:4:29]@[envMonteCarlo.cpp:122]
+Status has not been updated yet since the last annealing!
+
+[MC][INFO][15/1/9 23:4:44]@[envMonteCarlo.cpp:73]
+Start saving data...
+
+dumping <type 'dict'> to file <HDF5 file "0_MC_statis.hkl" (mode r+)>
+[MC][INFO][15/1/9 23:4:44]@[envMonteCarlo.cpp:82]
+Saving data is done!
+
+[MC][INFO][15/1/9 23:4:47]@[markov.cpp:195]
+============================================================
+DiagCounter: 5125708000
+CREATE_WORM:
+	   Order 1:    1.34933e+06          68521      0.0507816
+	   Order 2:    2.30835e+06         173196      0.0750302
+	   Order 3:    1.72789e+07    1.20743e+06      0.0698791
+	 Summation:    2.09366e+07    1.44915e+06      0.0692162
+DELETE_WORM:
+	   Order 1:          68520          68520              1
+	   Order 2:         173196         173196              1
+	   Order 3:    1.20743e+06    1.20743e+06              1
+	 Summation:    1.44915e+06    1.44915e+06              1
+MOVE_WORM_G:
+	   Order 2:    4.25253e+06    3.81821e+06       0.897867
+	   Order 3:    2.96858e+06    2.42727e+06       0.817653
+	 Summation:    7.22112e+06    6.24548e+06       0.864891
+MOVE_WORM_W:
+	   Order 2:         855016         855016              1
+	   Order 3:    3.24544e+06    3.24544e+06              1
+	 Summation:    4.10046e+06    4.10046e+06              1
+RECONNECT:
+	   Order 1:          96276          92235       0.958027
+	   Order 2:         637194         622334       0.976679
+	   Order 3:     1.8311e+06    1.78726e+06       0.976061
+	 Summation:    2.56457e+06    2.50183e+06       0.975537
+ADD_INTERACTION:
+	   Order 1:    3.69003e+07         970948      0.0263127
+	   Order 2:    6.90678e+06         202047      0.0292534
+	 Summation:    4.38071e+07      1.173e+06      0.0267764
+DEL_INTERACTION:
+	   Order 2:         976894         970851       0.993814
+	   Order 3:         201683         201683              1
+	 Summation:    1.17858e+06    1.17253e+06       0.994873
+ADD_DELTA_INTERACTION:
+	   Order 1:    3.69011e+07         280601     0.00760415
+	   Order 2:    6.90719e+06         113718      0.0164637
+	 Summation:    4.38082e+07         394319     0.00900102
+DEL_DELTA_INTERACTION:
+	   Order 2:         284647         280697       0.986123
+	   Order 3:         114082         114082              1
+	 Summation:         398729         394779       0.990094
+CHANGE_TAU_VERTEX:
+	   Order 1:    1.94726e+06    1.88496e+06       0.968009
+	   Order 2:    2.88059e+06    2.81161e+06       0.976055
+	   Order 3:    1.38477e+07    1.35573e+07       0.979031
+	 Summation:    1.86756e+07    1.82539e+07       0.977423
+CHANGE_R_VERTEX:
+	None
+CHANGE_R_LOOP:
+	   Order 1:    1.94908e+06    1.94908e+06              1
+	   Order 2:    2.88033e+06    2.88033e+06              1
+	   Order 3:    2.39625e+07    3.26494e+06       0.136252
+	 Summation:    2.87919e+07    8.09436e+06       0.281133
+CHANGE_MEASURE_G2W:
+	   Order 1:    1.29537e+06         591846       0.456892
+	   Order 2:     2.0771e+06         718165       0.345753
+	   Order 3:    1.01515e+07    3.72948e+06       0.367381
+	 Summation:     1.3524e+07    5.03949e+06       0.372633
+CHANGE_MEASURE_W2G:
+	   Order 1:         650826         591974       0.909573
+	   Order 2:         801968         718158       0.895495
+	   Order 3:    4.90104e+06    3.72936e+06       0.760932
+	 Summation:    6.35383e+06    5.03949e+06       0.793141
+CHANGE_CONTINUS2DELTA:
+	   Order 2:    2.47997e+06              0              0
+	   Order 3:    1.22155e+07    5.50871e+06       0.450959
+	 Summation:    1.46955e+07    5.50871e+06       0.374857
+CHANGE_DELTA2CONTINUS:
+	   Order 3:    1.01248e+07    5.50825e+06       0.544034
+	 Summation:    1.01248e+07    5.50825e+06       0.544034
+CHANGE_SPIN_VERTEX:
+	None
+JUMP_TO_ORDER0:
+	   Order 1:    1.94791e+06    1.38565e+06       0.711352
+	 Summation:    1.94791e+06    1.38565e+06       0.711352
+JUMP_BACK_TO_ORDER1:
+	   Order 0:    1.91366e+08    1.38565e+06     0.00724085
+	 Summation:    1.91366e+08    1.38565e+06     0.00724085
+------------------------------------------------------------
+ADD_INTERACTION<------>DEL_INTERACTION:
+	   Order 1:         970948         970851      0.0696097
+	   Order 2:         202047         201683        0.57287
+	 Summation:      1.173e+06    1.17253e+06        0.30101
+ADD_DELTA_INTERACTION<------>DEL_DELTA_INTERACTION:
+	   Order 1:         280601         280697       0.128137
+	   Order 2:         113718         114082       0.762649
+	 Summation:         394319         394779       0.517836
+CHANGE_MEASURE_G2W<------>CHANGE_MEASURE_W2G:
+	   Order 1:         591846         591974       0.117643
+	   Order 2:         718165         718158      0.0058408
+	   Order 3:    3.72948e+06    3.72936e+06      0.0443047
+	 Summation:    5.03949e+06    5.03949e+06              0
+CHANGE_CONTINUS2DELTA<------>CHANGE_DELTA2CONTINUS:
+	   Order 3:    5.50871e+06    5.50825e+06       0.138588
+	 Summation:    5.50871e+06    5.50825e+06       0.138588
+============================================================
+
+
+[MC][INFO][15/1/9 23:5:3]@[envMonteCarlo.cpp:117]
+Start Annealing...
+
+[MC][INFO][15/1/9 23:5:3]@[envMonteCarlo.cpp:122]
+Status has not been updated yet since the last annealing!
+

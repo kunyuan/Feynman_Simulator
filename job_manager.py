@@ -96,7 +96,7 @@ def submit_job(job_atom):
         fjob.write("#PBS -o "+homedir+"/Output\n")
         fjob.write("#PBS -e "+homedir+"/Error\n")
         fjob.write("cd "+homedir+"\n")
-        fjob.write(job_atom.execute+" "+infile)
+        fjob.write(job_atom.execute+" -f "+infile)
         fjob.close()
         if job_atom.auto_run:
             os.system("qsub "+jobfile)
