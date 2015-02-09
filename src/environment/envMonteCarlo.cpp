@@ -18,8 +18,9 @@ const string WeightKey = "Weight";
 const string HistKey = "Histogram";
 const string EstimatorsKey = "Estimators";
 
-EnvMonteCarlo::EnvMonteCarlo(const para::Job &job, bool IsAllTauSymmetric)
-    : Job(job), Weight(IsAllTauSymmetric)
+EnvMonteCarlo::EnvMonteCarlo(const para::Job& job, bool IsAllTauSymmetric)
+    : Job(job)
+    , Weight(IsAllTauSymmetric)
 {
 }
 
@@ -97,9 +98,7 @@ void EnvMonteCarlo::AdjustOrderReWeight()
         string str;
         for (int i = 0; i <= Para.Order; i++)
             str += ToString((Para.OrderReWeight[i])) + "  ";
-        LOG_INFO("Reweighted to:\n" + str +
-                 "\nWorm Reweighted to:\n" + ToString(Para.WormSpaceReweight) +
-                 "\nPolar Reweighted to:\n" + ToString(Para.PolarReweight));
+        LOG_INFO("Reweighted to:\n" + str + "\nWorm Reweighted to:\n" + ToString(Para.WormSpaceReweight) + "\nPolar Reweighted to:\n" + ToString(Para.PolarReweight));
     }
     else {
         string str;

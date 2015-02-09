@@ -15,103 +15,101 @@
 #ifndef Complex_h
 #define Complex_h
 
-#include <string>
 #include <iosfwd>
 #include <iomanip>
 #include <math.h>
-//#include <limits>
 #include "utility.h"
 
 // Complex number class
 class Complex {
-  public:
+public:
     Complex(); // Default constructor
     Complex(real re, real im = 0.0);
-    Complex(const Complex &c); // Copy constructor
+    Complex(const Complex& c); // Copy constructor
 
     real Re; // real part
     real Im; // imaginary part
 
-    Complex &operator=(const Complex &);
-    Complex &operator=(const real &);
+    Complex& operator=(const Complex&);
+    Complex& operator=(const real&);
 
     // define the compound assignment operators first
-    Complex &operator+=(const Complex &);
-    Complex &operator+=(const real &);
-    Complex &operator-=(const Complex &);
-    Complex &operator-=(const real &);
-    Complex &operator*=(const Complex &);
-    Complex &operator*=(const real &);
-    Complex &operator/=(const Complex &);
-    Complex &operator/=(const real &);
+    Complex& operator+=(const Complex&);
+    Complex& operator+=(const real&);
+    Complex& operator-=(const Complex&);
+    Complex& operator-=(const real&);
+    Complex& operator*=(const Complex&);
+    Complex& operator*=(const real&);
+    Complex& operator/=(const Complex&);
+    Complex& operator/=(const real&);
 
-    friend std::ostream &operator<<(std::ostream &, const Complex &);
-    friend std::istream &operator>>(std::istream &, Complex &);
+    friend std::ostream& operator<<(std::ostream&, const Complex&);
+    friend std::istream& operator>>(std::istream&, Complex&);
 };
 
-inline bool Equal(const Complex &c1, const Complex &c2, real eps = eps0)
+inline bool Equal(const Complex& c1, const Complex& c2, real eps = eps0)
 {
     return (fabs(c1.Re - c2.Re) < eps && fabs(c1.Im - c2.Im) < eps);
 }
 
-inline bool Equal(const Complex &c1, real r, real i, real eps = eps0)
+inline bool Equal(const Complex& c1, real r, real i, real eps = eps0)
 {
     return (fabs(c1.Re - r) < eps && fabs(c1.Im - i) < eps);
 }
 
-inline bool IsZero(const Complex &c)
+inline bool IsZero(const Complex& c)
 {
     return (c.Re == 0.0) && (c.Im == 0.0);
 }
 
 // Nonmember operators (to allow implicit conversion of the left operand)
-Complex operator+(const Complex &, const Complex &);
-Complex operator+(const Complex &); // unary + operator
-Complex operator-(const Complex &, const Complex &);
-Complex operator-(const Complex &); // unary - operator
-Complex operator*(const Complex &, const Complex &);
-Complex operator/(const Complex &, const Complex &);
+Complex operator+(const Complex&, const Complex&);
+Complex operator+(const Complex&); // unary + operator
+Complex operator-(const Complex&, const Complex&);
+Complex operator-(const Complex&); // unary - operator
+Complex operator*(const Complex&, const Complex&);
+Complex operator/(const Complex&, const Complex&);
 
-Complex operator+(const Complex &, real);
-Complex operator+(real, const Complex &);
-Complex operator-(const Complex &, real);
-Complex operator-(real, const Complex &);
-Complex operator*(real, const Complex &);
-Complex operator*(const Complex &, real);
-Complex operator/(const Complex &, real);
+Complex operator+(const Complex&, real);
+Complex operator+(real, const Complex&);
+Complex operator-(const Complex&, real);
+Complex operator-(real, const Complex&);
+Complex operator*(real, const Complex&);
+Complex operator*(const Complex&, real);
+Complex operator/(const Complex&, real);
 // Complex library
 
 // mod2 = Re*Re + Im*Im
-inline real mod2(const Complex &c)
+inline real mod2(const Complex& c)
 {
     return (c.Re * c.Re + c.Im * c.Im);
 }
 
 // sqrt(Re*Re + Im*Im)
-inline real mod(const Complex &c)
+inline real mod(const Complex& c)
 {
     return sqrt(mod2(c));
 }
 
-inline real arg(const Complex &c)
+inline real arg(const Complex& c)
 {
     return c.Im != 0.0 ? atan2(c.Im, c.Re) : 0.0;
 }
 
-inline Complex phase(const Complex &c)
+inline Complex phase(const Complex& c)
 {
     if (IsZero(c))
         return 0.0;
     return c / mod(c);
 }
 
-inline Complex exp(const Complex &c)
+inline Complex exp(const Complex& c)
 {
     return (exp(c.Re) * Complex(cos(c.Im), sin(c.Im)));
 }
 
 // Return the principal branch of the square root (non-negative real part).
-inline Complex sqrt(const Complex &x)
+inline Complex sqrt(const Complex& x)
 {
     real mag = mod(x);
     if (mag == 0.0)
@@ -134,7 +132,7 @@ inline Complex polar(real r, real t)
 }
 
 // Complex exponentiation
-inline Complex pow(const Complex &z, const Complex &w)
+inline Complex pow(const Complex& z, const Complex& w)
 {
     real u = w.Re;
     real v = w.Im;
@@ -146,7 +144,7 @@ inline Complex pow(const Complex &z, const Complex &w)
     return exp(logr * u - th * v) * Complex(cos(phi), sin(phi));
 }
 
-inline Complex pow(const Complex &z, real u)
+inline Complex pow(const Complex& z, real u)
 {
     if (IsZero(0.0))
         return u == 0.0 ? 1.0 : 0.0;

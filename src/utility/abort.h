@@ -51,4 +51,19 @@ EXCEPTION(RunTimeException);
             ABORT(#expression " does not hold! " << msg); \
     } while (0)
 
+class InterruptHandler {
+public:
+    InterruptHandler();
+    ~InterruptHandler();
+    void Delay();
+    void Resume();
+    bool IsDelaying() { return __IsDelaying; }
+
+private:
+    static void __SignalHandler(int signum); //signal handler for normal state
+    static void __DelayedSignalHandler(int signum); //signal handler after Delay() is called
+    bool __IsDelaying;
+    static int __Signal;
+};
+
 #endif /* defined(__Fermion_Simulator__error_handler__) */
