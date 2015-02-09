@@ -21,6 +21,7 @@ bool para::Message::Load(const string& FileName)
     }
     GET(_Para, Beta);
     GET(_Para, Version);
+    GET(_Para, SqueezeFactor);
     return true;
 }
 
@@ -29,6 +30,7 @@ void para::Message::Save(const string& FileName)
     Dictionary _Para;
     SET(_Para, Beta);
     SET(_Para, Version);
+    SET(_Para, SqueezeFactor);
     _Para.Save(FileName, "w");
 }
 
@@ -37,5 +39,6 @@ std::string para::Message::PrettyString()
     Dictionary _Para;
     SET(_Para, Beta);
     SET(_Para, Version);
+    SET(_Para, SqueezeFactor);
     return _Para.PrettyString();
 }

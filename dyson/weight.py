@@ -175,23 +175,25 @@ class Weight():
         if ratio is not None:
             self.AccuData+=ratio*newWeight.Data
             self.Norm+=ratio
-        self.__BackUpRatio=ratio
-        self.__BackUpWeight=newWeight
+        self.BackUpRatio=ratio
+        self.BackUpWeight=newWeight
         if self.Norm>1.0e-3:
             self.Data = self.AccuData/self.Norm
         else:
             self.Data=newWeight.Data
     def RollBack(self):
-        if self.__BackUpRatio is None:
+        if not hasattr(self, "BackUpRatio"):
+            return
+        if self.BackUpRatio is None:
             #None means no update in the last calling of Merge
             return 
-        self.__BackUpWeight.FFT(self.SpaceDomain, self.TimeDomain)
-        self.Norm-=self.__BackUpRatio
-        self.AccuData-=self.__BackUpRatio*self.__BackUpWeight.Data
+        self.BackUpWeight.FFT(self.SpaceDomain, self.TimeDomain)
+        self.Norm-=self.BackUpRatio
+        self.AccuData-=self.BackUpRatio*self.BackUpWeight.Data
         if self.Norm>1.0e-3:
             self.Data = self.AccuData/self.Norm
         else:
-            self.Data=self.__BackUpWeight.Data
+            self.Data=self.BackUpWeight.Data
 
     def FFT(self, *SpaceOrTime):
         if "R" in SpaceOrTime and self.SpaceDomain is "K":
