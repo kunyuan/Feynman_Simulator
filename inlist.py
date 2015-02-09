@@ -9,7 +9,7 @@ MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
     "__Duplicate" : 1,
-    "__IsCluster" : True, 
+    "__IsCluster" : False, 
     "__AutoRun" : True,
     "__KeepCPUBusy": True,
     },

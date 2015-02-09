@@ -8,6 +8,7 @@
 
 /********************** include files *****************************************/
 #include <iostream>
+#include <csignal>
 #include <unistd.h>
 #include "test.h"
 #include "environment/environment.h"
@@ -23,8 +24,20 @@ const string HelpStr = "Usage:"
                        "or -f / --file PATH   use PATH as the input file path.";
 
 void MonteCarlo(const Job&);
+
+void signalHandler(int signum)
+{
+    cout << "Interrupt signal (" << signum << ") received.\n";
+
+    // cleanup and close up stuff here
+    // terminate program
+
+    exit(signum);
+}
+
 int main(int argc, const char* argv[])
 {
+    signal(SIGINT, signalHandler);
     Python::Initialize();
     Python::ArrayInitialize();
     RunTest();
