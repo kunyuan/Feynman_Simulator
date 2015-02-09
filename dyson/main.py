@@ -4,7 +4,6 @@ import sys
 #log.info("Python Version: {0}".format(sys.version))
 import numpy as np
 import calculator as calc
-print dir(calc)
 import lattice as lat
 import collect
 from weight import UP,DOWN,IN,OUT

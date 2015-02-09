@@ -8,8 +8,8 @@ SLEEP = 1    #check job status for every SLEEP seconds
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" : 3,
-    "__IsCluster" : True, 
+    "__Duplicate" : 0,
+    "__IsCluster" : False, 
     "__AutoRun" : True,
     "__KeepCPUBusy": True,
     },
@@ -28,7 +28,8 @@ Dyson={
     "__KeepCPUBusy": False,
     },
 "Job": {
-    "DysonOnly": MonteCarlo["Control"]["__Duplicate"]==0
+    #"DysonOnly": MonteCarlo["Control"]["__Duplicate"]==0
+    "DysonOnly": False
     }
 }
 

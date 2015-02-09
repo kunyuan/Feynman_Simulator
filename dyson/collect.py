@@ -55,6 +55,7 @@ class WeightEstimator():
         x=range(0, MaxTauBin)
         Shape=self.OrderWeight.shape
         Average0 = np.average(abs(np.sum(self.OrderWeight[:,0,0,0,0,0,:], axis=0)))
+        Info=[]
         for orderindex in range(0, Shape[0]):
             # Order Index is equal to real Order-1
             RelativeError=0
@@ -74,18 +75,18 @@ class WeightEstimator():
                                         Smoothed=smooth.copy()
                                         Position=(orderindex,(sp1,sp2),(sub1,sub2),vol)
                                     self.OrderWeight[orderindex,sp1,sub1,sp2,sub2,vol, :]=smooth
-            State="Accepted with relative error {0} (Threshold {1})".format(RelativeError, ErrorThreshold)
+            State="Accepted with relative error {0:.2g}".format(RelativeError, ErrorThreshold)
             if RelativeError>=ErrorThreshold:
                 State="NOT "+State
-            try:
-                self.__Plot(Name, x, Original, Smoothed, error, Position, State)
-            except:
-                log.warning("Failed to plot statistics of {0} at order {1}".format(Name, Position[0]))
+            Info.append([Name, x, Original, Smoothed, error, Position, State])
             log.info("Maximum at Order {0} is {1}".format(orderindex, RelativeError))
             if RelativeError>=ErrorThreshold:
                 orderindex -= 1
                 break
-
+        try:
+            self.__Plot(Info)
+        except:
+            log.warning("Failed to plot statistics of {0} at order {1}".format(Name, Position[0]))
         if orderindex+1>OrderAccepted:
             NewOrderAccepted=orderindex+1
         else:
@@ -99,29 +100,31 @@ class WeightEstimator():
         self.__Weight.FromDict(Dict)
         return self.__Weight
 
-    def __Plot(self, Name, x, y, smooth, sigma, Position, State):
-        path=os.path.join(workspace, "status")
-        os.system("mkdir "+path)
+    def __Plot(self, Info):
         import matplotlib.pyplot as plt
-        mid=len(x)/2
-        Order=Position[0]+1
-        plt.subplot(2, 1, 1)
-        plt.plot(x, y.real, 'ro', x, smooth.real, 'b-')
-        plt.errorbar(x[mid], smooth[mid].real, yerr=sigma.real,
-                label="Error {0:.2g}".format(sigma.imag))
-        plt.title("Order {0} at Spin:{1}, Sublat:{2}, Coordi:{3}\n{4}".format(Order, 
-            Position[1], Position[2], self.__Map.IndexToCoordi(Position[3]), State))
-        plt.legend().get_frame().set_alpha(0.5)
-        plt.subplot(2, 1, 2)
-        plt.plot(x, y.imag, 'ro', x, smooth.imag, 'b-')
-        plt.errorbar(x[mid], smooth[mid].imag, yerr=sigma.imag, 
-                label="Error {0:.2g}".format(sigma.imag))
-        plt.legend().get_frame().set_alpha(0.5)
-        plt.xlabel("Tau")
-        plt.savefig(os.path.join(path, "{0}_Smoothed_Order{1}.jpg".format(Name, Order)))
-        #plt.show()
-        plt.clf()
-        plt.cla()
+        fig=plt.figure()
+        ax1=plt.subplot(1, 2, 1)
+        ax2=plt.subplot(1, 2, 2)
+        InfoStr=""
+        for Name, x, y, smooth, sigma, Position, State in Info:
+            mid=len(x)/2
+            Order=Position[0]+1
+            ax1.plot(x, y.real, '+', x, smooth.real, '-')
+            ax1.errorbar(x[mid], smooth[mid].real, yerr=sigma.real,
+                    label="Error {0:.2g}".format(sigma.real))
+            ax1.set_xlim([x[0],x[-1]])
+            ax2.plot(x, y.imag, '+', label="Order {0}/Sp:{1},Sub:{2},Coord:{3}".format(Order, 
+                     Position[1], Position[2], self.__Map.IndexToCoordi(Position[3])))
+            ax2.plot(x, smooth.imag, '-')
+            ax2.errorbar(x[mid], smooth[mid].imag, yerr=sigma.imag, 
+                    label="Error {0:.2g}\n{1}".format(sigma.imag, State))
+            ax2.set_xlim([x[0],x[-1]])
+
+        ax1.legend(loc='best', fancybox=True, framealpha=0.5, prop={'size':6})
+        ax2.legend(loc='best', fancybox=True, framealpha=0.5, prop={'size':6})
+        ax1.set_xlabel("$\\tau_{bin}$")
+        ax2.set_xlabel("$\\tau_{bin}$")
+        plt.savefig("{0}_Smoothed.pdf".format(Name))
         plt.close()
 
     def FromDict(self, data):
