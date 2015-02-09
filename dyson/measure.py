@@ -25,11 +25,27 @@ class Observable:
             StagKIndex=self.__Map.CoordiIndex([e/2 for e in self.__Map.L])
             self.Append("UnifChi", Chi.Data[0,0,0,0,0,0]*Factor)
             self.Append("StagChi", Chi.Data[0,0,0,0,StagKIndex,0]*Factor)
+            Chi.FFT("R","T")
+            energy=np.zeros(self.__Map.MaxTauBin)
+            for i in range(self.__Lat.NSublat):
+                for j in range(self.__Lat.NSublat):
+                    for l in NN[i][j]:
+                        energy+=Chi.Data[0,i,0,j,self.__Map.CoordiIndex(l),:]/self.__Lat.NSublat
+            self.Append("Energy", np.mean(energy))
         elif self.__Lat.Name in ["Checkerboard", "3DCheckerboard"]:
             Chi.FFT("K", "W")
             StagKIndex=self.__Map.CoordiIndex([0 for e in self.__Map.L])
             self.Append("UnifChi", (Chi.Data[0,0,0,0,0,0]+Chi.Data[0,0,0,1,0,0])*Factor)
             self.Append("StagChi", (Chi.Data[0,0,0,0,StagKIndex,0]-Chi.Data[0,0,0,1,StagKIndex,0])*Factor)
+
+            Chi.FFT("R","T")
+            energy=np.zeros(self.__Map.MaxTauBin)
+            for i in range(self.__Lat.NSublat):
+                for j in range(self.__Lat.NSublat):
+                    for l in NN[i][j]:
+                        energy+=Chi.Data[0,i,0,j,self.__Map.CoordiIndex(l),:]/self.__Lat.NSublat
+            self.Append("Energy", np.mean(energy))
+
             G.FFT("R","T")
             self.Append("<S^z_A>", 0.5*(G.Data[UP,0,UP,0,0,-1]-G.Data[DOWN,0,DOWN,0,0,-1]))
             self.Append("<S^z_B>", 0.5*(G.Data[UP,1,UP,1,0,-1]-G.Data[DOWN,1,DOWN,1,0,-1]))
@@ -43,7 +59,7 @@ class Observable:
             for i in range(self.__Lat.NSublat):
                 for j in range(self.__Lat.NSublat):
                     for l in NN[i][j]:
-                        energy+=Chi.Data[0,i,0,j,self.__Map.CoordiIndex(l),:]/4.0
+                        energy+=Chi.Data[0,i,0,j,self.__Map.CoordiIndex(l),:]/self.__Lat.NSublat
             self.Append("Energy", np.mean(energy))
         else:
             Assert(False, "model not implemented!")

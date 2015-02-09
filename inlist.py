@@ -33,7 +33,7 @@ Dyson={
     }
 }
 
-beta=0.8
+beta=0.5
 Order=3
 Common={
 "Tau": {
@@ -100,7 +100,7 @@ Dyson["Dyson"]={
     "BetaIncrease": 0.0,
     "SleepTime": 30,
     "Annealing": {
-        "DeltaField": [2.0, 2.0, 2.0, 2.0],
+        "DeltaField": [0.0, 1.0, 1.0, 1.0],
         "Interval": [-0.1, -0.1, -0.1, -0.1]
         }
     }
