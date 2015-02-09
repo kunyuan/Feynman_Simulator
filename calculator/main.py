@@ -16,7 +16,7 @@ import plot, gc
 #start in pdb mode after Ctrl-C
 #signal.signal(signal.SIGINT, start_pdb)
 
-def Measure(para, Observable, NearestNeighbor, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor):
+def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor):
     log.info("Measuring...")
     Chi = calc.Calculate_Chi(ChiTensor, Map)
 
@@ -51,7 +51,7 @@ def Measure(para, Observable, NearestNeighbor, G0, W0, G, W, SigmaDeltaT, Sigma,
     data["SigmaDeltaT"]=SigmaDeltaT.ToDict()
     data["Sigma"]=Sigma.ToDict()
     data["Polar"]=Polar.ToDict()
-    Observable.Measure(Chi, Determ, G, NearestNeighbor)
+    Observable.Measure(Chi, Determ, G, Factory.NearestNeighbor)
 
     with DelayedInterrupt():
         try:
@@ -99,19 +99,17 @@ def Dyson(IsDysonOnly, IsNewCalculation, para, Map, Lat):
         para["Version"]+=1
         log.info(green("Start Version {0}...".format(para["Version"])))
         try:
+            #ratio=None   #do not use accumulation!
             ratio = para["Version"]/(para["Version"]+10.0)
             G0,W0=Factory.Build()
             SigmaDeltaT.Merge(ratio, calc.SigmaDeltaT_FirstOrder(G, W0, Map))
-            #SigmaDeltaT=calc.SigmaDeltaT_FirstOrder(G, W0, Map)
 
             if IsDysonOnly or IsNewCalculation:
                 log.info("accumulating Sigma/Polar statistics...")
                 Sigma.Merge(ratio, calc.SigmaSmoothT_FirstOrder(G, W, Map))
-                #Sigma=calc.SigmaSmoothT_FirstOrder(G, W, Map)
                 log.info("calculating G...")
                 G = calc.G_Dyson(G0, SigmaDeltaT, Sigma, Map)
                 Polar.Merge(ratio, calc.Polar_FirstOrder(G, Map))
-                #Polar=calc.Polar_FirstOrder(G, Map)
             else:
                 log.info("Collecting Sigma/Polar statistics...")
                 Statis=collect.CollectStatis(Map, ParaDyson["Order"])
@@ -124,13 +122,19 @@ def Dyson(IsDysonOnly, IsNewCalculation, para, Map, Lat):
 
         except calc.DenorminatorTouchZero as err:
             #failure due to denorminator touch zero
-            Factory.RevertField(ParaDyson["Annealing"])
             log.warning(green("Version {0} fails due to:\n{1}".format(para["Version"],err)))
+            Factory.RevertField(ParaDyson["Annealing"])
             G, W = Gold, Wold
+            SigmaDeltaT.RollBack()
+            Sigma.RollBack()
+            Polar.RollBack()
         except collect.CollectStatisFailure as err:
             #failure due to statis files collection
             log.warning(green("Version {0} fails due to:\n{1}".format(para["Version"],err)))
             G, W = Gold, Wold
+            SigmaDeltaT.RollBack()
+            Sigma.RollBack()
+            Polar.RollBack()
         except KeyboardInterrupt, SystemExit:
             #exit
             log.info("Terminating Dyson\n {1}".format(para["Version"], traceback.format_exc()))
@@ -143,7 +147,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, para, Map, Lat):
         else:
             #everything works prefectly 
             Gold, Wold = G, W
-            Measure(para, Observable, Factory.NearestNeighbor, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor)
+            Measure(para, Observable, Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor)
             Factory.DecreaseField(ParaDyson["Annealing"])
             log.info("Version {0} is done!".format(para["Version"]))
             parameter.BroadcastMessage(MessageFile, {"Version": para["Version"], "Beta": Map.Beta})

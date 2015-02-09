@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import numpy as np
 from numpy.core import intc
-import sys, os, unittest, math
+import sys, os, unittest, math, traceback
 from logger import *
 try:
     #much faster Ax=b solver, but you have to run ./solver/compiler.sh to compile
@@ -168,13 +168,29 @@ class Weight():
     def Merge(self, ratio, newWeight):
         """return a summation of oldWeight and newWeight"""
         newWeight.FFT(self.SpaceDomain, self.TimeDomain)
-        if hasattr(self, "Norm"):
+        if not hasattr(self, "AccuData"):
+            self.AccuData=np.zeros(self.Shape,dtype=complex)
+        if not hasattr(self, "Norm"):
+            self.Norm=0.0
+        if isinstance(ratio, (int, long, float)):
             self.AccuData+=ratio*newWeight.Data
             self.Norm+=ratio
+            self.__BackUpRatio=ratio
         else:
-            self.AccuData=ratio*newWeight.Data
-            self.Norm=ratio
-        self.Data = self.AccuData/self.Norm
+            self.__BackUpRatio=0.0
+        self.__BackUpWeight=newWeight
+        if self.Norm>1.0e-3:
+            self.Data = self.AccuData/self.Norm
+        else:
+            self.Data=newWeight.Data
+    def RollBack(self):
+        self.__BackUpWeight.FFT(self.SpaceDomain, self.TimeDomain)
+        self.Norm-=self.__BackUpRatio
+        self.AccuData-=self.__BackUpRatio*self.__BackUpWeight.Data
+        if self.Norm>1.0e-3:
+            self.Data = self.AccuData/self.Norm
+        else:
+            self.Data=self.__BackUpWeight.Data
 
     def FFT(self, *SpaceOrTime):
         if "R" in SpaceOrTime and self.SpaceDomain is "K":
@@ -200,6 +216,8 @@ class Weight():
         tau=np.array([self.Map.IndexToTau(e) for e in range(self.Shape[self.TAUDIM])])
         PhaseFactor=np.exp(-1j*BackForth*np.pi*tau/self.Beta)
         self.Data*=PhaseFactor
+        if hasattr(self, "AccuData"):
+            self.AccuData*=PhaseFactor
 
     def FromDict(self, data):
         if self.Name in data:
@@ -239,10 +257,14 @@ class Weight():
         if BackForth==1:
             self.ChangeSymmetry(1)
             self.Data=np.fft.fft(self.Data, axis=self.TAUDIM)
+            if hasattr(self, "AccuData"):
+                self.AccuData=np.fft.fft(self.AccuData, axis=self.TAUDIM)
             self.__AdditionalPhaseFactor(1)
         if BackForth==-1:
             self.__AdditionalPhaseFactor(-1)
             self.Data=np.fft.ifft(self.Data, axis=self.TAUDIM)
+            if hasattr(self, "AccuData"):
+                self.AccuData=np.fft.ifft(self.AccuData, axis=self.TAUDIM)
             self.ChangeSymmetry(-1)
     def __fftSpace(self, BackForth):
         OldShape=self.__OriginShape
@@ -254,6 +276,13 @@ class Weight():
         elif BackForth==-1:
             self.Data=np.fft.ifftn(self.Data, axes=Axis)   
         self.Data=self.Data.reshape(OldShape)
+        if hasattr(self, "AccuData"):
+            self.AccuData=self.AccuData.reshape(NewShape)
+            if BackForth==1:
+                self.AccuData=np.fft.fftn(self.AccuData, axes=Axis)
+            elif BackForth==-1:
+                self.AccuData=np.fft.ifftn(self.AccuData, axes=Axis)
+            self.AccuData=self.AccuData.reshape(OldShape)
     def __AdditionalPhaseFactor(self,BackForth):
         ''' the transformation has to be done in continuous tau representation, namely using  
         exp(-i*2*Pi*m*Tau_n/Beta)(e.g. exp(-i*2*Pi*m*(n+1/2)/N)) as the phase factor

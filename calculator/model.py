@@ -156,7 +156,7 @@ class BareFactory:
             self.NearestNeighbor[0][0]=[(1,0,0),(0,1,0),(0,0,1),(Lx-1,0,0),(0,Ly-1,0),(0,0,Lz-1)]
             self.NextNearestNeighbor[0][0]=[]
             #J1 interaction on nearest neighbors
-            for i in NearestNeighbor[0][0]:
+            for i in self.NearestNeighbor[0][0]:
                 self.BareW.Data[spin,sub,spin,sub,self.__Map.CoordiIndex(i)] = J1/4.0;
             #J2 interaction on next nearest neighbors
             for i in self.NextNearestNeighbor[0][0]:
