@@ -3,10 +3,10 @@ from logger import *
 import lattice as lat
 import numpy as np
 import weight, os, matplotlib
-import matplotlib.pyplot as plt
 if "DISPLAY" not in os.environ:
     log.info("no DISPLAY detected, switch to Agg backend!")
     matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 
 def PlotArray(array, Beta, Name, DoesSave=True):
     x=np.linspace(0, Beta, len(array))

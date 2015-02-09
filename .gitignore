@@ -58,4 +58,7 @@ outfile
 .DS_Store
 *.DS_Store
 build
+Output
+Error
+_job_*
 
