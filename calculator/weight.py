@@ -172,18 +172,19 @@ class Weight():
             self.AccuData=np.zeros(self.Shape,dtype=complex)
         if not hasattr(self, "Norm"):
             self.Norm=0.0
-        if isinstance(ratio, (int, long, float)):
+        if ratio is not None:
             self.AccuData+=ratio*newWeight.Data
             self.Norm+=ratio
-            self.__BackUpRatio=ratio
-        else:
-            self.__BackUpRatio=0.0
+        self.__BackUpRatio=ratio
         self.__BackUpWeight=newWeight
         if self.Norm>1.0e-3:
             self.Data = self.AccuData/self.Norm
         else:
             self.Data=newWeight.Data
     def RollBack(self):
+        if self.__BackUpRatio is None:
+            #None means no update in the last calling of Merge
+            return 
         self.__BackUpWeight.FFT(self.SpaceDomain, self.TimeDomain)
         self.Norm-=self.__BackUpRatio
         self.AccuData-=self.__BackUpRatio*self.__BackUpWeight.Data
