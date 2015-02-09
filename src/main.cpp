@@ -49,8 +49,8 @@ int main(int argc, const char* argv[])
 
 void MonteCarlo(const para::Job& Job)
 {
+    InterruptHandler Interrupt;
     EnvMonteCarlo Env(Job);
-
     if (Job.DoesLoad)
         Env.Load();
     else
@@ -99,8 +99,11 @@ void MonteCarlo(const para::Job& Job)
                 Markov.PrintDetailBalanceInfo();
             }
 
-            if (DiskWriterTimer.check(Para.DiskWriterTimer))
+            if (DiskWriterTimer.check(Para.DiskWriterTimer)) {
+                Interrupt.Delay();
                 Env.Save();
+                Interrupt.Resume();
+            }
 
             if (MessageTimer.check(Para.MessageTimer))
                 Env.ListenToMessage();

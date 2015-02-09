@@ -50,6 +50,7 @@
 		84C86DF51A23D9FD002A3D8D /* index_map.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84C86DF31A23D9FD002A3D8D /* index_map.cpp */; };
 		84C86DFA1A24310F002A3D8D /* component_MC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84C86DF81A24310F002A3D8D /* component_MC.cpp */; };
 		84C86DFD1A24E463002A3D8D /* weight_estimator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84C86DFB1A24E463002A3D8D /* weight_estimator.cpp */; };
+		84E8AE911A89150B00556396 /* abort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84E8AE901A89150B00556396 /* abort.cpp */; };
 		84FDE07419DDFC2F0092B441 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84FDE07319DDFC2F0092B441 /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -119,14 +120,6 @@
 		843DBB3B1A3B535A009DB448 /* timer_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = timer_test.cpp; sourceTree = "<group>"; };
 		843DBB3C1A3B535A009DB448 /* timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = timer.cpp; sourceTree = "<group>"; };
 		843DBB3D1A3B535A009DB448 /* timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = timer.h; sourceTree = "<group>"; };
-		843DBB411A3E96BD009DB448 /* calculator.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = calculator.py; sourceTree = "<group>"; };
-		843DBB431A3E96BD009DB448 /* lattice.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = lattice.py; sourceTree = "<group>"; };
-		843DBB451A3E96BD009DB448 /* logger.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = logger.py; sourceTree = "<group>"; };
-		843DBB471A3E96BD009DB448 /* main.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = main.py; sourceTree = "<group>"; };
-		843DBB491A3E96BD009DB448 /* model.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = model.py; sourceTree = "<group>"; };
-		843DBB4B1A3E96BD009DB448 /* parameter.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = parameter.py; sourceTree = "<group>"; };
-		843DBB4E1A3E96BD009DB448 /* test.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = test.py; sourceTree = "<group>"; };
-		843DBB501A3E96BD009DB448 /* weight.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = weight.py; sourceTree = "<group>"; };
 		843DBB871A448545009DB448 /* dictionary_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dictionary_test.cpp; sourceTree = "<group>"; };
 		843DBB881A448545009DB448 /* dictionary.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dictionary.cpp; sourceTree = "<group>"; };
 		843DBB891A448545009DB448 /* dictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dictionary.h; sourceTree = "<group>"; };
@@ -146,8 +139,6 @@
 		84519AF019F33F22007CB81B /* complex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = complex.cpp; sourceTree = "<group>"; };
 		84519AF119F33F22007CB81B /* complex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = complex.h; sourceTree = "<group>"; };
 		84538C2C1A66DBEB00920C28 /* inlist_template.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = inlist_template.py; path = job/inlist_template.py; sourceTree = "<group>"; };
-		84538C2D1A6C98A900920C28 /* collect.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = collect.py; sourceTree = "<group>"; };
-		84538C2E1A6C98D100920C28 /* profile.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = profile.sh; sourceTree = "<group>"; };
 		84538C2F1A6C991300920C28 /* model_viewer.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = model_viewer.py; path = tool/model_viewer.py; sourceTree = SOURCE_ROOT; };
 		84538C311A6C992300920C28 /* @.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "@.png"; sourceTree = "<group>"; };
 		84538C321A6C992300920C28 /* add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = add.png; sourceTree = "<group>"; };
@@ -503,7 +494,6 @@
 		84538D911A6C997E00920C28 /* IO.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = IO.py; sourceTree = SOURCE_ROOT; };
 		845C92C719F834460066B590 /* job_manager.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = job_manager.py; sourceTree = SOURCE_ROOT; };
 		845C92C919F835590066B590 /* job_class.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = job_class.py; sourceTree = SOURCE_ROOT; };
-		847BCA691A5B97CC00A2562F /* plot.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = plot.py; sourceTree = "<group>"; };
 		8499DB0919FEECEC00AABA1E /* scopeguard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = scopeguard.h; sourceTree = "<group>"; };
 		84B1D57919DEFC19004C3A89 /* test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = test.h; sourceTree = "<group>"; };
 		84B8FC3E19ECA449003D6DF6 /* convention.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = convention.h; sourceTree = "<group>"; };
@@ -516,6 +506,26 @@
 		84C86DF81A24310F002A3D8D /* component_MC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = component_MC.cpp; path = module/weight/component_MC.cpp; sourceTree = "<group>"; };
 		84C86DFB1A24E463002A3D8D /* weight_estimator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = weight_estimator.cpp; path = module/weight/weight_estimator.cpp; sourceTree = "<group>"; };
 		84C86DFC1A24E463002A3D8D /* weight_estimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = weight_estimator.h; path = module/weight/weight_estimator.h; sourceTree = "<group>"; };
+		84E8AE6E1A89107200556396 /* __init__.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = __init__.py; path = dyson/__init__.py; sourceTree = SOURCE_ROOT; };
+		84E8AE6F1A89107200556396 /* calculator.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = calculator.py; path = dyson/calculator.py; sourceTree = SOURCE_ROOT; };
+		84E8AE711A89107200556396 /* collect.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = collect.py; path = dyson/collect.py; sourceTree = SOURCE_ROOT; };
+		84E8AE731A89107200556396 /* color.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = color.py; path = dyson/color.py; sourceTree = SOURCE_ROOT; };
+		84E8AE751A89107200556396 /* lattice.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = lattice.py; path = dyson/lattice.py; sourceTree = SOURCE_ROOT; };
+		84E8AE771A89107200556396 /* logger.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = logger.py; path = dyson/logger.py; sourceTree = SOURCE_ROOT; };
+		84E8AE791A89107200556396 /* main.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = main.py; path = dyson/main.py; sourceTree = SOURCE_ROOT; };
+		84E8AE7A1A89107200556396 /* measure.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = measure.py; path = dyson/measure.py; sourceTree = SOURCE_ROOT; };
+		84E8AE7C1A89107200556396 /* model.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = model.py; path = dyson/model.py; sourceTree = SOURCE_ROOT; };
+		84E8AE7E1A89107200556396 /* parameter.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = parameter.py; path = dyson/parameter.py; sourceTree = SOURCE_ROOT; };
+		84E8AE801A89107200556396 /* plot.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = plot.py; path = dyson/plot.py; sourceTree = SOURCE_ROOT; };
+		84E8AE821A89107200556396 /* profile.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = profile.sh; path = dyson/profile.sh; sourceTree = SOURCE_ROOT; };
+		84E8AE841A89107200556396 /* __init__.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
+		84E8AE861A89107200556396 /* compiler.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = compiler.sh; sourceTree = "<group>"; };
+		84E8AE881A89107200556396 /* lu_fast.pyx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = lu_fast.pyx; sourceTree = "<group>"; };
+		84E8AE891A89107200556396 /* lu_slow.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = lu_slow.py; sourceTree = "<group>"; };
+		84E8AE8B1A89107200556396 /* setup.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = setup.py; sourceTree = "<group>"; };
+		84E8AE8C1A89107200556396 /* test.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = test.py; path = dyson/test.py; sourceTree = SOURCE_ROOT; };
+		84E8AE8D1A89107200556396 /* weight.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = weight.py; path = dyson/weight.py; sourceTree = SOURCE_ROOT; };
+		84E8AE901A89150B00556396 /* abort.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = abort.cpp; sourceTree = "<group>"; };
 		84FDE07019DDFC2F0092B441 /* Feynman_Simulator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Feynman_Simulator; sourceTree = BUILT_PRODUCTS_DIR; };
 		84FDE07319DDFC2F0092B441 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -566,6 +576,7 @@
 				61266FC5A53017300457D92B /* utility.h */,
 				612660FB5825D574D3D39D34 /* utility.cpp */,
 				841D50F619EA176800FDB7FF /* abort.h */,
+				84E8AE901A89150B00556396 /* abort.cpp */,
 				8499DB0919FEECEC00AABA1E /* scopeguard.h */,
 				1CA021B81A0A897D00A18085 /* momentum.h */,
 				1CA021B71A0A897D00A18085 /* momentum.cpp */,
@@ -669,24 +680,6 @@
 			);
 			name = tool;
 			sourceTree = "<group>";
-		};
-		843DBB401A3E96BD009DB448 /* calculator */ = {
-			isa = PBXGroup;
-			children = (
-				84538C2E1A6C98D100920C28 /* profile.sh */,
-				84538C2D1A6C98A900920C28 /* collect.py */,
-				847BCA691A5B97CC00A2562F /* plot.py */,
-				843DBB411A3E96BD009DB448 /* calculator.py */,
-				843DBB431A3E96BD009DB448 /* lattice.py */,
-				843DBB451A3E96BD009DB448 /* logger.py */,
-				843DBB471A3E96BD009DB448 /* main.py */,
-				843DBB491A3E96BD009DB448 /* model.py */,
-				843DBB4B1A3E96BD009DB448 /* parameter.py */,
-				843DBB4E1A3E96BD009DB448 /* test.py */,
-				843DBB501A3E96BD009DB448 /* weight.py */,
-			);
-			path = calculator;
-			sourceTree = SOURCE_ROOT;
 		};
 		843DBB8C1A44854E009DB448 /* pyglue */ = {
 			isa = PBXGroup;
@@ -1092,11 +1085,48 @@
 			name = environment;
 			sourceTree = "<group>";
 		};
+		84E8AE6D1A89105A00556396 /* Dyson */ = {
+			isa = PBXGroup;
+			children = (
+				84E8AE6E1A89107200556396 /* __init__.py */,
+				84E8AE6F1A89107200556396 /* calculator.py */,
+				84E8AE711A89107200556396 /* collect.py */,
+				84E8AE731A89107200556396 /* color.py */,
+				84E8AE751A89107200556396 /* lattice.py */,
+				84E8AE771A89107200556396 /* logger.py */,
+				84E8AE791A89107200556396 /* main.py */,
+				84E8AE7A1A89107200556396 /* measure.py */,
+				84E8AE7C1A89107200556396 /* model.py */,
+				84E8AE7E1A89107200556396 /* parameter.py */,
+				84E8AE801A89107200556396 /* plot.py */,
+				84E8AE821A89107200556396 /* profile.sh */,
+				84E8AE831A89107200556396 /* solver */,
+				84E8AE8C1A89107200556396 /* test.py */,
+				84E8AE8D1A89107200556396 /* weight.py */,
+			);
+			name = Dyson;
+			path = src;
+			sourceTree = "<group>";
+		};
+		84E8AE831A89107200556396 /* solver */ = {
+			isa = PBXGroup;
+			children = (
+				84E8AE841A89107200556396 /* __init__.py */,
+				84E8AE861A89107200556396 /* compiler.sh */,
+				84E8AE881A89107200556396 /* lu_fast.pyx */,
+				84E8AE891A89107200556396 /* lu_slow.py */,
+				84E8AE8B1A89107200556396 /* setup.py */,
+			);
+			name = solver;
+			path = dyson/solver;
+			sourceTree = SOURCE_ROOT;
+		};
 		84FDE06719DDFC2F0092B441 = {
 			isa = PBXGroup;
 			children = (
 				1C30BE351A7E949C00EEF07C /* libpython2.7.dylib */,
 				84FDE07219DDFC2F0092B441 /* Feynman_Simulator */,
+				84E8AE6D1A89105A00556396 /* Dyson */,
 				84FDE07119DDFC2F0092B441 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -1122,7 +1152,6 @@
 				8422FE321A0A7E82002EB44E /* estimator */,
 				1CA5CF3C19ED6F5400212E20 /* lattice */,
 				612661D40BB91FC506C3E572 /* utility */,
-				843DBB401A3E96BD009DB448 /* calculator */,
 				843D3FBA1A155F2600DACC51 /* tool */,
 			);
 			name = Feynman_Simulator;
@@ -1222,6 +1251,7 @@
 				84C86DF51A23D9FD002A3D8D /* index_map.cpp in Sources */,
 				1CFBB0B91A1668C500EE2E9E /* markov_diag_counter.cpp in Sources */,
 				1CA5CF3819ED6F1B00212E20 /* lattice_test.cpp in Sources */,
+				84E8AE911A89150B00556396 /* abort.cpp in Sources */,
 				843DBB961A45F9A8009DB448 /* type_cast.cpp in Sources */,
 				8422FE0F1A09C112002EB44E /* component.cpp in Sources */,
 				8422FE251A09C13D002EB44E /* markov_monitor.cpp in Sources */,
@@ -1312,6 +1342,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
+				CLANG_ENABLE_MODULES = YES;
 				INSTALL_PATH = "~/project/Feynman_Simulator";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1329,6 +1360,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
+				CLANG_ENABLE_MODULES = YES;
 				INSTALL_PATH = "~/project/Feynman_Simulator";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

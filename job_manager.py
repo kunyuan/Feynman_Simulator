@@ -95,6 +95,7 @@ def submit_job(job_atom):
         fjob.write("#!/bin/sh\n"+"#PBS -N "+jobname+"\n")
         fjob.write("#PBS -o "+homedir+"/Output\n")
         fjob.write("#PBS -e "+homedir+"/Error\n")
+        fjob.write("echo $PBS_JOBID >>"+homedir+"/id_job.log\n")
         fjob.write("cd "+homedir+"\n")
         fjob.write(job_atom.execute+" -f "+infile)
         fjob.close()
