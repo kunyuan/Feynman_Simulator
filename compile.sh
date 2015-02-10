@@ -16,3 +16,9 @@ if [ -n "$1" ]
 fi
 make -j
 make install
+cd -
+
+cd ./dyson/solver
+#compile fast lu solver
+bash ./compiler.sh
+cd -
