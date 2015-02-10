@@ -33,7 +33,7 @@ Dyson={
     }
 }
 
-beta=0.8
+beta=0.6
 Order=3
 Common={
 "Tau": {

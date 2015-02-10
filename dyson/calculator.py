@@ -153,6 +153,7 @@ def G_Dyson(G0, SigmaDeltaT, Sigma, map):
     I=np.eye(NSpin*NSub).reshape([NSpin,NSub,NSpin,NSub])
     Denorm=I[...,np.newaxis,np.newaxis]-GS
     lu_piv,Determ=weight.LUFactor(Denorm)
+    Check_Denorminator(Determ,map)
     G.LUSolve(lu_piv, G0.Data);
     return G
 

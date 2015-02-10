@@ -293,8 +293,14 @@ class Weight():
         '''
         if not self.__HasTau:
             return
-        omega=np.array(range(self.Shape[self.TAUDIM]))
-        PhaseFactor=np.exp(-1j*BackForth*np.pi*omega/self.Shape[self.TAUDIM])
+        omega=np.array(range(1,self.Shape[self.TAUDIM]))
+        #PhaseFactor=np.exp(-1j*BackForth*np.pi*omega/self.Shape[self.TAUDIM])
+        EXP=np.exp(-1j*BackForth*2.0*np.pi*omega/self.Shape[self.TAUDIM])
+        PhaseFactor=np.zeros(self.MaxTauBin)+1j*0.0
+        PhaseFactor[0]=1.0
+        PhaseFactor[1:]=(1-EXP)/(1j*omega*2.0*np.pi)*self.Beta/self.MaxTauBin
+        if BackForth==-1:
+            PhaseFactor=1/PhaseFactor
         self.Data*=PhaseFactor
     def __SpatialShape(self, shape):
         InsertPos=self.VOLDIM
