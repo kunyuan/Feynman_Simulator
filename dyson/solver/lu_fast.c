@@ -481,7 +481,7 @@ typedef struct {
 } __Pyx_BufFmt_Context;
 
 
-/* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":723
+/* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":723
  * # in Cython to enable them only on the right systems.
  * 
  * ctypedef npy_int8       int8_t             # <<<<<<<<<<<<<<
@@ -490,7 +490,7 @@ typedef struct {
  */
 typedef npy_int8 __pyx_t_5numpy_int8_t;
 
-/* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":724
+/* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":724
  * 
  * ctypedef npy_int8       int8_t
  * ctypedef npy_int16      int16_t             # <<<<<<<<<<<<<<
@@ -499,7 +499,7 @@ typedef npy_int8 __pyx_t_5numpy_int8_t;
  */
 typedef npy_int16 __pyx_t_5numpy_int16_t;
 
-/* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":725
+/* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":725
  * ctypedef npy_int8       int8_t
  * ctypedef npy_int16      int16_t
  * ctypedef npy_int32      int32_t             # <<<<<<<<<<<<<<
@@ -508,7 +508,7 @@ typedef npy_int16 __pyx_t_5numpy_int16_t;
  */
 typedef npy_int32 __pyx_t_5numpy_int32_t;
 
-/* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":726
+/* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":726
  * ctypedef npy_int16      int16_t
  * ctypedef npy_int32      int32_t
  * ctypedef npy_int64      int64_t             # <<<<<<<<<<<<<<
@@ -517,7 +517,7 @@ typedef npy_int32 __pyx_t_5numpy_int32_t;
  */
 typedef npy_int64 __pyx_t_5numpy_int64_t;
 
-/* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":730
+/* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":730
  * #ctypedef npy_int128     int128_t
  * 
  * ctypedef npy_uint8      uint8_t             # <<<<<<<<<<<<<<
@@ -526,7 +526,7 @@ typedef npy_int64 __pyx_t_5numpy_int64_t;
  */
 typedef npy_uint8 __pyx_t_5numpy_uint8_t;
 
-/* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":731
+/* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":731
  * 
  * ctypedef npy_uint8      uint8_t
  * ctypedef npy_uint16     uint16_t             # <<<<<<<<<<<<<<
@@ -535,7 +535,7 @@ typedef npy_uint8 __pyx_t_5numpy_uint8_t;
  */
 typedef npy_uint16 __pyx_t_5numpy_uint16_t;
 
-/* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":732
+/* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":732
  * ctypedef npy_uint8      uint8_t
  * ctypedef npy_uint16     uint16_t
  * ctypedef npy_uint32     uint32_t             # <<<<<<<<<<<<<<
@@ -544,7 +544,7 @@ typedef npy_uint16 __pyx_t_5numpy_uint16_t;
  */
 typedef npy_uint32 __pyx_t_5numpy_uint32_t;
 
-/* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":733
+/* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":733
  * ctypedef npy_uint16     uint16_t
  * ctypedef npy_uint32     uint32_t
  * ctypedef npy_uint64     uint64_t             # <<<<<<<<<<<<<<
@@ -553,7 +553,7 @@ typedef npy_uint32 __pyx_t_5numpy_uint32_t;
  */
 typedef npy_uint64 __pyx_t_5numpy_uint64_t;
 
-/* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":737
+/* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":737
  * #ctypedef npy_uint128    uint128_t
  * 
  * ctypedef npy_float32    float32_t             # <<<<<<<<<<<<<<
@@ -562,7 +562,7 @@ typedef npy_uint64 __pyx_t_5numpy_uint64_t;
  */
 typedef npy_float32 __pyx_t_5numpy_float32_t;
 
-/* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":738
+/* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":738
  * 
  * ctypedef npy_float32    float32_t
  * ctypedef npy_float64    float64_t             # <<<<<<<<<<<<<<
@@ -571,7 +571,7 @@ typedef npy_float32 __pyx_t_5numpy_float32_t;
  */
 typedef npy_float64 __pyx_t_5numpy_float64_t;
 
-/* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":747
+/* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":747
  * # The int types are mapped a bit surprising --
  * # numpy.int corresponds to 'l' and numpy.long to 'q'
  * ctypedef npy_long       int_t             # <<<<<<<<<<<<<<
@@ -580,7 +580,7 @@ typedef npy_float64 __pyx_t_5numpy_float64_t;
  */
 typedef npy_long __pyx_t_5numpy_int_t;
 
-/* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":748
+/* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":748
  * # numpy.int corresponds to 'l' and numpy.long to 'q'
  * ctypedef npy_long       int_t
  * ctypedef npy_longlong   long_t             # <<<<<<<<<<<<<<
@@ -589,7 +589,7 @@ typedef npy_long __pyx_t_5numpy_int_t;
  */
 typedef npy_longlong __pyx_t_5numpy_long_t;
 
-/* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":749
+/* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":749
  * ctypedef npy_long       int_t
  * ctypedef npy_longlong   long_t
  * ctypedef npy_longlong   longlong_t             # <<<<<<<<<<<<<<
@@ -598,7 +598,7 @@ typedef npy_longlong __pyx_t_5numpy_long_t;
  */
 typedef npy_longlong __pyx_t_5numpy_longlong_t;
 
-/* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":751
+/* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":751
  * ctypedef npy_longlong   longlong_t
  * 
  * ctypedef npy_ulong      uint_t             # <<<<<<<<<<<<<<
@@ -607,7 +607,7 @@ typedef npy_longlong __pyx_t_5numpy_longlong_t;
  */
 typedef npy_ulong __pyx_t_5numpy_uint_t;
 
-/* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":752
+/* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":752
  * 
  * ctypedef npy_ulong      uint_t
  * ctypedef npy_ulonglong  ulong_t             # <<<<<<<<<<<<<<
@@ -616,7 +616,7 @@ typedef npy_ulong __pyx_t_5numpy_uint_t;
  */
 typedef npy_ulonglong __pyx_t_5numpy_ulong_t;
 
-/* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":753
+/* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":753
  * ctypedef npy_ulong      uint_t
  * ctypedef npy_ulonglong  ulong_t
  * ctypedef npy_ulonglong  ulonglong_t             # <<<<<<<<<<<<<<
@@ -625,7 +625,7 @@ typedef npy_ulonglong __pyx_t_5numpy_ulong_t;
  */
 typedef npy_ulonglong __pyx_t_5numpy_ulonglong_t;
 
-/* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":755
+/* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":755
  * ctypedef npy_ulonglong  ulonglong_t
  * 
  * ctypedef npy_intp       intp_t             # <<<<<<<<<<<<<<
@@ -634,7 +634,7 @@ typedef npy_ulonglong __pyx_t_5numpy_ulonglong_t;
  */
 typedef npy_intp __pyx_t_5numpy_intp_t;
 
-/* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":756
+/* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":756
  * 
  * ctypedef npy_intp       intp_t
  * ctypedef npy_uintp      uintp_t             # <<<<<<<<<<<<<<
@@ -643,7 +643,7 @@ typedef npy_intp __pyx_t_5numpy_intp_t;
  */
 typedef npy_uintp __pyx_t_5numpy_uintp_t;
 
-/* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":758
+/* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":758
  * ctypedef npy_uintp      uintp_t
  * 
  * ctypedef npy_double     float_t             # <<<<<<<<<<<<<<
@@ -652,7 +652,7 @@ typedef npy_uintp __pyx_t_5numpy_uintp_t;
  */
 typedef npy_double __pyx_t_5numpy_float_t;
 
-/* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":759
+/* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":759
  * 
  * ctypedef npy_double     float_t
  * ctypedef npy_double     double_t             # <<<<<<<<<<<<<<
@@ -661,7 +661,7 @@ typedef npy_double __pyx_t_5numpy_float_t;
  */
 typedef npy_double __pyx_t_5numpy_double_t;
 
-/* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":760
+/* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":760
  * ctypedef npy_double     float_t
  * ctypedef npy_double     double_t
  * ctypedef npy_longdouble longdouble_t             # <<<<<<<<<<<<<<
@@ -701,7 +701,7 @@ typedef __pyx_t_5numpy_double_t __pyx_t_7lu_fast_cDOUBLE;
 
 /*--- Type declarations ---*/
 
-/* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":762
+/* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":762
  * ctypedef npy_longdouble longdouble_t
  * 
  * ctypedef npy_cfloat      cfloat_t             # <<<<<<<<<<<<<<
@@ -710,7 +710,7 @@ typedef __pyx_t_5numpy_double_t __pyx_t_7lu_fast_cDOUBLE;
  */
 typedef npy_cfloat __pyx_t_5numpy_cfloat_t;
 
-/* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":763
+/* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":763
  * 
  * ctypedef npy_cfloat      cfloat_t
  * ctypedef npy_cdouble     cdouble_t             # <<<<<<<<<<<<<<
@@ -719,7 +719,7 @@ typedef npy_cfloat __pyx_t_5numpy_cfloat_t;
  */
 typedef npy_cdouble __pyx_t_5numpy_cdouble_t;
 
-/* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":764
+/* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":764
  * ctypedef npy_cfloat      cfloat_t
  * ctypedef npy_cdouble     cdouble_t
  * ctypedef npy_clongdouble clongdouble_t             # <<<<<<<<<<<<<<
@@ -728,7 +728,7 @@ typedef npy_cdouble __pyx_t_5numpy_cdouble_t;
  */
 typedef npy_clongdouble __pyx_t_5numpy_clongdouble_t;
 
-/* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":766
+/* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":766
  * ctypedef npy_clongdouble clongdouble_t
  * 
  * ctypedef npy_cdouble     complex_t             # <<<<<<<<<<<<<<
@@ -839,12 +839,6 @@ static CYTHON_INLINE int __Pyx_TypeTest(PyObject *obj, PyTypeObject *type);
 
 static void __Pyx_RaiseBufferFallbackError(void);
 
-#if CYTHON_COMPILING_IN_CPYTHON
-static CYTHON_INLINE PyObject* __Pyx_PyObject_CallMethO(PyObject *func, PyObject *arg);
-#endif
-
-static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObject *arg);
-
 static void __Pyx_RaiseBufferIndexError(int axis);
 
 #define __Pyx_BufPtrStrided3d(type, buf, i0, s0, i1, s1, i2, s2) (type)((char*)buf + i0 * s0 + i1 * s1 + i2 * s2)
@@ -857,6 +851,18 @@ static void __Pyx_RaiseDoubleKeywordsError(const char* func_name, PyObject* kw_n
 static int __Pyx_ParseOptionalKeywords(PyObject *kwds, PyObject **argnames[], \
     PyObject *kwds2, PyObject *values[], Py_ssize_t num_pos_args, \
     const char* function_name);
+
+#if CYTHON_COMPILING_IN_CPYTHON
+static CYTHON_INLINE PyObject* __Pyx_PyObject_CallMethO(PyObject *func, PyObject *arg);
+#endif
+
+static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObject *arg);
+
+#if CYTHON_COMPILING_IN_CPYTHON
+static CYTHON_INLINE PyObject* __Pyx_PyObject_CallNoArg(PyObject *func);
+#else
+#define __Pyx_PyObject_CallNoArg(func) __Pyx_PyObject_Call(func, __pyx_empty_tuple, NULL)
+#endif
 
 #define __Pyx_BufPtrStrided1d(type, buf, i0, s0) (type)((char*)buf + i0 * s0)
 static CYTHON_INLINE void __Pyx_RaiseTooManyValuesError(Py_ssize_t expected);
@@ -1080,6 +1086,7 @@ static PyObject *__pyx_pf_7lu_fast_4lu_det(CYTHON_UNUSED PyObject *__pyx_self, P
 static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info, int __pyx_v_flags); /* proto */
 static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info); /* proto */
 static char __pyx_k_B[] = "B";
+static char __pyx_k_F[] = "F";
 static char __pyx_k_H[] = "H";
 static char __pyx_k_I[] = "I";
 static char __pyx_k_L[] = "L";
@@ -1098,6 +1105,7 @@ static char __pyx_k_q[] = "q";
 static char __pyx_k_Zd[] = "Zd";
 static char __pyx_k_Zf[] = "Zf";
 static char __pyx_k_Zg[] = "Zg";
+static char __pyx_k_bb[] = "bb";
 static char __pyx_k_lu[] = "lu";
 static char __pyx_k_np[] = "np";
 static char __pyx_k_LDA[] = "LDA";
@@ -1105,6 +1113,7 @@ static char __pyx_k_LDB[] = "LDB";
 static char __pyx_k_arr[] = "arr";
 static char __pyx_k_det[] = "det";
 static char __pyx_k_piv[] = "piv";
+static char __pyx_k_copy[] = "copy";
 static char __pyx_k_info[] = "info";
 static char __pyx_k_intc[] = "intc";
 static char __pyx_k_main[] = "__main__";
@@ -1115,6 +1124,7 @@ static char __pyx_k_test[] = "__test__";
 static char __pyx_k_dtype[] = "dtype";
 static char __pyx_k_empty[] = "empty";
 static char __pyx_k_numpy[] = "numpy";
+static char __pyx_k_order[] = "order";
 static char __pyx_k_range[] = "range";
 static char __pyx_k_trans[] = "trans";
 static char __pyx_k_DOUBLE[] = "DOUBLE";
@@ -1123,31 +1133,35 @@ static char __pyx_k_lu_det[] = "lu_det";
 static char __pyx_k_Complex[] = "Complex";
 static char __pyx_k_float64[] = "float64";
 static char __pyx_k_lu_fast[] = "lu_fast";
+static char __pyx_k_require[] = "require";
 static char __pyx_k_lu_solve[] = "lu_solve";
 static char __pyx_k_TypeError[] = "TypeError";
 static char __pyx_k_lu_factor[] = "lu_factor";
 static char __pyx_k_ValueError[] = "ValueError";
 static char __pyx_k_complex128[] = "complex128";
 static char __pyx_k_RuntimeError[] = "RuntimeError";
-static char __pyx_k_ascontiguousarray[] = "ascontiguousarray";
+static char __pyx_k_requirements[] = "requirements";
+static char __pyx_k_may_share_memory[] = "may_share_memory";
 static char __pyx_k_require_lu_shape_b_shape[] = "require lu.shape==b.shape";
 static char __pyx_k_ndarray_is_not_C_contiguous[] = "ndarray is not C contiguous";
-static char __pyx_k_require_lu_shape_0_piv_shape_0[] = "require lu.shape[0]==piv.shape[0]";
-static char __pyx_k_require_lu_shape_1_piv_shape_1[] = "require lu.shape[1]==piv.shape[1]";
-static char __pyx_k_Users_kchen_project_Feynman_Sim[] = "/Users/kchen/project/Feynman_Simulator/calculator/solver/lu_fast.pyx";
-static char __pyx_k_the_input_array_must_have_shape[] = "the input array must have shape [:, N, N]";
+static char __pyx_k_require_lu_shape_1_piv_shape_0[] = "require lu.shape[1]==piv.shape[0]";
+static char __pyx_k_require_lu_shape_2_piv_shape_1[] = "require lu.shape[2]==piv.shape[1]";
+static char __pyx_k_Users_kchen_project_Feynman_Sim[] = "/Users/kchen/project/Feynman_Simulator/dyson/solver/lu_fast.pyx";
+static char __pyx_k_the_input_array_must_have_shape[] = "the input array must have shape [N, N, :]";
 static char __pyx_k_unknown_dtype_code_in_numpy_pxd[] = "unknown dtype code in numpy.pxd (%d)";
 static char __pyx_k_Diagonal_number_d_is_exactly_zer[] = "Diagonal number %d is exactly zero. Singular matrix.";
 static char __pyx_k_Format_string_allocated_too_shor[] = "Format string allocated too short, see comment in numpy.pxd";
 static char __pyx_k_Non_native_byte_order_not_suppor[] = "Non-native byte order not supported";
 static char __pyx_k_illegal_value_in_d_th_argument_o[] = "illegal value in %d-th argument of internal getrf";
 static char __pyx_k_ndarray_is_not_Fortran_contiguou[] = "ndarray is not Fortran contiguous";
-static char __pyx_k_the_lu_array_must_have_shape_N_N[] = "the lu array must have shape [:, N, N]";
+static char __pyx_k_the_lu_array_must_have_shape_N_N[] = "the lu array must have shape [N, N, :]";
 static char __pyx_k_Format_string_allocated_too_shor_2[] = "Format string allocated too short.";
 static char __pyx_k_illegal_value_in_d_th_argument_o_2[] = "illegal value in %d-th argument of internal gesv|posv";
+static char __pyx_k_the_lu_array_must_have_shape_N_N_2[] = "the lu array must have shape [N, N, M]";
 static PyObject *__pyx_n_s_Complex;
 static PyObject *__pyx_n_s_DOUBLE;
 static PyObject *__pyx_kp_s_Diagonal_number_d_is_exactly_zer;
+static PyObject *__pyx_n_s_F;
 static PyObject *__pyx_kp_u_Format_string_allocated_too_shor;
 static PyObject *__pyx_kp_u_Format_string_allocated_too_shor_2;
 static PyObject *__pyx_n_s_LDA;
@@ -1159,9 +1173,10 @@ static PyObject *__pyx_n_s_TypeError;
 static PyObject *__pyx_kp_s_Users_kchen_project_Feynman_Sim;
 static PyObject *__pyx_n_s_ValueError;
 static PyObject *__pyx_n_s_arr;
-static PyObject *__pyx_n_s_ascontiguousarray;
 static PyObject *__pyx_n_s_b;
+static PyObject *__pyx_n_s_bb;
 static PyObject *__pyx_n_s_complex128;
+static PyObject *__pyx_n_s_copy;
 static PyObject *__pyx_n_s_det;
 static PyObject *__pyx_n_s_dtype;
 static PyObject *__pyx_n_s_empty;
@@ -1179,21 +1194,26 @@ static PyObject *__pyx_n_s_lu_factor;
 static PyObject *__pyx_n_s_lu_fast;
 static PyObject *__pyx_n_s_lu_solve;
 static PyObject *__pyx_n_s_main;
+static PyObject *__pyx_n_s_may_share_memory;
 static PyObject *__pyx_kp_u_ndarray_is_not_C_contiguous;
 static PyObject *__pyx_kp_u_ndarray_is_not_Fortran_contiguou;
 static PyObject *__pyx_n_s_np;
 static PyObject *__pyx_n_s_nrhs;
 static PyObject *__pyx_n_s_numpy;
 static PyObject *__pyx_n_s_ones;
+static PyObject *__pyx_n_s_order;
 static PyObject *__pyx_n_s_piv;
 static PyObject *__pyx_n_s_range;
-static PyObject *__pyx_kp_s_require_lu_shape_0_piv_shape_0;
-static PyObject *__pyx_kp_s_require_lu_shape_1_piv_shape_1;
+static PyObject *__pyx_n_s_require;
+static PyObject *__pyx_kp_s_require_lu_shape_1_piv_shape_0;
+static PyObject *__pyx_kp_s_require_lu_shape_2_piv_shape_1;
 static PyObject *__pyx_kp_s_require_lu_shape_b_shape;
+static PyObject *__pyx_n_s_requirements;
 static PyObject *__pyx_n_s_size;
 static PyObject *__pyx_n_s_test;
 static PyObject *__pyx_kp_s_the_input_array_must_have_shape;
 static PyObject *__pyx_kp_s_the_lu_array_must_have_shape_N_N;
+static PyObject *__pyx_kp_s_the_lu_array_must_have_shape_N_N_2;
 static PyObject *__pyx_n_s_trans;
 static PyObject *__pyx_kp_u_unknown_dtype_code_in_numpy_pxd;
 static PyObject *__pyx_int_1;
@@ -1223,12 +1243,12 @@ static PyObject *__pyx_codeobj__20;
  * 
  * def lu_factor(np.ndarray[cComplex, ndim=3] arr):             # <<<<<<<<<<<<<<
  *     """
- *        arr: complex type array with [M, N, N], it may be altered!!!
+ *        arr: complex type array with [N, N, M], it may be altered!!!
  */
 
 /* Python wrapper */
 static PyObject *__pyx_pw_7lu_fast_1lu_factor(PyObject *__pyx_self, PyObject *__pyx_v_arr); /*proto*/
-static char __pyx_doc_7lu_fast_lu_factor[] = "\n       arr: complex type array with [M, N, N], it may be altered!!!\n       return: (lu, piv): lu decomposition of array arr\n    ";
+static char __pyx_doc_7lu_fast_lu_factor[] = "\n       arr: complex type array with [N, N, M], it may be altered!!!\n       return: (lu, piv): lu decomposition of array arr in fortran order!!!\n    ";
 static PyMethodDef __pyx_mdef_7lu_fast_1lu_factor = {"lu_factor", (PyCFunction)__pyx_pw_7lu_fast_1lu_factor, METH_O, __pyx_doc_7lu_fast_lu_factor};
 static PyObject *__pyx_pw_7lu_fast_1lu_factor(PyObject *__pyx_self, PyObject *__pyx_v_arr) {
   CYTHON_UNUSED int __pyx_lineno = 0;
@@ -1275,9 +1295,9 @@ static PyObject *__pyx_pf_7lu_fast_lu_factor(CYTHON_UNUSED PyObject *__pyx_self,
   PyObject *__pyx_t_11 = NULL;
   PyArrayObject *__pyx_t_12 = NULL;
   int __pyx_t_13;
-  int __pyx_t_14;
+  long __pyx_t_14;
   long __pyx_t_15;
-  long __pyx_t_16;
+  int __pyx_t_16;
   int __pyx_t_17;
   long __pyx_t_18;
   int __pyx_t_19;
@@ -1301,21 +1321,21 @@ static PyObject *__pyx_pf_7lu_fast_lu_factor(CYTHON_UNUSED PyObject *__pyx_self,
   __pyx_pybuffernd_arr.diminfo[0].strides = __pyx_pybuffernd_arr.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_arr.diminfo[0].shape = __pyx_pybuffernd_arr.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_arr.diminfo[1].strides = __pyx_pybuffernd_arr.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_arr.diminfo[1].shape = __pyx_pybuffernd_arr.rcbuffer->pybuffer.shape[1]; __pyx_pybuffernd_arr.diminfo[2].strides = __pyx_pybuffernd_arr.rcbuffer->pybuffer.strides[2]; __pyx_pybuffernd_arr.diminfo[2].shape = __pyx_pybuffernd_arr.rcbuffer->pybuffer.shape[2];
 
   /* "lu_fast.pyx":26
- *        return: (lu, piv): lu decomposition of array arr
+ *        return: (lu, piv): lu decomposition of array arr in fortran order!!!
  *     """
- *     if arr.shape[1] != arr.shape[2]:             # <<<<<<<<<<<<<<
- *         raise TypeError("the input array must have shape [:, N, N]")
- *     cdef int size= arr.shape[0];
+ *     if arr.shape[0] != arr.shape[1]:             # <<<<<<<<<<<<<<
+ *         raise TypeError("the input array must have shape [N, N, :]")
+ *     cdef int size= arr.shape[2];
  */
-  __pyx_t_1 = (((__pyx_v_arr->dimensions[1]) != (__pyx_v_arr->dimensions[2])) != 0);
+  __pyx_t_1 = (((__pyx_v_arr->dimensions[0]) != (__pyx_v_arr->dimensions[1])) != 0);
   if (__pyx_t_1) {
 
     /* "lu_fast.pyx":27
  *     """
- *     if arr.shape[1] != arr.shape[2]:
- *         raise TypeError("the input array must have shape [:, N, N]")             # <<<<<<<<<<<<<<
- *     cdef int size= arr.shape[0];
- *     cdef int N = arr.shape[1];
+ *     if arr.shape[0] != arr.shape[1]:
+ *         raise TypeError("the input array must have shape [N, N, :]")             # <<<<<<<<<<<<<<
+ *     cdef int size= arr.shape[2];
+ *     cdef int N = arr.shape[0];
  */
     __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple_, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 27; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_2);
@@ -1325,26 +1345,26 @@ static PyObject *__pyx_pf_7lu_fast_lu_factor(CYTHON_UNUSED PyObject *__pyx_self,
   }
 
   /* "lu_fast.pyx":28
- *     if arr.shape[1] != arr.shape[2]:
- *         raise TypeError("the input array must have shape [:, N, N]")
- *     cdef int size= arr.shape[0];             # <<<<<<<<<<<<<<
- *     cdef int N = arr.shape[1];
+ *     if arr.shape[0] != arr.shape[1]:
+ *         raise TypeError("the input array must have shape [N, N, :]")
+ *     cdef int size= arr.shape[2];             # <<<<<<<<<<<<<<
+ *     cdef int N = arr.shape[0];
  *     cdef int LDA = N;
  */
-  __pyx_v_size = (__pyx_v_arr->dimensions[0]);
+  __pyx_v_size = (__pyx_v_arr->dimensions[2]);
 
   /* "lu_fast.pyx":29
- *         raise TypeError("the input array must have shape [:, N, N]")
- *     cdef int size= arr.shape[0];
- *     cdef int N = arr.shape[1];             # <<<<<<<<<<<<<<
+ *         raise TypeError("the input array must have shape [N, N, :]")
+ *     cdef int size= arr.shape[2];
+ *     cdef int N = arr.shape[0];             # <<<<<<<<<<<<<<
  *     cdef int LDA = N;
  *     cdef int info;
  */
-  __pyx_v_N = (__pyx_v_arr->dimensions[1]);
+  __pyx_v_N = (__pyx_v_arr->dimensions[0]);
 
   /* "lu_fast.pyx":30
- *     cdef int size= arr.shape[0];
- *     cdef int N = arr.shape[1];
+ *     cdef int size= arr.shape[2];
+ *     cdef int N = arr.shape[0];
  *     cdef int LDA = N;             # <<<<<<<<<<<<<<
  *     cdef int info;
  *     cdef int i;
@@ -1354,18 +1374,18 @@ static PyObject *__pyx_pf_7lu_fast_lu_factor(CYTHON_UNUSED PyObject *__pyx_self,
   /* "lu_fast.pyx":34
  *     cdef int i;
  *     cdef np.ndarray[int, ndim=2] piv;
- *     piv=np.empty((size, N), dtype=np.intc)             # <<<<<<<<<<<<<<
- *     #make arr c contiguous!
- *     arr=np.ascontiguousarray(arr)
+ *     piv=np.empty((N, size), dtype=np.intc, order=['F'])             # <<<<<<<<<<<<<<
+ *     #make arr fortran contiguous!
+ *     arr=np.require(arr, requirements=['F'])
  */
   __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_empty); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_size); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_N); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_N); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_size); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_5 = PyTuple_New(2); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
@@ -1388,6 +1408,13 @@ static PyObject *__pyx_pf_7lu_fast_lu_factor(CYTHON_UNUSED PyObject *__pyx_self,
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_dtype, __pyx_t_6) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __pyx_t_6 = PyList_New(1); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_INCREF(__pyx_n_s_F);
+  PyList_SET_ITEM(__pyx_t_6, 0, __pyx_n_s_F);
+  __Pyx_GIVEREF(__pyx_n_s_F);
+  if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_order, __pyx_t_6) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_6);
@@ -1417,44 +1444,38 @@ static PyObject *__pyx_pf_7lu_fast_lu_factor(CYTHON_UNUSED PyObject *__pyx_self,
   __pyx_t_6 = 0;
 
   /* "lu_fast.pyx":36
- *     piv=np.empty((size, N), dtype=np.intc)
- *     #make arr c contiguous!
- *     arr=np.ascontiguousarray(arr)             # <<<<<<<<<<<<<<
+ *     piv=np.empty((N, size), dtype=np.intc, order=['F'])
+ *     #make arr fortran contiguous!
+ *     arr=np.require(arr, requirements=['F'])             # <<<<<<<<<<<<<<
  *     #for i in prange(size, nogil=True):
  *     for i in range(size):
  */
-  __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_6 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_6);
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_require); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_ascontiguousarray); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __pyx_t_6 = PyTuple_New(1); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_INCREF(((PyObject *)__pyx_v_arr));
+  PyTuple_SET_ITEM(__pyx_t_6, 0, ((PyObject *)__pyx_v_arr));
+  __Pyx_GIVEREF(((PyObject *)__pyx_v_arr));
+  __pyx_t_4 = PyDict_New(); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_3 = PyList_New(1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_INCREF(__pyx_n_s_F);
+  PyList_SET_ITEM(__pyx_t_3, 0, __pyx_n_s_F);
+  __Pyx_GIVEREF(__pyx_n_s_F);
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_requirements, __pyx_t_3) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_6, __pyx_t_4); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = NULL;
-  if (CYTHON_COMPILING_IN_CPYTHON && unlikely(PyMethod_Check(__pyx_t_4))) {
-    __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_4);
-    if (likely(__pyx_t_5)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
-      __Pyx_INCREF(__pyx_t_5);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_4, function);
-    }
-  }
-  if (!__pyx_t_5) {
-    __pyx_t_6 = __Pyx_PyObject_CallOneArg(__pyx_t_4, ((PyObject *)__pyx_v_arr)); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    __Pyx_GOTREF(__pyx_t_6);
-  } else {
-    __pyx_t_3 = PyTuple_New(1+1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    __Pyx_GOTREF(__pyx_t_3);
-    PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_5); __Pyx_GIVEREF(__pyx_t_5); __pyx_t_5 = NULL;
-    __Pyx_INCREF(((PyObject *)__pyx_v_arr));
-    PyTuple_SET_ITEM(__pyx_t_3, 0+1, ((PyObject *)__pyx_v_arr));
-    __Pyx_GIVEREF(((PyObject *)__pyx_v_arr));
-    __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_3, NULL); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    __Pyx_GOTREF(__pyx_t_6);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  }
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (!(likely(((__pyx_t_6) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_6, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_t_12 = ((PyArrayObject *)__pyx_t_6);
+  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_12 = ((PyArrayObject *)__pyx_t_3);
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_arr.rcbuffer->pybuffer);
@@ -1472,14 +1493,14 @@ static PyObject *__pyx_pf_7lu_fast_lu_factor(CYTHON_UNUSED PyObject *__pyx_self,
     if (unlikely(__pyx_t_8 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_t_12 = 0;
-  __Pyx_DECREF_SET(__pyx_v_arr, ((PyArrayObject *)__pyx_t_6));
-  __pyx_t_6 = 0;
+  __Pyx_DECREF_SET(__pyx_v_arr, ((PyArrayObject *)__pyx_t_3));
+  __pyx_t_3 = 0;
 
   /* "lu_fast.pyx":38
- *     arr=np.ascontiguousarray(arr)
+ *     arr=np.require(arr, requirements=['F'])
  *     #for i in prange(size, nogil=True):
  *     for i in range(size):             # <<<<<<<<<<<<<<
- *         zgetrf_(&N, &N, &arr[i,0,0], &LDA, &piv[i,0], &info);
+ *         zgetrf_(&N, &N, &arr[0,0,i], &LDA, &piv[0,i], &info);
  *         if info < 0:
  */
   __pyx_t_8 = __pyx_v_size;
@@ -1489,13 +1510,13 @@ static PyObject *__pyx_pf_7lu_fast_lu_factor(CYTHON_UNUSED PyObject *__pyx_self,
     /* "lu_fast.pyx":39
  *     #for i in prange(size, nogil=True):
  *     for i in range(size):
- *         zgetrf_(&N, &N, &arr[i,0,0], &LDA, &piv[i,0], &info);             # <<<<<<<<<<<<<<
+ *         zgetrf_(&N, &N, &arr[0,0,i], &LDA, &piv[0,i], &info);             # <<<<<<<<<<<<<<
  *         if info < 0:
  *             raise ValueError('illegal value in %d-th argument of internal getrf' % -info)
  */
-    __pyx_t_14 = __pyx_v_i;
+    __pyx_t_14 = 0;
     __pyx_t_15 = 0;
-    __pyx_t_16 = 0;
+    __pyx_t_16 = __pyx_v_i;
     __pyx_t_17 = -1;
     if (__pyx_t_14 < 0) {
       __pyx_t_14 += __pyx_pybuffernd_arr.diminfo[0].shape;
@@ -1513,26 +1534,26 @@ static PyObject *__pyx_pf_7lu_fast_lu_factor(CYTHON_UNUSED PyObject *__pyx_self,
       __Pyx_RaiseBufferIndexError(__pyx_t_17);
       {__pyx_filename = __pyx_f[0]; __pyx_lineno = 39; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
-    __pyx_t_17 = __pyx_v_i;
     __pyx_t_18 = 0;
+    __pyx_t_17 = __pyx_v_i;
     __pyx_t_19 = -1;
-    if (__pyx_t_17 < 0) {
-      __pyx_t_17 += __pyx_pybuffernd_piv.diminfo[0].shape;
-      if (unlikely(__pyx_t_17 < 0)) __pyx_t_19 = 0;
-    } else if (unlikely(__pyx_t_17 >= __pyx_pybuffernd_piv.diminfo[0].shape)) __pyx_t_19 = 0;
     if (__pyx_t_18 < 0) {
-      __pyx_t_18 += __pyx_pybuffernd_piv.diminfo[1].shape;
-      if (unlikely(__pyx_t_18 < 0)) __pyx_t_19 = 1;
-    } else if (unlikely(__pyx_t_18 >= __pyx_pybuffernd_piv.diminfo[1].shape)) __pyx_t_19 = 1;
+      __pyx_t_18 += __pyx_pybuffernd_piv.diminfo[0].shape;
+      if (unlikely(__pyx_t_18 < 0)) __pyx_t_19 = 0;
+    } else if (unlikely(__pyx_t_18 >= __pyx_pybuffernd_piv.diminfo[0].shape)) __pyx_t_19 = 0;
+    if (__pyx_t_17 < 0) {
+      __pyx_t_17 += __pyx_pybuffernd_piv.diminfo[1].shape;
+      if (unlikely(__pyx_t_17 < 0)) __pyx_t_19 = 1;
+    } else if (unlikely(__pyx_t_17 >= __pyx_pybuffernd_piv.diminfo[1].shape)) __pyx_t_19 = 1;
     if (unlikely(__pyx_t_19 != -1)) {
       __Pyx_RaiseBufferIndexError(__pyx_t_19);
       {__pyx_filename = __pyx_f[0]; __pyx_lineno = 39; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
-    zgetrf_((&__pyx_v_N), (&__pyx_v_N), (&(*__Pyx_BufPtrStrided3d(__pyx_t_double_complex *, __pyx_pybuffernd_arr.rcbuffer->pybuffer.buf, __pyx_t_14, __pyx_pybuffernd_arr.diminfo[0].strides, __pyx_t_15, __pyx_pybuffernd_arr.diminfo[1].strides, __pyx_t_16, __pyx_pybuffernd_arr.diminfo[2].strides))), (&__pyx_v_LDA), (&(*__Pyx_BufPtrStrided2d(int *, __pyx_pybuffernd_piv.rcbuffer->pybuffer.buf, __pyx_t_17, __pyx_pybuffernd_piv.diminfo[0].strides, __pyx_t_18, __pyx_pybuffernd_piv.diminfo[1].strides))), (&__pyx_v_info));
+    zgetrf_((&__pyx_v_N), (&__pyx_v_N), (&(*__Pyx_BufPtrStrided3d(__pyx_t_double_complex *, __pyx_pybuffernd_arr.rcbuffer->pybuffer.buf, __pyx_t_14, __pyx_pybuffernd_arr.diminfo[0].strides, __pyx_t_15, __pyx_pybuffernd_arr.diminfo[1].strides, __pyx_t_16, __pyx_pybuffernd_arr.diminfo[2].strides))), (&__pyx_v_LDA), (&(*__Pyx_BufPtrStrided2d(int *, __pyx_pybuffernd_piv.rcbuffer->pybuffer.buf, __pyx_t_18, __pyx_pybuffernd_piv.diminfo[0].strides, __pyx_t_17, __pyx_pybuffernd_piv.diminfo[1].strides))), (&__pyx_v_info));
 
     /* "lu_fast.pyx":40
  *     for i in range(size):
- *         zgetrf_(&N, &N, &arr[i,0,0], &LDA, &piv[i,0], &info);
+ *         zgetrf_(&N, &N, &arr[0,0,i], &LDA, &piv[0,i], &info);
  *         if info < 0:             # <<<<<<<<<<<<<<
  *             raise ValueError('illegal value in %d-th argument of internal getrf' % -info)
  *         elif info > 0:
@@ -1541,25 +1562,25 @@ static PyObject *__pyx_pf_7lu_fast_lu_factor(CYTHON_UNUSED PyObject *__pyx_self,
     if (__pyx_t_1) {
 
       /* "lu_fast.pyx":41
- *         zgetrf_(&N, &N, &arr[i,0,0], &LDA, &piv[i,0], &info);
+ *         zgetrf_(&N, &N, &arr[0,0,i], &LDA, &piv[0,i], &info);
  *         if info < 0:
  *             raise ValueError('illegal value in %d-th argument of internal getrf' % -info)             # <<<<<<<<<<<<<<
  *         elif info > 0:
  *             raise ValueError("Diagonal number %d is exactly zero. Singular matrix." % -info)
  */
-      __pyx_t_6 = __Pyx_PyInt_From_int((-__pyx_v_info)); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 41; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-      __Pyx_GOTREF(__pyx_t_6);
-      __pyx_t_4 = __Pyx_PyString_Format(__pyx_kp_s_illegal_value_in_d_th_argument_o, __pyx_t_6); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 41; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_3 = __Pyx_PyInt_From_int((-__pyx_v_info)); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 41; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __Pyx_GOTREF(__pyx_t_3);
+      __pyx_t_4 = __Pyx_PyString_Format(__pyx_kp_s_illegal_value_in_d_th_argument_o, __pyx_t_3); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 41; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_4);
-      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      __pyx_t_6 = PyTuple_New(1); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 41; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-      __Pyx_GOTREF(__pyx_t_6);
-      PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_4);
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 41; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __Pyx_GOTREF(__pyx_t_3);
+      PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_4);
       __Pyx_GIVEREF(__pyx_t_4);
       __pyx_t_4 = 0;
-      __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_t_6, NULL); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 41; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_t_3, NULL); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 41; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_4);
-      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_Raise(__pyx_t_4, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       {__pyx_filename = __pyx_f[0]; __pyx_lineno = 41; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
@@ -1584,19 +1605,19 @@ static PyObject *__pyx_pf_7lu_fast_lu_factor(CYTHON_UNUSED PyObject *__pyx_self,
  */
       __pyx_t_4 = __Pyx_PyInt_From_int((-__pyx_v_info)); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 43; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_6 = __Pyx_PyString_Format(__pyx_kp_s_Diagonal_number_d_is_exactly_zer, __pyx_t_4); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 43; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-      __Pyx_GOTREF(__pyx_t_6);
+      __pyx_t_3 = __Pyx_PyString_Format(__pyx_kp_s_Diagonal_number_d_is_exactly_zer, __pyx_t_4); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 43; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 43; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_4);
-      PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_6);
-      __Pyx_GIVEREF(__pyx_t_6);
-      __pyx_t_6 = 0;
-      __pyx_t_6 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_t_4, NULL); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 43; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-      __Pyx_GOTREF(__pyx_t_6);
+      PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_3);
+      __Pyx_GIVEREF(__pyx_t_3);
+      __pyx_t_3 = 0;
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_t_4, NULL); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 43; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __Pyx_Raise(__pyx_t_6, 0, 0, 0);
-      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+      __Pyx_Raise(__pyx_t_3, 0, 0, 0);
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       {__pyx_filename = __pyx_f[0]; __pyx_lineno = 43; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
   }
@@ -1609,16 +1630,16 @@ static PyObject *__pyx_pf_7lu_fast_lu_factor(CYTHON_UNUSED PyObject *__pyx_self,
  * def lu_solve(np.ndarray[cComplex, ndim=3] lu, np.ndarray[int, ndim=2] piv, np.ndarray[cComplex, ndim=3] b):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_6 = PyNumber_Subtract(((PyObject *)__pyx_v_piv), __pyx_int_1); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 45; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_6);
+  __pyx_t_3 = PyNumber_Subtract(((PyObject *)__pyx_v_piv), __pyx_int_1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 45; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 45; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_INCREF(((PyObject *)__pyx_v_arr));
   PyTuple_SET_ITEM(__pyx_t_4, 0, ((PyObject *)__pyx_v_arr));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_arr));
-  PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_t_6);
-  __Pyx_GIVEREF(__pyx_t_6);
-  __pyx_t_6 = 0;
+  PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_t_3);
+  __Pyx_GIVEREF(__pyx_t_3);
+  __pyx_t_3 = 0;
   __pyx_r = __pyx_t_4;
   __pyx_t_4 = 0;
   goto __pyx_L0;
@@ -1628,7 +1649,7 @@ static PyObject *__pyx_pf_7lu_fast_lu_factor(CYTHON_UNUSED PyObject *__pyx_self,
  * 
  * def lu_factor(np.ndarray[cComplex, ndim=3] arr):             # <<<<<<<<<<<<<<
  *     """
- *        arr: complex type array with [M, N, N], it may be altered!!!
+ *        arr: complex type array with [N, N, M], it may be altered!!!
  */
 
   /* function exit code */
@@ -1667,7 +1688,7 @@ static PyObject *__pyx_pf_7lu_fast_lu_factor(CYTHON_UNUSED PyObject *__pyx_self,
 
 /* Python wrapper */
 static PyObject *__pyx_pw_7lu_fast_3lu_solve(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_7lu_fast_2lu_solve[] = "\n       lu, piv: lu decomposition of array arr\n       b: shape [M, N, N], it will be altered!!!\n       return: the solve of aX=b, an array with shape [M,N,N]\n    ";
+static char __pyx_doc_7lu_fast_2lu_solve[] = "\n       lu, piv: lu decomposition of array arr\n       b: shape [N, N, M], it will not be altered\n       return: the solve of aX=b, an array with shape [N,N,M], but in fortran order!!!\n    ";
 static PyMethodDef __pyx_mdef_7lu_fast_3lu_solve = {"lu_solve", (PyCFunction)__pyx_pw_7lu_fast_3lu_solve, METH_VARARGS|METH_KEYWORDS, __pyx_doc_7lu_fast_2lu_solve};
 static PyObject *__pyx_pw_7lu_fast_3lu_solve(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyArrayObject *__pyx_v_lu = 0;
@@ -1752,9 +1773,12 @@ static PyObject *__pyx_pf_7lu_fast_2lu_solve(CYTHON_UNUSED PyObject *__pyx_self,
   int __pyx_v_LDA;
   int __pyx_v_LDB;
   int __pyx_v_info;
+  PyArrayObject *__pyx_v_bb = 0;
   int __pyx_v_i;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_b;
   __Pyx_Buffer __pyx_pybuffer_b;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_bb;
+  __Pyx_Buffer __pyx_pybuffer_bb;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_lu;
   __Pyx_Buffer __pyx_pybuffer_lu;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_piv;
@@ -1774,23 +1798,27 @@ static PyObject *__pyx_pf_7lu_fast_2lu_solve(CYTHON_UNUSED PyObject *__pyx_self,
   PyObject *__pyx_t_11 = NULL;
   PyArrayObject *__pyx_t_12 = NULL;
   PyArrayObject *__pyx_t_13 = NULL;
-  int __pyx_t_14;
+  Py_ssize_t __pyx_t_14;
   int __pyx_t_15;
   long __pyx_t_16;
   long __pyx_t_17;
   int __pyx_t_18;
-  long __pyx_t_19;
-  int __pyx_t_20;
-  long __pyx_t_21;
+  int __pyx_t_19;
+  long __pyx_t_20;
+  int __pyx_t_21;
   long __pyx_t_22;
-  int __pyx_t_23;
+  long __pyx_t_23;
+  int __pyx_t_24;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("lu_solve", 0);
   __Pyx_INCREF((PyObject *)__pyx_v_lu);
   __Pyx_INCREF((PyObject *)__pyx_v_piv);
-  __Pyx_INCREF((PyObject *)__pyx_v_b);
+  __pyx_pybuffer_bb.pybuffer.buf = NULL;
+  __pyx_pybuffer_bb.refcount = 0;
+  __pyx_pybuffernd_bb.data = NULL;
+  __pyx_pybuffernd_bb.rcbuffer = &__pyx_pybuffer_bb;
   __pyx_pybuffer_lu.pybuffer.buf = NULL;
   __pyx_pybuffer_lu.refcount = 0;
   __pyx_pybuffernd_lu.data = NULL;
@@ -1820,21 +1848,21 @@ static PyObject *__pyx_pf_7lu_fast_2lu_solve(CYTHON_UNUSED PyObject *__pyx_self,
   __pyx_pybuffernd_b.diminfo[0].strides = __pyx_pybuffernd_b.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_b.diminfo[0].shape = __pyx_pybuffernd_b.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_b.diminfo[1].strides = __pyx_pybuffernd_b.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_b.diminfo[1].shape = __pyx_pybuffernd_b.rcbuffer->pybuffer.shape[1]; __pyx_pybuffernd_b.diminfo[2].strides = __pyx_pybuffernd_b.rcbuffer->pybuffer.strides[2]; __pyx_pybuffernd_b.diminfo[2].shape = __pyx_pybuffernd_b.rcbuffer->pybuffer.shape[2];
 
   /* "lu_fast.pyx":53
- *        return: the solve of aX=b, an array with shape [M,N,N]
+ *        return: the solve of aX=b, an array with shape [N,N,M], but in fortran order!!!
  *     """
- *     if lu.shape[1] != lu.shape[2]:             # <<<<<<<<<<<<<<
- *         raise TypeError("the lu array must have shape [:, N, N]")
- *     if lu.shape[0] != piv.shape[0]:
+ *     if lu.shape[0] != lu.shape[1]:             # <<<<<<<<<<<<<<
+ *         raise TypeError("the lu array must have shape [N, N, :]")
+ *     if lu.shape[2] != piv.shape[1]:
  */
-  __pyx_t_1 = (((__pyx_v_lu->dimensions[1]) != (__pyx_v_lu->dimensions[2])) != 0);
+  __pyx_t_1 = (((__pyx_v_lu->dimensions[0]) != (__pyx_v_lu->dimensions[1])) != 0);
   if (__pyx_t_1) {
 
     /* "lu_fast.pyx":54
  *     """
- *     if lu.shape[1] != lu.shape[2]:
- *         raise TypeError("the lu array must have shape [:, N, N]")             # <<<<<<<<<<<<<<
- *     if lu.shape[0] != piv.shape[0]:
- *         raise TypeError("require lu.shape[0]==piv.shape[0]")
+ *     if lu.shape[0] != lu.shape[1]:
+ *         raise TypeError("the lu array must have shape [N, N, :]")             # <<<<<<<<<<<<<<
+ *     if lu.shape[2] != piv.shape[1]:
+ *         raise TypeError("require lu.shape[2]==piv.shape[1]")
  */
     __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__2, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 54; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_2);
@@ -1844,21 +1872,21 @@ static PyObject *__pyx_pf_7lu_fast_2lu_solve(CYTHON_UNUSED PyObject *__pyx_self,
   }
 
   /* "lu_fast.pyx":55
- *     if lu.shape[1] != lu.shape[2]:
- *         raise TypeError("the lu array must have shape [:, N, N]")
- *     if lu.shape[0] != piv.shape[0]:             # <<<<<<<<<<<<<<
- *         raise TypeError("require lu.shape[0]==piv.shape[0]")
- *     if lu.shape[1] != piv.shape[1]:
+ *     if lu.shape[0] != lu.shape[1]:
+ *         raise TypeError("the lu array must have shape [N, N, :]")
+ *     if lu.shape[2] != piv.shape[1]:             # <<<<<<<<<<<<<<
+ *         raise TypeError("require lu.shape[2]==piv.shape[1]")
+ *     if lu.shape[1] != piv.shape[0]:
  */
-  __pyx_t_1 = (((__pyx_v_lu->dimensions[0]) != (__pyx_v_piv->dimensions[0])) != 0);
+  __pyx_t_1 = (((__pyx_v_lu->dimensions[2]) != (__pyx_v_piv->dimensions[1])) != 0);
   if (__pyx_t_1) {
 
     /* "lu_fast.pyx":56
- *         raise TypeError("the lu array must have shape [:, N, N]")
- *     if lu.shape[0] != piv.shape[0]:
- *         raise TypeError("require lu.shape[0]==piv.shape[0]")             # <<<<<<<<<<<<<<
- *     if lu.shape[1] != piv.shape[1]:
- *         raise TypeError("require lu.shape[1]==piv.shape[1]")
+ *         raise TypeError("the lu array must have shape [N, N, :]")
+ *     if lu.shape[2] != piv.shape[1]:
+ *         raise TypeError("require lu.shape[2]==piv.shape[1]")             # <<<<<<<<<<<<<<
+ *     if lu.shape[1] != piv.shape[0]:
+ *         raise TypeError("require lu.shape[1]==piv.shape[0]")
  */
     __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 56; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_2);
@@ -1868,20 +1896,20 @@ static PyObject *__pyx_pf_7lu_fast_2lu_solve(CYTHON_UNUSED PyObject *__pyx_self,
   }
 
   /* "lu_fast.pyx":57
- *     if lu.shape[0] != piv.shape[0]:
- *         raise TypeError("require lu.shape[0]==piv.shape[0]")
- *     if lu.shape[1] != piv.shape[1]:             # <<<<<<<<<<<<<<
- *         raise TypeError("require lu.shape[1]==piv.shape[1]")
- *     if lu.shape[0] != b.shape[0] or lu.shape[1]!=b.shape[1] or lu.shape[2]!=b.shape[2]:
+ *     if lu.shape[2] != piv.shape[1]:
+ *         raise TypeError("require lu.shape[2]==piv.shape[1]")
+ *     if lu.shape[1] != piv.shape[0]:             # <<<<<<<<<<<<<<
+ *         raise TypeError("require lu.shape[1]==piv.shape[0]")
+ *     if lu.shape[2] != b.shape[2] or lu.shape[1]!=b.shape[1] or lu.shape[0]!=b.shape[0]:
  */
-  __pyx_t_1 = (((__pyx_v_lu->dimensions[1]) != (__pyx_v_piv->dimensions[1])) != 0);
+  __pyx_t_1 = (((__pyx_v_lu->dimensions[1]) != (__pyx_v_piv->dimensions[0])) != 0);
   if (__pyx_t_1) {
 
     /* "lu_fast.pyx":58
- *         raise TypeError("require lu.shape[0]==piv.shape[0]")
- *     if lu.shape[1] != piv.shape[1]:
- *         raise TypeError("require lu.shape[1]==piv.shape[1]")             # <<<<<<<<<<<<<<
- *     if lu.shape[0] != b.shape[0] or lu.shape[1]!=b.shape[1] or lu.shape[2]!=b.shape[2]:
+ *         raise TypeError("require lu.shape[2]==piv.shape[1]")
+ *     if lu.shape[1] != piv.shape[0]:
+ *         raise TypeError("require lu.shape[1]==piv.shape[0]")             # <<<<<<<<<<<<<<
+ *     if lu.shape[2] != b.shape[2] or lu.shape[1]!=b.shape[1] or lu.shape[0]!=b.shape[0]:
  *         raise TypeError("require lu.shape==b.shape")
  */
     __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__4, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 58; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
@@ -1892,13 +1920,13 @@ static PyObject *__pyx_pf_7lu_fast_2lu_solve(CYTHON_UNUSED PyObject *__pyx_self,
   }
 
   /* "lu_fast.pyx":59
- *     if lu.shape[1] != piv.shape[1]:
- *         raise TypeError("require lu.shape[1]==piv.shape[1]")
- *     if lu.shape[0] != b.shape[0] or lu.shape[1]!=b.shape[1] or lu.shape[2]!=b.shape[2]:             # <<<<<<<<<<<<<<
+ *     if lu.shape[1] != piv.shape[0]:
+ *         raise TypeError("require lu.shape[1]==piv.shape[0]")
+ *     if lu.shape[2] != b.shape[2] or lu.shape[1]!=b.shape[1] or lu.shape[0]!=b.shape[0]:             # <<<<<<<<<<<<<<
  *         raise TypeError("require lu.shape==b.shape")
  *     cdef char trans = 'N';
  */
-  __pyx_t_3 = (((__pyx_v_lu->dimensions[0]) != (__pyx_v_b->dimensions[0])) != 0);
+  __pyx_t_3 = (((__pyx_v_lu->dimensions[2]) != (__pyx_v_b->dimensions[2])) != 0);
   if (!__pyx_t_3) {
   } else {
     __pyx_t_1 = __pyx_t_3;
@@ -1910,17 +1938,17 @@ static PyObject *__pyx_pf_7lu_fast_2lu_solve(CYTHON_UNUSED PyObject *__pyx_self,
     __pyx_t_1 = __pyx_t_3;
     goto __pyx_L7_bool_binop_done;
   }
-  __pyx_t_3 = (((__pyx_v_lu->dimensions[2]) != (__pyx_v_b->dimensions[2])) != 0);
+  __pyx_t_3 = (((__pyx_v_lu->dimensions[0]) != (__pyx_v_b->dimensions[0])) != 0);
   __pyx_t_1 = __pyx_t_3;
   __pyx_L7_bool_binop_done:;
   if (__pyx_t_1) {
 
     /* "lu_fast.pyx":60
- *         raise TypeError("require lu.shape[1]==piv.shape[1]")
- *     if lu.shape[0] != b.shape[0] or lu.shape[1]!=b.shape[1] or lu.shape[2]!=b.shape[2]:
+ *         raise TypeError("require lu.shape[1]==piv.shape[0]")
+ *     if lu.shape[2] != b.shape[2] or lu.shape[1]!=b.shape[1] or lu.shape[0]!=b.shape[0]:
  *         raise TypeError("require lu.shape==b.shape")             # <<<<<<<<<<<<<<
  *     cdef char trans = 'N';
- *     cdef int size= lu.shape[0];
+ *     cdef int size= lu.shape[2];
  */
     __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__5, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 60; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_2);
@@ -1930,35 +1958,35 @@ static PyObject *__pyx_pf_7lu_fast_2lu_solve(CYTHON_UNUSED PyObject *__pyx_self,
   }
 
   /* "lu_fast.pyx":61
- *     if lu.shape[0] != b.shape[0] or lu.shape[1]!=b.shape[1] or lu.shape[2]!=b.shape[2]:
+ *     if lu.shape[2] != b.shape[2] or lu.shape[1]!=b.shape[1] or lu.shape[0]!=b.shape[0]:
  *         raise TypeError("require lu.shape==b.shape")
  *     cdef char trans = 'N';             # <<<<<<<<<<<<<<
- *     cdef int size= lu.shape[0];
- *     cdef int N = lu.shape[1];
+ *     cdef int size= lu.shape[2];
+ *     cdef int N = lu.shape[0];
  */
   __pyx_v_trans = 'N';
 
   /* "lu_fast.pyx":62
  *         raise TypeError("require lu.shape==b.shape")
  *     cdef char trans = 'N';
- *     cdef int size= lu.shape[0];             # <<<<<<<<<<<<<<
- *     cdef int N = lu.shape[1];
+ *     cdef int size= lu.shape[2];             # <<<<<<<<<<<<<<
+ *     cdef int N = lu.shape[0];
  *     cdef int nrhs = N;
  */
-  __pyx_v_size = (__pyx_v_lu->dimensions[0]);
+  __pyx_v_size = (__pyx_v_lu->dimensions[2]);
 
   /* "lu_fast.pyx":63
  *     cdef char trans = 'N';
- *     cdef int size= lu.shape[0];
- *     cdef int N = lu.shape[1];             # <<<<<<<<<<<<<<
+ *     cdef int size= lu.shape[2];
+ *     cdef int N = lu.shape[0];             # <<<<<<<<<<<<<<
  *     cdef int nrhs = N;
  *     cdef int LDA = N;
  */
-  __pyx_v_N = (__pyx_v_lu->dimensions[1]);
+  __pyx_v_N = (__pyx_v_lu->dimensions[0]);
 
   /* "lu_fast.pyx":64
- *     cdef int size= lu.shape[0];
- *     cdef int N = lu.shape[1];
+ *     cdef int size= lu.shape[2];
+ *     cdef int N = lu.shape[0];
  *     cdef int nrhs = N;             # <<<<<<<<<<<<<<
  *     cdef int LDA = N;
  *     cdef int LDB = N;
@@ -1966,7 +1994,7 @@ static PyObject *__pyx_pf_7lu_fast_2lu_solve(CYTHON_UNUSED PyObject *__pyx_self,
   __pyx_v_nrhs = __pyx_v_N;
 
   /* "lu_fast.pyx":65
- *     cdef int N = lu.shape[1];
+ *     cdef int N = lu.shape[0];
  *     cdef int nrhs = N;
  *     cdef int LDA = N;             # <<<<<<<<<<<<<<
  *     cdef int LDB = N;
@@ -1979,49 +2007,43 @@ static PyObject *__pyx_pf_7lu_fast_2lu_solve(CYTHON_UNUSED PyObject *__pyx_self,
  *     cdef int LDA = N;
  *     cdef int LDB = N;             # <<<<<<<<<<<<<<
  *     cdef int info;
- *     lu=np.ascontiguousarray(lu)
+ *     cdef np.ndarray[cComplex, ndim=3] bb
  */
   __pyx_v_LDB = __pyx_v_N;
 
-  /* "lu_fast.pyx":68
- *     cdef int LDB = N;
+  /* "lu_fast.pyx":69
  *     cdef int info;
- *     lu=np.ascontiguousarray(lu)             # <<<<<<<<<<<<<<
- *     piv=np.ascontiguousarray(piv)+1
- *     b=np.ascontiguousarray(b)
+ *     cdef np.ndarray[cComplex, ndim=3] bb
+ *     lu=np.require(lu, requirements=['F'])             # <<<<<<<<<<<<<<
+ *     piv=np.require(piv, requirements=['F'])+1
+ *     bb=np.require(b, requirements=['F'])
  */
-  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 68; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 69; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_require); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 69; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_ascontiguousarray); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 68; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 69; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_INCREF(((PyObject *)__pyx_v_lu));
+  PyTuple_SET_ITEM(__pyx_t_2, 0, ((PyObject *)__pyx_v_lu));
+  __Pyx_GIVEREF(((PyObject *)__pyx_v_lu));
+  __pyx_t_5 = PyDict_New(); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 69; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
+  __pyx_t_6 = PyList_New(1); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 69; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_INCREF(__pyx_n_s_F);
+  PyList_SET_ITEM(__pyx_t_6, 0, __pyx_n_s_F);
+  __Pyx_GIVEREF(__pyx_n_s_F);
+  if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_requirements, __pyx_t_6) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 69; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_2, __pyx_t_5); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 69; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = NULL;
-  if (CYTHON_COMPILING_IN_CPYTHON && unlikely(PyMethod_Check(__pyx_t_5))) {
-    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_5);
-    if (likely(__pyx_t_4)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
-      __Pyx_INCREF(__pyx_t_4);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_5, function);
-    }
-  }
-  if (!__pyx_t_4) {
-    __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_5, ((PyObject *)__pyx_v_lu)); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 68; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    __Pyx_GOTREF(__pyx_t_2);
-  } else {
-    __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 68; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    __Pyx_GOTREF(__pyx_t_6);
-    PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_4); __Pyx_GIVEREF(__pyx_t_4); __pyx_t_4 = NULL;
-    __Pyx_INCREF(((PyObject *)__pyx_v_lu));
-    PyTuple_SET_ITEM(__pyx_t_6, 0+1, ((PyObject *)__pyx_v_lu));
-    __Pyx_GIVEREF(((PyObject *)__pyx_v_lu));
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 68; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    __Pyx_GOTREF(__pyx_t_2);
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  }
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 68; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_t_7 = ((PyArrayObject *)__pyx_t_2);
+  if (!(likely(((__pyx_t_6) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_6, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 69; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_7 = ((PyArrayObject *)__pyx_t_6);
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_lu.rcbuffer->pybuffer);
@@ -2036,54 +2058,48 @@ static PyObject *__pyx_pf_7lu_fast_2lu_solve(CYTHON_UNUSED PyObject *__pyx_self,
       }
     }
     __pyx_pybuffernd_lu.diminfo[0].strides = __pyx_pybuffernd_lu.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_lu.diminfo[0].shape = __pyx_pybuffernd_lu.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_lu.diminfo[1].strides = __pyx_pybuffernd_lu.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_lu.diminfo[1].shape = __pyx_pybuffernd_lu.rcbuffer->pybuffer.shape[1]; __pyx_pybuffernd_lu.diminfo[2].strides = __pyx_pybuffernd_lu.rcbuffer->pybuffer.strides[2]; __pyx_pybuffernd_lu.diminfo[2].shape = __pyx_pybuffernd_lu.rcbuffer->pybuffer.shape[2];
-    if (unlikely(__pyx_t_8 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 68; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__pyx_t_8 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 69; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_t_7 = 0;
-  __Pyx_DECREF_SET(__pyx_v_lu, ((PyArrayObject *)__pyx_t_2));
-  __pyx_t_2 = 0;
+  __Pyx_DECREF_SET(__pyx_v_lu, ((PyArrayObject *)__pyx_t_6));
+  __pyx_t_6 = 0;
 
-  /* "lu_fast.pyx":69
- *     cdef int info;
- *     lu=np.ascontiguousarray(lu)
- *     piv=np.ascontiguousarray(piv)+1             # <<<<<<<<<<<<<<
- *     b=np.ascontiguousarray(b)
- *     #for i in prange(size, nogil=True):
+  /* "lu_fast.pyx":70
+ *     cdef np.ndarray[cComplex, ndim=3] bb
+ *     lu=np.require(lu, requirements=['F'])
+ *     piv=np.require(piv, requirements=['F'])+1             # <<<<<<<<<<<<<<
+ *     bb=np.require(b, requirements=['F'])
+ *     if np.may_share_memory(b,bb):
  */
-  __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 69; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_6 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 70; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_6);
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_require); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 70; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_ascontiguousarray); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 69; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_6);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = NULL;
-  if (CYTHON_COMPILING_IN_CPYTHON && unlikely(PyMethod_Check(__pyx_t_6))) {
-    __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_6);
-    if (likely(__pyx_t_5)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
-      __Pyx_INCREF(__pyx_t_5);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_6, function);
-    }
-  }
-  if (!__pyx_t_5) {
-    __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_6, ((PyObject *)__pyx_v_piv)); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 69; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    __Pyx_GOTREF(__pyx_t_2);
-  } else {
-    __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 69; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    __Pyx_GOTREF(__pyx_t_4);
-    PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_5); __Pyx_GIVEREF(__pyx_t_5); __pyx_t_5 = NULL;
-    __Pyx_INCREF(((PyObject *)__pyx_v_piv));
-    PyTuple_SET_ITEM(__pyx_t_4, 0+1, ((PyObject *)__pyx_v_piv));
-    __Pyx_GIVEREF(((PyObject *)__pyx_v_piv));
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_4, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 69; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    __Pyx_GOTREF(__pyx_t_2);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  }
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __pyx_t_6 = PyNumber_Add(__pyx_t_2, __pyx_int_1); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 69; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_6 = PyTuple_New(1); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 70; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_INCREF(((PyObject *)__pyx_v_piv));
+  PyTuple_SET_ITEM(__pyx_t_6, 0, ((PyObject *)__pyx_v_piv));
+  __Pyx_GIVEREF(((PyObject *)__pyx_v_piv));
+  __pyx_t_2 = PyDict_New(); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 70; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_4 = PyList_New(1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 70; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_INCREF(__pyx_n_s_F);
+  PyList_SET_ITEM(__pyx_t_4, 0, __pyx_n_s_F);
+  __Pyx_GIVEREF(__pyx_n_s_F);
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_requirements, __pyx_t_4) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 70; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_6, __pyx_t_2); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 70; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (!(likely(((__pyx_t_6) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_6, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 69; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_t_12 = ((PyArrayObject *)__pyx_t_6);
+  __pyx_t_2 = PyNumber_Add(__pyx_t_4, __pyx_int_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 70; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 70; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_12 = ((PyArrayObject *)__pyx_t_2);
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_piv.rcbuffer->pybuffer);
@@ -2098,192 +2114,281 @@ static PyObject *__pyx_pf_7lu_fast_2lu_solve(CYTHON_UNUSED PyObject *__pyx_self,
       }
     }
     __pyx_pybuffernd_piv.diminfo[0].strides = __pyx_pybuffernd_piv.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_piv.diminfo[0].shape = __pyx_pybuffernd_piv.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_piv.diminfo[1].strides = __pyx_pybuffernd_piv.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_piv.diminfo[1].shape = __pyx_pybuffernd_piv.rcbuffer->pybuffer.shape[1];
-    if (unlikely(__pyx_t_8 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 69; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__pyx_t_8 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 70; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_t_12 = 0;
-  __Pyx_DECREF_SET(__pyx_v_piv, ((PyArrayObject *)__pyx_t_6));
-  __pyx_t_6 = 0;
+  __Pyx_DECREF_SET(__pyx_v_piv, ((PyArrayObject *)__pyx_t_2));
+  __pyx_t_2 = 0;
 
-  /* "lu_fast.pyx":70
- *     lu=np.ascontiguousarray(lu)
- *     piv=np.ascontiguousarray(piv)+1
- *     b=np.ascontiguousarray(b)             # <<<<<<<<<<<<<<
- *     #for i in prange(size, nogil=True):
- *     for i in range(size):
+  /* "lu_fast.pyx":71
+ *     lu=np.require(lu, requirements=['F'])
+ *     piv=np.require(piv, requirements=['F'])+1
+ *     bb=np.require(b, requirements=['F'])             # <<<<<<<<<<<<<<
+ *     if np.may_share_memory(b,bb):
+ *         bb=b.copy()
  */
-  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 70; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 71; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_ascontiguousarray); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 70; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_require); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 71; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = NULL;
-  if (CYTHON_COMPILING_IN_CPYTHON && unlikely(PyMethod_Check(__pyx_t_4))) {
-    __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_4);
-    if (likely(__pyx_t_2)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
-      __Pyx_INCREF(__pyx_t_2);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_4, function);
-    }
-  }
-  if (!__pyx_t_2) {
-    __pyx_t_6 = __Pyx_PyObject_CallOneArg(__pyx_t_4, ((PyObject *)__pyx_v_b)); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 70; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    __Pyx_GOTREF(__pyx_t_6);
-  } else {
-    __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 70; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    __Pyx_GOTREF(__pyx_t_5);
-    PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_2); __Pyx_GIVEREF(__pyx_t_2); __pyx_t_2 = NULL;
-    __Pyx_INCREF(((PyObject *)__pyx_v_b));
-    PyTuple_SET_ITEM(__pyx_t_5, 0+1, ((PyObject *)__pyx_v_b));
-    __Pyx_GIVEREF(((PyObject *)__pyx_v_b));
-    __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_5, NULL); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 70; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    __Pyx_GOTREF(__pyx_t_6);
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  }
+  __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 71; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_INCREF(((PyObject *)__pyx_v_b));
+  PyTuple_SET_ITEM(__pyx_t_2, 0, ((PyObject *)__pyx_v_b));
+  __Pyx_GIVEREF(((PyObject *)__pyx_v_b));
+  __pyx_t_6 = PyDict_New(); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 71; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_6);
+  __pyx_t_5 = PyList_New(1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 71; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_INCREF(__pyx_n_s_F);
+  PyList_SET_ITEM(__pyx_t_5, 0, __pyx_n_s_F);
+  __Pyx_GIVEREF(__pyx_n_s_F);
+  if (PyDict_SetItem(__pyx_t_6, __pyx_n_s_requirements, __pyx_t_5) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 71; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_2, __pyx_t_6); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 71; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (!(likely(((__pyx_t_6) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_6, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 70; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_t_13 = ((PyArrayObject *)__pyx_t_6);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  if (!(likely(((__pyx_t_5) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_5, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 71; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_13 = ((PyArrayObject *)__pyx_t_5);
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_b.rcbuffer->pybuffer);
-    __pyx_t_8 = __Pyx_GetBufferAndValidate(&__pyx_pybuffernd_b.rcbuffer->pybuffer, (PyObject*)__pyx_t_13, &__Pyx_TypeInfo___pyx_t_double_complex, PyBUF_FORMAT| PyBUF_STRIDES, 3, 0, __pyx_stack);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_bb.rcbuffer->pybuffer);
+    __pyx_t_8 = __Pyx_GetBufferAndValidate(&__pyx_pybuffernd_bb.rcbuffer->pybuffer, (PyObject*)__pyx_t_13, &__Pyx_TypeInfo___pyx_t_double_complex, PyBUF_FORMAT| PyBUF_STRIDES, 3, 0, __pyx_stack);
     if (unlikely(__pyx_t_8 < 0)) {
       PyErr_Fetch(&__pyx_t_9, &__pyx_t_10, &__pyx_t_11);
-      if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_b.rcbuffer->pybuffer, (PyObject*)__pyx_v_b, &__Pyx_TypeInfo___pyx_t_double_complex, PyBUF_FORMAT| PyBUF_STRIDES, 3, 0, __pyx_stack) == -1)) {
+      if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_bb.rcbuffer->pybuffer, (PyObject*)__pyx_v_bb, &__Pyx_TypeInfo___pyx_t_double_complex, PyBUF_FORMAT| PyBUF_STRIDES, 3, 0, __pyx_stack) == -1)) {
         Py_XDECREF(__pyx_t_9); Py_XDECREF(__pyx_t_10); Py_XDECREF(__pyx_t_11);
         __Pyx_RaiseBufferFallbackError();
       } else {
         PyErr_Restore(__pyx_t_9, __pyx_t_10, __pyx_t_11);
       }
     }
-    __pyx_pybuffernd_b.diminfo[0].strides = __pyx_pybuffernd_b.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_b.diminfo[0].shape = __pyx_pybuffernd_b.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_b.diminfo[1].strides = __pyx_pybuffernd_b.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_b.diminfo[1].shape = __pyx_pybuffernd_b.rcbuffer->pybuffer.shape[1]; __pyx_pybuffernd_b.diminfo[2].strides = __pyx_pybuffernd_b.rcbuffer->pybuffer.strides[2]; __pyx_pybuffernd_b.diminfo[2].shape = __pyx_pybuffernd_b.rcbuffer->pybuffer.shape[2];
-    if (unlikely(__pyx_t_8 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 70; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_pybuffernd_bb.diminfo[0].strides = __pyx_pybuffernd_bb.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_bb.diminfo[0].shape = __pyx_pybuffernd_bb.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_bb.diminfo[1].strides = __pyx_pybuffernd_bb.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_bb.diminfo[1].shape = __pyx_pybuffernd_bb.rcbuffer->pybuffer.shape[1]; __pyx_pybuffernd_bb.diminfo[2].strides = __pyx_pybuffernd_bb.rcbuffer->pybuffer.strides[2]; __pyx_pybuffernd_bb.diminfo[2].shape = __pyx_pybuffernd_bb.rcbuffer->pybuffer.shape[2];
+    if (unlikely(__pyx_t_8 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 71; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_t_13 = 0;
-  __Pyx_DECREF_SET(__pyx_v_b, ((PyArrayObject *)__pyx_t_6));
-  __pyx_t_6 = 0;
+  __pyx_v_bb = ((PyArrayObject *)__pyx_t_5);
+  __pyx_t_5 = 0;
 
   /* "lu_fast.pyx":72
- *     b=np.ascontiguousarray(b)
+ *     piv=np.require(piv, requirements=['F'])+1
+ *     bb=np.require(b, requirements=['F'])
+ *     if np.may_share_memory(b,bb):             # <<<<<<<<<<<<<<
+ *         bb=b.copy()
+ *     #for i in prange(size, nogil=True):
+ */
+  __pyx_t_6 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 72; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_6);
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_may_share_memory); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 72; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __pyx_t_6 = NULL;
+  __pyx_t_14 = 0;
+  if (CYTHON_COMPILING_IN_CPYTHON && unlikely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_6)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_6);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+      __pyx_t_14 = 1;
+    }
+  }
+  __pyx_t_4 = PyTuple_New(2+__pyx_t_14); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 72; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_4);
+  if (__pyx_t_6) {
+    PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_6); __Pyx_GIVEREF(__pyx_t_6); __pyx_t_6 = NULL;
+  }
+  __Pyx_INCREF(((PyObject *)__pyx_v_b));
+  PyTuple_SET_ITEM(__pyx_t_4, 0+__pyx_t_14, ((PyObject *)__pyx_v_b));
+  __Pyx_GIVEREF(((PyObject *)__pyx_v_b));
+  __Pyx_INCREF(((PyObject *)__pyx_v_bb));
+  PyTuple_SET_ITEM(__pyx_t_4, 1+__pyx_t_14, ((PyObject *)__pyx_v_bb));
+  __Pyx_GIVEREF(((PyObject *)__pyx_v_bb));
+  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_4, NULL); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 72; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely(__pyx_t_1 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 72; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  if (__pyx_t_1) {
+
+    /* "lu_fast.pyx":73
+ *     bb=np.require(b, requirements=['F'])
+ *     if np.may_share_memory(b,bb):
+ *         bb=b.copy()             # <<<<<<<<<<<<<<
+ *     #for i in prange(size, nogil=True):
+ *     for i in range(size):
+ */
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_b), __pyx_n_s_copy); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 73; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_4 = NULL;
+    if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_2))) {
+      __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+      if (likely(__pyx_t_4)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+        __Pyx_INCREF(__pyx_t_4);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_2, function);
+      }
+    }
+    if (__pyx_t_4) {
+      __pyx_t_5 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 73; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    } else {
+      __pyx_t_5 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 73; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    }
+    __Pyx_GOTREF(__pyx_t_5);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    if (!(likely(((__pyx_t_5) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_5, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 73; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_13 = ((PyArrayObject *)__pyx_t_5);
+    {
+      __Pyx_BufFmt_StackElem __pyx_stack[1];
+      __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_bb.rcbuffer->pybuffer);
+      __pyx_t_8 = __Pyx_GetBufferAndValidate(&__pyx_pybuffernd_bb.rcbuffer->pybuffer, (PyObject*)__pyx_t_13, &__Pyx_TypeInfo___pyx_t_double_complex, PyBUF_FORMAT| PyBUF_STRIDES, 3, 0, __pyx_stack);
+      if (unlikely(__pyx_t_8 < 0)) {
+        PyErr_Fetch(&__pyx_t_11, &__pyx_t_10, &__pyx_t_9);
+        if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_bb.rcbuffer->pybuffer, (PyObject*)__pyx_v_bb, &__Pyx_TypeInfo___pyx_t_double_complex, PyBUF_FORMAT| PyBUF_STRIDES, 3, 0, __pyx_stack) == -1)) {
+          Py_XDECREF(__pyx_t_11); Py_XDECREF(__pyx_t_10); Py_XDECREF(__pyx_t_9);
+          __Pyx_RaiseBufferFallbackError();
+        } else {
+          PyErr_Restore(__pyx_t_11, __pyx_t_10, __pyx_t_9);
+        }
+      }
+      __pyx_pybuffernd_bb.diminfo[0].strides = __pyx_pybuffernd_bb.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_bb.diminfo[0].shape = __pyx_pybuffernd_bb.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_bb.diminfo[1].strides = __pyx_pybuffernd_bb.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_bb.diminfo[1].shape = __pyx_pybuffernd_bb.rcbuffer->pybuffer.shape[1]; __pyx_pybuffernd_bb.diminfo[2].strides = __pyx_pybuffernd_bb.rcbuffer->pybuffer.strides[2]; __pyx_pybuffernd_bb.diminfo[2].shape = __pyx_pybuffernd_bb.rcbuffer->pybuffer.shape[2];
+      if (unlikely(__pyx_t_8 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 73; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    }
+    __pyx_t_13 = 0;
+    __Pyx_DECREF_SET(__pyx_v_bb, ((PyArrayObject *)__pyx_t_5));
+    __pyx_t_5 = 0;
+    goto __pyx_L10;
+  }
+  __pyx_L10:;
+
+  /* "lu_fast.pyx":75
+ *         bb=b.copy()
  *     #for i in prange(size, nogil=True):
  *     for i in range(size):             # <<<<<<<<<<<<<<
- *         zgetrs_(&trans, &N, &nrhs, &lu[i,0,0], &LDA, &piv[i,0], &b[i,0,0], &LDB, &info);
+ *         zgetrs_(&trans, &N, &nrhs, &lu[0,0,i], &LDA, &piv[0,i], &bb[0,0,i], &LDB, &info);
  *         if info is not 0:
  */
   __pyx_t_8 = __pyx_v_size;
-  for (__pyx_t_14 = 0; __pyx_t_14 < __pyx_t_8; __pyx_t_14+=1) {
-    __pyx_v_i = __pyx_t_14;
+  for (__pyx_t_15 = 0; __pyx_t_15 < __pyx_t_8; __pyx_t_15+=1) {
+    __pyx_v_i = __pyx_t_15;
 
-    /* "lu_fast.pyx":73
+    /* "lu_fast.pyx":76
  *     #for i in prange(size, nogil=True):
  *     for i in range(size):
- *         zgetrs_(&trans, &N, &nrhs, &lu[i,0,0], &LDA, &piv[i,0], &b[i,0,0], &LDB, &info);             # <<<<<<<<<<<<<<
+ *         zgetrs_(&trans, &N, &nrhs, &lu[0,0,i], &LDA, &piv[0,i], &bb[0,0,i], &LDB, &info);             # <<<<<<<<<<<<<<
  *         if info is not 0:
  *             raise ValueError('illegal value in %d-th argument of internal gesv|posv'% -info)
  */
-    __pyx_t_15 = __pyx_v_i;
     __pyx_t_16 = 0;
     __pyx_t_17 = 0;
-    __pyx_t_18 = -1;
-    if (__pyx_t_15 < 0) {
-      __pyx_t_15 += __pyx_pybuffernd_lu.diminfo[0].shape;
-      if (unlikely(__pyx_t_15 < 0)) __pyx_t_18 = 0;
-    } else if (unlikely(__pyx_t_15 >= __pyx_pybuffernd_lu.diminfo[0].shape)) __pyx_t_18 = 0;
-    if (__pyx_t_16 < 0) {
-      __pyx_t_16 += __pyx_pybuffernd_lu.diminfo[1].shape;
-      if (unlikely(__pyx_t_16 < 0)) __pyx_t_18 = 1;
-    } else if (unlikely(__pyx_t_16 >= __pyx_pybuffernd_lu.diminfo[1].shape)) __pyx_t_18 = 1;
-    if (__pyx_t_17 < 0) {
-      __pyx_t_17 += __pyx_pybuffernd_lu.diminfo[2].shape;
-      if (unlikely(__pyx_t_17 < 0)) __pyx_t_18 = 2;
-    } else if (unlikely(__pyx_t_17 >= __pyx_pybuffernd_lu.diminfo[2].shape)) __pyx_t_18 = 2;
-    if (unlikely(__pyx_t_18 != -1)) {
-      __Pyx_RaiseBufferIndexError(__pyx_t_18);
-      {__pyx_filename = __pyx_f[0]; __pyx_lineno = 73; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    }
     __pyx_t_18 = __pyx_v_i;
-    __pyx_t_19 = 0;
-    __pyx_t_20 = -1;
+    __pyx_t_19 = -1;
+    if (__pyx_t_16 < 0) {
+      __pyx_t_16 += __pyx_pybuffernd_lu.diminfo[0].shape;
+      if (unlikely(__pyx_t_16 < 0)) __pyx_t_19 = 0;
+    } else if (unlikely(__pyx_t_16 >= __pyx_pybuffernd_lu.diminfo[0].shape)) __pyx_t_19 = 0;
+    if (__pyx_t_17 < 0) {
+      __pyx_t_17 += __pyx_pybuffernd_lu.diminfo[1].shape;
+      if (unlikely(__pyx_t_17 < 0)) __pyx_t_19 = 1;
+    } else if (unlikely(__pyx_t_17 >= __pyx_pybuffernd_lu.diminfo[1].shape)) __pyx_t_19 = 1;
     if (__pyx_t_18 < 0) {
-      __pyx_t_18 += __pyx_pybuffernd_piv.diminfo[0].shape;
-      if (unlikely(__pyx_t_18 < 0)) __pyx_t_20 = 0;
-    } else if (unlikely(__pyx_t_18 >= __pyx_pybuffernd_piv.diminfo[0].shape)) __pyx_t_20 = 0;
+      __pyx_t_18 += __pyx_pybuffernd_lu.diminfo[2].shape;
+      if (unlikely(__pyx_t_18 < 0)) __pyx_t_19 = 2;
+    } else if (unlikely(__pyx_t_18 >= __pyx_pybuffernd_lu.diminfo[2].shape)) __pyx_t_19 = 2;
+    if (unlikely(__pyx_t_19 != -1)) {
+      __Pyx_RaiseBufferIndexError(__pyx_t_19);
+      {__pyx_filename = __pyx_f[0]; __pyx_lineno = 76; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    }
+    __pyx_t_20 = 0;
+    __pyx_t_19 = __pyx_v_i;
+    __pyx_t_21 = -1;
+    if (__pyx_t_20 < 0) {
+      __pyx_t_20 += __pyx_pybuffernd_piv.diminfo[0].shape;
+      if (unlikely(__pyx_t_20 < 0)) __pyx_t_21 = 0;
+    } else if (unlikely(__pyx_t_20 >= __pyx_pybuffernd_piv.diminfo[0].shape)) __pyx_t_21 = 0;
     if (__pyx_t_19 < 0) {
       __pyx_t_19 += __pyx_pybuffernd_piv.diminfo[1].shape;
-      if (unlikely(__pyx_t_19 < 0)) __pyx_t_20 = 1;
-    } else if (unlikely(__pyx_t_19 >= __pyx_pybuffernd_piv.diminfo[1].shape)) __pyx_t_20 = 1;
-    if (unlikely(__pyx_t_20 != -1)) {
-      __Pyx_RaiseBufferIndexError(__pyx_t_20);
-      {__pyx_filename = __pyx_f[0]; __pyx_lineno = 73; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      if (unlikely(__pyx_t_19 < 0)) __pyx_t_21 = 1;
+    } else if (unlikely(__pyx_t_19 >= __pyx_pybuffernd_piv.diminfo[1].shape)) __pyx_t_21 = 1;
+    if (unlikely(__pyx_t_21 != -1)) {
+      __Pyx_RaiseBufferIndexError(__pyx_t_21);
+      {__pyx_filename = __pyx_f[0]; __pyx_lineno = 76; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
-    __pyx_t_20 = __pyx_v_i;
-    __pyx_t_21 = 0;
     __pyx_t_22 = 0;
-    __pyx_t_23 = -1;
-    if (__pyx_t_20 < 0) {
-      __pyx_t_20 += __pyx_pybuffernd_b.diminfo[0].shape;
-      if (unlikely(__pyx_t_20 < 0)) __pyx_t_23 = 0;
-    } else if (unlikely(__pyx_t_20 >= __pyx_pybuffernd_b.diminfo[0].shape)) __pyx_t_23 = 0;
-    if (__pyx_t_21 < 0) {
-      __pyx_t_21 += __pyx_pybuffernd_b.diminfo[1].shape;
-      if (unlikely(__pyx_t_21 < 0)) __pyx_t_23 = 1;
-    } else if (unlikely(__pyx_t_21 >= __pyx_pybuffernd_b.diminfo[1].shape)) __pyx_t_23 = 1;
+    __pyx_t_23 = 0;
+    __pyx_t_21 = __pyx_v_i;
+    __pyx_t_24 = -1;
     if (__pyx_t_22 < 0) {
-      __pyx_t_22 += __pyx_pybuffernd_b.diminfo[2].shape;
-      if (unlikely(__pyx_t_22 < 0)) __pyx_t_23 = 2;
-    } else if (unlikely(__pyx_t_22 >= __pyx_pybuffernd_b.diminfo[2].shape)) __pyx_t_23 = 2;
-    if (unlikely(__pyx_t_23 != -1)) {
-      __Pyx_RaiseBufferIndexError(__pyx_t_23);
-      {__pyx_filename = __pyx_f[0]; __pyx_lineno = 73; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_22 += __pyx_pybuffernd_bb.diminfo[0].shape;
+      if (unlikely(__pyx_t_22 < 0)) __pyx_t_24 = 0;
+    } else if (unlikely(__pyx_t_22 >= __pyx_pybuffernd_bb.diminfo[0].shape)) __pyx_t_24 = 0;
+    if (__pyx_t_23 < 0) {
+      __pyx_t_23 += __pyx_pybuffernd_bb.diminfo[1].shape;
+      if (unlikely(__pyx_t_23 < 0)) __pyx_t_24 = 1;
+    } else if (unlikely(__pyx_t_23 >= __pyx_pybuffernd_bb.diminfo[1].shape)) __pyx_t_24 = 1;
+    if (__pyx_t_21 < 0) {
+      __pyx_t_21 += __pyx_pybuffernd_bb.diminfo[2].shape;
+      if (unlikely(__pyx_t_21 < 0)) __pyx_t_24 = 2;
+    } else if (unlikely(__pyx_t_21 >= __pyx_pybuffernd_bb.diminfo[2].shape)) __pyx_t_24 = 2;
+    if (unlikely(__pyx_t_24 != -1)) {
+      __Pyx_RaiseBufferIndexError(__pyx_t_24);
+      {__pyx_filename = __pyx_f[0]; __pyx_lineno = 76; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
-    zgetrs_((&__pyx_v_trans), (&__pyx_v_N), (&__pyx_v_nrhs), (&(*__Pyx_BufPtrStrided3d(__pyx_t_double_complex *, __pyx_pybuffernd_lu.rcbuffer->pybuffer.buf, __pyx_t_15, __pyx_pybuffernd_lu.diminfo[0].strides, __pyx_t_16, __pyx_pybuffernd_lu.diminfo[1].strides, __pyx_t_17, __pyx_pybuffernd_lu.diminfo[2].strides))), (&__pyx_v_LDA), (&(*__Pyx_BufPtrStrided2d(int *, __pyx_pybuffernd_piv.rcbuffer->pybuffer.buf, __pyx_t_18, __pyx_pybuffernd_piv.diminfo[0].strides, __pyx_t_19, __pyx_pybuffernd_piv.diminfo[1].strides))), (&(*__Pyx_BufPtrStrided3d(__pyx_t_double_complex *, __pyx_pybuffernd_b.rcbuffer->pybuffer.buf, __pyx_t_20, __pyx_pybuffernd_b.diminfo[0].strides, __pyx_t_21, __pyx_pybuffernd_b.diminfo[1].strides, __pyx_t_22, __pyx_pybuffernd_b.diminfo[2].strides))), (&__pyx_v_LDB), (&__pyx_v_info));
+    zgetrs_((&__pyx_v_trans), (&__pyx_v_N), (&__pyx_v_nrhs), (&(*__Pyx_BufPtrStrided3d(__pyx_t_double_complex *, __pyx_pybuffernd_lu.rcbuffer->pybuffer.buf, __pyx_t_16, __pyx_pybuffernd_lu.diminfo[0].strides, __pyx_t_17, __pyx_pybuffernd_lu.diminfo[1].strides, __pyx_t_18, __pyx_pybuffernd_lu.diminfo[2].strides))), (&__pyx_v_LDA), (&(*__Pyx_BufPtrStrided2d(int *, __pyx_pybuffernd_piv.rcbuffer->pybuffer.buf, __pyx_t_20, __pyx_pybuffernd_piv.diminfo[0].strides, __pyx_t_19, __pyx_pybuffernd_piv.diminfo[1].strides))), (&(*__Pyx_BufPtrStrided3d(__pyx_t_double_complex *, __pyx_pybuffernd_bb.rcbuffer->pybuffer.buf, __pyx_t_22, __pyx_pybuffernd_bb.diminfo[0].strides, __pyx_t_23, __pyx_pybuffernd_bb.diminfo[1].strides, __pyx_t_21, __pyx_pybuffernd_bb.diminfo[2].strides))), (&__pyx_v_LDB), (&__pyx_v_info));
 
-    /* "lu_fast.pyx":74
+    /* "lu_fast.pyx":77
  *     for i in range(size):
- *         zgetrs_(&trans, &N, &nrhs, &lu[i,0,0], &LDA, &piv[i,0], &b[i,0,0], &LDB, &info);
+ *         zgetrs_(&trans, &N, &nrhs, &lu[0,0,i], &LDA, &piv[0,i], &bb[0,0,i], &LDB, &info);
  *         if info is not 0:             # <<<<<<<<<<<<<<
  *             raise ValueError('illegal value in %d-th argument of internal gesv|posv'% -info)
- *     return b
+ *     return bb
  */
     __pyx_t_1 = ((__pyx_v_info != 0) != 0);
     if (__pyx_t_1) {
 
-      /* "lu_fast.pyx":75
- *         zgetrs_(&trans, &N, &nrhs, &lu[i,0,0], &LDA, &piv[i,0], &b[i,0,0], &LDB, &info);
+      /* "lu_fast.pyx":78
+ *         zgetrs_(&trans, &N, &nrhs, &lu[0,0,i], &LDA, &piv[0,i], &bb[0,0,i], &LDB, &info);
  *         if info is not 0:
  *             raise ValueError('illegal value in %d-th argument of internal gesv|posv'% -info)             # <<<<<<<<<<<<<<
- *     return b
+ *     return bb
  * 
  */
-      __pyx_t_6 = __Pyx_PyInt_From_int((-__pyx_v_info)); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 75; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-      __Pyx_GOTREF(__pyx_t_6);
-      __pyx_t_4 = __Pyx_PyString_Format(__pyx_kp_s_illegal_value_in_d_th_argument_o_2, __pyx_t_6); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 75; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-      __Pyx_GOTREF(__pyx_t_4);
-      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      __pyx_t_6 = PyTuple_New(1); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 75; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-      __Pyx_GOTREF(__pyx_t_6);
-      PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_4);
-      __Pyx_GIVEREF(__pyx_t_4);
-      __pyx_t_4 = 0;
-      __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_t_6, NULL); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 75; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-      __Pyx_GOTREF(__pyx_t_4);
-      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      __Pyx_Raise(__pyx_t_4, 0, 0, 0);
-      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      {__pyx_filename = __pyx_f[0]; __pyx_lineno = 75; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_5 = __Pyx_PyInt_From_int((-__pyx_v_info)); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 78; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __Pyx_GOTREF(__pyx_t_5);
+      __pyx_t_2 = __Pyx_PyString_Format(__pyx_kp_s_illegal_value_in_d_th_argument_o_2, __pyx_t_5); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 78; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __Pyx_GOTREF(__pyx_t_2);
+      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+      __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 78; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __Pyx_GOTREF(__pyx_t_5);
+      PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_2);
+      __Pyx_GIVEREF(__pyx_t_2);
+      __pyx_t_2 = 0;
+      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_t_5, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 78; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __Pyx_GOTREF(__pyx_t_2);
+      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+      __Pyx_Raise(__pyx_t_2, 0, 0, 0);
+      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+      {__pyx_filename = __pyx_f[0]; __pyx_lineno = 78; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
   }
 
-  /* "lu_fast.pyx":76
+  /* "lu_fast.pyx":79
  *         if info is not 0:
  *             raise ValueError('illegal value in %d-th argument of internal gesv|posv'% -info)
- *     return b             # <<<<<<<<<<<<<<
+ *     return bb             # <<<<<<<<<<<<<<
  * 
  * #@cython.wraparound(False)
  */
   __Pyx_XDECREF(__pyx_r);
-  __Pyx_INCREF(((PyObject *)__pyx_v_b));
-  __pyx_r = ((PyObject *)__pyx_v_b);
+  __Pyx_INCREF(((PyObject *)__pyx_v_bb));
+  __pyx_r = ((PyObject *)__pyx_v_bb);
   goto __pyx_L0;
 
   /* "lu_fast.pyx":47
@@ -2303,6 +2408,7 @@ static PyObject *__pyx_pf_7lu_fast_2lu_solve(CYTHON_UNUSED PyObject *__pyx_self,
   { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
     __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_b.rcbuffer->pybuffer);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_bb.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_lu.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_piv.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
@@ -2311,23 +2417,24 @@ static PyObject *__pyx_pf_7lu_fast_2lu_solve(CYTHON_UNUSED PyObject *__pyx_self,
   goto __pyx_L2;
   __pyx_L0:;
   __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_b.rcbuffer->pybuffer);
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_bb.rcbuffer->pybuffer);
   __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_lu.rcbuffer->pybuffer);
   __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_piv.rcbuffer->pybuffer);
   __pyx_L2:;
+  __Pyx_XDECREF((PyObject *)__pyx_v_bb);
   __Pyx_XDECREF((PyObject *)__pyx_v_lu);
   __Pyx_XDECREF((PyObject *)__pyx_v_piv);
-  __Pyx_XDECREF((PyObject *)__pyx_v_b);
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "lu_fast.pyx":81
+/* "lu_fast.pyx":84
  * #@cython.boundscheck(False)
  * #@cython.nonecheck(False)
  * def lu_det(np.ndarray[cComplex, ndim=3] lu, np.ndarray[int, ndim=2] piv):             # <<<<<<<<<<<<<<
- *     if lu.shape[1] != lu.shape[2]:
- *         raise TypeError("the lu array must have shape [:, N, N]")
+ *     if lu.shape[0] != lu.shape[1]:
+ *         raise TypeError("the lu array must have shape [N, N, M]")
  */
 
 /* Python wrapper */
@@ -2362,11 +2469,11 @@ static PyObject *__pyx_pw_7lu_fast_5lu_det(PyObject *__pyx_self, PyObject *__pyx
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_piv)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("lu_det", 1, 2, 2, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 81; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("lu_det", 1, 2, 2, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 84; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "lu_det") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 81; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "lu_det") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 84; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -2379,14 +2486,14 @@ static PyObject *__pyx_pw_7lu_fast_5lu_det(PyObject *__pyx_self, PyObject *__pyx
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("lu_det", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 81; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  __Pyx_RaiseArgtupleInvalid("lu_det", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 84; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
   __Pyx_AddTraceback("lu_fast.lu_det", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_lu), __pyx_ptype_5numpy_ndarray, 1, "lu", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 81; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_piv), __pyx_ptype_5numpy_ndarray, 1, "piv", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 81; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_lu), __pyx_ptype_5numpy_ndarray, 1, "lu", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 84; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_piv), __pyx_ptype_5numpy_ndarray, 1, "piv", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 84; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_r = __pyx_pf_7lu_fast_4lu_det(__pyx_self, __pyx_v_lu, __pyx_v_piv);
 
   /* function exit code */
@@ -2456,136 +2563,136 @@ static PyObject *__pyx_pf_7lu_fast_4lu_det(CYTHON_UNUSED PyObject *__pyx_self, P
   __pyx_pybuffernd_piv.rcbuffer = &__pyx_pybuffer_piv;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_lu.rcbuffer->pybuffer, (PyObject*)__pyx_v_lu, &__Pyx_TypeInfo___pyx_t_double_complex, PyBUF_FORMAT| PyBUF_STRIDES, 3, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 81; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_lu.rcbuffer->pybuffer, (PyObject*)__pyx_v_lu, &__Pyx_TypeInfo___pyx_t_double_complex, PyBUF_FORMAT| PyBUF_STRIDES, 3, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 84; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_pybuffernd_lu.diminfo[0].strides = __pyx_pybuffernd_lu.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_lu.diminfo[0].shape = __pyx_pybuffernd_lu.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_lu.diminfo[1].strides = __pyx_pybuffernd_lu.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_lu.diminfo[1].shape = __pyx_pybuffernd_lu.rcbuffer->pybuffer.shape[1]; __pyx_pybuffernd_lu.diminfo[2].strides = __pyx_pybuffernd_lu.rcbuffer->pybuffer.strides[2]; __pyx_pybuffernd_lu.diminfo[2].shape = __pyx_pybuffernd_lu.rcbuffer->pybuffer.shape[2];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_piv.rcbuffer->pybuffer, (PyObject*)__pyx_v_piv, &__Pyx_TypeInfo_int, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 81; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_piv.rcbuffer->pybuffer, (PyObject*)__pyx_v_piv, &__Pyx_TypeInfo_int, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 84; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_pybuffernd_piv.diminfo[0].strides = __pyx_pybuffernd_piv.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_piv.diminfo[0].shape = __pyx_pybuffernd_piv.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_piv.diminfo[1].strides = __pyx_pybuffernd_piv.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_piv.diminfo[1].shape = __pyx_pybuffernd_piv.rcbuffer->pybuffer.shape[1];
 
-  /* "lu_fast.pyx":82
+  /* "lu_fast.pyx":85
  * #@cython.nonecheck(False)
  * def lu_det(np.ndarray[cComplex, ndim=3] lu, np.ndarray[int, ndim=2] piv):
- *     if lu.shape[1] != lu.shape[2]:             # <<<<<<<<<<<<<<
- *         raise TypeError("the lu array must have shape [:, N, N]")
- *     if lu.shape[0] != piv.shape[0]:
+ *     if lu.shape[0] != lu.shape[1]:             # <<<<<<<<<<<<<<
+ *         raise TypeError("the lu array must have shape [N, N, M]")
+ *     if lu.shape[2] != piv.shape[1]:
  */
-  __pyx_t_1 = (((__pyx_v_lu->dimensions[1]) != (__pyx_v_lu->dimensions[2])) != 0);
+  __pyx_t_1 = (((__pyx_v_lu->dimensions[0]) != (__pyx_v_lu->dimensions[1])) != 0);
   if (__pyx_t_1) {
 
-    /* "lu_fast.pyx":83
+    /* "lu_fast.pyx":86
  * def lu_det(np.ndarray[cComplex, ndim=3] lu, np.ndarray[int, ndim=2] piv):
- *     if lu.shape[1] != lu.shape[2]:
- *         raise TypeError("the lu array must have shape [:, N, N]")             # <<<<<<<<<<<<<<
- *     if lu.shape[0] != piv.shape[0]:
- *         raise TypeError("require lu.shape[0]==piv.shape[0]")
+ *     if lu.shape[0] != lu.shape[1]:
+ *         raise TypeError("the lu array must have shape [N, N, M]")             # <<<<<<<<<<<<<<
+ *     if lu.shape[2] != piv.shape[1]:
+ *         raise TypeError("require lu.shape[2]==piv.shape[1]")
  */
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__6, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 83; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__6, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 86; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 83; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 86; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
 
-  /* "lu_fast.pyx":84
- *     if lu.shape[1] != lu.shape[2]:
- *         raise TypeError("the lu array must have shape [:, N, N]")
- *     if lu.shape[0] != piv.shape[0]:             # <<<<<<<<<<<<<<
- *         raise TypeError("require lu.shape[0]==piv.shape[0]")
- *     if lu.shape[1] != piv.shape[1]:
+  /* "lu_fast.pyx":87
+ *     if lu.shape[0] != lu.shape[1]:
+ *         raise TypeError("the lu array must have shape [N, N, M]")
+ *     if lu.shape[2] != piv.shape[1]:             # <<<<<<<<<<<<<<
+ *         raise TypeError("require lu.shape[2]==piv.shape[1]")
+ *     if lu.shape[1] != piv.shape[0]:
  */
-  __pyx_t_1 = (((__pyx_v_lu->dimensions[0]) != (__pyx_v_piv->dimensions[0])) != 0);
+  __pyx_t_1 = (((__pyx_v_lu->dimensions[2]) != (__pyx_v_piv->dimensions[1])) != 0);
   if (__pyx_t_1) {
 
-    /* "lu_fast.pyx":85
- *         raise TypeError("the lu array must have shape [:, N, N]")
- *     if lu.shape[0] != piv.shape[0]:
- *         raise TypeError("require lu.shape[0]==piv.shape[0]")             # <<<<<<<<<<<<<<
- *     if lu.shape[1] != piv.shape[1]:
- *         raise TypeError("require lu.shape[1]==piv.shape[1]")
+    /* "lu_fast.pyx":88
+ *         raise TypeError("the lu array must have shape [N, N, M]")
+ *     if lu.shape[2] != piv.shape[1]:
+ *         raise TypeError("require lu.shape[2]==piv.shape[1]")             # <<<<<<<<<<<<<<
+ *     if lu.shape[1] != piv.shape[0]:
+ *         raise TypeError("require lu.shape[1]==piv.shape[0]")
  */
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__7, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 85; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__7, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 88; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 85; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  }
-
-  /* "lu_fast.pyx":86
- *     if lu.shape[0] != piv.shape[0]:
- *         raise TypeError("require lu.shape[0]==piv.shape[0]")
- *     if lu.shape[1] != piv.shape[1]:             # <<<<<<<<<<<<<<
- *         raise TypeError("require lu.shape[1]==piv.shape[1]")
- *     cdef np.ndarray[cComplex, ndim=1] det
- */
-  __pyx_t_1 = (((__pyx_v_lu->dimensions[1]) != (__pyx_v_piv->dimensions[1])) != 0);
-  if (__pyx_t_1) {
-
-    /* "lu_fast.pyx":87
- *         raise TypeError("require lu.shape[0]==piv.shape[0]")
- *     if lu.shape[1] != piv.shape[1]:
- *         raise TypeError("require lu.shape[1]==piv.shape[1]")             # <<<<<<<<<<<<<<
- *     cdef np.ndarray[cComplex, ndim=1] det
- *     cdef int size= lu.shape[0];
- */
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__8, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 87; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    __Pyx_GOTREF(__pyx_t_2);
-    __Pyx_Raise(__pyx_t_2, 0, 0, 0);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 87; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 88; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
 
   /* "lu_fast.pyx":89
- *         raise TypeError("require lu.shape[1]==piv.shape[1]")
+ *     if lu.shape[2] != piv.shape[1]:
+ *         raise TypeError("require lu.shape[2]==piv.shape[1]")
+ *     if lu.shape[1] != piv.shape[0]:             # <<<<<<<<<<<<<<
+ *         raise TypeError("require lu.shape[1]==piv.shape[0]")
  *     cdef np.ndarray[cComplex, ndim=1] det
- *     cdef int size= lu.shape[0];             # <<<<<<<<<<<<<<
- *     cdef int N = lu.shape[1];
+ */
+  __pyx_t_1 = (((__pyx_v_lu->dimensions[1]) != (__pyx_v_piv->dimensions[0])) != 0);
+  if (__pyx_t_1) {
+
+    /* "lu_fast.pyx":90
+ *         raise TypeError("require lu.shape[2]==piv.shape[1]")
+ *     if lu.shape[1] != piv.shape[0]:
+ *         raise TypeError("require lu.shape[1]==piv.shape[0]")             # <<<<<<<<<<<<<<
+ *     cdef np.ndarray[cComplex, ndim=1] det
+ *     cdef int size= lu.shape[2];
+ */
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__8, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 90; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_2);
+    __Pyx_Raise(__pyx_t_2, 0, 0, 0);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 90; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  }
+
+  /* "lu_fast.pyx":92
+ *         raise TypeError("require lu.shape[1]==piv.shape[0]")
+ *     cdef np.ndarray[cComplex, ndim=1] det
+ *     cdef int size= lu.shape[2];             # <<<<<<<<<<<<<<
+ *     cdef int N = lu.shape[0];
+ *     #print lu.shape[2], lu.shape[0], N
+ */
+  __pyx_v_size = (__pyx_v_lu->dimensions[2]);
+
+  /* "lu_fast.pyx":93
+ *     cdef np.ndarray[cComplex, ndim=1] det
+ *     cdef int size= lu.shape[2];
+ *     cdef int N = lu.shape[0];             # <<<<<<<<<<<<<<
+ *     #print lu.shape[2], lu.shape[0], N
  *     det=np.ones(size, dtype=Complex)
  */
-  __pyx_v_size = (__pyx_v_lu->dimensions[0]);
+  __pyx_v_N = (__pyx_v_lu->dimensions[0]);
 
-  /* "lu_fast.pyx":90
- *     cdef np.ndarray[cComplex, ndim=1] det
- *     cdef int size= lu.shape[0];
- *     cdef int N = lu.shape[1];             # <<<<<<<<<<<<<<
- *     det=np.ones(size, dtype=Complex)
- *     for i in range(size):
- */
-  __pyx_v_N = (__pyx_v_lu->dimensions[1]);
-
-  /* "lu_fast.pyx":91
- *     cdef int size= lu.shape[0];
- *     cdef int N = lu.shape[1];
+  /* "lu_fast.pyx":95
+ *     cdef int N = lu.shape[0];
+ *     #print lu.shape[2], lu.shape[0], N
  *     det=np.ones(size, dtype=Complex)             # <<<<<<<<<<<<<<
  *     for i in range(size):
  *         for j in range(N):
  */
-  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 91; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 95; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_ones); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 91; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_ones); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 95; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_size); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 91; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_size); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 95; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 91; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 95; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
   PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_2);
   __Pyx_GIVEREF(__pyx_t_2);
   __pyx_t_2 = 0;
-  __pyx_t_2 = PyDict_New(); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 91; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyDict_New(); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 95; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_Complex); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 91; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_Complex); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 95; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
-  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_dtype, __pyx_t_5) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 91; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_dtype, __pyx_t_5) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 95; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 91; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 95; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (!(likely(((__pyx_t_5) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_5, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 91; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (!(likely(((__pyx_t_5) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_5, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 95; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_t_6 = ((PyArrayObject *)__pyx_t_5);
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
@@ -2601,43 +2708,43 @@ static PyObject *__pyx_pf_7lu_fast_4lu_det(CYTHON_UNUSED PyObject *__pyx_self, P
       }
     }
     __pyx_pybuffernd_det.diminfo[0].strides = __pyx_pybuffernd_det.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_det.diminfo[0].shape = __pyx_pybuffernd_det.rcbuffer->pybuffer.shape[0];
-    if (unlikely(__pyx_t_7 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 91; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__pyx_t_7 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 95; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_t_6 = 0;
   __pyx_v_det = ((PyArrayObject *)__pyx_t_5);
   __pyx_t_5 = 0;
 
-  /* "lu_fast.pyx":92
- *     cdef int N = lu.shape[1];
+  /* "lu_fast.pyx":96
+ *     #print lu.shape[2], lu.shape[0], N
  *     det=np.ones(size, dtype=Complex)
  *     for i in range(size):             # <<<<<<<<<<<<<<
  *         for j in range(N):
- *             if piv[i, j]!=j:
+ *             if piv[j,i]!=j:
  */
   __pyx_t_7 = __pyx_v_size;
   for (__pyx_t_11 = 0; __pyx_t_11 < __pyx_t_7; __pyx_t_11+=1) {
     __pyx_v_i = __pyx_t_11;
 
-    /* "lu_fast.pyx":93
+    /* "lu_fast.pyx":97
  *     det=np.ones(size, dtype=Complex)
  *     for i in range(size):
  *         for j in range(N):             # <<<<<<<<<<<<<<
- *             if piv[i, j]!=j:
- *                 det[i]=-det[i]*lu[i,j,j]
+ *             if piv[j,i]!=j:
+ *                 det[i]=-det[i]*lu[j,j,i]
  */
     __pyx_t_12 = __pyx_v_N;
     for (__pyx_t_13 = 0; __pyx_t_13 < __pyx_t_12; __pyx_t_13+=1) {
       __pyx_v_j = __pyx_t_13;
 
-      /* "lu_fast.pyx":94
+      /* "lu_fast.pyx":98
  *     for i in range(size):
  *         for j in range(N):
- *             if piv[i, j]!=j:             # <<<<<<<<<<<<<<
- *                 det[i]=-det[i]*lu[i,j,j]
+ *             if piv[j,i]!=j:             # <<<<<<<<<<<<<<
+ *                 det[i]=-det[i]*lu[j,j,i]
  *             else:
  */
-      __pyx_t_14 = __pyx_v_i;
-      __pyx_t_15 = __pyx_v_j;
+      __pyx_t_14 = __pyx_v_j;
+      __pyx_t_15 = __pyx_v_i;
       __pyx_t_16 = -1;
       if (__pyx_t_14 < 0) {
         __pyx_t_14 += __pyx_pybuffernd_piv.diminfo[0].shape;
@@ -2649,17 +2756,17 @@ static PyObject *__pyx_pf_7lu_fast_4lu_det(CYTHON_UNUSED PyObject *__pyx_self, P
       } else if (unlikely(__pyx_t_15 >= __pyx_pybuffernd_piv.diminfo[1].shape)) __pyx_t_16 = 1;
       if (unlikely(__pyx_t_16 != -1)) {
         __Pyx_RaiseBufferIndexError(__pyx_t_16);
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 94; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 98; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       }
       __pyx_t_1 = (((*__Pyx_BufPtrStrided2d(int *, __pyx_pybuffernd_piv.rcbuffer->pybuffer.buf, __pyx_t_14, __pyx_pybuffernd_piv.diminfo[0].strides, __pyx_t_15, __pyx_pybuffernd_piv.diminfo[1].strides)) != __pyx_v_j) != 0);
       if (__pyx_t_1) {
 
-        /* "lu_fast.pyx":95
+        /* "lu_fast.pyx":99
  *         for j in range(N):
- *             if piv[i, j]!=j:
- *                 det[i]=-det[i]*lu[i,j,j]             # <<<<<<<<<<<<<<
+ *             if piv[j,i]!=j:
+ *                 det[i]=-det[i]*lu[j,j,i]             # <<<<<<<<<<<<<<
  *             else:
- *                 det[i]=det[i]*lu[i,j,j]
+ *                 det[i]=det[i]*lu[j,j,i]
  */
         __pyx_t_16 = __pyx_v_i;
         __pyx_t_17 = -1;
@@ -2669,11 +2776,11 @@ static PyObject *__pyx_pf_7lu_fast_4lu_det(CYTHON_UNUSED PyObject *__pyx_self, P
         } else if (unlikely(__pyx_t_16 >= __pyx_pybuffernd_det.diminfo[0].shape)) __pyx_t_17 = 0;
         if (unlikely(__pyx_t_17 != -1)) {
           __Pyx_RaiseBufferIndexError(__pyx_t_17);
-          {__pyx_filename = __pyx_f[0]; __pyx_lineno = 95; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+          {__pyx_filename = __pyx_f[0]; __pyx_lineno = 99; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         }
-        __pyx_t_17 = __pyx_v_i;
+        __pyx_t_17 = __pyx_v_j;
         __pyx_t_18 = __pyx_v_j;
-        __pyx_t_19 = __pyx_v_j;
+        __pyx_t_19 = __pyx_v_i;
         __pyx_t_20 = -1;
         if (__pyx_t_17 < 0) {
           __pyx_t_17 += __pyx_pybuffernd_lu.diminfo[0].shape;
@@ -2689,7 +2796,7 @@ static PyObject *__pyx_pf_7lu_fast_4lu_det(CYTHON_UNUSED PyObject *__pyx_self, P
         } else if (unlikely(__pyx_t_19 >= __pyx_pybuffernd_lu.diminfo[2].shape)) __pyx_t_20 = 2;
         if (unlikely(__pyx_t_20 != -1)) {
           __Pyx_RaiseBufferIndexError(__pyx_t_20);
-          {__pyx_filename = __pyx_f[0]; __pyx_lineno = 95; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+          {__pyx_filename = __pyx_f[0]; __pyx_lineno = 99; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         }
         __pyx_t_20 = __pyx_v_i;
         __pyx_t_21 = -1;
@@ -2699,19 +2806,19 @@ static PyObject *__pyx_pf_7lu_fast_4lu_det(CYTHON_UNUSED PyObject *__pyx_self, P
         } else if (unlikely(__pyx_t_20 >= __pyx_pybuffernd_det.diminfo[0].shape)) __pyx_t_21 = 0;
         if (unlikely(__pyx_t_21 != -1)) {
           __Pyx_RaiseBufferIndexError(__pyx_t_21);
-          {__pyx_filename = __pyx_f[0]; __pyx_lineno = 95; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+          {__pyx_filename = __pyx_f[0]; __pyx_lineno = 99; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         }
         *__Pyx_BufPtrStrided1d(__pyx_t_double_complex *, __pyx_pybuffernd_det.rcbuffer->pybuffer.buf, __pyx_t_20, __pyx_pybuffernd_det.diminfo[0].strides) = __Pyx_c_prod(__Pyx_c_neg((*__Pyx_BufPtrStrided1d(__pyx_t_double_complex *, __pyx_pybuffernd_det.rcbuffer->pybuffer.buf, __pyx_t_16, __pyx_pybuffernd_det.diminfo[0].strides))), (*__Pyx_BufPtrStrided3d(__pyx_t_double_complex *, __pyx_pybuffernd_lu.rcbuffer->pybuffer.buf, __pyx_t_17, __pyx_pybuffernd_lu.diminfo[0].strides, __pyx_t_18, __pyx_pybuffernd_lu.diminfo[1].strides, __pyx_t_19, __pyx_pybuffernd_lu.diminfo[2].strides)));
         goto __pyx_L10;
       }
       /*else*/ {
 
-        /* "lu_fast.pyx":97
- *                 det[i]=-det[i]*lu[i,j,j]
+        /* "lu_fast.pyx":101
+ *                 det[i]=-det[i]*lu[j,j,i]
  *             else:
- *                 det[i]=det[i]*lu[i,j,j]             # <<<<<<<<<<<<<<
+ *                 det[i]=det[i]*lu[j,j,i]             # <<<<<<<<<<<<<<
+ *             #print j,piv[j,i], lu[j,j,i], det[i]
  *     return det
- * 
  */
         __pyx_t_21 = __pyx_v_i;
         __pyx_t_22 = -1;
@@ -2721,11 +2828,11 @@ static PyObject *__pyx_pf_7lu_fast_4lu_det(CYTHON_UNUSED PyObject *__pyx_self, P
         } else if (unlikely(__pyx_t_21 >= __pyx_pybuffernd_det.diminfo[0].shape)) __pyx_t_22 = 0;
         if (unlikely(__pyx_t_22 != -1)) {
           __Pyx_RaiseBufferIndexError(__pyx_t_22);
-          {__pyx_filename = __pyx_f[0]; __pyx_lineno = 97; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+          {__pyx_filename = __pyx_f[0]; __pyx_lineno = 101; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         }
-        __pyx_t_22 = __pyx_v_i;
+        __pyx_t_22 = __pyx_v_j;
         __pyx_t_23 = __pyx_v_j;
-        __pyx_t_24 = __pyx_v_j;
+        __pyx_t_24 = __pyx_v_i;
         __pyx_t_25 = -1;
         if (__pyx_t_22 < 0) {
           __pyx_t_22 += __pyx_pybuffernd_lu.diminfo[0].shape;
@@ -2741,7 +2848,7 @@ static PyObject *__pyx_pf_7lu_fast_4lu_det(CYTHON_UNUSED PyObject *__pyx_self, P
         } else if (unlikely(__pyx_t_24 >= __pyx_pybuffernd_lu.diminfo[2].shape)) __pyx_t_25 = 2;
         if (unlikely(__pyx_t_25 != -1)) {
           __Pyx_RaiseBufferIndexError(__pyx_t_25);
-          {__pyx_filename = __pyx_f[0]; __pyx_lineno = 97; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+          {__pyx_filename = __pyx_f[0]; __pyx_lineno = 101; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         }
         __pyx_t_25 = __pyx_v_i;
         __pyx_t_26 = -1;
@@ -2751,7 +2858,7 @@ static PyObject *__pyx_pf_7lu_fast_4lu_det(CYTHON_UNUSED PyObject *__pyx_self, P
         } else if (unlikely(__pyx_t_25 >= __pyx_pybuffernd_det.diminfo[0].shape)) __pyx_t_26 = 0;
         if (unlikely(__pyx_t_26 != -1)) {
           __Pyx_RaiseBufferIndexError(__pyx_t_26);
-          {__pyx_filename = __pyx_f[0]; __pyx_lineno = 97; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+          {__pyx_filename = __pyx_f[0]; __pyx_lineno = 101; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         }
         *__Pyx_BufPtrStrided1d(__pyx_t_double_complex *, __pyx_pybuffernd_det.rcbuffer->pybuffer.buf, __pyx_t_25, __pyx_pybuffernd_det.diminfo[0].strides) = __Pyx_c_prod((*__Pyx_BufPtrStrided1d(__pyx_t_double_complex *, __pyx_pybuffernd_det.rcbuffer->pybuffer.buf, __pyx_t_21, __pyx_pybuffernd_det.diminfo[0].strides)), (*__Pyx_BufPtrStrided3d(__pyx_t_double_complex *, __pyx_pybuffernd_lu.rcbuffer->pybuffer.buf, __pyx_t_22, __pyx_pybuffernd_lu.diminfo[0].strides, __pyx_t_23, __pyx_pybuffernd_lu.diminfo[1].strides, __pyx_t_24, __pyx_pybuffernd_lu.diminfo[2].strides)));
       }
@@ -2759,9 +2866,9 @@ static PyObject *__pyx_pf_7lu_fast_4lu_det(CYTHON_UNUSED PyObject *__pyx_self, P
     }
   }
 
-  /* "lu_fast.pyx":98
- *             else:
- *                 det[i]=det[i]*lu[i,j,j]
+  /* "lu_fast.pyx":103
+ *                 det[i]=det[i]*lu[j,j,i]
+ *             #print j,piv[j,i], lu[j,j,i], det[i]
  *     return det             # <<<<<<<<<<<<<<
  * 
  * #*     SUBROUTINE ZGETRF( M, N, A, LDA, IPIV, INFO )
@@ -2771,12 +2878,12 @@ static PyObject *__pyx_pf_7lu_fast_4lu_det(CYTHON_UNUSED PyObject *__pyx_self, P
   __pyx_r = ((PyObject *)__pyx_v_det);
   goto __pyx_L0;
 
-  /* "lu_fast.pyx":81
+  /* "lu_fast.pyx":84
  * #@cython.boundscheck(False)
  * #@cython.nonecheck(False)
  * def lu_det(np.ndarray[cComplex, ndim=3] lu, np.ndarray[int, ndim=2] piv):             # <<<<<<<<<<<<<<
- *     if lu.shape[1] != lu.shape[2]:
- *         raise TypeError("the lu array must have shape [:, N, N]")
+ *     if lu.shape[0] != lu.shape[1]:
+ *         raise TypeError("the lu array must have shape [N, N, M]")
  */
 
   /* function exit code */
@@ -2805,7 +2912,7 @@ static PyObject *__pyx_pf_7lu_fast_4lu_det(CYTHON_UNUSED PyObject *__pyx_self, P
   return __pyx_r;
 }
 
-/* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":194
+/* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":194
  *         # experimental exception made for __getbuffer__ and __releasebuffer__
  *         # -- the details of this may change.
  *         def __getbuffer__(ndarray self, Py_buffer* info, int flags):             # <<<<<<<<<<<<<<
@@ -2855,7 +2962,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     __Pyx_GIVEREF(__pyx_v_info->obj);
   }
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":200
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":200
  *             # of flags
  * 
  *             if info == NULL: return             # <<<<<<<<<<<<<<
@@ -2868,7 +2975,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     goto __pyx_L0;
   }
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":203
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":203
  * 
  *             cdef int copy_shape, i, ndim
  *             cdef int endian_detector = 1             # <<<<<<<<<<<<<<
@@ -2877,7 +2984,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   __pyx_v_endian_detector = 1;
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":204
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":204
  *             cdef int copy_shape, i, ndim
  *             cdef int endian_detector = 1
  *             cdef bint little_endian = ((<char*>&endian_detector)[0] != 0)             # <<<<<<<<<<<<<<
@@ -2886,7 +2993,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   __pyx_v_little_endian = ((((char *)(&__pyx_v_endian_detector))[0]) != 0);
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":206
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":206
  *             cdef bint little_endian = ((<char*>&endian_detector)[0] != 0)
  * 
  *             ndim = PyArray_NDIM(self)             # <<<<<<<<<<<<<<
@@ -2895,7 +3002,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   __pyx_v_ndim = PyArray_NDIM(__pyx_v_self);
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":208
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":208
  *             ndim = PyArray_NDIM(self)
  * 
  *             if sizeof(npy_intp) != sizeof(Py_ssize_t):             # <<<<<<<<<<<<<<
@@ -2905,7 +3012,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   __pyx_t_1 = (((sizeof(npy_intp)) != (sizeof(Py_ssize_t))) != 0);
   if (__pyx_t_1) {
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":209
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":209
  * 
  *             if sizeof(npy_intp) != sizeof(Py_ssize_t):
  *                 copy_shape = 1             # <<<<<<<<<<<<<<
@@ -2917,7 +3024,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   }
   /*else*/ {
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":211
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":211
  *                 copy_shape = 1
  *             else:
  *                 copy_shape = 0             # <<<<<<<<<<<<<<
@@ -2928,7 +3035,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   }
   __pyx_L4:;
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":213
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":213
  *                 copy_shape = 0
  * 
  *             if ((flags & pybuf.PyBUF_C_CONTIGUOUS == pybuf.PyBUF_C_CONTIGUOUS)             # <<<<<<<<<<<<<<
@@ -2942,7 +3049,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     goto __pyx_L6_bool_binop_done;
   }
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":214
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":214
  * 
  *             if ((flags & pybuf.PyBUF_C_CONTIGUOUS == pybuf.PyBUF_C_CONTIGUOUS)
  *                 and not PyArray_CHKFLAGS(self, NPY_C_CONTIGUOUS)):             # <<<<<<<<<<<<<<
@@ -2954,7 +3061,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   __pyx_L6_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":215
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":215
  *             if ((flags & pybuf.PyBUF_C_CONTIGUOUS == pybuf.PyBUF_C_CONTIGUOUS)
  *                 and not PyArray_CHKFLAGS(self, NPY_C_CONTIGUOUS)):
  *                 raise ValueError(u"ndarray is not C contiguous")             # <<<<<<<<<<<<<<
@@ -2968,7 +3075,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     {__pyx_filename = __pyx_f[1]; __pyx_lineno = 215; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":217
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":217
  *                 raise ValueError(u"ndarray is not C contiguous")
  * 
  *             if ((flags & pybuf.PyBUF_F_CONTIGUOUS == pybuf.PyBUF_F_CONTIGUOUS)             # <<<<<<<<<<<<<<
@@ -2982,7 +3089,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     goto __pyx_L9_bool_binop_done;
   }
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":218
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":218
  * 
  *             if ((flags & pybuf.PyBUF_F_CONTIGUOUS == pybuf.PyBUF_F_CONTIGUOUS)
  *                 and not PyArray_CHKFLAGS(self, NPY_F_CONTIGUOUS)):             # <<<<<<<<<<<<<<
@@ -2994,7 +3101,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   __pyx_L9_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":219
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":219
  *             if ((flags & pybuf.PyBUF_F_CONTIGUOUS == pybuf.PyBUF_F_CONTIGUOUS)
  *                 and not PyArray_CHKFLAGS(self, NPY_F_CONTIGUOUS)):
  *                 raise ValueError(u"ndarray is not Fortran contiguous")             # <<<<<<<<<<<<<<
@@ -3008,7 +3115,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     {__pyx_filename = __pyx_f[1]; __pyx_lineno = 219; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":221
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":221
  *                 raise ValueError(u"ndarray is not Fortran contiguous")
  * 
  *             info.buf = PyArray_DATA(self)             # <<<<<<<<<<<<<<
@@ -3017,7 +3124,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   __pyx_v_info->buf = PyArray_DATA(__pyx_v_self);
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":222
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":222
  * 
  *             info.buf = PyArray_DATA(self)
  *             info.ndim = ndim             # <<<<<<<<<<<<<<
@@ -3026,7 +3133,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   __pyx_v_info->ndim = __pyx_v_ndim;
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":223
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":223
  *             info.buf = PyArray_DATA(self)
  *             info.ndim = ndim
  *             if copy_shape:             # <<<<<<<<<<<<<<
@@ -3036,7 +3143,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   __pyx_t_1 = (__pyx_v_copy_shape != 0);
   if (__pyx_t_1) {
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":226
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":226
  *                 # Allocate new buffer for strides and shape info.
  *                 # This is allocated as one block, strides first.
  *                 info.strides = <Py_ssize_t*>stdlib.malloc(sizeof(Py_ssize_t) * <size_t>ndim * 2)             # <<<<<<<<<<<<<<
@@ -3045,7 +3152,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
     __pyx_v_info->strides = ((Py_ssize_t *)malloc((((sizeof(Py_ssize_t)) * ((size_t)__pyx_v_ndim)) * 2)));
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":227
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":227
  *                 # This is allocated as one block, strides first.
  *                 info.strides = <Py_ssize_t*>stdlib.malloc(sizeof(Py_ssize_t) * <size_t>ndim * 2)
  *                 info.shape = info.strides + ndim             # <<<<<<<<<<<<<<
@@ -3054,7 +3161,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
     __pyx_v_info->shape = (__pyx_v_info->strides + __pyx_v_ndim);
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":228
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":228
  *                 info.strides = <Py_ssize_t*>stdlib.malloc(sizeof(Py_ssize_t) * <size_t>ndim * 2)
  *                 info.shape = info.strides + ndim
  *                 for i in range(ndim):             # <<<<<<<<<<<<<<
@@ -3065,7 +3172,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_4; __pyx_t_5+=1) {
       __pyx_v_i = __pyx_t_5;
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":229
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":229
  *                 info.shape = info.strides + ndim
  *                 for i in range(ndim):
  *                     info.strides[i] = PyArray_STRIDES(self)[i]             # <<<<<<<<<<<<<<
@@ -3074,7 +3181,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
       (__pyx_v_info->strides[__pyx_v_i]) = (PyArray_STRIDES(__pyx_v_self)[__pyx_v_i]);
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":230
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":230
  *                 for i in range(ndim):
  *                     info.strides[i] = PyArray_STRIDES(self)[i]
  *                     info.shape[i] = PyArray_DIMS(self)[i]             # <<<<<<<<<<<<<<
@@ -3087,7 +3194,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   }
   /*else*/ {
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":232
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":232
  *                     info.shape[i] = PyArray_DIMS(self)[i]
  *             else:
  *                 info.strides = <Py_ssize_t*>PyArray_STRIDES(self)             # <<<<<<<<<<<<<<
@@ -3096,7 +3203,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
     __pyx_v_info->strides = ((Py_ssize_t *)PyArray_STRIDES(__pyx_v_self));
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":233
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":233
  *             else:
  *                 info.strides = <Py_ssize_t*>PyArray_STRIDES(self)
  *                 info.shape = <Py_ssize_t*>PyArray_DIMS(self)             # <<<<<<<<<<<<<<
@@ -3107,7 +3214,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   }
   __pyx_L11:;
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":234
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":234
  *                 info.strides = <Py_ssize_t*>PyArray_STRIDES(self)
  *                 info.shape = <Py_ssize_t*>PyArray_DIMS(self)
  *             info.suboffsets = NULL             # <<<<<<<<<<<<<<
@@ -3116,7 +3223,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   __pyx_v_info->suboffsets = NULL;
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":235
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":235
  *                 info.shape = <Py_ssize_t*>PyArray_DIMS(self)
  *             info.suboffsets = NULL
  *             info.itemsize = PyArray_ITEMSIZE(self)             # <<<<<<<<<<<<<<
@@ -3125,7 +3232,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   __pyx_v_info->itemsize = PyArray_ITEMSIZE(__pyx_v_self);
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":236
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":236
  *             info.suboffsets = NULL
  *             info.itemsize = PyArray_ITEMSIZE(self)
  *             info.readonly = not PyArray_ISWRITEABLE(self)             # <<<<<<<<<<<<<<
@@ -3134,7 +3241,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   __pyx_v_info->readonly = (!(PyArray_ISWRITEABLE(__pyx_v_self) != 0));
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":239
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":239
  * 
  *             cdef int t
  *             cdef char* f = NULL             # <<<<<<<<<<<<<<
@@ -3143,7 +3250,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   __pyx_v_f = NULL;
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":240
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":240
  *             cdef int t
  *             cdef char* f = NULL
  *             cdef dtype descr = self.descr             # <<<<<<<<<<<<<<
@@ -3155,7 +3262,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   __pyx_v_descr = ((PyArray_Descr *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":244
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":244
  *             cdef int offset
  * 
  *             cdef bint hasfields = PyDataType_HASFIELDS(descr)             # <<<<<<<<<<<<<<
@@ -3164,7 +3271,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
   __pyx_v_hasfields = PyDataType_HASFIELDS(__pyx_v_descr);
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":246
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":246
  *             cdef bint hasfields = PyDataType_HASFIELDS(descr)
  * 
  *             if not hasfields and not copy_shape:             # <<<<<<<<<<<<<<
@@ -3182,7 +3289,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   __pyx_L15_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":248
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":248
  *             if not hasfields and not copy_shape:
  *                 # do not call releasebuffer
  *                 info.obj = None             # <<<<<<<<<<<<<<
@@ -3198,7 +3305,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   }
   /*else*/ {
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":251
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":251
  *             else:
  *                 # need to call releasebuffer
  *                 info.obj = self             # <<<<<<<<<<<<<<
@@ -3213,7 +3320,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   }
   __pyx_L14:;
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":253
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":253
  *                 info.obj = self
  * 
  *             if not hasfields:             # <<<<<<<<<<<<<<
@@ -3223,7 +3330,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   __pyx_t_1 = ((!(__pyx_v_hasfields != 0)) != 0);
   if (__pyx_t_1) {
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":254
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":254
  * 
  *             if not hasfields:
  *                 t = descr.type_num             # <<<<<<<<<<<<<<
@@ -3233,7 +3340,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     __pyx_t_4 = __pyx_v_descr->type_num;
     __pyx_v_t = __pyx_t_4;
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":255
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":255
  *             if not hasfields:
  *                 t = descr.type_num
  *                 if ((descr.byteorder == c'>' and little_endian) or             # <<<<<<<<<<<<<<
@@ -3253,7 +3360,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     }
     __pyx_L20_next_or:;
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":256
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":256
  *                 t = descr.type_num
  *                 if ((descr.byteorder == c'>' and little_endian) or
  *                     (descr.byteorder == c'<' and not little_endian)):             # <<<<<<<<<<<<<<
@@ -3271,7 +3378,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     __pyx_L19_bool_binop_done:;
     if (__pyx_t_1) {
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":257
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":257
  *                 if ((descr.byteorder == c'>' and little_endian) or
  *                     (descr.byteorder == c'<' and not little_endian)):
  *                     raise ValueError(u"Non-native byte order not supported")             # <<<<<<<<<<<<<<
@@ -3285,7 +3392,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       {__pyx_filename = __pyx_f[1]; __pyx_lineno = 257; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":274
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":274
  *                 elif t == NPY_CDOUBLE:     f = "Zd"
  *                 elif t == NPY_CLONGDOUBLE: f = "Zg"
  *                 elif t == NPY_OBJECT:      f = "O"             # <<<<<<<<<<<<<<
@@ -3294,7 +3401,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
     switch (__pyx_v_t) {
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":258
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":258
  *                     (descr.byteorder == c'<' and not little_endian)):
  *                     raise ValueError(u"Non-native byte order not supported")
  *                 if   t == NPY_BYTE:        f = "b"             # <<<<<<<<<<<<<<
@@ -3305,7 +3412,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       __pyx_v_f = __pyx_k_b;
       break;
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":259
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":259
  *                     raise ValueError(u"Non-native byte order not supported")
  *                 if   t == NPY_BYTE:        f = "b"
  *                 elif t == NPY_UBYTE:       f = "B"             # <<<<<<<<<<<<<<
@@ -3316,7 +3423,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       __pyx_v_f = __pyx_k_B;
       break;
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":260
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":260
  *                 if   t == NPY_BYTE:        f = "b"
  *                 elif t == NPY_UBYTE:       f = "B"
  *                 elif t == NPY_SHORT:       f = "h"             # <<<<<<<<<<<<<<
@@ -3327,7 +3434,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       __pyx_v_f = __pyx_k_h;
       break;
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":261
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":261
  *                 elif t == NPY_UBYTE:       f = "B"
  *                 elif t == NPY_SHORT:       f = "h"
  *                 elif t == NPY_USHORT:      f = "H"             # <<<<<<<<<<<<<<
@@ -3338,7 +3445,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       __pyx_v_f = __pyx_k_H;
       break;
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":262
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":262
  *                 elif t == NPY_SHORT:       f = "h"
  *                 elif t == NPY_USHORT:      f = "H"
  *                 elif t == NPY_INT:         f = "i"             # <<<<<<<<<<<<<<
@@ -3349,7 +3456,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       __pyx_v_f = __pyx_k_i;
       break;
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":263
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":263
  *                 elif t == NPY_USHORT:      f = "H"
  *                 elif t == NPY_INT:         f = "i"
  *                 elif t == NPY_UINT:        f = "I"             # <<<<<<<<<<<<<<
@@ -3360,7 +3467,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       __pyx_v_f = __pyx_k_I;
       break;
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":264
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":264
  *                 elif t == NPY_INT:         f = "i"
  *                 elif t == NPY_UINT:        f = "I"
  *                 elif t == NPY_LONG:        f = "l"             # <<<<<<<<<<<<<<
@@ -3371,7 +3478,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       __pyx_v_f = __pyx_k_l;
       break;
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":265
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":265
  *                 elif t == NPY_UINT:        f = "I"
  *                 elif t == NPY_LONG:        f = "l"
  *                 elif t == NPY_ULONG:       f = "L"             # <<<<<<<<<<<<<<
@@ -3382,7 +3489,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       __pyx_v_f = __pyx_k_L;
       break;
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":266
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":266
  *                 elif t == NPY_LONG:        f = "l"
  *                 elif t == NPY_ULONG:       f = "L"
  *                 elif t == NPY_LONGLONG:    f = "q"             # <<<<<<<<<<<<<<
@@ -3393,7 +3500,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       __pyx_v_f = __pyx_k_q;
       break;
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":267
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":267
  *                 elif t == NPY_ULONG:       f = "L"
  *                 elif t == NPY_LONGLONG:    f = "q"
  *                 elif t == NPY_ULONGLONG:   f = "Q"             # <<<<<<<<<<<<<<
@@ -3404,7 +3511,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       __pyx_v_f = __pyx_k_Q;
       break;
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":268
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":268
  *                 elif t == NPY_LONGLONG:    f = "q"
  *                 elif t == NPY_ULONGLONG:   f = "Q"
  *                 elif t == NPY_FLOAT:       f = "f"             # <<<<<<<<<<<<<<
@@ -3415,7 +3522,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       __pyx_v_f = __pyx_k_f;
       break;
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":269
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":269
  *                 elif t == NPY_ULONGLONG:   f = "Q"
  *                 elif t == NPY_FLOAT:       f = "f"
  *                 elif t == NPY_DOUBLE:      f = "d"             # <<<<<<<<<<<<<<
@@ -3426,7 +3533,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       __pyx_v_f = __pyx_k_d;
       break;
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":270
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":270
  *                 elif t == NPY_FLOAT:       f = "f"
  *                 elif t == NPY_DOUBLE:      f = "d"
  *                 elif t == NPY_LONGDOUBLE:  f = "g"             # <<<<<<<<<<<<<<
@@ -3437,7 +3544,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       __pyx_v_f = __pyx_k_g;
       break;
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":271
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":271
  *                 elif t == NPY_DOUBLE:      f = "d"
  *                 elif t == NPY_LONGDOUBLE:  f = "g"
  *                 elif t == NPY_CFLOAT:      f = "Zf"             # <<<<<<<<<<<<<<
@@ -3448,7 +3555,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       __pyx_v_f = __pyx_k_Zf;
       break;
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":272
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":272
  *                 elif t == NPY_LONGDOUBLE:  f = "g"
  *                 elif t == NPY_CFLOAT:      f = "Zf"
  *                 elif t == NPY_CDOUBLE:     f = "Zd"             # <<<<<<<<<<<<<<
@@ -3459,7 +3566,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       __pyx_v_f = __pyx_k_Zd;
       break;
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":273
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":273
  *                 elif t == NPY_CFLOAT:      f = "Zf"
  *                 elif t == NPY_CDOUBLE:     f = "Zd"
  *                 elif t == NPY_CLONGDOUBLE: f = "Zg"             # <<<<<<<<<<<<<<
@@ -3470,7 +3577,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       __pyx_v_f = __pyx_k_Zg;
       break;
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":274
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":274
  *                 elif t == NPY_CDOUBLE:     f = "Zd"
  *                 elif t == NPY_CLONGDOUBLE: f = "Zg"
  *                 elif t == NPY_OBJECT:      f = "O"             # <<<<<<<<<<<<<<
@@ -3482,7 +3589,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       break;
       default:
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":276
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":276
  *                 elif t == NPY_OBJECT:      f = "O"
  *                 else:
  *                     raise ValueError(u"unknown dtype code in numpy.pxd (%d)" % t)             # <<<<<<<<<<<<<<
@@ -3508,7 +3615,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
       break;
     }
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":277
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":277
  *                 else:
  *                     raise ValueError(u"unknown dtype code in numpy.pxd (%d)" % t)
  *                 info.format = f             # <<<<<<<<<<<<<<
@@ -3517,7 +3624,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
     __pyx_v_info->format = __pyx_v_f;
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":278
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":278
  *                     raise ValueError(u"unknown dtype code in numpy.pxd (%d)" % t)
  *                 info.format = f
  *                 return             # <<<<<<<<<<<<<<
@@ -3529,7 +3636,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   }
   /*else*/ {
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":280
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":280
  *                 return
  *             else:
  *                 info.format = <char*>stdlib.malloc(_buffer_format_string_len)             # <<<<<<<<<<<<<<
@@ -3538,7 +3645,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
     __pyx_v_info->format = ((char *)malloc(255));
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":281
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":281
  *             else:
  *                 info.format = <char*>stdlib.malloc(_buffer_format_string_len)
  *                 info.format[0] = c'^' # Native data types, manual alignment             # <<<<<<<<<<<<<<
@@ -3547,7 +3654,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
     (__pyx_v_info->format[0]) = '^';
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":282
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":282
  *                 info.format = <char*>stdlib.malloc(_buffer_format_string_len)
  *                 info.format[0] = c'^' # Native data types, manual alignment
  *                 offset = 0             # <<<<<<<<<<<<<<
@@ -3556,7 +3663,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  */
     __pyx_v_offset = 0;
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":283
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":283
  *                 info.format[0] = c'^' # Native data types, manual alignment
  *                 offset = 0
  *                 f = _util_dtypestring(descr, info.format + 1,             # <<<<<<<<<<<<<<
@@ -3566,7 +3673,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     __pyx_t_7 = __pyx_f_5numpy__util_dtypestring(__pyx_v_descr, (__pyx_v_info->format + 1), (__pyx_v_info->format + 255), (&__pyx_v_offset)); if (unlikely(__pyx_t_7 == NULL)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 283; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __pyx_v_f = __pyx_t_7;
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":286
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":286
  *                                       info.format + _buffer_format_string_len,
  *                                       &offset)
  *                 f[0] = c'\0' # Terminate format string             # <<<<<<<<<<<<<<
@@ -3576,7 +3683,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
     (__pyx_v_f[0]) = '\x00';
   }
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":194
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":194
  *         # experimental exception made for __getbuffer__ and __releasebuffer__
  *         # -- the details of this may change.
  *         def __getbuffer__(ndarray self, Py_buffer* info, int flags):             # <<<<<<<<<<<<<<
@@ -3608,7 +3715,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
   return __pyx_r;
 }
 
-/* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":288
+/* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":288
  *                 f[0] = c'\0' # Terminate format string
  * 
  *         def __releasebuffer__(ndarray self, Py_buffer* info):             # <<<<<<<<<<<<<<
@@ -3632,7 +3739,7 @@ static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_s
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("__releasebuffer__", 0);
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":289
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":289
  * 
  *         def __releasebuffer__(ndarray self, Py_buffer* info):
  *             if PyArray_HASFIELDS(self):             # <<<<<<<<<<<<<<
@@ -3642,7 +3749,7 @@ static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_s
   __pyx_t_1 = (PyArray_HASFIELDS(__pyx_v_self) != 0);
   if (__pyx_t_1) {
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":290
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":290
  *         def __releasebuffer__(ndarray self, Py_buffer* info):
  *             if PyArray_HASFIELDS(self):
  *                 stdlib.free(info.format)             # <<<<<<<<<<<<<<
@@ -3654,7 +3761,7 @@ static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_s
   }
   __pyx_L3:;
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":291
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":291
  *             if PyArray_HASFIELDS(self):
  *                 stdlib.free(info.format)
  *             if sizeof(npy_intp) != sizeof(Py_ssize_t):             # <<<<<<<<<<<<<<
@@ -3664,7 +3771,7 @@ static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_s
   __pyx_t_1 = (((sizeof(npy_intp)) != (sizeof(Py_ssize_t))) != 0);
   if (__pyx_t_1) {
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":292
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":292
  *                 stdlib.free(info.format)
  *             if sizeof(npy_intp) != sizeof(Py_ssize_t):
  *                 stdlib.free(info.strides)             # <<<<<<<<<<<<<<
@@ -3676,7 +3783,7 @@ static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_s
   }
   __pyx_L4:;
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":288
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":288
  *                 f[0] = c'\0' # Terminate format string
  * 
  *         def __releasebuffer__(ndarray self, Py_buffer* info):             # <<<<<<<<<<<<<<
@@ -3688,7 +3795,7 @@ static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_s
   __Pyx_RefNannyFinishContext();
 }
 
-/* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":768
+/* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":768
  * ctypedef npy_cdouble     complex_t
  * 
  * cdef inline object PyArray_MultiIterNew1(a):             # <<<<<<<<<<<<<<
@@ -3705,7 +3812,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew1(PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew1", 0);
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":769
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":769
  * 
  * cdef inline object PyArray_MultiIterNew1(a):
  *     return PyArray_MultiIterNew(1, <void*>a)             # <<<<<<<<<<<<<<
@@ -3719,7 +3826,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew1(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":768
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":768
  * ctypedef npy_cdouble     complex_t
  * 
  * cdef inline object PyArray_MultiIterNew1(a):             # <<<<<<<<<<<<<<
@@ -3738,7 +3845,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew1(PyObject *__
   return __pyx_r;
 }
 
-/* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":771
+/* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":771
  *     return PyArray_MultiIterNew(1, <void*>a)
  * 
  * cdef inline object PyArray_MultiIterNew2(a, b):             # <<<<<<<<<<<<<<
@@ -3755,7 +3862,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew2(PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew2", 0);
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":772
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":772
  * 
  * cdef inline object PyArray_MultiIterNew2(a, b):
  *     return PyArray_MultiIterNew(2, <void*>a, <void*>b)             # <<<<<<<<<<<<<<
@@ -3769,7 +3876,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew2(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":771
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":771
  *     return PyArray_MultiIterNew(1, <void*>a)
  * 
  * cdef inline object PyArray_MultiIterNew2(a, b):             # <<<<<<<<<<<<<<
@@ -3788,7 +3895,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew2(PyObject *__
   return __pyx_r;
 }
 
-/* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":774
+/* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":774
  *     return PyArray_MultiIterNew(2, <void*>a, <void*>b)
  * 
  * cdef inline object PyArray_MultiIterNew3(a, b, c):             # <<<<<<<<<<<<<<
@@ -3805,7 +3912,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew3(PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew3", 0);
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":775
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":775
  * 
  * cdef inline object PyArray_MultiIterNew3(a, b, c):
  *     return PyArray_MultiIterNew(3, <void*>a, <void*>b, <void*> c)             # <<<<<<<<<<<<<<
@@ -3819,7 +3926,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew3(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":774
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":774
  *     return PyArray_MultiIterNew(2, <void*>a, <void*>b)
  * 
  * cdef inline object PyArray_MultiIterNew3(a, b, c):             # <<<<<<<<<<<<<<
@@ -3838,7 +3945,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew3(PyObject *__
   return __pyx_r;
 }
 
-/* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":777
+/* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":777
  *     return PyArray_MultiIterNew(3, <void*>a, <void*>b, <void*> c)
  * 
  * cdef inline object PyArray_MultiIterNew4(a, b, c, d):             # <<<<<<<<<<<<<<
@@ -3855,7 +3962,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew4(PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew4", 0);
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":778
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":778
  * 
  * cdef inline object PyArray_MultiIterNew4(a, b, c, d):
  *     return PyArray_MultiIterNew(4, <void*>a, <void*>b, <void*>c, <void*> d)             # <<<<<<<<<<<<<<
@@ -3869,7 +3976,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew4(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":777
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":777
  *     return PyArray_MultiIterNew(3, <void*>a, <void*>b, <void*> c)
  * 
  * cdef inline object PyArray_MultiIterNew4(a, b, c, d):             # <<<<<<<<<<<<<<
@@ -3888,7 +3995,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew4(PyObject *__
   return __pyx_r;
 }
 
-/* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":780
+/* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":780
  *     return PyArray_MultiIterNew(4, <void*>a, <void*>b, <void*>c, <void*> d)
  * 
  * cdef inline object PyArray_MultiIterNew5(a, b, c, d, e):             # <<<<<<<<<<<<<<
@@ -3905,7 +4012,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew5(PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew5", 0);
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":781
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":781
  * 
  * cdef inline object PyArray_MultiIterNew5(a, b, c, d, e):
  *     return PyArray_MultiIterNew(5, <void*>a, <void*>b, <void*>c, <void*> d, <void*> e)             # <<<<<<<<<<<<<<
@@ -3919,7 +4026,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew5(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":780
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":780
  *     return PyArray_MultiIterNew(4, <void*>a, <void*>b, <void*>c, <void*> d)
  * 
  * cdef inline object PyArray_MultiIterNew5(a, b, c, d, e):             # <<<<<<<<<<<<<<
@@ -3938,7 +4045,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew5(PyObject *__
   return __pyx_r;
 }
 
-/* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":783
+/* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":783
  *     return PyArray_MultiIterNew(5, <void*>a, <void*>b, <void*>c, <void*> d, <void*> e)
  * 
  * cdef inline char* _util_dtypestring(dtype descr, char* f, char* end, int* offset) except NULL:             # <<<<<<<<<<<<<<
@@ -3970,7 +4077,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("_util_dtypestring", 0);
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":790
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":790
  *     cdef int delta_offset
  *     cdef tuple i
  *     cdef int endian_detector = 1             # <<<<<<<<<<<<<<
@@ -3979,7 +4086,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
  */
   __pyx_v_endian_detector = 1;
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":791
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":791
  *     cdef tuple i
  *     cdef int endian_detector = 1
  *     cdef bint little_endian = ((<char*>&endian_detector)[0] != 0)             # <<<<<<<<<<<<<<
@@ -3988,7 +4095,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
  */
   __pyx_v_little_endian = ((((char *)(&__pyx_v_endian_detector))[0]) != 0);
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":794
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":794
  *     cdef tuple fields
  * 
  *     for childname in descr.names:             # <<<<<<<<<<<<<<
@@ -4010,7 +4117,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
     __Pyx_XDECREF_SET(__pyx_v_childname, __pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":795
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":795
  * 
  *     for childname in descr.names:
  *         fields = descr.fields[childname]             # <<<<<<<<<<<<<<
@@ -4023,7 +4130,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
     __Pyx_XDECREF_SET(__pyx_v_fields, ((PyObject*)__pyx_t_3));
     __pyx_t_3 = 0;
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":796
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":796
  *     for childname in descr.names:
  *         fields = descr.fields[childname]
  *         child, new_offset = fields             # <<<<<<<<<<<<<<
@@ -4062,7 +4169,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
     __Pyx_XDECREF_SET(__pyx_v_new_offset, __pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":798
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":798
  *         child, new_offset = fields
  * 
  *         if (end - f) - <int>(new_offset - offset[0]) < 15:             # <<<<<<<<<<<<<<
@@ -4079,7 +4186,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
     __pyx_t_6 = ((((__pyx_v_end - __pyx_v_f) - ((int)__pyx_t_5)) < 15) != 0);
     if (__pyx_t_6) {
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":799
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":799
  * 
  *         if (end - f) - <int>(new_offset - offset[0]) < 15:
  *             raise RuntimeError(u"Format string allocated too short, see comment in numpy.pxd")             # <<<<<<<<<<<<<<
@@ -4093,7 +4200,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
       {__pyx_filename = __pyx_f[1]; __pyx_lineno = 799; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":801
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":801
  *             raise RuntimeError(u"Format string allocated too short, see comment in numpy.pxd")
  * 
  *         if ((child.byteorder == c'>' and little_endian) or             # <<<<<<<<<<<<<<
@@ -4113,7 +4220,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
     }
     __pyx_L8_next_or:;
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":802
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":802
  * 
  *         if ((child.byteorder == c'>' and little_endian) or
  *             (child.byteorder == c'<' and not little_endian)):             # <<<<<<<<<<<<<<
@@ -4131,7 +4238,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
     __pyx_L7_bool_binop_done:;
     if (__pyx_t_6) {
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":803
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":803
  *         if ((child.byteorder == c'>' and little_endian) or
  *             (child.byteorder == c'<' and not little_endian)):
  *             raise ValueError(u"Non-native byte order not supported")             # <<<<<<<<<<<<<<
@@ -4145,7 +4252,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
       {__pyx_filename = __pyx_f[1]; __pyx_lineno = 803; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":813
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":813
  * 
  *         # Output padding bytes
  *         while offset[0] < new_offset:             # <<<<<<<<<<<<<<
@@ -4161,7 +4268,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       if (!__pyx_t_6) break;
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":814
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":814
  *         # Output padding bytes
  *         while offset[0] < new_offset:
  *             f[0] = 120 # "x"; pad byte             # <<<<<<<<<<<<<<
@@ -4170,7 +4277,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
  */
       (__pyx_v_f[0]) = 120;
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":815
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":815
  *         while offset[0] < new_offset:
  *             f[0] = 120 # "x"; pad byte
  *             f += 1             # <<<<<<<<<<<<<<
@@ -4179,7 +4286,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
  */
       __pyx_v_f = (__pyx_v_f + 1);
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":816
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":816
  *             f[0] = 120 # "x"; pad byte
  *             f += 1
  *             offset[0] += 1             # <<<<<<<<<<<<<<
@@ -4190,7 +4297,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
       (__pyx_v_offset[__pyx_t_8]) = ((__pyx_v_offset[__pyx_t_8]) + 1);
     }
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":818
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":818
  *             offset[0] += 1
  * 
  *         offset[0] += child.itemsize             # <<<<<<<<<<<<<<
@@ -4200,7 +4307,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
     __pyx_t_8 = 0;
     (__pyx_v_offset[__pyx_t_8]) = ((__pyx_v_offset[__pyx_t_8]) + __pyx_v_child->elsize);
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":820
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":820
  *         offset[0] += child.itemsize
  * 
  *         if not PyDataType_HASFIELDS(child):             # <<<<<<<<<<<<<<
@@ -4210,7 +4317,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
     __pyx_t_6 = ((!(PyDataType_HASFIELDS(__pyx_v_child) != 0)) != 0);
     if (__pyx_t_6) {
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":821
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":821
  * 
  *         if not PyDataType_HASFIELDS(child):
  *             t = child.type_num             # <<<<<<<<<<<<<<
@@ -4222,7 +4329,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
       __Pyx_XDECREF_SET(__pyx_v_t, __pyx_t_4);
       __pyx_t_4 = 0;
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":822
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":822
  *         if not PyDataType_HASFIELDS(child):
  *             t = child.type_num
  *             if end - f < 5:             # <<<<<<<<<<<<<<
@@ -4232,7 +4339,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
       __pyx_t_6 = (((__pyx_v_end - __pyx_v_f) < 5) != 0);
       if (__pyx_t_6) {
 
-        /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":823
+        /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":823
  *             t = child.type_num
  *             if end - f < 5:
  *                 raise RuntimeError(u"Format string allocated too short.")             # <<<<<<<<<<<<<<
@@ -4246,7 +4353,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         {__pyx_filename = __pyx_f[1]; __pyx_lineno = 823; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       }
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":826
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":826
  * 
  *             # Until ticket #99 is fixed, use integers to avoid warnings
  *             if   t == NPY_BYTE:        f[0] =  98 #"b"             # <<<<<<<<<<<<<<
@@ -4264,7 +4371,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":827
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":827
  *             # Until ticket #99 is fixed, use integers to avoid warnings
  *             if   t == NPY_BYTE:        f[0] =  98 #"b"
  *             elif t == NPY_UBYTE:       f[0] =  66 #"B"             # <<<<<<<<<<<<<<
@@ -4282,7 +4389,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":828
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":828
  *             if   t == NPY_BYTE:        f[0] =  98 #"b"
  *             elif t == NPY_UBYTE:       f[0] =  66 #"B"
  *             elif t == NPY_SHORT:       f[0] = 104 #"h"             # <<<<<<<<<<<<<<
@@ -4300,7 +4407,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":829
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":829
  *             elif t == NPY_UBYTE:       f[0] =  66 #"B"
  *             elif t == NPY_SHORT:       f[0] = 104 #"h"
  *             elif t == NPY_USHORT:      f[0] =  72 #"H"             # <<<<<<<<<<<<<<
@@ -4318,7 +4425,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":830
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":830
  *             elif t == NPY_SHORT:       f[0] = 104 #"h"
  *             elif t == NPY_USHORT:      f[0] =  72 #"H"
  *             elif t == NPY_INT:         f[0] = 105 #"i"             # <<<<<<<<<<<<<<
@@ -4336,7 +4443,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":831
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":831
  *             elif t == NPY_USHORT:      f[0] =  72 #"H"
  *             elif t == NPY_INT:         f[0] = 105 #"i"
  *             elif t == NPY_UINT:        f[0] =  73 #"I"             # <<<<<<<<<<<<<<
@@ -4354,7 +4461,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":832
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":832
  *             elif t == NPY_INT:         f[0] = 105 #"i"
  *             elif t == NPY_UINT:        f[0] =  73 #"I"
  *             elif t == NPY_LONG:        f[0] = 108 #"l"             # <<<<<<<<<<<<<<
@@ -4372,7 +4479,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":833
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":833
  *             elif t == NPY_UINT:        f[0] =  73 #"I"
  *             elif t == NPY_LONG:        f[0] = 108 #"l"
  *             elif t == NPY_ULONG:       f[0] = 76  #"L"             # <<<<<<<<<<<<<<
@@ -4390,7 +4497,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":834
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":834
  *             elif t == NPY_LONG:        f[0] = 108 #"l"
  *             elif t == NPY_ULONG:       f[0] = 76  #"L"
  *             elif t == NPY_LONGLONG:    f[0] = 113 #"q"             # <<<<<<<<<<<<<<
@@ -4408,7 +4515,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":835
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":835
  *             elif t == NPY_ULONG:       f[0] = 76  #"L"
  *             elif t == NPY_LONGLONG:    f[0] = 113 #"q"
  *             elif t == NPY_ULONGLONG:   f[0] = 81  #"Q"             # <<<<<<<<<<<<<<
@@ -4426,7 +4533,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":836
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":836
  *             elif t == NPY_LONGLONG:    f[0] = 113 #"q"
  *             elif t == NPY_ULONGLONG:   f[0] = 81  #"Q"
  *             elif t == NPY_FLOAT:       f[0] = 102 #"f"             # <<<<<<<<<<<<<<
@@ -4444,7 +4551,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":837
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":837
  *             elif t == NPY_ULONGLONG:   f[0] = 81  #"Q"
  *             elif t == NPY_FLOAT:       f[0] = 102 #"f"
  *             elif t == NPY_DOUBLE:      f[0] = 100 #"d"             # <<<<<<<<<<<<<<
@@ -4462,7 +4569,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":838
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":838
  *             elif t == NPY_FLOAT:       f[0] = 102 #"f"
  *             elif t == NPY_DOUBLE:      f[0] = 100 #"d"
  *             elif t == NPY_LONGDOUBLE:  f[0] = 103 #"g"             # <<<<<<<<<<<<<<
@@ -4480,7 +4587,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":839
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":839
  *             elif t == NPY_DOUBLE:      f[0] = 100 #"d"
  *             elif t == NPY_LONGDOUBLE:  f[0] = 103 #"g"
  *             elif t == NPY_CFLOAT:      f[0] = 90; f[1] = 102; f += 1 # Zf             # <<<<<<<<<<<<<<
@@ -4500,7 +4607,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":840
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":840
  *             elif t == NPY_LONGDOUBLE:  f[0] = 103 #"g"
  *             elif t == NPY_CFLOAT:      f[0] = 90; f[1] = 102; f += 1 # Zf
  *             elif t == NPY_CDOUBLE:     f[0] = 90; f[1] = 100; f += 1 # Zd             # <<<<<<<<<<<<<<
@@ -4520,7 +4627,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":841
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":841
  *             elif t == NPY_CFLOAT:      f[0] = 90; f[1] = 102; f += 1 # Zf
  *             elif t == NPY_CDOUBLE:     f[0] = 90; f[1] = 100; f += 1 # Zd
  *             elif t == NPY_CLONGDOUBLE: f[0] = 90; f[1] = 103; f += 1 # Zg             # <<<<<<<<<<<<<<
@@ -4540,7 +4647,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
         goto __pyx_L15;
       }
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":842
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":842
  *             elif t == NPY_CDOUBLE:     f[0] = 90; f[1] = 100; f += 1 # Zd
  *             elif t == NPY_CLONGDOUBLE: f[0] = 90; f[1] = 103; f += 1 # Zg
  *             elif t == NPY_OBJECT:      f[0] = 79 #"O"             # <<<<<<<<<<<<<<
@@ -4559,7 +4666,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
       }
       /*else*/ {
 
-        /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":844
+        /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":844
  *             elif t == NPY_OBJECT:      f[0] = 79 #"O"
  *             else:
  *                 raise ValueError(u"unknown dtype code in numpy.pxd (%d)" % t)             # <<<<<<<<<<<<<<
@@ -4582,7 +4689,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
       }
       __pyx_L15:;
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":845
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":845
  *             else:
  *                 raise ValueError(u"unknown dtype code in numpy.pxd (%d)" % t)
  *             f += 1             # <<<<<<<<<<<<<<
@@ -4594,7 +4701,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
     }
     /*else*/ {
 
-      /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":849
+      /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":849
  *             # Cython ignores struct boundary information ("T{...}"),
  *             # so don't output it
  *             f = _util_dtypestring(child, f, end, offset)             # <<<<<<<<<<<<<<
@@ -4606,7 +4713,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
     }
     __pyx_L13:;
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":794
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":794
  *     cdef tuple fields
  * 
  *     for childname in descr.names:             # <<<<<<<<<<<<<<
@@ -4616,7 +4723,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":850
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":850
  *             # so don't output it
  *             f = _util_dtypestring(child, f, end, offset)
  *     return f             # <<<<<<<<<<<<<<
@@ -4626,7 +4733,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
   __pyx_r = __pyx_v_f;
   goto __pyx_L0;
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":783
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":783
  *     return PyArray_MultiIterNew(5, <void*>a, <void*>b, <void*>c, <void*> d, <void*> e)
  * 
  * cdef inline char* _util_dtypestring(dtype descr, char* f, char* end, int* offset) except NULL:             # <<<<<<<<<<<<<<
@@ -4651,7 +4758,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
   return __pyx_r;
 }
 
-/* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":966
+/* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":966
  * 
  * 
  * cdef inline void set_array_base(ndarray arr, object base):             # <<<<<<<<<<<<<<
@@ -4666,7 +4773,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
   int __pyx_t_2;
   __Pyx_RefNannySetupContext("set_array_base", 0);
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":968
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":968
  * cdef inline void set_array_base(ndarray arr, object base):
  *      cdef PyObject* baseptr
  *      if base is None:             # <<<<<<<<<<<<<<
@@ -4677,7 +4784,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":969
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":969
  *      cdef PyObject* baseptr
  *      if base is None:
  *          baseptr = NULL             # <<<<<<<<<<<<<<
@@ -4689,7 +4796,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
   }
   /*else*/ {
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":971
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":971
  *          baseptr = NULL
  *      else:
  *          Py_INCREF(base) # important to do this before decref below!             # <<<<<<<<<<<<<<
@@ -4698,7 +4805,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
  */
     Py_INCREF(__pyx_v_base);
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":972
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":972
  *      else:
  *          Py_INCREF(base) # important to do this before decref below!
  *          baseptr = <PyObject*>base             # <<<<<<<<<<<<<<
@@ -4709,7 +4816,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
   }
   __pyx_L3:;
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":973
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":973
  *          Py_INCREF(base) # important to do this before decref below!
  *          baseptr = <PyObject*>base
  *      Py_XDECREF(arr.base)             # <<<<<<<<<<<<<<
@@ -4718,7 +4825,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
  */
   Py_XDECREF(__pyx_v_arr->base);
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":974
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":974
  *          baseptr = <PyObject*>base
  *      Py_XDECREF(arr.base)
  *      arr.base = baseptr             # <<<<<<<<<<<<<<
@@ -4727,7 +4834,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
  */
   __pyx_v_arr->base = __pyx_v_baseptr;
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":966
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":966
  * 
  * 
  * cdef inline void set_array_base(ndarray arr, object base):             # <<<<<<<<<<<<<<
@@ -4739,7 +4846,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
   __Pyx_RefNannyFinishContext();
 }
 
-/* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":976
+/* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":976
  *      arr.base = baseptr
  * 
  * cdef inline object get_array_base(ndarray arr):             # <<<<<<<<<<<<<<
@@ -4753,7 +4860,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("get_array_base", 0);
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":977
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":977
  * 
  * cdef inline object get_array_base(ndarray arr):
  *     if arr.base is NULL:             # <<<<<<<<<<<<<<
@@ -4763,7 +4870,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
   __pyx_t_1 = ((__pyx_v_arr->base == NULL) != 0);
   if (__pyx_t_1) {
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":978
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":978
  * cdef inline object get_array_base(ndarray arr):
  *     if arr.base is NULL:
  *         return None             # <<<<<<<<<<<<<<
@@ -4777,7 +4884,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
   }
   /*else*/ {
 
-    /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":980
+    /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":980
  *         return None
  *     else:
  *         return <object>arr.base             # <<<<<<<<<<<<<<
@@ -4788,7 +4895,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
     goto __pyx_L0;
   }
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":976
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":976
  *      arr.base = baseptr
  * 
  * cdef inline object get_array_base(ndarray arr):             # <<<<<<<<<<<<<<
@@ -4829,6 +4936,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_Complex, __pyx_k_Complex, sizeof(__pyx_k_Complex), 0, 0, 1, 1},
   {&__pyx_n_s_DOUBLE, __pyx_k_DOUBLE, sizeof(__pyx_k_DOUBLE), 0, 0, 1, 1},
   {&__pyx_kp_s_Diagonal_number_d_is_exactly_zer, __pyx_k_Diagonal_number_d_is_exactly_zer, sizeof(__pyx_k_Diagonal_number_d_is_exactly_zer), 0, 0, 1, 0},
+  {&__pyx_n_s_F, __pyx_k_F, sizeof(__pyx_k_F), 0, 0, 1, 1},
   {&__pyx_kp_u_Format_string_allocated_too_shor, __pyx_k_Format_string_allocated_too_shor, sizeof(__pyx_k_Format_string_allocated_too_shor), 0, 1, 0, 0},
   {&__pyx_kp_u_Format_string_allocated_too_shor_2, __pyx_k_Format_string_allocated_too_shor_2, sizeof(__pyx_k_Format_string_allocated_too_shor_2), 0, 1, 0, 0},
   {&__pyx_n_s_LDA, __pyx_k_LDA, sizeof(__pyx_k_LDA), 0, 0, 1, 1},
@@ -4840,9 +4948,10 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_s_Users_kchen_project_Feynman_Sim, __pyx_k_Users_kchen_project_Feynman_Sim, sizeof(__pyx_k_Users_kchen_project_Feynman_Sim), 0, 0, 1, 0},
   {&__pyx_n_s_ValueError, __pyx_k_ValueError, sizeof(__pyx_k_ValueError), 0, 0, 1, 1},
   {&__pyx_n_s_arr, __pyx_k_arr, sizeof(__pyx_k_arr), 0, 0, 1, 1},
-  {&__pyx_n_s_ascontiguousarray, __pyx_k_ascontiguousarray, sizeof(__pyx_k_ascontiguousarray), 0, 0, 1, 1},
   {&__pyx_n_s_b, __pyx_k_b, sizeof(__pyx_k_b), 0, 0, 1, 1},
+  {&__pyx_n_s_bb, __pyx_k_bb, sizeof(__pyx_k_bb), 0, 0, 1, 1},
   {&__pyx_n_s_complex128, __pyx_k_complex128, sizeof(__pyx_k_complex128), 0, 0, 1, 1},
+  {&__pyx_n_s_copy, __pyx_k_copy, sizeof(__pyx_k_copy), 0, 0, 1, 1},
   {&__pyx_n_s_det, __pyx_k_det, sizeof(__pyx_k_det), 0, 0, 1, 1},
   {&__pyx_n_s_dtype, __pyx_k_dtype, sizeof(__pyx_k_dtype), 0, 0, 1, 1},
   {&__pyx_n_s_empty, __pyx_k_empty, sizeof(__pyx_k_empty), 0, 0, 1, 1},
@@ -4860,21 +4969,26 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_lu_fast, __pyx_k_lu_fast, sizeof(__pyx_k_lu_fast), 0, 0, 1, 1},
   {&__pyx_n_s_lu_solve, __pyx_k_lu_solve, sizeof(__pyx_k_lu_solve), 0, 0, 1, 1},
   {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
+  {&__pyx_n_s_may_share_memory, __pyx_k_may_share_memory, sizeof(__pyx_k_may_share_memory), 0, 0, 1, 1},
   {&__pyx_kp_u_ndarray_is_not_C_contiguous, __pyx_k_ndarray_is_not_C_contiguous, sizeof(__pyx_k_ndarray_is_not_C_contiguous), 0, 1, 0, 0},
   {&__pyx_kp_u_ndarray_is_not_Fortran_contiguou, __pyx_k_ndarray_is_not_Fortran_contiguou, sizeof(__pyx_k_ndarray_is_not_Fortran_contiguou), 0, 1, 0, 0},
   {&__pyx_n_s_np, __pyx_k_np, sizeof(__pyx_k_np), 0, 0, 1, 1},
   {&__pyx_n_s_nrhs, __pyx_k_nrhs, sizeof(__pyx_k_nrhs), 0, 0, 1, 1},
   {&__pyx_n_s_numpy, __pyx_k_numpy, sizeof(__pyx_k_numpy), 0, 0, 1, 1},
   {&__pyx_n_s_ones, __pyx_k_ones, sizeof(__pyx_k_ones), 0, 0, 1, 1},
+  {&__pyx_n_s_order, __pyx_k_order, sizeof(__pyx_k_order), 0, 0, 1, 1},
   {&__pyx_n_s_piv, __pyx_k_piv, sizeof(__pyx_k_piv), 0, 0, 1, 1},
   {&__pyx_n_s_range, __pyx_k_range, sizeof(__pyx_k_range), 0, 0, 1, 1},
-  {&__pyx_kp_s_require_lu_shape_0_piv_shape_0, __pyx_k_require_lu_shape_0_piv_shape_0, sizeof(__pyx_k_require_lu_shape_0_piv_shape_0), 0, 0, 1, 0},
-  {&__pyx_kp_s_require_lu_shape_1_piv_shape_1, __pyx_k_require_lu_shape_1_piv_shape_1, sizeof(__pyx_k_require_lu_shape_1_piv_shape_1), 0, 0, 1, 0},
+  {&__pyx_n_s_require, __pyx_k_require, sizeof(__pyx_k_require), 0, 0, 1, 1},
+  {&__pyx_kp_s_require_lu_shape_1_piv_shape_0, __pyx_k_require_lu_shape_1_piv_shape_0, sizeof(__pyx_k_require_lu_shape_1_piv_shape_0), 0, 0, 1, 0},
+  {&__pyx_kp_s_require_lu_shape_2_piv_shape_1, __pyx_k_require_lu_shape_2_piv_shape_1, sizeof(__pyx_k_require_lu_shape_2_piv_shape_1), 0, 0, 1, 0},
   {&__pyx_kp_s_require_lu_shape_b_shape, __pyx_k_require_lu_shape_b_shape, sizeof(__pyx_k_require_lu_shape_b_shape), 0, 0, 1, 0},
+  {&__pyx_n_s_requirements, __pyx_k_requirements, sizeof(__pyx_k_requirements), 0, 0, 1, 1},
   {&__pyx_n_s_size, __pyx_k_size, sizeof(__pyx_k_size), 0, 0, 1, 1},
   {&__pyx_n_s_test, __pyx_k_test, sizeof(__pyx_k_test), 0, 0, 1, 1},
   {&__pyx_kp_s_the_input_array_must_have_shape, __pyx_k_the_input_array_must_have_shape, sizeof(__pyx_k_the_input_array_must_have_shape), 0, 0, 1, 0},
   {&__pyx_kp_s_the_lu_array_must_have_shape_N_N, __pyx_k_the_lu_array_must_have_shape_N_N, sizeof(__pyx_k_the_lu_array_must_have_shape_N_N), 0, 0, 1, 0},
+  {&__pyx_kp_s_the_lu_array_must_have_shape_N_N_2, __pyx_k_the_lu_array_must_have_shape_N_N_2, sizeof(__pyx_k_the_lu_array_must_have_shape_N_N_2), 0, 0, 1, 0},
   {&__pyx_n_s_trans, __pyx_k_trans, sizeof(__pyx_k_trans), 0, 0, 1, 1},
   {&__pyx_kp_u_unknown_dtype_code_in_numpy_pxd, __pyx_k_unknown_dtype_code_in_numpy_pxd, sizeof(__pyx_k_unknown_dtype_code_in_numpy_pxd), 0, 1, 0, 0},
   {0, 0, 0, 0, 0, 0, 0}
@@ -4895,10 +5009,10 @@ static int __Pyx_InitCachedConstants(void) {
 
   /* "lu_fast.pyx":27
  *     """
- *     if arr.shape[1] != arr.shape[2]:
- *         raise TypeError("the input array must have shape [:, N, N]")             # <<<<<<<<<<<<<<
- *     cdef int size= arr.shape[0];
- *     cdef int N = arr.shape[1];
+ *     if arr.shape[0] != arr.shape[1]:
+ *         raise TypeError("the input array must have shape [N, N, :]")             # <<<<<<<<<<<<<<
+ *     cdef int size= arr.shape[2];
+ *     cdef int N = arr.shape[0];
  */
   __pyx_tuple_ = PyTuple_Pack(1, __pyx_kp_s_the_input_array_must_have_shape); if (unlikely(!__pyx_tuple_)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 27; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple_);
@@ -4906,82 +5020,82 @@ static int __Pyx_InitCachedConstants(void) {
 
   /* "lu_fast.pyx":54
  *     """
- *     if lu.shape[1] != lu.shape[2]:
- *         raise TypeError("the lu array must have shape [:, N, N]")             # <<<<<<<<<<<<<<
- *     if lu.shape[0] != piv.shape[0]:
- *         raise TypeError("require lu.shape[0]==piv.shape[0]")
+ *     if lu.shape[0] != lu.shape[1]:
+ *         raise TypeError("the lu array must have shape [N, N, :]")             # <<<<<<<<<<<<<<
+ *     if lu.shape[2] != piv.shape[1]:
+ *         raise TypeError("require lu.shape[2]==piv.shape[1]")
  */
   __pyx_tuple__2 = PyTuple_Pack(1, __pyx_kp_s_the_lu_array_must_have_shape_N_N); if (unlikely(!__pyx_tuple__2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 54; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__2);
   __Pyx_GIVEREF(__pyx_tuple__2);
 
   /* "lu_fast.pyx":56
- *         raise TypeError("the lu array must have shape [:, N, N]")
- *     if lu.shape[0] != piv.shape[0]:
- *         raise TypeError("require lu.shape[0]==piv.shape[0]")             # <<<<<<<<<<<<<<
- *     if lu.shape[1] != piv.shape[1]:
- *         raise TypeError("require lu.shape[1]==piv.shape[1]")
+ *         raise TypeError("the lu array must have shape [N, N, :]")
+ *     if lu.shape[2] != piv.shape[1]:
+ *         raise TypeError("require lu.shape[2]==piv.shape[1]")             # <<<<<<<<<<<<<<
+ *     if lu.shape[1] != piv.shape[0]:
+ *         raise TypeError("require lu.shape[1]==piv.shape[0]")
  */
-  __pyx_tuple__3 = PyTuple_Pack(1, __pyx_kp_s_require_lu_shape_0_piv_shape_0); if (unlikely(!__pyx_tuple__3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 56; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__3 = PyTuple_Pack(1, __pyx_kp_s_require_lu_shape_2_piv_shape_1); if (unlikely(!__pyx_tuple__3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 56; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__3);
   __Pyx_GIVEREF(__pyx_tuple__3);
 
   /* "lu_fast.pyx":58
- *         raise TypeError("require lu.shape[0]==piv.shape[0]")
- *     if lu.shape[1] != piv.shape[1]:
- *         raise TypeError("require lu.shape[1]==piv.shape[1]")             # <<<<<<<<<<<<<<
- *     if lu.shape[0] != b.shape[0] or lu.shape[1]!=b.shape[1] or lu.shape[2]!=b.shape[2]:
+ *         raise TypeError("require lu.shape[2]==piv.shape[1]")
+ *     if lu.shape[1] != piv.shape[0]:
+ *         raise TypeError("require lu.shape[1]==piv.shape[0]")             # <<<<<<<<<<<<<<
+ *     if lu.shape[2] != b.shape[2] or lu.shape[1]!=b.shape[1] or lu.shape[0]!=b.shape[0]:
  *         raise TypeError("require lu.shape==b.shape")
  */
-  __pyx_tuple__4 = PyTuple_Pack(1, __pyx_kp_s_require_lu_shape_1_piv_shape_1); if (unlikely(!__pyx_tuple__4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 58; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__4 = PyTuple_Pack(1, __pyx_kp_s_require_lu_shape_1_piv_shape_0); if (unlikely(!__pyx_tuple__4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 58; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__4);
   __Pyx_GIVEREF(__pyx_tuple__4);
 
   /* "lu_fast.pyx":60
- *         raise TypeError("require lu.shape[1]==piv.shape[1]")
- *     if lu.shape[0] != b.shape[0] or lu.shape[1]!=b.shape[1] or lu.shape[2]!=b.shape[2]:
+ *         raise TypeError("require lu.shape[1]==piv.shape[0]")
+ *     if lu.shape[2] != b.shape[2] or lu.shape[1]!=b.shape[1] or lu.shape[0]!=b.shape[0]:
  *         raise TypeError("require lu.shape==b.shape")             # <<<<<<<<<<<<<<
  *     cdef char trans = 'N';
- *     cdef int size= lu.shape[0];
+ *     cdef int size= lu.shape[2];
  */
   __pyx_tuple__5 = PyTuple_Pack(1, __pyx_kp_s_require_lu_shape_b_shape); if (unlikely(!__pyx_tuple__5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 60; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__5);
   __Pyx_GIVEREF(__pyx_tuple__5);
 
-  /* "lu_fast.pyx":83
+  /* "lu_fast.pyx":86
  * def lu_det(np.ndarray[cComplex, ndim=3] lu, np.ndarray[int, ndim=2] piv):
- *     if lu.shape[1] != lu.shape[2]:
- *         raise TypeError("the lu array must have shape [:, N, N]")             # <<<<<<<<<<<<<<
- *     if lu.shape[0] != piv.shape[0]:
- *         raise TypeError("require lu.shape[0]==piv.shape[0]")
+ *     if lu.shape[0] != lu.shape[1]:
+ *         raise TypeError("the lu array must have shape [N, N, M]")             # <<<<<<<<<<<<<<
+ *     if lu.shape[2] != piv.shape[1]:
+ *         raise TypeError("require lu.shape[2]==piv.shape[1]")
  */
-  __pyx_tuple__6 = PyTuple_Pack(1, __pyx_kp_s_the_lu_array_must_have_shape_N_N); if (unlikely(!__pyx_tuple__6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 83; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__6 = PyTuple_Pack(1, __pyx_kp_s_the_lu_array_must_have_shape_N_N_2); if (unlikely(!__pyx_tuple__6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 86; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__6);
   __Pyx_GIVEREF(__pyx_tuple__6);
 
-  /* "lu_fast.pyx":85
- *         raise TypeError("the lu array must have shape [:, N, N]")
- *     if lu.shape[0] != piv.shape[0]:
- *         raise TypeError("require lu.shape[0]==piv.shape[0]")             # <<<<<<<<<<<<<<
- *     if lu.shape[1] != piv.shape[1]:
- *         raise TypeError("require lu.shape[1]==piv.shape[1]")
+  /* "lu_fast.pyx":88
+ *         raise TypeError("the lu array must have shape [N, N, M]")
+ *     if lu.shape[2] != piv.shape[1]:
+ *         raise TypeError("require lu.shape[2]==piv.shape[1]")             # <<<<<<<<<<<<<<
+ *     if lu.shape[1] != piv.shape[0]:
+ *         raise TypeError("require lu.shape[1]==piv.shape[0]")
  */
-  __pyx_tuple__7 = PyTuple_Pack(1, __pyx_kp_s_require_lu_shape_0_piv_shape_0); if (unlikely(!__pyx_tuple__7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 85; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__7 = PyTuple_Pack(1, __pyx_kp_s_require_lu_shape_2_piv_shape_1); if (unlikely(!__pyx_tuple__7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 88; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__7);
   __Pyx_GIVEREF(__pyx_tuple__7);
 
-  /* "lu_fast.pyx":87
- *         raise TypeError("require lu.shape[0]==piv.shape[0]")
- *     if lu.shape[1] != piv.shape[1]:
- *         raise TypeError("require lu.shape[1]==piv.shape[1]")             # <<<<<<<<<<<<<<
+  /* "lu_fast.pyx":90
+ *         raise TypeError("require lu.shape[2]==piv.shape[1]")
+ *     if lu.shape[1] != piv.shape[0]:
+ *         raise TypeError("require lu.shape[1]==piv.shape[0]")             # <<<<<<<<<<<<<<
  *     cdef np.ndarray[cComplex, ndim=1] det
- *     cdef int size= lu.shape[0];
+ *     cdef int size= lu.shape[2];
  */
-  __pyx_tuple__8 = PyTuple_Pack(1, __pyx_kp_s_require_lu_shape_1_piv_shape_1); if (unlikely(!__pyx_tuple__8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 87; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__8 = PyTuple_Pack(1, __pyx_kp_s_require_lu_shape_1_piv_shape_0); if (unlikely(!__pyx_tuple__8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 90; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__8);
   __Pyx_GIVEREF(__pyx_tuple__8);
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":215
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":215
  *             if ((flags & pybuf.PyBUF_C_CONTIGUOUS == pybuf.PyBUF_C_CONTIGUOUS)
  *                 and not PyArray_CHKFLAGS(self, NPY_C_CONTIGUOUS)):
  *                 raise ValueError(u"ndarray is not C contiguous")             # <<<<<<<<<<<<<<
@@ -4992,7 +5106,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__9);
   __Pyx_GIVEREF(__pyx_tuple__9);
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":219
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":219
  *             if ((flags & pybuf.PyBUF_F_CONTIGUOUS == pybuf.PyBUF_F_CONTIGUOUS)
  *                 and not PyArray_CHKFLAGS(self, NPY_F_CONTIGUOUS)):
  *                 raise ValueError(u"ndarray is not Fortran contiguous")             # <<<<<<<<<<<<<<
@@ -5003,7 +5117,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__10);
   __Pyx_GIVEREF(__pyx_tuple__10);
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":257
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":257
  *                 if ((descr.byteorder == c'>' and little_endian) or
  *                     (descr.byteorder == c'<' and not little_endian)):
  *                     raise ValueError(u"Non-native byte order not supported")             # <<<<<<<<<<<<<<
@@ -5014,7 +5128,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__11);
   __Pyx_GIVEREF(__pyx_tuple__11);
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":799
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":799
  * 
  *         if (end - f) - <int>(new_offset - offset[0]) < 15:
  *             raise RuntimeError(u"Format string allocated too short, see comment in numpy.pxd")             # <<<<<<<<<<<<<<
@@ -5025,7 +5139,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__12);
   __Pyx_GIVEREF(__pyx_tuple__12);
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":803
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":803
  *         if ((child.byteorder == c'>' and little_endian) or
  *             (child.byteorder == c'<' and not little_endian)):
  *             raise ValueError(u"Non-native byte order not supported")             # <<<<<<<<<<<<<<
@@ -5036,7 +5150,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__13);
   __Pyx_GIVEREF(__pyx_tuple__13);
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":823
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":823
  *             t = child.type_num
  *             if end - f < 5:
  *                 raise RuntimeError(u"Format string allocated too short.")             # <<<<<<<<<<<<<<
@@ -5052,7 +5166,7 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  * def lu_factor(np.ndarray[cComplex, ndim=3] arr):             # <<<<<<<<<<<<<<
  *     """
- *        arr: complex type array with [M, N, N], it may be altered!!!
+ *        arr: complex type array with [N, N, M], it may be altered!!!
  */
   __pyx_tuple__15 = PyTuple_Pack(7, __pyx_n_s_arr, __pyx_n_s_size, __pyx_n_s_N, __pyx_n_s_LDA, __pyx_n_s_info, __pyx_n_s_i, __pyx_n_s_piv); if (unlikely(!__pyx_tuple__15)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 21; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__15);
@@ -5066,22 +5180,22 @@ static int __Pyx_InitCachedConstants(void) {
  *     """
  *        lu, piv: lu decomposition of array arr
  */
-  __pyx_tuple__17 = PyTuple_Pack(11, __pyx_n_s_lu, __pyx_n_s_piv, __pyx_n_s_b, __pyx_n_s_trans, __pyx_n_s_size, __pyx_n_s_N, __pyx_n_s_nrhs, __pyx_n_s_LDA, __pyx_n_s_LDB, __pyx_n_s_info, __pyx_n_s_i); if (unlikely(!__pyx_tuple__17)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 47; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__17 = PyTuple_Pack(12, __pyx_n_s_lu, __pyx_n_s_piv, __pyx_n_s_b, __pyx_n_s_trans, __pyx_n_s_size, __pyx_n_s_N, __pyx_n_s_nrhs, __pyx_n_s_LDA, __pyx_n_s_LDB, __pyx_n_s_info, __pyx_n_s_bb, __pyx_n_s_i); if (unlikely(!__pyx_tuple__17)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 47; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__17);
   __Pyx_GIVEREF(__pyx_tuple__17);
-  __pyx_codeobj__18 = (PyObject*)__Pyx_PyCode_New(3, 0, 11, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__17, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_kchen_project_Feynman_Sim, __pyx_n_s_lu_solve, 47, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__18)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 47; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_codeobj__18 = (PyObject*)__Pyx_PyCode_New(3, 0, 12, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__17, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_kchen_project_Feynman_Sim, __pyx_n_s_lu_solve, 47, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__18)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 47; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-  /* "lu_fast.pyx":81
+  /* "lu_fast.pyx":84
  * #@cython.boundscheck(False)
  * #@cython.nonecheck(False)
  * def lu_det(np.ndarray[cComplex, ndim=3] lu, np.ndarray[int, ndim=2] piv):             # <<<<<<<<<<<<<<
- *     if lu.shape[1] != lu.shape[2]:
- *         raise TypeError("the lu array must have shape [:, N, N]")
+ *     if lu.shape[0] != lu.shape[1]:
+ *         raise TypeError("the lu array must have shape [N, N, M]")
  */
-  __pyx_tuple__19 = PyTuple_Pack(7, __pyx_n_s_lu, __pyx_n_s_piv, __pyx_n_s_det, __pyx_n_s_size, __pyx_n_s_N, __pyx_n_s_i, __pyx_n_s_j); if (unlikely(!__pyx_tuple__19)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 81; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__19 = PyTuple_Pack(7, __pyx_n_s_lu, __pyx_n_s_piv, __pyx_n_s_det, __pyx_n_s_size, __pyx_n_s_N, __pyx_n_s_i, __pyx_n_s_j); if (unlikely(!__pyx_tuple__19)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 84; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__19);
   __Pyx_GIVEREF(__pyx_tuple__19);
-  __pyx_codeobj__20 = (PyObject*)__Pyx_PyCode_New(2, 0, 7, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__19, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_kchen_project_Feynman_Sim, __pyx_n_s_lu_det, 81, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__20)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 81; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_codeobj__20 = (PyObject*)__Pyx_PyCode_New(2, 0, 7, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__19, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_kchen_project_Feynman_Sim, __pyx_n_s_lu_det, 84, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__20)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 84; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -5247,7 +5361,7 @@ PyMODINIT_FUNC PyInit_lu_fast(void)
  * 
  * def lu_factor(np.ndarray[cComplex, ndim=3] arr):             # <<<<<<<<<<<<<<
  *     """
- *        arr: complex type array with [M, N, N], it may be altered!!!
+ *        arr: complex type array with [N, N, M], it may be altered!!!
  */
   __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_7lu_fast_1lu_factor, NULL, __pyx_n_s_lu_fast); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 21; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
@@ -5266,16 +5380,16 @@ PyMODINIT_FUNC PyInit_lu_fast(void)
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_lu_solve, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 47; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "lu_fast.pyx":81
+  /* "lu_fast.pyx":84
  * #@cython.boundscheck(False)
  * #@cython.nonecheck(False)
  * def lu_det(np.ndarray[cComplex, ndim=3] lu, np.ndarray[int, ndim=2] piv):             # <<<<<<<<<<<<<<
- *     if lu.shape[1] != lu.shape[2]:
- *         raise TypeError("the lu array must have shape [:, N, N]")
+ *     if lu.shape[0] != lu.shape[1]:
+ *         raise TypeError("the lu array must have shape [N, N, M]")
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_7lu_fast_5lu_det, NULL, __pyx_n_s_lu_fast); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 81; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_7lu_fast_5lu_det, NULL, __pyx_n_s_lu_fast); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 84; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_lu_det, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 81; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_lu_det, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 84; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "lu_fast.pyx":1
@@ -5288,7 +5402,7 @@ PyMODINIT_FUNC PyInit_lu_fast(void)
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../../../Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":976
+  /* "../../../../../../Library/Python/2.7/site-packages/Cython/Includes/numpy/__init__.pxd":976
  *      arr.base = baseptr
  * 
  * cdef inline object get_array_base(ndarray arr):             # <<<<<<<<<<<<<<
@@ -6165,55 +6279,6 @@ static void __Pyx_RaiseBufferFallbackError(void) {
      "Buffer acquisition failed on assignment; and then reacquiring the old buffer failed too!");
 }
 
-#if CYTHON_COMPILING_IN_CPYTHON
-static CYTHON_INLINE PyObject* __Pyx_PyObject_CallMethO(PyObject *func, PyObject *arg) {
-    PyObject *self, *result;
-    PyCFunction cfunc;
-    cfunc = PyCFunction_GET_FUNCTION(func);
-    self = PyCFunction_GET_SELF(func);
-    if (unlikely(Py_EnterRecursiveCall((char*)" while calling a Python object")))
-        return NULL;
-    result = cfunc(self, arg);
-    Py_LeaveRecursiveCall();
-    if (unlikely(!result) && unlikely(!PyErr_Occurred())) {
-        PyErr_SetString(
-            PyExc_SystemError,
-            "NULL result without error in PyObject_Call");
-    }
-    return result;
-}
-#endif
-
-#if CYTHON_COMPILING_IN_CPYTHON
-static PyObject* __Pyx__PyObject_CallOneArg(PyObject *func, PyObject *arg) {
-    PyObject *result;
-    PyObject *args = PyTuple_New(1);
-    if (unlikely(!args)) return NULL;
-    Py_INCREF(arg);
-    PyTuple_SET_ITEM(args, 0, arg);
-    result = __Pyx_PyObject_Call(func, args, NULL);
-    Py_DECREF(args);
-    return result;
-}
-static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObject *arg) {
-#ifdef __Pyx_CyFunction_USED
-    if (likely(PyCFunction_Check(func) || PyObject_TypeCheck(func, __pyx_CyFunctionType))) {
-#else
-    if (likely(PyCFunction_Check(func))) {
-#endif
-        if (likely(PyCFunction_GET_FLAGS(func) & METH_O)) {
-            return __Pyx_PyObject_CallMethO(func, arg);
-        }
-    }
-    return __Pyx__PyObject_CallOneArg(func, arg);
-}
-#else
-static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObject *arg) {
-    PyObject* args = PyTuple_Pack(1, arg);
-    return (likely(args)) ? __Pyx_PyObject_Call(func, args, NULL) : NULL;
-}
-#endif
-
 static void __Pyx_RaiseBufferIndexError(int axis) {
   PyErr_Format(PyExc_IndexError,
      "Out of bounds on buffer access (axis %d)", axis);
@@ -6357,6 +6422,70 @@ invalid_keyword:
 bad:
     return -1;
 }
+
+#if CYTHON_COMPILING_IN_CPYTHON
+static CYTHON_INLINE PyObject* __Pyx_PyObject_CallMethO(PyObject *func, PyObject *arg) {
+    PyObject *self, *result;
+    PyCFunction cfunc;
+    cfunc = PyCFunction_GET_FUNCTION(func);
+    self = PyCFunction_GET_SELF(func);
+    if (unlikely(Py_EnterRecursiveCall((char*)" while calling a Python object")))
+        return NULL;
+    result = cfunc(self, arg);
+    Py_LeaveRecursiveCall();
+    if (unlikely(!result) && unlikely(!PyErr_Occurred())) {
+        PyErr_SetString(
+            PyExc_SystemError,
+            "NULL result without error in PyObject_Call");
+    }
+    return result;
+}
+#endif
+
+#if CYTHON_COMPILING_IN_CPYTHON
+static PyObject* __Pyx__PyObject_CallOneArg(PyObject *func, PyObject *arg) {
+    PyObject *result;
+    PyObject *args = PyTuple_New(1);
+    if (unlikely(!args)) return NULL;
+    Py_INCREF(arg);
+    PyTuple_SET_ITEM(args, 0, arg);
+    result = __Pyx_PyObject_Call(func, args, NULL);
+    Py_DECREF(args);
+    return result;
+}
+static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObject *arg) {
+#ifdef __Pyx_CyFunction_USED
+    if (likely(PyCFunction_Check(func) || PyObject_TypeCheck(func, __pyx_CyFunctionType))) {
+#else
+    if (likely(PyCFunction_Check(func))) {
+#endif
+        if (likely(PyCFunction_GET_FLAGS(func) & METH_O)) {
+            return __Pyx_PyObject_CallMethO(func, arg);
+        }
+    }
+    return __Pyx__PyObject_CallOneArg(func, arg);
+}
+#else
+static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObject *arg) {
+    PyObject* args = PyTuple_Pack(1, arg);
+    return (likely(args)) ? __Pyx_PyObject_Call(func, args, NULL) : NULL;
+}
+#endif
+
+#if CYTHON_COMPILING_IN_CPYTHON
+static CYTHON_INLINE PyObject* __Pyx_PyObject_CallNoArg(PyObject *func) {
+#ifdef __Pyx_CyFunction_USED
+    if (likely(PyCFunction_Check(func) || PyObject_TypeCheck(func, __pyx_CyFunctionType))) {
+#else
+    if (likely(PyCFunction_Check(func))) {
+#endif
+        if (likely(PyCFunction_GET_FLAGS(func) & METH_NOARGS)) {
+            return __Pyx_PyObject_CallMethO(func, NULL);
+        }
+    }
+    return __Pyx_PyObject_Call(func, __pyx_empty_tuple, NULL);
+}
+#endif
 
 static CYTHON_INLINE void __Pyx_RaiseTooManyValuesError(Py_ssize_t expected) {
     PyErr_Format(PyExc_ValueError,
@@ -6553,7 +6682,7 @@ static void __Pyx_ReleaseBuffer(Py_buffer *view) {
 #endif
 
 
-        static PyObject *__Pyx_Import(PyObject *name, PyObject *from_list, int level) {
+          static PyObject *__Pyx_Import(PyObject *name, PyObject *from_list, int level) {
     PyObject *empty_list = 0;
     PyObject *module = 0;
     PyObject *global_dict = 0;

@@ -235,10 +235,10 @@ class Weight():
         """solve ax=b, self.Data will be from lu of a to x"""
         SpSub = self.NSpin*self.NSublat
         lu,piv=lu_piv
-        self.Data = np.swapaxes(self.Data.reshape([SpSub, SpSub, self.__SpaceTimeVol]),0,2)
-        b = np.swapaxes(b.reshape([SpSub, SpSub, self.__SpaceTimeVol]),0,2)
+        self.Data = self.Data.reshape([SpSub, SpSub, self.__SpaceTimeVol])
+        b = b.reshape([SpSub, SpSub, self.__SpaceTimeVol])
         self.Data = solver.lu_solve(lu,piv,b)
-        self.Data = np.swapaxes(self.Data,0,2).reshape(self.__OriginShape)
+        self.Data = self.Data.reshape(self.__OriginShape)
 
     def Inverse(self):
         Sp, Sub = self.NSpin, self.NSublat
@@ -304,7 +304,7 @@ class Weight():
 
 def LUFactor(arr):
     SpSub,Vol,Time=arr.shape[0]*arr.shape[1], arr.shape[-2], arr.shape[-1]
-    arr=np.swapaxes(arr.reshape([SpSub,SpSub,Vol*Time]),0,2)
+    arr=arr.reshape([SpSub,SpSub,Vol*Time])
     lu, piv=solver.lu_factor(arr)
     det=solver.lu_det(lu,piv)
     det=det.reshape([Vol,Time])
@@ -332,23 +332,10 @@ class TestWeightFFT(unittest.TestCase):
         zz=np.exp(xx+yy)
         self.z=zz[:,:, np.newaxis]*self.gTau
         self.G.Data+=self.z.reshape(self.G.Shape[self.G.VOLDIM:])
-    def test_matrix_IO(self):
-        FileName="test.npz"
-        self.G.Save(FileName)
-        newG=Weight("SmoothT", self.Map, "TwoSpins", "AntiSymmetric", "R","T")
-        newG.Load(FileName)
-        self.assertTrue(np.allclose(self.G.Data,newG.Data))
-        os.system("rm "+FileName)
     def test_fft_backforth(self):
         self.G.FFT("W")
         self.G.FFT("T")
         self.assertTrue(np.allclose(self.G.Data[0,0,:,:], self.z.reshape(self.G.Shape[self.G.VOLDIM:])))
-    def test_fft_symmetry(self):
-        self.G.ChangeSymmetry(-1)
-        self.G.FFT("W") #fftTime(1) will call ChangeSymmetry(1)
-        self.assertTrue(np.allclose(self.G.Data[0,0,0,:], np.fft.fft(self.gTau)))
-        self.G.FFT("T")
-        self.G.ChangeSymmetry(1)
     def test_fft_spatial(self):
         old=self.G.Data.copy()
         self.G.FFT("K")

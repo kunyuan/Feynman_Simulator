@@ -20,23 +20,23 @@ cdef extern void zgetrs_(char *TRANS, int *N, int *NRHS, cComplex *A, int *LDA, 
 
 def lu_factor(np.ndarray[cComplex, ndim=3] arr):
     """
-       arr: complex type array with [M, N, N], it may be altered!!!
-       return: (lu, piv): lu decomposition of array arr
+       arr: complex type array with [N, N, M], it may be altered!!!
+       return: (lu, piv): lu decomposition of array arr in fortran order!!!
     """
-    if arr.shape[1] != arr.shape[2]:
-        raise TypeError("the input array must have shape [:, N, N]")
-    cdef int size= arr.shape[0];
-    cdef int N = arr.shape[1];
+    if arr.shape[0] != arr.shape[1]:
+        raise TypeError("the input array must have shape [N, N, :]")
+    cdef int size= arr.shape[2];
+    cdef int N = arr.shape[0];
     cdef int LDA = N;
     cdef int info;
     cdef int i;
     cdef np.ndarray[int, ndim=2] piv;
-    piv=np.empty((size, N), dtype=np.intc)
-    #make arr c contiguous!
-    arr=np.ascontiguousarray(arr)
+    piv=np.empty((N, size), dtype=np.intc, order=['F'])
+    #make arr fortran contiguous!
+    arr=np.require(arr, requirements=['F'])
     #for i in prange(size, nogil=True):
     for i in range(size):
-        zgetrf_(&N, &N, &arr[i,0,0], &LDA, &piv[i,0], &info);
+        zgetrf_(&N, &N, &arr[0,0,i], &LDA, &piv[0,i], &info);
         if info < 0:
             raise ValueError('illegal value in %d-th argument of internal getrf' % -info)
         elif info > 0:
@@ -47,54 +47,59 @@ def lu_factor(np.ndarray[cComplex, ndim=3] arr):
 def lu_solve(np.ndarray[cComplex, ndim=3] lu, np.ndarray[int, ndim=2] piv, np.ndarray[cComplex, ndim=3] b):
     """
        lu, piv: lu decomposition of array arr
-       b: shape [M, N, N], it will be altered!!!
-       return: the solve of aX=b, an array with shape [M,N,N]
+       b: shape [N, N, M], it will not be altered
+       return: the solve of aX=b, an array with shape [N,N,M], but in fortran order!!!
     """
-    if lu.shape[1] != lu.shape[2]:
-        raise TypeError("the lu array must have shape [:, N, N]")
-    if lu.shape[0] != piv.shape[0]:
-        raise TypeError("require lu.shape[0]==piv.shape[0]")
-    if lu.shape[1] != piv.shape[1]:
-        raise TypeError("require lu.shape[1]==piv.shape[1]")
-    if lu.shape[0] != b.shape[0] or lu.shape[1]!=b.shape[1] or lu.shape[2]!=b.shape[2]:
+    if lu.shape[0] != lu.shape[1]:
+        raise TypeError("the lu array must have shape [N, N, :]")
+    if lu.shape[2] != piv.shape[1]:
+        raise TypeError("require lu.shape[2]==piv.shape[1]")
+    if lu.shape[1] != piv.shape[0]:
+        raise TypeError("require lu.shape[1]==piv.shape[0]")
+    if lu.shape[2] != b.shape[2] or lu.shape[1]!=b.shape[1] or lu.shape[0]!=b.shape[0]:
         raise TypeError("require lu.shape==b.shape")
     cdef char trans = 'N';
-    cdef int size= lu.shape[0];
-    cdef int N = lu.shape[1];
+    cdef int size= lu.shape[2];
+    cdef int N = lu.shape[0];
     cdef int nrhs = N;
     cdef int LDA = N;
     cdef int LDB = N;
     cdef int info;
-    lu=np.ascontiguousarray(lu)
-    piv=np.ascontiguousarray(piv)+1
-    b=np.ascontiguousarray(b)
+    cdef np.ndarray[cComplex, ndim=3] bb
+    lu=np.require(lu, requirements=['F'])
+    piv=np.require(piv, requirements=['F'])+1
+    bb=np.require(b, requirements=['F'])
+    if np.may_share_memory(b,bb):
+        bb=b.copy()
     #for i in prange(size, nogil=True):
     for i in range(size):
-        zgetrs_(&trans, &N, &nrhs, &lu[i,0,0], &LDA, &piv[i,0], &b[i,0,0], &LDB, &info);
+        zgetrs_(&trans, &N, &nrhs, &lu[0,0,i], &LDA, &piv[0,i], &bb[0,0,i], &LDB, &info);
         if info is not 0:
             raise ValueError('illegal value in %d-th argument of internal gesv|posv'% -info)
-    return b
+    return bb
 
 #@cython.wraparound(False)
 #@cython.boundscheck(False)
 #@cython.nonecheck(False)
 def lu_det(np.ndarray[cComplex, ndim=3] lu, np.ndarray[int, ndim=2] piv):
-    if lu.shape[1] != lu.shape[2]:
-        raise TypeError("the lu array must have shape [:, N, N]")
-    if lu.shape[0] != piv.shape[0]:
-        raise TypeError("require lu.shape[0]==piv.shape[0]")
-    if lu.shape[1] != piv.shape[1]:
-        raise TypeError("require lu.shape[1]==piv.shape[1]")
+    if lu.shape[0] != lu.shape[1]:
+        raise TypeError("the lu array must have shape [N, N, M]")
+    if lu.shape[2] != piv.shape[1]:
+        raise TypeError("require lu.shape[2]==piv.shape[1]")
+    if lu.shape[1] != piv.shape[0]:
+        raise TypeError("require lu.shape[1]==piv.shape[0]")
     cdef np.ndarray[cComplex, ndim=1] det
-    cdef int size= lu.shape[0];
-    cdef int N = lu.shape[1];
+    cdef int size= lu.shape[2];
+    cdef int N = lu.shape[0];
+    #print lu.shape[2], lu.shape[0], N
     det=np.ones(size, dtype=Complex)
     for i in range(size):
         for j in range(N):
-            if piv[i, j]!=j:
-                det[i]=-det[i]*lu[i,j,j]
+            if piv[j,i]!=j:
+                det[i]=-det[i]*lu[j,j,i]
             else:
-                det[i]=det[i]*lu[i,j,j]
+                det[i]=det[i]*lu[j,j,i]
+            #print j,piv[j,i], lu[j,j,i], det[i]
     return det
 
 #*     SUBROUTINE ZGETRF( M, N, A, LDA, IPIV, INFO )
