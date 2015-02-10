@@ -40,4 +40,4 @@ class TestWeightFFT(unittest.TestCase):
         self.assertTrue(np.allclose(x, xx, atol=1e-6))
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main(verbosity=3)

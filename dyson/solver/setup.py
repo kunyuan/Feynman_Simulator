@@ -7,7 +7,8 @@ ext_modules = Extension("lu_fast",["lu_fast.pyx"],\
     include_dirs=[numpy.get_include()],
     extra_compile_args=['-O3'],
     #extra_link_args=['-fopenmp']
-    extra_link_args=['-llapack']
+    #extra_link_args=['-llapack']
+    libraries=['mkl_intel_lp64','mkl_intel_thread','mkl_core']
     )
  
 setup(
