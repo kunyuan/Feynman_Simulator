@@ -129,7 +129,7 @@ bool EnvMonteCarlo::ListenToMessage()
     Diag.Reset(Para.Lat, *Weight.G, *Weight.W);
     Markov.Reset(Para, Diag, Weight);
     MarkovMonitor.Reset(Para, Diag, Weight);
-    MarkovMonitor.SqueezeStatistics(Para.SqueezeFactor);
+    MarkovMonitor.SqueezeStatistics(Message_.SqueezeFactor);
     LOG_INFO("Annealled to:\n" << Message_.PrettyString());
     return true;
 }

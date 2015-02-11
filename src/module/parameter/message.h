@@ -18,6 +18,7 @@ class Message {
 public:
     int Version;
     real Beta;
+    real SqueezeFactor;
 
     bool Load(const std::string& FileName);
     void Save(const std::string& FileName);

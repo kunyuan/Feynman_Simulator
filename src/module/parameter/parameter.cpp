@@ -82,7 +82,6 @@ bool ParaMC::FromDict(const Dictionary& Para)
     GET(_para, PolarReweight);
     GET(_para, OrderReWeight);
     GET(_para, OrderTimeRatio);
-    GET(_para, SqueezeFactor);
     GET(_para, Order);
     GET_WITH_DEFAULT(_para, Counter, 0);
     GET_WITH_DEFAULT(_para, Seed, 0);
@@ -109,7 +108,6 @@ Dictionary ParaMC::ToDict()
     SET(_para, PolarReweight);
     SET(_para, OrderReWeight);
     SET(_para, OrderTimeRatio);
-    SET(_para, SqueezeFactor);
     SET(_para, Counter);
     SET(_para, RNG);
     SET(_para, Order);
@@ -139,7 +137,6 @@ void ParaMC::SetTest()
     Order = 1;
     OrderReWeight = { 1, 1 };
     OrderTimeRatio = { 1, 1 };
-    SqueezeFactor = 10.0;
     Toss = 10000;
     Seed = 519180543;
     WormSpaceReweight = 0.1;

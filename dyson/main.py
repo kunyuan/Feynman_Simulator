@@ -4,7 +4,6 @@ import sys
 #log.info("Python Version: {0}".format(sys.version))
 import numpy as np
 import calculator as calc
-print dir(calc)
 import lattice as lat
 import collect
 from weight import UP,DOWN,IN,OUT
@@ -92,12 +91,9 @@ def Dyson(IsDysonOnly, IsNewCalculation, para, Map, Lat):
 
     Gold, Wold = G, W
     SigmaDeltaT=weight.Weight("DeltaT", Map, "TwoSpins", "AntiSymmetric","R")
+    Sigma=weight.Weight("SmoothT", Map, "TwoSpins", "AntiSymmetric","R","T")
+    Polar=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
 
-    if IsDysonOnly or IsNewCalculation:
-        #not load StatisFile
-	log.info("Do not load statisfile...")
-        Sigma=weight.Weight("SmoothT", Map, "TwoSpins", "AntiSymmetric","R","T")
-        Polar=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
     while True:
     #while Version<1:
         para["Version"]+=1
@@ -154,9 +150,11 @@ def Dyson(IsDysonOnly, IsNewCalculation, para, Map, Lat):
 	    log.info("everything is going well!")
             Gold, Wold = G, W
             Measure(para, Observable, Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor)
-            Factory.DecreaseField(ParaDyson["Annealing"])
+            IsSuccessed=Factory.DecreaseField(ParaDyson["Annealing"])
+            Factor=2.0 if IsSuccessed else 1.0
+            parameter.BroadcastMessage(MessageFile, 
+                    {"Version": para["Version"], "Beta": Map.Beta, "SqueezeFactor": Factor})
             log.info("Version {0} is done!".format(para["Version"]))
-            parameter.BroadcastMessage(MessageFile, {"Version": para["Version"], "Beta": Map.Beta})
         finally:
             log.info(green("Memory Usage before collecting: {0} MB".format(memory_usage())))
             gc.collect()

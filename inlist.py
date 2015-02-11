@@ -14,7 +14,7 @@ MonteCarlo={
     "__KeepCPUBusy": True,
     },
 "Job": {
-    "DoesLoad" : True,
+    "DoesLoad" : False,
     "Sample" : 100000000  ##0.8 min for 1000000(*1000) Samples in MC
     }
 }
@@ -29,11 +29,12 @@ Dyson={
     },
 "Job": {
     "DysonOnly": MonteCarlo["Control"]["__Duplicate"]==0
+    #"DysonOnly": False
     }
 }
 
-beta=0.5
-Order=3
+beta=5.0
+Order=2
 Common={
 "Tau": {
     "MaxTauBin" : 64,
@@ -51,12 +52,12 @@ Common={
     #"Name": "Kagome",
     #"NSublat": 3,
     #"L": [16,16],
-    "Name": "Cubic",
-    "NSublat": 1,
-    "L": [8,8,8],
-    #"Name": "Pyrochlore",
-    #"NSublat": 4,
-    #"L": [8,8,8]
+    #"Name": "Cubic",
+    #"NSublat": 1,
+    #"L": [8,8,8],
+    "Name": "Pyrochlore",
+    "NSublat": 4,
+    "L": [8,8,8]
     #"Name": "Checkboard",
     #"NSublat": 2,
     #"L": [8,8]
@@ -79,16 +80,16 @@ MonteCarlo["Markov"]={
     #Start from order 0, so that OrderReWeight has Order+1 elements
     "Sweep" : 10,
     "Toss" : 1000,
-    "OrderReWeight" : [1.0, 0.1, 0.5, 0.1],
+    "OrderReWeight" : [1.0, 0.1, 0.5],
     "SqueezeFactor" : 10.0,
     "WormSpaceReweight" : 0.05,
     "PolarReweight" : 2.0,
-    "OrderTimeRatio" : [1.0, 1.0, 1.0, 2.0],
+    "OrderTimeRatio" : [1.0, 1.0, 1.0],
     "Timer": {
-        "PrinterTimer": 30,
-        "DiskWriterTimer": 30,
-        "MessageTimer": 30,
-        "ReweightTimer": 100
+        "PrinterTimer": 150,
+        "DiskWriterTimer": 250,
+        "MessageTimer": 300,
+        "ReweightTimer": 600
         },
     }
 
@@ -97,9 +98,9 @@ Dyson["Dyson"]={
     "OrderAccepted": 1,
     "ErrorThreshold": 0.1,
     "BetaIncrease": 0.0,
-    "SleepTime": 30,
+    "SleepTime": 300,
     "Annealing": {
-        "DeltaField": [0.0, 1.0, 1.0, 1.0],
+        "DeltaField": [2.0, 2.0, 2.0, 2.0],
         "Interval": [-0.1, -0.1, -0.1, -0.1]
         }
     }

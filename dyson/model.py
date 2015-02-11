@@ -45,11 +45,15 @@ class BareFactory:
         return (self.BareG,self.BareW)
 
     def DecreaseField(self, Anneal):
+        #TODO: what if DeltaField/Interval is not an integer?!
+        flag=False
         if abs(self.__DeltaField[0])>1e-5:
             for i in range(len(self.__DeltaField)):
                 self.__DeltaField[i] += Anneal["Interval"][i]
                 Anneal["DeltaField"][i] += Anneal["Interval"][i] 
+            flag=True
         log.info(green("ExternalField decreased to: {0}".format(self.__DeltaField)))
+        return flag
 
     def RevertField(self, Anneal):
         for i in range(len(self.__DeltaField)):

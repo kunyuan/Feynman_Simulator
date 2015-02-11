@@ -65,8 +65,7 @@ void WeightEstimator::ClearStatistics()
 
 void WeightEstimator::SqueezeStatistics(real factor)
 {
-    if (DEBUGMODE && factor <= 0.0)
-        ABORT("factor=" << factor << "<=0!");
+    ASSERT_ALLWAYS(factor > 0, "factor=" << factor << "<=0!");
     _NormAccu /= factor;
     _WeightAccu *= 1.0 / factor;
 }
