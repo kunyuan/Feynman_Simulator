@@ -9,12 +9,12 @@ MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
     "__Duplicate" : 3,
-    "__IsCluster" : True, 
+    "__IsCluster" : False, 
     "__AutoRun" : True,
     "__KeepCPUBusy": True,
     },
 "Job": {
-    "DoesLoad" : False,
+    "DoesLoad" : True,
     "Sample" : 100000000  ##0.8 min for 1000000(*1000) Samples in MC
     }
 }

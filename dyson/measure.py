@@ -55,7 +55,7 @@ class Observable:
             self.Append("Chi_X(4Pi,2Pi,0)", 
                     self.__Lat.FourierTransformation(Chi.Data[0,:,0,:,:,0]*Factor, [K,],"Real"))
             Chi.FFT("R","T")
-            energy=np.zeros(self.__Map.MaxTauBin)
+            energy=np.zeros(self.__Map.MaxTauBin)+1j*0
             for i in range(self.__Lat.NSublat):
                 for j in range(self.__Lat.NSublat):
                     for l in NN[i][j]:
