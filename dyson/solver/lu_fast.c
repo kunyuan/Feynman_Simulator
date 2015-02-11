@@ -231,8 +231,8 @@ void __Pyx_call_destructor(T* x) {
 #define _USE_MATH_DEFINES
 #endif
 #include <math.h>
-#define __PYX_HAVE__dyson__solver__lu_fast
-#define __PYX_HAVE_API__dyson__solver__lu_fast
+#define __PYX_HAVE__lu_fast
+#define __PYX_HAVE_API__lu_fast
 #include "string.h"
 #include "stdio.h"
 #include "stdlib.h"
@@ -441,7 +441,7 @@ static const char *__pyx_filename;
 
 
 static const char *__pyx_f[] = {
-  "dyson/solver/lu_fast.pyx",
+  "lu_fast.pyx",
   "__init__.pxd",
   "type.pxd",
 };
@@ -670,14 +670,14 @@ typedef npy_double __pyx_t_5numpy_double_t;
  */
 typedef npy_longdouble __pyx_t_5numpy_longdouble_t;
 
-/* "dyson/solver/lu_fast.pyx":6
+/* "lu_fast.pyx":6
  * from cython.parallel import prange
  * 
  * ctypedef np.double_t cDOUBLE             # <<<<<<<<<<<<<<
  * ctypedef np.complex128_t cComplex
  * DOUBLE = np.float64
  */
-typedef __pyx_t_5numpy_double_t __pyx_t_5dyson_6solver_7lu_fast_cDOUBLE;
+typedef __pyx_t_5numpy_double_t __pyx_t_7lu_fast_cDOUBLE;
 #if CYTHON_CCOMPLEX
   #ifdef __cplusplus
     typedef ::std::complex< float > __pyx_t_float_complex;
@@ -1067,22 +1067,22 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *, cha
 
 /* Module declarations from 'cython' */
 
-/* Module declarations from 'dyson.solver.lu_fast' */
+/* Module declarations from 'lu_fast' */
 __PYX_EXTERN_C DL_IMPORT(void) zgetrf_(int *, int *, __pyx_t_double_complex *, int *, int *, int *); /*proto*/
 __PYX_EXTERN_C DL_IMPORT(void) zgetrs_(char *, int *, int *, __pyx_t_double_complex *, int *, int *, __pyx_t_double_complex *, int *, int *); /*proto*/
 static __Pyx_TypeInfo __Pyx_TypeInfo___pyx_t_double_complex = { "double complex", NULL, sizeof(__pyx_t_double_complex), { 0 }, 0, 'C', 0, 0 };
 static __Pyx_TypeInfo __Pyx_TypeInfo_int = { "int", NULL, sizeof(int), { 0 }, 0, IS_UNSIGNED(int) ? 'U' : 'I', IS_UNSIGNED(int), 0 };
-#define __Pyx_MODULE_NAME "dyson.solver.lu_fast"
-int __pyx_module_is_main_dyson__solver__lu_fast = 0;
+#define __Pyx_MODULE_NAME "lu_fast"
+int __pyx_module_is_main_lu_fast = 0;
 
-/* Implementation of 'dyson.solver.lu_fast' */
+/* Implementation of 'lu_fast' */
 static PyObject *__pyx_builtin_TypeError;
 static PyObject *__pyx_builtin_range;
 static PyObject *__pyx_builtin_ValueError;
 static PyObject *__pyx_builtin_RuntimeError;
-static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_lu_factor(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_arr); /* proto */
-static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_2lu_solve(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_lu, PyArrayObject *__pyx_v_piv, PyArrayObject *__pyx_v_b); /* proto */
-static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_4lu_det(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_lu, PyArrayObject *__pyx_v_piv); /* proto */
+static PyObject *__pyx_pf_7lu_fast_lu_factor(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_arr); /* proto */
+static PyObject *__pyx_pf_7lu_fast_2lu_solve(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_lu, PyArrayObject *__pyx_v_piv, PyArrayObject *__pyx_v_b); /* proto */
+static PyObject *__pyx_pf_7lu_fast_4lu_det(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_lu, PyArrayObject *__pyx_v_piv); /* proto */
 static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info, int __pyx_v_flags); /* proto */
 static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info); /* proto */
 static char __pyx_k_B[] = "B";
@@ -1132,6 +1132,7 @@ static char __pyx_k_import[] = "__import__";
 static char __pyx_k_lu_det[] = "lu_det";
 static char __pyx_k_Complex[] = "Complex";
 static char __pyx_k_float64[] = "float64";
+static char __pyx_k_lu_fast[] = "lu_fast";
 static char __pyx_k_require[] = "require";
 static char __pyx_k_lu_solve[] = "lu_solve";
 static char __pyx_k_TypeError[] = "TypeError";
@@ -1141,7 +1142,6 @@ static char __pyx_k_complex128[] = "complex128";
 static char __pyx_k_RuntimeError[] = "RuntimeError";
 static char __pyx_k_requirements[] = "requirements";
 static char __pyx_k_may_share_memory[] = "may_share_memory";
-static char __pyx_k_dyson_solver_lu_fast[] = "dyson.solver.lu_fast";
 static char __pyx_k_require_lu_shape_b_shape[] = "require lu.shape==b.shape";
 static char __pyx_k_ndarray_is_not_C_contiguous[] = "ndarray is not C contiguous";
 static char __pyx_k_require_lu_shape_1_piv_shape_0[] = "require lu.shape[1]==piv.shape[0]";
@@ -1179,7 +1179,6 @@ static PyObject *__pyx_n_s_complex128;
 static PyObject *__pyx_n_s_copy;
 static PyObject *__pyx_n_s_det;
 static PyObject *__pyx_n_s_dtype;
-static PyObject *__pyx_n_s_dyson_solver_lu_fast;
 static PyObject *__pyx_n_s_empty;
 static PyObject *__pyx_n_s_float64;
 static PyObject *__pyx_n_s_i;
@@ -1192,6 +1191,7 @@ static PyObject *__pyx_n_s_j;
 static PyObject *__pyx_n_s_lu;
 static PyObject *__pyx_n_s_lu_det;
 static PyObject *__pyx_n_s_lu_factor;
+static PyObject *__pyx_n_s_lu_fast;
 static PyObject *__pyx_n_s_lu_solve;
 static PyObject *__pyx_n_s_main;
 static PyObject *__pyx_n_s_may_share_memory;
@@ -1238,7 +1238,7 @@ static PyObject *__pyx_codeobj__16;
 static PyObject *__pyx_codeobj__18;
 static PyObject *__pyx_codeobj__20;
 
-/* "dyson/solver/lu_fast.pyx":21
+/* "lu_fast.pyx":21
  * #*  by ZGETRF.
  * 
  * def lu_factor(np.ndarray[cComplex, ndim=3] arr):             # <<<<<<<<<<<<<<
@@ -1247,10 +1247,10 @@ static PyObject *__pyx_codeobj__20;
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5dyson_6solver_7lu_fast_1lu_factor(PyObject *__pyx_self, PyObject *__pyx_v_arr); /*proto*/
-static char __pyx_doc_5dyson_6solver_7lu_fast_lu_factor[] = "\n       arr: complex type array with [N, N, M], it may be altered!!!\n       return: (lu, piv): lu decomposition of array arr in fortran order!!!\n    ";
-static PyMethodDef __pyx_mdef_5dyson_6solver_7lu_fast_1lu_factor = {"lu_factor", (PyCFunction)__pyx_pw_5dyson_6solver_7lu_fast_1lu_factor, METH_O, __pyx_doc_5dyson_6solver_7lu_fast_lu_factor};
-static PyObject *__pyx_pw_5dyson_6solver_7lu_fast_1lu_factor(PyObject *__pyx_self, PyObject *__pyx_v_arr) {
+static PyObject *__pyx_pw_7lu_fast_1lu_factor(PyObject *__pyx_self, PyObject *__pyx_v_arr); /*proto*/
+static char __pyx_doc_7lu_fast_lu_factor[] = "\n       arr: complex type array with [N, N, M], it may be altered!!!\n       return: (lu, piv): lu decomposition of array arr in fortran order!!!\n    ";
+static PyMethodDef __pyx_mdef_7lu_fast_1lu_factor = {"lu_factor", (PyCFunction)__pyx_pw_7lu_fast_1lu_factor, METH_O, __pyx_doc_7lu_fast_lu_factor};
+static PyObject *__pyx_pw_7lu_fast_1lu_factor(PyObject *__pyx_self, PyObject *__pyx_v_arr) {
   CYTHON_UNUSED int __pyx_lineno = 0;
   CYTHON_UNUSED const char *__pyx_filename = NULL;
   CYTHON_UNUSED int __pyx_clineno = 0;
@@ -1258,7 +1258,7 @@ static PyObject *__pyx_pw_5dyson_6solver_7lu_fast_1lu_factor(PyObject *__pyx_sel
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("lu_factor (wrapper)", 0);
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_arr), __pyx_ptype_5numpy_ndarray, 1, "arr", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 21; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_r = __pyx_pf_5dyson_6solver_7lu_fast_lu_factor(__pyx_self, ((PyArrayObject *)__pyx_v_arr));
+  __pyx_r = __pyx_pf_7lu_fast_lu_factor(__pyx_self, ((PyArrayObject *)__pyx_v_arr));
 
   /* function exit code */
   goto __pyx_L0;
@@ -1269,7 +1269,7 @@ static PyObject *__pyx_pw_5dyson_6solver_7lu_fast_1lu_factor(PyObject *__pyx_sel
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_lu_factor(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_arr) {
+static PyObject *__pyx_pf_7lu_fast_lu_factor(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_arr) {
   int __pyx_v_size;
   int __pyx_v_N;
   int __pyx_v_LDA;
@@ -1320,7 +1320,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_lu_factor(CYTHON_UNUSED PyObje
   }
   __pyx_pybuffernd_arr.diminfo[0].strides = __pyx_pybuffernd_arr.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_arr.diminfo[0].shape = __pyx_pybuffernd_arr.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_arr.diminfo[1].strides = __pyx_pybuffernd_arr.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_arr.diminfo[1].shape = __pyx_pybuffernd_arr.rcbuffer->pybuffer.shape[1]; __pyx_pybuffernd_arr.diminfo[2].strides = __pyx_pybuffernd_arr.rcbuffer->pybuffer.strides[2]; __pyx_pybuffernd_arr.diminfo[2].shape = __pyx_pybuffernd_arr.rcbuffer->pybuffer.shape[2];
 
-  /* "dyson/solver/lu_fast.pyx":26
+  /* "lu_fast.pyx":26
  *        return: (lu, piv): lu decomposition of array arr in fortran order!!!
  *     """
  *     if arr.shape[0] != arr.shape[1]:             # <<<<<<<<<<<<<<
@@ -1330,7 +1330,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_lu_factor(CYTHON_UNUSED PyObje
   __pyx_t_1 = (((__pyx_v_arr->dimensions[0]) != (__pyx_v_arr->dimensions[1])) != 0);
   if (__pyx_t_1) {
 
-    /* "dyson/solver/lu_fast.pyx":27
+    /* "lu_fast.pyx":27
  *     """
  *     if arr.shape[0] != arr.shape[1]:
  *         raise TypeError("the input array must have shape [N, N, :]")             # <<<<<<<<<<<<<<
@@ -1344,7 +1344,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_lu_factor(CYTHON_UNUSED PyObje
     {__pyx_filename = __pyx_f[0]; __pyx_lineno = 27; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
 
-  /* "dyson/solver/lu_fast.pyx":28
+  /* "lu_fast.pyx":28
  *     if arr.shape[0] != arr.shape[1]:
  *         raise TypeError("the input array must have shape [N, N, :]")
  *     cdef int size= arr.shape[2];             # <<<<<<<<<<<<<<
@@ -1353,7 +1353,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_lu_factor(CYTHON_UNUSED PyObje
  */
   __pyx_v_size = (__pyx_v_arr->dimensions[2]);
 
-  /* "dyson/solver/lu_fast.pyx":29
+  /* "lu_fast.pyx":29
  *         raise TypeError("the input array must have shape [N, N, :]")
  *     cdef int size= arr.shape[2];
  *     cdef int N = arr.shape[0];             # <<<<<<<<<<<<<<
@@ -1362,7 +1362,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_lu_factor(CYTHON_UNUSED PyObje
  */
   __pyx_v_N = (__pyx_v_arr->dimensions[0]);
 
-  /* "dyson/solver/lu_fast.pyx":30
+  /* "lu_fast.pyx":30
  *     cdef int size= arr.shape[2];
  *     cdef int N = arr.shape[0];
  *     cdef int LDA = N;             # <<<<<<<<<<<<<<
@@ -1371,7 +1371,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_lu_factor(CYTHON_UNUSED PyObje
  */
   __pyx_v_LDA = __pyx_v_N;
 
-  /* "dyson/solver/lu_fast.pyx":34
+  /* "lu_fast.pyx":34
  *     cdef int i;
  *     cdef np.ndarray[int, ndim=2] piv;
  *     piv=np.empty((N, size), dtype=np.intc, order=['F'])             # <<<<<<<<<<<<<<
@@ -1443,7 +1443,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_lu_factor(CYTHON_UNUSED PyObje
   __pyx_v_piv = ((PyArrayObject *)__pyx_t_6);
   __pyx_t_6 = 0;
 
-  /* "dyson/solver/lu_fast.pyx":36
+  /* "lu_fast.pyx":36
  *     piv=np.empty((N, size), dtype=np.intc, order=['F'])
  *     #make arr fortran contiguous!
  *     arr=np.require(arr, requirements=['F'])             # <<<<<<<<<<<<<<
@@ -1496,7 +1496,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_lu_factor(CYTHON_UNUSED PyObje
   __Pyx_DECREF_SET(__pyx_v_arr, ((PyArrayObject *)__pyx_t_3));
   __pyx_t_3 = 0;
 
-  /* "dyson/solver/lu_fast.pyx":38
+  /* "lu_fast.pyx":38
  *     arr=np.require(arr, requirements=['F'])
  *     #for i in prange(size, nogil=True):
  *     for i in range(size):             # <<<<<<<<<<<<<<
@@ -1507,7 +1507,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_lu_factor(CYTHON_UNUSED PyObje
   for (__pyx_t_13 = 0; __pyx_t_13 < __pyx_t_8; __pyx_t_13+=1) {
     __pyx_v_i = __pyx_t_13;
 
-    /* "dyson/solver/lu_fast.pyx":39
+    /* "lu_fast.pyx":39
  *     #for i in prange(size, nogil=True):
  *     for i in range(size):
  *         zgetrf_(&N, &N, &arr[0,0,i], &LDA, &piv[0,i], &info);             # <<<<<<<<<<<<<<
@@ -1551,7 +1551,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_lu_factor(CYTHON_UNUSED PyObje
     }
     zgetrf_((&__pyx_v_N), (&__pyx_v_N), (&(*__Pyx_BufPtrStrided3d(__pyx_t_double_complex *, __pyx_pybuffernd_arr.rcbuffer->pybuffer.buf, __pyx_t_14, __pyx_pybuffernd_arr.diminfo[0].strides, __pyx_t_15, __pyx_pybuffernd_arr.diminfo[1].strides, __pyx_t_16, __pyx_pybuffernd_arr.diminfo[2].strides))), (&__pyx_v_LDA), (&(*__Pyx_BufPtrStrided2d(int *, __pyx_pybuffernd_piv.rcbuffer->pybuffer.buf, __pyx_t_18, __pyx_pybuffernd_piv.diminfo[0].strides, __pyx_t_17, __pyx_pybuffernd_piv.diminfo[1].strides))), (&__pyx_v_info));
 
-    /* "dyson/solver/lu_fast.pyx":40
+    /* "lu_fast.pyx":40
  *     for i in range(size):
  *         zgetrf_(&N, &N, &arr[0,0,i], &LDA, &piv[0,i], &info);
  *         if info < 0:             # <<<<<<<<<<<<<<
@@ -1561,7 +1561,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_lu_factor(CYTHON_UNUSED PyObje
     __pyx_t_1 = ((__pyx_v_info < 0) != 0);
     if (__pyx_t_1) {
 
-      /* "dyson/solver/lu_fast.pyx":41
+      /* "lu_fast.pyx":41
  *         zgetrf_(&N, &N, &arr[0,0,i], &LDA, &piv[0,i], &info);
  *         if info < 0:
  *             raise ValueError('illegal value in %d-th argument of internal getrf' % -info)             # <<<<<<<<<<<<<<
@@ -1586,7 +1586,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_lu_factor(CYTHON_UNUSED PyObje
       {__pyx_filename = __pyx_f[0]; __pyx_lineno = 41; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
 
-    /* "dyson/solver/lu_fast.pyx":42
+    /* "lu_fast.pyx":42
  *         if info < 0:
  *             raise ValueError('illegal value in %d-th argument of internal getrf' % -info)
  *         elif info > 0:             # <<<<<<<<<<<<<<
@@ -1596,7 +1596,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_lu_factor(CYTHON_UNUSED PyObje
     __pyx_t_1 = ((__pyx_v_info > 0) != 0);
     if (__pyx_t_1) {
 
-      /* "dyson/solver/lu_fast.pyx":43
+      /* "lu_fast.pyx":43
  *             raise ValueError('illegal value in %d-th argument of internal getrf' % -info)
  *         elif info > 0:
  *             raise ValueError("Diagonal number %d is exactly zero. Singular matrix." % -info)             # <<<<<<<<<<<<<<
@@ -1622,7 +1622,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_lu_factor(CYTHON_UNUSED PyObje
     }
   }
 
-  /* "dyson/solver/lu_fast.pyx":45
+  /* "lu_fast.pyx":45
  *             raise ValueError("Diagonal number %d is exactly zero. Singular matrix." % -info)
  *     #piv stores pivot indices with fortran convention, meaning indices start from 1
  *     return arr,piv-1             # <<<<<<<<<<<<<<
@@ -1644,7 +1644,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_lu_factor(CYTHON_UNUSED PyObje
   __pyx_t_4 = 0;
   goto __pyx_L0;
 
-  /* "dyson/solver/lu_fast.pyx":21
+  /* "lu_fast.pyx":21
  * #*  by ZGETRF.
  * 
  * def lu_factor(np.ndarray[cComplex, ndim=3] arr):             # <<<<<<<<<<<<<<
@@ -1664,7 +1664,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_lu_factor(CYTHON_UNUSED PyObje
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_arr.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_piv.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("dyson.solver.lu_fast.lu_factor", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("lu_fast.lu_factor", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   goto __pyx_L2;
   __pyx_L0:;
@@ -1678,7 +1678,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_lu_factor(CYTHON_UNUSED PyObje
   return __pyx_r;
 }
 
-/* "dyson/solver/lu_fast.pyx":47
+/* "lu_fast.pyx":47
  *     return arr,piv-1
  * 
  * def lu_solve(np.ndarray[cComplex, ndim=3] lu, np.ndarray[int, ndim=2] piv, np.ndarray[cComplex, ndim=3] b):             # <<<<<<<<<<<<<<
@@ -1687,10 +1687,10 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_lu_factor(CYTHON_UNUSED PyObje
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5dyson_6solver_7lu_fast_3lu_solve(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_5dyson_6solver_7lu_fast_2lu_solve[] = "\n       lu, piv: lu decomposition of array arr\n       b: shape [N, N, M], it will not be altered\n       return: the solve of aX=b, an array with shape [N,N,M], but in fortran order!!!\n    ";
-static PyMethodDef __pyx_mdef_5dyson_6solver_7lu_fast_3lu_solve = {"lu_solve", (PyCFunction)__pyx_pw_5dyson_6solver_7lu_fast_3lu_solve, METH_VARARGS|METH_KEYWORDS, __pyx_doc_5dyson_6solver_7lu_fast_2lu_solve};
-static PyObject *__pyx_pw_5dyson_6solver_7lu_fast_3lu_solve(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_7lu_fast_3lu_solve(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_7lu_fast_2lu_solve[] = "\n       lu, piv: lu decomposition of array arr\n       b: shape [N, N, M], it will not be altered\n       return: the solve of aX=b, an array with shape [N,N,M], but in fortran order!!!\n    ";
+static PyMethodDef __pyx_mdef_7lu_fast_3lu_solve = {"lu_solve", (PyCFunction)__pyx_pw_7lu_fast_3lu_solve, METH_VARARGS|METH_KEYWORDS, __pyx_doc_7lu_fast_2lu_solve};
+static PyObject *__pyx_pw_7lu_fast_3lu_solve(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyArrayObject *__pyx_v_lu = 0;
   PyArrayObject *__pyx_v_piv = 0;
   PyArrayObject *__pyx_v_b = 0;
@@ -1747,14 +1747,14 @@ static PyObject *__pyx_pw_5dyson_6solver_7lu_fast_3lu_solve(PyObject *__pyx_self
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("lu_solve", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 47; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
-  __Pyx_AddTraceback("dyson.solver.lu_fast.lu_solve", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("lu_fast.lu_solve", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_lu), __pyx_ptype_5numpy_ndarray, 1, "lu", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 47; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_piv), __pyx_ptype_5numpy_ndarray, 1, "piv", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 47; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_b), __pyx_ptype_5numpy_ndarray, 1, "b", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 47; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_r = __pyx_pf_5dyson_6solver_7lu_fast_2lu_solve(__pyx_self, __pyx_v_lu, __pyx_v_piv, __pyx_v_b);
+  __pyx_r = __pyx_pf_7lu_fast_2lu_solve(__pyx_self, __pyx_v_lu, __pyx_v_piv, __pyx_v_b);
 
   /* function exit code */
   goto __pyx_L0;
@@ -1765,7 +1765,7 @@ static PyObject *__pyx_pw_5dyson_6solver_7lu_fast_3lu_solve(PyObject *__pyx_self
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_2lu_solve(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_lu, PyArrayObject *__pyx_v_piv, PyArrayObject *__pyx_v_b) {
+static PyObject *__pyx_pf_7lu_fast_2lu_solve(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_lu, PyArrayObject *__pyx_v_piv, PyArrayObject *__pyx_v_b) {
   char __pyx_v_trans;
   int __pyx_v_size;
   int __pyx_v_N;
@@ -1847,7 +1847,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_2lu_solve(CYTHON_UNUSED PyObje
   }
   __pyx_pybuffernd_b.diminfo[0].strides = __pyx_pybuffernd_b.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_b.diminfo[0].shape = __pyx_pybuffernd_b.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_b.diminfo[1].strides = __pyx_pybuffernd_b.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_b.diminfo[1].shape = __pyx_pybuffernd_b.rcbuffer->pybuffer.shape[1]; __pyx_pybuffernd_b.diminfo[2].strides = __pyx_pybuffernd_b.rcbuffer->pybuffer.strides[2]; __pyx_pybuffernd_b.diminfo[2].shape = __pyx_pybuffernd_b.rcbuffer->pybuffer.shape[2];
 
-  /* "dyson/solver/lu_fast.pyx":53
+  /* "lu_fast.pyx":53
  *        return: the solve of aX=b, an array with shape [N,N,M], but in fortran order!!!
  *     """
  *     if lu.shape[0] != lu.shape[1]:             # <<<<<<<<<<<<<<
@@ -1857,7 +1857,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_2lu_solve(CYTHON_UNUSED PyObje
   __pyx_t_1 = (((__pyx_v_lu->dimensions[0]) != (__pyx_v_lu->dimensions[1])) != 0);
   if (__pyx_t_1) {
 
-    /* "dyson/solver/lu_fast.pyx":54
+    /* "lu_fast.pyx":54
  *     """
  *     if lu.shape[0] != lu.shape[1]:
  *         raise TypeError("the lu array must have shape [N, N, :]")             # <<<<<<<<<<<<<<
@@ -1871,7 +1871,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_2lu_solve(CYTHON_UNUSED PyObje
     {__pyx_filename = __pyx_f[0]; __pyx_lineno = 54; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
 
-  /* "dyson/solver/lu_fast.pyx":55
+  /* "lu_fast.pyx":55
  *     if lu.shape[0] != lu.shape[1]:
  *         raise TypeError("the lu array must have shape [N, N, :]")
  *     if lu.shape[2] != piv.shape[1]:             # <<<<<<<<<<<<<<
@@ -1881,7 +1881,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_2lu_solve(CYTHON_UNUSED PyObje
   __pyx_t_1 = (((__pyx_v_lu->dimensions[2]) != (__pyx_v_piv->dimensions[1])) != 0);
   if (__pyx_t_1) {
 
-    /* "dyson/solver/lu_fast.pyx":56
+    /* "lu_fast.pyx":56
  *         raise TypeError("the lu array must have shape [N, N, :]")
  *     if lu.shape[2] != piv.shape[1]:
  *         raise TypeError("require lu.shape[2]==piv.shape[1]")             # <<<<<<<<<<<<<<
@@ -1895,7 +1895,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_2lu_solve(CYTHON_UNUSED PyObje
     {__pyx_filename = __pyx_f[0]; __pyx_lineno = 56; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
 
-  /* "dyson/solver/lu_fast.pyx":57
+  /* "lu_fast.pyx":57
  *     if lu.shape[2] != piv.shape[1]:
  *         raise TypeError("require lu.shape[2]==piv.shape[1]")
  *     if lu.shape[1] != piv.shape[0]:             # <<<<<<<<<<<<<<
@@ -1905,7 +1905,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_2lu_solve(CYTHON_UNUSED PyObje
   __pyx_t_1 = (((__pyx_v_lu->dimensions[1]) != (__pyx_v_piv->dimensions[0])) != 0);
   if (__pyx_t_1) {
 
-    /* "dyson/solver/lu_fast.pyx":58
+    /* "lu_fast.pyx":58
  *         raise TypeError("require lu.shape[2]==piv.shape[1]")
  *     if lu.shape[1] != piv.shape[0]:
  *         raise TypeError("require lu.shape[1]==piv.shape[0]")             # <<<<<<<<<<<<<<
@@ -1919,7 +1919,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_2lu_solve(CYTHON_UNUSED PyObje
     {__pyx_filename = __pyx_f[0]; __pyx_lineno = 58; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
 
-  /* "dyson/solver/lu_fast.pyx":59
+  /* "lu_fast.pyx":59
  *     if lu.shape[1] != piv.shape[0]:
  *         raise TypeError("require lu.shape[1]==piv.shape[0]")
  *     if lu.shape[2] != b.shape[2] or lu.shape[1]!=b.shape[1] or lu.shape[0]!=b.shape[0]:             # <<<<<<<<<<<<<<
@@ -1943,7 +1943,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_2lu_solve(CYTHON_UNUSED PyObje
   __pyx_L7_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "dyson/solver/lu_fast.pyx":60
+    /* "lu_fast.pyx":60
  *         raise TypeError("require lu.shape[1]==piv.shape[0]")
  *     if lu.shape[2] != b.shape[2] or lu.shape[1]!=b.shape[1] or lu.shape[0]!=b.shape[0]:
  *         raise TypeError("require lu.shape==b.shape")             # <<<<<<<<<<<<<<
@@ -1957,7 +1957,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_2lu_solve(CYTHON_UNUSED PyObje
     {__pyx_filename = __pyx_f[0]; __pyx_lineno = 60; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
 
-  /* "dyson/solver/lu_fast.pyx":61
+  /* "lu_fast.pyx":61
  *     if lu.shape[2] != b.shape[2] or lu.shape[1]!=b.shape[1] or lu.shape[0]!=b.shape[0]:
  *         raise TypeError("require lu.shape==b.shape")
  *     cdef char trans = 'N';             # <<<<<<<<<<<<<<
@@ -1966,7 +1966,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_2lu_solve(CYTHON_UNUSED PyObje
  */
   __pyx_v_trans = 'N';
 
-  /* "dyson/solver/lu_fast.pyx":62
+  /* "lu_fast.pyx":62
  *         raise TypeError("require lu.shape==b.shape")
  *     cdef char trans = 'N';
  *     cdef int size= lu.shape[2];             # <<<<<<<<<<<<<<
@@ -1975,7 +1975,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_2lu_solve(CYTHON_UNUSED PyObje
  */
   __pyx_v_size = (__pyx_v_lu->dimensions[2]);
 
-  /* "dyson/solver/lu_fast.pyx":63
+  /* "lu_fast.pyx":63
  *     cdef char trans = 'N';
  *     cdef int size= lu.shape[2];
  *     cdef int N = lu.shape[0];             # <<<<<<<<<<<<<<
@@ -1984,7 +1984,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_2lu_solve(CYTHON_UNUSED PyObje
  */
   __pyx_v_N = (__pyx_v_lu->dimensions[0]);
 
-  /* "dyson/solver/lu_fast.pyx":64
+  /* "lu_fast.pyx":64
  *     cdef int size= lu.shape[2];
  *     cdef int N = lu.shape[0];
  *     cdef int nrhs = N;             # <<<<<<<<<<<<<<
@@ -1993,7 +1993,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_2lu_solve(CYTHON_UNUSED PyObje
  */
   __pyx_v_nrhs = __pyx_v_N;
 
-  /* "dyson/solver/lu_fast.pyx":65
+  /* "lu_fast.pyx":65
  *     cdef int N = lu.shape[0];
  *     cdef int nrhs = N;
  *     cdef int LDA = N;             # <<<<<<<<<<<<<<
@@ -2002,7 +2002,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_2lu_solve(CYTHON_UNUSED PyObje
  */
   __pyx_v_LDA = __pyx_v_N;
 
-  /* "dyson/solver/lu_fast.pyx":66
+  /* "lu_fast.pyx":66
  *     cdef int nrhs = N;
  *     cdef int LDA = N;
  *     cdef int LDB = N;             # <<<<<<<<<<<<<<
@@ -2011,7 +2011,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_2lu_solve(CYTHON_UNUSED PyObje
  */
   __pyx_v_LDB = __pyx_v_N;
 
-  /* "dyson/solver/lu_fast.pyx":69
+  /* "lu_fast.pyx":69
  *     cdef int info;
  *     cdef np.ndarray[cComplex, ndim=3] bb
  *     lu=np.require(lu, requirements=['F'])             # <<<<<<<<<<<<<<
@@ -2064,7 +2064,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_2lu_solve(CYTHON_UNUSED PyObje
   __Pyx_DECREF_SET(__pyx_v_lu, ((PyArrayObject *)__pyx_t_6));
   __pyx_t_6 = 0;
 
-  /* "dyson/solver/lu_fast.pyx":70
+  /* "lu_fast.pyx":70
  *     cdef np.ndarray[cComplex, ndim=3] bb
  *     lu=np.require(lu, requirements=['F'])
  *     piv=np.require(piv, requirements=['F'])+1             # <<<<<<<<<<<<<<
@@ -2120,7 +2120,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_2lu_solve(CYTHON_UNUSED PyObje
   __Pyx_DECREF_SET(__pyx_v_piv, ((PyArrayObject *)__pyx_t_2));
   __pyx_t_2 = 0;
 
-  /* "dyson/solver/lu_fast.pyx":71
+  /* "lu_fast.pyx":71
  *     lu=np.require(lu, requirements=['F'])
  *     piv=np.require(piv, requirements=['F'])+1
  *     bb=np.require(b, requirements=['F'])             # <<<<<<<<<<<<<<
@@ -2173,7 +2173,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_2lu_solve(CYTHON_UNUSED PyObje
   __pyx_v_bb = ((PyArrayObject *)__pyx_t_5);
   __pyx_t_5 = 0;
 
-  /* "dyson/solver/lu_fast.pyx":72
+  /* "lu_fast.pyx":72
  *     piv=np.require(piv, requirements=['F'])+1
  *     bb=np.require(b, requirements=['F'])
  *     if np.may_share_memory(b,bb):             # <<<<<<<<<<<<<<
@@ -2216,7 +2216,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_2lu_solve(CYTHON_UNUSED PyObje
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   if (__pyx_t_1) {
 
-    /* "dyson/solver/lu_fast.pyx":73
+    /* "lu_fast.pyx":73
  *     bb=np.require(b, requirements=['F'])
  *     if np.may_share_memory(b,bb):
  *         bb=b.copy()             # <<<<<<<<<<<<<<
@@ -2268,7 +2268,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_2lu_solve(CYTHON_UNUSED PyObje
   }
   __pyx_L10:;
 
-  /* "dyson/solver/lu_fast.pyx":75
+  /* "lu_fast.pyx":75
  *         bb=b.copy()
  *     #for i in prange(size, nogil=True):
  *     for i in range(size):             # <<<<<<<<<<<<<<
@@ -2279,7 +2279,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_2lu_solve(CYTHON_UNUSED PyObje
   for (__pyx_t_15 = 0; __pyx_t_15 < __pyx_t_8; __pyx_t_15+=1) {
     __pyx_v_i = __pyx_t_15;
 
-    /* "dyson/solver/lu_fast.pyx":76
+    /* "lu_fast.pyx":76
  *     #for i in prange(size, nogil=True):
  *     for i in range(size):
  *         zgetrs_(&trans, &N, &nrhs, &lu[0,0,i], &LDA, &piv[0,i], &bb[0,0,i], &LDB, &info);             # <<<<<<<<<<<<<<
@@ -2343,7 +2343,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_2lu_solve(CYTHON_UNUSED PyObje
     }
     zgetrs_((&__pyx_v_trans), (&__pyx_v_N), (&__pyx_v_nrhs), (&(*__Pyx_BufPtrStrided3d(__pyx_t_double_complex *, __pyx_pybuffernd_lu.rcbuffer->pybuffer.buf, __pyx_t_16, __pyx_pybuffernd_lu.diminfo[0].strides, __pyx_t_17, __pyx_pybuffernd_lu.diminfo[1].strides, __pyx_t_18, __pyx_pybuffernd_lu.diminfo[2].strides))), (&__pyx_v_LDA), (&(*__Pyx_BufPtrStrided2d(int *, __pyx_pybuffernd_piv.rcbuffer->pybuffer.buf, __pyx_t_20, __pyx_pybuffernd_piv.diminfo[0].strides, __pyx_t_19, __pyx_pybuffernd_piv.diminfo[1].strides))), (&(*__Pyx_BufPtrStrided3d(__pyx_t_double_complex *, __pyx_pybuffernd_bb.rcbuffer->pybuffer.buf, __pyx_t_22, __pyx_pybuffernd_bb.diminfo[0].strides, __pyx_t_23, __pyx_pybuffernd_bb.diminfo[1].strides, __pyx_t_21, __pyx_pybuffernd_bb.diminfo[2].strides))), (&__pyx_v_LDB), (&__pyx_v_info));
 
-    /* "dyson/solver/lu_fast.pyx":77
+    /* "lu_fast.pyx":77
  *     for i in range(size):
  *         zgetrs_(&trans, &N, &nrhs, &lu[0,0,i], &LDA, &piv[0,i], &bb[0,0,i], &LDB, &info);
  *         if info is not 0:             # <<<<<<<<<<<<<<
@@ -2353,7 +2353,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_2lu_solve(CYTHON_UNUSED PyObje
     __pyx_t_1 = ((__pyx_v_info != 0) != 0);
     if (__pyx_t_1) {
 
-      /* "dyson/solver/lu_fast.pyx":78
+      /* "lu_fast.pyx":78
  *         zgetrs_(&trans, &N, &nrhs, &lu[0,0,i], &LDA, &piv[0,i], &bb[0,0,i], &LDB, &info);
  *         if info is not 0:
  *             raise ValueError('illegal value in %d-th argument of internal gesv|posv'% -info)             # <<<<<<<<<<<<<<
@@ -2379,7 +2379,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_2lu_solve(CYTHON_UNUSED PyObje
     }
   }
 
-  /* "dyson/solver/lu_fast.pyx":79
+  /* "lu_fast.pyx":79
  *         if info is not 0:
  *             raise ValueError('illegal value in %d-th argument of internal gesv|posv'% -info)
  *     return bb             # <<<<<<<<<<<<<<
@@ -2391,7 +2391,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_2lu_solve(CYTHON_UNUSED PyObje
   __pyx_r = ((PyObject *)__pyx_v_bb);
   goto __pyx_L0;
 
-  /* "dyson/solver/lu_fast.pyx":47
+  /* "lu_fast.pyx":47
  *     return arr,piv-1
  * 
  * def lu_solve(np.ndarray[cComplex, ndim=3] lu, np.ndarray[int, ndim=2] piv, np.ndarray[cComplex, ndim=3] b):             # <<<<<<<<<<<<<<
@@ -2412,7 +2412,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_2lu_solve(CYTHON_UNUSED PyObje
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_lu.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_piv.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("dyson.solver.lu_fast.lu_solve", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("lu_fast.lu_solve", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   goto __pyx_L2;
   __pyx_L0:;
@@ -2429,7 +2429,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_2lu_solve(CYTHON_UNUSED PyObje
   return __pyx_r;
 }
 
-/* "dyson/solver/lu_fast.pyx":84
+/* "lu_fast.pyx":84
  * #@cython.boundscheck(False)
  * #@cython.nonecheck(False)
  * def lu_det(np.ndarray[cComplex, ndim=3] lu, np.ndarray[int, ndim=2] piv):             # <<<<<<<<<<<<<<
@@ -2438,9 +2438,9 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_2lu_solve(CYTHON_UNUSED PyObje
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5dyson_6solver_7lu_fast_5lu_det(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_5dyson_6solver_7lu_fast_5lu_det = {"lu_det", (PyCFunction)__pyx_pw_5dyson_6solver_7lu_fast_5lu_det, METH_VARARGS|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_5dyson_6solver_7lu_fast_5lu_det(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_7lu_fast_5lu_det(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_7lu_fast_5lu_det = {"lu_det", (PyCFunction)__pyx_pw_7lu_fast_5lu_det, METH_VARARGS|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_7lu_fast_5lu_det(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyArrayObject *__pyx_v_lu = 0;
   PyArrayObject *__pyx_v_piv = 0;
   int __pyx_lineno = 0;
@@ -2488,13 +2488,13 @@ static PyObject *__pyx_pw_5dyson_6solver_7lu_fast_5lu_det(PyObject *__pyx_self, 
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("lu_det", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 84; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
-  __Pyx_AddTraceback("dyson.solver.lu_fast.lu_det", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("lu_fast.lu_det", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_lu), __pyx_ptype_5numpy_ndarray, 1, "lu", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 84; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_piv), __pyx_ptype_5numpy_ndarray, 1, "piv", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 84; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_r = __pyx_pf_5dyson_6solver_7lu_fast_4lu_det(__pyx_self, __pyx_v_lu, __pyx_v_piv);
+  __pyx_r = __pyx_pf_7lu_fast_4lu_det(__pyx_self, __pyx_v_lu, __pyx_v_piv);
 
   /* function exit code */
   goto __pyx_L0;
@@ -2505,7 +2505,7 @@ static PyObject *__pyx_pw_5dyson_6solver_7lu_fast_5lu_det(PyObject *__pyx_self, 
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_4lu_det(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_lu, PyArrayObject *__pyx_v_piv) {
+static PyObject *__pyx_pf_7lu_fast_4lu_det(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_lu, PyArrayObject *__pyx_v_piv) {
   PyArrayObject *__pyx_v_det = 0;
   int __pyx_v_size;
   int __pyx_v_N;
@@ -2572,7 +2572,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_4lu_det(CYTHON_UNUSED PyObject
   }
   __pyx_pybuffernd_piv.diminfo[0].strides = __pyx_pybuffernd_piv.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_piv.diminfo[0].shape = __pyx_pybuffernd_piv.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_piv.diminfo[1].strides = __pyx_pybuffernd_piv.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_piv.diminfo[1].shape = __pyx_pybuffernd_piv.rcbuffer->pybuffer.shape[1];
 
-  /* "dyson/solver/lu_fast.pyx":85
+  /* "lu_fast.pyx":85
  * #@cython.nonecheck(False)
  * def lu_det(np.ndarray[cComplex, ndim=3] lu, np.ndarray[int, ndim=2] piv):
  *     if lu.shape[0] != lu.shape[1]:             # <<<<<<<<<<<<<<
@@ -2582,7 +2582,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_4lu_det(CYTHON_UNUSED PyObject
   __pyx_t_1 = (((__pyx_v_lu->dimensions[0]) != (__pyx_v_lu->dimensions[1])) != 0);
   if (__pyx_t_1) {
 
-    /* "dyson/solver/lu_fast.pyx":86
+    /* "lu_fast.pyx":86
  * def lu_det(np.ndarray[cComplex, ndim=3] lu, np.ndarray[int, ndim=2] piv):
  *     if lu.shape[0] != lu.shape[1]:
  *         raise TypeError("the lu array must have shape [N, N, M]")             # <<<<<<<<<<<<<<
@@ -2596,7 +2596,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_4lu_det(CYTHON_UNUSED PyObject
     {__pyx_filename = __pyx_f[0]; __pyx_lineno = 86; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
 
-  /* "dyson/solver/lu_fast.pyx":87
+  /* "lu_fast.pyx":87
  *     if lu.shape[0] != lu.shape[1]:
  *         raise TypeError("the lu array must have shape [N, N, M]")
  *     if lu.shape[2] != piv.shape[1]:             # <<<<<<<<<<<<<<
@@ -2606,7 +2606,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_4lu_det(CYTHON_UNUSED PyObject
   __pyx_t_1 = (((__pyx_v_lu->dimensions[2]) != (__pyx_v_piv->dimensions[1])) != 0);
   if (__pyx_t_1) {
 
-    /* "dyson/solver/lu_fast.pyx":88
+    /* "lu_fast.pyx":88
  *         raise TypeError("the lu array must have shape [N, N, M]")
  *     if lu.shape[2] != piv.shape[1]:
  *         raise TypeError("require lu.shape[2]==piv.shape[1]")             # <<<<<<<<<<<<<<
@@ -2620,7 +2620,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_4lu_det(CYTHON_UNUSED PyObject
     {__pyx_filename = __pyx_f[0]; __pyx_lineno = 88; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
 
-  /* "dyson/solver/lu_fast.pyx":89
+  /* "lu_fast.pyx":89
  *     if lu.shape[2] != piv.shape[1]:
  *         raise TypeError("require lu.shape[2]==piv.shape[1]")
  *     if lu.shape[1] != piv.shape[0]:             # <<<<<<<<<<<<<<
@@ -2630,7 +2630,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_4lu_det(CYTHON_UNUSED PyObject
   __pyx_t_1 = (((__pyx_v_lu->dimensions[1]) != (__pyx_v_piv->dimensions[0])) != 0);
   if (__pyx_t_1) {
 
-    /* "dyson/solver/lu_fast.pyx":90
+    /* "lu_fast.pyx":90
  *         raise TypeError("require lu.shape[2]==piv.shape[1]")
  *     if lu.shape[1] != piv.shape[0]:
  *         raise TypeError("require lu.shape[1]==piv.shape[0]")             # <<<<<<<<<<<<<<
@@ -2644,7 +2644,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_4lu_det(CYTHON_UNUSED PyObject
     {__pyx_filename = __pyx_f[0]; __pyx_lineno = 90; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
 
-  /* "dyson/solver/lu_fast.pyx":92
+  /* "lu_fast.pyx":92
  *         raise TypeError("require lu.shape[1]==piv.shape[0]")
  *     cdef np.ndarray[cComplex, ndim=1] det
  *     cdef int size= lu.shape[2];             # <<<<<<<<<<<<<<
@@ -2653,7 +2653,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_4lu_det(CYTHON_UNUSED PyObject
  */
   __pyx_v_size = (__pyx_v_lu->dimensions[2]);
 
-  /* "dyson/solver/lu_fast.pyx":93
+  /* "lu_fast.pyx":93
  *     cdef np.ndarray[cComplex, ndim=1] det
  *     cdef int size= lu.shape[2];
  *     cdef int N = lu.shape[0];             # <<<<<<<<<<<<<<
@@ -2662,7 +2662,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_4lu_det(CYTHON_UNUSED PyObject
  */
   __pyx_v_N = (__pyx_v_lu->dimensions[0]);
 
-  /* "dyson/solver/lu_fast.pyx":95
+  /* "lu_fast.pyx":95
  *     cdef int N = lu.shape[0];
  *     #print lu.shape[2], lu.shape[0], N
  *     det=np.ones(size, dtype=Complex)             # <<<<<<<<<<<<<<
@@ -2714,7 +2714,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_4lu_det(CYTHON_UNUSED PyObject
   __pyx_v_det = ((PyArrayObject *)__pyx_t_5);
   __pyx_t_5 = 0;
 
-  /* "dyson/solver/lu_fast.pyx":96
+  /* "lu_fast.pyx":96
  *     #print lu.shape[2], lu.shape[0], N
  *     det=np.ones(size, dtype=Complex)
  *     for i in range(size):             # <<<<<<<<<<<<<<
@@ -2725,7 +2725,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_4lu_det(CYTHON_UNUSED PyObject
   for (__pyx_t_11 = 0; __pyx_t_11 < __pyx_t_7; __pyx_t_11+=1) {
     __pyx_v_i = __pyx_t_11;
 
-    /* "dyson/solver/lu_fast.pyx":97
+    /* "lu_fast.pyx":97
  *     det=np.ones(size, dtype=Complex)
  *     for i in range(size):
  *         for j in range(N):             # <<<<<<<<<<<<<<
@@ -2736,7 +2736,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_4lu_det(CYTHON_UNUSED PyObject
     for (__pyx_t_13 = 0; __pyx_t_13 < __pyx_t_12; __pyx_t_13+=1) {
       __pyx_v_j = __pyx_t_13;
 
-      /* "dyson/solver/lu_fast.pyx":98
+      /* "lu_fast.pyx":98
  *     for i in range(size):
  *         for j in range(N):
  *             if piv[j,i]!=j:             # <<<<<<<<<<<<<<
@@ -2761,7 +2761,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_4lu_det(CYTHON_UNUSED PyObject
       __pyx_t_1 = (((*__Pyx_BufPtrStrided2d(int *, __pyx_pybuffernd_piv.rcbuffer->pybuffer.buf, __pyx_t_14, __pyx_pybuffernd_piv.diminfo[0].strides, __pyx_t_15, __pyx_pybuffernd_piv.diminfo[1].strides)) != __pyx_v_j) != 0);
       if (__pyx_t_1) {
 
-        /* "dyson/solver/lu_fast.pyx":99
+        /* "lu_fast.pyx":99
  *         for j in range(N):
  *             if piv[j,i]!=j:
  *                 det[i]=-det[i]*lu[j,j,i]             # <<<<<<<<<<<<<<
@@ -2813,7 +2813,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_4lu_det(CYTHON_UNUSED PyObject
       }
       /*else*/ {
 
-        /* "dyson/solver/lu_fast.pyx":101
+        /* "lu_fast.pyx":101
  *                 det[i]=-det[i]*lu[j,j,i]
  *             else:
  *                 det[i]=det[i]*lu[j,j,i]             # <<<<<<<<<<<<<<
@@ -2866,7 +2866,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_4lu_det(CYTHON_UNUSED PyObject
     }
   }
 
-  /* "dyson/solver/lu_fast.pyx":103
+  /* "lu_fast.pyx":103
  *                 det[i]=det[i]*lu[j,j,i]
  *             #print j,piv[j,i], lu[j,j,i], det[i]
  *     return det             # <<<<<<<<<<<<<<
@@ -2878,7 +2878,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_4lu_det(CYTHON_UNUSED PyObject
   __pyx_r = ((PyObject *)__pyx_v_det);
   goto __pyx_L0;
 
-  /* "dyson/solver/lu_fast.pyx":84
+  /* "lu_fast.pyx":84
  * #@cython.boundscheck(False)
  * #@cython.nonecheck(False)
  * def lu_det(np.ndarray[cComplex, ndim=3] lu, np.ndarray[int, ndim=2] piv):             # <<<<<<<<<<<<<<
@@ -2898,7 +2898,7 @@ static PyObject *__pyx_pf_5dyson_6solver_7lu_fast_4lu_det(CYTHON_UNUSED PyObject
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_lu.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_piv.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("dyson.solver.lu_fast.lu_det", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("lu_fast.lu_det", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   goto __pyx_L2;
   __pyx_L0:;
@@ -4954,7 +4954,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_copy, __pyx_k_copy, sizeof(__pyx_k_copy), 0, 0, 1, 1},
   {&__pyx_n_s_det, __pyx_k_det, sizeof(__pyx_k_det), 0, 0, 1, 1},
   {&__pyx_n_s_dtype, __pyx_k_dtype, sizeof(__pyx_k_dtype), 0, 0, 1, 1},
-  {&__pyx_n_s_dyson_solver_lu_fast, __pyx_k_dyson_solver_lu_fast, sizeof(__pyx_k_dyson_solver_lu_fast), 0, 0, 1, 1},
   {&__pyx_n_s_empty, __pyx_k_empty, sizeof(__pyx_k_empty), 0, 0, 1, 1},
   {&__pyx_n_s_float64, __pyx_k_float64, sizeof(__pyx_k_float64), 0, 0, 1, 1},
   {&__pyx_n_s_i, __pyx_k_i, sizeof(__pyx_k_i), 0, 0, 1, 1},
@@ -4967,6 +4966,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_lu, __pyx_k_lu, sizeof(__pyx_k_lu), 0, 0, 1, 1},
   {&__pyx_n_s_lu_det, __pyx_k_lu_det, sizeof(__pyx_k_lu_det), 0, 0, 1, 1},
   {&__pyx_n_s_lu_factor, __pyx_k_lu_factor, sizeof(__pyx_k_lu_factor), 0, 0, 1, 1},
+  {&__pyx_n_s_lu_fast, __pyx_k_lu_fast, sizeof(__pyx_k_lu_fast), 0, 0, 1, 1},
   {&__pyx_n_s_lu_solve, __pyx_k_lu_solve, sizeof(__pyx_k_lu_solve), 0, 0, 1, 1},
   {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
   {&__pyx_n_s_may_share_memory, __pyx_k_may_share_memory, sizeof(__pyx_k_may_share_memory), 0, 0, 1, 1},
@@ -5007,7 +5007,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "dyson/solver/lu_fast.pyx":27
+  /* "lu_fast.pyx":27
  *     """
  *     if arr.shape[0] != arr.shape[1]:
  *         raise TypeError("the input array must have shape [N, N, :]")             # <<<<<<<<<<<<<<
@@ -5018,7 +5018,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple_);
   __Pyx_GIVEREF(__pyx_tuple_);
 
-  /* "dyson/solver/lu_fast.pyx":54
+  /* "lu_fast.pyx":54
  *     """
  *     if lu.shape[0] != lu.shape[1]:
  *         raise TypeError("the lu array must have shape [N, N, :]")             # <<<<<<<<<<<<<<
@@ -5029,7 +5029,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__2);
   __Pyx_GIVEREF(__pyx_tuple__2);
 
-  /* "dyson/solver/lu_fast.pyx":56
+  /* "lu_fast.pyx":56
  *         raise TypeError("the lu array must have shape [N, N, :]")
  *     if lu.shape[2] != piv.shape[1]:
  *         raise TypeError("require lu.shape[2]==piv.shape[1]")             # <<<<<<<<<<<<<<
@@ -5040,7 +5040,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__3);
   __Pyx_GIVEREF(__pyx_tuple__3);
 
-  /* "dyson/solver/lu_fast.pyx":58
+  /* "lu_fast.pyx":58
  *         raise TypeError("require lu.shape[2]==piv.shape[1]")
  *     if lu.shape[1] != piv.shape[0]:
  *         raise TypeError("require lu.shape[1]==piv.shape[0]")             # <<<<<<<<<<<<<<
@@ -5051,7 +5051,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__4);
   __Pyx_GIVEREF(__pyx_tuple__4);
 
-  /* "dyson/solver/lu_fast.pyx":60
+  /* "lu_fast.pyx":60
  *         raise TypeError("require lu.shape[1]==piv.shape[0]")
  *     if lu.shape[2] != b.shape[2] or lu.shape[1]!=b.shape[1] or lu.shape[0]!=b.shape[0]:
  *         raise TypeError("require lu.shape==b.shape")             # <<<<<<<<<<<<<<
@@ -5062,7 +5062,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__5);
   __Pyx_GIVEREF(__pyx_tuple__5);
 
-  /* "dyson/solver/lu_fast.pyx":86
+  /* "lu_fast.pyx":86
  * def lu_det(np.ndarray[cComplex, ndim=3] lu, np.ndarray[int, ndim=2] piv):
  *     if lu.shape[0] != lu.shape[1]:
  *         raise TypeError("the lu array must have shape [N, N, M]")             # <<<<<<<<<<<<<<
@@ -5073,7 +5073,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__6);
   __Pyx_GIVEREF(__pyx_tuple__6);
 
-  /* "dyson/solver/lu_fast.pyx":88
+  /* "lu_fast.pyx":88
  *         raise TypeError("the lu array must have shape [N, N, M]")
  *     if lu.shape[2] != piv.shape[1]:
  *         raise TypeError("require lu.shape[2]==piv.shape[1]")             # <<<<<<<<<<<<<<
@@ -5084,7 +5084,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__7);
   __Pyx_GIVEREF(__pyx_tuple__7);
 
-  /* "dyson/solver/lu_fast.pyx":90
+  /* "lu_fast.pyx":90
  *         raise TypeError("require lu.shape[2]==piv.shape[1]")
  *     if lu.shape[1] != piv.shape[0]:
  *         raise TypeError("require lu.shape[1]==piv.shape[0]")             # <<<<<<<<<<<<<<
@@ -5161,7 +5161,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__14);
   __Pyx_GIVEREF(__pyx_tuple__14);
 
-  /* "dyson/solver/lu_fast.pyx":21
+  /* "lu_fast.pyx":21
  * #*  by ZGETRF.
  * 
  * def lu_factor(np.ndarray[cComplex, ndim=3] arr):             # <<<<<<<<<<<<<<
@@ -5173,7 +5173,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GIVEREF(__pyx_tuple__15);
   __pyx_codeobj__16 = (PyObject*)__Pyx_PyCode_New(1, 0, 7, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__15, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_kchen_project_Feynman_Sim, __pyx_n_s_lu_factor, 21, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__16)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 21; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-  /* "dyson/solver/lu_fast.pyx":47
+  /* "lu_fast.pyx":47
  *     return arr,piv-1
  * 
  * def lu_solve(np.ndarray[cComplex, ndim=3] lu, np.ndarray[int, ndim=2] piv, np.ndarray[cComplex, ndim=3] b):             # <<<<<<<<<<<<<<
@@ -5185,7 +5185,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GIVEREF(__pyx_tuple__17);
   __pyx_codeobj__18 = (PyObject*)__Pyx_PyCode_New(3, 0, 12, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__17, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_kchen_project_Feynman_Sim, __pyx_n_s_lu_solve, 47, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__18)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 47; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-  /* "dyson/solver/lu_fast.pyx":84
+  /* "lu_fast.pyx":84
  * #@cython.boundscheck(False)
  * #@cython.nonecheck(False)
  * def lu_det(np.ndarray[cComplex, ndim=3] lu, np.ndarray[int, ndim=2] piv):             # <<<<<<<<<<<<<<
@@ -5280,14 +5280,14 @@ PyMODINIT_FUNC PyInit_lu_fast(void)
   #if PY_MAJOR_VERSION < 3 && (__PYX_DEFAULT_STRING_ENCODING_IS_ASCII || __PYX_DEFAULT_STRING_ENCODING_IS_DEFAULT)
   if (__Pyx_init_sys_getdefaultencoding_params() < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   #endif
-  if (__pyx_module_is_main_dyson__solver__lu_fast) {
+  if (__pyx_module_is_main_lu_fast) {
     if (PyObject_SetAttrString(__pyx_m, "__name__", __pyx_n_s_main) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
   }
   #if PY_MAJOR_VERSION >= 3
   {
     PyObject *modules = PyImport_GetModuleDict(); if (unlikely(!modules)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    if (!PyDict_GetItemString(modules, "dyson.solver.lu_fast")) {
-      if (unlikely(PyDict_SetItemString(modules, "dyson.solver.lu_fast", __pyx_m) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (!PyDict_GetItemString(modules, "lu_fast")) {
+      if (unlikely(PyDict_SetItemString(modules, "lu_fast", __pyx_m) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
   }
   #endif
@@ -5316,7 +5316,7 @@ PyMODINIT_FUNC PyInit_lu_fast(void)
   /*--- Function import code ---*/
   /*--- Execution code ---*/
 
-  /* "dyson/solver/lu_fast.pyx":1
+  /* "lu_fast.pyx":1
  * import numpy as np             # <<<<<<<<<<<<<<
  * cimport numpy as np
  * import cython
@@ -5326,7 +5326,7 @@ PyMODINIT_FUNC PyInit_lu_fast(void)
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "dyson/solver/lu_fast.pyx":8
+  /* "lu_fast.pyx":8
  * ctypedef np.double_t cDOUBLE
  * ctypedef np.complex128_t cComplex
  * DOUBLE = np.float64             # <<<<<<<<<<<<<<
@@ -5341,7 +5341,7 @@ PyMODINIT_FUNC PyInit_lu_fast(void)
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_DOUBLE, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 8; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "dyson/solver/lu_fast.pyx":9
+  /* "lu_fast.pyx":9
  * ctypedef np.complex128_t cComplex
  * DOUBLE = np.float64
  * Complex = np.complex128             # <<<<<<<<<<<<<<
@@ -5356,43 +5356,43 @@ PyMODINIT_FUNC PyInit_lu_fast(void)
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_Complex, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 9; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "dyson/solver/lu_fast.pyx":21
+  /* "lu_fast.pyx":21
  * #*  by ZGETRF.
  * 
  * def lu_factor(np.ndarray[cComplex, ndim=3] arr):             # <<<<<<<<<<<<<<
  *     """
  *        arr: complex type array with [N, N, M], it may be altered!!!
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_5dyson_6solver_7lu_fast_1lu_factor, NULL, __pyx_n_s_dyson_solver_lu_fast); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 21; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_7lu_fast_1lu_factor, NULL, __pyx_n_s_lu_fast); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 21; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_lu_factor, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 21; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "dyson/solver/lu_fast.pyx":47
+  /* "lu_fast.pyx":47
  *     return arr,piv-1
  * 
  * def lu_solve(np.ndarray[cComplex, ndim=3] lu, np.ndarray[int, ndim=2] piv, np.ndarray[cComplex, ndim=3] b):             # <<<<<<<<<<<<<<
  *     """
  *        lu, piv: lu decomposition of array arr
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_5dyson_6solver_7lu_fast_3lu_solve, NULL, __pyx_n_s_dyson_solver_lu_fast); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 47; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_7lu_fast_3lu_solve, NULL, __pyx_n_s_lu_fast); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 47; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_lu_solve, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 47; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "dyson/solver/lu_fast.pyx":84
+  /* "lu_fast.pyx":84
  * #@cython.boundscheck(False)
  * #@cython.nonecheck(False)
  * def lu_det(np.ndarray[cComplex, ndim=3] lu, np.ndarray[int, ndim=2] piv):             # <<<<<<<<<<<<<<
  *     if lu.shape[0] != lu.shape[1]:
  *         raise TypeError("the lu array must have shape [N, N, M]")
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_5dyson_6solver_7lu_fast_5lu_det, NULL, __pyx_n_s_dyson_solver_lu_fast); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 84; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_7lu_fast_5lu_det, NULL, __pyx_n_s_lu_fast); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 84; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_lu_det, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 84; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "dyson/solver/lu_fast.pyx":1
+  /* "lu_fast.pyx":1
  * import numpy as np             # <<<<<<<<<<<<<<
  * cimport numpy as np
  * import cython
@@ -5418,11 +5418,11 @@ PyMODINIT_FUNC PyInit_lu_fast(void)
   __Pyx_XDECREF(__pyx_t_2);
   if (__pyx_m) {
     if (__pyx_d) {
-      __Pyx_AddTraceback("init dyson.solver.lu_fast", __pyx_clineno, __pyx_lineno, __pyx_filename);
+      __Pyx_AddTraceback("init lu_fast", __pyx_clineno, __pyx_lineno, __pyx_filename);
     }
     Py_DECREF(__pyx_m); __pyx_m = 0;
   } else if (!PyErr_Occurred()) {
-    PyErr_SetString(PyExc_ImportError, "init dyson.solver.lu_fast");
+    PyErr_SetString(PyExc_ImportError, "init lu_fast");
   }
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
