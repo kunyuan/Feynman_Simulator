@@ -41,6 +41,9 @@ weight::Weight::~Weight()
 
 bool weight::Weight::BuildNew(flag _flag, const ParaMC& para)
 {
+    //NormFactor only consider Vol, not beta, since beta can be changing during annealing
+    Norm::NormFactor = para.Lat.Vol*para.Lat.SublatVol;
+    
     if (para.Order == 0)
         ABORT("Order can not be zero!!!");
     //GW can only be loaded

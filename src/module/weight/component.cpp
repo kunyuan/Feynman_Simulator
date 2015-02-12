@@ -13,6 +13,8 @@
 using namespace weight;
 using namespace std;
 
+real Norm::NormFactor = 1.0;
+
 G::G(const Lattice& lat, real beta, uint MaxTauBin, TauSymmetry Symmetry)
     : _Map(IndexMapSPIN2(beta, MaxTauBin, lat, Symmetry))
 {

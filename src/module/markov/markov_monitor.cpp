@@ -102,6 +102,7 @@ bool MarkovMonitor::AdjustOrderReWeight()
         if (Zero(weight[i]))
             continue;
         Para->OrderReWeight[i] = Para->OrderTimeRatio[i] * weight[0] / weight[i];
+        cout<<"Order0 :"<< weight[0] <<" Order" << i <<" :"<< weight[i] << " => "<<Para->OrderReWeight[i] <<endl;
     }
 
     if (Zero(wormweight))

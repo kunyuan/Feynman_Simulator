@@ -8,13 +8,13 @@ SLEEP = 1    #check job status for every SLEEP seconds
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" : 3,
+    "__Duplicate" : 1,
     "__IsCluster" : False, 
     "__AutoRun" : True,
     "__KeepCPUBusy": True,
     },
 "Job": {
-    "DoesLoad" : True,
+    "DoesLoad" : False,
     "Sample" : 100000000  ##0.8 min for 1000000(*1000) Samples in MC
     }
 }
@@ -33,7 +33,7 @@ Dyson={
     }
 }
 
-beta=10.0
+beta=1.0
 Order=3
 Common={
 "Tau": {
@@ -80,7 +80,8 @@ MonteCarlo["Markov"]={
     #Start from order 0, so that OrderReWeight has Order+1 elements
     "Sweep" : 10,
     "Toss" : 1000,
-    "OrderReWeight" : [1.0, 0.1*1e-5, 0.5*1e-5, 0.1*1e-5],
+    #"OrderReWeight" : [1.0, 0.1*1e-5, 0.5*1e-5, 0.1*1e-5],
+    "OrderReWeight" : [1.0, 0.1, 0.5, 0.05],
     "SqueezeFactor" : 10.0,
     "WormSpaceReweight" : 0.05,
     "PolarReweight" : 2.0,
