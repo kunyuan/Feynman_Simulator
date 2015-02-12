@@ -1,8 +1,6 @@
 #!/usr/bin/python
 import pprint
-import cPickle as pickle
-import gzip
-import sys
+import gzip,os,sys,time
 print sys.version
 import hickle as hkl
 from numpy import *
@@ -25,21 +23,10 @@ def LoadDict(filename):
 def SaveBigDict(filename, root):
     if filename[-4:]!=".hkl":
         filename+=".hkl"
-    hkl.dump(root, filename, mode='w', compression='gzip')
-    #TODO: better to add an file read-lock here
-    #if filename[-4:]!=".pkl":
-        #filename+=".pkl"
-    #with gzip.open(filename, "w") as f:
-        #pickle.dump(root, f, pickle.HIGHEST_PROTOCOL)
+    hkl.dump(root, "_"+filename, mode='w', compression='gzip')
+    os.rename("_"+filename, filename)
 
 def LoadBigDict(filename):
     if filename[-4:]!=".hkl":
         filename+=".hkl"
-    root=hkl.load(filename)
-    #if filename[-4:]!=".pkl":
-        #filename+=".pkl"
-    #with gzip.open(filename, "r") as f:
-        #root=pickle.load(f)
-    return root
-
-
+    return hkl.load(filename)

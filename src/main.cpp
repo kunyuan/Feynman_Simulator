@@ -107,7 +107,6 @@ void MonteCarlo(const para::Job& Job)
 
             if (MessageTimer.check(Para.MessageTimer))
                 Env.ListenToMessage();
-            //                    MarkovMonitor.SqueezeStatistics(2.0);
 
             if (ReweightTimer.check(Para.ReweightTimer))
                 Env.AdjustOrderReWeight();

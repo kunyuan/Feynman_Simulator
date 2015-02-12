@@ -121,15 +121,22 @@ bool EnvMonteCarlo::ListenToMessage()
         LOG_INFO("Status has not been updated yet since the last annealing!");
         return false;
     }
-    Para.UpdateWithMessage(Message_);
     Dictionary weight_;
-    weight_.BigLoad(Job.WeightFile);
+    try {
+        weight_.BigLoad(Job.WeightFile);
+    }
+    catch (IOInvalid e) {
+        LOG_WARNING("Annealing Failed!");
+        return false;
+    }
+    Para.UpdateWithMessage(Message_);
     Weight.FromDict(weight_, weight::GW, Para);
     Weight.Anneal(Para);
     Diag.Reset(Para.Lat, *Weight.G, *Weight.W);
     Markov.Reset(Para, Diag, Weight);
     MarkovMonitor.Reset(Para, Diag, Weight);
     MarkovMonitor.SqueezeStatistics(Message_.SqueezeFactor);
-    LOG_INFO("Annealled to:\n" << Message_.PrettyString());
+    LOG_INFO("Annealled to " << Message_.PrettyString()
+                             << "\nwith squeeze factor" << Message_.SqueezeFactor);
     return true;
 }

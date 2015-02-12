@@ -6,7 +6,7 @@ import parameter as para
 import traceback
 
 StatisFilePattern="_statis"
-AcceptRatio=0.5
+AcceptRatio=0.75
 
 class CollectStatisFailure(Exception):
     def __init__(self, msg):
@@ -148,6 +148,7 @@ class WeightEstimator():
 
 def GetFileList():
     FileList = [f for f in os.listdir(workspace) if os.path.isfile(os.path.join(workspace,f))]
+    FileList = [f for f in FileList if f[0]!="_"]
     StatisFileList=[os.path.join(workspace, f) for f in FileList if f.find(StatisFilePattern) is not -1]
     return StatisFileList
 

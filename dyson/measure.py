@@ -53,7 +53,9 @@ class Observable:
             Chi.FFT("R", "W")
             K=(4*PI, 2*PI ,0) #High symmetry point with strongest order
             self.Append("Chi_X(4Pi,2Pi,0)", 
-                    self.__Lat.FourierTransformation(Chi.Data[0,:,0,:,:,0]*Factor, [K,],"Real"))
+                    self.__Lat.FourierTransformation(Chi.Data[0,:,0,:,:,0]*Factor, [K,],"Real")[1][0])
+            self.Append("UnifChi", 
+                    self.__Lat.FourierTransformation(Chi.Data[0,:,0,:,:,0]*Factor, [(0.0,0.0,0.0),],"Real")[1][0])
             Chi.FFT("R","T")
             energy=np.zeros(self.__Map.MaxTauBin)+1j*0
             for i in range(self.__Lat.NSublat):
