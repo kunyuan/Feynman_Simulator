@@ -14,7 +14,7 @@ MonteCarlo={
     "__KeepCPUBusy": True,
     },
 "Job": {
-    "DoesLoad" : True,
+    "DoesLoad" : False,
     "Sample" : 100000000  ##0.8 min for 1000000(*1000) Samples in MC
     }
 }
@@ -33,7 +33,7 @@ Dyson={
     }
 }
 
-beta=5.0
+beta=10.0
 Order=3
 Common={
 "Tau": {
@@ -80,16 +80,16 @@ MonteCarlo["Markov"]={
     #Start from order 0, so that OrderReWeight has Order+1 elements
     "Sweep" : 10,
     "Toss" : 1000,
-    "OrderReWeight" : [1.0, 0.1, 0.5, 0.1],
+    "OrderReWeight" : [1.0, 0.1*1e-5, 0.5*1e-5, 0.1*1e-5],
     "SqueezeFactor" : 10.0,
     "WormSpaceReweight" : 0.05,
     "PolarReweight" : 2.0,
-    "OrderTimeRatio" : [1.0, 1.0, 1.0, 2.0],
+    "OrderTimeRatio" : [1.0, 1.0, 2.0, 10.0],
     "Timer": {
-        "PrinterTimer": 30,
-        "DiskWriterTimer": 30,
-        "MessageTimer": 30,
-        "ReweightTimer": 100
+        "PrinterTimer": 60,
+        "DiskWriterTimer": 60,
+        "MessageTimer": 60,
+        "ReweightTimer": 60
         },
     }
 
@@ -98,10 +98,10 @@ Dyson["Dyson"]={
     "OrderAccepted": 1,
     "ErrorThreshold": 0.1,
     "BetaIncrease": 0.0,
-    "SleepTime": 30,
+    "SleepTime": 40,
     "Annealing": {
-        "DeltaField": [2.0, 2.0, 2.0, 2.0],
-        "Interval": [-0.1, -0.1, -0.1, -0.1]
+        "DeltaField": [1.0, -1.0, 1.0, -1.0],
+        "Interval": [-0.1, 0.1, -0.1, 0.1]
         }
     }
 

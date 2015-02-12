@@ -17,7 +17,6 @@ import plot, gc
 #import signal
 #start in pdb mode after Ctrl-C
 #signal.signal(signal.SIGINT, start_pdb)
-import os
 
 def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor):
     log.info("Measuring...")

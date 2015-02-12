@@ -56,7 +56,7 @@ def construct_job_queue(to_do):
                 else:
                     job_queue_back.append(atom)
         except IndexError:
-            pass
+            pass 
     logging.info("Constructed the job queue!")
     return job_queue, job_queue_back
 
@@ -99,12 +99,12 @@ def submit_job(job_atom):
         fjob.write("cd "+homedir+"\n")
         fjob.write(job_atom.execute+" -f "+infile)
         fjob.close()
-        if job_atom.auto_run:
-            os.system("qsub "+jobfile)
-            os.system("rm "+jobfile)
-            logging.info(job_atom.get_job_name()+" submitted!")
-        else:
-            print "You have to run "+job_atom.get_job_name()+" by yourself!"
+        #if job_atom.auto_run:
+            #os.system("qsub "+jobfile)
+            #os.system("rm "+jobfile)
+            #logging.info(job_atom.get_job_name()+" submitted!")
+        #else:
+            #print "You have to run "+job_atom.get_job_name()+" by yourself!"
     else:
         if job_atom.auto_run:
             #shellstr = "exec "+job_atom.execute+" -f "+infile+" >> "+outfile
