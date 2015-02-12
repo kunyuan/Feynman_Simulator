@@ -205,11 +205,13 @@ if __name__=="__main__":
     if args.collect:
         log.info("Collect statistics only...")
         SigmaMC, PolarMC=collect.CollectStatis(Map, para["Dyson"]["Order"])
+        collect.UpdateWeight((SigmaMC, PolarMC), para["Dyson"]["ErrorThreshold"], para["Dyson"]["OrderAccepted"])
         data ={}
         data["Sigma"] = {"Histogram": SigmaMC.ToDict()}
         data["Polar"] = {"Histogram": PolarMC.ToDict()}
         with DelayedInterrupt():
             IO.SaveBigDict(StatisFile, data)
+
         sys.exit(0)
     else:
         Dyson(job["DysonOnly"], IsNewCalculation, para, Map, Lat)

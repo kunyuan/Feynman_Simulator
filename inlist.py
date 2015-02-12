@@ -14,7 +14,7 @@ MonteCarlo={
     "__KeepCPUBusy": True,
     },
 "Job": {
-    "DoesLoad" : False,
+    "DoesLoad" : True,
     "Sample" : 100000000  ##0.8 min for 1000000(*1000) Samples in MC
     }
 }
@@ -90,6 +90,10 @@ MonteCarlo["Markov"]={
         "DiskWriterTimer": 60,
         "MessageTimer": 60,
         "ReweightTimer": 60
+        #"PrinterTimer":  80,
+        #"DiskWriterTimer": 100,
+        #"MessageTimer": 130,
+        #"ReweightTimer": 300
         },
     }
 
@@ -99,6 +103,7 @@ Dyson["Dyson"]={
     "ErrorThreshold": 0.1,
     "BetaIncrease": 0.0,
     "SleepTime": 40,
+    #"SleepTime": 120,
     "Annealing": {
         "DeltaField": [1.0, -1.0, 1.0, -1.0],
         "Interval": [-0.1, 0.1, -0.1, 0.1]
