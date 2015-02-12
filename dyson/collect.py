@@ -18,7 +18,7 @@ def Smooth(x,y):
     """return: smoothed funciton s(x) and estimation of sigma of y for one data point"""
     from scipy.interpolate import LSQUnivariateSpline
     #define segments to do spline smoothing
-    t=np.linspace(0,len(x),10)[1:-1]
+    t=np.linspace(0,len(x),3)[1:-1]
     sr = LSQUnivariateSpline(x, y.real, t)
     si = LSQUnivariateSpline(x, y.imag, t)
     return sr(x)+si(x)*1j, (sr.get_residual()/len(x))**0.5+(si.get_residual()/len(x))**0.5*1j

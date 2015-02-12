@@ -17,18 +17,18 @@
 namespace weight {
 
 class Worm {
-public:
-    static real Weight(const Site&, const Site&, real, real)
+  public:
+    static real Weight(const Site &, const Site &, real, real)
     {
         return 1.0;
     }
 };
 
 class Norm {
-public:
+  public:
     static real Weight()
     {
-        return 10.0;
+        return 100000.0;
     }
 };
 
@@ -36,18 +36,18 @@ typedef WeightArray<DELTA_T_SIZE> DeltaTArray;
 typedef WeightArray<SMOOTH_T_SIZE> SmoothTArray;
 
 class G {
-public:
-    G(const Lattice& lat, real beta, uint MaxTauBin,
+  public:
+    G(const Lattice &lat, real beta, uint MaxTauBin,
       TauSymmetry TauSymmetry = TauAntiSymmetric);
     void BuildTest();
     void Reset(real Beta);
-    bool FromDict(const Dictionary&);
+    bool FromDict(const Dictionary &);
     Dictionary ToDict();
 
-    Complex Weight(const Site&, const Site&, real, real, spin, spin, bool) const;
-    Complex Weight(int, const Site&, const Site&, real, real, spin, spin, bool) const;
+    Complex Weight(const Site &, const Site &, real, real, spin, spin, bool) const;
+    Complex Weight(int, const Site &, const Site &, real, real, spin, spin, bool) const;
 
-private:
+  private:
     SmoothTArray _SmoothTWeight;
     weight::SmoothTArray _MeasureWeight;
     IndexMapSPIN2 _Map;
@@ -58,18 +58,18 @@ private:
     The mirror symmetry is only required on the level of the whole lattice, not within a unit cell.
 */
 class W {
-public:
-    W(const Lattice& lat, real Beta, uint MaxTauBin);
+  public:
+    W(const Lattice &lat, real Beta, uint MaxTauBin);
     void BuildTest();
     void WriteBareToASCII();
     void Reset(real Beta);
-    bool FromDict(const Dictionary&);
+    bool FromDict(const Dictionary &);
     Dictionary ToDict();
 
-    Complex Weight(const Site&, const Site&, real, real, spin*, spin*, bool, bool, bool) const;
-    Complex Weight(int, const Site&, const Site&, real, real, spin*, spin*, bool, bool, bool) const;
+    Complex Weight(const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool) const;
+    Complex Weight(int, const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool) const;
 
-protected:
+  protected:
     DeltaTArray _DeltaTWeight;
     SmoothTArray _SmoothTWeight;
     weight::SmoothTArray _MeasureWeight;
@@ -77,39 +77,39 @@ protected:
 };
 
 class Sigma {
-public:
-    Sigma(const Lattice&, real Beta, uint MaxTauBin, int MaxOrder,
+  public:
+    Sigma(const Lattice &, real Beta, uint MaxTauBin, int MaxOrder,
           TauSymmetry Symmetry = TauAntiSymmetric, real Norm = Norm::Weight());
     void BuildNew();
     void BuildTest();
 
     void Reset(real Beta);
-    bool FromDict(const Dictionary&);
+    bool FromDict(const Dictionary &);
     Dictionary ToDict();
 
-    void Measure(const Site&, const Site&, real, real, spin, spin,
-                 int Order, const Complex&);
+    void Measure(const Site &, const Site &, real, real, spin, spin,
+                 int Order, const Complex &);
     WeightEstimator Estimator;
 
-protected:
+  protected:
     IndexMapSPIN2 _Map;
 };
 
 class Polar {
-public:
-    Polar(const Lattice&, real Beta, uint MaxTauBin, int MaxOrder, real Norm = Norm::Weight());
+  public:
+    Polar(const Lattice &, real Beta, uint MaxTauBin, int MaxOrder, real Norm = Norm::Weight());
     void BuildNew();
     void BuildTest();
 
     void Reset(real Beta);
-    bool FromDict(const Dictionary&);
+    bool FromDict(const Dictionary &);
     Dictionary ToDict();
 
-    void Measure(const Site&, const Site&, real, real, spin*, spin*,
-                 int Order, const Complex&);
+    void Measure(const Site &, const Site &, real, real, spin *, spin *,
+                 int Order, const Complex &);
     WeightEstimator Estimator;
 
-protected:
+  protected:
     IndexMapSPIN4 _Map;
 };
 
