@@ -26,9 +26,10 @@ class Worm {
 
 class Norm {
   public:
+    static real NormFactor;
     static real Weight()
     {
-        return 100000.0;
+        return NormFactor;
     }
 };
 
