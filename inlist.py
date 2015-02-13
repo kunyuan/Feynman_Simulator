@@ -80,7 +80,6 @@ MonteCarlo["Markov"]={
     #Start from order 0, so that OrderReWeight has Order+1 elements
     "Sweep" : 10,
     "Toss" : 1000,
-    #"OrderReWeight" : [1.0, 0.1*1e-5, 0.5*1e-5, 0.1*1e-5],
     "OrderReWeight" : [1.0, 0.1, 0.5, 0.05],
     "SqueezeFactor" : 10.0,
     "WormSpaceReweight" : 0.05,
