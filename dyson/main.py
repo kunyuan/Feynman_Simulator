@@ -9,7 +9,6 @@ import collect
 from weight import UP,DOWN,IN,OUT
 import os, model, weight, measure, parameter, plot, argparse, time, traceback
 import plot, gc
-
 #def start_pdb(signal, trace):
     #import pdb
     #pdb.set_trace()
@@ -115,7 +114,8 @@ def Dyson(IsDysonOnly, IsNewCalculation, para, Map, Lat):
             else:
                 log.info("Collecting Sigma/Polar statistics...")
                 Statis=collect.CollectStatis(Map, ParaDyson["Order"])
-                Sigma, Polar=collect.UpdateWeight(Statis, ParaDyson["ErrorThreshold"], ParaDyson["OrderAccepted"])
+                Sigma, Polar, ParaDyson["OrderAccepted"]=collect.UpdateWeight(Statis,
+                        ParaDyson["ErrorThreshold"], ParaDyson["OrderAccepted"])
                 log.info("calculating G...")
                 G = calc.G_Dyson(G0, SigmaDeltaT, Sigma, Map)
             #######DYSON FOR W AND G###########################
@@ -159,8 +159,8 @@ def Dyson(IsDysonOnly, IsNewCalculation, para, Map, Lat):
             log.info(green("Memory Usage before collecting: {0} MB".format(memory_usage())))
             gc.collect()
             log.info(green("Memory Usage : {0} MB".format(memory_usage())))
-            if not IsDysonOnly and not IsNewCalculation:
-                time.sleep(ParaDyson["SleepTime"])
+            #if not IsDysonOnly and not IsNewCalculation:
+                #time.sleep(ParaDyson["SleepTime"])
 
 if __name__=="__main__":
     parser = argparse.ArgumentParser()

@@ -3,6 +3,7 @@ import numpy as np
 import os, sys, weight
 from logger import *
 import parameter as para
+from scipy.interpolate import LSQUnivariateSpline
 import traceback
 
 StatisFilePattern="_statis"
@@ -16,7 +17,6 @@ class CollectStatisFailure(Exception):
 
 def Smooth(x,y):
     """return: smoothed funciton s(x) and estimation of sigma of y for one data point"""
-    from scipy.interpolate import LSQUnivariateSpline
     #define segments to do spline smoothing
     t=np.linspace(0,len(x),3)[1:-1]
     sr = LSQUnivariateSpline(x, y.real, t)
@@ -33,51 +33,49 @@ class WeightEstimator():
         self.Norm=None
         self.Order=Order
 
-    def Copy(self):
-        """return a deep copy of Weight instance"""
-        import copy
-        return copy.deepcopy(self)
-
-    def Merge(self, _WeightEstimator):
+    def MergeFromDict(self, WeightDict):
+        datamat=WeightDict[self.__Weight.Name]
         """add data from another WeightEstimator"""
-        self.WeightAccu+=_WeightEstimator.WeightAccu
-        self.NormAccu+=_WeightEstimator.NormAccu
+        self.WeightAccu+=datamat['WeightAccu']
+        self.NormAccu+=datamat['NormAccu']
         if self.Norm is None:
-            self.Norm=_WeightEstimator.Norm
+            self.Norm=datamat['Norm']
         else:
-            Assert(self.Norm==_WeightEstimator.Norm, "Norm have to be the same to merge statistics")
-    
-    def GetNewOrderAccepted(self, Name, ErrorThreshold, OrderAccepted):
-        self.OrderWeight=self.WeightAccu/self.NormAccu*self.Norm
+            Assert(self.Norm==datamat['Norm'], "Norm have to be the same to merge statistics")
+
+    def UpdateWeight(self, Name, ErrorThreshold, OrderAccepted):
+        """ Weight accumulation data will be destroyed here to save memory!!!"""
         if abs(self.NormAccu)<1e-3:
             raise CollectStatisFailure("{0} 's NormAccu is 0.0!".format(Name))
+        self.WeightAccu*=1.0/self.NormAccu*self.Norm
+        self.NormAccu=0.0 #destroy accumulation data
+        self.OrderWeight=self.WeightAccu
         MaxTauBin=self.__Map.MaxTauBin
         x=range(0, MaxTauBin)
         Shape=self.OrderWeight.shape
         Average0 = np.average(abs(np.sum(self.OrderWeight[:,0,0,0,0,0,:], axis=0)))
         Info=[]
-        for orderindex in range(0, Shape[0]):
+        DimList=[]
+        for orderindex in xrange(Shape[0]):
             # Order Index is equal to real Order-1
-            RelativeError=0
-            for sp1 in range(Shape[1]):
-                for sub1 in range(Shape[2]):
-                    for sp2 in range(Shape[3]):
-                        for sub2 in range(Shape[4]):
-                            for vol in range(Shape[5]):
-                                y=self.OrderWeight[orderindex,sp1,sub1,sp2,sub2,vol, :]
-                                if not np.allclose(y, 0.0, 1e-10): 
-                                    smooth, sigma=Smooth(x, y)
-                                    relative=abs(sigma)/abs(Average0)
-                                    if abs(relative)>RelativeError:
-                                        RelativeError=relative
-                                        error=sigma
-                                        Original=y.copy()
-                                        Smoothed=smooth.copy()
-                                        Position=(orderindex,(sp1,sp2),(sub1,sub2),vol)
-                                    self.OrderWeight[orderindex,sp1,sub1,sp2,sub2,vol, :]=smooth
+            weight=self.OrderWeight[orderindex,...]
+            for index, _ in np.ndenumerate(weight[...,0]):
+                sp1, sub1, sp2, sub2, vol=index
+                RelativeError=0
+                y=weight[index] # y is a function of tau
+                if not np.allclose(y, 0.0, 1e-5): 
+                    smooth, sigma=Smooth(x, y)
+                    relative=abs(sigma)/abs(Average0)
+                    if relative>RelativeError:
+                        RelativeError=relative
+                        error=sigma
+                        Original=weight[index].copy()
+                        Position=(orderindex,sp1,sub1,sp2,sub2,vol)
+                    weight[index]=smooth
             State="Accepted with relative error {0:.2g}".format(RelativeError, ErrorThreshold)
             if RelativeError>=ErrorThreshold:
                 State="NOT "+State
+            Smoothed=self.OrderWeight[Position]
             Info.append([Name, x, Original, Smoothed, error, Position, State])
             log.info("Maximum at Order {0} is {1}".format(orderindex, RelativeError))
             if RelativeError>=ErrorThreshold:
@@ -86,38 +84,42 @@ class WeightEstimator():
         try:
             self.__Plot(Info)
         except:
+            raise
             log.warning("Failed to plot statistics of {0} at order {1}".format(Name, Position[0]))
         if orderindex+1>OrderAccepted:
             NewOrderAccepted=orderindex+1
         else:
             NewOrderAccepted=OrderAccepted
         log.info("OrderAccepted={0}".format(NewOrderAccepted))
-        return NewOrderAccepted
 
-    def GetWeight(self, OrderAccepted):
-        OrderIndex=OrderAccepted-1
+        OrderIndex=NewOrderAccepted-1
         Dict={self.__Weight.Name: np.sum(self.OrderWeight[:OrderIndex+1], axis=0)}
         self.__Weight.FromDict(Dict)
-        return self.__Weight
+        return self.__Weight, NewOrderAccepted
 
     def __Plot(self, Info):
         import matplotlib.pyplot as plt
+        color=plt.cm.rainbow(np.linspace(0,1,len(Info)))
         fig=plt.figure()
         ax1=plt.subplot(1, 2, 1)
         ax2=plt.subplot(1, 2, 2)
         InfoStr=""
-        for Name, x, y, smooth, sigma, Position, State in Info:
+        for i in range(len(Info)):
+            Name, x, y, smooth, sigma, Position, State=Info[i]
             mid=len(x)/2
             Order=Position[0]+1
-            ax1.plot(x, y.real, '+', x, smooth.real, '-')
+            ax1.plot(x, y.real, '+', c=color[i])
+            ax1.plot(x, smooth.real, '-k')
             ax1.errorbar(x[mid], smooth[mid].real, yerr=sigma.real,
-                    label="Error {0:.2g}".format(sigma.real))
+                    label="Error {0:.2g}".format(sigma.real), c=color[i],elinewidth=3)
             ax1.set_xlim([x[0],x[-1]])
-            ax2.plot(x, y.imag, '+', label="Order {0}/Sp:{1},Sub:{2},Coord:{3}".format(Order, 
-                     Position[1], Position[2], self.__Map.IndexToCoordi(Position[3])))
-            ax2.plot(x, smooth.imag, '-')
+            ax2.plot(x, y.imag, '+', c=color[i],
+                     label="Order {0}/Sp:{1},Sub:{2},Coord:{3}".format(Order, 
+                     (Position[1], Position[3]), (Position[2],Position[4]),
+                     self.__Map.IndexToCoordi(Position[5])))
+            ax2.plot(x, smooth.imag, '-k')
             ax2.errorbar(x[mid], smooth[mid].imag, yerr=sigma.imag, 
-                    label="Error {0:.2g}\n{1}".format(sigma.imag, State))
+                    label="Error {0:.2g}\n{1}".format(sigma.imag, State), c=color[i],elinewidth=3)
             ax2.set_xlim([x[0],x[-1]])
 
         ax1.legend(loc='best', fancybox=True, framealpha=0.5, prop={'size':6})
@@ -126,14 +128,6 @@ class WeightEstimator():
         ax2.set_xlabel("$\\tau_{bin}$")
         plt.savefig("{0}_Smoothed.pdf".format(Name))
         plt.close()
-
-    def FromDict(self, data):
-        datamat=data[self.__Weight.Name]
-        self.WeightAccu=datamat['WeightAccu']
-        self.NormAccu=datamat['NormAccu']
-        self.Norm=datamat['Norm']
-        self.OrderWeight=self.WeightAccu*self.NormAccu/self.Norm
-        self.__AssertShape(self.Shape, self.WeightAccu.shape)
 
     def ToDict(self):
         datatmp={}
@@ -157,8 +151,6 @@ def CollectStatis(_map, _order):
     SigmaSmoothT=WeightEstimator(Sigma, _order)
     Polar=weight.Weight("SmoothT", _map, "FourSpins", "Symmetric")
     PolarSmoothT=WeightEstimator(Polar, _order)
-    SigmaTemp=SigmaSmoothT.Copy()
-    PolarTemp=PolarSmoothT.Copy()
     _FileList=GetFileList()
     if len(_FileList)==0:
         raise CollectStatisFailure("No statistics files to read!") 
@@ -169,10 +161,8 @@ def CollectStatis(_map, _order):
         try:
             log.info("Merging {0} ...".format(f));
             Dict=IO.LoadBigDict(f)
-            SigmaTemp.FromDict(Dict['Sigma']['Histogram'])
-            PolarTemp.FromDict(Dict['Polar']['Histogram'])
-            SigmaSmoothT.Merge(SigmaTemp)
-            PolarSmoothT.Merge(PolarTemp)
+            SigmaSmoothT.MergeFromDict(Dict['Sigma']['Histogram'])
+            PolarSmoothT.MergeFromDict(Dict['Polar']['Histogram'])
         except:
             log.info("Fails to merge\n {0}".format(traceback.format_exc()))
         else:
@@ -184,15 +174,14 @@ def CollectStatis(_map, _order):
 
 def UpdateWeight(StatisCollected, ErrorThreshold, OrderAccepted):
     SigmaSmoothT, PolarSmoothT=StatisCollected
-    SigmaOrder=SigmaSmoothT.GetNewOrderAccepted("Sigma", ErrorThreshold, OrderAccepted)
-    PolarOrder=PolarSmoothT.GetNewOrderAccepted("Polar", ErrorThreshold, OrderAccepted)
+    Sigma,SigmaOrder=SigmaSmoothT.UpdateWeight("Sigma", ErrorThreshold, OrderAccepted["Sigma"])
+    Polar,PolarOrder=PolarSmoothT.UpdateWeight("Polar", ErrorThreshold, OrderAccepted["Polar"])
     log.info("Accepted Sigma order : {0}; Accepted Polar order : {1}".
             format(SigmaOrder, PolarOrder))
-    Sigma=SigmaSmoothT.GetWeight(SigmaOrder)
-    Polar=PolarSmoothT.GetWeight(PolarOrder)
     if SigmaOrder==0 or PolarOrder==0:
         raise CollectStatisFailure("Either Sigma or Polar's OrderAccepted is still zero!")
-    return Sigma, Polar
+    OrderAccepted={"Sigma": SigmaOrder, "Polar": PolarOrder}
+    return Sigma, Polar, OrderAccepted
 
 if __name__=="__main__":
     WeightPara={"NSublat": 1, "L":[4, 4],

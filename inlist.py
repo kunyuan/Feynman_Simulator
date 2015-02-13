@@ -28,12 +28,12 @@ Dyson={
     "__KeepCPUBusy": False,
     },
 "Job": {
-    "DysonOnly": MonteCarlo["Control"]["__Duplicate"]==0
-    #"DysonOnly": False
+    #"DysonOnly": MonteCarlo["Control"]["__Duplicate"]==0
+    "DysonOnly": False
     }
 }
 
-beta=1.0
+beta=10.0
 Order=3
 Common={
 "Tau": {
@@ -84,7 +84,7 @@ MonteCarlo["Markov"]={
     "SqueezeFactor" : 10.0,
     "WormSpaceReweight" : 0.05,
     "PolarReweight" : 2.0,
-    "OrderTimeRatio" : [1.0, 1.0, 2.0, 10.0],
+    "OrderTimeRatio" : [1.0, 1.0, 1.0, 1.0],
     "Timer": {
         "PrinterTimer": 60,
         "DiskWriterTimer": 60,
