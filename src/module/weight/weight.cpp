@@ -39,11 +39,11 @@ weight::Weight::~Weight()
 *  @param order     order
 */
 
-bool weight::Weight::BuildNew(flag _flag, const ParaMC& para)
+bool weight::Weight::BuildNew(flag _flag, const ParaMC &para)
 {
     //NormFactor only consider Vol, not beta, since beta can be changing during annealing
-    Norm::NormFactor = para.Lat.Vol*para.Lat.SublatVol;
-    
+    Norm::NormFactor = para.Lat.Vol * para.Lat.SublatVol;
+
     if (para.Order == 0)
         ABORT("Order can not be zero!!!");
     //GW can only be loaded
@@ -55,7 +55,7 @@ bool weight::Weight::BuildNew(flag _flag, const ParaMC& para)
     return true;
 }
 
-void weight::Weight::Anneal(const ParaMC& para)
+void weight::Weight::Anneal(const ParaMC &para)
 {
     G->Reset(para.Beta);
     W->Reset(para.Beta);
@@ -63,8 +63,11 @@ void weight::Weight::Anneal(const ParaMC& para)
     Polar->Reset(para.Beta);
 }
 
-bool weight::Weight::FromDict(const Dictionary& dict, flag _flag, const para::ParaMC& para)
+bool weight::Weight::FromDict(const Dictionary &dict, flag _flag, const para::ParaMC &para)
 {
+    //NormFactor only consider Vol, not beta, since beta can be changing during annealing
+    Norm::NormFactor = para.Lat.Vol * para.Lat.SublatVol;
+
     if (_flag & weight::GW) {
         _AllocateGW(para);
         G->FromDict(dict.Get<Dictionary>("G"));
@@ -91,7 +94,7 @@ Dictionary weight::Weight::ToDict(flag _flag)
     return dict;
 }
 
-void weight::Weight::SetTest(const ParaMC& para)
+void weight::Weight::SetTest(const ParaMC &para)
 {
     _AllocateGW(para);
     _AllocateSigmaPolar(para);
@@ -99,7 +102,7 @@ void weight::Weight::SetTest(const ParaMC& para)
     W->BuildTest();
 }
 
-void weight::Weight::SetDiagCounter(const ParaMC& para)
+void weight::Weight::SetDiagCounter(const ParaMC &para)
 {
     _AllocateGW(para);
     _AllocateSigmaPolar(para);
@@ -107,7 +110,7 @@ void weight::Weight::SetDiagCounter(const ParaMC& para)
     W->BuildTest();
 }
 
-void weight::Weight::_AllocateGW(const ParaMC& para)
+void weight::Weight::_AllocateGW(const ParaMC &para)
 {
     //make sure old Sigma/Polar/G/W are released before assigning new memory
     delete G;
@@ -117,7 +120,7 @@ void weight::Weight::_AllocateGW(const ParaMC& para)
     W = new weight::W(para.Lat, para.Beta, para.MaxTauBin);
 }
 
-void weight::Weight::_AllocateSigmaPolar(const ParaMC& para)
+void weight::Weight::_AllocateSigmaPolar(const ParaMC &para)
 {
     auto symmetry = _IsAllSymmetric ? TauSymmetric : TauAntiSymmetric;
     delete Sigma;
