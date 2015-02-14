@@ -23,7 +23,7 @@ def PlotTime(weight, SpinIn, SubIn, SpinOut, SubOut, Vol, DoesSave=True):
     plt.figure()
     plt.plot(x,weight.Data[SpinIn, SubIn, SpinOut, SubOut, Vol,:],'-')
     if DoesSave:
-        plt.savefig("time.jpg")
+        plt.savefig("time.png")
     else:
         plt.show()
     plt.close()

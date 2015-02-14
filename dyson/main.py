@@ -62,6 +62,7 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
             Observable.Save(OutputFile)
             #plot what you are interested in
             plot.PlotChiAlongPath(Chi, Lat)
+            plot.PlotTime(G, UP, 0, UP, 0, 0)
             #plot.PlotSpatial(Chi, Lat, 0, 0, 0) 
             plot.PlotChi_2D(Chi, Lat)
         except:
@@ -159,8 +160,8 @@ def Dyson(IsDysonOnly, IsNewCalculation, para, Map, Lat):
             log.info(green("Memory Usage before collecting: {0} MB".format(memory_usage())))
             gc.collect()
             log.info(green("Memory Usage : {0} MB".format(memory_usage())))
-            #if not IsDysonOnly and not IsNewCalculation:
-                #time.sleep(ParaDyson["SleepTime"])
+            if not IsDysonOnly and not IsNewCalculation:
+                time.sleep(ParaDyson["SleepTime"])
 
 if __name__=="__main__":
     parser = argparse.ArgumentParser()

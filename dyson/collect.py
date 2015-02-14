@@ -56,12 +56,12 @@ class WeightEstimator():
         Average0 = np.average(abs(np.sum(self.OrderWeight[:,0,0,0,0,0,:], axis=0)))
         Info=[]
         DimList=[]
-        for orderindex in xrange(Shape[0]):
+        for order in xrange(1,Shape[0]+1):
             # Order Index is equal to real Order-1
-            weight=self.OrderWeight[orderindex,...]
+            RelativeError=0.0
+            weight=self.OrderWeight[order-1,...]
             for index, _ in np.ndenumerate(weight[...,0]):
                 sp1, sub1, sp2, sub2, vol=index
-                RelativeError=0
                 y=weight[index] # y is a function of tau
                 if not np.allclose(y, 0.0, 1e-5): 
                     smooth, sigma=Smooth(x, y)
@@ -70,30 +70,27 @@ class WeightEstimator():
                         RelativeError=relative
                         error=sigma
                         Original=weight[index].copy()
-                        Position=(orderindex,sp1,sub1,sp2,sub2,vol)
-                    weight[index]=smooth
+                        Smoothed=smooth.copy()
+                        Position=(order,sp1,sub1,sp2,sub2,vol)
+                    #weight[index]=smooth
+            log.info("Maximum at Order {0} is {1}".format(order, RelativeError))
+            IsAccpted=RelativeError<ErrorThreshold or order<=OrderAccepted
             State="Accepted with relative error {0:.2g}".format(RelativeError, ErrorThreshold)
-            if RelativeError>=ErrorThreshold:
+            if not IsAccpted:
                 State="NOT "+State
-            Smoothed=self.OrderWeight[Position]
             Info.append([Name, x, Original, Smoothed, error, Position, State])
-            log.info("Maximum at Order {0} is {1}".format(orderindex, RelativeError))
-            if RelativeError>=ErrorThreshold:
-                orderindex -= 1
+            if not IsAccpted:
+                order-=1
                 break
         try:
             self.__Plot(Info)
         except:
             raise
             log.warning("Failed to plot statistics of {0} at order {1}".format(Name, Position[0]))
-        if orderindex+1>OrderAccepted:
-            NewOrderAccepted=orderindex+1
-        else:
-            NewOrderAccepted=OrderAccepted
+        NewOrderAccepted=order
         log.info("OrderAccepted={0}".format(NewOrderAccepted))
 
-        OrderIndex=NewOrderAccepted-1
-        Dict={self.__Weight.Name: np.sum(self.OrderWeight[:OrderIndex+1], axis=0)}
+        Dict={self.__Weight.Name: np.sum(self.OrderWeight[:NewOrderAccepted], axis=0)}
         self.__Weight.FromDict(Dict)
         return self.__Weight, NewOrderAccepted
 
@@ -107,14 +104,13 @@ class WeightEstimator():
         for i in range(len(Info)):
             Name, x, y, smooth, sigma, Position, State=Info[i]
             mid=len(x)/2
-            Order=Position[0]+1
             ax1.plot(x, y.real, '+', c=color[i])
             ax1.plot(x, smooth.real, '-k')
             ax1.errorbar(x[mid], smooth[mid].real, yerr=sigma.real,
                     label="Error {0:.2g}".format(sigma.real), c=color[i],elinewidth=3)
             ax1.set_xlim([x[0],x[-1]])
             ax2.plot(x, y.imag, '+', c=color[i],
-                     label="Order {0}/Sp:{1},Sub:{2},Coord:{3}".format(Order, 
+                    label="Order {0}/Sp:{1},Sub:{2},Coord:{3}".format(Position[0], 
                      (Position[1], Position[3]), (Position[2],Position[4]),
                      self.__Map.IndexToCoordi(Position[5])))
             ax2.plot(x, smooth.imag, '-k')

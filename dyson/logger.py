@@ -8,7 +8,7 @@ parentdir = os.path.dirname(currentdir)
 sys.path.insert(0,parentdir) 
 #add parentdir into PYTHONPATH, where IO module can be found
 import IO
-from memory_profiler import profile
+#from memory_profiler import profile
 workspace = parentdir
 
 log = logging.getLogger()
