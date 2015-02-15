@@ -65,8 +65,9 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
             plot.PlotChiAlongPath(Chi, Lat)
             plot.PlotTime("G", G, UP, 0, UP, 0, 0)
             plot.PlotTime("G0", G0, UP, 0, UP, 0, 0)
-            #plot.PlotSpatial(Chi, Lat, 0, 0, 0) 
+            #plot.PlotSpatial(Chi, Lat, 0, 0) 
             plot.PlotChi_2D(Chi, Lat)
+            PlotWeightvsR("\chi", Chi,l,0,0)
         except:
             log.info("Output fails due to\n {0}".format(traceback.format_exc()))
 

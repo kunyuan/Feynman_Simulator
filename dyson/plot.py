@@ -7,6 +7,7 @@ if "DISPLAY" not in os.environ:
     log.info("no DISPLAY detected, switch to Agg backend!")
     matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from scipy.optimize import curve_fit
 
 def PlotArray(array, Beta, Name, DoesSave=True):
     x=np.linspace(0, Beta, len(array))
@@ -26,44 +27,77 @@ def PlotTime(Name, weight, SpinIn, SubIn, SpinOut, SubOut, Vol, DoesSave=True):
     ax1=plt.subplot(121)
     ax1.plot(x,weight.Data[SpinIn, SubIn, SpinOut, SubOut, Vol,:].real,'-')
     ax1.set_xlabel("$\\tau$")
-    ax1.set_title("Real part")
+    ax1.set_ylabel("{0}.real".format(Name))
     ax2=plt.subplot(122)
     ax2.plot(x,weight.Data[SpinIn, SubIn, SpinOut, SubOut, Vol,:].imag,'-')
     ax2.set_xlabel("$\\tau$")
-    ax2.set_title("Imag part")
+    ax1.set_ylabel("{0}.imag".format(Name))
     if DoesSave:
         plt.savefig("{0}.pdf".format(Name))
     else:
         plt.show()
     plt.close()
 
-def PlotSpatial(weight, lattice, SpinIn, SpinOut, Tau=0, DoesSave=True):
-    OriginalSubLat=2
-    if lattice.Dim>2:
-        log.warning("Can not plot for Dimension>3!")
-        return
+def PlotSpatial(weight, lattice, SpinIn, SpinOut, DoesSave=True):
+    Omega=0
+    OriginalSubLat=0
+    coord3=0
     weight.FFT("R","W")
-    map=weight.Map
     x=[]
     y=[]
     z=[]
     points, _=lattice.GetSitesList()
     for vec, coord, sub in points:
-        x.append(vec[0])
-        y.append(vec[1])
-        if coord[0]==coord[1]==0 and sub==OriginalSubLat:
-            z.append(0.0)
-        else:
-            z.append(weight.Data[SpinIn,OriginalSubLat,SpinOut,sub,map.CoordiIndex(coord),map.TauIndex(0.0,Tau)].real)
+        if lattice.Dim==2 or (lattice.Dim==3 and coord[2]==0):
+            x.append(vec[0])
+            y.append(vec[1])
+            if coord[0]==coord[1]==0 and sub==OriginalSubLat:
+                z.append(0.0)
+            else:
+                z.append(weight.Data[SpinIn,OriginalSubLat,SpinOut,sub,
+                    weight.Map.CoordiIndex(coord),Omega].real)
     log.info("Max:{0}, Min: {1}".format(max(z), min(z)))
     plt.figure()
     plt.scatter(x,y,c=z, s=10, edgecolor="black", linewidth=0,vmin=-7, vmax=7)
     c = plt.colorbar(orientation='horizontal')
     c.set_label("magnitude")
     plt.axis('equal')
-    #plt.show()
     if DoesSave:
-        plt.savefig("spatial_sub{0}.png".format(OriginalSubLat))
+        plt.savefig("spatial_sub{0}.pdf".format(OriginalSubLat))
+    else:
+        plt.show()
+    plt.close()
+
+def Exp(t, a, b):
+    return a*np.exp(-b*np.array(t))
+def PlotWeightvsR(Name, weight, lattice, SpinIn, SpinOut, Tau=0, DoesSave=True):
+    Omega=0
+    OriginalSubLat=0
+    coord3=0
+    weight.FFT("R","W")
+    x=[]
+    y=[]
+    z=[]
+    points, _=lattice.GetSitesList(HasOffset=False)
+    for vec, coord, sub in points:
+        if not all(v == 0 for v in coord) and all(v<l/2 for v,l in zip(coord, lattice.L)):
+            x.append(np.linalg.norm(vec))
+            y.append(abs(weight.Data[SpinIn, OriginalSubLat, SpinOut, sub,
+                weight.Map.CoordiIndex(coord), Omega]))
+    #sort x,y according to the distance in x
+    x,y = (list(x) for x in zip(*sorted(zip(x, y), key=lambda pair: pair[0])))
+    #fitting
+    #fitParams, fitCovariances = curve_fit(Exp, x, y)
+    plt.figure()
+    plt.plot(x,y, "o")
+    #plt.plot(x, Exp(x, fitParams[0], fitParams[1]), '-',
+            #label="fit with ${0}exp(-R/{1}a)$".format(fitParams[0], 1.0/fitParams[1]))
+    plt.yscale("log")
+    plt.xlabel("$R/a$")
+    plt.ylabel("$|{0}(\omega={1})|$".format(Name,Omega))
+    #plt.legend()
+    if DoesSave:
+        plt.savefig("WeightvsR.pdf")
     else:
         plt.show()
     plt.close()
@@ -73,7 +107,6 @@ def PlotChiAlongPath(Chi, lat, DoesSave=True):
     map=Chi.Map
     Chi.FFT("R", "W")
     fig=plt.figure(figsize=(20, 10))
-    #fig=plt.figure()
     for BZcenter in lat.IndependtBZCenter:
         x=[]
         KList=[]
@@ -189,10 +222,10 @@ def PlotChi_2D(Chi, lat, DoesSave=True):
             for k in range(-2*lat.L[2], 2*lat.L[2]+1):
                 KList_hhl.append((i*2*np.pi/lat.L[0],i*2*np.pi/lat.L[1],k*2*np.pi/lat.L[2]))
 
-        k_hl0, ChiK_hl0=lat.FourierTransformation(Chi.Data[0,:,0,:,:,omega]*map.Beta/map.MaxTauBin, KList_hl0, "Real")
-
-        k_hhl, ChiK_hhl=lat.FourierTransformation(Chi.Data[0,:,0,:,:,omega]*map.Beta/map.MaxTauBin, KList_hhl, "Real")
-
+        k_hl0, ChiK_hl0=lat.FourierTransformation(Chi.Data[0,:,0,:,:,omega]*map.Beta/map.MaxTauBin,
+                KList_hl0, "Real")
+        k_hhl, ChiK_hhl=lat.FourierTransformation(Chi.Data[0,:,0,:,:,omega]*map.Beta/map.MaxTauBin,
+                KList_hhl, "Real")
         x_hl0=[]
         y_hl0=[]
         for e in k_hl0:
@@ -237,7 +270,7 @@ def PlotChi_2D(Chi, lat, DoesSave=True):
         c.set_label("magnitude")
         plt.axis('equal')
         if DoesSave:
-            plt.savefig("chiK_{0}.png".format(lat.Name))
+            plt.savefig("chiK_{0}.pdf".format(lat.Name))
         else:
             plt.show()
         plt.close()
@@ -252,7 +285,7 @@ if __name__=="__main__":
     import IO
 
     WeightPara={"NSublat": 4, "L":[8,8,8],
-            "Beta": 3.0, "MaxTauBin":64}
+            "Beta": 1.5, "MaxTauBin":64}
     Map=weight.IndexMap(**WeightPara)
     l=lat.Lattice("Pyrochlore", Map)
 
@@ -261,4 +294,5 @@ if __name__=="__main__":
 
     PlotChiAlongPath(Chi, l)
     PlotChi_2D(Chi, l)
+    PlotWeightvsR("\chi", Chi,l,0,0)
 
