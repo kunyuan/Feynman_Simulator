@@ -25,6 +25,12 @@ class Observable:
             StagKIndex=self.__Map.CoordiIndex([e/2 for e in self.__Map.L])
             self.Append("UnifChi", Chi.Data[0,0,0,0,0,0]*Factor)
             self.Append("StagChi", Chi.Data[0,0,0,0,StagKIndex,0]*Factor)
+
+            Chi.FFT("R", "W")
+            self.Append("UnifChi1", 
+                    self.__Lat.FourierTransformation(Chi.Data[0,:,0,:,:,0]*Factor,
+                        [(0.0,0.0,0.0),],"Real")[1][0])
+
             Chi.FFT("R","T")
             energy=np.zeros(self.__Map.MaxTauBin)
             for i in range(self.__Lat.NSublat):

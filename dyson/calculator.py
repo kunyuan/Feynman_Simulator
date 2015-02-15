@@ -173,14 +173,11 @@ def Calculate_Chi(ChiTensor, map):
     SzSz[UU, UU]= SzSz[DD, DD]=1
     SzSz[UU, DD]= SzSz[DD, UU]=-1
     Chi=weight.Weight("SmoothT", map, "NoSpin", "Symmetric", ChiTensor.SpaceDomain, ChiTensor.TimeDomain)
-    Chi_ss=[Chi.Copy(), Chi.Copy(), Chi.Copy()]
+    Chi.Data=0.0
     SS=[SxSx/4.0, SySy/4.0, SzSz/4.0]
     for i in range(3):
         temp=np.einsum("ik, kminvt->mnvt", SS[i], ChiTensor.Data)
-        Chi_ss[i].Data=temp.reshape([1, NSublat, 1, NSublat, map.Vol, map.MaxTauBin]) 
-    Chi.Data=Chi_ss[0].Data+Chi_ss[1].Data+Chi_ss[2].Data
-    #Chi.Data=np.einsum("ik, kminvt->mnvt", SS[2], ChiTensor.Data)*3
-    Chi.Data=Chi.Data.reshape([1, NSublat, 1, NSublat, map.Vol, map.MaxTauBin]) 
+        Chi.Data+=temp.reshape([1, NSublat, 1, NSublat, map.Vol, map.MaxTauBin]) 
     return Chi
 
 class DenorminatorTouchZero(Exception):

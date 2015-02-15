@@ -18,12 +18,21 @@ def PlotArray(array, Beta, Name, DoesSave=True):
         plt.show()
     plt.close()
 
-def PlotTime(weight, SpinIn, SubIn, SpinOut, SubOut, Vol, DoesSave=True):
+def PlotTime(Name, weight, SpinIn, SubIn, SpinOut, SubOut, Vol, DoesSave=True):
     x=np.linspace(0, weight.Map.Beta, weight.Map.MaxTauBin)
-    plt.figure()
-    plt.plot(x,weight.Data[SpinIn, SubIn, SpinOut, SubOut, Vol,:],'-')
+    plt.figure(1)
+    plt.suptitle("{0}, Spin ({1},{2}), Sublat ({3},{4}), Coordinates: {5}".format(Name,
+        SpinIn, SpinOut, SubIn, SubOut, weight.Map.IndexToCoordi(Vol)))
+    ax1=plt.subplot(121)
+    ax1.plot(x,weight.Data[SpinIn, SubIn, SpinOut, SubOut, Vol,:].real,'-')
+    ax1.set_xlabel("$\\tau$")
+    ax1.set_title("Real part")
+    ax2=plt.subplot(122)
+    ax2.plot(x,weight.Data[SpinIn, SubIn, SpinOut, SubOut, Vol,:].imag,'-')
+    ax2.set_xlabel("$\\tau$")
+    ax2.set_title("Imag part")
     if DoesSave:
-        plt.savefig("time.png")
+        plt.savefig("{0}.pdf".format(Name))
     else:
         plt.show()
     plt.close()

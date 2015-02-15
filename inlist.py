@@ -8,7 +8,7 @@ SLEEP = 1    #check job status for every SLEEP seconds
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" :  3,
+    "__Duplicate" :  0,
     "__IsCluster" : False, 
     "__AutoRun" : True,
     "__KeepCPUBusy": True,
@@ -33,7 +33,7 @@ Dyson={
     }
 }
 
-beta=5.0
+beta=3.0
 Order=3
 Common={
 "Tau": {
@@ -105,8 +105,8 @@ Dyson["Dyson"]={
     "SleepTime": 40,
     #"SleepTime": 150,
     "Annealing": {
-        "DeltaField": [0.3, -0.3, 0.3, -0.3],
-        "Interval": [-0.05, +0.05, -0.05, +0.05]
+        "DeltaField": [0.5, 0.5, 0.5, 0.5],
+        "Interval": [-0.1, -0.1, -0.1, -0.1]
         }
     }
 

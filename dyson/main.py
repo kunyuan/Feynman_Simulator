@@ -28,6 +28,7 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     Polar.FFT("R","T")
     W0.FFT("R")
     W.FFT("R","T")
+    G0.FFT("R","T")
     G.FFT("R","T")
     SigmaDeltaT.FFT("R")
     Sigma.FFT("R","T")
@@ -62,7 +63,8 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
             Observable.Save(OutputFile)
             #plot what you are interested in
             plot.PlotChiAlongPath(Chi, Lat)
-            plot.PlotTime(G, UP, 0, UP, 0, 0)
+            plot.PlotTime("G", G, UP, 0, UP, 0, 0)
+            plot.PlotTime("G0", G0, UP, 0, UP, 0, 0)
             #plot.PlotSpatial(Chi, Lat, 0, 0, 0) 
             plot.PlotChi_2D(Chi, Lat)
         except:
@@ -189,6 +191,7 @@ if __name__=="__main__":
     OutputFile=job["OutputFile"]
     global StatisFile
     StatisFile=os.path.join(workspace, "statis_total")
+    parameter.Save(ParaFile, para)  #Save Parameters
 
     IsNewCalculation=not os.path.exists(WeightFile+".hkl")
     if not IsNewCalculation: 
