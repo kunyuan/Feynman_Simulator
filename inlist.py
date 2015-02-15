@@ -34,7 +34,7 @@ Dyson={
 }
 
 beta=1.5
-Order=1
+Order=2
 Common={
 "Tau": {
     "MaxTauBin" : 64,
@@ -86,10 +86,10 @@ MonteCarlo["Markov"]={
     "PolarReweight" : 2.0,
     "OrderTimeRatio" : [1.0, 1.0, 2.0, 4.0],
     "Timer": {
-        "PrinterTimer": 50,
-        "DiskWriterTimer": 40,
-        "MessageTimer": 60,
-        "ReweightTimer":120
+        "PrinterTimer": 20,
+        "DiskWriterTimer": 20,
+        "MessageTimer": 30,
+        "ReweightTimer":60
         #"PrinterTimer": 150,
         #"DiskWriterTimer": 280,
         #"MessageTimer": 300,
@@ -102,8 +102,7 @@ Dyson["Dyson"]={
     "OrderAccepted": 1,
     "ErrorThreshold": 0.1,
     "BetaIncrease": 0.0,
-    "SleepTime": 50,
-    #"SleepTime": 150,
+    "SleepTime": 25,
     "Annealing": {
         "DeltaField": [0.5, -0.5, 0.5, -0.5],
         "Interval": [-0.1, 0.1, -0.1, 0.1]
