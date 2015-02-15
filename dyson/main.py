@@ -197,10 +197,10 @@ if __name__=="__main__":
     IsNewCalculation=not os.path.exists(WeightFile+".hkl")
     if not IsNewCalculation: 
         try:
-            log.info(green("Load previous DYSHON_para file"))
+            log.info(green("Try to load previous DYSHON_para file"))
             para=parameter.LoadPara(ParaFile)
         except:
-            log.warning(red("Previous DYSHON_para file, use _in_DYSON_ file as para instead"))
+            log.warning(red("Previous DYSHON_para file does not exist, use _in_DYSON_ file as para instead"))
 
     WeightPara={"NSublat": para["Lattice"]["NSublat"], "L":para["Lattice"]["L"],
                 "Beta": float(para["Tau"]["Beta"]), "MaxTauBin": para["Tau"]["MaxTauBin"]}
