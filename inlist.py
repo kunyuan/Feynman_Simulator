@@ -81,6 +81,7 @@ MonteCarlo["Markov"]={
     "Sweep" : 10,
     "Toss" : 1000,
     "OrderReWeight" : [100.0, 0.5, 1.0, 0.1, 0.05, 0.05, 0.01, 0.005],
+    #"OrderReWeight" : [1.0, 0.005, 0.01, 0.001, 0.0005, 0.0005, 0.0001, 0.00005],
     "SqueezeFactor" : 10.0,
     "WormSpaceReweight" : 0.05,
     "PolarReweight" : 2.0,

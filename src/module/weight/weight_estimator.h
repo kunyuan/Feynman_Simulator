@@ -27,7 +27,7 @@ public:
     //(as for now, reweighted weight function is set to be the unreweighted weight function)
     void Anneal(real Beta);
 
-    void MeasureNorm();
+    void MeasureNorm(real weight);
     void Measure(uint WeightIndex, int Order, Complex Weight);
 
     void ClearStatistics();
