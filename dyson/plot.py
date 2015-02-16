@@ -176,6 +176,8 @@ def PlotChi_2D(Chi, lat, DoesSave=True):
         plt.figure(1)
         ax1=plt.subplot(121,aspect='equal')
         plt.scatter(x_hhl,y_hhl,c=ChiK_hhl, s=10, edgecolor="black", linewidth=0)
+        plt.xlim(-40, 40)
+        plt.ylim(-50, 50)
 
         PI2=2*np.pi
         sqrt2 = np.sqrt(2.0)

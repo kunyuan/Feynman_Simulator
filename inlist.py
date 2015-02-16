@@ -8,7 +8,7 @@ SLEEP = 1    #check job status for every SLEEP seconds
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" :  1,
+    "__Duplicate" :  0,
     "__IsCluster" : False, 
     "__AutoRun" : True,
     "__KeepCPUBusy": True,
@@ -33,8 +33,8 @@ Dyson={
     }
 }
 
-beta=3.0
-Order=7
+beta=1.5
+Order=1
 Common={
 "Tau": {
     "MaxTauBin" : 64,
@@ -52,12 +52,12 @@ Common={
     #"Name": "Kagome",
     #"NSublat": 3,
     #"L": [16,16],
-    "Name": "Cubic",
-    "NSublat": 1,
-    "L": [8,8,8],
-    #"Name": "Pyrochlore",
-    #"NSublat": 4,
-    #"L": [8,8,8]
+    #"Name": "Cubic",
+    #"NSublat": 1,
+    #"L": [8,8,8],
+    "Name": "Pyrochlore",
+    "NSublat": 4,
+    "L": [8,8,8]
     #"Name": "Checkboard",
     #"NSublat": 2,
     #"L": [8,8]
@@ -102,7 +102,7 @@ Dyson["Dyson"]={
     "SleepTime": 40,
     "Annealing": {
         "DeltaField": [0.0, 0.0, 0.0, 0.0],
-        "Interval": [-0.1, -0.1, -0.0, -0.0]
+        "Interval": [-0.1, -0.1, -0.1, -0.1]
         }
     }
 
