@@ -24,25 +24,21 @@ def Smooth(x,y):
     return sr(x)+si(x)*1j, (sr.get_residual()/len(x))**0.5+(si.get_residual()/len(x))**0.5*1j
 
 class WeightEstimator():
-    def __init__(self, Weight, Order): 
-        self.Shape=[Order,]+Weight.Shape
+    def __init__(self, Weight): 
         self.__Map=Weight.Map
         self.__Weight=Weight
-        self.WeightAccu=np.zeros(self.Shape, dtype=complex)
-        self.NormAccu=0.0
-        self.Norm=None
-        self.Order=Order
 
     def MergeFromDict(self, WeightDict):
         """add data from another WeightEstimator, work even if order WeightDict is smaller than MaxOrder"""
         datamat=WeightDict[self.__Weight.Name]
-        orderindex=datamat["WeightAccu"].shape[0]
-        self.WeightAccu[:orderindex,...]+=datamat['WeightAccu']
-        self.NormAccu+=datamat['NormAccu']
-        if self.Norm is None:
-            self.Norm=datamat['Norm']
-        else:
+        if hasattr(self, "Norm"):
+            self.WeightAccu+=datamat['WeightAccu']
+            self.NormAccu+=datamat['NormAccu']
             Assert(self.Norm==datamat['Norm'], "Norm have to be the same to merge statistics")
+        else:
+            self.Norm=datamat['Norm']
+            self.NormAccu=datamat['NormAccu']
+            self.WeightAccu=datamat['WeightAccu']
 
     def UpdateWeight(self, Name, ErrorThreshold, OrderAccepted):
         """ Weight accumulation data will be destroyed here to save memory!!!"""
@@ -78,12 +74,13 @@ class WeightEstimator():
                         Position=(order,sp1,sub1,sp2,sub2,vol)
                         #if relative>0.05:
                             #weight[index]=smooth  #use smoothed function instead if the noise is larger than 5%
-            log.info("Maximum RelativeError at Order {0} is {1}".format(order, RelativeError))
+            log.info("RelativeError at Order {0} is {1}".format(order, RelativeError))
             IsAccpted=RelativeError<ErrorThreshold or order<=OrderAccepted
             State="Accepted with relative error {0:.2g}".format(RelativeError, ErrorThreshold)
             if not IsAccpted:
                 State="NOT "+State
             Info.append([Name, x, Original, Smoothed, error, Position, State])
+            log.info("{0},Threshold {1}".format(State, ErrorThreshold))
             if not IsAccpted:
                 order-=1
                 break
@@ -147,11 +144,11 @@ def GetFileList():
     StatisFileList=[os.path.join(workspace, f) for f in FileList if f.find(StatisFilePattern) is not -1]
     return StatisFileList
 
-def CollectStatis(_map, _order):
+def CollectStatis(_map):
     Sigma=weight.Weight("SmoothT", _map, "TwoSpins", "AntiSymmetric")
-    SigmaSmoothT=WeightEstimator(Sigma, _order)
+    SigmaSmoothT=WeightEstimator(Sigma)
     Polar=weight.Weight("SmoothT", _map, "FourSpins", "Symmetric")
-    PolarSmoothT=WeightEstimator(Polar, _order)
+    PolarSmoothT=WeightEstimator(Polar)
     _FileList=GetFileList()
     if len(_FileList)==0:
         raise CollectStatisFailure("No statistics files to read!") 
@@ -187,10 +184,8 @@ def UpdateWeight(StatisCollected, ErrorThreshold, OrderAccepted):
 if __name__=="__main__":
     WeightPara={"NSublat": 1, "L":[4, 4],
                 "Beta": 0.5, "MaxTauBin":128}
-    Order=3
     map=weight.IndexMap(**WeightPara)
-
-    SigmaSmoothT, PolarSmoothT=CollectStatis(map, Order)
+    SigmaSmoothT, PolarSmoothT=CollectStatis(map)
 
     data ={}
     data["Sigma"] = {"Histogram": SigmaSmoothT.ToDict()}

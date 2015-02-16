@@ -32,8 +32,6 @@ bool Parameter::_FromDict(const Dictionary& Para)
     GET_WITH_DEFAULT(Para, Version, 0);
     auto _para = Para.Get<Dictionary>("Tau");
     GET(_para, Beta);
-    GET(_para, DeltaBeta);
-    GET(_para, FinalBeta);
     GET(_para, MaxTauBin);
     _para = Para.Get<Dictionary>("Lattice");
     GET(_para, NSublat);
@@ -45,7 +43,6 @@ bool Parameter::_FromDict(const Dictionary& Para)
     Lat.Initialize(L, NSublat);
     T = 1.0 / Beta;
 
-    ASSERT_ALLWAYS(Beta <= FinalBeta, "Beta should be <= Final Beta");
     return true;
 }
 Dictionary Parameter::_ToDict()
@@ -56,8 +53,6 @@ Dictionary Parameter::_ToDict()
     Para["Lattice"] = _para;
     _para.Clear();
     SET(_para, Beta);
-    SET(_para, DeltaBeta);
-    SET(_para, FinalBeta);
     SET(_para, MaxTauBin);
     Para["Tau"] = _para;
     SET(Para, Version);
@@ -131,8 +126,6 @@ void ParaMC::SetTest()
     L = Vec<int>(size);
     Lat = Lattice(L, NSublat);
     Beta = 1.0;
-    DeltaBeta = 0.0;
-    FinalBeta = 1.0;
     Beta = 1.0;
     Order = 1;
     OrderReWeight = { 1, 1 };
