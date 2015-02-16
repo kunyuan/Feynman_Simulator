@@ -8,7 +8,8 @@ from logger import *
 print "calculator"
 
 def SigmaSmoothT_FirstOrder(G, W, map):
-    '''Fock diagram'''
+    '''Fock diagram, assume Spin Conservation'''
+    OrderSign=-1
     Sigma=weight.Weight("SmoothT", map, "TwoSpins", "AntiSymmetric", "R", "T")
     TauRange = range(map.MaxTauBin)
     G.FFT("R", "T")
@@ -19,12 +20,12 @@ def SigmaSmoothT_FirstOrder(G, W, map):
             spinG = (spin2, spin2)
             spinSigma = (spin1, spin1)
             Sigma.Data[spinSigma[IN], :, spinSigma[OUT], :, :]  \
-                    -= G.Data[spinG[IN], :, spinG[OUT], :, :]\
+                    += OrderSign*G.Data[spinG[IN], :, spinG[OUT], :, :]\
                     *W.Data[spinW[IN], :, spinW[OUT], :, :]
     return Sigma
 
 def SigmaDeltaT_FirstOrder(G, W0, map):
-    '''Hatree-Fock diagram'''
+    '''Hatree-Fock diagram, assume Spin Conservation'''
     ########Fock Diagram
     OrderSign=-1
     AntiSymmetricFactor=-1

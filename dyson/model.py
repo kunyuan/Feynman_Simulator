@@ -71,6 +71,8 @@ class BareFactory:
 
     def __SpinModel(self, LatName):
         Beta=self.__Map.Beta
+        self.BareG.Data=np.zeros(self.BareG.Shape, dtype=complex)
+        self.BareW.Data=np.zeros(self.BareW.Shape, dtype=complex)
         #Bare G
         self.__Hopping=np.array([0.0])
         log.info("set Mu={0}, Hopping={1}, and SmoothT Bare G".format(self.__Mu, self.__Hopping))
@@ -89,6 +91,11 @@ class BareFactory:
         #Bare W
         #Dimension: 2
         spin=self.__Map.Spin2Index(UP,UP)
+        Sx=0.5*np.array([0,1,1,0])
+        Sy=0.5*np.array([0,-1j,1j,0])
+        Sz=0.5*np.array([1,0,0,-1])
+        SS=np.outer(Sx,Sx)+np.outer(Sy,Sy)+np.outer(Sz,Sz)
+        SzSz=np.outer(Sz,Sz)
         if LatName=="Checkerboard":
         #NSublat: 2
             Lx,Ly=self.__Map.L
@@ -99,17 +106,15 @@ class BareFactory:
             self.NextNearestNeighbor[A][A]=[(0, 1),(1,   0),(0,Ly-1),(Lx-1,   0)]
             self.NextNearestNeighbor[B][B]=[(0, 1),(1,   0),(0,Ly-1),(Lx-1,   0)]
 
-            #J1 interaction A-->B, B-->A
             for i in range(2):
                 for j in range(2):
+                    #J1 interaction A-->B, B-->A
                     for e in self.NearestNeighbor[i][j]:
-                        self.BareW.Data[spin,i,spin,j,self.__Map.CoordiIndex(e)] = J1/4;
-
-            #J2 interaction A-->A, B-->B
-            for i in range(2):
-                for j in range(2):
+                        self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SS;
+                    #J2 interaction A-->A, B-->B
                     for e in self.NextNearestNeighbor[i][j]:
-                        self.BareW.Data[spin,i,spin,j,self.__Map.CoordiIndex(e)] = J2/4;
+                        self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J2*SS;
+
         elif LatName=="Square":
         #NSublat: 1
             Lx,Ly=self.__Map.L
@@ -120,10 +125,10 @@ class BareFactory:
 
             #J1 interaction on nearest neighbors
             for i in self.NearestNeighbor[0][0]:
-                self.BareW.Data[spin,sub,spin,sub,self.__Map.CoordiIndex(i)] = J1/4.0;
+                self.BareW.Data[:,sub,:,sub,self.__Map.CoordiIndex(i)]+= J1*SS;
             #J2 interaction on next nearest neighbors
             for i in self.NextNearestNeighbor[0][0]:
-                self.BareW.Data[spin,sub,spin,sub,self.__Map.CoordiIndex(i)] = J2/4.0;
+                self.BareW.Data[:,sub,:,sub,self.__Map.CoordiIndex(i)]+= J2*SS;
 
         elif LatName=="Honeycomb":
             #NSublat: 2
@@ -136,7 +141,7 @@ class BareFactory:
             for i in range(2):
                 for j in range(2):
                     for e in self.NearestNeighbor[i][j]:
-                        self.BareW.Data[spin,i,spin,j,self.__Map.CoordiIndex(e)] = J1/4;
+                        self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SS;
             ##J2 interaction A-->A, B-->B
         elif LatName=="Kagome":
             #NSublat: 2
@@ -151,7 +156,7 @@ class BareFactory:
             for i in range(3):
                 for j in range(3):
                     for e in self.NearestNeighbor[i][j]:
-                        self.BareW.Data[spin,i,spin,j,self.__Map.CoordiIndex(e)] = J1/4;
+                        self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SS;
 
         elif LatName=="Cubic":
         #NSublat: 1
@@ -161,11 +166,11 @@ class BareFactory:
             self.NextNearestNeighbor[0][0]=[]
             #J1 interaction on nearest neighbors
             for i in self.NearestNeighbor[0][0]:
-                self.BareW.Data[spin,sub,spin,sub,self.__Map.CoordiIndex(i)] = J1/4.0;
+                self.BareW.Data[:,sub,:,sub,self.__Map.CoordiIndex(i)]+= J1*SS;
             #J2 interaction on next nearest neighbors
             for i in self.NextNearestNeighbor[0][0]:
-                self.BareW.Data[spin,sub,spin,sub,self.__Map.CoordiIndex(i)] = J2/4.0;
-            pass
+                self.BareW.Data[:,sub,:,sub,self.__Map.CoordiIndex(i)]+= J2*SS;
+                #self.BareW.Data[spin,sub,spin,sub,self.__Map.CoordiIndex(i)] = J2/4.0;
 
         elif LatName=="Pyrochlore":
         #NSublat: 4
@@ -188,7 +193,11 @@ class BareFactory:
             for i in range(4):
                 for j in range(4):
                     for e in self.NearestNeighbor[i][j]:
-                        self.BareW.Data[spin,i,spin,j,self.__Map.CoordiIndex(e)] = J1/4;
+                        self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SzSz;
+            S111S111=np.outer(Sx+Sy+Sz,Sx+Sy+Sz)
+            #for i in range(4):
+                #self.BareW.Data[:,i,:,i,0]+ = -10.0*J1*S111S111;
+
 
         elif LatName=="3DCheckerboard":
         #NSublat: 2
@@ -208,32 +217,31 @@ class BareFactory:
                     (Lx-1,Ly-1,1),(1,1,Lz-1),(0,0,Lz-1),(0,0,1),
                     (1,0,Lz-1),(0,1,Lz-1),(Lx-1,0,1),(0,Ly-1,1)]
 
-            #J1 interaction A-->B, B-->A
             for i in range(2):
                 for j in range(2):
+                    #J1 interaction A-->B, B-->A
                     for e in self.NearestNeighbor[i][j]:
-                        self.BareW.Data[spin,i,spin,j,self.__Map.CoordiIndex(e)] = J1/4;
-            ##J2 interaction A-->A, B-->B
-            for i in range(2):
-                for j in range(2):
+                        self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SS;
+                    #J2 interaction A-->A, B-->B
                     for e in self.NextNearestNeighbor[i][j]:
-                        self.BareW.Data[spin,i,spin,j,self.__Map.CoordiIndex(e)] = J2/4;
+                        self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J2*SS;
         else:
             Assert(False, "Lattice {0} has not been implemented yet!".format(LatName))
 
         #Generate other non-zero spin configuration
-        for e in self.__Map.GetSpin4SimilarTuples((UP,UP),(UP,UP)):
-            spleft = self.__Map.Spin2Index(*e[IN]) 
-            spright = self.__Map.Spin2Index(*e[OUT]) 
-            self.BareW.Data[spleft,:,spright,...]=self.BareW.Data[spin,:,spin,...]
-        for e in self.__Map.GetSpin4SimilarTuples((DOWN,DOWN),(UP,UP)):
-            spleft = self.__Map.Spin2Index(*e[IN]) 
-            spright = self.__Map.Spin2Index(*e[OUT]) 
-            self.BareW.Data[spleft,:,spright,...]=-1.0*self.BareW.Data[spin,:,spin,...]
-        for e in self.__Map.GetSpin4SimilarTuples((DOWN,UP),(UP,DOWN)):
-            spleft = self.__Map.Spin2Index(*e[IN]) 
-            spright = self.__Map.Spin2Index(*e[OUT]) 
-            self.BareW.Data[spleft,:,spright,...]=2.0*self.BareW.Data[spin,:,spin,...]
+        #for e in self.__Map.GetSpin4SimilarTuples((UP,UP),(UP,UP)):
+            #spleft = self.__Map.Spin2Index(*e[IN]) 
+            #spright = self.__Map.Spin2Index(*e[OUT]) 
+            #self.BareW.Data[spleft,:,spright,...]=self.BareW.Data[spin,:,spin,...]
+        #for e in self.__Map.GetSpin4SimilarTuples((DOWN,DOWN),(UP,UP)):
+            #spleft = self.__Map.Spin2Index(*e[IN]) 
+            #spright = self.__Map.Spin2Index(*e[OUT]) 
+            #self.BareW.Data[spleft,:,spright,...]=-1.0*self.BareW.Data[spin,:,spin,...]
+        #for e in self.__Map.GetSpin4SimilarTuples((DOWN,UP),(UP,DOWN)):
+            #spleft = self.__Map.Spin2Index(*e[IN]) 
+            #spright = self.__Map.Spin2Index(*e[OUT]) 
+            #self.BareW.Data[spleft,:,spright,...]=2.0*self.BareW.Data[spin,:,spin,...]
+        #print self.BareW.Data[:,0,:,1,0]
 
     def ToDict(self):
         points, lines=self.Lat.GetSitesList()
