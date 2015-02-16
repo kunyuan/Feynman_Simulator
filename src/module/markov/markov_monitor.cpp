@@ -22,7 +22,7 @@ MarkovMonitor::MarkovMonitor()
 {
 }
 
-bool MarkovMonitor::BuildNew(ParaMC& para, Diagram& diag, weight::Weight& weight)
+bool MarkovMonitor::BuildNew(ParaMC &para, Diagram &diag, weight::Weight &weight)
 {
     Para = &para;
     Diag = &diag;
@@ -38,14 +38,14 @@ bool MarkovMonitor::BuildNew(ParaMC& para, Diagram& diag, weight::Weight& weight
     return true;
 }
 
-void MarkovMonitor::Reset(ParaMC& para, Diagram& diag, weight::Weight& weight)
+void MarkovMonitor::Reset(ParaMC &para, Diagram &diag, weight::Weight &weight)
 {
     Para = &para;
     Diag = &diag;
     Weight = &weight;
 }
 
-bool MarkovMonitor::FromDict(const Dictionary& dict, ParaMC& para, Diagram& diag, weight::Weight& weight)
+bool MarkovMonitor::FromDict(const Dictionary &dict, ParaMC &para, Diagram &diag, weight::Weight &weight)
 {
     Para = &para;
     Diag = &diag;
@@ -96,11 +96,11 @@ bool MarkovMonitor::AdjustOrderReWeight()
     if (Zero(PolarEstimator.Value()) || Zero(SigmaEstimator.Value()))
         return false;
 
-    Para->OrderReWeight[0] = 1.0;
     real weight[Para->Order + 1];
     real wormweight = 0.0, phyweight = 0.0;
     weight[0] = WormEstimator[0].Value() + PhyEstimator[0].Value();
 
+    LOG_INFO("Number of confs in different Order => Reweight Ratio:");
     for (int i = 1; i <= Para->Order; i++) {
         weight[i] = WormEstimator[i].Value() + PhyEstimator[i].Value();
         wormweight += WormEstimator[i].Value();
@@ -110,10 +110,14 @@ bool MarkovMonitor::AdjustOrderReWeight()
         Para->OrderReWeight[i] = Para->OrderTimeRatio[i] * weight[0] / weight[i];
         cout << "Order0 :" << weight[0] << " Order" << i << " :" << weight[i] << " => " << Para->OrderReWeight[i] << endl;
     }
+    Para->OrderReWeight[0] = 1.0;
 
     if (Zero(wormweight))
         return false;
+
     Para->WormSpaceReweight = phyweight / wormweight;
+    cout << "Worm confs:" << wormweight << " Physics confs: " << phyweight << " => " << Para->WormSpaceReweight << endl;
+
     Para->PolarReweight = SigmaEstimator.Value() / PolarEstimator.Value();
     return true;
 }
@@ -135,7 +139,7 @@ void MarkovMonitor::Measure()
         if (Diag->MeasureGLine) {
             SigmaEstimator.Measure(OrderWeight);
             if (Diag->Order == 0) {
-                Weight->Sigma->Estimator.MeasureNorm();
+                Weight->Sigma->Estimator.MeasureNorm(OrderWeight);
             }
             else {
                 gLine g = Diag->GMeasure;
@@ -147,7 +151,7 @@ void MarkovMonitor::Measure()
         else {
             PolarEstimator.Measure(OrderWeight);
             if (Diag->Order == 0)
-                Weight->Polar->Estimator.MeasureNorm();
+                Weight->Polar->Estimator.MeasureNorm(OrderWeight);
             else {
                 wLine w = Diag->WMeasure;
                 vertex vin = w->NeighVer(OUT);

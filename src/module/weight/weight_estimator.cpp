@@ -43,9 +43,9 @@ void WeightEstimator::Anneal(real Beta)
     _NormAccu *= pow((Beta / _Beta), 2.0);
 }
 
-void WeightEstimator::MeasureNorm()
+void WeightEstimator::MeasureNorm(real weight)
 {
-    _NormAccu += 1.0;
+    _NormAccu += weight;
 }
 
 void WeightEstimator::Measure(uint WeightIndex, int Order, Complex weight)

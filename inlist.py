@@ -52,12 +52,12 @@ Common={
     #"Name": "Kagome",
     #"NSublat": 3,
     #"L": [16,16],
-    "Name": "Cubic",
-    "NSublat": 1,
-    "L": [8,8,8],
-    #"Name": "Pyrochlore",
-    #"NSublat": 4,
-    #"L": [8,8,8]
+    #"Name": "Cubic",
+    #"NSublat": 1,
+    #"L": [8,8,8],
+    "Name": "Pyrochlore",
+    "NSublat": 4,
+    "L": [8,8,8]
     #"Name": "Checkboard",
     #"NSublat": 2,
     #"L": [8,8]
@@ -80,20 +80,17 @@ MonteCarlo["Markov"]={
     #Start from order 0, so that OrderReWeight has Order+1 elements
     "Sweep" : 10,
     "Toss" : 1000,
-    "OrderReWeight" : [1.0, 0.1, 0.5, 0.05, 0.05],
+    "OrderReWeight" : [100.0, 0.5, 1.0, 0.1, 0.05, 0.05, 0.01, 0.005],
+    #"OrderReWeight" : [1.0, 0.005, 0.01, 0.001, 0.0005, 0.0005, 0.0001, 0.00005],
     "SqueezeFactor" : 10.0,
     "WormSpaceReweight" : 0.05,
     "PolarReweight" : 2.0,
-    "OrderTimeRatio" : [1.0, 1.0, 1.0, 1.0, 1.0],
+    "OrderTimeRatio" : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
     "Timer": {
-        "PrinterTimer": 10,
-        "DiskWriterTimer": 10,
-        "MessageTimer": 10,
-        "ReweightTimer":10
-        #"PrinterTimer": 150,
-        #"DiskWriterTimer": 280,
-        #"MessageTimer": 300,
-        #"ReweightTimer": 600
+        "PrinterTimer": 60,
+        "DiskWriterTimer": 60,
+        "MessageTimer": 60,
+        "ReweightTimer":60
         },
     }
 
@@ -102,8 +99,8 @@ Dyson["Dyson"]={
     "OrderAccepted": {"Sigma":1, "Polar":1},
     "ErrorThreshold": 0.1,
     "BetaIncrease": 0.0,
-    "SleepTime": 10,
     #"SleepTime": 150,
+    "SleepTime": 40,
     "Annealing": {
         "DeltaField": [0.0, 0.0, 0.0, 0.0],
         "Interval": [-0.1, -0.1, -0.0, -0.0]
