@@ -69,6 +69,11 @@ class Observable:
                     for l in NN[i][j]:
                         energy+=Chi.Data[0,i,0,j,self.__Map.CoordiIndex(l),:]/self.__Lat.NSublat
             self.Append("Energy", np.mean(energy))
+            G.FFT("R","T")
+            self.Append("<S^z_A>", 0.5*(G.Data[UP,0,UP,0,0,-1]-G.Data[DOWN,0,DOWN,0,0,-1]))
+            self.Append("<S^z_B>", 0.5*(G.Data[UP,1,UP,1,0,-1]-G.Data[DOWN,1,DOWN,1,0,-1]))
+            self.Append("<S^z_C>", 0.5*(G.Data[UP,2,UP,2,0,-1]-G.Data[DOWN,2,DOWN,2,0,-1]))
+            self.Append("<S^z_D>", 0.5*(G.Data[UP,3,UP,3,0,-1]-G.Data[DOWN,3,DOWN,3,0,-1]))
         else:
             Assert(False, "model not implemented!")
 
