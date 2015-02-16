@@ -90,7 +90,6 @@ bool MarkovMonitor::AdjustOrderReWeight()
     if (Zero(PolarEstimator.Value()) || Zero(SigmaEstimator.Value()))
         return false;
 
-    Para->OrderReWeight[0] = 1.0;
     real weight[Para->Order + 1];
     real wormweight = 0.0, phyweight = 0.0;
     weight[0] = WormEstimator[0].Value() + PhyEstimator[0].Value();
@@ -104,10 +103,14 @@ bool MarkovMonitor::AdjustOrderReWeight()
         Para->OrderReWeight[i] = Para->OrderTimeRatio[i] * weight[0] / weight[i];
         cout<<"Order0 :"<< weight[0] <<" Order" << i <<" :"<< weight[i] << " => "<<Para->OrderReWeight[i] <<endl;
     }
+    Para->OrderReWeight[0] = 1.0;
 
     if (Zero(wormweight))
         return false;
+    
     Para->WormSpaceReweight = phyweight / wormweight;
+    cout<<"Worm:"<< wormweight <<" Physics: " << phyweight << " => "<<Para->WormSpaceReweight <<endl;
+    
     Para->PolarReweight = SigmaEstimator.Value() / PolarEstimator.Value();
     return true;
 }

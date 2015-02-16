@@ -9,7 +9,6 @@ import collect
 from weight import UP,DOWN,IN,OUT
 import os, model, weight, measure, parameter, plot, argparse, time, traceback
 import plot, gc
-
 #def start_pdb(signal, trace):
     #import pdb
     #pdb.set_trace()
@@ -29,6 +28,7 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     Polar.FFT("R","T")
     W0.FFT("R")
     W.FFT("R","T")
+    G0.FFT("R","T")
     G.FFT("R","T")
     SigmaDeltaT.FFT("R")
     Sigma.FFT("R","T")
@@ -63,8 +63,11 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
             Observable.Save(OutputFile)
             #plot what you are interested in
             plot.PlotChiAlongPath(Chi, Lat)
-            #plot.PlotSpatial(Chi, Lat, 0, 0, 0) 
+            plot.PlotTime("G", G, UP, 0, UP, 0, 0)
+            plot.PlotTime("G0", G0, UP, 0, UP, 0, 0)
+            #plot.PlotSpatial(Chi, Lat, 0, 0) 
             plot.PlotChi_2D(Chi, Lat)
+            PlotWeightvsR("\chi", Chi,l,0,0)
         except:
             log.info("Output fails due to\n {0}".format(traceback.format_exc()))
 
@@ -115,7 +118,8 @@ def Dyson(IsDysonOnly, IsNewCalculation, para, Map, Lat):
             else:
                 log.info("Collecting Sigma/Polar statistics...")
                 Statis=collect.CollectStatis(Map, ParaDyson["Order"])
-                Sigma, Polar=collect.UpdateWeight(Statis, ParaDyson["ErrorThreshold"], ParaDyson["OrderAccepted"])
+                Sigma, Polar, ParaDyson["OrderAccepted"]=collect.UpdateWeight(Statis,
+                        ParaDyson["ErrorThreshold"], ParaDyson["OrderAccepted"])
                 log.info("calculating G...")
                 G = calc.G_Dyson(G0, SigmaDeltaT, Sigma, Map)
             #######DYSON FOR W AND G###########################
@@ -188,14 +192,15 @@ if __name__=="__main__":
     OutputFile=job["OutputFile"]
     global StatisFile
     StatisFile=os.path.join(workspace, "statis_total")
+    parameter.Save(ParaFile, para)  #Save Parameters
 
     IsNewCalculation=not os.path.exists(WeightFile+".hkl")
     if not IsNewCalculation: 
         try:
-            log.info(green("Load previous DYSHON_para file"))
+            log.info(green("Try to load previous DYSHON_para file"))
             para=parameter.LoadPara(ParaFile)
         except:
-            log.warning(red("Previous DYSHON_para file, use _in_DYSON_ file as para instead"))
+            log.warning(red("Previous DYSHON_para file does not exist, use _in_DYSON_ file as para instead"))
 
     WeightPara={"NSublat": para["Lattice"]["NSublat"], "L":para["Lattice"]["L"],
                 "Beta": float(para["Tau"]["Beta"]), "MaxTauBin": para["Tau"]["MaxTauBin"]}
