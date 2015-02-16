@@ -36,7 +36,8 @@ public:
     void Free();
     void Copy(const WeightArray& c);
     void Assign(const Complex& c);
-    void Assign(const Complex* c);
+    void Assign(const Complex* c); //copy _Size complex into _Data
+    void Assign(const Complex* c, uint size); //copy size complex into _Data
 
     uint GetDim() const { return DIM; }
     uint GetSize() const { return _Size; }

@@ -2,9 +2,8 @@
     You have to modify this file if you want to add new type of jobs.'''
 import sys, os, random, re, copy
 
-def get_current_PID(Type):
+def get_current_PID(KeyWord):
     workspace=os.path.abspath(".")
-    KeyWord=Type+"_para"
     filelist=sorted([int(e.split('_')[0]) for e in os.listdir(workspace) if KeyWord in e])
     if len(filelist)==0:
         NextPID=0
@@ -62,7 +61,7 @@ class JobMonteCarlo(Job):
         Job.__init__(self, para)
         self.job["Type"] = "MC"
         #search folder for old jobs, the new pid=largest old pid+1
-        PIDList, NextPID=get_current_PID(self.job["Type"])
+        PIDList, NextPID=get_current_PID("statis")
         if self.job["DoesLoad"] and len(PIDList) is not 0:
             self.pid=PIDList[:self.control["__Duplicate"]]
         else:
@@ -80,15 +79,12 @@ class JobMonteCarlo(Job):
 
     def to_dict(self):
         pid, Dict=Job.to_dict(self)
-        if self.job["DoesLoad"]:
-            Dict.pop("Para")
-        else:
         #set Seed here so that each job has it own rng seed
-            Dict["Para"]["Markov"]["Seed"] = int(random.random()*2**30)
-            Timer=Dict["Para"]["Markov"]["Timer"]
-            #don't let MC process output at the same time
-            for e in Timer.keys():
-                Timer[e]=int(Timer[e]*random.uniform(0.8, 1.2))
+        Dict["Para"]["Markov"]["Seed"] = int(random.random()*2**30)
+        Timer=Dict["Para"]["Markov"]["Timer"]
+        #don't let MC process output at the same time
+        for e in Timer.keys():
+            Timer[e]=int(Timer[e]*random.uniform(0.8, 1.2))
         return pid, Dict
 
 class JobDyson(Job):
@@ -96,7 +92,7 @@ class JobDyson(Job):
     def __init__(self, para):
         Job.__init__(self, para)
         self.job["Type"] = "DYSON"
-        PIDList, NextPID=get_current_PID(self.job["Type"])
+        #PIDList, NextPID=get_current_PID("Weight")
         if self.control["__Duplicate"]>0:
             self.pid=range(1)
         #self.pid=range(NextPID, NextPID+self.control["__Duplicate"])

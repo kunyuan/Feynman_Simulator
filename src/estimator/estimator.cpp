@@ -296,11 +296,14 @@ int EstimatorBundle<T>::HowMany()
 }
 
 template <typename T>
-bool EstimatorBundle<T>::FromDict(const Dictionary& dict)
+bool EstimatorBundle<T>::FromDict(const Dictionary& dict, bool AllowFailure)
 {
     bool flag = true;
-    for (auto& vector : _EstimatorVector)
+    for (auto& vector : _EstimatorVector) {
+        if (AllowFailure == true && dict.HasKey(vector.Name) == false)
+            continue;
         flag &= vector.FromDict(dict.Get<Dictionary>(vector.Name));
+    }
     return flag;
 }
 

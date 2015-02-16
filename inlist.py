@@ -8,13 +8,13 @@ SLEEP = 1    #check job status for every SLEEP seconds
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" :  0,
+    "__Duplicate" :  3,
     "__IsCluster" : False, 
     "__AutoRun" : True,
     "__KeepCPUBusy": True,
     },
 "Job": {
-    "DoesLoad" : False,
+    "DoesLoad" : True,
     "Sample" : 100000000  ##0.8 min for 1000000(*1000) Samples in MC
     }
 }
@@ -34,7 +34,7 @@ Dyson={
 }
 
 beta=0.6
-Order=3
+Order=4
 Common={
 "Tau": {
     "MaxTauBin" : 64,
@@ -80,16 +80,16 @@ MonteCarlo["Markov"]={
     #Start from order 0, so that OrderReWeight has Order+1 elements
     "Sweep" : 10,
     "Toss" : 1000,
-    "OrderReWeight" : [1.0, 0.1, 0.5, 0.05],
+    "OrderReWeight" : [1.0, 0.1, 0.5, 0.05, 0.05],
     "SqueezeFactor" : 10.0,
     "WormSpaceReweight" : 0.05,
     "PolarReweight" : 2.0,
-    "OrderTimeRatio" : [1.0, 1.0, 1.0, 1.0],
+    "OrderTimeRatio" : [1.0, 1.0, 1.0, 1.0, 1.0],
     "Timer": {
-        "PrinterTimer": 60,
-        "DiskWriterTimer": 60,
-        "MessageTimer": 60,
-        "ReweightTimer":60
+        "PrinterTimer": 10,
+        "DiskWriterTimer": 10,
+        "MessageTimer": 10,
+        "ReweightTimer":10
         #"PrinterTimer": 150,
         #"DiskWriterTimer": 280,
         #"MessageTimer": 300,
@@ -102,7 +102,7 @@ Dyson["Dyson"]={
     "OrderAccepted": {"Sigma":1, "Polar":1},
     "ErrorThreshold": 0.1,
     "BetaIncrease": 0.0,
-    "SleepTime": 40,
+    "SleepTime": 10,
     #"SleepTime": 150,
     "Annealing": {
         "DeltaField": [0.0, 0.0, 0.0, 0.0],

@@ -34,9 +34,10 @@ class WeightEstimator():
         self.Order=Order
 
     def MergeFromDict(self, WeightDict):
+        """add data from another WeightEstimator, work even if order WeightDict is smaller than MaxOrder"""
         datamat=WeightDict[self.__Weight.Name]
-        """add data from another WeightEstimator"""
-        self.WeightAccu+=datamat['WeightAccu']
+        orderindex=datamat["WeightAccu"].shape[0]
+        self.WeightAccu[:orderindex,...]+=datamat['WeightAccu']
         self.NormAccu+=datamat['NormAccu']
         if self.Norm is None:
             self.Norm=datamat['Norm']
@@ -58,22 +59,25 @@ class WeightEstimator():
         DimList=[]
         for order in xrange(1,Shape[0]+1):
             # Order Index is equal to real Order-1
-            RelativeError=0.0
+            #RelativeError=0.0
+            Average=0.0
             weight=self.OrderWeight[order-1,...]
             for index, _ in np.ndenumerate(weight[...,0]):
                 sp1, sub1, sp2, sub2, vol=index
                 y=weight[index] # y is a function of tau
                 if not np.allclose(y, 0.0, 1e-5): 
                     smooth, sigma=Smooth(x, y)
-                    relative=abs(sigma)/np.average(abs(smooth))
-                    if relative>RelativeError:
+                    average=np.average(abs(smooth))
+                    #if relative>RelativeError:
+                    if average>Average:
+                        relative=abs(sigma)/average
                         RelativeError=relative
                         error=sigma
                         Original=weight[index].copy()
                         Smoothed=smooth.copy()
                         Position=(order,sp1,sub1,sp2,sub2,vol)
-                        if relative>0.05:
-                            weight[index]=smooth  #use smoothed function instead if the noise is larger than 5%
+                        #if relative>0.05:
+                            #weight[index]=smooth  #use smoothed function instead if the noise is larger than 5%
             log.info("Maximum RelativeError at Order {0} is {1}".format(order, RelativeError))
             IsAccpted=RelativeError<ErrorThreshold or order<=OrderAccepted
             State="Accepted with relative error {0:.2g}".format(RelativeError, ErrorThreshold)

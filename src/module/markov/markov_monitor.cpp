@@ -54,10 +54,16 @@ bool MarkovMonitor::FromDict(const Dictionary& dict, ParaMC& para, Diagram& diag
         WormEstimator.AddEstimator("Order" + ToString(i));
         PhyEstimator.AddEstimator("Order" + ToString(i));
     }
-    return WormEstimator.FromDict(dict.Get<Dictionary>("WormEstimator"))
-           || PhyEstimator.FromDict(dict.Get<Dictionary>("PhyEstimator"))
-           || SigmaEstimator.FromDict(dict.Get<Dictionary>("SigmaEstimator"))
-           || PolarEstimator.FromDict(dict.Get<Dictionary>("PolarEstimator"));
+    bool flag = true;
+    flag &= WormEstimator.FromDict(dict.Get<Dictionary>("WormEstimator"),
+                                   true //allow failure
+                                   );
+    flag &= PhyEstimator.FromDict(dict.Get<Dictionary>("PhyEstimator"),
+                                  true //allow failure
+                                  );
+    flag &= SigmaEstimator.FromDict(dict.Get<Dictionary>("SigmaEstimator"));
+    flag &= PolarEstimator.FromDict(dict.Get<Dictionary>("PolarEstimator"));
+    return flag;
 }
 Dictionary MarkovMonitor::ToDict()
 {
@@ -102,7 +108,7 @@ bool MarkovMonitor::AdjustOrderReWeight()
         if (Zero(weight[i]))
             continue;
         Para->OrderReWeight[i] = Para->OrderTimeRatio[i] * weight[0] / weight[i];
-        cout<<"Order0 :"<< weight[0] <<" Order" << i <<" :"<< weight[i] << " => "<<Para->OrderReWeight[i] <<endl;
+        cout << "Order0 :" << weight[0] << " Order" << i << " :" << weight[i] << " => " << Para->OrderReWeight[i] << endl;
     }
 
     if (Zero(wormweight))
