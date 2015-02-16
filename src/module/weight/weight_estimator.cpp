@@ -77,8 +77,10 @@ bool WeightEstimator::FromDict(const Dictionary& dict)
     _Norm = dict.Get<real>("Norm");
     _NormAccu = dict.Get<real>("NormAccu");
     auto arr = dict.Get<Python::ArrayObject>("WeightAccu");
-    ASSERT_ALLWAYS(Equal(arr.Shape().data(), _WeightAccu.GetShape(), _WeightAccu.GetDim()), "Shape should match!");
-    _WeightAccu.Assign(arr.Data<Complex>());
+    //assert estimator shape except order dimension
+    ASSERT_ALLWAYS(Equal(arr.Shape().data() + 1, _WeightAccu.GetShape() + 1, _WeightAccu.GetDim() - 1), "Shape should match!");
+    _WeightAccu.Assign(0.0);
+    _WeightAccu.Assign(arr.Data<Complex>(), arr.Size());
     return true;
 }
 

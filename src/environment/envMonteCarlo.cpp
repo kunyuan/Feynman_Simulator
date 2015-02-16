@@ -57,13 +57,26 @@ bool EnvMonteCarlo::Load()
 {
     LOGGER_CONF(Job.LogFile, Job.Type, Logger::file_on | Logger::screen_on, INFO, INFO);
     Dictionary para_;
-    para_.Load(Job.ParaFile);
+    LOG_INFO("Trying to load " << Job.ParaFile);
+    bool DoesParaFileExit;
+    try {
+        para_.Load(Job.ParaFile);
+        DoesParaFileExit = true;
+    }
+    catch (IOInvalid e) {
+        LOG_WARNING("Load " << Job.ParaFile << " failed, use " << Job.InputFile << " instead!");
+        para_.Load(Job.InputFile);
+        DoesParaFileExit = false;
+    }
     Para.FromDict(para_.Get<Dictionary>(ParaKey));
     Dictionary statis_;
     statis_.BigLoad(Job.StatisticsFile);
     Weight.FromDict(statis_, weight::GW, Para);
     Weight.FromDict(statis_, weight::SigmaPolar, Para);
-    Diag.FromDict(para_.Get<Dictionary>(ConfigKey), Para.Lat, *Weight.G, *Weight.W);
+    if (DoesParaFileExit)
+        Diag.FromDict(para_.Get<Dictionary>(ConfigKey), Para.Lat, *Weight.G, *Weight.W);
+    else
+        Diag.BuildNew(Para.Lat, *Weight.G, *Weight.W);
     MarkovMonitor.FromDict(statis_, Para, Diag, Weight);
     Markov.BuildNew(Para, Diag, Weight);
     return true;

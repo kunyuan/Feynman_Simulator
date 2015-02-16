@@ -207,7 +207,7 @@ class Lattice:
                 f=0
                 f+=np.dot(data, np.exp(-1j*np.dot(vec[:,:], KVec)))
                 K.append(KVec)
-                DataK.append(f.real/self.NSublat)
+                DataK.append(f/self.NSublat)
         return K, DataK
 
     def __Distance(self,a,b):

@@ -39,6 +39,7 @@ public:
     template <typename T>
     T* Data();
     std::vector<uint> Shape();
+    uint Size();
     int Dim();
     ArrayObject& operator=(const ArrayObject& obj)
     {

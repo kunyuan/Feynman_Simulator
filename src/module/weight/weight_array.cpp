@@ -32,6 +32,15 @@ void WeightArray<DIM>::Assign(const Complex* source)
 }
 
 template <uint DIM>
+void WeightArray<DIM>::Assign(const Complex* source, uint size)
+{
+    ASSERT_ALLWAYS(IsAllocated, "Array should be allocated first!");
+    if (_Data == source)
+        return;
+    std::copy(source, source + size, _Data);
+}
+
+template <uint DIM>
 void WeightArray<DIM>::Allocate(const uint* Shape_, const std::string Name)
 {
     _Name = Name;

@@ -23,8 +23,6 @@ class Parameter {
 public:
     int Version;
     real Beta;
-    real DeltaBeta;
-    real FinalBeta;
     uint MaxTauBin;
     int Order;
     int NSublat;

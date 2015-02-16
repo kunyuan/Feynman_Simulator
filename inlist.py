@@ -33,14 +33,12 @@ Dyson={
     }
 }
 
-beta=1.5
-Order=1
+Beta=1.5
+Order=4
 Common={
 "Tau": {
     "MaxTauBin" : 64,
-    "Beta": beta,
-    "DeltaBeta" :  0.00,
-    "FinalBeta" :  beta,
+    "Beta": Beta,
     },
 "Lattice":  {
     #"Name": "Square",
@@ -82,7 +80,6 @@ MonteCarlo["Markov"]={
     "Toss" : 1000,
     "OrderReWeight" : [100.0, 0.5, 1.0, 0.1, 0.05, 0.05, 0.01, 0.005],
     #"OrderReWeight" : [1.0, 0.005, 0.01, 0.001, 0.0005, 0.0005, 0.0001, 0.00005],
-    "SqueezeFactor" : 10.0,
     "WormSpaceReweight" : 0.05,
     "PolarReweight" : 2.0,
     "OrderTimeRatio" : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
@@ -95,10 +92,9 @@ MonteCarlo["Markov"]={
     }
 
 Dyson["Dyson"]={
-    "Order": Order,
     "OrderAccepted": {"Sigma":1, "Polar":1},
     "ErrorThreshold": 0.1,
-    "BetaIncrease": 0.0,
+    #"SleepTime": 150,
     "SleepTime": 40,
     "Annealing": {
         "DeltaField": [0.0, 0.0, 0.0, 0.0],

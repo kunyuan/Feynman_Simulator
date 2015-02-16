@@ -108,7 +108,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, para, Map, Lat):
             G0,W0=Factory.Build()
 	    log.info("calculating SigmaDeltaT..")
             SigmaDeltaT.Merge(ratio, calc.SigmaDeltaT_FirstOrder(G, W0, Map))
-            SigmaDeltaT=calc.SigmaDeltaT_FirstOrder(G, W0, Map)
+            #SigmaDeltaT=calc.SigmaDeltaT_FirstOrder(G, W0, Map)
 	    log.info("SigmaDeltaT is done")
 
             if IsDysonOnly or IsNewCalculation:
@@ -119,7 +119,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, para, Map, Lat):
                 Polar.Merge(ratio, calc.Polar_FirstOrder(G, Map))
             else:
                 log.info("Collecting Sigma/Polar statistics...")
-                Statis=collect.CollectStatis(Map, ParaDyson["Order"])
+                Statis=collect.CollectStatis(Map)
                 Sigma, Polar, ParaDyson["OrderAccepted"]=collect.UpdateWeight(Statis,
                         ParaDyson["ErrorThreshold"], ParaDyson["OrderAccepted"])
                 log.info("calculating G...")
@@ -212,7 +212,7 @@ if __name__=="__main__":
 
     if args.collect:
         log.info("Collect statistics only...")
-        SigmaMC, PolarMC=collect.CollectStatis(Map, para["Dyson"]["Order"])
+        SigmaMC, PolarMC=collect.CollectStatis(Map)
         collect.UpdateWeight((SigmaMC, PolarMC), para["Dyson"]["ErrorThreshold"], para["Dyson"]["OrderAccepted"])
         data ={}
         data["Sigma"] = {"Histogram": SigmaMC.ToDict()}

@@ -82,7 +82,8 @@ public:
     void RemoveEstimator(const std::string);
     void AddStatistics();
     int HowMany();
-    bool FromDict(const Dictionary&);
+    //if AllowFailure is set to true, then FromDict will not throw exception even if some of the estimators fail to read
+    bool FromDict(const Dictionary&, bool AllowFailure = false);
     Dictionary ToDict();
     EstimatorT& operator[](int);
     EstimatorT& operator[](std::string);

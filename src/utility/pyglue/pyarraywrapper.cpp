@@ -123,6 +123,14 @@ std::vector<uint> ArrayObject::Shape()
     return _Shape;
 }
 
+uint ArrayObject::Size()
+{
+    uint size = 1;
+    for (auto i : Shape())
+        size *= i;
+    return size;
+}
+
 int ArrayObject::Dim()
 {
     ASSERT_ALLWAYS(_PyPtr != nullptr, "ArrayObject is still empty!");
