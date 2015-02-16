@@ -33,8 +33,8 @@ Dyson={
     }
 }
 
-beta=5.0
-Order=5
+beta=0.6
+Order=3
 Common={
 "Tau": {
     "MaxTauBin" : 64,
@@ -52,12 +52,12 @@ Common={
     #"Name": "Kagome",
     #"NSublat": 3,
     #"L": [16,16],
-    #"Name": "Cubic",
-    #"NSublat": 1,
-    #"L": [8,8,8],
-    "Name": "Pyrochlore",
-    "NSublat": 4,
-    "L": [8,8,8]
+    "Name": "Cubic",
+    "NSublat": 1,
+    "L": [8,8,8],
+    #"Name": "Pyrochlore",
+    #"NSublat": 4,
+    #"L": [8,8,8]
     #"Name": "Checkboard",
     #"NSublat": 2,
     #"L": [8,8]
@@ -68,9 +68,9 @@ Common={
     },
 "Model": {
     "Name": "J1J2",
+    #"Description": ["ImW",],
     "Interaction": [1.0,0.0],
-    "ExternalField": [0.0, -0.0, 0.0, 0.0]
-    #"ExternalField": [0.0, -0.0, 0.0, 0.0]
+    "ExternalField": [0.0, 0.0, 0.0, 0.0]
     #ExternalField on Sublattice A and B
     },
 }
@@ -105,8 +105,8 @@ Dyson["Dyson"]={
     "SleepTime": 40,
     #"SleepTime": 150,
     "Annealing": {
-        "DeltaField": [0.5, 0.5, 0.5, 0.5],
-        "Interval": [-0.1, -0.1, -0.1, -0.1]
+        "DeltaField": [0.0, 0.0, 0.0, 0.0],
+        "Interval": [-0.1, -0.1, -0.0, -0.0]
         }
     }
 

@@ -53,7 +53,7 @@ class WeightEstimator():
         MaxTauBin=self.__Map.MaxTauBin
         x=range(0, MaxTauBin)
         Shape=self.OrderWeight.shape
-        Average0 = np.average(abs(np.sum(self.OrderWeight[:,0,0,0,0,0,:], axis=0)))
+        #Average0 = np.average(abs(np.sum(self.OrderWeight[:,0,0,0,0,0,:], axis=0)))
         Info=[]
         DimList=[]
         for order in xrange(1,Shape[0]+1):
@@ -65,15 +65,16 @@ class WeightEstimator():
                 y=weight[index] # y is a function of tau
                 if not np.allclose(y, 0.0, 1e-5): 
                     smooth, sigma=Smooth(x, y)
-                    relative=abs(sigma)/abs(Average0)
+                    relative=abs(sigma)/np.average(abs(smooth))
                     if relative>RelativeError:
                         RelativeError=relative
                         error=sigma
                         Original=weight[index].copy()
                         Smoothed=smooth.copy()
                         Position=(order,sp1,sub1,sp2,sub2,vol)
-                    #weight[index]=smooth
-            log.info("Maximum at Order {0} is {1}".format(order, RelativeError))
+                        if relative>0.05:
+                            weight[index]=smooth  #use smoothed function instead if the noise is larger than 5%
+            log.info("Maximum RelativeError at Order {0} is {1}".format(order, RelativeError))
             IsAccpted=RelativeError<ErrorThreshold or order<=OrderAccepted
             State="Accepted with relative error {0:.2g}".format(RelativeError, ErrorThreshold)
             if not IsAccpted:

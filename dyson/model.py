@@ -13,10 +13,15 @@ class BareFactory:
         self.__Interaction=np.array(Hamiltonian["Interaction"])
         self.__ExternalField=np.array(Hamiltonian["ExternalField"])
         self.__DeltaField=np.array(Anneal["DeltaField"])
-        self.__Mu=np.array(Hamiltonian["ChemicalPotential"])
         self.__Hopping=np.array(Hamiltonian["Hopping"])
         self.__MaxTauBin=self.__Map.MaxTauBin
         self.__Beta=self.__Map.Beta
+        if "ChemicalPotential" in Hamiltonian:
+            self.__Mu=np.array(Hamiltonian["ChemicalPotential"])
+        if "Description" in Hamiltonian:
+            self.__Description=Hamiltonian["Description"]
+        else:
+            self.__Description=None
 
         self.NearestNeighbor=[]
         for i in range(Lat.NSublat):
@@ -73,6 +78,21 @@ class BareFactory:
         Beta=self.__Map.Beta
         self.BareG.Data=np.zeros(self.BareG.Shape, dtype=complex)
         self.BareW.Data=np.zeros(self.BareW.Shape, dtype=complex)
+        Sx=0.5*np.array([0,1,1,0])
+        Sy=0.5*np.array([0,-1j,1j,0])
+        Sz=0.5*np.array([1,0,0,-1])
+        I=np.array([1,0,0,1])
+        SS=np.outer(Sx,Sx)+np.outer(Sy,Sy)+np.outer(Sz,Sz)
+        SzSz=np.outer(Sz,Sz)
+
+        if self.__Description is not None and "ImW" in self.__Description:
+            #use imaginary W instead of imaginary chemical potential
+            II=np.outer(I,I)
+            for i in range(self.__Map.NSublat):
+                self.BareW.Data[:,i,:,i,0]+=1j*np.pi/4.0*II/Beta
+            self.__Mu=0.0
+        else:
+            self.__Mu=1j*np.pi/2.0/Beta
         #Bare G
         self.__Hopping=np.array([0.0])
         log.info("set Mu={0}, Hopping={1}, and SmoothT Bare G".format(self.__Mu, self.__Hopping))
@@ -83,7 +103,7 @@ class BareFactory:
         Pauli_Z=self.__Map.Pauli()[2]
         for sub in range(self.__Map.NSublat):
             for sp in range(2):
-                Mu=1j*np.pi/2.0/Beta+Pauli_Z[sp, sp]*(self.__DeltaField[sub]+self.__ExternalField[sub])
+                Mu=self.__Mu+Pauli_Z[sp, sp]*(self.__DeltaField[sub]+self.__ExternalField[sub])
                 self.BareG.Data[sp,sub,sp,sub,0,:]=np.exp(Mu*TauGrid)/(1.0+np.exp(Mu*Beta))
 
         Interaction=list(self.__Interaction)+[0,0,0,0,0]
@@ -91,11 +111,7 @@ class BareFactory:
         #Bare W
         #Dimension: 2
         spin=self.__Map.Spin2Index(UP,UP)
-        Sx=0.5*np.array([0,1,1,0])
-        Sy=0.5*np.array([0,-1j,1j,0])
-        Sz=0.5*np.array([1,0,0,-1])
-        SS=np.outer(Sx,Sx)+np.outer(Sy,Sy)+np.outer(Sz,Sz)
-        SzSz=np.outer(Sz,Sz)
+
         if LatName=="Checkerboard":
         #NSublat: 2
             Lx,Ly=self.__Map.L
@@ -228,20 +244,6 @@ class BareFactory:
         else:
             Assert(False, "Lattice {0} has not been implemented yet!".format(LatName))
 
-        #Generate other non-zero spin configuration
-        #for e in self.__Map.GetSpin4SimilarTuples((UP,UP),(UP,UP)):
-            #spleft = self.__Map.Spin2Index(*e[IN]) 
-            #spright = self.__Map.Spin2Index(*e[OUT]) 
-            #self.BareW.Data[spleft,:,spright,...]=self.BareW.Data[spin,:,spin,...]
-        #for e in self.__Map.GetSpin4SimilarTuples((DOWN,DOWN),(UP,UP)):
-            #spleft = self.__Map.Spin2Index(*e[IN]) 
-            #spright = self.__Map.Spin2Index(*e[OUT]) 
-            #self.BareW.Data[spleft,:,spright,...]=-1.0*self.BareW.Data[spin,:,spin,...]
-        #for e in self.__Map.GetSpin4SimilarTuples((DOWN,UP),(UP,DOWN)):
-            #spleft = self.__Map.Spin2Index(*e[IN]) 
-            #spright = self.__Map.Spin2Index(*e[OUT]) 
-            #self.BareW.Data[spleft,:,spright,...]=2.0*self.BareW.Data[spin,:,spin,...]
-        #print self.BareW.Data[:,0,:,1,0]
 
     def ToDict(self):
         points, lines=self.Lat.GetSitesList()
