@@ -121,6 +121,7 @@ def PlotChiAlongPath(Chi, lat, DoesSave=True):
             offset+=np.linalg.norm(end-start)
             ticks.append(offset)
         _, y=lat.FourierTransformation(Chi.Data[0,:,0,:,:,omega]*map.Beta/map.MaxTauBin, KList, "Real")
+        y=[e.real for e in y]
         BZstr=["{:.3f}".format(e) for e in BZcenter]
         #x obtained previously may from big to small, so we have to reorder x here
         x,y=zip(*sorted(zip(x, y)))
@@ -156,6 +157,7 @@ def PlotChi_2D(Chi, lat, DoesSave=True):
         ######hhl
         k_hhl, ChiK_hhl=lat.FourierTransformation(Chi.Data[0,:,0,:,:,omega]*map.Beta/map.MaxTauBin, \
                 KList_hhl, "Integer", bound=bound)
+        ChiK_hhl=[e.real for e in ChiK_hhl]
 
         x_hhl=[]
         y_hhl=[]
@@ -166,6 +168,7 @@ def PlotChi_2D(Chi, lat, DoesSave=True):
         ######hl0
         k_hl0, ChiK_hl0=lat.FourierTransformation(Chi.Data[0,:,0,:,:,omega]*map.Beta/map.MaxTauBin, \
                 KList_hl0, "Integer", bound=bound)
+        ChiK_hl0=[e.real for e in ChiK_hl0]
         x_hl0=[]
         y_hl0=[]
 
@@ -226,6 +229,8 @@ def PlotChi_2D(Chi, lat, DoesSave=True):
                 KList_hl0, "Real")
         k_hhl, ChiK_hhl=lat.FourierTransformation(Chi.Data[0,:,0,:,:,omega]*map.Beta/map.MaxTauBin,
                 KList_hhl, "Real")
+        ChiK_hl0=[e.real for e in ChiK_hl0]
+        ChiK_hhl=[e.real for e in ChiK_hhl]
         x_hl0=[]
         y_hl0=[]
         for e in k_hl0:
@@ -263,6 +268,7 @@ def PlotChi_2D(Chi, lat, DoesSave=True):
                 KList.append((i,j))
         k, ChiK=lat.FourierTransformation(Chi.Data[0,:,0,:,:,omega]*map.Beta/map.MaxTauBin,
                 KList, "Integer", bound=[[-20,20], [-20,20]])
+        ChiK=[e.real for e in ChiK]
         k=np.array(k)
         plt.figure()
         plt.scatter(k[:, 0],k[:, 1],c=ChiK, s=10, edgecolor="black", linewidth=0)

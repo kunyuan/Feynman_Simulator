@@ -20,62 +20,34 @@ class Observable:
     def Measure(self, Chi, Determinate, G, NN):
         self.Append("1-JP", Determinate.min())
         Factor=self.__Map.Beta/self.__Map.MaxTauBin
-        if self.__Lat.Name in ["Square", "Cubic"]:
-            Chi.FFT("K", "W")
-            StagKIndex=self.__Map.CoordiIndex([e/2 for e in self.__Map.L])
-            self.Append("UnifChi", Chi.Data[0,0,0,0,0,0]*Factor)
-            self.Append("StagChi", Chi.Data[0,0,0,0,StagKIndex,0]*Factor)
-
+        if self.__Lat.Name in ["Square", "Cubic", "Checkerboard", "3DCheckerboard"]:
             Chi.FFT("R", "W")
-            self.Append("UnifChi1", 
-                    self.__Lat.FourierTransformation(Chi.Data[0,:,0,:,:,0]*Factor,
-                        [(0.0,0.0,0.0),],"Real")[1][0])
+            UnifK=(0.0,)*self.__Map.Dim
+            StagK=(PI,)*self.__Map.Dim
+            _, ChiK=self.__Lat.FourierTransformation(Chi.Data[0,:,0,:,:,0]*Factor, [UnifK,StagK],"Real")
+            self.Append("UnifChi", ChiK[0])
+            self.Append("StagMag", ChiK[1])
 
-            Chi.FFT("R","T")
-            energy=np.zeros(self.__Map.MaxTauBin)
-            for i in range(self.__Lat.NSublat):
-                for j in range(self.__Lat.NSublat):
-                    for l in NN[i][j]:
-                        energy+=Chi.Data[0,i,0,j,self.__Map.CoordiIndex(l),:]/self.__Lat.NSublat
-            self.Append("Energy", np.mean(energy))
-        elif self.__Lat.Name in ["Checkerboard", "3DCheckerboard"]:
-            Chi.FFT("K", "W")
-            StagKIndex=self.__Map.CoordiIndex([0 for e in self.__Map.L])
-            self.Append("UnifChi", (Chi.Data[0,0,0,0,0,0]+Chi.Data[0,0,0,1,0,0])*Factor)
-            self.Append("StagChi", (Chi.Data[0,0,0,0,StagKIndex,0]-Chi.Data[0,0,0,1,StagKIndex,0])*Factor)
-
-            Chi.FFT("R","T")
-            energy=np.zeros(self.__Map.MaxTauBin)
-            for i in range(self.__Lat.NSublat):
-                for j in range(self.__Lat.NSublat):
-                    for l in NN[i][j]:
-                        energy+=Chi.Data[0,i,0,j,self.__Map.CoordiIndex(l),:]/self.__Lat.NSublat
-            self.Append("Energy", np.mean(energy))
-
-            G.FFT("R","T")
-            self.Append("<S^z_A>", 0.5*(G.Data[UP,0,UP,0,0,-1]-G.Data[DOWN,0,DOWN,0,0,-1]))
-            self.Append("<S^z_B>", 0.5*(G.Data[UP,1,UP,1,0,-1]-G.Data[DOWN,1,DOWN,1,0,-1]))
         elif self.__Lat.Name in ["Pyrochlore"]:
             Chi.FFT("R", "W")
-            K=(4*PI, 2*PI ,0) #High symmetry point with strongest order
-            self.Append("Chi_X(4Pi,2Pi,0)", 
-                    self.__Lat.FourierTransformation(Chi.Data[0,:,0,:,:,0]*Factor, [K,],"Real")[1][0])
-            self.Append("UnifChi", 
-                    self.__Lat.FourierTransformation(Chi.Data[0,:,0,:,:,0]*Factor, [(0.0,0.0,0.0),],"Real")[1][0])
-            Chi.FFT("R","T")
-            energy=np.zeros(self.__Map.MaxTauBin)+1j*0
-            for i in range(self.__Lat.NSublat):
-                for j in range(self.__Lat.NSublat):
-                    for l in NN[i][j]:
-                        energy+=Chi.Data[0,i,0,j,self.__Map.CoordiIndex(l),:]/self.__Lat.NSublat
-            self.Append("Energy", np.mean(energy))
-            G.FFT("R","T")
-            self.Append("<S^z_A>", 0.5*(G.Data[UP,0,UP,0,0,-1]-G.Data[DOWN,0,DOWN,0,0,-1]))
-            self.Append("<S^z_B>", 0.5*(G.Data[UP,1,UP,1,0,-1]-G.Data[DOWN,1,DOWN,1,0,-1]))
-            self.Append("<S^z_C>", 0.5*(G.Data[UP,2,UP,2,0,-1]-G.Data[DOWN,2,DOWN,2,0,-1]))
-            self.Append("<S^z_D>", 0.5*(G.Data[UP,3,UP,3,0,-1]-G.Data[DOWN,3,DOWN,3,0,-1]))
+            KList=[(0.0,0.0,0.0), (4*PI, 2*PI ,0)] #High symmetry point with strongest order
+            _, ChiK=self.__Lat.FourierTransformation(Chi.Data[0,:,0,:,:,0]*Factor, KList,"Real")
+            self.Append("UnifChi", ChiK[0])
+            self.Append("Chi_X(4Pi,2Pi,0)", ChiK[1])
         else:
             Assert(False, "model not implemented!")
+
+        Chi.FFT("R","W")
+        energy=0j
+        for i in range(self.__Lat.NSublat):
+            for j in range(self.__Lat.NSublat):
+                for l in NN[i][j]:
+                    energy+=Chi.Data[0,i,0,j,self.__Map.CoordiIndex(l),0]/self.__Lat.NSublat
+        self.Append("Energy", energy*Factor)
+
+        G.FFT("R","T")
+        for i in range(self.__Map.NSublat):
+            self.Append("<Sz_{0}>".format(i), 0.5*(G.Data[UP,i,UP,i,0,-1]-G.Data[DOWN,i,DOWN,i,0,-1]))
 
         infostr="Latest measurement:\n"
         for key in self.__History.keys():
