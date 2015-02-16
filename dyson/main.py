@@ -107,7 +107,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, para, Map, Lat):
             G0,W0=Factory.Build()
 	    log.info("calculating SigmaDeltaT..")
             SigmaDeltaT.Merge(ratio, calc.SigmaDeltaT_FirstOrder(G, W0, Map))
-            SigmaDeltaT=calc.SigmaDeltaT_FirstOrder(G, W0, Map)
+            #SigmaDeltaT=calc.SigmaDeltaT_FirstOrder(G, W0, Map)
 	    log.info("SigmaDeltaT is done")
 
             if IsDysonOnly or IsNewCalculation:

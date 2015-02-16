@@ -43,14 +43,14 @@ class Observable:
             for j in range(self.__Lat.NSublat):
                 for l in NN[i][j]:
                     energy+=Chi.Data[0,i,0,j,self.__Map.CoordiIndex(l),0]/self.__Lat.NSublat
-        self.Append("Energy", energy*Factor)
+        self.Append("Energy", energy/self.__Map.MaxTauBin)
 
         G.FFT("R","T")
         for i in range(self.__Map.NSublat):
             self.Append("<Sz_{0}>".format(i), 0.5*(G.Data[UP,i,UP,i,0,-1]-G.Data[DOWN,i,DOWN,i,0,-1]))
 
         infostr="Latest measurement:\n"
-        for key in self.__History.keys():
+        for key in sorted(self.__History.keys()):
             infostr+="{0}={1}\n".format(key, self.__History[key][-1])
         log.info(infostr)
 
