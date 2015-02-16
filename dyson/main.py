@@ -67,7 +67,7 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
             plot.PlotTime("G0", G0, UP, 0, UP, 0, 0)
             #plot.PlotSpatial(Chi, Lat, 0, 0) 
             plot.PlotChi_2D(Chi, Lat)
-            PlotWeightvsR("\chi", Chi,l,0,0)
+            plot.PlotWeightvsR("\chi", Chi,Lat,0,0)
         except:
             log.info("Output fails due to\n {0}".format(traceback.format_exc()))
 
@@ -103,10 +103,11 @@ def Dyson(IsDysonOnly, IsNewCalculation, para, Map, Lat):
         log.info(green("Start Version {0}...".format(para["Version"])))
         try:
             #ratio=None   #set this will not use accumulation!
-            ratio = para["Version"]/(para["Version"]+10.0)
+            ratio = (para["Version"]+10.0)/para["Version"]
             G0,W0=Factory.Build()
 	    log.info("calculating SigmaDeltaT..")
             SigmaDeltaT.Merge(ratio, calc.SigmaDeltaT_FirstOrder(G, W0, Map))
+            SigmaDeltaT=calc.SigmaDeltaT_FirstOrder(G, W0, Map)
 	    log.info("SigmaDeltaT is done")
 
             if IsDysonOnly or IsNewCalculation:
@@ -192,15 +193,16 @@ if __name__=="__main__":
     OutputFile=job["OutputFile"]
     global StatisFile
     StatisFile=os.path.join(workspace, "statis_total")
-    parameter.Save(ParaFile, para)  #Save Parameters
 
     IsNewCalculation=not os.path.exists(WeightFile+".hkl")
     if not IsNewCalculation: 
         try:
             log.info(green("Try to load previous DYSHON_para file"))
             para=parameter.LoadPara(ParaFile)
+            log.info("{0} para file is loaded".format(ParaFile))
         except:
             log.warning(red("Previous DYSHON_para file does not exist, use _in_DYSON_ file as para instead"))
+            parameter.Save(ParaFile, para)  #Save Parameters
 
     WeightPara={"NSublat": para["Lattice"]["NSublat"], "L":para["Lattice"]["L"],
                 "Beta": float(para["Tau"]["Beta"]), "MaxTauBin": para["Tau"]["MaxTauBin"]}

@@ -50,8 +50,11 @@ class Job:
         PI=3.141592653589793238
         if self.para["Model"]["Name"] in ("J1J2", "Heisenberg"):
             self.para["Model"]["Hopping"]=[0.0,]
-            mu=1j*PI/2.0/self.para["Tau"]["Beta"]
-            self.para["Model"]["ChemicalPotential"]=[mu,mu]
+            if self.para["Model"].has_key("Description") and "ImW" in self.para["Model"]["Description"]:
+                self.para["Model"]["ChemicalPotential"]=[0.0,0.0]
+            else:
+                mu=1j*PI/2.0/self.para["Tau"]["Beta"]
+                self.para["Model"]["ChemicalPotential"]=[mu,mu]
 
 class JobMonteCarlo(Job):
     '''job subclass for monte carlo jobs'''

@@ -68,8 +68,8 @@ def PlotSpatial(weight, lattice, SpinIn, SpinOut, DoesSave=True):
         plt.show()
     plt.close()
 
-def Exp(t, a, b):
-    return a*np.exp(-b*np.array(t))
+#def Exp(t, a, b):
+    #return a*np.exp(-b*np.array(t))
 def PlotWeightvsR(Name, weight, lattice, SpinIn, SpinOut, Tau=0, DoesSave=True):
     Omega=0
     OriginalSubLat=0
