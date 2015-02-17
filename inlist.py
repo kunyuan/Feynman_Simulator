@@ -33,7 +33,7 @@ Dyson={
     }
 }
 
-Beta=0.6
+Beta=4.0
 Order=4
 Common={
 "Tau": {
@@ -50,12 +50,12 @@ Common={
     #"Name": "Kagome",
     #"NSublat": 3,
     #"L": [16,16],
-    "Name": "Cubic",
-    "NSublat": 1,
-    "L": [8,8,8],
-    #"Name": "Pyrochlore",
-    #"NSublat": 4,
-    #"L": [8,8,8]
+    #"Name": "Cubic",
+    #"NSublat": 1,
+    #"L": [8,8,8],
+    "Name": "Pyrochlore",
+    "NSublat": 4,
+    "L": [8,8,8]
     #"Name": "Checkboard",
     #"NSublat": 2,
     #"L": [8,8]
@@ -79,10 +79,15 @@ MonteCarlo["Markov"]={
     "Sweep" : 10,
     "Toss" : 1000,
     "OrderReWeight" : [100.0, 0.5, 1.0, 0.1, 0.05, 0.05, 0.01, 0.005],
-    #"OrderReWeight" : [1.0, 0.005, 0.01, 0.001, 0.0005, 0.0005, 0.0001, 0.00005],
     "WormSpaceReweight" : 0.05,
     "PolarReweight" : 2.0,
     "OrderTimeRatio" : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+    #"Timer": {
+        #"PrinterTimer": 300,
+        #"DiskWriterTimer": 300,
+        #"MessageTimer": 310,
+        #"ReweightTimer": 600
+        #},
     "Timer": {
         "PrinterTimer": 60,
         "DiskWriterTimer": 60,
@@ -94,7 +99,7 @@ MonteCarlo["Markov"]={
 Dyson["Dyson"]={
     "OrderAccepted": {"Sigma":1, "Polar":1},
     "ErrorThreshold": 0.1,
-    #"SleepTime": 150,
+    #"SleepTime": 300,
     "SleepTime": 40,
     "Annealing": {
         "DeltaField": [0.0, 0.0, 0.0, 0.0],

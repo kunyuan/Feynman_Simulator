@@ -62,12 +62,13 @@ class WeightEstimator():
                 sp1, sub1, sp2, sub2, vol=index
                 y=weight[index] # y is a function of tau
                 if not np.allclose(y, 0.0, 1e-5): 
-                    smooth, sigma=Smooth(x, y)
+                    smooth, sigma=Smooth(x, y) #smooth is a function of tau
                     average=np.average(abs(smooth))
                     #if relative>RelativeError:
                     if average>Average:
                         relative=abs(sigma)/average
                         RelativeError=relative
+                        Average=average
                         error=sigma
                         Original=weight[index].copy()
                         Smoothed=smooth.copy()

@@ -88,9 +88,10 @@ class BareFactory:
         if self.__Description is not None and "ImW" in self.__Description:
             #use imaginary W instead of imaginary chemical potential
             II=np.outer(I,I)
-            for i in range(self.__Map.NSublat):
-                self.BareW.Data[:,i,:,i,0]+=1j*np.pi/4.0*II/Beta
-            self.__Mu=0.0
+            #for i in range(self.__Map.NSublat):
+                #self.BareW.Data[:,i,:,i,0]+=1j*np.pi/4.0*II/Beta
+            #self.__Mu=1j*np.pi/4.0/Beta
+            self.__Mu=np.pi/4.0/Beta
         else:
             self.__Mu=1j*np.pi/2.0/Beta
         #Bare G
