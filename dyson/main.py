@@ -97,18 +97,17 @@ def Dyson(IsDysonOnly, IsNewCalculation, para, Map, Lat):
     Sigma=weight.Weight("SmoothT", Map, "TwoSpins", "AntiSymmetric","R","T")
     Polar=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
 
+    #while para["Version"]<2:
     while True:
-    #while Version<1:
         para["Version"]+=1
         log.info(green("Start Version {0}...".format(para["Version"])))
         try:
             #ratio=None   #set this will not use accumulation!
             ratio = (para["Version"]+10.0)/para["Version"]
             G0,W0=Factory.Build()
-	    log.info("calculating SigmaDeltaT..")
+            log.info("calculating SigmaDeltaT..")
             SigmaDeltaT.Merge(ratio, calc.SigmaDeltaT_FirstOrder(G, W0, Map))
-            #SigmaDeltaT=calc.SigmaDeltaT_FirstOrder(G, W0, Map)
-	    log.info("SigmaDeltaT is done")
+            log.info("SigmaDeltaT is done")
 
             if IsDysonOnly or IsNewCalculation:
                 log.info("accumulating Sigma/Polar statistics...")
@@ -218,7 +217,6 @@ if __name__=="__main__":
         data["Polar"] = {"Histogram": PolarMC.ToDict()}
         with DelayedInterrupt():
             IO.SaveBigDict(StatisFile, data)
-
         sys.exit(0)
     else:
         Dyson(job["DysonOnly"], IsNewCalculation, para, Map, Lat)

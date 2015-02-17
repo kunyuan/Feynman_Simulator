@@ -31,7 +31,7 @@ def PlotTime(Name, weight, SpinIn, SubIn, SpinOut, SubOut, Vol, DoesSave=True):
     ax2=plt.subplot(122)
     ax2.plot(x,weight.Data[SpinIn, SubIn, SpinOut, SubOut, Vol,:].imag,'-')
     ax2.set_xlabel("$\\tau$")
-    ax1.set_ylabel("{0}.imag".format(Name))
+    ax2.set_ylabel("{0}.imag".format(Name))
     if DoesSave:
         plt.savefig("{0}.pdf".format(Name))
     else:
