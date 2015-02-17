@@ -179,6 +179,8 @@ def PlotChi_2D(Chi, lat, DoesSave=True):
         plt.figure(1)
         ax1=plt.subplot(121,aspect='equal')
         plt.scatter(x_hhl,y_hhl,c=ChiK_hhl, s=29, edgecolor="black", linewidth=0)
+        plt.xlabel("Direction [hh0]")
+        plt.ylabel("Direction [00l]")
         plt.xlim(-30, 30)
         plt.ylim(-30, 30)
         label=np.linspace(min(ChiK_hhl),max(ChiK_hhl), 4)
@@ -200,9 +202,12 @@ def PlotChi_2D(Chi, lat, DoesSave=True):
 
         ax2=plt.subplot(122,aspect='equal')
         plt.scatter(x_hl0,y_hl0,c=ChiK_hl0, s=18, edgecolor="black", linewidth=0)
+        plt.xlabel("Direction [h00]")
+        plt.ylabel("Direction [0l0]")
         label=np.linspace(min(ChiK_hl0),max(ChiK_hl0), 4)
         plt.xlim(-40, 40)
         plt.ylim(-40, 40)
+        plt.tight_layout()
 
         xlist = PI2*np.array([-1.0,-0.5, 0.5, 1.0, 1.0, 0.5,-0.5,-1.0,-1.0])
         ylist = PI2*np.array([ 0.5, 1.0, 1.0, 0.5,-0.5,-1.0,-1.0,-0.5, 0.5])

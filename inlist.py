@@ -8,7 +8,7 @@ SLEEP = 1    #check job status for every SLEEP seconds
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" :  0,
+    "__Duplicate" :  3,
     "__IsCluster" : False, 
     "__AutoRun" : True,
     "__KeepCPUBusy": True,
@@ -33,8 +33,13 @@ Dyson={
     }
 }
 
+<<<<<<< HEAD
 Beta=4.0
 Order=4
+=======
+Beta=2.0
+Order=1
+>>>>>>> 877f720202e931f7a6d27e5753d6ba8d8f15d647
 Common={
 "Tau": {
     "MaxTauBin" : 64,
