@@ -6,6 +6,7 @@ then
       rm *.hkl
       rm *.txt
       rm statis_total.hkl
+      rm _job*.sh
   fi
 fi
 rm Message.txt

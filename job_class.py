@@ -4,7 +4,7 @@ import sys, os, random, re, copy
 
 def get_current_PID(KeyWord):
     workspace=os.path.abspath(".")
-    filelist=sorted([int(e.split('_')[0]) for e in os.listdir(workspace) if KeyWord in e])
+    filelist=sorted([int(e.split('_')[0]) for e in os.listdir(workspace) if (KeyWord in e) and e[0] is not '_'])
     if len(filelist)==0:
         NextPID=0
     else:
@@ -46,25 +46,21 @@ class Job:
             return False
 
     def __set_model_specific__(self):
-        PI=3.141592653589793238
-        if self.para["Model"]["Name"] in ("J1J2", "Heisenberg"):
-            self.para["Model"]["Hopping"]=[0.0,]
-            if self.para["Model"].has_key("Description") and "ImW" in self.para["Model"]["Description"]:
-                self.para["Model"]["ChemicalPotential"]=[0.0,0.0]
-            else:
-                mu=1j*PI/2.0/self.para["Tau"]["Beta"]
-                self.para["Model"]["ChemicalPotential"]=[mu,mu]
+        pass
 
 class JobMonteCarlo(Job):
     '''job subclass for monte carlo jobs'''
     def __init__(self, para):
         Job.__init__(self, para)
         self.job["Type"] = "MC"
+        self.control["__KeepCPUBusy"]=True
         #search folder for old jobs, the new pid=largest old pid+1
         PIDList, NextPID=get_current_PID("statis")
-        if self.job["DoesLoad"] and len(PIDList) is not 0:
+        if len(PIDList) is not 0:
+            self.job["DoesLoad"]=True
             self.pid=PIDList[:self.control["__Duplicate"]]
         else:
+            self.job["DoesLoad"]=False
             self.pid=range(NextPID, NextPID+self.control["__Duplicate"])
 
     def __check_parameters__(self, para):
@@ -92,6 +88,7 @@ class JobDyson(Job):
     def __init__(self, para):
         Job.__init__(self, para)
         self.job["Type"] = "DYSON"
+        self.control["__KeepCPUBusy"]=False
         #PIDList, NextPID=get_current_PID("Weight")
         if self.control["__Duplicate"]>0:
             self.pid=range(1)

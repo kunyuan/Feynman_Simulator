@@ -13,9 +13,10 @@ class BareFactory:
         self.__Interaction=np.array(Hamiltonian["Interaction"])
         self.__ExternalField=np.array(Hamiltonian["ExternalField"])
         self.__DeltaField=np.array(Anneal["DeltaField"])
-        self.__Hopping=np.array(Hamiltonian["Hopping"])
         self.__MaxTauBin=self.__Map.MaxTauBin
         self.__Beta=self.__Map.Beta
+        if "Hopping" in Hamiltonian:
+            self.__Hopping=np.array(Hamiltonian["Hopping"])
         if "ChemicalPotential" in Hamiltonian:
             self.__Mu=np.array(Hamiltonian["ChemicalPotential"])
         if "Description" in Hamiltonian:
@@ -88,9 +89,10 @@ class BareFactory:
         if self.__Description is not None and "ImW" in self.__Description:
             #use imaginary W instead of imaginary chemical potential
             II=np.outer(I,I)
-            for i in range(self.__Map.NSublat):
-                self.BareW.Data[:,i,:,i,0]+=1j*np.pi/4.0*II/Beta
-            self.__Mu=0.0
+            #for i in range(self.__Map.NSublat):
+                #self.BareW.Data[:,i,:,i,0]+=1j*np.pi/4.0*II/Beta
+            #self.__Mu=1j*np.pi/4.0/Beta
+            self.__Mu=np.pi/4.0/Beta
         else:
             self.__Mu=1j*np.pi/2.0/Beta
         #Bare G
