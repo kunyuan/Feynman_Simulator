@@ -13,9 +13,10 @@ class BareFactory:
         self.__Interaction=np.array(Hamiltonian["Interaction"])
         self.__ExternalField=np.array(Hamiltonian["ExternalField"])
         self.__DeltaField=np.array(Anneal["DeltaField"])
-        self.__Hopping=np.array(Hamiltonian["Hopping"])
         self.__MaxTauBin=self.__Map.MaxTauBin
         self.__Beta=self.__Map.Beta
+        if "Hopping" in Hamiltonian:
+            self.__Hopping=np.array(Hamiltonian["Hopping"])
         if "ChemicalPotential" in Hamiltonian:
             self.__Mu=np.array(Hamiltonian["ChemicalPotential"])
         if "Description" in Hamiltonian:

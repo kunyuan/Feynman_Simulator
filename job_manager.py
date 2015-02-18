@@ -10,14 +10,14 @@ import inlist
 
 PROCLIST = []
 PROCLIST_BACK = []
-workdir="."
+workdir=os.path.abspath(".")
 logging.basicConfig(filename=workdir+"/project.log",
         level=logging.INFO,
         format="\n[job.daemon][%(asctime)s][%(levelname)s]:\n%(message)s",
         datefmt='%y/%m/%d %H:%M:%S')
 
-INFILEPATH = os.path.join(os.path.abspath(workdir),"infile")
-OUTFILEPATH = os.path.join(os.path.abspath(workdir),"outfile")
+INFILEPATH = os.path.join(workdir,"infile")
+OUTFILEPATH = os.path.join(workdir,"outfile")
 
 class JobAtom():
     '''atom class of all jobs'''
@@ -34,6 +34,8 @@ class JobAtom():
         self.is_cluster=control["__IsCluster"]
         self.auto_run=control["__AutoRun"]
         self.keep_cpu_busy=control["__KeepCPUBusy"]
+        if control.has_key("__PBSCommand"):
+            self.pbs_command=control["__PBSCommand"]
         self.para = para
         return
 
@@ -82,23 +84,23 @@ def submit_job(job_atom):
         os.system("mkdir "+OUTFILEPATH)
 
     homedir = os.getcwd()
-    jobname = homedir.split("/")[-1]+"."+job_atom.name
+    _, tail = os.path.split(homedir)
+    jobname = tail+"."+job_atom.name
 
-    infile = INFILEPATH+"/_in_{0}_{1}".format(job_atom.name, job_atom.pid)
-    outfile = OUTFILEPATH+"/out_{0}_{1}.txt".format(
-        job_atom.name, job_atom.pid)
-    jobfile = os.path.abspath(workdir+"/_job_{0}_{1}.sh".format(
-        job_atom.name, job_atom.pid))
+    infile = os.path.join(INFILEPATH,"_in_{0}_{1}".format(job_atom.name, job_atom.pid))
+    outfile = os.path.join(OUTFILEPATH,"out_{0}_{1}.txt".format(job_atom.name, job_atom.pid))
+    jobfile = os.path.join(workdir,"_job_{0}_{1}.sh".format(job_atom.name, job_atom.pid))
     IO.SaveDict(infile, "w", job_atom.para)
     if job_atom.is_cluster:
-        fjob = open(jobfile, "w")
-        fjob.write("#!/bin/sh\n"+"#PBS -N "+jobname+"\n")
-        fjob.write("#PBS -o "+homedir+"/Output\n")
-        fjob.write("#PBS -e "+homedir+"/Error\n")
-        fjob.write("echo $PBS_JOBID >>"+homedir+"/id_job.log\n")
-        fjob.write("cd "+homedir+"\n")
-        fjob.write(job_atom.execute+" -f "+infile)
-        fjob.close()
+        with open(jobfile, "w") as fjob:
+            fjob.write("#!/bin/sh\n"+"#PBS -N "+jobname+"\n")
+            if hasattr(job_atom, "pbs_command"):
+                fjob.write(job_atom.pbs_command+"\n")
+            fjob.write("#PBS -o "+homedir+"/Output\n")
+            fjob.write("#PBS -e "+homedir+"/Error\n")
+            fjob.write("echo $PBS_JOBID >>"+homedir+"/id_job.log\n")
+            fjob.write("cd "+homedir+"\n")
+            fjob.write(job_atom.execute+" -f "+infile)
         if job_atom.auto_run:
             os.system("qsub "+jobfile)
             os.system("rm "+jobfile)
@@ -115,9 +117,6 @@ def submit_job(job_atom):
             else:
                 PROCLIST_BACK.append((proc, job_atom))
 
-            #print shellstr
-            #print PROCLIST
-            #print PROCLIST_BACK
             logging.info(job_atom.get_job_name()+" is started...")
             logging.info("input:\n"+str(job_atom.para))
             logging.info("PID:{0}\n".format(proc.pid))
