@@ -9,21 +9,9 @@ class Lattice:
         self.__Map=Map
         self.L=np.array(Map.L)
         self.Name=Name
-        if Name=="Checkerboard":
-            self.__Checkerboard()
-        elif Name=="3DCheckerboard":
-            self.__3DCheckerboard()
-        elif Name=="Honeycomb":
-            self.__Honeycomb()
-        elif Name=="Kagome":
-            self.__Kagome()
-        elif Name=="Square":
-            self.__Square()
-        elif Name=="Cubic":
-            self.__Cubic()
-        elif Name=="Pyrochlore":
-            self.__Pyrochlore()
-        else:
+        try:
+            getattr(self, "_Lattice__"+Name)()
+        except:
             Assert(False, "Lattice {0} has not been implemented!".format(self.Name))
 
     #2D lattice
@@ -177,17 +165,18 @@ class Lattice:
         DataK=[]
         K=[]
         SiteNum=self.__Map.Vol*self.__Map.NSublat
-        vec=np.zeros((SiteNum, self.Dim))
-        data=np.zeros(SiteNum)+0*1j
+        vec=np.zeros((SiteNum*self.__Map.NSublat, self.Dim))
+        data=np.zeros(SiteNum*self.__Map.NSublat)+0*1j
         index=0
-        for SubLatIn in range(self.NSublat):
+        for SubLatIn in range(self.__Map.NSublat):
             points,_=self.GetSitesList(HasOffset=False, SubLatIn=SubLatIn)
-            for i in range(self.__Map.Vol):
+            for i in range(SiteNum):
                 RealVec, Coord, SubLatOut=points[i]
                 vec[index,:]=RealVec
                 data[index]=Data[SubLatIn, SubLatOut, self.__Map.CoordiIndex(Coord)]
+                #data[index]=1.0
                 index+=1
-        Assert(index==SiteNum, "{0} is expected for the total number of sites, not {1}!".format(SiteNum, index))
+        Assert(index==SiteNum*self.NSublat, "{0} is expected for the total number of sites, not {1}!".format(SiteNum, index))
                 
         for p in KCoordi:
             if KType=="Integer":
@@ -247,6 +236,7 @@ class Lattice:
         '''
         v=self.__Shift(Coordi+offset)
         return tuple(np.einsum("ij,i->j",self.LatVec,v)+self.SubLatVec[SubLatOut]-self.SubLatVec[SubLatIn])
+        #return tuple(np.einsum("ij,i->j",self.LatVec,v)+self.SubLatVec[SubLatOut])
     def GetSitesList(self, HasOffset=True, SubLatIn=0):
         """
         return: list of all sites, with format 

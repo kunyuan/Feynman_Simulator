@@ -42,7 +42,7 @@ def PlotSpatial(weight, lattice, SpinIn, SpinOut, DoesSave=True):
     Omega=0
     OriginalSubLat=0
     coord3=0
-    weight.FFT("R","W")
+    weight.FFT("R","T")
     x=[]
     y=[]
     z=[]
@@ -58,8 +58,8 @@ def PlotSpatial(weight, lattice, SpinIn, SpinOut, DoesSave=True):
                     weight.Map.CoordiIndex(coord),Omega].real)
     log.info("Max:{0}, Min: {1}".format(max(z), min(z)))
     plt.figure()
-    plt.scatter(x,y,c=z, s=10, edgecolor="black", linewidth=0,vmin=-7, vmax=7)
-    c = plt.colorbar(orientation='horizontal')
+    plt.scatter(x,y,c=z, s=10, edgecolor="black", linewidth=0)
+    c = plt.colorbar(orientation='horizontal', shrink=0.8, ticks=np.linspace(min(z),max(z),4))
     c.set_label("magnitude")
     plt.axis('equal')
     if DoesSave:
@@ -74,7 +74,8 @@ def PlotWeightvsR(Name, weight, lattice, SpinIn, SpinOut, Tau=0, DoesSave=True):
     Omega=0
     OriginalSubLat=0
     coord3=0
-    weight.FFT("R","W")
+    #weight.FFT("R","W")
+    weight.FFT("R","T")
     x=[]
     y=[]
     z=[]
@@ -218,81 +219,55 @@ def PlotChi_2D(Chi, lat, DoesSave=True):
         c = plt.colorbar(orientation='horizontal', shrink=0.8, ticks=label)
         c.set_label("magnitude")
 
-        if DoesSave:
-            plt.savefig("chiK_Pyrochlore.pdf", dpi=500)
-        else:
-            plt.show()
-        plt.close()
-
-    elif lat.Name=="3DCheckerboard":
+    elif lat.Name in ["3DCheckerboard", "Cubic"]:
         ####3D Checkerboard
         KList_hl0=[]
         KList_hhl=[]
 
-        for i in range(-2*lat.L[0], 2*lat.L[0]+1):
-            for j in range(-2*lat.L[1], 2*lat.L[1]+1):
-                KList_hl0.append((i*2*np.pi/lat.L[0],j*2*np.pi/lat.L[2],0))
-            for k in range(-2*lat.L[2], 2*lat.L[2]+1):
-                KList_hhl.append((i*2*np.pi/lat.L[0],i*2*np.pi/lat.L[1],k*2*np.pi/lat.L[2]))
+        for i in range(-2*lat.L[0]+1, 2*lat.L[0]):
+            for j in range(-2*lat.L[1]+1, 2*lat.L[1]):
+                KList_hl0.append((i,j,0))
 
         k_hl0, ChiK_hl0=lat.FourierTransformation(Chi.Data[0,:,0,:,:,omega]*map.Beta/map.MaxTauBin,
-                KList_hl0, "Real")
-        k_hhl, ChiK_hhl=lat.FourierTransformation(Chi.Data[0,:,0,:,:,omega]*map.Beta/map.MaxTauBin,
-                KList_hhl, "Real")
+                KList_hl0, "Integer")
         ChiK_hl0=[e.real for e in ChiK_hl0]
-        ChiK_hhl=[e.real for e in ChiK_hhl]
         x_hl0=[]
         y_hl0=[]
         for e in k_hl0:
             x_hl0.append(e[0])
             y_hl0.append(e[1])
 
-        x_hhl=[]
-        y_hhl=[]
-        for e in k_hhl:
-            x_hhl.append(np.sqrt(2)*e[0])
-            y_hhl.append(e[2])
-
         plt.figure(1)
-        plt.subplot(121)
-        plt.scatter(x_hhl,y_hhl,c=ChiK_hhl, s=10, edgecolor="black", linewidth=0)
-        c = plt.colorbar(orientation='horizontal')
-        c.set_label("magnitude")
-        #plt.axis('equal')
-
-        plt.subplot(122)
         plt.scatter(x_hl0,y_hl0,c=ChiK_hl0, s=10, edgecolor="black", linewidth=0)
         c = plt.colorbar(orientation='horizontal')
         c.set_label("magnitude")
         plt.axis('equal')
 
-        if DoesSave:
-            plt.savefig("chiK_3DChecker.pdf")
-        else:
-            plt.show()
-        plt.close()
     elif lat.Dim==2:
         KList=[]
-        for i in range(-4*lat.L[0], 4*lat.L[0]):
-            for j in range(-4*lat.L[1], 4*lat.L[1]):
+        for i in range(-2*lat.L[0], 2*lat.L[0]+1):
+            for j in range(-2*lat.L[1], 2*lat.L[1]+1):
                 KList.append((i,j))
         k, ChiK=lat.FourierTransformation(Chi.Data[0,:,0,:,:,omega]*map.Beta/map.MaxTauBin,
                 KList, "Integer", bound=[[-20,20], [-20,20]])
         ChiK=[e.real for e in ChiK]
         k=np.array(k)
         plt.figure()
-        plt.scatter(k[:, 0],k[:, 1],c=ChiK, s=10, edgecolor="black", linewidth=0)
+        plt.scatter(k[:, 0],k[:, 1],c=ChiK, s=6, edgecolor="black", linewidth=0)
         c = plt.colorbar(orientation='horizontal')
         c.set_label("magnitude")
         plt.axis('equal')
-        if DoesSave:
-            plt.savefig("chiK_{0}.pdf".format(lat.Name))
-        else:
-            plt.show()
-        plt.close()
-
+        Ktemp=[(-3,0),(3,0),(0,3),(0,-3)]
+        k, ChiK=lat.FourierTransformation(Chi.Data[0,:,0,:,:,omega]*map.Beta/map.MaxTauBin,
+                Ktemp, "Integer")
     else:
         log.warn("Lattice PlotChi_2D not implemented yet!")
+
+    if DoesSave:
+        plt.savefig("chiK_{0}.pdf".format(lat.Name))
+    else:
+        plt.show()
+    plt.close()
     log.info("Plotting done!")
 
 

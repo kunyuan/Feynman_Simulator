@@ -42,12 +42,10 @@ class BareFactory:
         self.BareG=weight.Weight("SmoothT", self.__Map, "TwoSpins", "AntiSymmetric", "R", "T")
         self.BareW=weight.Weight("DeltaT", self.__Map, "FourSpins", "Symmetric", "R", "T")
         LatName=self.Lat.Name
-        if self.__Model=="Heisenberg":
-            self.__Heisenberg(LatName)
-        if self.__Model=="J1J2":
-            self.__J1J2(LatName)
-        elif self.__Model=="DiagCount":
-            self.__DiagCount()
+        try:
+            getattr(self, self.__Model)(LatName)
+        except:
+            Assert(False, "Model {0} has not been implemented!".format(self.__Model))
         return (self.BareG,self.BareW)
 
     def DecreaseField(self, Anneal):
@@ -68,10 +66,15 @@ class BareFactory:
             Anneal["DeltaField"][i] -= Anneal["Interval"][i]
         log.info(green("ExternalField reverted to: {0}".format(self.__DeltaField)))
 
-    def __Heisenberg(self, LatName):
+    #model defintion
+    def DiagCount(self, LatName):
+        raise NotImplementedError
+    def Hubbard(self, LatName):
+        raise NotImplementedError
+    def Heisenberg(self, LatName):
         Assert(len(self.__Interaction)==1, "Heisenberg model only has one coupling!")
         self.__SpinModel(LatName)
-    def __J1J2(self, LatName):
+    def J1J2(self, LatName):
         Assert(len(self.__Interaction)==2, "J1J2 model only has two couplings!")
         self.__SpinModel(LatName)
 
@@ -188,7 +191,6 @@ class BareFactory:
             #J2 interaction on next nearest neighbors
             for i in self.NextNearestNeighbor[0][0]:
                 self.BareW.Data[:,sub,:,sub,self.__Map.CoordiIndex(i)]+= J2*SS;
-                #self.BareW.Data[spin,sub,spin,sub,self.__Map.CoordiIndex(i)] = J2/4.0;
 
         elif LatName=="Pyrochlore":
         #NSublat: 4
@@ -248,7 +250,7 @@ class BareFactory:
 
 
     def ToDict(self):
-        points, lines=self.Lat.GetSitesList()
+        points, lines=self.Lat.GetSitesList(SubLatIn=0)
         interaction=self.__GetBareWList()
         return {"Points":points, "Interaction":interaction, "Lines": lines}
 

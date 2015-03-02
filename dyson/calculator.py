@@ -128,8 +128,8 @@ def W_Dyson(W0, Polar, map, Lat):
     JPJ=np.einsum("ijklvt,klmnv->ijmnvt", JP, W0.Data)
     lu_piv,Determ=weight.LUFactor(Denorm)
     Check_Denorminator(Determ,map)
-    ChiTensor.LUSolve(lu_piv, -Polar.Data)
     W.LUSolve(lu_piv, JPJ)
+    ChiTensor.LUSolve(lu_piv, -Polar.Data)
     return W, ChiTensor, Determ
 
 def G_Dyson(G0, SigmaDeltaT, Sigma, map):
@@ -157,6 +157,25 @@ def G_Dyson(G0, SigmaDeltaT, Sigma, map):
     Check_Denorminator(Determ,map)
     G.LUSolve(lu_piv, G0.Data);
     return G
+
+def Add_ChiTensor_ZerothOrder(ChiTensor, G, map):
+    """add G(tau=0^-, k=0)G(tau=0^-, k=0) to ChiTensor
+       This diagram has +1 sign since two fermi loop contribute (-1)^2
+    """
+    G.FFT("R", "T")
+    ChiTensor.FFT("R", "T")
+    NSub=map.NSublat
+    SpList=[(a,b,c,d) for a in range(2) for b in range(2) for c in range(2) for d in range(2)]
+    SubList=[(a,b) for a in range(NSub) for b in range(NSub)]
+    ChiTensorInUnitCell=np.empty((ChiTensor.NSpin,NSub,ChiTensor.NSpin,NSub), dtype=complex)
+    for spIn1, spIn2, spOut1, spOut2 in SpList:
+        for subIn, subOut in SubList:
+            for tau in range(map.MaxTauBin):
+                ChiSpIn=map.Spin2Index(spIn1,spIn2)
+                ChiSpOut=map.Spin2Index(spOut1,spOut2)
+                ChiTensorInUnitCell[ChiSpIn,subIn,ChiSpOut,subOut]=G.Data[spIn1,subIn,spIn2,subIn,0,-1]*G.Data[spOut1,subOut,spOut2,subOut,0,-1]
+    ChiTensor.Data+=ChiTensorInUnitCell[...,np.newaxis,np.newaxis]
+    return ChiTensor
 
 def Calculate_Chi(ChiTensor, map):
     NSpin, NSublat=ChiTensor.NSpin, ChiTensor.NSublat

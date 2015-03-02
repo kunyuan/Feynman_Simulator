@@ -19,6 +19,7 @@ import plot, gc
 
 def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor):
     log.info("Measuring...")
+    ChiTensor=calc.Add_ChiTensor_ZerothOrder(ChiTensor, G, Map)
     Chi = calc.Calculate_Chi(ChiTensor, Map)
 
     ##########OUTPUT AND FILE SAVE ####################
@@ -66,11 +67,11 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
             plot.PlotChiAlongPath(Chi, Lat)
             plot.PlotTime("G", G, UP, 0, UP, 0, 0)
             plot.PlotTime("G0", G0, UP, 0, UP, 0, 0)
-            #plot.PlotSpatial(Chi, Lat, 0, 0) 
+            plot.PlotSpatial(Chi, Lat, 0, 0) 
             plot.PlotChi_2D(Chi, Lat)
             plot.PlotWeightvsR("\chi", Chi,Lat,0,0)
         except:
-            log.info("Output fails due to\n {0}".format(traceback.format_exc()))
+            log.info(blue("Output fails due to\n {0}".format(traceback.format_exc())))
 
 def Dyson(IsDysonOnly, IsNewCalculation, para, Map, Lat):
     ParaDyson=para["Dyson"]
@@ -81,30 +82,36 @@ def Dyson(IsDysonOnly, IsNewCalculation, para, Map, Lat):
     G0,W0=Factory.Build()
     IO.SaveDict("Coordinates","w", Factory.ToDict())
     Observable=measure.Observable(Map, Lat)
+    W=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
+    SigmaDeltaT=weight.Weight("DeltaT", Map, "TwoSpins", "AntiSymmetric","R")
+    Sigma=weight.Weight("SmoothT", Map, "TwoSpins", "AntiSymmetric","R","T")
+    Polar=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
     if IsNewCalculation:
         #not load WeightFile
         log.info("Start from bare G, W")
         G=G0.Copy()
-        W=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
     else:
         #load WeightFile, load G,W
         log.info("Load G, W from {0}".format(WeightFile))
         data=IO.LoadBigDict(WeightFile)
         G=weight.Weight("SmoothT", Map, "TwoSpins", "AntiSymmetric", "R", "T").FromDict(data["G"])
-        W=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T").FromDict(data["W"])
+        W.FromDict(data["W"])
+        SigmaDeltaT.FromDict(data["SigmaDeltaT"])
+        Sigma.FromDict(data["Sigma"])
+        Polar.FromDict(data["Polar"])
+
+        Sigma.FFT("R","T")
+        print "Sigma=\n", Sigma.Data[UP,0,UP,0,0,:]
 
     Gold, Wold = G, W
-    SigmaDeltaT=weight.Weight("DeltaT", Map, "TwoSpins", "AntiSymmetric","R")
-    Sigma=weight.Weight("SmoothT", Map, "TwoSpins", "AntiSymmetric","R","T")
-    Polar=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
 
     #while para["Version"]<2:
     while True:
         para["Version"]+=1
         log.info(green("Start Version {0}...".format(para["Version"])))
         try:
-            #ratio=None   #set this will not use accumulation!
-            ratio = para["Version"]/(para["Version"]+10.0)
+            ratio=None   #set this will not use accumulation!
+            #ratio = para["Version"]/(para["Version"]+10.0)
             G0,W0=Factory.Build()
             log.info("calculating SigmaDeltaT..")
             SigmaDeltaT.Merge(ratio, calc.SigmaDeltaT_FirstOrder(G, W0, Map))
@@ -112,6 +119,10 @@ def Dyson(IsDysonOnly, IsNewCalculation, para, Map, Lat):
 
             if IsDysonOnly or IsNewCalculation:
                 log.info("accumulating Sigma/Polar statistics...")
+
+                Sigma=calc.SigmaSmoothT_FirstOrder(G, W, Map)
+                Sigma.FFT("R","T")
+                print "Sigma2=\n", Sigma.Data[UP,0,UP,0,0,:]
                 Sigma.Merge(ratio, calc.SigmaSmoothT_FirstOrder(G, W, Map))
                 log.info("calculating G...")
                 G = calc.G_Dyson(G0, SigmaDeltaT, Sigma, Map)
@@ -121,6 +132,8 @@ def Dyson(IsDysonOnly, IsNewCalculation, para, Map, Lat):
                 Statis=collect.CollectStatis(Map)
                 Sigma, Polar, ParaDyson["OrderAccepted"]=collect.UpdateWeight(Statis,
                         ParaDyson["ErrorThreshold"], ParaDyson["OrderAccepted"])
+                Sigma.FFT("R","T")
+                print "Sigma3=\n", Sigma.Data[UP,0,UP,0,0,:]
                 log.info("calculating G...")
                 G = calc.G_Dyson(G0, SigmaDeltaT, Sigma, Map)
             #######DYSON FOR W AND G###########################
