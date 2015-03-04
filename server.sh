@@ -6,5 +6,6 @@ if [ -n "$1" ]
       ipython notebook status.ipynb
   fi
   else
-      ipython notebook --no-browser --ip=* --port=8888 status.ipynb
+      ipython notebook --no-browser --ip=* --port=8888
+      #http://ip-address:8888/notebooks/status.ipynb to access the file
 fi
