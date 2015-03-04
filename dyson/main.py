@@ -100,9 +100,6 @@ def Dyson(IsDysonOnly, IsNewCalculation, para, Map, Lat):
         Sigma.FromDict(data["Sigma"])
         Polar.FromDict(data["Polar"])
 
-        Sigma.FFT("R","T")
-        print "Sigma=\n", Sigma.Data[UP,0,UP,0,0,:]
-
     Gold, Wold = G, W
 
     #while para["Version"]<2:
@@ -122,8 +119,6 @@ def Dyson(IsDysonOnly, IsNewCalculation, para, Map, Lat):
 
                 Sigma=calc.SigmaSmoothT_FirstOrder(G, W, Map)
                 Sigma.FFT("R","T")
-                print "Sigma2=\n", Sigma.Data[UP,0,UP,0,0,:]
-                Sigma.Merge(ratio, calc.SigmaSmoothT_FirstOrder(G, W, Map))
                 log.info("calculating G...")
                 G = calc.G_Dyson(G0, SigmaDeltaT, Sigma, Map)
                 Polar.Merge(ratio, calc.Polar_FirstOrder(G, Map))
@@ -132,8 +127,6 @@ def Dyson(IsDysonOnly, IsNewCalculation, para, Map, Lat):
                 Statis=collect.CollectStatis(Map)
                 Sigma, Polar, ParaDyson["OrderAccepted"]=collect.UpdateWeight(Statis,
                         ParaDyson["ErrorThreshold"], ParaDyson["OrderAccepted"])
-                Sigma.FFT("R","T")
-                print "Sigma3=\n", Sigma.Data[UP,0,UP,0,0,:]
                 log.info("calculating G...")
                 G = calc.G_Dyson(G0, SigmaDeltaT, Sigma, Map)
             #######DYSON FOR W AND G###########################

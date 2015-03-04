@@ -21,7 +21,6 @@ using namespace para;
 const string HelpStr = "Usage:"
                        "-p N / --PID N   use N to construct input file path."
                        "or -f / --file PATH   use PATH as the input file path.";
-
 void MonteCarlo(const Job&);
 int main(int argc, const char* argv[])
 {

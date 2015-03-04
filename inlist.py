@@ -14,6 +14,7 @@ Dyson={
     "__Duplicate" : 1,
     "__IsCluster" : MonteCarlo["Control"]["__IsCluster"],
     "__AutoRun" : MonteCarlo["Control"]["__AutoRun"], 
+    #"__AutoRun" : False,
     "__PBSCommand": "#PBS -l mem=5gb"
     },
 "Job": {
@@ -22,10 +23,10 @@ Dyson={
     }
 }
 
-Beta=0.6
+Beta=1.5
 Order=1
 Common={
-"Tau": {"MaxTauBin" : 64, "Beta": Beta},
+"Tau": {"MaxTauBin" : 128, "Beta": Beta},
 "Lattice":  {
     #2D lattice
     #"Name": "Square", "NSublat": 1,
@@ -75,7 +76,7 @@ Dyson["Dyson"]={
     #"SleepTime": 300,
     "OrderAccepted": {"Sigma":1, "Polar":1}, "ErrorThreshold": 0.2,
     "Annealing": {
-        "DeltaField": [0.0, -0.0, 0.0, 0.0],
+        "DeltaField": [1.0, -1.0, 0.0, 0.0],
         "Interval": [-0.1, 0.1, -0.0, -0.0]
         }
     }
