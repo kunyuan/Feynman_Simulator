@@ -107,7 +107,8 @@ def PlotChiAlongPath(Chi, lat, DoesSave=True):
     omega=0
     map=Chi.Map
     Chi.FFT("R", "W")
-    fig=plt.figure(figsize=(20, 10))
+    #fig=plt.figure(figsize=(20, 10))
+    fig=plt.figure()
     for BZcenter in lat.IndependtBZCenter:
         x=[]
         KList=[]
