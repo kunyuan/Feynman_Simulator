@@ -23,9 +23,8 @@ WeightEstimator::WeightEstimator()
 void WeightEstimator::Allocate(const IndexMap& map, int order, real Norm)
 {
     int Vol = map.Lat.Vol;
-    int SublatVol = map.Lat.SublatVol;
     _Beta = map.Beta;
-    _Norm = Norm * (map.MaxTauBin / _Beta) / _Beta / Vol / SublatVol;
+    _Norm = Norm * (map.MaxTauBin / _Beta) / _Beta / Vol;
     uint MeaShape[SMOOTH_T_SIZE + 1];
     MeaShape[0] = order;
     std::copy(map.GetShape(), map.GetShape() + SMOOTH_T_SIZE, &MeaShape[1]);

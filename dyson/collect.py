@@ -40,7 +40,7 @@ class WeightEstimator():
             self.NormAccu=datamat['NormAccu']
             self.WeightAccu=datamat['WeightAccu']
 
-    def UpdateWeight(self, Name, ErrorThreshold, OrderAccepted):
+    def UpdateWeight(self, Name, ErrorThreshold, OrderAccepted, DoesSaveFigure=True):
         """ Weight accumulation data will be destroyed here to save memory!!!"""
         if abs(self.NormAccu)<1e-3:
             raise CollectStatisFailure("{0} 's NormAccu is 0.0!".format(Name))
@@ -86,7 +86,7 @@ class WeightEstimator():
                 order-=1
                 break
         try:
-            self.__Plot(Info)
+            self.__Plot(Info, DoesSaveFigure)
         except:
             raise
             log.warning("Failed to plot statistics of {0} at order {1}".format(Name, Position[0]))
@@ -97,7 +97,7 @@ class WeightEstimator():
         self.__Weight.FromDict(Dict)
         return self.__Weight, NewOrderAccepted
 
-    def __Plot(self, Info):
+    def __Plot(self, Info, DoesSaveFigure):
         import matplotlib.pyplot as plt
         color=plt.cm.rainbow(np.linspace(0,1,len(Info)))
         fig=plt.figure()
@@ -125,7 +125,10 @@ class WeightEstimator():
         ax2.legend(loc='best', fancybox=True, framealpha=0.5, prop={'size':6})
         ax1.set_xlabel("$\\tau_{bin}$")
         ax2.set_xlabel("$\\tau_{bin}$")
-        plt.savefig("{0}_Smoothed.pdf".format(Name))
+        if DoesSaveFigure:
+            plt.savefig("{0}_Smoothed.pdf".format(Name))
+        else:
+            plt.show()
         plt.close()
 
     def ToDict(self):
@@ -171,10 +174,10 @@ def CollectStatis(_map):
         raise CollectStatisFailure("More than {0}% statistics files fail to read!".format(100.0*AcceptRatio)) 
     return (SigmaSmoothT, PolarSmoothT)
 
-def UpdateWeight(StatisCollected, ErrorThreshold, OrderAccepted):
+def UpdateWeight(StatisCollected, ErrorThreshold, OrderAccepted, DoesSaveFigure=True):
     SigmaSmoothT, PolarSmoothT=StatisCollected
-    Sigma,SigmaOrder=SigmaSmoothT.UpdateWeight("Sigma", ErrorThreshold, OrderAccepted["Sigma"])
-    Polar,PolarOrder=PolarSmoothT.UpdateWeight("Polar", ErrorThreshold, OrderAccepted["Polar"])
+    Sigma,SigmaOrder=SigmaSmoothT.UpdateWeight("Sigma", ErrorThreshold, OrderAccepted["Sigma"], DoesSaveFigure)
+    Polar,PolarOrder=PolarSmoothT.UpdateWeight("Polar", ErrorThreshold, OrderAccepted["Polar"], DoesSaveFigure)
     log.info("Accepted Sigma order : {0}; Accepted Polar order : {1}".
             format(SigmaOrder, PolarOrder))
     if SigmaOrder==0 or PolarOrder==0:

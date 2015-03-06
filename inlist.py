@@ -2,7 +2,7 @@
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" :  0,
+    "__Duplicate" :  3,
     "__IsCluster" : False, 
     "__AutoRun" : True,
     },
@@ -14,6 +14,7 @@ Dyson={
     "__Duplicate" : 1,
     "__IsCluster" : MonteCarlo["Control"]["__IsCluster"],
     "__AutoRun" : MonteCarlo["Control"]["__AutoRun"], 
+    #"__AutoRun" : False,
     "__PBSCommand": "#PBS -l mem=5gb"
     },
 "Job": {
@@ -25,26 +26,26 @@ Dyson={
 Beta=2.0
 Order=3
 Common={
-"Tau": {"MaxTauBin" : 64, "Beta": Beta},
+"Tau": {"MaxTauBin" : 128, "Beta": Beta},
 "Lattice":  {
     #2D lattice
     #"Name": "Square", "NSublat": 1,
-    #"Name": "Checkboard", "NSublat": 2,
+    #"Name": "Checkerboard", "NSublat": 2,
     #"Name": "Honeycomb", "NSublat": 2,
     #"Name": "Kagome", "NSublat": 3,
-    #"L": [8,8]
+    #"L": [16,16]
 
     #3D lattice
     #"Name": "Cubic", "NSublat": 1,
-    #"Name": "3DCheckerboard", "NSublat": 2,
-    "Name": "Pyrochlore", "NSublat": 4,
+    "Name": "3DCheckerboard", "NSublat": 2,
+    #"Name": "Pyrochlore", "NSublat": 4,
     "L": [8,8,8]
     },
 "Model": {
     "Name": "J1J2",
     #"Description": ["ImW",],
     "Interaction": [1.0,0.0],
-    "ExternalField": [0.0, 0.0, 0.0, 0.0]
+    "ExternalField": [0.00, -0.00, 0.0, 0.0]
     #ExternalField on Sublattice A and B
     },
 }
@@ -63,20 +64,20 @@ MonteCarlo["Markov"]={
         #"ReweightTimer": 600
         #},
     "Timer": {
-        "PrinterTimer": 60,
-        "DiskWriterTimer": 60,
-        "MessageTimer": 60,
+        "PrinterTimer": 30,
+        "DiskWriterTimer": 30,
+        "MessageTimer": 30,
         "ReweightTimer":60
         },
     }
 
 Dyson["Dyson"]={
-    "SleepTime": 40,
+    "SleepTime": 30,
     #"SleepTime": 300,
     "OrderAccepted": {"Sigma":1, "Polar":1}, "ErrorThreshold": 0.2,
     "Annealing": {
-        "DeltaField": [0.0, 0.0, 0.0, 0.0],
-        "Interval": [-0.1, -0.1, -0.1, -0.1]
+        "DeltaField": [1.0, -1.0, 0.0, 0.0],
+        "Interval": [-0.1, 0.1, -0.0, -0.0]
         }
     }
 

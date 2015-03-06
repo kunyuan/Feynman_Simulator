@@ -27,11 +27,11 @@ log.addHandler(fh)
 
 def Assert(condition, info):
     if not condition:
-        log.error(info)
+        log.error(red(info))
         raise AssertionError
 
 def Abort(info):
-    log.error(info)
+    log.error(red(info))
     raise AssertionError
 
 class DelayedInterrupt(object):

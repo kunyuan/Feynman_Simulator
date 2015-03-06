@@ -26,7 +26,8 @@ class Observable:
             StagK=(PI,)*self.__Map.Dim
             _, ChiK=self.__Lat.FourierTransformation(Chi.Data[0,:,0,:,:,0]*Factor, [UnifK,StagK],"Real")
             self.Append("UnifChi", ChiK[0])
-            self.Append("StagMag", ChiK[1])
+            self.Append("StagChi", ChiK[1])
+            self.Append("StagMag^2 density", ChiK[1]/self.__Map.Vol/self.__Map.NSublat/self.__Map.Beta)
 
         elif self.__Lat.Name in ["Pyrochlore"]:
             Chi.FFT("R", "W")
