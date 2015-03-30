@@ -101,6 +101,7 @@ bool MarkovMonitor::AdjustOrderReWeight()
     weight[0] = WormEstimator[0].Value() + PhyEstimator[0].Value();
 
     LOG_INFO("Number of confs in different Order => Reweight Ratio:");
+    stringstream output;
     for (int i = 1; i <= Para->Order; i++) {
         weight[i] = WormEstimator[i].Value() + PhyEstimator[i].Value();
         wormweight += WormEstimator[i].Value();
@@ -108,7 +109,7 @@ bool MarkovMonitor::AdjustOrderReWeight()
         if (Zero(weight[i]))
             continue;
         Para->OrderReWeight[i] = Para->OrderTimeRatio[i] * weight[0] / weight[i];
-        cout << "Order0 :" << weight[0] << " Order" << i << " :" << weight[i] << " => " << Para->OrderReWeight[i] << endl;
+        output << "Order0 :" << weight[0] << " Order" << i << " :" << weight[i] << " => " << Para->OrderReWeight[i] << endl;
     }
     Para->OrderReWeight[0] = 1.0;
 
@@ -116,7 +117,8 @@ bool MarkovMonitor::AdjustOrderReWeight()
         return false;
 
     Para->WormSpaceReweight = phyweight / wormweight;
-    cout << "Worm confs:" << wormweight << " Physics confs: " << phyweight << " => " << Para->WormSpaceReweight << endl;
+    output << "Worm confs:" << wormweight << " Physics confs: " << phyweight << " => " << Para->WormSpaceReweight << endl;
+    LOG_INFO(output.str());
 
     Para->PolarReweight = SigmaEstimator.Value() / PolarEstimator.Value();
     return true;
