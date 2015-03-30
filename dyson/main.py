@@ -110,9 +110,9 @@ def Dyson(IsDysonOnly, IsNewCalculation, para, Map, Lat):
             ratio=None   #set this will not use accumulation!
             #ratio = para["Version"]/(para["Version"]+10.0)
             G0,W0=Factory.Build()
-            log.info("calculating SigmaDeltaT..")
-            SigmaDeltaT.Merge(ratio, calc.SigmaDeltaT_FirstOrder(G, W0, Map))
-            log.info("SigmaDeltaT is done")
+            #log.info("calculating SigmaDeltaT..")
+            #SigmaDeltaT.Merge(ratio, calc.SigmaDeltaT_FirstOrder(G, W0, Map))
+            #log.info("SigmaDeltaT is done")
 
             if IsDysonOnly or IsNewCalculation:
                 log.info("accumulating Sigma/Polar statistics...")
