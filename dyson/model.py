@@ -213,6 +213,7 @@ class BareFactory:
             for i in range(4):
                 for j in range(4):
                     for e in self.NearestNeighbor[i][j]:
+                        #self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SzSz;
                         self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SS;
             #S111S111=np.outer(Sx+Sy+Sz,Sx+Sy+Sz)
             #for i in range(4):
