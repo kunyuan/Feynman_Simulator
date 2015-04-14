@@ -107,8 +107,8 @@ def Dyson(IsDysonOnly, IsNewCalculation, para, Map, Lat):
         para["Version"]+=1
         log.info(green("Start Version {0}...".format(para["Version"])))
         try:
-            ratio=None   #set this will not use accumulation!
-            #ratio = para["Version"]/(para["Version"]+10.0)
+            #ratio=None   #set this will not use accumulation!
+            ratio = para["Version"]/(para["Version"]+10.0)
             G0,W0=Factory.Build()
             #log.info("calculating SigmaDeltaT..")
             #SigmaDeltaT.Merge(ratio, calc.SigmaDeltaT_FirstOrder(G, W0, Map))

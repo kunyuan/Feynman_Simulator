@@ -2,7 +2,7 @@
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" :  3,
+    "__Duplicate" :  0,
     "__IsCluster" : False, 
     "__AutoRun" : True,
     },
@@ -37,8 +37,8 @@ Common={
 
     #3D lattice
     #"Name": "Cubic", "NSublat": 1,
-    "Name": "3DCheckerboard", "NSublat": 2,
-    #"Name": "Pyrochlore", "NSublat": 4,
+    #"Name": "3DCheckerboard", "NSublat": 2,
+    "Name": "Pyrochlore", "NSublat": 4,
     "L": [8,8,8]
     },
 "Model": {
@@ -64,19 +64,19 @@ MonteCarlo["Markov"]={
         #"ReweightTimer": 600
         #},
     "Timer": {
-        "PrinterTimer": 30,
-        "DiskWriterTimer": 30,
-        "MessageTimer": 30,
-        "ReweightTimer":60
+        "PrinterTimer": 90,
+        "DiskWriterTimer": 90,
+        "MessageTimer": 90,
+        "ReweightTimer":36000
         },
     }
 
 Dyson["Dyson"]={
-    "SleepTime": 30,
+    "SleepTime": 90,
     #"SleepTime": 300,
     "OrderAccepted": {"Sigma":1, "Polar":1}, "ErrorThreshold": 0.2,
     "Annealing": {
-        "DeltaField": [1.0, -1.0, 0.0, 0.0],
+        "DeltaField": [0.0, -0.0, 0.0, 0.0],
         "Interval": [-0.1, 0.1, -0.0, -0.0]
         }
     }
