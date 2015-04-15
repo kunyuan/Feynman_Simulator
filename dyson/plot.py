@@ -95,7 +95,7 @@ def PlotWeightvsR(Name, weight, lattice, SpinIn, SpinOut, Tau=0, DoesSave=True):
     plt.plot(x,y, "o")
     #plt.plot(x, Exp(x, fitParams[0], fitParams[1]), '-',
             #label="fit with ${0}exp(-R/{1}a)$".format(fitParams[0], 1.0/fitParams[1]))
-    plt.yscale("log")
+    #plt.yscale("log")
     plt.xlabel("$R/a$")
     plt.ylabel("$|{0}(\omega={1})|$".format(Name,Omega))
     #plt.legend()
