@@ -154,7 +154,7 @@ def G_Dyson(G0, SigmaDeltaT, Sigma, map):
     I=np.eye(NSpin*NSub).reshape([NSpin,NSub,NSpin,NSub])
     Denorm=I[...,np.newaxis,np.newaxis]-GS
     lu_piv,Determ=weight.LUFactor(Denorm)
-    Check_Denorminator(Determ,map)
+    Check_Denorminator(Denorm, Determ,map)
     G.LUSolve(lu_piv, G0.Data);
     return G
 
@@ -212,6 +212,6 @@ def Check_Denorminator(Denorm, Determ, map):
     pos=np.where(Determ==Determ.min())
     x,t=pos[0][0], pos[1][0]
     log.info("The minmum {0} is at K={1} and Omega={2}".format(Determ.min(), map.IndexToCoordi(x), t))
-    log.info("The linalg.cond is {0}".format(linalg.cond(np.array(Denorm[:,:,x,t])))
+    log.info("The linalg.cond is {0}".format(linalg.cond(np.array(Denorm[:,:,x,t]))))
     if Determ.min().real<0.0 and Determ.min().imag<1.0e-4:
         raise DenorminatorTouchZero(Determ.min(), map.IndexToCoordi(x), t)
