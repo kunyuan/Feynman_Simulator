@@ -212,6 +212,8 @@ def Check_Denorminator(Denorm, Determ, map):
     pos=np.where(Determ==Determ.min())
     x,t=pos[0][0], pos[1][0]
     log.info("The minmum {0} is at K={1} and Omega={2}".format(Determ.min(), map.IndexToCoordi(x), t))
-    log.info("The linalg.cond is {0}".format(np.linalg.cond(Denorm[:,:,x,t])))
+    SpSub,Vol,Time=Denorm.shape[0]*Denorm.shape[1], Denorm.shape[-2], Denorm.shape[-1]
+    Denorm=Denorm.reshape([SpSub,SpSub,Vol,Time])
+    log.info("The 1/linalg.cond is {0}".format(1.0/np.linalg.cond(Denorm[...,x,t])))
     if Determ.min().real<0.0 and Determ.min().imag<1.0e-4:
         raise DenorminatorTouchZero(Determ.min(), map.IndexToCoordi(x), t)
