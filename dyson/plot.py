@@ -83,8 +83,10 @@ def PlotWeightvsR(Name, weight, lattice, SpinIn, SpinOut, Tau=0, DoesSave=True):
     for vec, coord, sub in points:
         if not all(v == 0 for v in coord) and all(v<l/2 for v,l in zip(coord, lattice.L)):
             x.append(np.linalg.norm(vec))
-            y.append(abs(weight.Data[SpinIn, OriginalSubLat, SpinOut, sub,
-                weight.Map.CoordiIndex(coord), Omega]))
+            #y.append(abs(weight.Data[SpinIn, OriginalSubLat, SpinOut, sub,
+                #weight.Map.CoordiIndex(coord), Omega]))
+            y.append(weight.Data[SpinIn, OriginalSubLat, SpinOut, sub,
+                weight.Map.CoordiIndex(coord), Omega])
     #sort x,y according to the distance in x
     x,y = (list(x) for x in zip(*sorted(zip(x, y), key=lambda pair: pair[0])))
     #fitting

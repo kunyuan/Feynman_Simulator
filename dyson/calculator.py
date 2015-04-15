@@ -127,7 +127,7 @@ def W_Dyson(W0, Polar, map, Lat):
     W0.FFT("K")
     JPJ=np.einsum("ijklvt,klmnv->ijmnvt", JP, W0.Data)
     lu_piv,Determ=weight.LUFactor(Denorm)
-    Check_Denorminator(Determ,map)
+    Check_Denorminator(Denorm,Determ,map)
     W.LUSolve(lu_piv, JPJ)
     ChiTensor.LUSolve(lu_piv, -Polar.Data)
     return W, ChiTensor, Determ
@@ -208,9 +208,10 @@ class DenorminatorTouchZero(Exception):
     def __str__(self):
         return "Denorminator touch zero, minmum {0} is at K={1} and Omega={2}".format(self.value, self.position, self.frequency)
 
-def Check_Denorminator(Determ, map):
+def Check_Denorminator(Denorm, Determ, map):
     pos=np.where(Determ==Determ.min())
     x,t=pos[0][0], pos[1][0]
     log.info("The minmum {0} is at K={1} and Omega={2}".format(Determ.min(), map.IndexToCoordi(x), t))
+    log.info("The linalg.cond is {0}".format(linalg.cond(np.array(Denorm[:,:,x,t])))
     if Determ.min().real<0.0 and Determ.min().imag<1.0e-4:
         raise DenorminatorTouchZero(Determ.min(), map.IndexToCoordi(x), t)
