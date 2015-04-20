@@ -21,8 +21,8 @@ if __name__ == '__main__':
     else:
         filename="id_job.log"
         lines = [line.rstrip('\n') for line in open(filename)]
-    p = Pool(16)
-    if args.force:
-        p.map(delete, lines) 
-    else:
-        p.map(terminate, lines)
+    for i in lines:
+        if args.force:
+            delete(i) 
+        else:
+            terminate(i)
