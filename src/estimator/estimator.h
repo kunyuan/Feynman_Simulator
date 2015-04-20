@@ -73,7 +73,7 @@ class EstimatorBundle {
 private:
     typedef Estimator<T> EstimatorT;
     std::vector<EstimatorT> _EstimatorVector;
-    std::unordered_map<std::string, EstimatorT*> _EstimatorMap;
+    std::unordered_map<std::string, unsigned long> _EstimatorMap;
     bool _MakeSureKeyNotExists(std::string key);
 
 public:

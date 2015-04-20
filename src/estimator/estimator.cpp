@@ -258,7 +258,7 @@ void EstimatorBundle<T>::AddEstimator(string name)
 {
     _MakeSureKeyNotExists(name);
     _EstimatorVector.push_back(EstimatorT(name));
-    _EstimatorMap[name] = _EstimatorVector.data() + _EstimatorVector.size() - 1;
+    _EstimatorMap[name] = _EstimatorVector.size() - 1;
 }
 
 /**
@@ -269,7 +269,7 @@ void EstimatorBundle<T>::AddEstimator(const Estimator<T>& est)
 {
     _MakeSureKeyNotExists(est.Name);
     _EstimatorVector.push_back(est);
-    _EstimatorMap[est.Name] = _EstimatorVector.data() + _EstimatorVector.size() - 1;
+    _EstimatorMap[est.Name] = _EstimatorVector.size() - 1;
 }
 
 template <typename T>
@@ -326,7 +326,7 @@ Estimator<T>& EstimatorBundle<T>::operator[](int index)
 template <typename T>
 Estimator<T>& EstimatorBundle<T>::operator[](string name)
 {
-    return *_EstimatorMap[name];
+    return _EstimatorVector[_EstimatorMap[name]];
 }
 
 /**
