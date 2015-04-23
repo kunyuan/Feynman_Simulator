@@ -269,6 +269,7 @@ class Weight():
             if hasattr(self, "AccuData"):
                 self.AccuData=np.fft.ifft(self.AccuData, axis=self.TAUDIM)
             self.ChangeSymmetry(-1)
+
     def __fftSpace(self, BackForth):
         OldShape=self.__OriginShape
         self.__AssertShape(self.Shape, OldShape)
@@ -286,6 +287,7 @@ class Weight():
             elif BackForth==-1:
                 self.AccuData=np.fft.ifftn(self.AccuData, axes=Axis)
             self.AccuData=self.AccuData.reshape(OldShape)
+
     def __AdditionalPhaseFactor(self,BackForth):
         ''' the transformation has to be done in continuous tau representation, namely using  
         exp(-i*2*Pi*m*Tau_n/Beta)(e.g. exp(-i*2*Pi*m*(n+1/2)/N)) as the phase factor
