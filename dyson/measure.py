@@ -20,7 +20,7 @@ class Observable:
     def Measure(self, Chi, Determinate, G, NN):
         self.Append("1-JP", Determinate.min())
         Factor=self.__Map.Beta/self.__Map.MaxTauBin
-        if self.__Lat.Name in ["Square", "Cubic", "Checkerboard", "3DCheckerboard"]:
+        if self.__Lat.Name in ["Square", "Cubic", "Checkerboard", "3DCheckerboard", "ValenceBond"]:
             Chi.FFT("R", "W")
             UnifK=(0.0,)*self.__Map.Dim
             StagK=(PI,)*self.__Map.Dim
@@ -37,6 +37,12 @@ class Observable:
             self.Append("Chi_X(4Pi,2Pi,0)", ChiK[1])
         else:
             Assert(False, "model not implemented!")
+
+        if self.__Lat.Name in ["ValenceBond"]:
+            Chi.FFT("R","W")
+            Neighbor1=self.__Map.CoordiIndex((0,0))
+            Neighbor2=self.__Map.CoordiIndex((0,self.__Lat.L[1]-1))
+            self.Append("VBS", (Chi.Data[0,0,0,1,Neighbor1,0]-Chi.Data[0,0,0,1,Neighbor2,0])*Factor)
 
         Chi.FFT("R","W")
         energy=0j

@@ -23,17 +23,18 @@ Dyson={
     }
 }
 
-Beta=2.0
+Beta=1.0
 Order=3
 Common={
-"Tau": {"MaxTauBin" : 128, "Beta": Beta},
+"Tau": {"MaxTauBin" : 64, "Beta": Beta},
 "Lattice":  {
     #2D lattice
     #"Name": "Square", "NSublat": 1,
     #"Name": "Checkerboard", "NSublat": 2,
+    #"Name": "ValenceBond", "NSublat": 2,
     #"Name": "Honeycomb", "NSublat": 2,
     #"Name": "Kagome", "NSublat": 3,
-    #"L": [16,16]
+    #"L": [16,8]
 
     #3D lattice
     #"Name": "Cubic", "NSublat": 1,
@@ -44,7 +45,7 @@ Common={
 "Model": {
     "Name": "J1J2",
     #"Description": ["ImW",],
-    "Interaction": [1.0,0.0],
+    "Interaction": [1.0,0.0,0.002],
     "ExternalField": [0.00, -0.00, 0.0, 0.0]
     #ExternalField on Sublattice A and B
     },
