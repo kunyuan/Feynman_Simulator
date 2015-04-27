@@ -80,13 +80,14 @@ def PlotWeightvsR(Name, weight, lattice, SpinIn, SpinOut, Tau=0, DoesSave=True):
     y=[]
     z=[]
     points, _=lattice.GetSitesList(HasOffset=False)
+    Norm = weight.Data[SpinIn, OriginalSubLat, SpinOut, OriginalSubLat, 0, Omega]
     for vec, coord, sub in points:
-        if not all(v == 0 for v in coord) and all(v<l/2 for v,l in zip(coord, lattice.L)):
+        if not (all(v == 0 for v in coord) and sub==OriginalSubLat) and all(v<l/2 for v,l in zip(coord, lattice.L)):
             x.append(np.linalg.norm(vec))
-            y.append(abs(weight.Data[SpinIn, OriginalSubLat, SpinOut, sub,
-                weight.Map.CoordiIndex(coord), Omega]))
-            #y.append(weight.Data[SpinIn, OriginalSubLat, SpinOut, sub,
-                #weight.Map.CoordiIndex(coord), Omega])
+            #y.append(abs(weight.Data[SpinIn, OriginalSubLat, SpinOut, sub,
+                #weight.Map.CoordiIndex(coord), Omega])/Norm)
+            y.append(weight.Data[SpinIn, OriginalSubLat, SpinOut, sub,
+                weight.Map.CoordiIndex(coord), Omega]/Norm)
     #sort x,y according to the distance in x
     x,y = (list(x) for x in zip(*sorted(zip(x, y), key=lambda pair: pair[0])))
     #fitting
@@ -95,7 +96,7 @@ def PlotWeightvsR(Name, weight, lattice, SpinIn, SpinOut, Tau=0, DoesSave=True):
     plt.plot(x,y, "o")
     #plt.plot(x, Exp(x, fitParams[0], fitParams[1]), '-',
             #label="fit with ${0}exp(-R/{1}a)$".format(fitParams[0], 1.0/fitParams[1]))
-    plt.yscale("log")
+    #plt.yscale("log")
     plt.xlabel("$R/a$")
     plt.ylabel("$|{0}(\omega={1})|$".format(Name,Omega))
     #plt.legend()
@@ -279,7 +280,7 @@ if __name__=="__main__":
     import IO
 
     WeightPara={"NSublat": 4, "L":[8,8,8],
-            "Beta": 1.5, "MaxTauBin":64}
+            "Beta": 6.0, "MaxTauBin":64}
     Map=weight.IndexMap(**WeightPara)
     l=lat.Lattice("Pyrochlore", Map)
 
