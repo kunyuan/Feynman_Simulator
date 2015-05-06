@@ -73,7 +73,7 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
         except:
             log.info(blue("Output fails due to\n {0}".format(traceback.format_exc())))
 
-def Dyson(IsDysonOnly, IsNewCalculation, para, Map, Lat):
+def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
     ParaDyson=para["Dyson"]
     if not para.has_key("Version"):
         para["Version"]=0
@@ -131,7 +131,24 @@ def Dyson(IsDysonOnly, IsNewCalculation, para, Map, Lat):
                 G = calc.G_Dyson(G0, SigmaDeltaT, Sigma, Map)
             #######DYSON FOR W AND G###########################
             log.info("calculating W...")
-            W, ChiTensor, Determ = calc.W_Dyson(W0, Polar, Map, Lat)
+            Wtmp, ChiTensor, Determ = calc.W_Dyson(W0, Polar, Map, Lat)
+
+            if EnforceSumRule:
+                ChiTensor=calc.Add_ChiTensor_ZerothOrder(ChiTensor, G, Map)
+                Chi = calc.Calculate_Chi(ChiTensor, Map)
+                Chi.FFT("R","T")
+
+                while abs(Chi.Data[0,0,0,0,0,0]-0.75)>1.e-2:
+                    SumRuleRatio = np.sqrt(0.75/Chi.Data[0,0,0,0,0,0])
+                    PolarSumRule = Polar
+                    PolarSumRule.Data = PolarSumRule.Data*SumRuleRatio
+                    Wtmp, ChiTensor, Determ = calc.W_Dyson(W0, Polar, Map, Lat)
+                    ChiTensor=calc.Add_ChiTensor_ZerothOrder(ChiTensor, G, Map)
+                    Chi = calc.Calculate_Chi(ChiTensor, Map)
+                    Chi.FFT("R","T")
+                    print "Chi(r=0,t=0)", Chi.Data[0,0,0,0,0,0]
+
+            W = Wtmp
 
         except calc.DenorminatorTouchZero as err:
             #failure due to denorminator touch zero
@@ -226,7 +243,7 @@ if __name__=="__main__":
             IO.SaveBigDict(StatisFile, data)
         sys.exit(0)
     else:
-        Dyson(job["DysonOnly"], IsNewCalculation, para, Map, Lat)
+        Dyson(job["DysonOnly"],  IsNewCalculation, job["SumRule"], para, Map, Lat)
 
     log.info("calculation ended!")
 

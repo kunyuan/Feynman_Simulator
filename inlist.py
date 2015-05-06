@@ -18,8 +18,9 @@ Dyson={
     "__PBSCommand": "#PBS -l mem=5gb"
     },
 "Job": {
-    "DysonOnly": MonteCarlo["Control"]["__Duplicate"]==0
-    #"DysonOnly": False
+    "DysonOnly": MonteCarlo["Control"]["__Duplicate"]==0,
+    #"DysonOnly": False,
+    "SumRule": True
     }
 }
 
