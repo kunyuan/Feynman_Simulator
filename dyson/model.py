@@ -75,7 +75,7 @@ class BareFactory:
         Assert(len(self.__Interaction)==1, "Heisenberg model only has one coupling!")
         self.__SpinModel(LatName)
     def J1J2(self, LatName):
-        Assert(len(self.__Interaction)==2, "J1J2 model only has two couplings!")
+        Assert(len(self.__Interaction)>=2, "J1J2 model takes at least two couplings!")
         self.__SpinModel(LatName)
 
     def __SpinModel(self, LatName):
@@ -113,6 +113,9 @@ class BareFactory:
 
         Interaction=list(self.__Interaction)+[0,0,0,0,0]
         J1,J2=Interaction[0:2]
+        J_perturbation=None
+        if len(Interaction)>2:
+            J_perturbation=Interaction[2:]
         #Bare W
         #Dimension: 2
         spin=self.__Map.Spin2Index(UP,UP)
@@ -135,6 +138,28 @@ class BareFactory:
                     #J2 interaction A-->A, B-->B
                     for e in self.NextNearestNeighbor[i][j]:
                         self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J2*SS;
+
+        elif LatName=="ValenceBond":
+            Lx,Ly=self.__Map.L
+            A,B=0,1
+            self.NearestNeighbor[A][B]=[(0, 0),(0,Ly-1)]
+            self.NearestNeighbor[B][A]=[(0, 0),(0,   1)]
+            self.NearestNeighbor[A][A]=[(Lx-1, 0),(1,0)]
+            self.NearestNeighbor[B][B]=[(Lx-1, 0),(1,0)]
+
+            self.NextNearestNeighbor[A][B]=[(1, 0),(1,   Ly-1),(Lx-1,0),(Lx-1,   Ly-1)]
+            self.NextNearestNeighbor[B][A]=[(1, 1),(1,   0),(Lx-1,1),(Lx-1,   0)]
+
+            for i in range(2):
+                for j in range(2):
+                    #J1 interaction A-->B, B-->A
+                    for e in self.NearestNeighbor[i][j]:
+                        self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SS;
+                    #J2 interaction A-->A, B-->B
+                    for e in self.NextNearestNeighbor[i][j]:
+                        self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J2*SS;
+            self.BareW.Data[:,A,:,B,self.__Map.CoordiIndex((0,0))]+= J_perturbation[0]*SS;
+            self.BareW.Data[:,B,:,A,self.__Map.CoordiIndex((0,0))]+= J_perturbation[0]*SS;
 
         elif LatName=="Square":
         #NSublat: 1
