@@ -34,7 +34,7 @@ Common={
     #"Name": "ValenceBond", "NSublat": 2,
     #"Name": "Honeycomb", "NSublat": 2,
     #"Name": "Kagome", "NSublat": 3,
-    #"L": [16,8]
+    #"L": [16,16]
 
     #3D lattice
     #"Name": "Cubic", "NSublat": 1,
