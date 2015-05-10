@@ -18,12 +18,13 @@ Dyson={
     "__PBSCommand": "#PBS -l mem=5gb"
     },
 "Job": {
-    "DysonOnly": MonteCarlo["Control"]["__Duplicate"]==0
-    #"DysonOnly": False
+    "DysonOnly": MonteCarlo["Control"]["__Duplicate"]==0,
+    #"DysonOnly": False,
+    "SumRule": False 
     }
 }
 
-Beta=1.0
+Beta=2.0
 Order=3
 Common={
 "Tau": {"MaxTauBin" : 64, "Beta": Beta},

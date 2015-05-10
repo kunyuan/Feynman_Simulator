@@ -127,7 +127,7 @@ def W_Dyson(W0, Polar, map, Lat):
     W0.FFT("K")
     JPJ=np.einsum("ijklvt,klmnv->ijmnvt", JP, W0.Data)
     lu_piv,Determ=weight.LUFactor(Denorm)
-    Check_Denorminator(Denorm,Determ,map)
+    Check_Denorminator(Denorm, Determ,map)
     W.LUSolve(lu_piv, JPJ)
     ChiTensor.LUSolve(lu_piv, -Polar.Data)
     return W, ChiTensor, Determ
