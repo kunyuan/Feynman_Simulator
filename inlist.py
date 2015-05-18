@@ -24,7 +24,7 @@ Dyson={
     }
 }
 
-Beta=2.0
+Beta=1.5
 Order=3
 Common={
 "Tau": {"MaxTauBin" : 64, "Beta": Beta},
@@ -41,7 +41,7 @@ Common={
     #"Name": "Cubic", "NSublat": 1,
     #"Name": "3DCheckerboard", "NSublat": 2,
     "Name": "Pyrochlore", "NSublat": 4,
-    "L": [8,8,8]
+    "L": [4,4,4]
     },
 "Model": {
     "Name": "J1J2",
