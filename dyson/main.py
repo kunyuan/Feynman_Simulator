@@ -125,6 +125,9 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                 Statis=collect.CollectStatis(Map)
                 Sigma, Polar, ParaDyson["OrderAccepted"]=collect.UpdateWeight(Statis,
                         ParaDyson["ErrorThreshold"], ParaDyson["OrderAccepted"])
+                Sigma.Symmetric()
+                Polar.Symmetric()
+                print Sigma.Data[0,0,0,0,0,0], Sigma.Data[0,0,0,0,0,63]
                 log.info("calculating G...")
                 G = calc.G_Dyson(G0, SigmaDeltaT, Sigma, Map)
             #######DYSON FOR W AND G###########################
