@@ -75,6 +75,8 @@ class Lattice:
         #TODO: self.Path is not correct yet
         self.Path=[(0,0),(PI2/root3,0)]
         self.PathName=["\Gamma", "M"]
+        self.IndependtBZCenter=[(0,0)]
+
     def __Kagome(self):
         self.Dim=2
         self.__AssertDim()
@@ -92,6 +94,7 @@ class Lattice:
         #TODO: self.Path is not correct yet
         self.Path=[(0,0),(PI2/root3,0)]
         self.PathName=["\Gamma", "M"]
+        self.IndependtBZCenter=[(0,0)]
 
     #3D lattice
     def __Cubic(self):

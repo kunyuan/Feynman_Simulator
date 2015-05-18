@@ -79,15 +79,20 @@ def PlotWeightvsR(Name, weight, lattice, SpinIn, SpinOut, Tau=0, DoesSave=True):
     x=[]
     y=[]
     z=[]
-    points, _=lattice.GetSitesList(HasOffset=False)
+    points, _=lattice.GetSitesList(HasOffset=True)
     Norm = weight.Data[SpinIn, OriginalSubLat, SpinOut, OriginalSubLat, 0, Omega]
     for vec, coord, sub in points:
-        if not (all(v == 0 for v in coord) and sub==OriginalSubLat) and all(v<l/2 for v,l in zip(coord, lattice.L)):
-            x.append(np.linalg.norm(vec))
+        if (all(v == 0 for v in coord) and sub==OriginalSubLat):
+            Origin=np.array(vec)
+    for vec, coord, sub in points:
+        #if not (all(v == 0 for v in coord) and sub==OriginalSubLat) and all(v<l/2 for v,l in zip(coord, lattice.L)):
+        if not (all(v == 0 for v in coord) and sub==OriginalSubLat):
+            print np.array(vec)-Origin, coord, sub
+            x.append(np.linalg.norm(np.array(vec)-Origin))
             #y.append(abs(weight.Data[SpinIn, OriginalSubLat, SpinOut, sub,
                 #weight.Map.CoordiIndex(coord), Omega])/Norm)
-            y.append(weight.Data[SpinIn, OriginalSubLat, SpinOut, sub,
-                weight.Map.CoordiIndex(coord), Omega]/Norm)
+            y.append(abs(weight.Data[SpinIn, OriginalSubLat, SpinOut, sub,
+                weight.Map.CoordiIndex(coord), Omega]/Norm))
     #sort x,y according to the distance in x
     x,y = (list(x) for x in zip(*sorted(zip(x, y), key=lambda pair: pair[0])))
     #fitting
@@ -96,7 +101,7 @@ def PlotWeightvsR(Name, weight, lattice, SpinIn, SpinOut, Tau=0, DoesSave=True):
     plt.plot(x,y, "o")
     #plt.plot(x, Exp(x, fitParams[0], fitParams[1]), '-',
             #label="fit with ${0}exp(-R/{1}a)$".format(fitParams[0], 1.0/fitParams[1]))
-    #plt.yscale("log")
+    plt.yscale("log")
     plt.xlabel("$R/a$")
     plt.ylabel("$|{0}(\omega={1})|$".format(Name,Omega))
     #plt.legend()
