@@ -59,6 +59,22 @@ class Lattice:
         self.PathName=["$\Gamma$\n$(0,0)$", "$X$\n$(\pi,0)$", "$M$\n$(\pi,\pi)$","$\Gamma$\n$(0,0)$"]
         self.IndependtBZCenter=[(0,0)]
 
+    def __Triangular(self):
+        self.Dim=2
+        self.__AssertDim()
+        self.NSublat=1
+        self.__AssertNSublat()
+        root3=math.sqrt(3)
+        PI2=2.0*np.pi
+        self.LatVec=np.array([[1.0,0.0],
+                              [0.5,root3/2.0]])
+        self.SubLatVec=np.array([[0.0,0.0]])
+        self.ReciprocalLatVec =np.array([[PI2, -PI2/root3],
+                                         [0.0, 2*PI2/root3]])
+        #self.Path=[(0,0),(PI,0),(PI,PI),(0,0)]
+        #self.PathName=["$\Gamma$\n$(0,0)$", "$X$\n$(\pi,0)$", "$M$\n$(\pi,\pi)$","$\Gamma$\n$(0,0)$"]
+        #self.IndependtBZCenter=[(0,0)]
+
     def __Honeycomb(self):
         self.Dim=2
         self.__AssertDim()

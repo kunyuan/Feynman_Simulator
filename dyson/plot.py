@@ -85,9 +85,8 @@ def PlotWeightvsR(Name, weight, lattice, SpinIn, SpinOut, Tau=0, DoesSave=True):
         if (all(v == 0 for v in coord) and sub==OriginalSubLat):
             Origin=np.array(vec)
     for vec, coord, sub in points:
-        #if not (all(v == 0 for v in coord) and sub==OriginalSubLat) and all(v<l/2 for v,l in zip(coord, lattice.L)):
-        if not (all(v == 0 for v in coord) and sub==OriginalSubLat):
-            print np.array(vec)-Origin, coord, sub
+        if not (all(v == 0 for v in coord) and sub==OriginalSubLat) and all(v<l/2 for v,l in zip(coord, lattice.L)):
+        #if not (all(v == 0 for v in coord) and sub==OriginalSubLat):
             x.append(np.linalg.norm(np.array(vec)-Origin))
             #y.append(abs(weight.Data[SpinIn, OriginalSubLat, SpinOut, sub,
                 #weight.Map.CoordiIndex(coord), Omega])/Norm)

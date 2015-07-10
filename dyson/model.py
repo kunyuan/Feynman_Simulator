@@ -176,6 +176,21 @@ class BareFactory:
             for i in self.NextNearestNeighbor[0][0]:
                 self.BareW.Data[:,sub,:,sub,self.__Map.CoordiIndex(i)]+= J2*SS;
 
+        elif LatName=="Triangular":
+        #NSublat: 1
+            Lx,Ly=self.__Map.L
+            sub=0
+
+            self.NearestNeighbor[0][0]=[(0,1),(1,0),(Lx-1,0),(0,Ly-1)]
+            self.NextNearestNeighbor[0][0]=[(1,1),(Lx-1,1),(1,Ly-1),(Lx-1,Ly-1)]
+
+            #J1 interaction on nearest neighbors
+            for i in self.NearestNeighbor[0][0]:
+                self.BareW.Data[:,sub,:,sub,self.__Map.CoordiIndex(i)]+= J1*SS;
+            #J2 interaction on next nearest neighbors
+            for i in self.NextNearestNeighbor[0][0]:
+                self.BareW.Data[:,sub,:,sub,self.__Map.CoordiIndex(i)]+= J2*SS;
+
         elif LatName=="Honeycomb":
             #NSublat: 2
             Lx,Ly=self.__Map.L

@@ -2,7 +2,7 @@
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" :  1,
+    "__Duplicate" :  0,
     "__IsCluster" : False, 
     "__AutoRun" : True,
     },
@@ -35,13 +35,14 @@ Common={
     #"Name": "ValenceBond", "NSublat": 2,
     #"Name": "Honeycomb", "NSublat": 2,
     #"Name": "Kagome", "NSublat": 3,
-    #"L": [16,16]
+    "Name": "Triangular", "NSublat": 1,
+    "L": [8,8]
 
     #3D lattice
     #"Name": "Cubic", "NSublat": 1,
     #"Name": "3DCheckerboard", "NSublat": 2,
-    "Name": "Pyrochlore", "NSublat": 4,
-    "L": [4,4,4]
+    #"Name": "Pyrochlore", "NSublat": 4,
+    #"L": [4,4,4]
     },
 "Model": {
     "Name": "J1J2",
