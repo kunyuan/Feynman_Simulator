@@ -13,7 +13,7 @@
 using namespace weight;
 using namespace std;
 
-real Norm::NormFactor = 1.0;
+//Complex Norm::NormFactor = 1.0;
 
 G::G(const Lattice& lat, real beta, uint MaxTauBin, TauSymmetry Symmetry)
     : _Map(IndexMapSPIN2(beta, MaxTauBin, lat, Symmetry))
@@ -98,7 +98,7 @@ Dictionary W::ToDict()
 }
 
 Sigma::Sigma(const Lattice& lat, real Beta, uint MaxTauBin,
-             int MaxOrder, TauSymmetry Symmetry, real Norm)
+             int MaxOrder, Complex Norm, TauSymmetry Symmetry)
     : _Map(IndexMapSPIN2(Beta, MaxTauBin, lat, Symmetry))
 {
     Estimator.Allocate(_Map, MaxOrder, Norm);
@@ -132,7 +132,7 @@ Dictionary Sigma::ToDict()
     return dict;
 }
 
-Polar::Polar(const Lattice& lat, real Beta, uint MaxTauBin, int MaxOrder, real Norm)
+Polar::Polar(const Lattice& lat, real Beta, uint MaxTauBin, int MaxOrder, Complex Norm)
     : _Map(IndexMapSPIN4(Beta, MaxTauBin, lat, TauSymmetric))
 {
     Estimator.Allocate(_Map, MaxOrder, Norm);

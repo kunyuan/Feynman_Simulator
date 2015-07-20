@@ -24,14 +24,14 @@ class Worm {
     }
 };
 
-class Norm {
-  public:
-    static real NormFactor;
-    static real Weight()
-    {
-        return NormFactor;
-    }
-};
+//class Norm {
+  //public:
+    //static Complex NormFactor;
+    //static Complex Weight()
+    //{
+        //return NormFactor;
+    //}
+//};
 
 typedef WeightArray<DELTA_T_SIZE> DeltaTArray;
 typedef WeightArray<SMOOTH_T_SIZE> SmoothTArray;
@@ -80,7 +80,7 @@ class W {
 class Sigma {
   public:
     Sigma(const Lattice &, real Beta, uint MaxTauBin, int MaxOrder,
-          TauSymmetry Symmetry = TauAntiSymmetric, real Norm = Norm::Weight());
+          Complex Norm, TauSymmetry Symmetry = TauAntiSymmetric);
     void BuildNew();
     void BuildTest();
 
@@ -90,6 +90,8 @@ class Sigma {
 
     void Measure(const Site &, const Site &, real, real, spin, spin,
                  int Order, const Complex &);
+    void MeasureNorm(const Site &, const Site &, real, real, spin, spin,
+                 const Complex &);
     WeightEstimator Estimator;
 
   protected:
@@ -98,7 +100,7 @@ class Sigma {
 
 class Polar {
   public:
-    Polar(const Lattice &, real Beta, uint MaxTauBin, int MaxOrder, real Norm = Norm::Weight());
+    Polar(const Lattice &, real Beta, uint MaxTauBin, int MaxOrder, Complex Norm);
     void BuildNew();
     void BuildTest();
 
@@ -108,6 +110,8 @@ class Polar {
 
     void Measure(const Site &, const Site &, real, real, spin *, spin *,
                  int Order, const Complex &);
+    void MeasureNorm(const Site &, const Site &, real, real, spin *, spin *,
+                 const Complex &);
     WeightEstimator Estimator;
 
   protected:

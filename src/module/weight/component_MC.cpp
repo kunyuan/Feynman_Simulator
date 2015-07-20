@@ -93,9 +93,23 @@ void Sigma::Measure(const Site& rin, const Site& rout, real tin, real tout, spin
     Estimator.Measure(index, order, weight * _Map.GetTauSymmetryFactor(tin, tout));
 }
 
+void Sigma::MeasureNorm(const Site& rin, const Site& rout, real tin, real tout, spin SpinIn, spin SpinOut, const Complex& weight)
+{
+    if(SpinIn==UP && SpinOut==UP)
+	if(rin.Sublattice==0 && rout.Sublattice==0)
+	    Estimator.MeasureNorm(weight * _Map.GetTauSymmetryFactor(tin, tout));
+}
+
 void Polar::Measure(const Site& rin, const Site& rout, real tin, real tout, spin* SpinIn, spin* SpinOut, int order, const Complex& weight)
 {
     static uint index;
     index = _Map.GetIndex(SpinIn, SpinOut, rin, rout, tin, tout);
     Estimator.Measure(index, order, weight);
+}
+
+void Polar::MeasureNorm(const Site& rin, const Site& rout, real tin, real tout, spin* SpinIn, spin* SpinOut, const Complex& weight)
+{
+    if(SpinIn[IN]==UP && SpinIn[OUT]==UP && SpinOut[IN]==UP &&SpinOut[OUT]==UP)
+	if(rin.Sublattice==0 && rout.Sublattice==0)
+	    Estimator.MeasureNorm(weight);
 }

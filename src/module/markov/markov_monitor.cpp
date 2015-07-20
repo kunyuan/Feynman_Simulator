@@ -145,9 +145,7 @@ void MarkovMonitor::Measure()
 	    vertex vin = g->NeighVer(OUT);
 	    vertex vout = g->NeighVer(IN);
             if (Diag->Order == 1) {
-                //Weight->Sigma->Estimator.MeasureNorm(OrderWeight);
-		if(g->Spin(OUT)==UP && g->Spin(IN)==UP)
-		    Weight->Sigma->Estimator.MeasureNorm(vin->R, vout->R, vin->Tau, vout->Tau, Diag->Phase*OrderWeight);
+		Weight->Sigma->MeasureNorm(vin->R, vout->R, vin->Tau, vout->Tau, g->Spin(OUT), g->Spin(IN), Diag->Phase*OrderWeight);
             }
             else {
                 Weight->Sigma->Measure(vin->R, vout->R, vin->Tau, vout->Tau, g->Spin(OUT), g->Spin(IN), Diag->Order, Diag->Phase * OrderWeight);
@@ -160,9 +158,7 @@ void MarkovMonitor::Measure()
 	    vertex vin = w->NeighVer(OUT);
 	    vertex vout = w->NeighVer(IN);
             if (Diag->Order == 1)
-                //Weight->Polar->Estimator.MeasureNorm(OrderWeight);
-		if(vin->Spin(IN)==UP && vin->Spin(OUT)==UP && vout->Spin(IN)==UP && vout->Spin(OUT)==UP)
-		    Weight->Polar->Estimator.MeasureNorm(vin->R, vout->R, vin->Tau, vout->Tau, -Diag->Phase * OrderWeight);
+                Weight->Polar->MeasureNorm(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin(), vout->Spin(), -Diag->Phase * OrderWeight);
             else {
                 Weight->Polar->Measure(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin(), vout->Spin(), Diag->Order, -Diag->Phase * OrderWeight);
             }

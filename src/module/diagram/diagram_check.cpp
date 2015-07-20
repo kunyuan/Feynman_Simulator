@@ -141,34 +141,30 @@ bool Diagram::_CheckSpin()
 bool Diagram::_CheckWeight()
 {
     cout << "Check weight..." << endl;
-    if (Order == 0)
-        return Equal(Weight, weight::Norm::Weight());
-    else {
-        Complex DiagWeight(1.0, 0.0);
-        Complex gWeight, wWeight;
-        vertex vin, vout;
+    Complex DiagWeight(1.0, 0.0);
+    Complex gWeight, wWeight;
+    vertex vin, vout;
 
-        for (int i = 0; i < G.HowMany(); i++) {
-            DiagWeight *= G(i)->Weight;
+    for (int i = 0; i < G.HowMany(); i++) {
+	DiagWeight *= G(i)->Weight;
 
-            vin = G(i)->NeighVer(IN);
-            vout = G(i)->NeighVer(OUT);
-            gWeight = GWeight->Weight(vin->R, vout->R, vin->Tau, vout->Tau,
-                                      vin->Spin(OUT), vout->Spin(IN), G(i)->IsMeasure);
-            if (!Equal(G(i)->Weight, gWeight))
-                return false;
-        }
-        for (int i = 0; i < W.HowMany(); i++) {
-            DiagWeight *= W(i)->Weight;
-
-            vin = W(i)->NeighVer(IN);
-            vout = W(i)->NeighVer(OUT);
-            wWeight = WWeight->Weight(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin(),
-                                      vout->Spin(), W(i)->IsWorm, W(i)->IsMeasure, W(i)->IsDelta);
-            if (!Equal(W(i)->Weight, wWeight))
-                return false;
-        }
-        DiagWeight *= SignFermiLoop * (Order % 2 == 0 ? 1 : -1);
-        return (Equal(DiagWeight, Weight));
+	vin = G(i)->NeighVer(IN);
+	vout = G(i)->NeighVer(OUT);
+	gWeight = GWeight->Weight(vin->R, vout->R, vin->Tau, vout->Tau,
+				  vin->Spin(OUT), vout->Spin(IN), G(i)->IsMeasure);
+	if (!Equal(G(i)->Weight, gWeight))
+	    return false;
     }
+    for (int i = 0; i < W.HowMany(); i++) {
+	DiagWeight *= W(i)->Weight;
+
+	vin = W(i)->NeighVer(IN);
+	vout = W(i)->NeighVer(OUT);
+	wWeight = WWeight->Weight(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin(),
+				  vout->Spin(), W(i)->IsWorm, W(i)->IsMeasure, W(i)->IsDelta);
+	if (!Equal(W(i)->Weight, wWeight))
+	    return false;
+    }
+    DiagWeight *= SignFermiLoop * (Order % 2 == 0 ? 1 : -1);
+    return (Equal(DiagWeight, Weight));
 }

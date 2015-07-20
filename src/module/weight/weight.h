@@ -12,6 +12,7 @@
 //#include "weight_inherit.h"
 #include <string>
 #include "utility/convention.h"
+#include "utility/complex.h"
 
 class Dictionary;
 namespace para {
@@ -38,6 +39,8 @@ public:
     Polar* Polar;
     G* G;
     W* W;
+    Complex SigmaNorm;
+    Complex PolarNorm;
 
     void SetTest(const para::ParaMC&);
     void SetDiagCounter(const para::ParaMC&);
@@ -48,7 +51,7 @@ public:
 
 private:
     void _AllocateGW(const para::ParaMC&);
-    void _AllocateSigmaPolar(const para::ParaMC&);
+    void _AllocateSigmaPolar(const para::ParaMC&, Complex, Complex);
 };
 }
 

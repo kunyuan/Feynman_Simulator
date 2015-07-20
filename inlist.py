@@ -2,7 +2,7 @@
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" :  0,
+    "__Duplicate" :  1,
     "__IsCluster" : False, 
     "__AutoRun" : True,
     },
@@ -11,7 +11,7 @@ MonteCarlo={
 Dyson={
 "Control": {
     "__Execute" : ["python", "./dyson/main.py"],
-    "__Duplicate" : 1,
+    "__Duplicate" : 0,
     "__IsCluster" : MonteCarlo["Control"]["__IsCluster"],
     "__AutoRun" : MonteCarlo["Control"]["__AutoRun"], 
     #"__AutoRun" : False,

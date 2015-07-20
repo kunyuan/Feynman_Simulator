@@ -1,4 +1,3 @@
-//
 //  weight.cpp
 //  Feynman_Simulator
 //
@@ -41,17 +40,10 @@ weight::Weight::~Weight()
 
 bool weight::Weight::BuildNew(flag _flag, const ParaMC &para)
 {
-    //NormFactor only consider Vol, not beta, since beta can be changing during annealing
-    Norm::NormFactor = para.Lat.Vol * para.Lat.SublatVol;
-
     if (para.Order == 0)
         ABORT("Order can not be zero!!!");
     //GW can only be loaded
-    if (_flag & weight::SigmaPolar) {
-        _AllocateSigmaPolar(para);
-        Sigma->BuildNew();
-        Polar->BuildNew();
-    }
+    //Sigma and Polar also only can be loaded
     return true;
 }
 
@@ -65,16 +57,15 @@ void weight::Weight::Anneal(const ParaMC &para)
 
 bool weight::Weight::FromDict(const Dictionary &dict, flag _flag, const para::ParaMC &para)
 {
-    //NormFactor only consider Vol, not beta, since beta can be changing during annealing
-    Norm::NormFactor = para.Lat.Vol * para.Lat.SublatVol;
-
     if (_flag & weight::GW) {
         _AllocateGW(para);
         G->FromDict(dict.Get<Dictionary>("G"));
         W->FromDict(dict.Get<Dictionary>("W"));
     }
     if (_flag & weight::SigmaPolar) {
-        _AllocateSigmaPolar(para);
+        SigmaNorm =dict.Get<Complex>("SigmaNorm");
+        PolarNorm =dict.Get<Complex>("PolarNorm");
+        _AllocateSigmaPolar(para, SigmaNorm, PolarNorm);
         Sigma->FromDict(dict.Get<Dictionary>("Sigma"));
         Polar->FromDict(dict.Get<Dictionary>("Polar"));
     }
@@ -96,16 +87,20 @@ Dictionary weight::Weight::ToDict(flag _flag)
 
 void weight::Weight::SetTest(const ParaMC &para)
 {
+    SigmaNorm = 1.0;
+    PolarNorm = 1.0;
     _AllocateGW(para);
-    _AllocateSigmaPolar(para);
+    _AllocateSigmaPolar(para, SigmaNorm, PolarNorm);
     G->BuildTest();
     W->BuildTest();
 }
 
 void weight::Weight::SetDiagCounter(const ParaMC &para)
 {
+    SigmaNorm = 1.0;
+    PolarNorm = 1.0;
     _AllocateGW(para);
-    _AllocateSigmaPolar(para);
+    _AllocateSigmaPolar(para, SigmaNorm, PolarNorm);
     G->BuildTest();
     W->BuildTest();
 }
@@ -120,11 +115,11 @@ void weight::Weight::_AllocateGW(const ParaMC &para)
     W = new weight::W(para.Lat, para.Beta, para.MaxTauBin);
 }
 
-void weight::Weight::_AllocateSigmaPolar(const ParaMC &para)
+void weight::Weight::_AllocateSigmaPolar(const ParaMC &para, Complex SigmaNorm, Complex PolarNorm)
 {
     auto symmetry = _IsAllSymmetric ? TauSymmetric : TauAntiSymmetric;
     delete Sigma;
-    Sigma = new weight::Sigma(para.Lat, para.Beta, para.MaxTauBin, para.Order, symmetry);
+    Sigma = new weight::Sigma(para.Lat, para.Beta, para.MaxTauBin, para.Order, SigmaNorm, symmetry);
     delete Polar;
-    Polar = new weight::Polar(para.Lat, para.Beta, para.MaxTauBin, para.Order);
+    Polar = new weight::Polar(para.Lat, para.Beta, para.MaxTauBin, para.Order, PolarNorm);
 }
