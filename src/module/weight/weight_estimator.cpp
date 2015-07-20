@@ -23,6 +23,7 @@ WeightEstimator::WeightEstimator()
 void WeightEstimator::Allocate(const IndexMap& map, int order, real Norm)
 {
     int Vol = map.Lat.Vol;
+    _Map = map;
     _Beta = map.Beta;
     _Norm = Norm * (map.MaxTauBin / _Beta) / _Beta / Vol;
     uint MeaShape[SMOOTH_T_SIZE + 1];
@@ -42,9 +43,10 @@ void WeightEstimator::Anneal(real Beta)
     _NormAccu *= pow((Beta / _Beta), 2.0);
 }
 
-void WeightEstimator::MeasureNorm(real weight)
+void WeightEstimator::MeasureNorm(const Site& rin, const Site& rout, real tin, real tout, spin SpinIn, spin SpinOut, int order, const Complex& weight)
 {
-    _NormAccu += weight;
+    if(rin->Sublat==0 && rout->Sublat==0)
+	_NormAccu +=weight * _Map.GetTauSymmetryFactor(tin, tout);
 }
 
 void WeightEstimator::Measure(uint WeightIndex, int Order, Complex weight)

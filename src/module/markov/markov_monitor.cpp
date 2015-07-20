@@ -140,24 +140,30 @@ void MarkovMonitor::Measure()
         PhyEstimator[Diag->Order].Measure(OrderWeight);
         if (Diag->MeasureGLine) {
             SigmaEstimator.Measure(OrderWeight);
-            if (Diag->Order == 0) {
-                Weight->Sigma->Estimator.MeasureNorm(OrderWeight);
+
+	    gLine g = Diag->GMeasure;
+	    vertex vin = g->NeighVer(OUT);
+	    vertex vout = g->NeighVer(IN);
+            if (Diag->Order == 1) {
+                //Weight->Sigma->Estimator.MeasureNorm(OrderWeight);
+		if(g->Spin(OUT)==UP && g->Spin(IN)==UP)
+		    Weight->Sigma->Estimator.MeasureNorm(vin->R, vout->R, vin->Tau, vout->Tau, Diag->Phase*OrderWeight);
             }
             else {
-                gLine g = Diag->GMeasure;
-                vertex vin = g->NeighVer(OUT);
-                vertex vout = g->NeighVer(IN);
                 Weight->Sigma->Measure(vin->R, vout->R, vin->Tau, vout->Tau, g->Spin(OUT), g->Spin(IN), Diag->Order, Diag->Phase * OrderWeight);
             }
         }
         else {
             PolarEstimator.Measure(OrderWeight);
-            if (Diag->Order == 0)
-                Weight->Polar->Estimator.MeasureNorm(OrderWeight);
+
+	    wLine w = Diag->WMeasure;
+	    vertex vin = w->NeighVer(OUT);
+	    vertex vout = w->NeighVer(IN);
+            if (Diag->Order == 1)
+                //Weight->Polar->Estimator.MeasureNorm(OrderWeight);
+		if(vin->Spin(IN)==UP && vin->Spin(OUT)==UP && vout->Spin(IN)==UP && vout->Spin(OUT)==UP)
+		    Weight->Polar->Estimator.MeasureNorm(vin->R, vout->R, vin->Tau, vout->Tau, -Diag->Phase * OrderWeight);
             else {
-                wLine w = Diag->WMeasure;
-                vertex vin = w->NeighVer(OUT);
-                vertex vout = w->NeighVer(IN);
                 Weight->Polar->Measure(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin(), vout->Spin(), Diag->Order, -Diag->Phase * OrderWeight);
             }
         }

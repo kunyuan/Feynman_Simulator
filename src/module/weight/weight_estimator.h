@@ -37,6 +37,7 @@ public:
     Dictionary ToDict();
 
 protected:
+    IndexMap _Map;
     real _Beta;
     real _Norm; //The normalization factor
     real _NormAccu; //The normalization accumulation
