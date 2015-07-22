@@ -114,6 +114,8 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
         Polar.FromDict(data["Polar"])
 
     Gold, Wold = G, W
+    Sigma1=weight.Weight("SmoothT", Map, "TwoSpins", "AntiSymmetric","R","T")
+    Polar1=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
 
     #while para["Version"]<2:
     while True:
@@ -138,6 +140,10 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                 Statis=collect.CollectStatis(Map)
                 Sigma, Polar, ParaDyson["OrderAccepted"]=collect.UpdateWeight(Statis,
                         ParaDyson["ErrorThreshold"], ParaDyson["OrderAccepted"])
+                Sigma1 = calc.SigmaSmoothT_FirstOrder(G, W, Map)
+                Polar1 = calc.Polar_FirstOrder(G, Map)
+                Sigma.Data += Sigma1.Data
+                Polar.Data += Polar1.Data
                 Sigma.Symmetric()
                 Polar.Symmetric()
                 log.info("calculating G...")
@@ -189,8 +195,6 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
             #everything works prefectly 
 	    log.info("everything is going well!")
             Gold, Wold = G, W
-            Sigma1=weight.Weight("SmoothT", Map, "TwoSpins", "AntiSymmetric","R","T")
-            Polar1=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
             Sigma1 = calc.SigmaSmoothT_FirstOrder(G, W, Map)
             Polar1 = calc.Polar_FirstOrder(G, Map)
 
