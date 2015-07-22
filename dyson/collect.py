@@ -53,19 +53,20 @@ class WeightEstimator():
         #Average0 = np.average(abs(np.sum(self.OrderWeight[:,0,0,0,0,0,:], axis=0)))
         Info=[]
         DimList=[]
-        for order in xrange(1,Shape[0]+1):
+        for order in xrange(2,Shape[0]+1):
             # Order Index is equal to real Order-1
-            #RelativeError=0.0
             Average=0.0
             weight=self.OrderWeight[order-1,...]
+            #RelativeError=0.0
+            #Original = weight[0].copy()
+
             for index, _ in np.ndenumerate(weight[...,0]):
                 sp1, sub1, sp2, sub2, vol=index
                 y=weight[index] # y is a function of tau
                 if not np.allclose(y, 0.0, 1e-5): 
                     smooth, sigma=Smooth(x, y) #smooth is a function of tau
                     average=np.average(abs(smooth))
-                    #if relative>RelativeError:
-                    if average>Average:
+                    if average>=Average:
                         relative=abs(sigma)/average
                         RelativeError=relative
                         Average=average

@@ -167,10 +167,10 @@ def dump_unicode(obj, h5f, compression=None):
 
 def _dump_dict(dd, hgroup, compression=None):
     for key in dd:
-        if type(dd[key]) in (str, int, float, unicode, bool):
+        if type(dd[key]) in (str, int, float, unicode, bool, complex):
             # Figure out type to be stored
             types = {str: 'str', int: 'int', float: 'float',
-                     unicode: 'unicode', bool: 'bool'}
+                    unicode: 'unicode', bool: 'bool', complex: 'complex'}
             _key = types.get(type(dd[key]))
 
             # Store along with dtype info
@@ -411,7 +411,7 @@ def load_dict(group):
 
             if group[_key][0] == 'np_dtype':
                 dd[key] = group[key].value
-            elif group[_key][0] in ('str', 'int', 'float', 'unicode', 'bool'):
+            elif group[_key][0] in ('str', 'int', 'float', 'unicode', 'bool', 'complex'):
                 dd[key] = group[key][0]
             elif group[_key][0] == 'masked':
                 key_ma = "_%s_mask" % key
@@ -421,7 +421,7 @@ def load_dict(group):
 
             # Convert numpy constructs back to string
             dtype = group[_key][0]
-            types = {'str': str, 'int': int, 'float': float,
+            types = {'str': str, 'int': int, 'float': float, 'complex': complex,
                      'unicode': unicode, 'bool': bool, 'list': list}
             try:
                 mod = types.get(dtype)

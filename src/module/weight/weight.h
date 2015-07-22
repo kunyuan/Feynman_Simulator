@@ -39,12 +39,13 @@ public:
     Polar* Polar;
     G* G;
     W* W;
+
     Complex SigmaNorm;
     Complex PolarNorm;
 
     void SetTest(const para::ParaMC&);
     void SetDiagCounter(const para::ParaMC&);
-    bool BuildNew(flag, const para::ParaMC&);
+    bool BuildNew(const Dictionary &, flag, const para::ParaMC&);
     bool FromDict(const Dictionary&, flag, const para::ParaMC&);
     Dictionary ToDict(flag);
     void Anneal(const para::ParaMC&);

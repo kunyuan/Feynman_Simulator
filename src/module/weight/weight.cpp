@@ -38,12 +38,17 @@ weight::Weight::~Weight()
 *  @param order     order
 */
 
-bool weight::Weight::BuildNew(flag _flag, const ParaMC &para)
+bool weight::Weight::BuildNew(const Dictionary &dict, flag _flag, const ParaMC &para)
 {
     if (para.Order == 0)
         ABORT("Order can not be zero!!!");
     //GW can only be loaded
-    //Sigma and Polar also only can be loaded
+    if (_flag & weight::SigmaPolar) {
+        SigmaNorm =dict.Get<Complex>("SigmaNorm");
+        PolarNorm =dict.Get<Complex>("PolarNorm");
+
+        _AllocateSigmaPolar(para, SigmaNorm, PolarNorm);
+    }
     return true;
 }
 
@@ -63,9 +68,12 @@ bool weight::Weight::FromDict(const Dictionary &dict, flag _flag, const para::Pa
         W->FromDict(dict.Get<Dictionary>("W"));
     }
     if (_flag & weight::SigmaPolar) {
+
         SigmaNorm =dict.Get<Complex>("SigmaNorm");
         PolarNorm =dict.Get<Complex>("PolarNorm");
+
         _AllocateSigmaPolar(para, SigmaNorm, PolarNorm);
+
         Sigma->FromDict(dict.Get<Dictionary>("Sigma"));
         Polar->FromDict(dict.Get<Dictionary>("Polar"));
     }
@@ -87,8 +95,8 @@ Dictionary weight::Weight::ToDict(flag _flag)
 
 void weight::Weight::SetTest(const ParaMC &para)
 {
-    SigmaNorm = 1.0;
-    PolarNorm = 1.0;
+    SigmaNorm = Complex(1.0, 0.0);
+    PolarNorm = Complex(1.0, 0.0);
     _AllocateGW(para);
     _AllocateSigmaPolar(para, SigmaNorm, PolarNorm);
     G->BuildTest();
@@ -97,8 +105,8 @@ void weight::Weight::SetTest(const ParaMC &para)
 
 void weight::Weight::SetDiagCounter(const ParaMC &para)
 {
-    SigmaNorm = 1.0;
-    PolarNorm = 1.0;
+    SigmaNorm = Complex(1.0, 0.0);
+    PolarNorm = Complex(1.0, 0.0);
     _AllocateGW(para);
     _AllocateSigmaPolar(para, SigmaNorm, PolarNorm);
     G->BuildTest();

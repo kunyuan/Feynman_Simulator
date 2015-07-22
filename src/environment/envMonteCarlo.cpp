@@ -36,11 +36,12 @@ bool EnvMonteCarlo::BuildNew()
     Dictionary GW_;
     GW_.BigLoad(Job.WeightFile);
     Weight.FromDict(GW_, weight::GW, Para);
+    //Weight.FromDict(GW_, weight::SigmaPolar, Para);
 
     //    Weight.SetDiagCounter(Para);//Test for DiagCounter
     //    Weight.SetTest(Para);//Test for WeightTest
 
-    Weight.BuildNew(weight::SigmaPolar, Para);
+    Weight.BuildNew(GW_, weight::SigmaPolar, Para);
     Diag.BuildNew(Para.Lat, *Weight.G, *Weight.W);
     Markov.BuildNew(Para, Diag, Weight);
     MarkovMonitor.BuildNew(Para, Diag, Weight);
@@ -144,6 +145,7 @@ bool EnvMonteCarlo::ListenToMessage()
     }
     Para.UpdateWithMessage(Message_);
     Weight.FromDict(weight_, weight::GW, Para);
+    //Weight.FromDict(weight_, weight::SigmaPolar, Para);
     Weight.Anneal(Para);
     Diag.Reset(Para.Lat, *Weight.G, *Weight.W);
     Markov.Reset(Para, Diag, Weight);

@@ -38,6 +38,7 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, S
     Chi.FFT("R","T")
 
     SigmaNorm = np.sum(Sigma1.Data[UP,0, UP, 0, :, :])
+    print SigmaNorm
     PolarNorm = np.sum(Polar1.Data[spinUP,0, spinUP, 0, :, :])
 
     #print "Polar[UP,UP]=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
@@ -62,8 +63,8 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, S
     data["SigmaDeltaT"]=SigmaDeltaT.ToDict()
     data["Sigma"]=Sigma.ToDict()
     data["Polar"]=Polar.ToDict()
-    data["SigmaNorm"]={"SigmaNorm": SigmaNorm}
-    data["PolarNorm"]={"PolarNorm": PolarNorm}
+    data["SigmaNorm"]=SigmaNorm
+    data["PolarNorm"]=PolarNorm
 
     Observable.Measure(Chi, Determ, G, Factory.NearestNeighbor)
 
@@ -73,6 +74,7 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, S
             IO.SaveBigDict(WeightFile, data)
             parameter.Save(ParaFile, para)  #Save Parameters
             Observable.Save(OutputFile)
+            IO.SaveDict("Test", 'w', data)
 
             #plot what you are interested in
             plot.PlotChiAlongPath(Chi, Lat)
@@ -138,7 +140,6 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                         ParaDyson["ErrorThreshold"], ParaDyson["OrderAccepted"])
                 Sigma.Symmetric()
                 Polar.Symmetric()
-                print Sigma.Data[0,0,0,0,0,0], Sigma.Data[0,0,0,0,0,63]
                 log.info("calculating G...")
                 G = calc.G_Dyson(G0, SigmaDeltaT, Sigma, Map)
             #######DYSON FOR W AND G###########################
@@ -189,7 +190,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
 	    log.info("everything is going well!")
             Gold, Wold = G, W
             Sigma1=weight.Weight("SmoothT", Map, "TwoSpins", "AntiSymmetric","R","T")
-            Polar2=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
+            Polar1=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
             Sigma1 = calc.SigmaSmoothT_FirstOrder(G, W, Map)
             Polar1 = calc.Polar_FirstOrder(G, Map)
 

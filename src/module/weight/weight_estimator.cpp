@@ -24,8 +24,9 @@ void WeightEstimator::Allocate(const IndexMap& map, int order, Complex Norm)
 {
     int Vol = map.Lat.Vol;
     _Beta = map.Beta;
-    //_Norm = (map.MaxTauBin / _Beta) / _Beta / Vol *Norm;
     _Norm = Norm;
+    //_Norm = (map.MaxTauBin / _Beta) / _Beta / Vol *Norm;
+    _NormAccu = Complex(0.0, 0.0);
     uint MeaShape[SMOOTH_T_SIZE + 1];
     MeaShape[0] = order;
     std::copy(map.GetShape(), map.GetShape() + SMOOTH_T_SIZE, &MeaShape[1]);
@@ -44,12 +45,12 @@ void WeightEstimator::Anneal(real Beta)
     _NormAccu *= 1.0;
 }
 
-void WeightEstimator::MeasureNorm(Complex weight)
+void WeightEstimator::MeasureNorm(const Complex& weight)
 {
     _NormAccu += weight;
 }
 
-void WeightEstimator::Measure(uint WeightIndex, int Order, Complex weight)
+void WeightEstimator::Measure(uint WeightIndex, int Order, const Complex& weight)
 {
     if (DEBUGMODE && Order < 1)
         LOG_ERROR("Too small order=" << Order);
@@ -59,15 +60,15 @@ void WeightEstimator::Measure(uint WeightIndex, int Order, Complex weight)
 
 void WeightEstimator::ClearStatistics()
 {
-    _NormAccu = 0.0;
-    _WeightAccu.Assign(0.0);
+    _NormAccu=Complex(0.0, 0.0);
+    _WeightAccu.Assign(Complex(0.0, 0.0));
 }
 //TODO: you may have to replace int with size_t here
 
 void WeightEstimator::SqueezeStatistics(real factor)
 {
     ASSERT_ALLWAYS(factor > 0, "factor=" << factor << "<=0!");
-    _NormAccu /= factor;
+    _NormAccu *= 1.0/factor;
     _WeightAccu *= 1.0 / factor;
 }
 
@@ -75,8 +76,9 @@ void WeightEstimator::SqueezeStatistics(real factor)
 
 bool WeightEstimator::FromDict(const Dictionary& dict)
 {
-    _Norm = dict.Get<real>("Norm");
-    _NormAccu = dict.Get<real>("NormAccu");
+    _Norm = dict.Get<Complex>("Norm");
+    _NormAccu = dict.Get<Complex>("NormAccu");
+
     auto arr = dict.Get<Python::ArrayObject>("WeightAccu");
     //assert estimator shape except order dimension
     ASSERT_ALLWAYS(Equal(arr.Shape().data() + 1, _WeightAccu.GetShape() + 1, _WeightAccu.GetDim() - 1), "Shape should match!");

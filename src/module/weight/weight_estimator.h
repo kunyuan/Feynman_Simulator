@@ -27,8 +27,8 @@ public:
     //(as for now, reweighted weight function is set to be the unreweighted weight function)
     void Anneal(real Beta);
 
-    void MeasureNorm(Complex weight);
-    void Measure(uint WeightIndex, int Order, Complex Weight);
+    void MeasureNorm(const Complex& weight);
+    void Measure(uint WeightIndex, int Order, const Complex& Weight);
 
     void ClearStatistics();
     void SqueezeStatistics(real factor);
@@ -36,10 +36,10 @@ public:
     bool FromDict(const Dictionary&);
     Dictionary ToDict();
 
-protected:
-    real _Beta;
     Complex _Norm; //The normalization factor
     Complex _NormAccu; //The normalization accumulation
+protected:
+    real _Beta;
     //final weight function =_WeightAccu/_NormAccu*_Norm
     //final weight of each bin = (final weight of each bin)/MAX_BIN*Beta
     WeightArray<SMOOTH_T_SIZE + 1> _WeightAccu; //dim=0 is order

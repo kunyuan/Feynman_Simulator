@@ -11,7 +11,7 @@ MonteCarlo={
 Dyson={
 "Control": {
     "__Execute" : ["python", "./dyson/main.py"],
-    "__Duplicate" : 0,
+    "__Duplicate" : 1,
     "__IsCluster" : MonteCarlo["Control"]["__IsCluster"],
     "__AutoRun" : MonteCarlo["Control"]["__AutoRun"], 
     #"__AutoRun" : False,
@@ -25,24 +25,24 @@ Dyson={
 }
 
 Beta=0.5
-Order=1
+Order=2
 Common={
-"Tau": {"MaxTauBin" : 64, "Beta": Beta},
+"Tau": {"MaxTauBin" : 32, "Beta": Beta},
 "Lattice":  {
     #2D lattice
-    #"Name": "Square", "NSublat": 1,
+    "Name": "Square", "NSublat": 1,
     #"Name": "Checkerboard", "NSublat": 2,
     #"Name": "ValenceBond", "NSublat": 2,
     #"Name": "Honeycomb", "NSublat": 2,
     #"Name": "Kagome", "NSublat": 3,
     #"Name": "Triangular", "NSublat": 1,
-    #"L": [8,8]
+    "L": [4,4]
 
     #3D lattice
     #"Name": "Cubic", "NSublat": 1,
     #"Name": "3DCheckerboard", "NSublat": 2,
-    "Name": "Pyrochlore", "NSublat": 4,
-    "L": [4,4,4]
+    #"Name": "Pyrochlore", "NSublat": 4,
+    #"L": [4,4,4]
     },
 "Model": {
     "Name": "J1J2",
@@ -67,15 +67,15 @@ MonteCarlo["Markov"]={
         #"ReweightTimer": 600
         #},
     "Timer": {
-        "PrinterTimer": 90,
-        "DiskWriterTimer": 90,
-        "MessageTimer": 90,
-        "ReweightTimer":36000
+        "PrinterTimer": 10,
+        "DiskWriterTimer": 10,
+        "MessageTimer": 10,
+        "ReweightTimer":3000
         },
     }
 
 Dyson["Dyson"]={
-    "SleepTime": 90,
+    "SleepTime": 10,
     #"SleepTime": 300,
     "OrderAccepted": {"Sigma":1, "Polar":1}, "ErrorThreshold": 0.2,
     "Annealing": {
