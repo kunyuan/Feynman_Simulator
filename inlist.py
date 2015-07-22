@@ -27,7 +27,7 @@ Dyson={
 Beta=0.5
 Order=2
 Common={
-"Tau": {"MaxTauBin" : 32, "Beta": Beta},
+"Tau": {"MaxTauBin" : 64, "Beta": Beta},
 "Lattice":  {
     #2D lattice
     "Name": "Square", "NSublat": 1,
@@ -36,7 +36,7 @@ Common={
     #"Name": "Honeycomb", "NSublat": 2,
     #"Name": "Kagome", "NSublat": 3,
     #"Name": "Triangular", "NSublat": 1,
-    "L": [4,4]
+    "L": [8,8]
 
     #3D lattice
     #"Name": "Cubic", "NSublat": 1,
@@ -47,7 +47,7 @@ Common={
 "Model": {
     "Name": "J1J2",
     #"Description": ["ImW",],
-    "Interaction": [1.0,0.0,0.00],
+    "Interaction": [1.0,0.5],
     "ExternalField": [0.00, -0.00, 0.0, 0.0]
     #ExternalField on Sublattice A and B
     },
@@ -67,15 +67,15 @@ MonteCarlo["Markov"]={
         #"ReweightTimer": 600
         #},
     "Timer": {
-        "PrinterTimer": 10,
-        "DiskWriterTimer": 10,
-        "MessageTimer": 10,
+        "PrinterTimer": 90,
+        "DiskWriterTimer": 90,
+        "MessageTimer": 90,
         "ReweightTimer":3000
         },
     }
 
 Dyson["Dyson"]={
-    "SleepTime": 10,
+    "SleepTime": 90,
     #"SleepTime": 300,
     "OrderAccepted": {"Sigma":1, "Polar":1}, "ErrorThreshold": 0.2,
     "Annealing": {
