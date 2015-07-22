@@ -65,8 +65,6 @@ public:
     void DeleteInteraction();
     void AddDeltaInteraction();
     void DeleteDeltaInteraction();
-    //void JumpToOrder0();
-    //void JumpBackToOrder1();
     void ChangeTauOnVertex();
     void ChangeROnVertex();
     void ChangeRLoop();
@@ -110,8 +108,6 @@ private:
         CHANGE_DELTA2CONTINUS,
         CHANGE_CONTINUS2DELTA,
         CHANGE_SPIN_VERTEX,
-        //JUMP_TO_ORDER0,
-        //JUMP_BACK_TO_ORDER1,
         END
     };
     std::string _DetailBalanceStr(Operations op);

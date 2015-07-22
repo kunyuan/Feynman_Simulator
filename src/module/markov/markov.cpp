@@ -62,8 +62,6 @@ bool Markov::BuildNew(ParaMC &para, Diagram &diag, weight::Weight &weight)
     OperationName[CHANGE_CONTINUS2DELTA] = NAME(CHANGE_CONTINUS2DELTA);
     OperationName[CHANGE_DELTA2CONTINUS] = NAME(CHANGE_DELTA2CONTINUS);
     OperationName[CHANGE_SPIN_VERTEX] = NAME(CHANGE_SPIN_VERTEX);
-    //OperationName[JUMP_TO_ORDER0] = NAME(JUMP_TO_ORDER0);
-    //OperationName[JUMP_BACK_TO_ORDER1] = NAME(JUMP_BACK_TO_ORDER1);
     return true;
 }
 
@@ -126,18 +124,6 @@ std::string Markov::_CheckBalance(Operations op1, Operations op2)
                 Output += temp;
             }
         }
-        //else if (op1 == JUMP_TO_ORDER0 and op2 == JUMP_BACK_TO_ORDER1) {
-            //if (i != 0)
-                //continue;
-            //if (!Equal(Accepted[op1][i + 1] + Accepted[op2][i], 0.0)) {
-                //TotalAccepted1 += Accepted[op1][i + 1];
-                //TotalAccepted2 += Accepted[op2][i];
-                //sprintf(temp, "\t%8s%2i:%15g%15g%15g\n",
-                        //"Order", i, Accepted[op1][i + 1], Accepted[op2][i],
-                        //fabs(Accepted[op1][i + 1] - Accepted[op2][i]) / sqrt(Accepted[op1][i + 1] + Accepted[op2][i]));
-                //Output += temp;
-            //}
-        //}
         else {
             if (!Equal(Accepted[op1][i] + Accepted[op2][i], 0.0)) {
                 TotalAccepted1 += Accepted[op1][i];
@@ -182,15 +168,12 @@ void Markov::PrintDetailBalanceInfo()
     Output += _DetailBalanceStr(CHANGE_CONTINUS2DELTA);
     Output += _DetailBalanceStr(CHANGE_DELTA2CONTINUS);
     Output += _DetailBalanceStr(CHANGE_SPIN_VERTEX);
-    //Output += _DetailBalanceStr(JUMP_TO_ORDER0);
-    //Output += _DetailBalanceStr(JUMP_BACK_TO_ORDER1);
     Output += string(60, '-') + "\n";
     //    Output += _CheckBalance(CREATE_WORM, DELETE_WORM);
     Output += _CheckBalance(ADD_INTERACTION, DEL_INTERACTION);
     Output += _CheckBalance(ADD_DELTA_INTERACTION, DEL_DELTA_INTERACTION);
     Output += _CheckBalance(CHANGE_MEASURE_G2W, CHANGE_MEASURE_W2G);
     Output += _CheckBalance(CHANGE_CONTINUS2DELTA, CHANGE_DELTA2CONTINUS);
-    //    Output += _CheckBalance(JUMP_TO_ORDER0, JUMP_BACK_TO_ORDER1);
     Output += string(60, '=') + "\n";
     LOG_INFO(Output);
 }
@@ -1483,84 +1466,6 @@ void Markov::ChangeContinuousToDelta()
             G2->Weight = G2Weight;
     }
 }
-
-//void Markov::JumpToOrder0()
-//{
-    //if (Worm->Exist || Diag->Order != 1)
-        //return;
-
-    //vertex Ver1 = &Diag->Ver[0];
-    //vertex Ver2 = &Diag->Ver[1];
-    //if (Ver1->R != Ver2->R)
-        //return;
-
-    //Complex weightRatio;
-    //weightRatio = weight::Norm::Weight() / Diag->Weight;
-
-    //real prob = mod(weightRatio);
-    //Complex sgn = phase(weightRatio);
-
-    //prob *= (ProbofCall[JUMP_BACK_TO_ORDER1] * ProbSite(Ver1->R) * ProbTau(Ver1->Tau) * ProbTau(Ver2->Tau) * 0.5 * 0.5 * OrderReWeight[0]) / (ProbofCall[JUMP_TO_ORDER0] * OrderReWeight[1]);
-
-    //Proposed[JUMP_TO_ORDER0][Diag->Order] += 1.0;
-    //if (prob >= 1.0 || RNG->urn() < prob) {
-        //Accepted[JUMP_TO_ORDER0][Diag->Order] += 1.0;
-        //Diag->Order = 0;
-        //Diag->Phase *= sgn;
-        //Diag->Weight = weight::Norm::Weight();
-    //}
-//}
-
-//void Markov::JumpBackToOrder1()
-//{
-    //if (Worm->Exist || Diag->Order != 0)
-        //return;
-
-    //Site R = RandomPickSite();
-    //real Tau1 = RandomPickTau();
-    //real Tau2 = RandomPickTau();
-    //spin SpinG1 = RandomPickSpin();
-    //spin SpinG2 = RandomPickSpin();
-
-    //vertex Ver1 = &Diag->Ver[0];
-    //vertex Ver2 = &Diag->Ver[1];
-    //gLine G1 = Ver1->NeighG(OUT);
-    //gLine G2 = Ver2->NeighG(OUT);
-    //wLine W1 = Ver1->NeighW();
-
-    //spin SpinV1[2] = {SpinG2, SpinG1};
-    //spin SpinV2[2] = {SpinG1, SpinG2};
-
-    //Complex weightG1 = G->Weight(R, R, Tau1, Tau2, SpinG1, SpinG1, G1->IsMeasure);
-    //Complex weightG2 = G->Weight(R, R, Tau2, Tau1, SpinG2, SpinG2, G2->IsMeasure);
-    //Complex weightW = W->Weight(Ver1->Dir, R, R, Tau1, Tau2, SpinV1, SpinV2, false, W1->IsMeasure, W1->IsDelta);
-
-    //Complex weightRatio = -1.0 * weightG1 * weightG2 * weightW / Diag->Weight;
-    //real prob = mod(weightRatio);
-    //Complex sgn = phase(weightRatio);
-
-    //prob *= ProbofCall[JUMP_TO_ORDER0] * OrderReWeight[1] / (ProbofCall[JUMP_BACK_TO_ORDER1] * OrderReWeight[0] * ProbSite(R) * ProbTau(Tau1) * ProbTau(Tau2) * 0.5 * 0.5);
-
-    //Proposed[JUMP_BACK_TO_ORDER1][Diag->Order] += 1.0;
-    //if (prob >= 1.0 || RNG->urn() < prob) {
-        //Accepted[JUMP_BACK_TO_ORDER1][Diag->Order] += 1.0;
-        //Diag->Order = 1;
-
-        //Diag->Phase *= sgn;
-        //Diag->Weight *= weightRatio;
-
-        //Ver1->R = R;
-        //Ver2->R = R;
-        //Ver1->Tau = Tau1;
-        //Ver2->Tau = Tau2;
-        //Ver1->SetSpin(SpinV1);
-        //Ver2->SetSpin(SpinV2);
-
-        //G1->Weight = weightG1;
-        //G2->Weight = weightG2;
-        //W1->Weight = weightW;
-    //}
-//}
 
 Momentum Markov::RandomPickK()
 {

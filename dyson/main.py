@@ -38,7 +38,6 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, S
     Chi.FFT("R","T")
 
     SigmaNorm = np.sum(Sigma1.Data[UP,0, UP, 0, :, :])
-    print SigmaNorm
     PolarNorm = np.sum(Polar1.Data[spinUP,0, spinUP, 0, :, :])
 
     #print "Polar[UP,UP]=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
@@ -125,6 +124,9 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
             #ratio=None   #set this will not use accumulation!
             ratio = para["Version"]/(para["Version"]+10.0)
             G0,W0=Factory.Build()
+
+            #######Without symmetry breaking, there's no SigmaDeltaT. 
+            #######There's no need to introduce the error from calculating it.
             #log.info("calculating SigmaDeltaT..")
             #SigmaDeltaT.Merge(ratio, calc.SigmaDeltaT_FirstOrder(G, W0, Map))
             #log.info("SigmaDeltaT is done")
@@ -148,6 +150,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                 Polar.Symmetric()
                 log.info("calculating G...")
                 G = calc.G_Dyson(G0, SigmaDeltaT, Sigma, Map)
+
             #######DYSON FOR W AND G###########################
             log.info("calculating W...")
             Wtmp, ChiTensor, Determ = calc.W_Dyson(W0, Polar, Map, Lat)
