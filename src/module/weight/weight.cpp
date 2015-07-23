@@ -88,7 +88,9 @@ Dictionary weight::Weight::ToDict(flag _flag)
     }
     if (_flag & weight::SigmaPolar) {
         dict["Sigma"] = Sigma->ToDict();
+        dict["SigmaNorm"] = SigmaNorm;
         dict["Polar"] = Polar->ToDict();
+        dict["PolarNorm"] = PolarNorm;
     }
     return dict;
 }
