@@ -19,6 +19,8 @@ class BareFactory:
             self.__Hopping=np.array(Hamiltonian["Hopping"])
         if "ChemicalPotential" in Hamiltonian:
             self.__Mu=np.array(Hamiltonian["ChemicalPotential"])
+        if "Type" in Hamiltonian:
+            self.__VBSType=Hamiltonian["Type"]
         if "Description" in Hamiltonian:
             self.__Description=Hamiltonian["Description"]
         else:
@@ -69,11 +71,14 @@ class BareFactory:
     #model defintion
     def DiagCount(self, LatName):
         raise NotImplementedError
+
     def Hubbard(self, LatName):
         raise NotImplementedError
+
     def Heisenberg(self, LatName):
         Assert(len(self.__Interaction)==1, "Heisenberg model only has one coupling!")
         self.__SpinModel(LatName)
+
     def J1J2(self, LatName):
         Assert(len(self.__Interaction)>=2, "J1J2 model takes at least two couplings!")
         self.__SpinModel(LatName)
@@ -98,6 +103,7 @@ class BareFactory:
             self.__Mu=np.pi/4.0/Beta
         else:
             self.__Mu=1j*np.pi/2.0/Beta
+
         #Bare G
         self.__Hopping=np.array([0.0])
         log.info("set Mu={0}, Hopping={1}, and SmoothT Bare G".format(self.__Mu, self.__Hopping))
@@ -140,26 +146,55 @@ class BareFactory:
                         self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J2*SS;
 
         elif LatName=="ValenceBond":
+
             Lx,Ly=self.__Map.L
-            A,B=0,1
-            self.NearestNeighbor[A][B]=[(0, 0),(0,Ly-1)]
-            self.NearestNeighbor[B][A]=[(0, 0),(0,   1)]
-            self.NearestNeighbor[A][A]=[(Lx-1, 0),(1,0)]
-            self.NearestNeighbor[B][B]=[(Lx-1, 0),(1,0)]
+            A,B,C,D=0,1,2,3
 
-            self.NextNearestNeighbor[A][B]=[(1, 0),(1,   Ly-1),(Lx-1,0),(Lx-1,   Ly-1)]
-            self.NextNearestNeighbor[B][A]=[(1, 1),(1,   0),(Lx-1,1),(Lx-1,   0)]
+            self.NearestNeighbor[A][B]=[(0, 0),(Lx-1,0)]
+            self.NearestNeighbor[A][C]=[(0, 0),(0,   1)]
+            self.NearestNeighbor[B][A]=[(0, 0),(1,   0)]
+            self.NearestNeighbor[B][D]=[(0, 0),(0,   1)]
+            self.NearestNeighbor[C][A]=[(0, 0),(0,Ly-1)]
+            self.NearestNeighbor[C][D]=[(0, 0),(Lx-1,0)]
+            self.NearestNeighbor[D][B]=[(0, 0),(0,Ly-1)]
+            self.NearestNeighbor[D][C]=[(0, 0),(1,   0)]
 
-            for i in range(2):
-                for j in range(2):
-                    #J1 interaction A-->B, B-->A
+            self.NextNearestNeighbor[A][D]=[(0, 0),(Lx-1,   1),(Lx-1,0),(0,   1)]
+            self.NextNearestNeighbor[B][C]=[(0, 0),(1,      1),(0,   1),(1,   0)]
+            self.NextNearestNeighbor[C][B]=[(0, 0),(Lx-1,Ly-1),(Lx-1,0),(0,Ly-1)]
+            self.NextNearestNeighbor[D][A]=[(0, 0),(1,   Ly-1),(1,   0),(0,Ly-1)]
+
+            for i in range(4):
+                for j in range(4):
+                    #J1 interaction
                     for e in self.NearestNeighbor[i][j]:
                         self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SS;
-                    #J2 interaction A-->A, B-->B
+                    #J2 interaction
                     for e in self.NextNearestNeighbor[i][j]:
                         self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J2*SS;
-            self.BareW.Data[:,A,:,B,self.__Map.CoordiIndex((0,0))]+= J_perturbation[0]*SS;
-            self.BareW.Data[:,B,:,A,self.__Map.CoordiIndex((0,0))]+= J_perturbation[0]*SS;
+
+            if J_perturbation is not None:
+                if self.__VBSType=="xColomn":
+                    self.BareW.Data[:,A,:,B,self.__Map.CoordiIndex((0,0))]+= J_perturbation[0]*SS;
+                    self.BareW.Data[:,B,:,A,self.__Map.CoordiIndex((0,0))]+= J_perturbation[0]*SS;
+                    self.BareW.Data[:,C,:,D,self.__Map.CoordiIndex((0,0))]+= J_perturbation[0]*SS;
+                    self.BareW.Data[:,D,:,C,self.__Map.CoordiIndex((0,0))]+= J_perturbation[0]*SS;
+                elif self.__VBSType=="yColomn":
+                    self.BareW.Data[:,A,:,C,self.__Map.CoordiIndex((0,0))]+= J_perturbation[0]*SS;
+                    self.BareW.Data[:,C,:,A,self.__Map.CoordiIndex((0,0))]+= J_perturbation[0]*SS;
+                    self.BareW.Data[:,B,:,D,self.__Map.CoordiIndex((0,0))]+= J_perturbation[0]*SS;
+                    self.BareW.Data[:,D,:,B,self.__Map.CoordiIndex((0,0))]+= J_perturbation[0]*SS;
+                elif self.__VBSType=="Plaquette":
+                    self.BareW.Data[:,A,:,B,self.__Map.CoordiIndex((0,0))]+= J_perturbation[0]*SS;
+                    self.BareW.Data[:,A,:,C,self.__Map.CoordiIndex((0,0))]+= J_perturbation[0]*SS;
+                    self.BareW.Data[:,B,:,D,self.__Map.CoordiIndex((0,0))]+= J_perturbation[0]*SS;
+                    self.BareW.Data[:,B,:,A,self.__Map.CoordiIndex((0,0))]+= J_perturbation[0]*SS;
+                    self.BareW.Data[:,C,:,A,self.__Map.CoordiIndex((0,0))]+= J_perturbation[0]*SS;
+                    self.BareW.Data[:,C,:,D,self.__Map.CoordiIndex((0,0))]+= J_perturbation[0]*SS;
+                    self.BareW.Data[:,D,:,B,self.__Map.CoordiIndex((0,0))]+= J_perturbation[0]*SS;
+                    self.BareW.Data[:,D,:,C,self.__Map.CoordiIndex((0,0))]+= J_perturbation[0]*SS;
+                else:
+                    Assert(False, "VBS Type {0} has not been implemented yet!".format(self.__VBSType))
 
         elif LatName=="Square":
         #NSublat: 1

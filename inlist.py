@@ -30,9 +30,9 @@ Common={
 "Tau": {"MaxTauBin" : 64, "Beta": Beta},
 "Lattice":  {
     #2D lattice
-    "Name": "Square", "NSublat": 1,
+    #"Name": "Square", "NSublat": 1,
     #"Name": "Checkerboard", "NSublat": 2,
-    #"Name": "ValenceBond", "NSublat": 2,
+    "Name": "ValenceBond", "NSublat": 4,
     #"Name": "Honeycomb", "NSublat": 2,
     #"Name": "Kagome", "NSublat": 3,
     #"Name": "Triangular", "NSublat": 1,
@@ -46,8 +46,11 @@ Common={
     },
 "Model": {
     "Name": "J1J2",
+    "Type": "xColomn",
+    #"Type": "yColomn", 
+    #"Type": "Plaquette",
     #"Description": ["ImW",],
-    "Interaction": [1.0,0.5],
+    "Interaction": [1.0, 0.5, 0.05],
     "ExternalField": [0.00, -0.00, 0.0, 0.0]
     #ExternalField on Sublattice A and B
     },
