@@ -36,7 +36,7 @@ Common={
     #"Name": "Honeycomb", "NSublat": 2,
     #"Name": "Kagome", "NSublat": 3,
     #"Name": "Triangular", "NSublat": 1,
-    "L": [8,8]
+    "L": [4,4]
 
     #3D lattice
     #"Name": "Cubic", "NSublat": 1,
