@@ -93,7 +93,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
     Factory=model.BareFactory(Map, Lat,  para["Model"], ParaDyson["Annealing"])
     G0,W0=Factory.Build()
     IO.SaveDict("Coordinates","w", Factory.ToDict())
-    Observable=measure.Observable(Map, Lat)
+    Observable=measure.Observable(Map, Lat, para["Model"]["Type"])
     W=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
     SigmaDeltaT=weight.Weight("DeltaT", Map, "TwoSpins", "AntiSymmetric","R")
     Sigma=weight.Weight("SmoothT", Map, "TwoSpins", "AntiSymmetric","R","T")

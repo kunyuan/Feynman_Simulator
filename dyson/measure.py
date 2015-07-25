@@ -7,10 +7,11 @@ import os, sys, weight
 PI=np.pi
 
 class Observable:
-    def __init__(self, Map, lat):
+    def __init__(self, Map, lat, VBS):
         self.__History={}
         self.__Lat=lat
         self.__Map=Map
+        self.__VBSType=VBS
 
     def Append(self, Name, Value):
         if self.__History.has_key(Name) is False:
@@ -46,9 +47,15 @@ class Observable:
 
         if self.__Lat.Name in ["ValenceBond"]:
             Chi.FFT("R","W")
+            A,B,C,D=0,1,2,3
             Neighbor1=self.__Map.CoordiIndex((0,0))
-            Neighbor2=self.__Map.CoordiIndex((0,self.__Lat.L[1]-1))
-            self.Append("VBS", (Chi.Data[0,0,0,1,Neighbor1,0]-Chi.Data[0,0,0,1,Neighbor2,0])*Factor)
+            Neighbor2=self.__Map.CoordiIndex((self.__Lat.L[0]-1, 0))
+            self.Append("xVBS", (Chi.Data[0,A,0,B,Neighbor1,0]-Chi.Data[0,A,0,B,Neighbor2,0])*Factor)
+            Neighbor1=self.__Map.CoordiIndex((0,0))
+            Neighbor2=self.__Map.CoordiIndex((0,1))
+            self.Append("yVBS", (Chi.Data[0,A,0,C,Neighbor1,0]-Chi.Data[0,A,0,C,Neighbor2,0])*Factor)
+
+
 
         Chi.FFT("R","W")
         energy=0j
