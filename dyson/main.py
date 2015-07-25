@@ -73,7 +73,6 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, S
             IO.SaveBigDict(WeightFile, data)
             parameter.Save(ParaFile, para)  #Save Parameters
             Observable.Save(OutputFile)
-            IO.SaveDict("Test", 'w', data)
 
             #plot what you are interested in
             plot.PlotChiAlongPath(Chi, Lat)
