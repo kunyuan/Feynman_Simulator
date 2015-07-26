@@ -20,7 +20,7 @@ Dyson={
 "Job": {
     "DysonOnly": MonteCarlo["Control"]["__Duplicate"]==0,
     #"DysonOnly": False,
-    "SumRule": False 
+    "SumRule": True,
     }
 }
 
