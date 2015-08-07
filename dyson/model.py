@@ -151,18 +151,18 @@ class BareFactory:
             A,B,C,D=0,1,2,3
 
             self.NearestNeighbor[A][B]=[(0, 0),(Lx-1,0)]
-            self.NearestNeighbor[A][C]=[(0, 0),(0,   1)]
+            self.NearestNeighbor[A][C]=[(0, 0),(0,Ly-1)]
             self.NearestNeighbor[B][A]=[(0, 0),(1,   0)]
-            self.NearestNeighbor[B][D]=[(0, 0),(0,   1)]
-            self.NearestNeighbor[C][A]=[(0, 0),(0,Ly-1)]
+            self.NearestNeighbor[B][D]=[(0, 0),(0,Ly-1)]
+            self.NearestNeighbor[C][A]=[(0, 0),(0,   1)]
             self.NearestNeighbor[C][D]=[(0, 0),(Lx-1,0)]
-            self.NearestNeighbor[D][B]=[(0, 0),(0,Ly-1)]
+            self.NearestNeighbor[D][B]=[(0, 0),(0,   1)]
             self.NearestNeighbor[D][C]=[(0, 0),(1,   0)]
 
-            self.NextNearestNeighbor[A][D]=[(0, 0),(Lx-1,   1),(Lx-1,0),(0,   1)]
-            self.NextNearestNeighbor[B][C]=[(0, 0),(1,      1),(0,   1),(1,   0)]
-            self.NextNearestNeighbor[C][B]=[(0, 0),(Lx-1,Ly-1),(Lx-1,0),(0,Ly-1)]
-            self.NextNearestNeighbor[D][A]=[(0, 0),(1,   Ly-1),(1,   0),(0,Ly-1)]
+            self.NextNearestNeighbor[A][D]=[(0, 0),(Lx-1,Ly-1),(Lx-1,0),(0,Ly-1)]
+            self.NextNearestNeighbor[B][C]=[(0, 0),(1,   Ly-1),(0,Ly-1),(1,   0)]
+            self.NextNearestNeighbor[C][B]=[(0, 0),(Lx-1,   1),(Lx-1,0),(0,   1)]
+            self.NextNearestNeighbor[D][A]=[(0, 0),(1,      1),(1,   0),(0,   1)]
 
             for i in range(4):
                 for j in range(4):
