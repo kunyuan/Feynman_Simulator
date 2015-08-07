@@ -52,7 +52,7 @@ class Observable:
             Neighbor2=self.__Map.CoordiIndex((self.__Lat.L[0]-1, 0))
             self.Append("xVBS", (Chi.Data[0,A,0,B,Neighbor1,0]-Chi.Data[0,A,0,B,Neighbor2,0])*Factor)
             Neighbor1=self.__Map.CoordiIndex((0,0))
-            Neighbor2=self.__Map.CoordiIndex((0,1))
+            Neighbor2=self.__Map.CoordiIndex((0,self.__Lat.L[1]-1))
             self.Append("yVBS", (Chi.Data[0,A,0,C,Neighbor1,0]-Chi.Data[0,A,0,C,Neighbor2,0])*Factor)
 
 
