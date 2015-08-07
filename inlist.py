@@ -2,7 +2,7 @@
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" :  1,
+    "__Duplicate" :  0,
     "__IsCluster" : False, 
     "__AutoRun" : True,
     },

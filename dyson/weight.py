@@ -204,8 +204,16 @@ class Weight():
 
         for SubIn in range(self.NSublat):
             for SubOut in range(self.NSublat):
-                self.Data[:,SubIn,:,SubOut,:,:] = (self.Data[:,SubIn,:,SubOut,:,:]+self.Data[:,SubOut,:,SubIn,:,:])/2.0
-                self.Data[:,SubOut,:,SubIn,:,:] = (self.Data[:,SubIn,:,SubOut,:,:]+self.Data[:,SubOut,:,SubIn,:,:])/2.0
+                for  i in range(self.Vol):
+                    coord = self.Map.IndexToCoordi(i)
+                    revcoord=np.zeros(self.Map.Dim)
+                    for m in range(self.Map.Dim):
+                        revcoord[m] = -coord[m]
+                        if revcoord[m]<0:
+                            revcoord[m] = self.L[m]+revcoord[m]
+                    rev = self.Map.CoordiIndex(revcoord)
+                    print coord, revcoord, rev
+                    self.Data[:,SubIn,:,SubOut,i,:] = (self.Data[:,SubIn,:,SubOut,i,:]+self.Data[:,SubOut,:,SubIn,rev,:])/2.0
 
 
     def FFT(self, *SpaceOrTime):

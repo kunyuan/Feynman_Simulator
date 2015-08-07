@@ -55,8 +55,6 @@ class Observable:
             Neighbor2=self.__Map.CoordiIndex((0,self.__Lat.L[1]-1))
             self.Append("yVBS", (Chi.Data[0,A,0,C,Neighbor1,0]-Chi.Data[0,A,0,C,Neighbor2,0])*Factor)
 
-
-
         Chi.FFT("R","W")
         energy=0j
         for i in range(self.__Lat.NSublat):
