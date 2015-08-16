@@ -25,33 +25,33 @@ Dyson={
 }
 
 Beta=0.5
-Order=2
+Order=1
 Common={
 "Tau": {"MaxTauBin" : 64, "Beta": Beta},
 "Lattice":  {
     #2D lattice
     #"Name": "Square", "NSublat": 1,
     #"Name": "Checkerboard", "NSublat": 2,
-    "Name": "ValenceBond", "NSublat": 4,
+    #"Name": "ValenceBond", "NSublat": 4,
     #"Name": "Honeycomb", "NSublat": 2,
     #"Name": "Kagome", "NSublat": 3,
     #"Name": "Triangular", "NSublat": 1,
-    "L": [4,4]
+    #"L": [4,4]
 
     #3D lattice
     #"Name": "Cubic", "NSublat": 1,
-    #"Name": "3DCheckerboard", "NSublat": 2,
+    "Name": "3DCheckerboard", "NSublat": 2,
     #"Name": "Pyrochlore", "NSublat": 4,
-    #"L": [4,4,4]
+    "L": [4,4,4]
     },
 "Model": {
     "Name": "J1J2",
-    "Type": "xColomn",
+    #"Type": "xColomn",
     #"Type": "yColomn", 
     #"Type": "Plaquette",
     #"Description": ["ImW",],
-    "Interaction": [1.0, 0.5, 0.05],
-    "ExternalField": [0.00, -0.00, 0.0, 0.0]
+    "Interaction": [1.0, 0.0, 0.0],
+    "ExternalField": [0.10, -0.10, 0.0, 0.0]
     #ExternalField on Sublattice A and B
     },
 }
