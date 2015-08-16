@@ -58,7 +58,7 @@ class BareFactory:
                 self.__DeltaField[i] += Anneal["Interval"][i]
                 Anneal["DeltaField"][i] += Anneal["Interval"][i] 
             flag=True
-        log.info(green("ExternalField decreased to: {0}".format(self.__ExternalField+self.__DeltaField)))
+        log.info(green("ExternalField decreased to: {0}".format(self.__DeltaField)))
         return flag
 
     def RevertField(self, Anneal):
@@ -66,7 +66,7 @@ class BareFactory:
             Anneal["Interval"][i]/=2.0
             self.__DeltaField[i] -= Anneal["Interval"][i]
             Anneal["DeltaField"][i] -= Anneal["Interval"][i]
-        log.info(green("ExternalField reverted to: {0}".format(self.__ExternalField+self.__DeltaField)))
+        log.info(green("ExternalField reverted to: {0}".format(self.__DeltaField)))
 
     #model defintion
     def DiagCount(self, LatName):
