@@ -20,11 +20,11 @@ Dyson={
 "Job": {
     "DysonOnly": MonteCarlo["Control"]["__Duplicate"]==0,
     #"DysonOnly": False,
-    "SumRule": True,
+    "SumRule": False,
     }
 }
 
-Beta=0.5
+Beta=0.7
 Order=1
 Common={
 "Tau": {"MaxTauBin" : 64, "Beta": Beta},
@@ -42,13 +42,13 @@ Common={
     #"Name": "Cubic", "NSublat": 1,
     "Name": "3DCheckerboard", "NSublat": 2,
     #"Name": "Pyrochlore", "NSublat": 4,
-    "L": [4,4,4]
+    "L": [8,8,8]
     },
 "Model": {
     "Name": "J1J2",
     #"Description": ["ImW",],
     "Interaction": [1.0, 0.0, 0.0],
-    "ExternalField": [0.10, -0.10, 0.0, 0.0]
+    "ExternalField": [0.20, -0.20, 0.0, 0.0]
     #ExternalField on Sublattice A and B
     },
 }
