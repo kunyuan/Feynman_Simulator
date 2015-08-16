@@ -46,9 +46,6 @@ Common={
     },
 "Model": {
     "Name": "J1J2",
-    #"Type": "xColomn",
-    #"Type": "yColomn", 
-    #"Type": "Plaquette",
     #"Description": ["ImW",],
     "Interaction": [1.0, 0.0, 0.0],
     "ExternalField": [0.10, -0.10, 0.0, 0.0]

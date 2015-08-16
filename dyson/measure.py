@@ -7,11 +7,10 @@ import os, sys, weight
 PI=np.pi
 
 class Observable:
-    def __init__(self, Map, lat, VBS):
+    def __init__(self, Map, lat):
         self.__History={}
         self.__Lat=lat
         self.__Map=Map
-        self.__VBSType=VBS
 
     def Append(self, Name, Value):
         if self.__History.has_key(Name) is False:
