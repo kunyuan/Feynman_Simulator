@@ -126,9 +126,9 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
 
             #######Without symmetry breaking, there's no SigmaDeltaT. 
             #######There's no need to introduce the error from calculating it.
-            #log.info("calculating SigmaDeltaT..")
-            #SigmaDeltaT.Merge(ratio, calc.SigmaDeltaT_FirstOrder(G, W0, Map))
-            #log.info("SigmaDeltaT is done")
+            log.info("calculating SigmaDeltaT..")
+            SigmaDeltaT.Merge(ratio, calc.SigmaDeltaT_FirstOrder(G, W0, Map))
+            log.info("SigmaDeltaT is done")
 
             if IsDysonOnly or IsNewCalculation:
                 log.info("accumulating new Sigma/Polar...")
