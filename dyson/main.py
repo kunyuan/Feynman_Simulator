@@ -19,7 +19,7 @@ import plot, gc
 
 def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Sigma1, Polar1, Determ, ChiTensor):
     log.info("Measuring...")
-    ChiTensor=calc.Add_ChiTensor_ZerothOrder(ChiTensor, G, Map)
+    #ChiTensor=calc.Add_ChiTensor_ZerothOrder(ChiTensor, G, Map)
     Chi = calc.Calculate_Chi(ChiTensor, Map)
 
     ##########OUTPUT AND FILE SAVE ####################
