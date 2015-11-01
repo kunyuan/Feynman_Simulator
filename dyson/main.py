@@ -66,7 +66,8 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
             #plot what you are interested in
             plot.PlotChiAlongPath(Chi, Lat)
             plot.PlotTime("G", G, UP, 0, UP, 0, 0)
-            plot.PlotTime("G0", G0, UP, 0, UP, 0, 0)
+            plot.PlotTime("G0UPUP", G0, UP, 0, UP, 0, 0)
+            plot.PlotTime("G0DOWNDOWN", G0, DOWN, 0, DOWN, 0, 0)
             plot.PlotSpatial(Chi, Lat, 0, 0) 
             plot.PlotChi_2D(Chi, Lat)
             plot.PlotWeightvsR("\chi", Chi,Lat,0,0)
@@ -110,9 +111,9 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
             #ratio=None   #set this will not use accumulation!
             ratio = para["Version"]/(para["Version"]+10.0)
             G0,W0=Factory.Build()
-            #log.info("calculating SigmaDeltaT..")
-            #SigmaDeltaT.Merge(ratio, calc.SigmaDeltaT_FirstOrder(G, W0, Map))
-            #log.info("SigmaDeltaT is done")
+            log.info("calculating SigmaDeltaT..")
+            SigmaDeltaT.Merge(ratio, calc.SigmaDeltaT_FirstOrder(G, W0, Map))
+            log.info("SigmaDeltaT is done")
 
             if IsDysonOnly or IsNewCalculation:
                 log.info("accumulating Sigma/Polar statistics...")

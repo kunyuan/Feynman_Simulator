@@ -134,7 +134,8 @@ class BareFactory:
                 for j in range(2):
                     #J1 interaction A-->B, B-->A
                     for e in self.NearestNeighbor[i][j]:
-                        self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SS;
+                        #self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SS;
+                        self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SzSz;
                     #J2 interaction A-->A, B-->B
                     for e in self.NextNearestNeighbor[i][j]:
                         self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J2*SS;
@@ -171,7 +172,8 @@ class BareFactory:
 
             #J1 interaction on nearest neighbors
             for i in self.NearestNeighbor[0][0]:
-                self.BareW.Data[:,sub,:,sub,self.__Map.CoordiIndex(i)]+= J1*SS;
+                self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SzSz;
+                #self.BareW.Data[:,sub,:,sub,self.__Map.CoordiIndex(i)]+= J1*SS;
             #J2 interaction on next nearest neighbors
             for i in self.NextNearestNeighbor[0][0]:
                 self.BareW.Data[:,sub,:,sub,self.__Map.CoordiIndex(i)]+= J2*SS;
@@ -237,24 +239,40 @@ class BareFactory:
             Lx,Ly,Lz=self.__Map.L
             A,B,C,D=0,1,2,3
 
-            self.NearestNeighbor[A][B]=[(0,0,0),(0,0,Lz-1)]
-            self.NearestNeighbor[A][C]=[(0,0,0),(Lx-1,0,0)]
-            self.NearestNeighbor[A][D]=[(0,0,0),(0,Ly-1,0)]
-            self.NearestNeighbor[B][A]=[(0,0,0),(0,0,1)]
-            self.NearestNeighbor[B][C]=[(0,0,0),(Lx-1,0,1)]
-            self.NearestNeighbor[B][D]=[(0,0,0),(0,Ly-1,1)]
-            self.NearestNeighbor[C][A]=[(0,0,0),(1,0,0)]
-            self.NearestNeighbor[C][B]=[(0,0,0),(1,0,Lz-1)]
-            self.NearestNeighbor[C][D]=[(0,0,0),(1,Ly-1,0)]
-            self.NearestNeighbor[D][A]=[(0,0,0),(0,1,0)]
-            self.NearestNeighbor[D][B]=[(0,0,0),(0,1,Lz-1)]
-            self.NearestNeighbor[D][C]=[(0,0,0),(Lx-1,1,0)]
+            self.NearestNeighbor[A][B]=[(0,0,0),(Lx-1,0,0)]
+            self.NearestNeighbor[A][C]=[(0,0,0),(0,Ly-1,0)]
+            self.NearestNeighbor[A][D]=[(0,0,0),(0,0,Lz-1)]
+            self.NearestNeighbor[B][A]=[(0,0,0),(1,0,0)]
+            self.NearestNeighbor[B][C]=[(0,0,0),(1,Ly-1,0)]
+            self.NearestNeighbor[B][D]=[(0,0,0),(1,0,Lz-1)]
+            self.NearestNeighbor[C][A]=[(0,0,0),(0,1,0)]
+            self.NearestNeighbor[C][B]=[(0,0,0),(Lx-1,1,0)]
+            self.NearestNeighbor[C][D]=[(0,0,0),(0,1,Lz-1)]
+            self.NearestNeighbor[D][A]=[(0,0,0),(0,0,1)]
+            self.NearestNeighbor[D][B]=[(0,0,0),(Lx-1,0,1)]
+            self.NearestNeighbor[D][C]=[(0,0,0),(0,Ly-1,1)]
+
+            self.NextNearestNeighbor[A][B]=[(0,Ly-1,0),(0,0,Lz-1),(Lx-1,1,0),(Lx-1,0,1)]
+            self.NextNearestNeighbor[A][C]=[(Lx-1,0,0),(0,0,Lz-1),(1,Ly-1,0),(0,Ly-1,1)]
+            self.NextNearestNeighbor[A][D]=[(Lx-1,0,0),(0,Ly-1,0),(1,0,Lz-1),(0,1,Lz-1)]
+            self.NextNearestNeighbor[B][A]=[(1,Ly-1,0),(1,0,Lz-1),(0,0,1),(0,1,0)]
+            self.NextNearestNeighbor[B][C]=[(1,0,0),(1,0,Lz-1),(0,Ly-1,0),(0,Ly-1,1)]
+            self.NextNearestNeighbor[B][D]=[(1,Ly-1,0),(1,0,0),(0,0,Lz-1),(0,1,Lz-1)]
+            self.NextNearestNeighbor[C][A]=[(Lx-1,1,0),(0,1,Lz-1),(1,0,0),(0,0,1)]
+            self.NextNearestNeighbor[C][B]=[(0,1,0),(0,1,Lz-1),(Lx-1,0,0),(Lx-1,0,1)]
+            self.NextNearestNeighbor[C][D]=[(0,1,0),(Lx-1,1,0),(0,0,Lz-1),(1,0,Lz-1)]
+            self.NextNearestNeighbor[D][A]=[(Lx-1,0,1),(0,Ly-1,1),(1,0,0),(0,1,0)]
+            self.NextNearestNeighbor[D][B]=[(0,0,1),(0,Ly-1,1),(Lx-1,0,0),(Lx-1,1,0)]
+            self.NextNearestNeighbor[D][C]=[(0,0,1),(Lx-1,0,1),(0,Ly-1,0),(1,Ly-1,0),]
 
             for i in range(4):
                 for j in range(4):
                     for e in self.NearestNeighbor[i][j]:
                         #self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SzSz;
                         self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SS;
+                    for e in self.NextNearestNeighbor[i][j]:
+                        #self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SzSz;
+                        self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J2*SS;
             #S111S111=np.outer(Sx+Sy+Sz,Sx+Sy+Sz)
             #for i in range(4):
                 #self.BareW.Data[:,i,:,i,0]+ = -10.0*J1*S111S111;

@@ -153,13 +153,13 @@ class Lattice:
         self.__AssertDim()
         self.NSublat=4
         self.__AssertNSublat()
-        self.LatVec=np.array([[0.5,0.0,0.5],
-                              [0.5,0.5,0.0],
-                              [0.0,0.5,0.5]])
+        self.LatVec=np.array([[0.0,0.5,0.5],
+                              [0.5,0.0,0.5],
+                              [0.5,0.5,0.0]])
         self.SubLatVec=np.array([[0.0,0.0,0.0],
                                  [0.0,0.25,0.25],
                                  [0.25,0.0,0.25],
-                                 [0.25,0.25,0]])
+                                 [0.25,0.25,0.0]])
         self.ReciprocalLatVec=np.array([[2*PI, -2*PI, 2*PI],
                                         [2*PI, 2*PI, -2*PI],
                                         [-2*PI, 2*PI, 2*PI]])
