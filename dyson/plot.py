@@ -110,7 +110,7 @@ def PlotWeightvsR(Name, weight, lattice, SpinIn, SpinOut, Tau=0, DoesSave=True):
         plt.show()
     plt.close()
 
-def PlotChiAlongPath(Chi, lat, DoesSave=True):
+def PlotChiAlongPath(Chi, lat, Name="Chi", DoesSave=True):
     omega=0
     map=Chi.Map
     Chi.FFT("R", "W")
@@ -138,12 +138,12 @@ def PlotChiAlongPath(Chi, lat, DoesSave=True):
     plt.legend(loc='best', fancybox=True, framealpha=0.5)
     plt.xticks(ticks, lat.PathName)
     if DoesSave:
-        plt.savefig("chi_1D.pdf")
+        plt.savefig("{0}_1D.pdf".format(Name))
     else:
         plt.show()
     plt.close()
 
-def PlotChi_2D(Chi, lat, DoesSave=True):
+def PlotChi_2D(Chi, lat, Name, DoesSave=True):
     omega=0
     map=Chi.Map
     Chi.FFT("R", "W")
@@ -272,7 +272,7 @@ def PlotChi_2D(Chi, lat, DoesSave=True):
         log.warn("Lattice PlotChi_2D not implemented yet!")
 
     if DoesSave:
-        plt.savefig("chiK_{0}.pdf".format(lat.Name))
+        plt.savefig("{0}K_{1}.pdf".format(Name, lat.Name))
     else:
         plt.show()
     plt.close()

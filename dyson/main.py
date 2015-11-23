@@ -20,7 +20,10 @@ import plot, gc
 def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor):
     log.info("Measuring...")
     ChiTensor=calc.Add_ChiTensor_ZerothOrder(ChiTensor, G, Map)
+
     Chi = calc.Calculate_Chi(ChiTensor, Map)
+    ChiZZ = calc.Calculate_ChiZZ(ChiTensor, Map)
+    ChiXY = calc.Calculate_ChiXY(ChiTensor, Map)
 
     ##########OUTPUT AND FILE SAVE ####################
     spinUP=Map.Spin2Index(UP,UP)
@@ -33,7 +36,8 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     G.FFT("R","T")
     SigmaDeltaT.FFT("R")
     Sigma.FFT("R","T")
-    Chi.FFT("R","T")
+    ChiZZ.FFT("R","T")
+    ChiXY.FFT("R","T")
 
     #print "Polar[UP,UP]=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
     #print "Polar[DOWN, DOWN]=\n", Polar.Data[spinDOWN,0,spinDOWN,0,0,:]
@@ -64,13 +68,19 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
             Observable.Save(OutputFile)
 
             #plot what you are interested in
-            plot.PlotChiAlongPath(Chi, Lat)
+            plot.PlotChiAlongPath(Chi, Lat, "Chi")
+            #plot.PlotChiAlongPath(ChiXY, Lat, "Chi_XY")
+            plot.PlotChiAlongPath(ChiZZ, Lat, "Chi_ZZ")
+
             plot.PlotTime("G", G, UP, 0, UP, 0, 0)
             plot.PlotTime("G0UPUP", G0, UP, 0, UP, 0, 0)
             plot.PlotTime("G0DOWNDOWN", G0, DOWN, 0, DOWN, 0, 0)
+
             plot.PlotSpatial(Chi, Lat, 0, 0) 
-            plot.PlotChi_2D(Chi, Lat)
-            plot.PlotWeightvsR("\chi", Chi,Lat,0,0)
+            plot.PlotChi_2D(Chi, Lat, "Chi")
+            #plot.PlotChi_2D(ChiXY, Lat, "Chi_XY")
+            plot.PlotChi_2D(ChiZZ, Lat, "Chi_ZZ")
+            plot.PlotWeightvsR("\chi", Chi, Lat, 0, 0)
         except:
             log.info(blue("Output fails due to\n {0}".format(traceback.format_exc())))
 

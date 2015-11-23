@@ -24,8 +24,8 @@ Dyson={
     }
 }
 
-Beta=10.0
-Order=3
+Beta=1.00
+Order=1
 Common={
 "Tau": {"MaxTauBin" : 64, "Beta": Beta},
 "Lattice":  {
@@ -42,12 +42,12 @@ Common={
     #"Name": "Cubic", "NSublat": 1,
     #"Name": "3DCheckerboard", "NSublat": 2,
     "Name": "Pyrochlore", "NSublat": 4,
-    "L": [4,4,4]
+    "L": [8,8,8]
     },
 "Model": {
     "Name": "J1J2",
     #"Description": ["ImW",],
-    "Interaction": [1.0,0.1,0.000],
+    "Interaction": [1.0,  -0.0, -2.0, 0.000],
     "ExternalField": [0.00, -0.00, 0.0, 0.0]
     #ExternalField on Sublattice A and B
     },
@@ -79,8 +79,8 @@ Dyson["Dyson"]={
     #"SleepTime": 300,
     "OrderAccepted": {"Sigma":1, "Polar":1}, "ErrorThreshold": 0.2,
     "Annealing": {
-        "DeltaField": [1.0, -1.0, 0.0, 0.0],
-        "Interval": [-0.1, 0.1, -0.0, -0.0]
+        "DeltaField": [0.0, -0.0, 0.0, 0.0],
+        "Interval": [-0.0, 0.0, -0.0, -0.0]
         }
     }
 

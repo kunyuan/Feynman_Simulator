@@ -87,6 +87,7 @@ class BareFactory:
         Sz=0.5*np.array([1,0,0,-1])
         I=np.array([1,0,0,1])
         SS=np.outer(Sx,Sx)+np.outer(Sy,Sy)+np.outer(Sz,Sz)
+        SpSp=np.outer(Sx,Sx)+np.outer(Sy,Sy)
         SzSz=np.outer(Sz,Sz)
 
         if self.__Description is not None and "ImW" in self.__Description:
@@ -112,10 +113,10 @@ class BareFactory:
                 self.BareG.Data[sp,sub,sp,sub,0,:]=np.exp(Mu*TauGrid)/(1.0+np.exp(Mu*Beta))
 
         Interaction=list(self.__Interaction)+[0,0,0,0,0]
-        J1,J2=Interaction[0:2]
+        J1,J2,J3=Interaction[0:3]
         J_perturbation=None
-        if len(Interaction)>2:
-            J_perturbation=Interaction[2:]
+        if len(Interaction)>3:
+            J_perturbation=Interaction[3:]
         #Bare W
         #Dimension: 2
         spin=self.__Map.Spin2Index(UP,UP)
@@ -268,11 +269,12 @@ class BareFactory:
             for i in range(4):
                 for j in range(4):
                     for e in self.NearestNeighbor[i][j]:
-                        #self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SzSz;
-                        self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SS;
+                        self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SzSz;
+                        self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J2*SpSp;
+                        #self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SS;
                     for e in self.NextNearestNeighbor[i][j]:
                         #self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SzSz;
-                        self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J2*SS;
+                        self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J3*SzSz;
             #S111S111=np.outer(Sx+Sy+Sz,Sx+Sy+Sz)
             #for i in range(4):
                 #self.BareW.Data[:,i,:,i,0]+ = -10.0*J1*S111S111;

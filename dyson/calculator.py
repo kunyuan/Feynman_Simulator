@@ -200,6 +200,51 @@ def Calculate_Chi(ChiTensor, map):
         Chi.Data+=temp.reshape([1, NSublat, 1, NSublat, map.Vol, map.MaxTauBin]) 
     return Chi
 
+def Calculate_ChiXY(ChiTensor, map):
+    NSpin, NSublat=ChiTensor.NSpin, ChiTensor.NSublat
+    SxSx=np.zeros((NSpin,NSpin))
+    SySy=np.zeros((NSpin,NSpin))
+    SzSz=np.zeros((NSpin,NSpin))
+    UU=map.Spin2Index(UP,UP) 
+    UD=map.Spin2Index(UP,DOWN) 
+    DU=map.Spin2Index(DOWN, UP) 
+    DD=map.Spin2Index(DOWN, DOWN) 
+    SxSx[UD, UD]=SxSx[DU, DU]=1
+    SxSx[UD, DU]=SxSx[DU, UD]=1
+    SySy[UD, UD]= SySy[DU, DU]=-1
+    SySy[UD, DU]= SySy[DU, UD]=1
+    SzSz[UU, UU]= SzSz[DD, DD]=1
+    SzSz[UU, DD]= SzSz[DD, UU]=-1
+    Chi=weight.Weight("SmoothT", map, "NoSpin", "Symmetric", ChiTensor.SpaceDomain, ChiTensor.TimeDomain)
+    Chi.Data=0.0
+    SS=[SxSx/4.0, SySy/4.0]
+    for i in range(2):
+        temp=np.einsum("ik, kminvt->mnvt", SS[i], ChiTensor.Data)
+        Chi.Data+=temp.reshape([1, NSublat, 1, NSublat, map.Vol, map.MaxTauBin]) 
+    return Chi
+
+def Calculate_ChiZZ(ChiTensor, map):
+    NSpin, NSublat=ChiTensor.NSpin, ChiTensor.NSublat
+    SxSx=np.zeros((NSpin,NSpin))
+    SySy=np.zeros((NSpin,NSpin))
+    SzSz=np.zeros((NSpin,NSpin))
+    UU=map.Spin2Index(UP,UP) 
+    UD=map.Spin2Index(UP,DOWN) 
+    DU=map.Spin2Index(DOWN, UP) 
+    DD=map.Spin2Index(DOWN, DOWN) 
+    SxSx[UD, UD]=SxSx[DU, DU]=1
+    SxSx[UD, DU]=SxSx[DU, UD]=1
+    SySy[UD, UD]= SySy[DU, DU]=-1
+    SySy[UD, DU]= SySy[DU, UD]=1
+    SzSz[UU, UU]= SzSz[DD, DD]=1
+    SzSz[UU, DD]= SzSz[DD, UU]=-1
+    Chi=weight.Weight("SmoothT", map, "NoSpin", "Symmetric", ChiTensor.SpaceDomain, ChiTensor.TimeDomain)
+    Chi.Data=0.0
+    SS=SzSz/4.0
+    temp=np.einsum("ik, kminvt->mnvt", SS, ChiTensor.Data)
+    Chi.Data+=temp.reshape([1, NSublat, 1, NSublat, map.Vol, map.MaxTauBin]) 
+    return Chi
+
 class DenorminatorTouchZero(Exception):
     def __init__(self, value, pos, freq):
        self.value = value
