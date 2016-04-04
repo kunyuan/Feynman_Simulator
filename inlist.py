@@ -24,10 +24,10 @@ Dyson={
     }
 }
 
-Beta=10.0
+Beta=2.0
 Order=3
 Common={
-"Tau": {"MaxTauBin" : 64, "Beta": Beta},
+"Tau": {"MaxTauBin" :1024, "Beta": Beta},
 "Lattice":  {
     #2D lattice
     #"Name": "Square", "NSublat": 1,
@@ -40,15 +40,15 @@ Common={
 
     #3D lattice
     #"Name": "Cubic", "NSublat": 1,
-    #"Name": "3DCheckerboard", "NSublat": 2,
-    "Name": "Pyrochlore", "NSublat": 4,
+    "Name": "3DCheckerboard", "NSublat": 2,
+    #"Name": "Pyrochlore", "NSublat": 4,
     "L": [4,4,4]
     },
 "Model": {
     "Name": "J1J2",
     #"Description": ["ImW",],
-    "Interaction": [1.0,0.1,0.000],
-    "ExternalField": [0.00, -0.00, 0.0, 0.0]
+    "Interaction": [1.0,0.0,0.000],
+    "ExternalField": [0.10, -0.10, 0.0, 0.0]
     #ExternalField on Sublattice A and B
     },
 }
@@ -56,7 +56,7 @@ Common={
 MonteCarlo["Markov"]={
     "Order": Order, "Sweep" : 10, "Toss" : 1000,
     #Start from order 0, so that OrderReWeight has Order+1 elements
-    "OrderReWeight" : [100.0, 0.5, 1.0, 0.1, 0.05, 0.05, 0.01, 0.005],
+    "OrderReWeight" : [10.0, 1.0, 3.0, 0.1, 0.05, 0.05, 0.01, 0.005],
     "WormSpaceReweight" : 0.05,
     "PolarReweight" : 2.0,
     "OrderTimeRatio" : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
@@ -79,8 +79,8 @@ Dyson["Dyson"]={
     #"SleepTime": 300,
     "OrderAccepted": {"Sigma":1, "Polar":1}, "ErrorThreshold": 0.2,
     "Annealing": {
-        "DeltaField": [1.0, -1.0, 0.0, 0.0],
-        "Interval": [-0.1, 0.1, -0.0, -0.0]
+        "DeltaField": [0.0, -0.0, 0.0, 0.0],
+        "Interval": [-0.0, 0.0, -0.0, -0.0]
         }
     }
 
