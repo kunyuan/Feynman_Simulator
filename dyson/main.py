@@ -37,14 +37,16 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
 
     #print "Polar[UP,UP]=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
     #print "Polar[DOWN, DOWN]=\n", Polar.Data[spinDOWN,0,spinDOWN,0,0,:]
-    #print "W=\n", W.Data[spinUP,0,spinUP,0,0,:]
+    #print "W0=\n", W0.Data[spinUP,0,spinUP,1,0]
+    #print "G0[UP,UP]=\n", G0.Data[UP,0,UP,0,0,:]
+    #print "G0[DOWN,DOWN]=\n", G0.Data[DOWN,0,DOWN,0,0,:]
     #print "G[UP,UP]=\n", G.Data[UP,0,UP,0,0,:]
     #print "G[DOWN,DOWN]=\n", G.Data[DOWN,0,DOWN,0,0,:]
     #print "SigmaDeltaT[UP,UP]=\n", SigmaDeltaT.Data[UP,0,UP,0,0]
     #print "SigmaDeltaT[DOWN,DOWN]=\n", SigmaDeltaT.Data[DOWN,0,DOWN,0,0]
     #print "Sigma=\n", Sigma.Data[UP,0,UP,0,0,:]
+    #print "Chi=\n", Chi.Data[0,0,0,0,0,:]
     #print "Chi=\n", Chi.Data[0,0,0,0,1,:]
-    #print "Chi=\n", Chi.Data[0,0,0,0,:,0]
 
     data={}
     data["Chi"]=Chi.ToDict()
@@ -68,6 +70,8 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
             plot.PlotTime("G", G, UP, 0, UP, 0, 0)
             plot.PlotTime("G0UPUP", G0, UP, 0, UP, 0, 0)
             plot.PlotTime("G0DOWNDOWN", G0, DOWN, 0, DOWN, 0, 0)
+            plot.PlotTime("Sigma", Sigma, DOWN, 1, DOWN, 1, 0)
+            plot.PlotTime("Polar", Polar, UP, 0, UP, 0, 0)
             plot.PlotSpatial(Chi, Lat, 0, 0) 
             plot.PlotChi_2D(Chi, Lat)
             plot.PlotWeightvsR("\chi", Chi,Lat,0,0)
@@ -103,13 +107,13 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
 
     Gold, Wold = G, W
 
-    #while para["Version"]<2:
+    #while para["Version"]==0:
     while True:
         para["Version"]+=1
         log.info(green("Start Version {0}...".format(para["Version"])))
         try:
-            #ratio=None   #set this will not use accumulation!
-            ratio = para["Version"]/(para["Version"]+10.0)
+            ratio=None   #set this will not use accumulation!
+            #ratio = para["Version"]/(para["Version"]+10.0)
             G0,W0=Factory.Build()
             log.info("calculating SigmaDeltaT..")
             SigmaDeltaT.Merge(ratio, calc.SigmaDeltaT_FirstOrder(G, W0, Map))
@@ -128,13 +132,13 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                         ParaDyson["ErrorThreshold"], ParaDyson["OrderAccepted"])
                 Sigma.Symmetric()
                 Polar.Symmetric()
-                print Sigma.Data[0,0,0,0,0,0], Sigma.Data[0,0,0,0,0,63]
+                #print Sigma.Data[0,0,0,0,0,0], Sigma.Data[0,0,0,0,0,-1]
                 log.info("calculating G...")
                 G = calc.G_Dyson(G0, SigmaDeltaT, Sigma, Map)
+
             #######DYSON FOR W AND G###########################
             log.info("calculating W...")
             Wtmp, ChiTensor, Determ = calc.W_Dyson(W0, Polar, Map, Lat)
-
             if EnforceSumRule:
                 ChiTensor=calc.Add_ChiTensor_ZerothOrder(ChiTensor, G, Map)
                 Chi = calc.Calculate_Chi(ChiTensor, Map)
@@ -159,6 +163,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
             SigmaDeltaT.RollBack()
             Sigma.RollBack()
             Polar.RollBack()
+
         except collect.CollectStatisFailure as err:
             #failure due to statis files collection
             log.info(green("Version {0} fails due to:\n{1}".format(para["Version"],err)))

@@ -36,9 +36,9 @@ class Norm {
 typedef WeightArray<DELTA_T_SIZE> DeltaTArray;
 typedef WeightArray<SMOOTH_T_SIZE> SmoothTArray;
 
-class G {
+class GClass{
   public:
-    G(const Lattice &lat, real beta, uint MaxTauBin,
+    GClass(const Lattice &lat, real beta, uint MaxTauBin,
       TauSymmetry TauSymmetry = TauAntiSymmetric);
     void BuildTest();
     void Reset(real Beta);
@@ -58,9 +58,9 @@ class G {
 *  W is the interaction. An assumption is made here: translational and \emp{MIRROR} symmetry of the lattice (constructed by unit cells) are imposed on interaction.
     The mirror symmetry is only required on the level of the whole lattice, not within a unit cell.
 */
-class W {
+class WClass {
   public:
-    W(const Lattice &lat, real Beta, uint MaxTauBin);
+    WClass(const Lattice &lat, real Beta, uint MaxTauBin);
     void BuildTest();
     void WriteBareToASCII();
     void Reset(real Beta);
@@ -77,9 +77,9 @@ class W {
     IndexMapSPIN4 _Map;
 };
 
-class Sigma {
+class SigmaClass {
   public:
-    Sigma(const Lattice &, real Beta, uint MaxTauBin, int MaxOrder,
+    SigmaClass(const Lattice &, real Beta, uint MaxTauBin, int MaxOrder,
           TauSymmetry Symmetry = TauAntiSymmetric, real Norm = Norm::Weight());
     void BuildNew();
     void BuildTest();
@@ -96,9 +96,9 @@ class Sigma {
     IndexMapSPIN2 _Map;
 };
 
-class Polar {
+class PolarClass {
   public:
-    Polar(const Lattice &, real Beta, uint MaxTauBin, int MaxOrder, real Norm = Norm::Weight());
+    PolarClass(const Lattice &, real Beta, uint MaxTauBin, int MaxOrder, real Norm = Norm::Weight());
     void BuildNew();
     void BuildTest();
 

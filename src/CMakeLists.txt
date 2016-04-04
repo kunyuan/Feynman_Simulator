@@ -18,7 +18,7 @@ ADD_EXECUTABLE(simulator.exe  ${SRCS} ${HDRS})
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR})
 
 find_package(NumPy REQUIRED)
-find_package(PythonLibsNew REQUIRED)
+find_package(PythonDev REQUIRED)
 message("python include dir:" ${PYTHON_INCLUDE_DIR})
 message("python libraries:" ${PYTHON_LIBRARIES})
 message("numpy version:" ${NUMPY_VERSION})

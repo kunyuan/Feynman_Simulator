@@ -87,6 +87,7 @@ class BareFactory:
         Sz=0.5*np.array([1,0,0,-1])
         I=np.array([1,0,0,1])
         SS=np.outer(Sx,Sx)+np.outer(Sy,Sy)+np.outer(Sz,Sz)
+        SSxy=np.outer(Sx,Sx)+np.outer(Sy,Sy)
         SzSz=np.outer(Sz,Sz)
 
         if self.__Description is not None and "ImW" in self.__Description:
@@ -108,7 +109,7 @@ class BareFactory:
         Pauli_Z=self.__Map.Pauli()[2]
         for sub in range(self.__Map.NSublat):
             for sp in range(2):
-                Mu=self.__Mu+Pauli_Z[sp, sp]*(self.__DeltaField[sub]+self.__ExternalField[sub])
+                Mu=self.__Mu+0.5*Pauli_Z[sp, sp]*(self.__DeltaField[sub]+self.__ExternalField[sub])
                 self.BareG.Data[sp,sub,sp,sub,0,:]=np.exp(Mu*TauGrid)/(1.0+np.exp(Mu*Beta))
 
         Interaction=list(self.__Interaction)+[0,0,0,0,0]
@@ -172,7 +173,7 @@ class BareFactory:
 
             #J1 interaction on nearest neighbors
             for i in self.NearestNeighbor[0][0]:
-                self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SzSz;
+                self.BareW.Data[:,sub,:,sub,self.__Map.CoordiIndex(i)]+= J1*SzSz;
                 #self.BareW.Data[:,sub,:,sub,self.__Map.CoordiIndex(i)]+= J1*SS;
             #J2 interaction on next nearest neighbors
             for i in self.NextNearestNeighbor[0][0]:
@@ -200,12 +201,21 @@ class BareFactory:
             self.NearestNeighbor[A][B]=[(0, 0), (Lx-1, 0), (Lx-1,Ly-1)]
             self.NearestNeighbor[B][A]=[(0, 0), (1,0), (1,1)]
 
+            self.NextNearestNeighbor[A][A]=[(1, 0), (Lx-1, 0), (0, 1), (0, Ly-1), (1, 1), (Lx-1,Ly-1)]
+            self.NextNearestNeighbor[B][B]=[(1, 0), (Lx-1, 0), (0, 1), (0, Ly-1), (1, 1), (Lx-1,Ly-1)]
+
             #J1 interaction A-->B, B-->A
             for i in range(2):
                 for j in range(2):
                     for e in self.NearestNeighbor[i][j]:
-                        self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SS;
-            ##J2 interaction A-->A, B-->B
+                        #self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SS;
+                        self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SSxy;
+
+                    ##J2 interaction A-->A, B-->B
+                    for e in self.NextNearestNeighbor[i][j]:
+                        #self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SS;
+                        self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J2*SSxy;
+
         elif LatName=="Kagome":
             #NSublat: 2
             Lx,Ly=self.__Map.L

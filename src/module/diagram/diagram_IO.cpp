@@ -134,7 +134,7 @@ Dictionary Diagram::ToDict()
     return Config;
 }
 
-bool Diagram::FromDict(const Dictionary& dict, Lattice& lat, weight::G& g, weight::W& w)
+bool Diagram::FromDict(const Dictionary& dict, Lattice& lat, weight::GClass& g, weight::WClass& w)
 {
     Reset(lat, g, w);
     return FromDict(dict);
@@ -158,7 +158,7 @@ bool Diagram::FromDict(const Dictionary& Config)
     return true;
 }
 
-void Diagram::BuildNew(Lattice& lat, weight::G& g, weight::W& w)
+void Diagram::BuildNew(Lattice& lat, weight::GClass& g, weight::WClass& w)
 {
     Reset(lat, g, w);
     Dictionary Config;
@@ -183,7 +183,7 @@ void Diagram::BuildNew(Lattice& lat, weight::G& g, weight::W& w)
         ABORT("Faile to construct diagram!");
 }
 
-void Diagram::SetTest(Lattice& lat, weight::G& g, weight::W& w)
+void Diagram::SetTest(Lattice& lat, weight::GClass& g, weight::WClass& w)
 {
     Reset(lat, g, w);
     Dictionary Config;

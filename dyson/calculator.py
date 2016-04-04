@@ -39,7 +39,8 @@ def SigmaDeltaT_FirstOrder(G, W0, map):
             spinG = (spin2, spin2)
             spinSigma = (spin1, spin1)
             SigmaDeltaT.Data[spinSigma[IN], :, spinSigma[OUT], :, :]+= OrderSign \
-                    *AntiSymmetricFactor*G.Data[spinG[IN], :, spinG[OUT], :, :, -1]\
+                    *AntiSymmetricFactor*(1.5*G.Data[spinG[IN], :, spinG[OUT], :, :, -1]\
+                    -0.5*G.Data[spinG[IN], :,spinG[OUT], :, :,-2])\
                     *W0.Data[spinW[IN], :, spinW[OUT], :, :]
 
     ########Hatree Diagram, or bubble diagram
@@ -50,9 +51,9 @@ def SigmaDeltaT_FirstOrder(G, W0, map):
             for sub1 in range(map.NSublat):
                 for sub2 in range(map.NSublat):
                     for r in range(map.Vol):
+                        G1 = 1.5*G.Data[sp2,sub2,sp2,sub2,0,-1]-0.5*G.Data[sp2,sub2,sp2,sub2,0,-2]
                         SigmaDeltaT.Data[sp1, sub1, sp1, sub1, 0]+= OrderSign*FermiLoopSign \
-                            *AntiSymmetricFactor*G.Data[sp2, sub2, sp2, sub2, 0, -1] \
-                            *W0.Data[spinW[IN], sub1, spinW[OUT], sub2, r]
+                            *AntiSymmetricFactor*G1*W0.Data[spinW[IN], sub1, spinW[OUT], sub2, r]
     return SigmaDeltaT
 
 
@@ -173,7 +174,12 @@ def Add_ChiTensor_ZerothOrder(ChiTensor, G, map):
             for tau in range(map.MaxTauBin):
                 ChiSpIn=map.Spin2Index(spIn1,spIn2)
                 ChiSpOut=map.Spin2Index(spOut1,spOut2)
-                ChiTensorInUnitCell[ChiSpIn,subIn,ChiSpOut,subOut]=G.Data[spIn1,subIn,spIn2,subIn,0,-1]*G.Data[spOut1,subOut,spOut2,subOut,0,-1]
+                G1 = 1.5*G.Data[spIn1,subIn,spIn2,subIn,0,-1]-0.5*G.Data[spIn1,subIn,spIn2,subIn,0,-2]
+                G2 = 1.5*G.Data[spOut1,subOut,spOut2,subOut,0,-1]-0.5*G.Data[spOut1,subOut,spOut2,subOut,0,-2]
+                ChiTensorInUnitCell[ChiSpIn,subIn,ChiSpOut,subOut]= G1 * G2
+                #if spIn1==UP and spIn2==UP and spOut1==DOWN and spOut2==DOWN:
+                    #if abs(G1)>0.1 and abs(G2)>0.1:
+                        #print G1,G2, G1*G2
     ChiTensor.Data+=ChiTensorInUnitCell[...,np.newaxis,np.newaxis]
     return ChiTensor
 
@@ -194,8 +200,13 @@ def Calculate_Chi(ChiTensor, map):
     SzSz[UU, DD]= SzSz[DD, UU]=-1
     Chi=weight.Weight("SmoothT", map, "NoSpin", "Symmetric", ChiTensor.SpaceDomain, ChiTensor.TimeDomain)
     Chi.Data=0.0
-    SS=[SxSx/4.0, SySy/4.0, SzSz/4.0]
-    for i in range(3):
+    #SS=[SxSx/4.0, SySy/4.0, SzSz/4.0]
+    #for i in range(3):
+        #temp=np.einsum("ik, kminvt->mnvt", SS[i], ChiTensor.Data)
+        #Chi.Data+=temp.reshape([1, NSublat, 1, NSublat, map.Vol, map.MaxTauBin]) 
+
+    SS=[SzSz/4.0]
+    for i in range(1):
         temp=np.einsum("ik, kminvt->mnvt", SS[i], ChiTensor.Data)
         Chi.Data+=temp.reshape([1, NSublat, 1, NSublat, map.Vol, map.MaxTauBin]) 
     return Chi

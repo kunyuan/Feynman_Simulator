@@ -21,14 +21,14 @@ class Dictionary;
 *  \brief estimate with mean value and standard error
 */
 template <typename T>
-class Estimate {
+class EstimateClass {
 public:
-    Estimate();
-    Estimate(const T& m, const T& e);
+    EstimateClass();
+    EstimateClass(const T& m, const T& e);
     T Mean;
     T Error;
     T RelativeError();
-    friend std::ostream& operator<<(std::ostream&, const Estimate&);
+    friend std::ostream& operator<<(std::ostream&, const EstimateClass&);
 };
 
 /**
@@ -44,7 +44,7 @@ private:
     T _accumulator;
     real _norm;
     real _ratio;
-    Estimate<T> _value;
+    EstimateClass<T> _value;
     void _update();
     T _history[SIZE];
 
@@ -57,7 +57,7 @@ public:
     T Value();
     real Norm();
     double Ratio();
-    Estimate<T> Estimate();
+    EstimateClass<T> Estimate();
     bool FromDict(const Dictionary&);
     Dictionary ToDict();
     void ClearStatistics();

@@ -16,7 +16,7 @@
 using namespace std;
 
 template <typename T>
-Estimate<T>::Estimate()
+EstimateClass<T>::EstimateClass()
     : Mean()
     , Error()
 {
@@ -30,18 +30,18 @@ Estimate<T>::Estimate()
 *
 */
 template <typename T>
-Estimate<T>::Estimate(const T& mean, const T& error)
+EstimateClass<T>::EstimateClass(const T& mean, const T& error)
     : Mean(mean)
     , Error(error)
 {
 }
 template <>
-Complex Estimate<Complex>::RelativeError()
+Complex EstimateClass<Complex>::RelativeError()
 {
     return Complex(fabs(Error.Re / Mean.Re), fabs(Error.Im / Mean.Im));
 }
 template <>
-real Estimate<real>::RelativeError()
+real EstimateClass<real>::RelativeError()
 {
     return Error / Mean;
 }
@@ -49,22 +49,22 @@ real Estimate<real>::RelativeError()
 /**
 *  \brief Pretty output of Complex Estimate
 */
-ostream& operator<<(ostream& os, const Estimate<Complex>& e)
+ostream& operator<<(ostream& os, const EstimateClass<Complex>& e)
 {
     os.setf(ios::showpoint);
     os << "(" << e.Mean.Re << "+/-" << e.Error.Re << "," << e.Mean.Im << "+/-" << e.Error.Im << ")";
     return os;
 }
 
-ostream& operator<<(ostream& os, const Estimate<real>& e)
+ostream& operator<<(ostream& os, const EstimateClass<real>& e)
 {
     os.setf(ios::showpoint);
     os << e.Mean << "+/-" << e.Error;
     return os;
 }
 
-template class Estimate<Complex>;
-template class Estimate<real>;
+template class EstimateClass<Complex>;
+template class EstimateClass<real>;
 
 /**
 *  Normalization factor is initialized as 1.0 when Estimator is constructed.
@@ -196,7 +196,7 @@ void Estimator<T>::AddStatistics()
 }
 
 template <typename T>
-Estimate<T> Estimator<T>::Estimate()
+EstimateClass<T> Estimator<T>::Estimate()
 {
     _update();
     return _value;

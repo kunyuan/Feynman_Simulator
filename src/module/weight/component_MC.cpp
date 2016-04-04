@@ -13,7 +13,7 @@ using namespace std;
 
 const spin SPINUPUP[2] = { UP, UP };
 
-Complex G::Weight(const Site& rin, const Site& rout, real tin, real tout, spin SpinIn, spin SpinOut, bool IsMeasure) const
+Complex GClass::Weight(const Site& rin, const Site& rout, real tin, real tout, spin SpinIn, spin SpinOut, bool IsMeasure) const
 {
     uint Index = _Map.GetIndex(SpinIn, SpinOut, rin, rout, tin, tout);
     if (IsMeasure)
@@ -22,7 +22,7 @@ Complex G::Weight(const Site& rin, const Site& rout, real tin, real tout, spin S
         return _Map.GetTauSymmetryFactor(tin, tout) * _SmoothTWeight(Index);
 }
 
-Complex G::Weight(int dir, const Site& r1, const Site& r2, real t1, real t2, spin Spin1, spin Spin2, bool IsMeasure) const
+Complex GClass::Weight(int dir, const Site& r1, const Site& r2, real t1, real t2, spin Spin1, spin Spin2, bool IsMeasure) const
 {
     static uint Index;
     int symmetryfactor;
@@ -41,7 +41,7 @@ Complex G::Weight(int dir, const Site& r1, const Site& r2, real t1, real t2, spi
         return symmetryfactor * _SmoothTWeight(Index);
 }
 
-Complex W::Weight(const Site& rin, const Site& rout, real tin, real tout, spin* SpinIn, spin* SpinOut, bool IsWorm, bool IsMeasure, bool IsDelta) const
+Complex WClass::Weight(const Site& rin, const Site& rout, real tin, real tout, spin* SpinIn, spin* SpinOut, bool IsWorm, bool IsMeasure, bool IsDelta) const
 {
     static uint index;
     if (IsWorm) {
@@ -60,7 +60,7 @@ Complex W::Weight(const Site& rin, const Site& rout, real tin, real tout, spin* 
         return _SmoothTWeight(index);
 }
 
-Complex W::Weight(int dir, const Site& r1, const Site& r2, real t1, real t2, spin* Spin1, spin* Spin2, bool IsWorm, bool IsMeasure, bool IsDelta) const
+Complex WClass::Weight(int dir, const Site& r1, const Site& r2, real t1, real t2, spin* Spin1, spin* Spin2, bool IsWorm, bool IsMeasure, bool IsDelta) const
 {
     static uint index;
     if (IsWorm) {
@@ -86,14 +86,14 @@ Complex W::Weight(int dir, const Site& r1, const Site& r2, real t1, real t2, spi
         return _SmoothTWeight(index);
 }
 
-void Sigma::Measure(const Site& rin, const Site& rout, real tin, real tout, spin SpinIn, spin SpinOut, int order, const Complex& weight)
+void SigmaClass::Measure(const Site& rin, const Site& rout, real tin, real tout, spin SpinIn, spin SpinOut, int order, const Complex& weight)
 {
     static uint index;
     index = _Map.GetIndex(SpinIn, SpinOut, rin, rout, tin, tout);
     Estimator.Measure(index, order, weight * _Map.GetTauSymmetryFactor(tin, tout));
 }
 
-void Polar::Measure(const Site& rin, const Site& rout, real tin, real tout, spin* SpinIn, spin* SpinOut, int order, const Complex& weight)
+void PolarClass::Measure(const Site& rin, const Site& rout, real tin, real tout, spin* SpinIn, spin* SpinOut, int order, const Complex& weight)
 {
     static uint index;
     index = _Map.GetIndex(SpinIn, SpinOut, rin, rout, tin, tout);
