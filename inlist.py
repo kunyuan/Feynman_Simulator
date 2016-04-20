@@ -2,16 +2,16 @@
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" :  0,
+    "__Duplicate" :  1,
     "__IsCluster" : False, 
-    "__AutoRun" : True,
+    "__AutoRun" : False,
     },
 "Job": {"Sample" : 100000000}  ##0.8 min for 1000000(*1000) Samples in MC
 }
 Dyson={
 "Control": {
     "__Execute" : ["python", "./dyson/main.py"],
-    "__Duplicate" : 1,
+    "__Duplicate" : 0,
     "__IsCluster" : MonteCarlo["Control"]["__IsCluster"],
     "__AutoRun" : MonteCarlo["Control"]["__AutoRun"], 
     #"__AutoRun" : False,
@@ -24,31 +24,31 @@ Dyson={
     }
 }
 
-Beta=2.0
-Order=3
+Beta=20.0
+Order=2
 Common={
-"Tau": {"MaxTauBin" :1024, "Beta": Beta},
+"Tau": {"MaxTauBin" : 512, "Beta": Beta},
 "Lattice":  {
     #2D lattice
     #"Name": "Square", "NSublat": 1,
     #"Name": "Checkerboard", "NSublat": 2,
     #"Name": "ValenceBond", "NSublat": 2,
-    #"Name": "Honeycomb", "NSublat": 2,
+    "Name": "Honeycomb", "NSublat": 2,
     #"Name": "Kagome", "NSublat": 3,
     #"Name": "Triangular", "NSublat": 1,
-    #"L": [8,8]
+    "L": [8,8]
 
     #3D lattice
     #"Name": "Cubic", "NSublat": 1,
-    "Name": "3DCheckerboard", "NSublat": 2,
+    #"Name": "3DCheckerboard", "NSublat": 2,
     #"Name": "Pyrochlore", "NSublat": 4,
-    "L": [4,4,4]
+    #"L": [4,4,4]
     },
 "Model": {
     "Name": "J1J2",
     #"Description": ["ImW",],
-    "Interaction": [1.0,0.0,0.000],
-    "ExternalField": [0.10, -0.10, 0.0, 0.0]
+    "Interaction": [1.0, 0.25,0.0],
+    "ExternalField": [-0.7, -0.7, 0.0, 0.0]
     #ExternalField on Sublattice A and B
     },
 }
@@ -56,7 +56,7 @@ Common={
 MonteCarlo["Markov"]={
     "Order": Order, "Sweep" : 10, "Toss" : 1000,
     #Start from order 0, so that OrderReWeight has Order+1 elements
-    "OrderReWeight" : [10.0, 1.0, 3.0, 0.1, 0.05, 0.05, 0.01, 0.005],
+    "OrderReWeight" : [100.0, 0.5, 1.0, 0.1, 0.05, 0.05, 0.01, 0.005],
     "WormSpaceReweight" : 0.05,
     "PolarReweight" : 2.0,
     "OrderTimeRatio" : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
@@ -79,8 +79,10 @@ Dyson["Dyson"]={
     #"SleepTime": 300,
     "OrderAccepted": {"Sigma":1, "Polar":1}, "ErrorThreshold": 0.2,
     "Annealing": {
-        "DeltaField": [0.0, -0.0, 0.0, 0.0],
-        "Interval": [-0.0, 0.0, -0.0, -0.0]
+        #"DeltaField": [-0.5,  -0.5, 0.0, 0.0],
+        #"Interval": [0.05, 0.05, -0.0, -0.0]
+        "DeltaField": [-0.0,  -0.0, 0.0, 0.0],
+        "Interval": [0.00, 0.00, -0.0, -0.0]
         }
     }
 

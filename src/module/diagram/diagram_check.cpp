@@ -157,6 +157,8 @@ bool Diagram::_CheckWeight()
                                       vin->Spin(OUT), vout->Spin(IN), G(i)->IsMeasure);
             if (!Equal(G(i)->Weight, gWeight))
                 return false;
+            if (Equal(G(i)->Weight, Complex(0.0, 0.0)))
+                return false;
         }
         for (int i = 0; i < W.HowMany(); i++) {
             DiagWeight *= W(i)->Weight;
@@ -167,8 +169,10 @@ bool Diagram::_CheckWeight()
                                       vout->Spin(), W(i)->IsWorm, W(i)->IsMeasure, W(i)->IsDelta);
             if (!Equal(W(i)->Weight, wWeight))
                 return false;
+            if (Equal(W(i)->Weight, Complex(0.0, 0.0)))
+                return false;
         }
         DiagWeight *= SignFermiLoop * (Order % 2 == 0 ? 1 : -1);
-        return (Equal(DiagWeight, Weight));
+        return Equal(DiagWeight, Weight);
     }
 }
