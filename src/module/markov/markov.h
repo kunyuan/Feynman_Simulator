@@ -18,10 +18,10 @@ class Diagram;
 }
 namespace weight {
 class Weight;
-class GClass;
-class WClass;
-class SigmaClass;
-class PolarClass;
+class G;
+class W;
+class Sigma;
+class Polar;
 class Norm;
 }
 namespace para {
@@ -45,10 +45,10 @@ public:
     real* PolarReweight;
     diag::Diagram* Diag;
     diag::WormClass* Worm;
-    weight::SigmaClass* Sigma;
-    weight::PolarClass* Polar;
-    weight::GClass* G;
-    weight::WClass* W;
+    weight::Sigma* Sigma;
+    weight::Polar* Polar;
+    weight::G* G;
+    weight::W* W;
     RandomFactory* RNG;
 
     bool BuildNew(para::ParaMC&, diag::Diagram&, weight::Weight&);

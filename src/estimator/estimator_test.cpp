@@ -38,7 +38,7 @@ void TestObservableComplex()
         quan2.Measure(-a[i]);
         quan2.AddStatistics();
     }
-    EstimateClass<Complex> ExpectedResult(Complex(5.0, 5.0), Complex(1.5, 0.9));
+    Estimate<Complex> ExpectedResult(Complex(5.0, 5.0), Complex(1.5, 0.9));
     //!!!This two value only works if you set _norm=1.0 and ThrowRatio=1.0/3
     sput_fail_unless(Equal(quan1.Estimate().Mean, ExpectedResult.Mean, 1e-6),
                      "check the Mean value.");
@@ -75,7 +75,7 @@ void TestObservableReal()
         quan1.Measure(a[i]);
         quan1.AddStatistics();
     }
-    EstimateClass<Complex> ExpectedResult(5.0, 1.5);
+    Estimate<Complex> ExpectedResult(5.0, 1.5);
     //!!!This two value only works if you set _norm=1.0 and ThrowRatio=1.0/3
     sput_fail_unless(Equal(quan1.Estimate().Mean, ExpectedResult.Mean, 1e-6),
                      "check the Mean value.");

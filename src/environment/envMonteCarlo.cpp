@@ -37,8 +37,8 @@ bool EnvMonteCarlo::BuildNew()
     GW_.BigLoad(Job.WeightFile);
     Weight.FromDict(GW_, weight::GW, Para);
 
-    //    Weight.SetDiagCounter(Para);//Test for DiagCounter
-    //    Weight.SetTest(Para);//Test for WeightTest
+       //Weight.SetDiagCounter(Para);//Test for DiagCounter
+       //Weight.SetTest(Para);//Test for WeightTest
 
     Weight.BuildNew(weight::SigmaPolar, Para);
     Diag.BuildNew(Para.Lat, *Weight.G, *Weight.W);

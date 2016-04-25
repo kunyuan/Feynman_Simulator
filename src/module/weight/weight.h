@@ -23,10 +23,10 @@ namespace weight {
 typedef const int flag;
 flag SigmaPolar = 1;
 flag GW = 2;
-class SigmaClass;
-class PolarClass;
-class GClass;
-class WClass;
+class Sigma;
+class Polar;
+class G;
+class W;
 
 class Weight {
 
@@ -34,10 +34,10 @@ public:
     Weight(bool IsAllSymmetric = false);
     ~Weight();
     bool _IsAllSymmetric;
-    SigmaClass* Sigma;
-    PolarClass* Polar;
-    GClass* G;
-    WClass* W;
+    Sigma* Sigma;
+    Polar* Polar;
+    G* G;
+    W* W;
 
     void SetTest(const para::ParaMC&);
     void SetDiagCounter(const para::ParaMC&);

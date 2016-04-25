@@ -85,7 +85,7 @@ void Diagram::ReplaceWHash(Momentum kold, Momentum k)
     AddWHash(k);
 }
 
-void Diagram::Reset(Lattice& lat, weight::GClass& g, weight::WClass& w)
+void Diagram::Reset(Lattice& lat, weight::G& g, weight::W& w)
 {
     Lat = &lat;
     GWeight = &g;

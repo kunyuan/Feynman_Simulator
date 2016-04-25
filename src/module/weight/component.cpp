@@ -15,7 +15,7 @@ using namespace std;
 
 real Norm::NormFactor = 1.0;
 
-GClass::GClass(const Lattice& lat, real beta, uint MaxTauBin, TauSymmetry Symmetry)
+G::G(const Lattice& lat, real beta, uint MaxTauBin, TauSymmetry Symmetry)
     : _Map(IndexMapSPIN2(beta, MaxTauBin, lat, Symmetry))
 {
     _SmoothTWeight.Allocate(_Map.GetShape(), SMOOTH);
@@ -25,7 +25,7 @@ GClass::GClass(const Lattice& lat, real beta, uint MaxTauBin, TauSymmetry Symmet
     _MeasureWeight.Assign(Complex(1.0, 0.0));
 }
 
-void GClass::BuildTest()
+void G::BuildTest()
 {
     _SmoothTWeight.Assign(0.0);
     for (uint sub = 0; sub < _Map.Lat.SublatVol; sub++) {
@@ -38,22 +38,22 @@ void GClass::BuildTest()
     }
 }
 
-void GClass::Reset(real Beta)
+void G::Reset(real Beta)
 {
     _Map = IndexMapSPIN2(Beta, _Map.MaxTauBin, _Map.Lat, _Map.Symmetry);
 }
 
-bool GClass::FromDict(const Dictionary& dict)
+bool G::FromDict(const Dictionary& dict)
 {
     return _SmoothTWeight.FromDict(dict);
 }
 
-Dictionary GClass::ToDict()
+Dictionary G::ToDict()
 {
     return _SmoothTWeight.ToDict();
 }
 
-WClass::WClass(const Lattice& lat, real Beta, uint MaxTauBin)
+W::W(const Lattice& lat, real Beta, uint MaxTauBin)
     : _Map(IndexMapSPIN4(Beta, MaxTauBin, lat, TauSymmetric))
 {
     _SmoothTWeight.Allocate(_Map.GetShape(), SMOOTH);
@@ -65,7 +65,7 @@ WClass::WClass(const Lattice& lat, real Beta, uint MaxTauBin)
     _MeasureWeight.Assign(Complex(1.0, 0.0));
 }
 
-void WClass::BuildTest()
+void W::BuildTest()
 {
     _DeltaTWeight.Assign(0.0);
     _SmoothTWeight.Assign(0.0);
@@ -80,86 +80,86 @@ void WClass::BuildTest()
     }
 }
 
-void WClass::Reset(real Beta)
+void W::Reset(real Beta)
 {
     _Map = IndexMapSPIN4(Beta, _Map.MaxTauBin, _Map.Lat, _Map.Symmetry);
 }
 
-bool WClass::FromDict(const Dictionary& dict)
+bool W::FromDict(const Dictionary& dict)
 {
     return _SmoothTWeight.FromDict(dict) && _DeltaTWeight.FromDict(dict);
 }
 
-Dictionary WClass::ToDict()
+Dictionary W::ToDict()
 {
     auto dict = _SmoothTWeight.ToDict();
     dict.Update(_DeltaTWeight.ToDict());
     return dict;
 }
 
-SigmaClass::SigmaClass(const Lattice& lat, real Beta, uint MaxTauBin,
+Sigma::Sigma(const Lattice& lat, real Beta, uint MaxTauBin,
              int MaxOrder, TauSymmetry Symmetry, real Norm)
     : _Map(IndexMapSPIN2(Beta, MaxTauBin, lat, Symmetry))
 {
     Estimator.Allocate(_Map, MaxOrder, Norm);
 }
 
-void SigmaClass::BuildNew()
+void Sigma::BuildNew()
 {
     Estimator.ClearStatistics();
 }
 
-void SigmaClass::BuildTest()
+void Sigma::BuildTest()
 {
     Estimator.ClearStatistics();
 }
 
-void SigmaClass::Reset(real Beta)
+void Sigma::Reset(real Beta)
 {
     _Map = IndexMapSPIN2(Beta, _Map.MaxTauBin, _Map.Lat, _Map.Symmetry);
     Estimator.Anneal(Beta);
 }
 
-bool SigmaClass::FromDict(const Dictionary& dict)
+bool Sigma::FromDict(const Dictionary& dict)
 {
     return Estimator.FromDict(dict.Get<Dictionary>("Histogram").Get<Dictionary>("SmoothT"));
 }
 
-Dictionary SigmaClass::ToDict()
+Dictionary Sigma::ToDict()
 {
     Dictionary dict;
     dict["Histogram"] = Dictionary("SmoothT", Estimator.ToDict());
     return dict;
 }
 
-PolarClass::PolarClass(const Lattice& lat, real Beta, uint MaxTauBin, int MaxOrder, real Norm)
+Polar::Polar(const Lattice& lat, real Beta, uint MaxTauBin, int MaxOrder, real Norm)
     : _Map(IndexMapSPIN4(Beta, MaxTauBin, lat, TauSymmetric))
 {
     Estimator.Allocate(_Map, MaxOrder, Norm);
 }
 
-void PolarClass::BuildNew()
+void Polar::BuildNew()
 {
     Estimator.ClearStatistics();
 }
 
-void PolarClass::BuildTest()
+void Polar::BuildTest()
 {
     Estimator.ClearStatistics();
 }
 
-void PolarClass::Reset(real Beta)
+void Polar::Reset(real Beta)
 {
     _Map = IndexMapSPIN4(Beta, _Map.MaxTauBin, _Map.Lat, _Map.Symmetry);
     Estimator.Anneal(Beta);
 }
 
-bool PolarClass::FromDict(const Dictionary& dict)
+bool Polar::FromDict(const Dictionary& dict)
 {
     return Estimator.FromDict(dict.Get<Dictionary>("Histogram").Get<Dictionary>("SmoothT"));
 }
 
-Dictionary PolarClass::ToDict()
+Dictionary Polar::ToDict()
 {
     Dictionary dict;
     dict["Histogram"] = Dictionary("SmoothT", Estimator.ToDict());

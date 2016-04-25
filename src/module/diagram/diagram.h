@@ -13,8 +13,8 @@
 #include "component_bundle.h"
 #include "utility/rng.h"
 namespace weight {
-class GClass;
-class WClass;
+class G;
+class W;
 }
 class Dictionary;
 
@@ -23,18 +23,18 @@ class Diagram {
 public:
     Diagram();
 
-    void BuildNew(Lattice&, weight::GClass&, weight::WClass&);
-    bool FromDict(const Dictionary&, Lattice&, weight::GClass&, weight::WClass&);
+    void BuildNew(Lattice&, weight::G&, weight::W&);
+    bool FromDict(const Dictionary&, Lattice&, weight::G&, weight::W&);
     bool FromDict(const Dictionary&);
     Dictionary ToDict();
-    void Reset(Lattice&, weight::GClass&, weight::WClass&);
-    void SetTest(Lattice&, weight::GClass&, weight::WClass&);
+    void Reset(Lattice&, weight::G&, weight::W&);
+    void SetTest(Lattice&, weight::G&, weight::W&);
     bool CheckDiagram();
     bool FixDiagram();
 
     Lattice* Lat;
-    weight::GClass* GWeight;
-    weight::WClass* WWeight;
+    weight::G* GWeight;
+    weight::W* WWeight;
 
     int Order;
     Complex Phase, Weight;

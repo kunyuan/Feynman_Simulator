@@ -115,16 +115,16 @@ void weight::Weight::_AllocateGW(const ParaMC &para)
     //make sure old Sigma/Polar/G/W are released before assigning new memory
     delete G;
     auto symmetry = _IsAllSymmetric ? TauSymmetric : TauAntiSymmetric;
-    G = new weight::GClass(para.Lat, para.Beta, para.MaxTauBin, symmetry);
+    G = new weight::G(para.Lat, para.Beta, para.MaxTauBin, symmetry);
     delete W;
-    W = new weight::WClass(para.Lat, para.Beta, para.MaxTauBin);
+    W = new weight::W(para.Lat, para.Beta, para.MaxTauBin);
 }
 
 void weight::Weight::_AllocateSigmaPolar(const ParaMC &para)
 {
     auto symmetry = _IsAllSymmetric ? TauSymmetric : TauAntiSymmetric;
     delete Sigma;
-    Sigma = new weight::SigmaClass(para.Lat, para.Beta, para.MaxTauBin, para.Order, symmetry);
+    Sigma = new weight::Sigma(para.Lat, para.Beta, para.MaxTauBin, para.Order, symmetry);
     delete Polar;
-    Polar = new weight::PolarClass(para.Lat, para.Beta, para.MaxTauBin, para.Order);
+    Polar = new weight::Polar(para.Lat, para.Beta, para.MaxTauBin, para.Order);
 }

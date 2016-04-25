@@ -134,7 +134,7 @@ Dictionary Diagram::ToDict()
     return Config;
 }
 
-bool Diagram::FromDict(const Dictionary& dict, Lattice& lat, weight::GClass& g, weight::WClass& w)
+bool Diagram::FromDict(const Dictionary& dict, Lattice& lat, weight::G& g, weight::W& w)
 {
     Reset(lat, g, w);
     return FromDict(dict);
@@ -158,32 +158,32 @@ bool Diagram::FromDict(const Dictionary& Config)
     return true;
 }
 
-void Diagram::BuildNew(Lattice& lat, weight::GClass& g, weight::WClass& w)
+void Diagram::BuildNew(Lattice& lat, weight::G& g, weight::W& w)
 {
     Reset(lat, g, w);
     Dictionary Config;
     string coord;
     if (D == 2)
-        coord = "[1,0]";
+        coord = "[0,0]";
     else if (D == 3)
-        coord = "[1,0,0]";
+        coord = "[0,0,0]";
     else
         ABORT("Not implemented!");
     Config.LoadFromString(
         "{'SignFermiLoop': 1.0,"
         "'Ver': "
-        "[{'Name': 0, 'Sublat': 0, 'Coordi':" + coord + ", 'Tau': 0.0, 'SpinIn': 0, 'SpinOut' :1},"
-                                                        "{'Name': 1, 'Sublat': 0, 'Coordi':" + coord + ", 'Tau': 0.0, 'SpinIn': 1, 'SpinOut' :0}],"
-                                                                                                       "'G':"
-                                                                                                       "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsMeasure': True},"
-                                                                                                       "{'IN': 1, 'OUT': 0, 'K': 2, 'IsMeasure': False}],"
-                                                                                                       "'W':"
-                                                                                                       "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsDelta': False, 'IsMeasure': False}]}");
+        "[{'Name': 0, 'Sublat': 0, 'Coordi':" + coord + ", 'Tau': 0.0, 'SpinIn': 0, 'SpinOut':1},"
+        "{'Name': 1, 'Sublat': 0, 'Coordi':" + coord + ", 'Tau': 0.0, 'SpinIn': 1, 'SpinOut':0}],"
+        "'G':"
+        "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsMeasure': True},"
+        "{'IN': 1, 'OUT': 0, 'K': 2, 'IsMeasure': False}],"
+        "'W':"
+        "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsDelta': False, 'IsMeasure': False}]}");
     if (!FromDict(Config))
         ABORT("Faile to construct diagram!");
 }
 
-void Diagram::SetTest(Lattice& lat, weight::GClass& g, weight::WClass& w)
+void Diagram::SetTest(Lattice& lat, weight::G& g, weight::W& w)
 {
     Reset(lat, g, w);
     Dictionary Config;
@@ -197,8 +197,8 @@ void Diagram::SetTest(Lattice& lat, weight::GClass& g, weight::WClass& w)
     Config.LoadFromString(
         "{'SignFermiLoop': 1.0,"
         "'Ver': "
-        "[{'Name': 0, 'Sublat': 0, 'Coordi':" + coord + ", 'Tau': 0.0, 'SpinIn': 1, 'SpinOut' :1},"
-                                                        "{'Name': 1, 'Sublat': 0, 'Coordi':" + coord + ", 'Tau': 0.0, 'SpinIn': 1, 'SpinOut' :1}],"
+        "[{'Name': 0, 'Sublat': 0, 'Coordi':" + coord + ", 'Tau': 0.0, 'SpinIn': 1, 'SpinOut' :0},"
+                                                        "{'Name': 1, 'Sublat': 0, 'Coordi':" + coord + ", 'Tau': 0.0, 'SpinIn': 0, 'SpinOut' :1}],"
                                                                                                        "'G':"
                                                                                                        "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsMeasure': True},"
                                                                                                        "{'IN': 1, 'OUT': 0, 'K': 2, 'IsMeasure': False}],"

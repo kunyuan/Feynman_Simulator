@@ -81,15 +81,16 @@ void Test_Diagram_Component_Bundle()
 void Test_Diagram_IO()
 {
     Lattice lat(Vec<int>(8));
-    weight::GClass G(lat, 1.0, 32);
-    weight::WClass W(lat, 1.0, 32);
+    weight::G G(lat, 1.0, 32);
+    weight::W W(lat, 1.0, 32);
     G.BuildTest();
     W.BuildTest();
     Diagram Diag;
 
-    Diag.SetTest(lat, G, W);
+    Diag.BuildNew(lat, G, W);
     LOG_INFO(Diag.Ver(0)->PrettyString());
+    LOG_INFO(Diag.Ver(1)->PrettyString());
     sput_fail_unless(Diag.CheckDiagram(), "Check diagram G,W,Ver and Weight");
     Diag.WriteDiagram2gv("./test.gv");
-    //system("rm ./test.gv");
+    system("rm ./test.gv");
 }
