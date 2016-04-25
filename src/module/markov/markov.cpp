@@ -576,6 +576,9 @@ void Markov::AddInteraction()
 
     spin spinA[2] = {GIC->Spin(), GIC->Spin()};
     spin spinB[2] = {GMD->Spin(), GMD->Spin()};
+    spinA[INVERSE(dir)]=FLIP(GIC->Spin());
+    spinB[INVERSE(dir)]=FLIP(GMD->Spin());
+
     vertex vC = GIC->NeighVer(dir), vD = GMD->NeighVer(dir);
     Site RA = vC->R, RB = vD->R;
 
@@ -682,9 +685,9 @@ void Markov::DeleteInteraction()
         return;
 
     vertex vA = GIA->NeighVer(dir), vB = GMB->NeighVer(dir);
-    if (vA->Spin(IN) != vA->Spin(OUT))
+    if (vA->Spin(IN) == vA->Spin(OUT))
         return;
-    if (vB->Spin(IN) != vB->Spin(OUT))
+    if (vB->Spin(IN) == vB->Spin(OUT))
         return;
 
     if (vA->NeighW() != vB->NeighW())
@@ -742,6 +745,8 @@ void Markov::DeleteInteraction()
 
         Ira->nG[dir] = GAC;
         Masha->nG[dir] = GBD;
+	Ira->Spin(dir) = vC->Spin(INVERSE(dir))
+	Masha->Spin(dir) = vD->Spin(INVERSE(dir))
         GAC->nVer[INVERSE(dir)] = Ira;
         GBD->nVer[INVERSE(dir)] = Masha;
 

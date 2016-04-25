@@ -27,7 +27,7 @@ Dyson={
 Beta=20.0
 Order=2
 Common={
-"Tau": {"MaxTauBin" : 512, "Beta": Beta},
+"Tau": {"MaxTauBin" : 128, "Beta": Beta},
 "Lattice":  {
     #2D lattice
     #"Name": "Square", "NSublat": 1,
