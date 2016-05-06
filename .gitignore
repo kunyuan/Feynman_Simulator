@@ -62,6 +62,8 @@ outfile
 build
 Output
 Error
+Debug
+Release
 _job_*
 .ipynb_checkpoints
 .idea
