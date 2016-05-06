@@ -39,7 +39,9 @@
 *.eps
 *.pdf
 *.svg
+*.dot
 
+#other
 *.zip
 *.npy
 *.pkl
@@ -62,4 +64,7 @@ Output
 Error
 _job_*
 .ipynb_checkpoints
+.idea
+*/.idea
+
 
