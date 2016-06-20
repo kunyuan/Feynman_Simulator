@@ -31,7 +31,8 @@ bool CanNotMoveWorm(int dspin, spin sin, int dir);
 bool Markov::BuildNew(ParaMC &para, Diagram &diag, weight::Weight &weight)
 {
     Reset(para, diag, weight);
-    ASSERT_ALLWAYS(NUpdates >= (int)Operations::END, "NUpdates " << NUpdates << " should larger than " << (int)Operations::END);
+    ASSERT_ALLWAYS(NUpdates >= (int)Operations::END,
+                   "NUpdates " << NUpdates << " should larger than " << (int)Operations::END);
 
     InitialArray(ProbofCall, 0.0, NUpdates);
     InitialArray(SumofProbofCall, 0.0, NUpdates);
@@ -114,7 +115,8 @@ std::string Markov::_CheckBalance(Operations op1, Operations op2)
     real TotalAccepted1 = 0.0;
     real TotalAccepted2 = 0.0;
     for (int i = 0; i <= Order; i++) {
-        if ((op1 == ADD_INTERACTION and op2 == DEL_INTERACTION) || (op1 == ADD_DELTA_INTERACTION and op2 == DEL_DELTA_INTERACTION)) {
+        if ((op1 == ADD_INTERACTION and op2 == DEL_INTERACTION)
+            || (op1 == ADD_DELTA_INTERACTION and op2 == DEL_DELTA_INTERACTION)) {
             if (i == Order)
                 continue;
             if (!Equal(Accepted[op1][i] + Accepted[op2][i + 1], 0.0)) {

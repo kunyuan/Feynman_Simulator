@@ -10,15 +10,18 @@ set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 include_directories(${FeynmanSimulator_SOURCE_DIR})
+#message("source dir:" ${FeynmanSimulator_SOURCE_DIR})
 
 file(GLOB_RECURSE SRCS *.cpp)
 file(GLOB_RECURSE HDRS *.h)
-ADD_EXECUTABLE(simulator.exe  ${SRCS} ${HDRS})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/..") 
+#crucial to output the .exe file to the root of project, and CLion compatible
 
+ADD_EXECUTABLE(simulator.exe  ${SRCS} ${HDRS})
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR})
 
 find_package(NumPy REQUIRED)
-find_package(PythonDev REQUIRED)
+find_package(PythonLibsNew REQUIRED)
 message("python include dir:" ${PYTHON_INCLUDE_DIR})
 message("python libraries:" ${PYTHON_LIBRARIES})
 message("numpy version:" ${NUMPY_VERSION})
@@ -35,4 +38,5 @@ include_directories(
     ${NUMPY_INCLUDE_DIRS}
     )
 target_link_libraries(simulator.exe ${PYTHON_LIBRARIES})
-install (TARGETS simulator.exe DESTINATION ${PROJECT_SOURCE_DIR}/..)
+
+#install (TARGETS simulator.exe DESTINATION ${PROJECT_SOURCE_DIR}/..)
