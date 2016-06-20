@@ -11,7 +11,7 @@ MonteCarlo={
 Dyson={
 "Control": {
     "__Execute" : ["python", "./dyson/main.py"],
-    "__Duplicate" : 0,
+    "__Duplicate" : 1,
     "__IsCluster" : MonteCarlo["Control"]["__IsCluster"],
     "__AutoRun" : MonteCarlo["Control"]["__AutoRun"], 
     #"__AutoRun" : False,
@@ -24,16 +24,16 @@ Dyson={
     }
 }
 
-Beta=20.0
+Beta=0.5
 Order=2
 Common={
-"Tau": {"MaxTauBin" : 512, "Beta": Beta},
+"Tau": {"MaxTauBin" : 128, "Beta": Beta},
 "Lattice":  {
     #2D lattice
-    #"Name": "Square", "NSublat": 1,
+    "Name": "Square", "NSublat": 1,
     #"Name": "Checkerboard", "NSublat": 2,
     #"Name": "ValenceBond", "NSublat": 2,
-    "Name": "Honeycomb", "NSublat": 2,
+    #"Name": "Honeycomb", "NSublat": 2,
     #"Name": "Kagome", "NSublat": 3,
     #"Name": "Triangular", "NSublat": 1,
     "L": [8,8]
@@ -48,7 +48,7 @@ Common={
     "Name": "J1J2",
     #"Description": ["ImW",],
     "Interaction": [1.0, 0.25,0.0],
-    "ExternalField": [-0.7, -0.7, 0.0, 0.0]
+    "ExternalField": [-0.0, -0.0, 0.0, 0.0]
     #ExternalField on Sublattice A and B
     },
 }
