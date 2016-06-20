@@ -173,8 +173,7 @@ class BareFactory:
 
             #J1 interaction on nearest neighbors
             for i in self.NearestNeighbor[0][0]:
-                self.BareW.Data[:,sub,:,sub,self.__Map.CoordiIndex(i)]+= J1*SzSz;
-                #self.BareW.Data[:,sub,:,sub,self.__Map.CoordiIndex(i)]+= J1*SS;
+                self.BareW.Data[:,sub,:,sub,self.__Map.CoordiIndex(i)]+= J1*SS;
             #J2 interaction on next nearest neighbors
             for i in self.NextNearestNeighbor[0][0]:
                 self.BareW.Data[:,sub,:,sub,self.__Map.CoordiIndex(i)]+= J2*SS;

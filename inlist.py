@@ -4,7 +4,7 @@ MonteCarlo={
     "__Execute" : "./simulator.exe",
     "__Duplicate" :  1,
     "__IsCluster" : False, 
-    "__AutoRun" : False,
+    "__AutoRun" : True,
     },
 "Job": {"Sample" : 100000000}  ##0.8 min for 1000000(*1000) Samples in MC
 }
@@ -24,16 +24,16 @@ Dyson={
     }
 }
 
-Beta=20.0
-Order=2
+Beta=0.5
+Order=4
 Common={
-"Tau": {"MaxTauBin" : 512, "Beta": Beta},
+"Tau": {"MaxTauBin" : 64, "Beta": Beta},
 "Lattice":  {
     #2D lattice
-    #"Name": "Square", "NSublat": 1,
+    "Name": "Square", "NSublat": 1,
     #"Name": "Checkerboard", "NSublat": 2,
     #"Name": "ValenceBond", "NSublat": 2,
-    "Name": "Honeycomb", "NSublat": 2,
+    #"Name": "Honeycomb", "NSublat": 2,
     #"Name": "Kagome", "NSublat": 3,
     #"Name": "Triangular", "NSublat": 1,
     "L": [8,8]
@@ -47,8 +47,8 @@ Common={
 "Model": {
     "Name": "J1J2",
     #"Description": ["ImW",],
-    "Interaction": [1.0, 0.25,0.0],
-    "ExternalField": [-0.7, -0.7, 0.0, 0.0]
+    "Interaction": [1.0, 0.0,0.0],
+    "ExternalField": [ 0.0,  0.0, 0.0, 0.0]
     #ExternalField on Sublattice A and B
     },
 }

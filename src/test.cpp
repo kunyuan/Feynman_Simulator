@@ -25,15 +25,15 @@ using namespace std;
 int RunTest()
 {
     LOGGER_CONF("test.log", "test", Logger::file_on | Logger::screen_on, INFO, INFO);
-    //    TestTimer();  //Test the timer
-    //    TestRNG();
-    //    TestArray();
-    //      TEST(diag::TestDiagram);
-    //      TEST(mc::TestMarkov);
+    //TestTimer();  //Test the timer
+    //TestRNG();
+    //TestArray();
+    TEST(diag::TestDiagram);
+    TEST(mc::TestMarkov);
     //    TEST(mc::TestDiagCounter);
 
-    //    TEST(TestLattice);
-    //    TEST(TestEstimator);
+    TEST(TestLattice);
+    TEST(TestEstimator);
 
     //    TEST(TestDictionary);
 

@@ -125,11 +125,10 @@ void ParaMC::SetTest()
     NSublat = 2;
     L = Vec<int>(size);
     Lat = Lattice(L, NSublat);
-    Beta = 1.0;
-    Beta = 1.0;
-    Order = 1;
-    OrderReWeight = { 1, 1 };
-    OrderTimeRatio = { 1, 1 };
+    Beta = 0.5;
+    Order = 4;
+    OrderReWeight = { 1, 1, 1, 1, 1};
+    OrderTimeRatio = { 1, 1, 1, 1, 1 };
     Toss = 10000;
     Seed = 519180543;
     WormSpaceReweight = 0.1;
