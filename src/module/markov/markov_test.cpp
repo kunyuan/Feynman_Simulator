@@ -45,7 +45,7 @@ void Test_Updates()
         markov.Hop(5000);
 
         sput_fail_unless(markov.Diag->CheckDiagram(), "Check for all the random steps");
-        Diag.WriteDiagram2gv("diagram/" + ToString(Para.Counter) + ".gv");
+        //Diag.WriteDiagram2gv("diagram/" + ToString(Para.Counter) + ".gv");
         markov.PrintDetailBalanceInfo();
     }
     LOG_INFO("Updates Check are done!");

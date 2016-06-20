@@ -92,6 +92,9 @@ void MonteCarlo(const para::Job& Job)
 
         if (Step % 100 == 0) {
             MarkovMonitor.AddStatistics();
+	    //if (Markov.Diag->Order>2) {
+		//Markov.Diag->WriteDiagram2gv("diagram/" + ToString(Para.Counter) + ".gv");
+	    //}
 
             if (PrinterTimer.check(Para.PrinterTimer)) {
                 Env.Diag.CheckDiagram();

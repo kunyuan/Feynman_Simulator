@@ -67,9 +67,9 @@ MonteCarlo["Markov"]={
         #"ReweightTimer": 600
         #},
     "Timer": {
-        "PrinterTimer": 90,
-        "DiskWriterTimer": 90,
-        "MessageTimer": 90,
+        "PrinterTimer": 30,
+        "DiskWriterTimer": 30,
+        "MessageTimer": 30,
         "ReweightTimer":36000
         },
     }

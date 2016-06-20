@@ -28,11 +28,11 @@ int RunTest()
     //TestTimer();  //Test the timer
     //TestRNG();
     //TestArray();
+    TEST(TestLattice);
     TEST(diag::TestDiagram);
     TEST(mc::TestMarkov);
     //    TEST(mc::TestDiagCounter);
 
-    TEST(TestLattice);
     TEST(TestEstimator);
 
     //    TEST(TestDictionary);

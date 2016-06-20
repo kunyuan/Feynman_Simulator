@@ -135,8 +135,8 @@ class BareFactory:
                 for j in range(2):
                     #J1 interaction A-->B, B-->A
                     for e in self.NearestNeighbor[i][j]:
-                        #self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SS;
-                        self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SzSz;
+                        self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SS;
+                        #self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SzSz;
                     #J2 interaction A-->A, B-->B
                     for e in self.NextNearestNeighbor[i][j]:
                         self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J2*SS;
