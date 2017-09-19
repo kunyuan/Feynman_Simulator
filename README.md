@@ -1,5 +1,5 @@
 # Feynman Simulator
-A generic purpose quantum simulator using Feynman diagram technique
+A general purpose quantum simulator using Feynman diagram technique
 
 ## Import project to CLion
    To create a CLion project, you have to do the followings:
