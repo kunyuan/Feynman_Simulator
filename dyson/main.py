@@ -44,12 +44,12 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     #print "G[DOWN,DOWN]=\n", G.Data[DOWN,0,DOWN,0,0,:]
     #print "SigmaDeltaT[UP,UP]=\n", SigmaDeltaT.Data[UP,0,UP,0,0]
     #print "SigmaDeltaT[DOWN,DOWN]=\n", SigmaDeltaT.Data[DOWN,0,DOWN,0,0]
-    for i in range(Map.MaxTauBin):
-        n=Sigma.Data[UP,0,UP,0,0,i]
-        print '%05f %05f %05f' % (i*Map.Beta/Map.MaxTauBin, n.real, n.imag)
+    # for i in range(Map.MaxTauBin):
+        # n=Sigma.Data[UP,0,UP,0,0,i]
+        # print '%05f %05f %05f' % (i*Map.Beta/Map.MaxTauBin, n.real, n.imag)
     # print "Sigma=\n", Sigma.Data[UP,0,UP,0,0,:]
-    #print "Chi=\n", Chi.Data[0,0,0,0,0,:]
-    #print "Chi=\n", Chi.Data[0,0,0,0,1,:]
+    # print "Chi=\n", Chi.Data[0,0,0,0,0,:]
+    # print "Chi=\n", Chi.Data[0,0,0,0,1,:]
 
     data={}
     data["Chi"]=Chi.ToDict()

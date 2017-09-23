@@ -200,13 +200,13 @@ def Calculate_Chi(ChiTensor, map):
     SzSz[UU, DD]= SzSz[DD, UU]=-1
     Chi=weight.Weight("SmoothT", map, "NoSpin", "Symmetric", ChiTensor.SpaceDomain, ChiTensor.TimeDomain)
     Chi.Data=0.0
-    #SS=[SxSx/4.0, SySy/4.0, SzSz/4.0]
+    SS=[SxSx/4.0, SySy/4.0, SzSz/4.0]
     #for i in range(3):
         #temp=np.einsum("ik, kminvt->mnvt", SS[i], ChiTensor.Data)
         #Chi.Data+=temp.reshape([1, NSublat, 1, NSublat, map.Vol, map.MaxTauBin]) 
 
-    SS=[SzSz/4.0]
-    for i in range(1):
+    # SS=[SzSz/4.0]
+    for i in range(len(SS)):
         temp=np.einsum("ik, kminvt->mnvt", SS[i], ChiTensor.Data)
         Chi.Data+=temp.reshape([1, NSublat, 1, NSublat, map.Vol, map.MaxTauBin]) 
     return Chi

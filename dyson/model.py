@@ -75,11 +75,14 @@ class BareFactory:
     def Hubbard(self, LatName):
         raise NotImplementedError
     def Heisenberg(self, LatName):
-        Assert(len(self.__Interaction)==1, "Heisenberg model only has one coupling!")
+        Assert(len(self.__Interaction)>=1, "Heisenberg model only has one coupling!")
         self.__SpinModel(LatName)
     def J1J2(self, LatName):
         Assert(len(self.__Interaction)>=2, "J1J2 model takes at least two couplings!")
         self.__SpinModel(LatName)
+    def Kitaev(self, LatName):
+        Assert(LatName=="Honeycomb", "Kitaev model takes three couplings!")
+        self.__SpinModel("Kitaev")
 
     def __SpinModel(self, LatName):
         Beta=self.__Map.Beta
@@ -91,6 +94,8 @@ class BareFactory:
         I=np.array([1,0,0,1])
         SS=np.outer(Sx,Sx)+np.outer(Sy,Sy)+np.outer(Sz,Sz)
         SSxy=np.outer(Sx,Sx)+np.outer(Sy,Sy)
+        SxSx=np.outer(Sx,Sx)
+        SySy=np.outer(Sy,Sy)
         SzSz=np.outer(Sz,Sz)
 
         if self.__Description is not None and "ImW" in self.__Description:
@@ -116,10 +121,10 @@ class BareFactory:
                 self.BareG.Data[sp,sub,sp,sub,0,:]=np.exp(Mu*TauGrid)/(1.0+np.exp(Mu*Beta))
 
         Interaction=list(self.__Interaction)+[0,0,0,0,0]
-        J1,J2=Interaction[0:2]
+        J1,J2,J3=Interaction[0:3]
         J_perturbation=None
-        if len(Interaction)>2:
-            J_perturbation=Interaction[2:]
+        if len(Interaction)>3:
+            J_perturbation=Interaction[3:]
         #Bare W
         #Dimension: 2
         spin=self.__Map.Spin2Index(UP,UP)
@@ -230,13 +235,27 @@ class BareFactory:
             for i in range(2):
                 for j in range(2):
                     for e in self.NearestNeighbor[i][j]:
-                        #self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SS;
-                        self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SSxy;
+                        self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SS;
+                        # self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SSxy;
 
                     ##J2 interaction A-->A, B-->B
                     for e in self.NextNearestNeighbor[i][j]:
-                        #self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SS;
-                        self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J2*SSxy;
+                        self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J2*SS;
+                        # self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J2*SSxy;
+
+        elif LatName=="Kitaev":
+            #NSublat: 2
+            Lx,Ly=self.__Map.L
+            A,B=0,1
+
+            self.BareW.Data[:,A,:,B,self.__Map.CoordiIndex((0,0))]+= J1*SxSx;
+            self.BareW.Data[:,B,:,A,self.__Map.CoordiIndex((0,0))]+= J1*SxSx;
+
+            self.BareW.Data[:,A,:,B,self.__Map.CoordiIndex((Lx-1,0))]+= J2*SySy;
+            self.BareW.Data[:,B,:,A,self.__Map.CoordiIndex((1,0))]+= J2*SySy;
+
+            self.BareW.Data[:,A,:,B,self.__Map.CoordiIndex((Lx-1,Ly-1))]+= J3*SzSz;
+            self.BareW.Data[:,B,:,A,self.__Map.CoordiIndex((1,1))]+= J3*SzSz;
 
         elif LatName=="Kagome":
             #NSublat: 2
