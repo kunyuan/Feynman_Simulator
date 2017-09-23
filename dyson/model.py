@@ -3,6 +3,7 @@ import lattice as lat
 from weight import UP,DOWN,IN,OUT
 import numpy as np
 import math
+import traceback
 from logger import *
 
 class BareFactory:
@@ -42,10 +43,12 @@ class BareFactory:
         self.BareG=weight.Weight("SmoothT", self.__Map, "TwoSpins", "AntiSymmetric", "R", "T")
         self.BareW=weight.Weight("DeltaT", self.__Map, "FourSpins", "Symmetric", "R", "T")
         LatName=self.Lat.Name
+        # getattr(self, self.__Model)(LatName)
         try:
             getattr(self, self.__Model)(LatName)
         except:
-            Assert(False, "Model {0} has not been implemented!".format(self.__Model))
+            log.error(blue("Model construction fails {0}".format(traceback.format_exc())))
+            # Assert(False, "Model {0} has not been implemented!".format(self.__Model))
         return (self.BareG,self.BareW)
 
     def DecreaseField(self, Anneal):
@@ -121,7 +124,27 @@ class BareFactory:
         #Dimension: 2
         spin=self.__Map.Spin2Index(UP,UP)
 
-        if LatName=="Checkerboard":
+        if LatName=="Chain":
+        #NSublat: 1
+            Lx=self.__Map.L[0]  #for 1D system, L=[Lx]
+            sub=0
+
+            self.NearestNeighbor[0][0]=[(1,),(Lx-1,)]
+            if Lx>2:
+                self.NextNearestNeighbor[0][0]=[(2,),(Lx-2,)]
+            elif Lx==2:
+                self.NextNearestNeighbor[0][0]=[(0,),(0,)]
+            else:
+                raise ValueError("System size must be larger than 1")
+
+            #J1 interaction on nearest neighbors
+            for i in self.NearestNeighbor[0][0]:
+                self.BareW.Data[:,sub,:,sub,self.__Map.CoordiIndex(i)]+= J1*SS;
+            #J2 interaction on next nearest neighbors
+            for i in self.NextNearestNeighbor[0][0]:
+                self.BareW.Data[:,sub,:,sub,self.__Map.CoordiIndex(i)]+= J2*SS;
+
+        elif LatName=="Checkerboard":
         #NSublat: 2
             Lx,Ly=self.__Map.L
             A,B=0,1

@@ -14,6 +14,19 @@ class Lattice:
         except:
             Assert(False, "Lattice {0} has not been implemented!".format(self.Name))
 
+    #1D lattice
+    def __Chain(self):
+        self.Dim=1
+        self.__AssertDim()
+        self.NSublat=1
+        self.__AssertNSublat()
+        self.LatVec=np.array([[1.0]])
+        self.SubLatVec=np.array([[0.0]])
+        self.ReciprocalLatVec =np.array([[2.0 * PI]])
+        self.Path=[(0),(PI)]
+        self.PathName=["$(0)$", "$(2\pi)$"]
+        self.IndependtBZCenter=[(0,)]
+
     #2D lattice
     def __Checkerboard(self):
         self.Dim=2

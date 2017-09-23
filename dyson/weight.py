@@ -58,7 +58,9 @@ class IndexMap:
         return Out
 
     def GetAllCoordi(self):
-        if len(self.L)==2:
+        if len(self.L)==1:
+            return ((i,) for i in range(self.L[0]))
+        elif len(self.L)==2:
             return ((i,j) for i in range(self.L[0]) for j in range(self.L[1]))
         elif len(self.L)==3:
             return ((i,j,k) for i in range(self.L[0]) 

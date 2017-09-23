@@ -56,6 +56,14 @@ def PlotSpatial(weight, lattice, SpinIn, SpinOut, DoesSave=True):
             else:
                 z.append(weight.Data[SpinIn,OriginalSubLat,SpinOut,sub,
                     weight.Map.CoordiIndex(coord),Omega].real)
+        elif lattice.Dim==1:
+            x.append(vec[0])
+            y.append(0.0)  #in the case of 1D system, the y vector is 0.0
+            if coord[0]==0 and sub==OriginalSubLat:
+                z.append(0.0)
+            else:
+                z.append(weight.Data[SpinIn,OriginalSubLat,SpinOut,sub,
+                                     weight.Map.CoordiIndex(coord),Omega].real)
     log.info("Max:{0}, Min: {1}".format(max(z), min(z)))
     plt.figure()
     plt.scatter(x,y,c=z, s=10, edgecolor="black", linewidth=0)
@@ -85,7 +93,7 @@ def PlotWeightvsR(Name, weight, lattice, SpinIn, SpinOut, Tau=0, DoesSave=True):
         if (all(v == 0 for v in coord) and sub==OriginalSubLat):
             Origin=np.array(vec)
     for vec, coord, sub in points:
-        if not (all(v == 0 for v in coord) and sub==OriginalSubLat) and all(v<l/2 for v,l in zip(coord, lattice.L)):
+        if not (all(v == 0 for v in coord) and sub==OriginalSubLat) and all(v<=l/2 for v,l in zip(coord, lattice.L)):
         #if not (all(v == 0 for v in coord) and sub==OriginalSubLat):
             x.append(np.linalg.norm(np.array(vec)-Origin))
             #y.append(abs(weight.Data[SpinIn, OriginalSubLat, SpinOut, sub,

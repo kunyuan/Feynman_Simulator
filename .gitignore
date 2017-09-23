@@ -68,5 +68,6 @@ _job_*
 .ipynb_checkpoints
 .idea
 */.idea
+src/cmake-build-debug/
 
 
