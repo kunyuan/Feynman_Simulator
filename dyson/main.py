@@ -38,7 +38,7 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     #print "Polar[UP,UP]=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
     #print "Polar[DOWN, DOWN]=\n", Polar.Data[spinDOWN,0,spinDOWN,0,0,:]
     #print "W0=\n", W0.Data[spinUP,0,spinUP,1,0]
-    #print "G0[UP,UP]=\n", G0.Data[UP,0,UP,0,0,:]
+    # print "G0[UP,UP]=\n", G0.Data[UP,0,UP,0,0,:]
     #print "G0[DOWN,DOWN]=\n", G0.Data[DOWN,0,DOWN,0,0,:]
     #print "G[UP,UP]=\n", G.Data[UP,0,UP,0,0,:]
     #print "G[DOWN,DOWN]=\n", G.Data[DOWN,0,DOWN,0,0,:]
@@ -77,9 +77,10 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
             plot.PlotTime("Polar", Polar, UP, 0, UP, 0, 0)
             plot.PlotSpatial(Chi, Lat, 0, 0) 
             plot.PlotChi_2D(Chi, Lat)
-            plot.PlotWeightvsR("\chi", Chi,Lat,0,0)
+            # plot.PlotWeightvsR("\chi", Chi,Lat,0,0)
+            plot.PlotBand(G0, Lat)
         except:
-            log.info(blue("Output fails due to\n {0}".format(traceback.format_exc())))
+            log.warning(blue("Output fails due to\n {0}".format(traceback.format_exc())))
 
 def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
     ParaDyson=para["Dyson"]
@@ -88,6 +89,36 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
     ########## Calulation INITIALIZATION ##########################
     Factory=model.BareFactory(Map, Lat,  para["Model"], ParaDyson["Annealing"])
     G0,W0=Factory.Build()
+    # G0.FFT("K","W")
+    # print G0.Data[UP,0,UP,0,0,:]
+    # print "Comparison 1"
+    # for n in range(Map.MaxTauBin):
+        # wn=1j*(2*n+1)*np.pi/Map.Beta
+        # print 1.0/(wn-4.0), G0.Data[UP,0,UP,0,0,n]*Map.Beta/Map.MaxTauBin
+
+    # print "Comparison 2"
+    # G0.FFT("K","T")
+    # for t in range(Map.MaxTauBin):
+        # tau=Map.IndexToTau(t)
+        # G0w=-np.exp(4*tau)*(1.0-1.0/(1.0+np.exp(-Map.Beta*4)))
+        # print G0.Data[UP,0,UP,0,0,t], G0w
+
+    # print "Comparison 3"
+    # for n in range(Map.MaxTauBin):
+        # Gw=0.0
+        # wn=(2*n+1)*np.pi/Map.Beta
+        # for t in range(Map.MaxTauBin):
+            # tau=Map.IndexToTau(t)
+            # G0w=-np.exp(4*tau)*(1.0-1.0/(1.0+np.exp(-Map.Beta*4)))
+            # Gw+=G0w*np.exp(-1j*wn*tau)*Map.Beta/Map.MaxTauBin
+            # # Gw+=G0.Data[UP,0,UP,0,0,t]*np.exp(-1j*wn*tau)*Map.Beta/Map.MaxTauBin
+        # print 1.0/(1j*wn-4.0), Gw
+
+    G0.FFT("K","T")
+    print G0.Data[UP,0,UP,0,0,:]
+    plot.PlotTime("G0UPUP", G0, UP, 0, UP, 0, 0)
+    plot.PlotBand(G0, Lat)
+
     IO.SaveDict("Coordinates","w", Factory.ToDict())
     Observable=measure.Observable(Map, Lat)
     W=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
@@ -118,6 +149,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
             ratio=None   #set this will not use accumulation!
             #ratio = para["Version"]/(para["Version"]+10.0)
             G0,W0=Factory.Build()
+
             log.info("calculating SigmaDeltaT..")
             SigmaDeltaT.Merge(ratio, calc.SigmaDeltaT_FirstOrder(G, W0, Map))
             log.info("SigmaDeltaT is done")

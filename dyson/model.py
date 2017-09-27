@@ -18,6 +18,14 @@ class BareFactory:
         self.__Beta=self.__Map.Beta
         if "Hopping" in Hamiltonian:
             self.__Hopping=np.array(Hamiltonian["Hopping"])
+        if "Phase" in Hamiltonian:
+            self.__Phase=np.array(Hamiltonian["Phase"])
+        if "HubbardInteraction" in Hamiltonian:
+            self.__HubbardInteraction=np.array(Hamiltonian["HubbardInteraction"])
+        if "ShortRangeInteraction" in Hamiltonian:
+            self.__ShortRangeInteraction=np.array(Hamiltonian["ShortRangeInteraction"])
+        if "CoulombInteraction" in Hamiltonian:
+            self.__ShortRangeInteraction=np.array(Hamiltonian["CoulombInteraction"])
         if "ChemicalPotential" in Hamiltonian:
             self.__Mu=np.array(Hamiltonian["ChemicalPotential"])
         if "Description" in Hamiltonian:
@@ -49,6 +57,7 @@ class BareFactory:
         except:
             log.error(blue("Model construction fails {0}".format(traceback.format_exc())))
             # Assert(False, "Model {0} has not been implemented!".format(self.__Model))
+
         return (self.BareG,self.BareW)
 
     def DecreaseField(self, Anneal):
@@ -73,7 +82,12 @@ class BareFactory:
     def DiagCount(self, LatName):
         raise NotImplementedError
     def Hubbard(self, LatName):
-        raise NotImplementedError
+        self.__BuildBareG(LatName)
+        self.__BuildHubbardInteraction()
+    def Haldane(self, LatName):
+        Assert(LatName=="Honeycomb", "Haldane model is defined on the Honeycomb lattice!")
+        self.__BuildBareG(LatName="Honeycomb")
+        self.__BuildShortRangeInteraction(LatName="Honeycomb", InteractionTypeList=["nn"])
     def Heisenberg(self, LatName):
         Assert(len(self.__Interaction)>=1, "Heisenberg model only has one coupling!")
         self.__SpinModel(LatName)
@@ -83,6 +97,176 @@ class BareFactory:
     def Kitaev(self, LatName):
         Assert(LatName=="Honeycomb", "Kitaev model takes three couplings!")
         self.__SpinModel("Kitaev")
+
+    def __BuildBareG(self, LatName):
+        Beta=self.__Map.Beta
+        self.BareG.Data=np.zeros(self.BareG.Shape, dtype=complex)
+        TauGrid=np.array([self.__Map.IndexToTau(t) for t in range(self.__MaxTauBin)])
+        self.__KineticTerm=weight.Weight("DeltaT", self.__Map, "TwoSpins", "Symmetric", "R", "T")
+        self.__LocalTerm=weight.Weight("DeltaT", self.__Map, "TwoSpins", "Symmetric", "R", "T")
+
+        TauGrid=np.array([self.__Map.IndexToTau(t) for t in range(self.__MaxTauBin)])
+
+        Hopping=list(self.__Hopping)+[0,0,0,0,0]
+        Mu=list(self.__Mu)+[0,0,0,0,0]
+        ExternalField=list(self.__ExternalField)+[0,0,0,0,0]
+        Phase=list(self.__Phase)
+
+        Pauli=self.__Map.Pauli()
+        SpinOrbit=[]
+        I=np.array([[1.0,0.0],[0.0,1.0]])
+        for i in range(len(Hopping)):
+            Phase=np.array(Phase)
+            PhaseMod=np.sqrt(sum(Phase**2))
+            if i<len(Phase) and PhaseMod>1e-8:
+                # SpinOrbit.append(np.exp(-1j*(Phase[0]*Pauli[0]+Phase[1]*Pauli[1]+Phase[2]*Pauli[2])))
+                PhaseMatrix=Phase[0]*Pauli[0]+Phase[1]*Pauli[1]+Phase[2]*Pauli[2]
+                SpinOrbit.append(np.cos(PhaseMod)*I+1j*(PhaseMatrix/PhaseMod)*np.sin(PhaseMod))
+            else:
+                SpinOrbit.append(I)
+
+        if LatName=="Square":
+            #NSublat: 1
+            Lx,Ly=self.__Map.L
+            sub=0
+
+            self.NearestNeighbor[0][0]=[(0,1),(1,0),(Lx-1,0),(0,Ly-1)]
+            self.NextNearestNeighbor[0][0]=[(1,1),(Lx-1,1),(1,Ly-1),(Lx-1,Ly-1)]
+
+            for e in self.NearestNeighbor[sub][sub]:
+                self.__KineticTerm.Data[:,sub,:,sub,self.__Map.CoordiIndex(e)]+= -self.__Hopping[0]*SpinOrbit[0];
+            for e in self.NextNearestNeighbor[sub][sub]:
+                self.__KineticTerm.Data[:,sub,:,sub,self.__Map.CoordiIndex(e)]+= -self.__Hopping[1]*SpinOrbit[1];
+
+        elif LatName=="Honeycomb":
+            #NSublat: 2
+            Lx,Ly=self.__Map.L
+            A,B=0,1
+            self.NearestNeighbor[A][B]=[(0, 0), (Lx-1, 0), (Lx-1,Ly-1)]
+            self.NearestNeighbor[B][A]=[(0, 0), (1,0), (1,1)]
+
+            self.NextNearestNeighbor[A][A]=[(1, 0), (Lx-1, 0), (0, 1), (0, Ly-1), (1, 1), (Lx-1,Ly-1)]
+            self.NextNearestNeighbor[B][B]=[(1, 0), (Lx-1, 0), (0, 1), (0, Ly-1), (1, 1), (Lx-1,Ly-1)]
+
+            #hopping A-->B, B-->A
+            for i in range(2):
+                for j in range(2):
+                    for e in self.NearestNeighbor[i][j]:
+                        self.__KineticTerm.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= -self.__Hopping[0]*SpinOrbit[0];
+                    for e in self.NextNearestNeighbor[i][j]:
+                        self.__KineticTerm.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= -self.__Hopping[1]*SpinOrbit[1];
+
+        else:
+            Assert(False, "Lattice {0} has not been implemented yet!".format(LatName))
+
+        origin=self.__Map.CoordiIndex((0,0))
+        for sub in range(self.__Map.NSublat):
+            self.__LocalTerm.Data[UP,sub,UP,sub,origin]+= -Mu[0];
+            self.__LocalTerm.Data[DOWN,sub,DOWN,sub,origin]+= -Mu[0];
+            self.__LocalTerm.Data[UP,sub,UP,sub,origin]+= -ExternalField[sub];
+            self.__LocalTerm.Data[DOWN,sub,DOWN,sub,origin]+= ExternalField[sub];
+
+        self.__KineticTerm.FFT("K")
+        self.__LocalTerm.FFT("K")
+
+        self.__KineticTerm.Data+=self.__LocalTerm.Data
+        Sp, Sub = self.__KineticTerm.NSpin, self.__KineticTerm.NSublat
+        self.__KineticTerm.Data = self.__KineticTerm.Data.reshape([Sp*Sub, Sp*Sub, self.__Map.Vol])
+
+        self.BareG.FFT("K","T")
+
+        for k in range(self.__Map.Vol): 
+            Ek,Uk=np.linalg.eig(self.__KineticTerm.Data[:,:,k])
+            # print Ek, self.__KineticTerm.Data[:,:,k]
+            Ukdag=Uk.conj().T
+            for t in range(self.__MaxTauBin):
+                Gk=np.zeros([Sp*Sub,Sp*Sub], dtype="complex")
+                for i in range(Sp*Sub):
+                    Gk[i,i]=-np.exp(-Ek[i]*TauGrid[t])*(1.0-1.0/(1.0+np.exp(Beta*Ek[i])))
+                Gk=np.dot(np.dot(Uk,Gk),Ukdag)
+                self.BareG.Data[:,:,:,:,k,t]=Gk.reshape([Sp, Sub, Sp, Sub])
+
+    def __BuildHubbardInteraction(self):
+        HubbardU=self.__HubbardInteraction
+        for sub in range(self.__Map.NSublat):
+            self.BareW.Data[0,sub,1,sub,:]+= HubbardU;
+            self.BareW.Data[1,sub,0,sub,:]+= HubbardU;
+
+    def __BuildShortRangeInteraction(self, LatName, InteractionTypeList):
+        """
+        InteractionTypeList: a list of types of interaction. For example, ["SS","SxSx","SzSz"] mean
+        the Hamiltonian has three different interaction terms: Heisenberg term, SxSx term and SzSz term.
+        """
+        Beta=self.__Map.Beta
+        self.BareW.Data=np.zeros(self.BareW.Shape, dtype=complex)
+        Sx=0.5*np.array([0,1,1,0])
+        Sy=0.5*np.array([0,-1j,1j,0])
+        Sz=0.5*np.array([1,0,0,-1])
+        I=np.array([1,0,0,1])
+        SS=np.outer(Sx,Sx)+np.outer(Sy,Sy)+np.outer(Sz,Sz)
+        SSxy=np.outer(Sx,Sx)+np.outer(Sy,Sy)
+        SxSx=np.outer(Sx,Sx)
+        SySy=np.outer(Sy,Sy)
+        SzSz=np.outer(Sz,Sz)
+        II=np.outer(I,I)
+
+        ShortRangeInteraction=list(self.__ShortRangeInteraction)+[0,0,0,0,0]
+
+        TypeList=[]
+        for t in InteractionTypeList:
+            if t=="SS":
+                TypeList.append(SS)
+            elif t=="SSxy":
+                TypeList.append(SSxy)
+            elif t=="SxSx":
+                TypeList.append(SxSx)
+            elif t=="SySy":
+                TypeList.append(SySy)
+            elif t=="SzSz":
+                TypeList.append(SzSz)
+            elif t=="nn":
+                TypeList.append(II)
+        for i in range(len(TypeList), len(ShortRangeInteraction)):
+            TypeList.append(0.0)
+
+        if LatName=="Square":
+        #NSublat: 1
+            Lx,Ly=self.__Map.L
+            sub=0
+
+            self.NearestNeighbor[0][0]=[(0,1),(1,0),(Lx-1,0),(0,Ly-1)]
+            self.NextNearestNeighbor[0][0]=[(1,1),(Lx-1,1),(1,Ly-1),(Lx-1,Ly-1)]
+
+            #J1 interaction on nearest neighbors
+            for i in self.NearestNeighbor[0][0]:
+                self.BareW.Data[:,sub,:,sub,self.__Map.CoordiIndex(i)]+= ShortRangeInteraction[0]*TypeList[0];
+            #J2 interaction on next nearest neighbors
+            for i in self.NextNearestNeighbor[0][0]:
+                self.BareW.Data[:,sub,:,sub,self.__Map.CoordiIndex(i)]+= ShortRangeInteraction[1]*TypeList[1];
+
+        elif LatName=="Honeycomb":
+            #NSublat: 2
+            Lx,Ly=self.__Map.L
+            A,B=0,1
+            self.NearestNeighbor[A][B]=[(0, 0), (Lx-1, 0), (Lx-1,Ly-1)]
+            self.NearestNeighbor[B][A]=[(0, 0), (1,0), (1,1)]
+
+            self.NextNearestNeighbor[A][A]=[(1, 0), (Lx-1, 0), (0, 1), (0, Ly-1), (1, 1), (Lx-1,Ly-1)]
+            self.NextNearestNeighbor[B][B]=[(1, 0), (Lx-1, 0), (0, 1), (0, Ly-1), (1, 1), (Lx-1,Ly-1)]
+
+            #J1 interaction A-->B, B-->A
+            for i in range(2):
+                for j in range(2):
+                    for e in self.NearestNeighbor[i][j]:
+                        self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= ShortRangeInteraction[0]*TypeList[0];
+                        # self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SSxy;
+
+                    ##J2 interaction A-->A, B-->B
+                    for e in self.NextNearestNeighbor[i][j]:
+                        self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= ShortRangeInteraction[1]*TypeList[1];
+                        # self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J2*SSxy;
+        else:
+            Assert(False, "Lattice {0} has not been implemented yet!".format(LatName))
 
     def __SpinModel(self, LatName):
         Beta=self.__Map.Beta

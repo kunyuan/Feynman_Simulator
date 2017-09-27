@@ -24,23 +24,23 @@ Dyson={
     }
 }
 
-Beta=0.5
+Beta=2
 Order=4
 Common={
-"Tau": {"MaxTauBin" : 32, "Beta": Beta},
+"Tau": {"MaxTauBin" : 128, "Beta": Beta},
 "Lattice":  {
     #1D lattice
     # "Name": "Chain", "NSublat":1,
     # "L": [2,]
 
     #2D lattice
-    # "Name": "Square", "NSublat": 1,
+    "Name": "Square", "NSublat": 1,
     # "Name": "Checkerboard", "NSublat": 2,
     #"Name": "ValenceBond", "NSublat": 2,
-    "Name": "Honeycomb", "NSublat": 2,
+    # "Name": "Honeycomb", "NSublat": 2,
     #"Name": "Kagome", "NSublat": 3,
     #"Name": "Triangular", "NSublat": 1,
-    "L": [8,8]
+    "L": [16,16]
 
     #3D lattice
     #"Name": "Cubic", "NSublat": 1,
@@ -50,11 +50,19 @@ Common={
     },
 "Model": {
     # "Name": "J1J2",
-    "Name": "Kitaev",
+    # "Name": "Kitaev",
     # "Name": "Heisenberg",
+    "Name": "Hubbard",
+    # "Name": "Haldane",
     #"Description": ["ImW",],
-    "Interaction": [1.0, 1.0, 1.0, 0.0],
-    "ExternalField": [ 0.0, 0.0, 0.0, 0.0]
+    "Hopping": [1.0,0.0,0.0,0.0],
+    "Phase": [0.0,0.0,0.0,0.0],
+    "HubbardInteraction": 1.0, 
+    "ShortRangeInteraction": [1.0, 0.0, 0.0, 0.0],
+    "LongRangeInteraction": [0.0, 0.0, 0.0, 0.0],
+    "Interaction": [1.0, 0.0, 0.0, 0.0],
+    "ChemicalPotential": [ 0.0, 0.0, 0.0, 0.0],
+    "ExternalField": [ 0.0, 0.0, 0.0, 0.0],
     #ExternalField on Sublattice A and B
     },
 }

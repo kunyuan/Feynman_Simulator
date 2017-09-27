@@ -320,6 +320,7 @@ class Weight():
         #if BackForth==-1:
             #PhaseFactor=1/PhaseFactor
         self.Data*=PhaseFactor
+
     def __SpatialShape(self, shape):
         InsertPos=self.VOLDIM
         shape=list(shape)
