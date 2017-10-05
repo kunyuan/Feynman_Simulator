@@ -36,7 +36,7 @@ const int IN = 0;
 const int OUT = 1;
 #define INVERSE(x) (1 - x)
 
-const int MAX_ORDER = 10;
+const int MAX_ORDER = 16;
 
 //define your lattice here
 

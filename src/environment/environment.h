@@ -9,12 +9,14 @@
 #ifndef __Feynman_Simulator__environment__
 #define __Feynman_Simulator__environment__
 
+#include "module/diagCalc/diag_calculator.h"
 #include "module/parameter/parameter.h"
 #include "module/diagram/diagram.h"
 #include "module/weight/weight.h"
 #include "module/markov/markov_monitor.h"
 #include "module/markov/markov.h"
 #include "job/job.h"
+
 
 class EnvMonteCarlo {
 public:
@@ -31,6 +33,29 @@ public:
     bool BuildNew();
     bool Load();
     void Save(); //Save everything in EnvMonteCarlo
+    void DeleteSavedFiles();
+    void AdjustOrderReWeight();
+
+    bool ListenToMessage();
+
+private:
+    std::string _DiagramFile;
+};
+
+class EnvDiagMonteCarloCalc {
+public:
+    EnvDiagMonteCarloCalc(const para::Job& job, bool IsAllTauSymmetric = false);
+
+    //can be read from StateFile or InputFile
+    para::Job Job;
+    para::ParaMC Para;
+    weight::Weight Weight;
+
+    diagCalc::DiagramDict DiagDict;
+
+    bool BuildNew();
+    bool Load();
+    void Save(); //Save everything in EnvDiagMonteCarlo
     void DeleteSavedFiles();
     void AdjustOrderReWeight();
 

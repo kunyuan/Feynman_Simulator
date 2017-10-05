@@ -2,9 +2,9 @@
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" :  0,
+    "__Duplicate" :  1,
     "__IsCluster" : False, 
-    "__AutoRun" : True,
+    "__AutoRun" : False,
     },
 "Job": {"Sample" : 100000000}  ##0.8 min for 1000000(*1000) Samples in MC
 }
@@ -27,17 +27,17 @@ Dyson={
 Beta=0.5
 Order=4
 Common={
-"Tau": {"MaxTauBin" : 32, "Beta": Beta},
+"Tau": {"MaxTauBin" : 64, "Beta": Beta},
 "Lattice":  {
     #1D lattice
     # "Name": "Chain", "NSublat":1,
     # "L": [2,]
 
     #2D lattice
-    # "Name": "Square", "NSublat": 1,
+    "Name": "Square", "NSublat": 1,
     # "Name": "Checkerboard", "NSublat": 2,
     #"Name": "ValenceBond", "NSublat": 2,
-    "Name": "Honeycomb", "NSublat": 2,
+    # "Name": "Honeycomb", "NSublat": 2,
     #"Name": "Kagome", "NSublat": 3,
     #"Name": "Triangular", "NSublat": 1,
     "L": [8,8]
@@ -49,8 +49,8 @@ Common={
     #"L": [4,4,4]
     },
 "Model": {
-    # "Name": "J1J2",
-    "Name": "Kitaev",
+    "Name": "J1J2",
+    # "Name": "Kitaev",
     # "Name": "Heisenberg",
     #"Description": ["ImW",],
     "Interaction": [1.0, 1.0, 1.0, 0.0],
