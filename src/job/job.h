@@ -17,7 +17,7 @@ namespace para {
 class Job {
 public:
     typedef std::string type;
-    std::set<std::string> TypeName = { "MC", "DiagCount" };
+    std::set<std::string> TypeName = { "MC", "DiagCount", "DiagCalc"};
 
     Job(std::string inputfile);
     Job(type, bool, bool, int);

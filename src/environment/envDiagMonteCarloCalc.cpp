@@ -18,13 +18,13 @@ const string WeightKey = "Weight";
 const string HistKey = "Histogram";
 const string EstimatorsKey = "Estimators";
 
-EnvMonteCarlo::EnvMonteCarlo(const para::Job& job, bool IsAllTauSymmetric)
+EnvDiagMonteCarloCalc::EnvDiagMonteCarloCalc(const para::Job& job, bool IsAllTauSymmetric)
     : Job(job)
     , Weight(IsAllTauSymmetric)
 {
 }
 
-bool EnvMonteCarlo::BuildNew()
+bool EnvDiagMonteCarloCalc::BuildNew()
 {
     LOGGER_CONF(Job.LogFile, Job.Type, Logger::file_on | Logger::screen_on, INFO, INFO);
     //Read more stuff for the state of MC only
@@ -46,6 +46,11 @@ bool EnvMonteCarlo::BuildNew()
 //    MarkovMonitor.BuildNew(Para, Diag, Weight);
 //    para_[ConfigKey] = Diag.ToDict();
     para_.Save(Job.ParaFile, "w");
+
+    Dictionary Diag_;
+//    Diag_.Load("./DiagramDict_SpinModel.txt");
+    Diag_.Load("./Diagram_test.txt");
+    DiagDict.FromDict(Diag_);
     return true;
 }
 /**
@@ -53,7 +58,7 @@ bool EnvMonteCarlo::BuildNew()
 *
 *  @return true if load succesfully
 */
-bool EnvMonteCarlo::Load()
+bool EnvDiagMonteCarloCalc::Load()
 {
     LOGGER_CONF(Job.LogFile, Job.Type, Logger::file_on | Logger::screen_on, INFO, INFO);
     Dictionary para_;
@@ -83,7 +88,7 @@ bool EnvMonteCarlo::Load()
     return true;
 }
 
-void EnvMonteCarlo::Save()
+void EnvDiagMonteCarloCalc::Save()
 {
     LOG_INFO("Start saving data...");
     Dictionary para_;
@@ -92,19 +97,19 @@ void EnvMonteCarlo::Save()
     para_["PID"] = Job.PID;
     para_.Save(Job.ParaFile, "w");
     Dictionary statis_ = Weight.ToDict(weight::GW | weight::SigmaPolar);
-    statis_.Update(MarkovMonitor.ToDict());
+//    statis_.Update(MarkovMonitor.ToDict());
     statis_.BigSave(Job.StatisticsFile);
     LOG_INFO("Saving data is done!");
 }
 
-void EnvMonteCarlo::DeleteSavedFiles()
+void EnvDiagMonteCarloCalc::DeleteSavedFiles()
 {
     system(("rm " + Job.ParaFile).c_str());
     system(("rm " + Job.StatisticsFile).c_str());
     system(("rm " + Job.WeightFile).c_str());
 }
 
-void EnvMonteCarlo::AdjustOrderReWeight()
+void EnvDiagMonteCarloCalc::AdjustOrderReWeight()
 {
     LOG_INFO("Start adjusting OrderReweight...");
 //    if (MarkovMonitor.AdjustOrderReWeight()) {
@@ -125,7 +130,7 @@ void EnvMonteCarlo::AdjustOrderReWeight()
 /**
 *  Adjust everything according to new parameters, like new Beta, Jcp
 */
-bool EnvMonteCarlo::ListenToMessage()
+bool EnvDiagMonteCarloCalc::ListenToMessage()
 {
     LOG_INFO("Start Annealing...");
     Message Message_;

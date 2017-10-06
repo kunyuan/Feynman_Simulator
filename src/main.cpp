@@ -22,6 +22,7 @@ const string HelpStr = "Usage:"
                        "-p N / --PID N   use N to construct input file path."
                        "or -f / --file PATH   use PATH as the input file path.";
 void MonteCarlo(const Job&);
+void DiagCalc(const Job&);
 int main(int argc, const char* argv[])
 {
     Python::Initialize();
@@ -40,10 +41,22 @@ int main(int argc, const char* argv[])
 
     if (Job.Type == "MC")
         MonteCarlo(Job);
+    else if (Job.Type=="DiagCalc")
+        DiagCalc(Job);
     else
         cout << "Not Defined" << endl;
     Python::Finalize();
     return 0;
+}
+
+void DiagCalc(const para::Job& Job)
+{
+    InterruptHandler Interrupt;
+    EnvDiagMonteCarloCalc Env(Job);
+    if (Job.DoesLoad)
+        Env.Load();
+    else
+        Env.BuildNew();
 }
 
 void MonteCarlo(const para::Job& Job)

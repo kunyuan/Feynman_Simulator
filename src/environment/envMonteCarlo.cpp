@@ -18,13 +18,13 @@ const string WeightKey = "Weight";
 const string HistKey = "Histogram";
 const string EstimatorsKey = "Estimators";
 
-EnvDiagMonteCarloCalc::EnvDiagMonteCarloCalc(const para::Job& job, bool IsAllTauSymmetric)
+EnvMonteCarlo::EnvMonteCarlo(const para::Job& job, bool IsAllTauSymmetric)
     : Job(job)
     , Weight(IsAllTauSymmetric)
 {
 }
 
-bool EnvDiagMonteCarloCalc::BuildNew()
+bool EnvMonteCarlo::BuildNew()
 {
     LOGGER_CONF(Job.LogFile, Job.Type, Logger::file_on | Logger::screen_on, INFO, INFO);
     //Read more stuff for the state of MC only
@@ -53,7 +53,7 @@ bool EnvDiagMonteCarloCalc::BuildNew()
 *
 *  @return true if load succesfully
 */
-bool EnvDiagMonteCarloCalc::Load()
+bool EnvMonteCarlo::Load()
 {
     LOGGER_CONF(Job.LogFile, Job.Type, Logger::file_on | Logger::screen_on, INFO, INFO);
     Dictionary para_;
@@ -83,7 +83,7 @@ bool EnvDiagMonteCarloCalc::Load()
     return true;
 }
 
-void EnvDiagMonteCarloCalc::Save()
+void EnvMonteCarlo::Save()
 {
     LOG_INFO("Start saving data...");
     Dictionary para_;
@@ -97,14 +97,14 @@ void EnvDiagMonteCarloCalc::Save()
     LOG_INFO("Saving data is done!");
 }
 
-void EnvDiagMonteCarloCalc::DeleteSavedFiles()
+void EnvMonteCarlo::DeleteSavedFiles()
 {
     system(("rm " + Job.ParaFile).c_str());
     system(("rm " + Job.StatisticsFile).c_str());
     system(("rm " + Job.WeightFile).c_str());
 }
 
-void EnvDiagMonteCarloCalc::AdjustOrderReWeight()
+void EnvMonteCarlo::AdjustOrderReWeight()
 {
     LOG_INFO("Start adjusting OrderReweight...");
 //    if (MarkovMonitor.AdjustOrderReWeight()) {
@@ -125,7 +125,7 @@ void EnvDiagMonteCarloCalc::AdjustOrderReWeight()
 /**
 *  Adjust everything according to new parameters, like new Beta, Jcp
 */
-bool EnvDiagMonteCarloCalc::ListenToMessage()
+bool EnvMonteCarlo::ListenToMessage()
 {
     LOG_INFO("Start Annealing...");
     Message Message_;
