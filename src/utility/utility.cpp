@@ -22,7 +22,7 @@ bool Equal(uint x1, uint x2, real eps)
     return x1 == x2;
 }
 // FORTRAN abs
-real abs(real x)
+real fabs(real x)
 {
     return ((x >= 0.0) ? x : -x);
 }

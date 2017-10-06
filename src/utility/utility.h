@@ -24,7 +24,7 @@ const real MaxReal = 1.0e30;
 const real MinReal = -1.0e30;
 
 // FORTRAN abs
-real abs(real x); // { return ( (x >= 0.0) ? x : -x); }
+real fabs(real x); // { return ( (x >= 0.0) ? x : -x); }
 
 // FORTRAN iabs
 int iabs(int x); // { return ( (x >= 0.0) ? x : -x); }
