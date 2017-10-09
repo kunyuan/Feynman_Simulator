@@ -53,8 +53,7 @@
 doc
 data
 data*
-diagram
-diagram*
+diagram/
 infile
 outfile
 .DS_Store
