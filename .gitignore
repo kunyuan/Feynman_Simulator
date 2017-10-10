@@ -68,5 +68,6 @@ _job_*
 .idea
 */.idea
 src/cmake-build-debug/
+*.diagram.txt
 
 

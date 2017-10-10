@@ -49,7 +49,7 @@ bool EnvDiagMonteCarloCalc::BuildNew()
 
     Dictionary Diag_;
 //    Diag_.Load("./DiagramDict_SpinModel.txt");
-    Diag_.Load("./Diagram_test.txt");
+    Diag_.Load("./spin_model.diagram.txt");
     DiagDict.FromDict(Diag_);
     return true;
 }

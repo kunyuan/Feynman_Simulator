@@ -41,10 +41,10 @@ bool EnvMonteCarlo::BuildNew()
     //    Weight.SetTest(Para);//Test for WeightTest
 
     Weight.BuildNew(weight::SigmaPolar, Para);
-//    Diag.BuildNew(Para.Lat, *Weight.G, *Weight.W);
-//    Markov.BuildNew(Para, Diag, Weight);
-//    MarkovMonitor.BuildNew(Para, Diag, Weight);
-//    para_[ConfigKey] = Diag.ToDict();
+    Diag.BuildNew(Para.Lat, *Weight.G, *Weight.W);
+    Markov.BuildNew(Para, Diag, Weight);
+    MarkovMonitor.BuildNew(Para, Diag, Weight);
+    para_[ConfigKey] = Diag.ToDict();
     para_.Save(Job.ParaFile, "w");
     return true;
 }
@@ -74,12 +74,12 @@ bool EnvMonteCarlo::Load()
     Weight.FromDict(statis_, weight::GW, Para);
     Weight.FromDict(statis_, weight::SigmaPolar, Para);
     LOG_INFO(DoesParaFileExit);
-//    if (DoesParaFileExit)
-//        Diag.FromDict(para_.Get<Dictionary>(ConfigKey), Para.Lat, *Weight.G, *Weight.W);
-//    else
-//        Diag.BuildNew(Para.Lat, *Weight.G, *Weight.W);
-//    MarkovMonitor.FromDict(statis_, Para, Diag, Weight);
-//    Markov.BuildNew(Para, Diag, Weight);
+    if (DoesParaFileExit)
+        Diag.FromDict(para_.Get<Dictionary>(ConfigKey), Para.Lat, *Weight.G, *Weight.W);
+    else
+        Diag.BuildNew(Para.Lat, *Weight.G, *Weight.W);
+    MarkovMonitor.FromDict(statis_, Para, Diag, Weight);
+    Markov.BuildNew(Para, Diag, Weight);
     return true;
 }
 
@@ -88,11 +88,11 @@ void EnvMonteCarlo::Save()
     LOG_INFO("Start saving data...");
     Dictionary para_;
     para_[ParaKey] = Para.ToDict();
-//    para_[ConfigKey] = Diag.ToDict();
+    para_[ConfigKey] = Diag.ToDict();
     para_["PID"] = Job.PID;
     para_.Save(Job.ParaFile, "w");
     Dictionary statis_ = Weight.ToDict(weight::GW | weight::SigmaPolar);
-//    statis_.Update(MarkovMonitor.ToDict());
+    statis_.Update(MarkovMonitor.ToDict());
     statis_.BigSave(Job.StatisticsFile);
     LOG_INFO("Saving data is done!");
 }
@@ -107,20 +107,20 @@ void EnvMonteCarlo::DeleteSavedFiles()
 void EnvMonteCarlo::AdjustOrderReWeight()
 {
     LOG_INFO("Start adjusting OrderReweight...");
-//    if (MarkovMonitor.AdjustOrderReWeight()) {
-//        Markov.Reset(Para, Diag, Weight);
-//        string str;
-//        for (int i = 0; i <= Para.Order; i++)
-//            str += ToString((Para.OrderReWeight[i])) + "  ";
-//        LOG_INFO("Reweighted to:\n" + str + "\nWorm Reweighted to:\n" + ToString(Para.WormSpaceReweight) + "\nPolar Reweighted to:\n" + ToString(Para.PolarReweight));
-//    }
-//    else {
-//        string str;
-//        for (int i = 0; i <= Para.Order; i++)
-//            str += ToString((MarkovMonitor.PhyEstimator[i].Norm())) + "  ";
-//        LOG_INFO("Number of samples is too small, adjust later.\n"
-//                 << "Norm of different orders: " << str);
-//    }
+    if (MarkovMonitor.AdjustOrderReWeight()) {
+        Markov.Reset(Para, Diag, Weight);
+        string str;
+        for (int i = 0; i <= Para.Order; i++)
+            str += ToString((Para.OrderReWeight[i])) + "  ";
+        LOG_INFO("Reweighted to:\n" + str + "\nWorm Reweighted to:\n" + ToString(Para.WormSpaceReweight) + "\nPolar Reweighted to:\n" + ToString(Para.PolarReweight));
+    }
+    else {
+        string str;
+        for (int i = 0; i <= Para.Order; i++)
+            str += ToString((MarkovMonitor.PhyEstimator[i].Norm())) + "  ";
+        LOG_INFO("Number of samples is too small, adjust later.\n"
+                 << "Norm of different orders: " << str);
+    }
 }
 /**
 *  Adjust everything according to new parameters, like new Beta, Jcp
@@ -146,10 +146,10 @@ bool EnvMonteCarlo::ListenToMessage()
     Para.UpdateWithMessage(Message_);
     Weight.FromDict(weight_, weight::GW, Para);
     Weight.Anneal(Para);
-//    Diag.Reset(Para.Lat, *Weight.G, *Weight.W);
-//    Markov.Reset(Para, Diag, Weight);
-//    MarkovMonitor.Reset(Para, Diag, Weight);
-//    MarkovMonitor.SqueezeStatistics(Message_.SqueezeFactor);
+    Diag.Reset(Para.Lat, *Weight.G, *Weight.W);
+    Markov.Reset(Para, Diag, Weight);
+    MarkovMonitor.Reset(Para, Diag, Weight);
+    MarkovMonitor.SqueezeStatistics(Message_.SqueezeFactor);
     LOG_INFO("Annealled to " << Message_.PrettyString()
                              << "\nwith squeeze factor" << Message_.SqueezeFactor);
     return true;

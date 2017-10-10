@@ -47,9 +47,9 @@ namespace diagCalc {
 
     const int NUpdates = 8;
 
-    class MonteCarloCalc{
+    class MonteCarlo{
     public:
-        MonteCarloCalc();
+        MonteCarlo();
 
         long long* Counter;
         Lattice* Lat;
