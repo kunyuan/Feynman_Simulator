@@ -14,11 +14,17 @@ DiagramDict::DiagramDict(){
 }
 
 bool DiagramDict::FromDict(const Dictionary & dict){
-//    std::cout<<dict.HasKey("Sigma")<<std::endl;
+//    auto diagram1=std::array<int, 2*MAX_ORDER>({2,1,3,4});
+//    auto diagram2=std::array<int, 2*MAX_ORDER>({1,3,2,4});
+//    auto spin1=std::array<int, 2*MAX_ORDER>({1,0,1,0});
+//    auto spin2=std::array<int, 2*MAX_ORDER>({0,1,0,0});
+//    auto FermiSign1=-1;
+//    auto FermiSign2=1;
+//
+//    AllDiagramConfig.push_back(std::vector<std::array<int, 2*MAX_ORDER>>({diagram1, diagram2}));
+//    AllSpinConfig.push_back(std::vector<std::array<int, 2*MAX_ORDER>>({spin1, spin2}));
+//    AllFermiSignConfig.push_back(std::vector<int>({FermiSign1, FermiSign2}));
 
-//    Dictionary SubPort;
-//    SubPort.LoadFromString("{'b':[(1,3),(2,4)],'c':[3,4]}");
-//    cout<<SubPort.Get<vector<tuple<int>>>("b")[0][0]<<endl;
     auto _Sigma=dict.Get<Dictionary>("Sigma");
     for(auto order=0;order<=MAX_ORDER;order++){
         if(_Sigma.HasKey(to_string(order))){
@@ -51,16 +57,6 @@ bool DiagramDict::FromDict(const Dictionary & dict){
         }
     }
     cout<<AllDiagramConfig[0][0][0]<<","<<AllSpinConfig[0][0][1]<<endl;
-    auto diagram1=std::array<int, 2*MAX_ORDER>({2,1,3,4});
-    auto diagram2=std::array<int, 2*MAX_ORDER>({1,3,2,4});
-    auto spin1=std::array<int, 2*MAX_ORDER>({1,0,1,0});
-    auto spin2=std::array<int, 2*MAX_ORDER>({0,1,0,0});
-    auto FermiSign1=-1;
-    auto FermiSign2=1;
-
-    AllDiagramConfig.push_back(std::vector<std::array<int, 2*MAX_ORDER>>({diagram1, diagram2}));
-    AllSpinConfig.push_back(std::vector<std::array<int, 2*MAX_ORDER>>({spin1, spin2}));
-    AllFermiSignConfig.push_back(std::vector<int>({FermiSign1, FermiSign2}));
 //#define DiagramsList std::vector<std::array<int, 2*MAX_ORDER>>
 //#define DiagramsList std::vector<std::array<int, 2*MAX_ORDER>>
 
