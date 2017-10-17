@@ -31,7 +31,7 @@ bool DiagramDict::FromDict(const Dictionary & dict){
             auto _Dict=_Sigma.Get<Dictionary>(std::to_string(order));
             DiagramsList _diagramList;
             for (auto d: _Dict.Get<vector<vector<int>>>("Permutations")){
-                array<int, 2*MAX_ORDER> _diagram;
+                array<int, 2*MAX_ORDER> _diagram={0};
                 for(auto i=0;i<d.size();i++){
                     _diagram[i]=d[i];
                 }
@@ -41,7 +41,7 @@ bool DiagramDict::FromDict(const Dictionary & dict){
 
             SpinsList _spinsList;
             for (auto d: _Dict.Get<vector<vector<int>>>("Spins")){
-                array<int, 2*MAX_ORDER> _spins;
+                array<int, 2*MAX_ORDER> _spins={0};
                 for(auto i=0;i<d.size();i++){
                     _spins[i]=d[i];
                 }
@@ -49,7 +49,7 @@ bool DiagramDict::FromDict(const Dictionary & dict){
             }
             AllSpinConfig.push_back(_spinsList);
 
-            FermiSignList _signList;
+            FermiSignList _signList={0};
             for (auto d: _Dict.Get<vector<int>>("FermiSigns")){
                 _signList.push_back(d);
             }
