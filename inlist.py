@@ -1,6 +1,8 @@
 # monte carlo job defintion
 MonteCarlo={
 "Control": {
+    "__Algorithm": "DiagCalc",
+    # "__Algorithm": "MC",
     "__Execute" : "./simulator.exe",
     "__Duplicate" :  1,
     "__IsCluster" : False, 
