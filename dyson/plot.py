@@ -21,6 +21,28 @@ def PlotArray(array, Beta, Name, DoesSave=True):
         plt.show()
     plt.close()
 
+def PlotTimeForList(Name, weight, SpinIn, SubIn, SpinOut, SubOut, VolList, DoesSave=True):
+    x=np.linspace(0, weight.Map.Beta, weight.Map.MaxTauBin)
+    plt.figure(1)
+    plt.suptitle("{0}, Spin ({1},{2}), Sublat ({3},{4}), Coordinates: {5}:{6}".format(Name,
+        SpinIn, SpinOut, SubIn, SubOut, weight.Map.IndexToCoordi(VolList[0]), weight.Map.IndexToCoordi(VolList[1])))
+    ax1=plt.subplot(121)
+    for v in VolList:
+        print v
+        ax1.plot(x,weight.Data[SpinIn, SubIn, SpinOut, SubOut, v,:].real,'-')
+    ax1.set_xlabel("$\\tau$")
+    ax1.set_ylabel("{0}.real".format(Name))
+    ax2=plt.subplot(122)
+    for v in VolList:
+        ax2.plot(x,weight.Data[SpinIn, SubIn, SpinOut, SubOut, v,:].imag,'-')
+    ax2.set_xlabel("$\\tau$")
+    ax2.set_ylabel("{0}.imag".format(Name))
+    if DoesSave:
+        plt.savefig("{0}.pdf".format(Name))
+    else:
+        plt.show()
+    plt.close()
+
 def PlotTime(Name, weight, SpinIn, SubIn, SpinOut, SubOut, Vol, DoesSave=True):
     x=np.linspace(0, weight.Map.Beta, weight.Map.MaxTauBin)
     plt.figure(1)

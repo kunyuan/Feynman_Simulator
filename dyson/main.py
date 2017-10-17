@@ -116,7 +116,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
 
     G0.FFT("K","T")
     print G0.Data[UP,0,UP,0,0,:]
-    plot.PlotTime("G0UPUP", G0, UP, 0, UP, 0, 0)
+    plot.PlotTimeForList("G0UPUP_r", G0, UP, 0, UP, 0, range(Map.L[0]))
     plot.PlotBand(G0, Lat)
 
     IO.SaveDict("Coordinates","w", Factory.ToDict())

@@ -182,7 +182,8 @@ class BareFactory:
             for t in range(self.__MaxTauBin):
                 Gk=np.zeros([Sp*Sub,Sp*Sub], dtype="complex")
                 for i in range(Sp*Sub):
-                    Gk[i,i]=-np.exp(-Ek[i]*TauGrid[t])*(1.0-1.0/(1.0+np.exp(Beta*Ek[i])))
+                    # Gk[i,i]=-np.exp(-Ek[i]*TauGrid[t])*(1.0-1.0/(1.0+np.exp(Beta*Ek[i])))
+                    Gk[i,i]=-np.exp(-Ek[i]*TauGrid[t])/(1.0+np.exp(-Beta*Ek[i]))
                 Gk=np.dot(np.dot(Uk,Gk),Ukdag)
                 self.BareG.Data[:,:,:,:,k,t]=Gk.reshape([Sp, Sub, Sp, Sub])
 

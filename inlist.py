@@ -24,10 +24,10 @@ Dyson={
     }
 }
 
-Beta=2
+Beta=10
 Order=4
 Common={
-"Tau": {"MaxTauBin" : 128, "Beta": Beta},
+"Tau": {"MaxTauBin" : 1024, "Beta": Beta},
 "Lattice":  {
     #1D lattice
     # "Name": "Chain", "NSublat":1,
@@ -61,7 +61,7 @@ Common={
     "ShortRangeInteraction": [1.0, 0.0, 0.0, 0.0],
     "LongRangeInteraction": [0.0, 0.0, 0.0, 0.0],
     "Interaction": [1.0, 0.0, 0.0, 0.0],
-    "ChemicalPotential": [ 0.0, 0.0, 0.0, 0.0],
+    "ChemicalPotential": [ -3.8, 0.0, 0.0, 0.0],
     "ExternalField": [ 0.0, 0.0, 0.0, 0.0],
     #ExternalField on Sublattice A and B
     },
