@@ -26,7 +26,7 @@ EnvDiagMonteCarloCalc::EnvDiagMonteCarloCalc(const para::Job& job, bool IsAllTau
 
 bool EnvDiagMonteCarloCalc::BuildNew()
 {
-    LOGGER_CONF(Job.LogFile, Job.Type, Logger::file_on | Logger::screen_on, INFO, INFO);
+    LOGGER_CONF(Job.LogFile, Job.Algorithm, Logger::file_on | Logger::screen_on, INFO, INFO);
     //Read more stuff for the state of MC only
     Dictionary para_;
     para_.Load(Job.InputFile);
@@ -60,7 +60,7 @@ bool EnvDiagMonteCarloCalc::BuildNew()
 */
 bool EnvDiagMonteCarloCalc::Load()
 {
-    LOGGER_CONF(Job.LogFile, Job.Type, Logger::file_on | Logger::screen_on, INFO, INFO);
+    LOGGER_CONF(Job.LogFile, Job.Algorithm, Logger::file_on | Logger::screen_on, INFO, INFO);
     Dictionary para_;
     LOG_INFO("Trying to load " << Job.ParaFile);
     bool DoesParaFileExit;

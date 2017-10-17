@@ -39,9 +39,9 @@ int main(int argc, const char* argv[])
 
     para::Job Job(InputFile);
 
-    if (Job.Type == "MC")
+    if (Job.Algorithm == "MC")
         MonteCarlo(Job);
-    else if (Job.Type=="DiagCalc")
+    else if (Job.Algorithm=="DiagCalc")
         DiagCalc(Job);
     else
         cout << "Not Defined" << endl;

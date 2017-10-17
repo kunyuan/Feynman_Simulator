@@ -53,6 +53,7 @@ class JobMonteCarlo(Job):
     def __init__(self, para):
         Job.__init__(self, para)
         self.job["Type"] = "MC"
+        self.job["Algorithm"] = self.control["__Algorithm"]
         self.control["__KeepCPUBusy"]=True
         #search folder for old jobs, the new pid=largest old pid+1
         PIDList, NextPID=get_current_PID("statis")

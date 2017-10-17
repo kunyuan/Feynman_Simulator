@@ -17,12 +17,12 @@ namespace para {
 class Job {
 public:
     typedef std::string type;
-    std::set<std::string> TypeName = { "MC", "DiagCount", "DiagCalc"};
+    std::set<std::string> AlgorithmName = { "MC", "DiagCount", "DiagCalc"};
 
     Job(std::string inputfile);
     Job(type, bool, bool, int);
 
-    type Type;
+    type Algorithm;
     bool DoesLoad;
     int Sample;
     int PID;
