@@ -57,8 +57,7 @@ bool DiagramDict::FromDict(const Dictionary & dict){
         }
     }
     cout<<AllDiagramConfig[0][0][0]<<","<<AllSpinConfig[0][0][1]<<endl;
-//#define DiagramsList std::vector<std::array<int, 2*MAX_ORDER>>
-//#define DiagramsList std::vector<std::array<int, 2*MAX_ORDER>>
 
     return true;
 }
+

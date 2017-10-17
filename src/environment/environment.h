@@ -53,6 +53,9 @@ public:
 
     diagCalc::DiagramDict DiagDict;
 
+    diagCalc::MonteCarlo MonteCarlo;
+    diagCalc::MarkovMonitor MarkovMonitor;
+
     bool BuildNew();
     bool Load();
     void Save(); //Save everything in EnvDiagMonteCarlo

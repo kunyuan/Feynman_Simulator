@@ -57,6 +57,66 @@ void DiagCalc(const para::Job& Job)
         Env.Load();
     else
         Env.BuildNew();
+
+    auto& MonteCarlo = Env.MonteCarlo;
+    auto& MarkovMonitor = Env.MarkovMonitor;
+    auto& Para = Env.Para;
+
+    LOG_INFO("Monte Carlo is started!");
+    timer ReweightTimer, PrinterTimer, DiskWriterTimer, MessageTimer;
+    PrinterTimer.start();
+    DiskWriterTimer.start();
+    MessageTimer.start();
+    ReweightTimer.start();
+
+    int sigma[MAX_ORDER] = { 0 };
+    int polar[MAX_ORDER] = { 0 };
+
+    Env.ListenToMessage();
+
+    for (uint Step = 0; Step < Para.Toss; Step++) {
+        //TODO: updates are empty
+        MonteCarlo.Hop(Para.Sweep);
+    }
+
+//    uint Step = 0;
+//    while (true) {
+    for (uint Step = 0; Step < Para.Toss; Step++) {
+        //Don't use Para.Counter as counter
+        Step++;
+        MonteCarlo.Hop(Para.Sweep);
+        MarkovMonitor.Measure();
+
+        if (MonteCarlo.DiagConf.MeasureGLine)
+            sigma[MonteCarlo.DiagConf.Order]++;
+        else
+            polar[MonteCarlo.DiagConf.Order]++;
+
+        if (Step % 100 == 0) {
+            //TODO: Add statistics is empty now
+            MarkovMonitor.AddStatistics();
+
+            if (PrinterTimer.check(Para.PrinterTimer)) {
+                // TODO: diagdict CheckDiagram has not been implemented
+//                Env.DiagDict.CheckDiagram();
+                MonteCarlo.PrintDetailBalanceInfo();
+            }
+
+            if (DiskWriterTimer.check(Para.DiskWriterTimer)) {
+                Interrupt.Delay();
+                Env.Save();
+                Interrupt.Resume();
+            }
+
+            if (MessageTimer.check(Para.MessageTimer))
+                Env.ListenToMessage();
+
+            if (ReweightTimer.check(Para.ReweightTimer))
+                Env.AdjustOrderReWeight();
+        }
+    }
+    LOG_INFO("Markov is ended!");
+
 }
 
 void MonteCarlo(const para::Job& Job)

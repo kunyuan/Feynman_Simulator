@@ -41,16 +41,19 @@ bool EnvDiagMonteCarloCalc::BuildNew()
     //    Weight.SetTest(Para);//Test for WeightTest
 
     Weight.BuildNew(weight::SigmaPolar, Para);
-//    Diag.BuildNew(Para.Lat, *Weight.G, *Weight.W);
-//    Markov.BuildNew(Para, Diag, Weight);
-//    MarkovMonitor.BuildNew(Para, Diag, Weight);
-//    para_[ConfigKey] = Diag.ToDict();
-    para_.Save(Job.ParaFile, "w");
 
     Dictionary Diag_;
 //    Diag_.Load("./DiagramDict_SpinModel.txt");
     Diag_.Load("./spin_model.diagram.txt");
     DiagDict.FromDict(Diag_);
+
+//    Diag.BuildNew(Para.Lat, *Weight.G, *Weight.W);
+    MonteCarlo.BuildNew(Para, DiagDict, Weight);
+//    MarkovMonitor.BuildNew(Para, DiagDict, Weight);
+
+//    para_[ConfigKey] = Diag.ToDict();
+    para_.Save(Job.ParaFile, "w");
+
     return true;
 }
 /**
@@ -83,8 +86,9 @@ bool EnvDiagMonteCarloCalc::Load()
 //        Diag.FromDict(para_.Get<Dictionary>(ConfigKey), Para.Lat, *Weight.G, *Weight.W);
 //    else
 //        Diag.BuildNew(Para.Lat, *Weight.G, *Weight.W);
-//    MarkovMonitor.FromDict(statis_, Para, Diag, Weight);
-//    Markov.BuildNew(Para, Diag, Weight);
+
+//    MarkovMonitor.FromDict(statis_, Para, DiagDict, Weight);
+    MonteCarlo.BuildNew(Para, DiagDict, Weight);
     return true;
 }
 
