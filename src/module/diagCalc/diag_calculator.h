@@ -59,16 +59,10 @@ namespace diagCalc {
         std::array<real, 2*MAX_ORDER> Tau_list;
     };
 
-<<<<<<< HEAD
     const int NUpdates = 10;
 
     class MonteCarlo{
     public:
-=======
-    class MonteCarlo{
-    public:
-        MonteCarlo();
->>>>>>> calc
 
         long long* Counter;
         Lattice* Lat;
