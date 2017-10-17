@@ -155,9 +155,9 @@ bool EnvDiagMonteCarloCalc::ListenToMessage()
     Para.UpdateWithMessage(Message_);
     Weight.FromDict(weight_, weight::GW, Para);
     Weight.Anneal(Para);
-//    Diag.Reset(Para.Lat, *Weight.G, *Weight.W);
-//    Markov.Reset(Para, Diag, Weight);
-//    MarkovMonitor.Reset(Para, Diag, Weight);
+//    DiagDict.Reset(Para.Lat, *Weight.G, *Weight.W);
+    MonteCarlo.Reset(Para, DiagDict, Weight);
+//    MarkovMonitor.Reset(Para, DiagDict, Weight);
 //    MarkovMonitor.SqueezeStatistics(Message_.SqueezeFactor);
     LOG_INFO("Annealled to " << Message_.PrettyString()
                              << "\nwith squeeze factor" << Message_.SqueezeFactor);

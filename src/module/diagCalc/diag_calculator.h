@@ -78,18 +78,23 @@ namespace diagCalc {
         weight::WClass* W;
         RandomFactory* RNG;
 
-        std::array<std::array<std::array<Complex, 2*MAX_ORDER>, 2*MAX_ORDER>,2> G_Weight;
-        std::array<std::array<std::array<Complex, MAX_ORDER>, MAX_ORDER>, 16> W_Weight;
+        std::array<std::array<std::array<Complex, 2*MAX_ORDER>, 2*MAX_ORDER>,2> New_G_Weight;
+        std::array<std::array<std::array<Complex, MAX_ORDER>, MAX_ORDER>, 16> New_W_Weight;
+
+        std::array<std::array<std::array<Complex, 2*MAX_ORDER>, 2*MAX_ORDER>,2> Old_G_Weight;
+        std::array<std::array<std::array<Complex, MAX_ORDER>, MAX_ORDER>, 16> Old_W_Weight;
 
         std::vector<spin> IndexToSpin;
 
-        Conf DiagConf;
+        Conf Old_DiagConf;
+        Conf New_DiagConf;
 
         bool BuildNew(para::ParaMC&, diagCalc::DiagramDict &, weight::Weight&);
         void Reset(para::ParaMC&, diagCalc::DiagramDict &, weight::Weight&);
         void Hop(int);
 
-        void CalculateGWTable();
+        void InitializeGWTable();
+        void UpdateGWTable(int);
         Complex SumAllDiagrams();
 
         void PrintDetailBalanceInfo();
@@ -116,6 +121,7 @@ namespace diagCalc {
         real RandomPickTau();
         real ProbTau(real);
         Site RandomPickSite();
+        int RandomPickVertex(int);
         real ProbSite(const Site&);
         enum Operations {
             CHANGE_R = 0,

@@ -52,15 +52,20 @@ bool MonteCarlo::BuildNew(ParaMC &para, DiagramDict &diag, weight::Weight &weigh
     OperationName[JUMP_TO_ORDER0] = NAME(JUMP_TO_ORDER0);
     OperationName[JUMP_TO_ORDER1] = NAME(JUMP_TO_ORDER1);
 
-    DiagConf.Initialize();
+    New_DiagConf.Initialize();
 
     IndexToSpin = {UP, DOWN};
 
-    CalculateGWTable();
+    InitializeGWTable();
+    Old_G_Weight = New_G_Weight;
+    Old_W_Weight = New_W_Weight;
+
     Complex initial_weight = SumAllDiagrams();
 
-    DiagConf.Weight = mod(initial_weight);
-    DiagConf.Phase = phase(initial_weight);
+    New_DiagConf.Weight = mod(initial_weight);
+    New_DiagConf.Phase = phase(initial_weight);
+
+    Old_DiagConf = New_DiagConf;
 
     return true;
 }
@@ -85,20 +90,20 @@ void MonteCarlo::Reset(ParaMC &para, DiagramDict &diag, weight::Weight &weight)
     RNG = &para.RNG;
 }
 
-void MonteCarlo::CalculateGWTable() {
+void MonteCarlo::InitializeGWTable() {
 
-    for (int in = 0; in < 2*DiagConf.Order; in ++){
-        for (int out = 0; out < 2*DiagConf.Order; out ++) {
+    for (int in = 0; in < 2*New_DiagConf.Order; in ++){
+        for (int out = 0; out < 2*New_DiagConf.Order; out ++) {
 
-            Site RIn = DiagConf.R_list[in];
-            Site ROut = DiagConf.R_list[out];
-            real TauIn = DiagConf.Tau_list[in];
-            real TauOut = DiagConf.Tau_list[out];
+            Site RIn = New_DiagConf.R_list[in];
+            Site ROut = New_DiagConf.R_list[out];
+            real TauIn = New_DiagConf.Tau_list[in];
+            real TauOut = New_DiagConf.Tau_list[out];
 
             for (int sp = 0; sp < 2; sp ++){
                 Complex gWeight = G->Weight(IN, RIn, ROut, TauIn, TauOut,
                                             IndexToSpin[sp], IndexToSpin[sp], false);
-                G_Weight[sp][in][out] = gWeight;
+                New_G_Weight[sp][in][out] = gWeight;
             }
 
             for(int sp_leftin = 0; sp_leftin < 2; sp_leftin ++){
@@ -109,8 +114,68 @@ void MonteCarlo::CalculateGWTable() {
                             spin SpRight[2] = {IndexToSpin[sp_rightin], IndexToSpin[sp_rightout]};
                             Complex wWeight = W->Weight(IN, RIn, ROut, TauIn, TauOut,
                                                         SpLeft, SpRight, false, false, false);
-                            W_Weight[SpinIndex(SpLeft, SpRight)][in][out] = wWeight;
+                            New_W_Weight[SpinIndex(SpLeft, SpRight)][in][out] = wWeight;
                         }
+                    }
+                }
+            }
+        }
+    }
+}
+
+void MonteCarlo::UpdateGWTable(int vertex) {
+    int in = vertex;
+    for (int out = 0; out < 2*New_DiagConf.Order; out ++){
+
+        Site RIn = New_DiagConf.R_list[in];
+        Site ROut = New_DiagConf.R_list[out];
+        real TauIn = New_DiagConf.Tau_list[in];
+        real TauOut = New_DiagConf.Tau_list[out];
+
+        for (int sp = 0; sp < 2; sp ++){
+            Complex gWeight = G->Weight(IN, RIn, ROut, TauIn, TauOut,
+                                        IndexToSpin[sp], IndexToSpin[sp], false);
+            New_G_Weight[sp][in][out] = gWeight;
+        }
+
+        for(int sp_leftin = 0; sp_leftin < 2; sp_leftin ++){
+            for(int sp_leftout = 0; sp_leftout < 2; sp_leftout ++) {
+                for (int sp_rightin = 0; sp_rightin < 2; sp_rightin++) {
+                    for (int sp_rightout = 0; sp_rightout < 2; sp_rightout++) {
+                        spin SpLeft[2] = {IndexToSpin[sp_leftin], IndexToSpin[sp_leftout]};
+                        spin SpRight[2] = {IndexToSpin[sp_rightin], IndexToSpin[sp_rightout]};
+                        Complex wWeight = W->Weight(IN, RIn, ROut, TauIn, TauOut,
+                                                    SpLeft, SpRight, false, false, false);
+                        New_W_Weight[SpinIndex(SpLeft, SpRight)][in][out] = wWeight;
+                    }
+                }
+            }
+        }
+    }
+
+    int out = vertex;
+    for (int in = 0; in < 2*New_DiagConf.Order; in ++){
+
+        Site RIn = New_DiagConf.R_list[in];
+        Site ROut = New_DiagConf.R_list[out];
+        real TauIn = New_DiagConf.Tau_list[in];
+        real TauOut = New_DiagConf.Tau_list[out];
+
+        for (int sp = 0; sp < 2; sp ++){
+            Complex gWeight = G->Weight(IN, RIn, ROut, TauIn, TauOut,
+                                        IndexToSpin[sp], IndexToSpin[sp], false);
+            New_G_Weight[sp][in][out] = gWeight;
+        }
+
+        for(int sp_leftin = 0; sp_leftin < 2; sp_leftin ++){
+            for(int sp_leftout = 0; sp_leftout < 2; sp_leftout ++) {
+                for (int sp_rightin = 0; sp_rightin < 2; sp_rightin++) {
+                    for (int sp_rightout = 0; sp_rightout < 2; sp_rightout++) {
+                        spin SpLeft[2] = {IndexToSpin[sp_leftin], IndexToSpin[sp_leftout]};
+                        spin SpRight[2] = {IndexToSpin[sp_rightin], IndexToSpin[sp_rightout]};
+                        Complex wWeight = W->Weight(IN, RIn, ROut, TauIn, TauOut,
+                                                    SpLeft, SpRight, false, false, false);
+                        New_W_Weight[SpinIndex(SpLeft, SpRight)][in][out] = wWeight;
                     }
                 }
             }
@@ -120,19 +185,18 @@ void MonteCarlo::CalculateGWTable() {
 
 int Find_Position(std::array<int, 2*MAX_ORDER> arr, int value){
     auto iter = std::find(arr.begin(), arr.end(), value);
-    return std::distance(arr.begin(), iter);
+    return int(std::distance(arr.begin(), iter));
 }
+
 Complex MonteCarlo::SumAllDiagrams() {
 
     Complex total_weight=Complex(0.0, 0.0);
 
-    DiagramsList permutations = Diag->AllDiagramConfig[0];
-    SpinsList spin_configs = Diag->AllSpinConfig[0];
-    FermiSignList fermi_signs = Diag->AllFermiSignConfig[0];
+    int order = New_DiagConf.Order;
 
-    //DiagramsList permutations = Diag->AllDiagramConfig[DiagConf.Order];
-    //SpinsList spin_configs = Diag->AllSpinConfig[DiagConf.Order];
-    //FermiSignList fermi_signs = Diag->AllFermiSignConfig[DiagConf.Order];
+    DiagramsList permutations = Diag->AllDiagramConfig[order-1];
+    SpinsList spin_configs = Diag->AllSpinConfig[order-1];
+    FermiSignList fermi_signs = Diag->AllFermiSignConfig[order-1];
 
     Complex weight;
 
@@ -140,24 +204,23 @@ Complex MonteCarlo::SumAllDiagrams() {
         auto permutation = permutations[i];
         auto spins = spin_configs[i];
         weight = Complex(1.0, 0.0);
-        for (int in=0; in < 2*DiagConf.Order; in++){
-            weight *= G_Weight[spins[in]][in][permutation[in]];
+        for (int in=0; in < 2*order; in++){
+            weight *= New_G_Weight[spins[in]][in][permutation[in]];
         }
-        for (int in=0; in < DiagConf.Order; in++){
+        for (int in=0; in < order; in++){
 
             int leftout =in*2, rightout = in*2+1;
             int leftin = Find_Position(permutation, in*2), rightin = Find_Position(permutation, in*2+1);
             spin SpLeft[2] = {IndexToSpin[spins[leftin]], IndexToSpin[spins[leftout]]};
             spin SpRight[2] = {IndexToSpin[spins[rightin]], IndexToSpin[spins[rightout]]};
             int spin_index = SpinIndex(SpLeft, SpRight);
-            weight *= W_Weight[spin_index][in*2][in*2+1];
+            weight *= New_W_Weight[spin_index][in*2][in*2+1];
         }
 
         total_weight += weight * fermi_signs[i];
     }
     return total_weight;
 }
-
 
 std::string MonteCarlo::_DetailBalanceStr(Operations op)
 {
@@ -297,14 +360,62 @@ void MonteCarlo::Hop(int sweep)
  *  change space variable R
  */
 void MonteCarlo::ChangeR() {
-    LOG_INFO("change r");
+    if (Old_DiagConf.Order == 0)
+        return;
+
+    int vertex = RandomPickVertex(Old_DiagConf.Order);
+    Site site = RandomPickSite();
+
+    New_DiagConf.R_list[vertex] = site;
+
+    UpdateGWTable(vertex);
+
+    Complex new_weight = SumAllDiagrams();
+
+    real prob = mod(new_weight/Old_DiagConf.Weight);
+    prob *= ProbSite(Old_DiagConf.R_list[vertex]) / ProbSite(site);
+
+    Proposed[CHANGE_R][Old_DiagConf.Order] += 1.0;
+    if (prob >= 1.0 || RNG->urn() < prob) {
+        LOG_INFO("change R");
+        Accepted[CHANGE_R][Old_DiagConf.Order] += 1.0;
+
+        New_DiagConf.Weight = mod(new_weight);
+        New_DiagConf.Phase = phase(new_weight);
+
+        Old_DiagConf = New_DiagConf;
+    }
 }
 
 /**
  *  change time variable tau
  */
 void MonteCarlo::ChangeTau() {
-    LOG_INFO("change tau");
+    if (Old_DiagConf.Order == 0)
+        return;
+
+    int vertex = RandomPickVertex(Old_DiagConf.Order);
+    real tau = RandomPickTau();
+
+    New_DiagConf.Tau_list[vertex] = tau;
+
+    UpdateGWTable(vertex);
+
+    Complex new_weight = SumAllDiagrams();
+
+    real prob = mod(new_weight/Old_DiagConf.Weight);
+    prob *= ProbTau(Old_DiagConf.Tau_list[vertex]) / ProbTau(tau);
+
+    Proposed[CHANGE_TAU][Old_DiagConf.Order] += 1.0;
+    if (prob >= 1.0 || RNG->urn() < prob) {
+        LOG_INFO("change tau");
+        Accepted[CHANGE_TAU][Old_DiagConf.Order] += 1.0;
+
+        New_DiagConf.Weight = mod(new_weight);
+        New_DiagConf.Phase = phase(new_weight);
+
+        Old_DiagConf = New_DiagConf;
+    }
 }
 
 /**
@@ -312,7 +423,7 @@ void MonteCarlo::ChangeTau() {
  */
 void MonteCarlo::ChangeMeasureFromGToW()
 {
-    LOG_INFO("change measure line from g to w");
+//    LOG_INFO("change measure line from g to w");
 //    if (Diag->Order == 0 || Worm->Exist || !Diag->MeasureGLine)
 //        return;
 //
@@ -363,7 +474,7 @@ void MonteCarlo::ChangeMeasureFromGToW()
  */
 void MonteCarlo::ChangeMeasureFromWToG()
 {
-    LOG_INFO("change measure line from w to g");
+//    LOG_INFO("change measure line from w to g");
 //    if (Diag->Order == 0 || Worm->Exist || Diag->MeasureGLine)
 //        return;
 //
@@ -414,7 +525,7 @@ void MonteCarlo::ChangeMeasureFromWToG()
  */
 void MonteCarlo::ChangeDeltaToContinuous()
 {
-    LOG_INFO("change w line from delta to continuous");
+//    LOG_INFO("change w line from delta to continuous");
 //    if (Diag->Order < 2 || Worm->Exist)
 //        return;
 //    wLine w = Diag->W.RandomPick(*RNG);
@@ -474,7 +585,7 @@ void MonteCarlo::ChangeDeltaToContinuous()
  */
 void MonteCarlo::ChangeContinuousToDelta()
 {
-    LOG_INFO("change w line from continuous to delta");
+//    LOG_INFO("change w line from continuous to delta");
 //    if (Diag->Order < 2 || Worm->Exist)
 //        return;
 //
@@ -534,14 +645,14 @@ void MonteCarlo::ChangeContinuousToDelta()
  *  increase diagram order
  */
 void MonteCarlo::AddInteraction() {
-    LOG_INFO("increase diagram order");
+//    LOG_INFO("increase diagram order");
 }
 
 /**
  *  decrease diagram order
  */
 void MonteCarlo::DeleteInteraction() {
-    LOG_INFO("decrease diagram order");
+//    LOG_INFO("decrease diagram order");
 }
 
 
@@ -549,16 +660,15 @@ void MonteCarlo::DeleteInteraction() {
  *  jump to order 0 diagram from order 1
  */
 void MonteCarlo::JumpToOrder0() {
-    LOG_INFO("jump to order 0 diagram");
+//    LOG_INFO("jump to order 0 diagram");
 }
 
 /**
  *  jump to order 1 diagram from order 0
  */
 void MonteCarlo::JumpToOrder1() {
-    LOG_INFO("jump to order 1 diagram");
+//    LOG_INFO("jump to order 1 diagram");
 }
-
 
 //First In/Out: direction of WLine; Second In/Out: direction of Vertex
 int MonteCarlo::SpinIndex(spin SpinInIn, spin SpinInOut, spin SpinOutIn, spin SpinOutOut)
@@ -571,3 +681,32 @@ int MonteCarlo::SpinIndex(const spin* TwoSpinIn, const spin* TwoSpinOut)
     return SpinIndex(TwoSpinIn[0], TwoSpinIn[1],
                      TwoSpinOut[0], TwoSpinOut[1]);
 }
+
+int MonteCarlo::RandomPickVertex(int order)
+{
+    return RNG->irn(0, 2*order);
+}
+
+real MonteCarlo::RandomPickTau()
+{
+    return RNG->urn() * Beta;
+}
+
+real MonteCarlo::ProbTau(real tau)
+{
+    return 1.0 / Beta;
+}
+
+Site MonteCarlo::RandomPickSite()
+{
+    Vec<int> coord;
+    for (int i = 0; i < D; i++)
+        coord[i] = RNG->irn(0, Lat->Size[i] - 1);
+    return (Site(RNG->irn(0, Lat->SublatVol - 1), coord));
+}
+
+real MonteCarlo::ProbSite(const Site &site)
+{
+    return 1.0 / (Lat->Vol * Lat->SublatVol);
+}
+

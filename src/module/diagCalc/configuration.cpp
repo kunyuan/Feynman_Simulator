@@ -10,7 +10,7 @@
 using namespace diagCalc;
 
 void Conf::Initialize(){
-    Order = 2;
+    Order = 1;
     MeasureGLine = true;
 
     for (int i = 0; i < Order*2; i++){

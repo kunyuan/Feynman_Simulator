@@ -87,10 +87,10 @@ void DiagCalc(const para::Job& Job)
         MonteCarlo.Hop(Para.Sweep);
         MarkovMonitor.Measure();
 
-        if (MonteCarlo.DiagConf.MeasureGLine)
-            sigma[MonteCarlo.DiagConf.Order]++;
+        if (MonteCarlo.New_DiagConf.MeasureGLine)
+            sigma[MonteCarlo.New_DiagConf.Order]++;
         else
-            polar[MonteCarlo.DiagConf.Order]++;
+            polar[MonteCarlo.New_DiagConf.Order]++;
 
         if (Step % 100 == 0) {
             //TODO: Add statistics is empty now
