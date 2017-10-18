@@ -31,6 +31,7 @@ Diagram::Diagram()
     , G("GLine")
     , W("WLine")
     , Ver("nVer")
+    , MeasuredSdG(false)
 {
     Lat = nullptr;
 }

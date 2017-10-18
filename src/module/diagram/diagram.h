@@ -54,6 +54,10 @@ public:
     gLine GMeasure;
     wLine WMeasure;
 
+    ///extra features for gamma3
+    bool MeasuredSdG;
+    vertex* Vin, * Vout, * Vw;
+
     //Diagram
     void ClearDiagram();
 
