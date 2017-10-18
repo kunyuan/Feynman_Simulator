@@ -65,6 +65,8 @@ bool Markov::BuildNew(ParaMC &para, Diagram &diag, weight::Weight &weight)
     OperationName[CHANGE_SPIN_VERTEX] = NAME(CHANGE_SPIN_VERTEX);
     OperationName[JUMP_TO_ORDER0] = NAME(JUMP_TO_ORDER0);
     OperationName[JUMP_BACK_TO_ORDER1] = NAME(JUMP_BACK_TO_ORDER1);
+    OperationName[JUMP_TO_DSDG] = NAME(JUMP_TO_DSDG);
+    OperationName[JUMP_FROM_DSDG_TO_SIGMA] = NAME(JUMP_FROM_DSDG_TO_SIGMA);
     return true;
 }
 
@@ -186,12 +188,15 @@ void Markov::PrintDetailBalanceInfo()
     Output += _DetailBalanceStr(CHANGE_SPIN_VERTEX);
     Output += _DetailBalanceStr(JUMP_TO_ORDER0);
     Output += _DetailBalanceStr(JUMP_BACK_TO_ORDER1);
+    Output += _DetailBalanceStr(JUMP_TO_DSDG);
+    Output += _DetailBalanceStr(JUMP_FROM_DSDG_TO_SIGMA);
     Output += string(60, '-') + "\n";
     //    Output += _CheckBalance(CREATE_WORM, DELETE_WORM);
     Output += _CheckBalance(ADD_INTERACTION, DEL_INTERACTION);
     Output += _CheckBalance(ADD_DELTA_INTERACTION, DEL_DELTA_INTERACTION);
     Output += _CheckBalance(CHANGE_MEASURE_G2W, CHANGE_MEASURE_W2G);
     Output += _CheckBalance(CHANGE_CONTINUS2DELTA, CHANGE_DELTA2CONTINUS);
+    //TODO: Add Extra Updates for Gamma3 to the check
     //    Output += _CheckBalance(JUMP_TO_ORDER0, JUMP_BACK_TO_ORDER1);
     Output += string(60, '=') + "\n";
     LOG_INFO(Output);
@@ -262,7 +267,10 @@ void Markov::Hop(int sweep)
         //        ;
         else if (x < SumofProbofCall[JUMP_BACK_TO_ORDER1])
             JumpBackToOrder1();
-        //        ;
+        else if (x < SumofProbofCall[JUMP_TO_DSDG])
+            JumpTodSdG();
+        else if (x < SumofProbofCall[JUMP_FROM_DSDG_TO_SIGMA])
+            JumpFromdSdGToSigma();
 
         (*Counter)++;
     }

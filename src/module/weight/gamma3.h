@@ -30,7 +30,7 @@ namespace weight {
         Dictionary ToDict();
 
         Complex Weight(const Site &, const Site &, const Site &, real, real, real,
-                       spin, spin,spin) const;
+                       spin, spin, spin) const;
 
         void Measure(const Site &, const Site &, const Site &, real, real, real, spin, spin, spin,
                      const Complex &);

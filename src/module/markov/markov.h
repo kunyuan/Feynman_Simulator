@@ -20,6 +20,7 @@ namespace weight {
 class Weight;
 class GClass;
 class WClass;
+class GammaGClass;
 class SigmaClass;
 class PolarClass;
 class Norm;
@@ -33,7 +34,7 @@ class RandomFactory;
 class Momentum;
 
 namespace mc {
-const int NUpdates = 19;
+const int NUpdates = 19+2;
 class Markov {
 public:
     long long* Counter;
@@ -47,6 +48,7 @@ public:
     diag::WormClass* Worm;
     weight::SigmaClass* Sigma;
     weight::PolarClass* Polar;
+    weight::GammaGClass* GammaG;
     weight::GClass* G;
     weight::WClass* W;
     RandomFactory* RNG;
@@ -75,6 +77,10 @@ public:
     void ChangeDeltaToContinuous();
     void ChangeContinuousToDelta();
     void ChangeSpinOnVertex();
+
+    //Extra updates for Gamma3
+    void JumpTodSdG();
+    void JumpFromdSdGToSigma();
 
 private:
     real ProbofCall[NUpdates];
@@ -112,6 +118,9 @@ private:
         CHANGE_SPIN_VERTEX,
         JUMP_TO_ORDER0,
         JUMP_BACK_TO_ORDER1,
+        //Extra updates for Gamma3
+        JUMP_TO_DSDG,
+        JUMP_FROM_DSDG_TO_SIGMA,
         END
     };
     std::string _DetailBalanceStr(Operations op);

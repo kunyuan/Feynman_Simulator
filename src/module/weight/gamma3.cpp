@@ -17,7 +17,7 @@ GammaGClass::GammaGClass(const Lattice &lat, real beta, uint MaxTauBin, real Nor
     _Beta = _Map.Beta;
     _Norm = Norm * (_Map.MaxTauBin / _Beta) / _Beta / Vol;
     uint SubVol=(uint)lat.SublatVol;
-    uint MeaShape[7]={2,2,SubVol,SubVol,Vol,MaxTauBin,MaxTauBin};
+    uint MeaShape[7]={2,2,SubVol,SubVol,(uint)Vol,MaxTauBin,MaxTauBin};
     //Gspin, Uspin, Gsub, Usub, G_r1, Gtau1,dtau2
     _WeightAccu.Allocate(MeaShape, SMOOTH);
     _WeightSize = _WeightAccu.GetSize();
