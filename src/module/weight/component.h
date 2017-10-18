@@ -114,6 +114,7 @@ class PolarClass {
     IndexMapSPIN4 _Map;
 };
 
+
 int TestWeight();
 }
 
