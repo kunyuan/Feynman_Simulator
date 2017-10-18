@@ -27,7 +27,7 @@ GammaGClass::GammaGClass(const Lattice &lat, real beta, uint MaxTauBin, real Nor
 Complex GammaGClass::Weight(const Site &Gr1, const Site &Gr2, const Site &Ur,
                             real Gt1, real Gt2, real Ut, spin Gspin1, spin Gspin2, spin Uspin) const
 {
-
+    return Complex(1.0,0.0);
 }
 
 void GammaGClass::MeasureNorm(real weight)
