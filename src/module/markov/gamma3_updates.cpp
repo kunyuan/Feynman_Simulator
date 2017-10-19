@@ -11,6 +11,7 @@
 #include "lattice/lattice.h"
 #include "module/weight/weight.h"
 #include "module/weight/component.h"
+#include "module/weight/gamma3.h"
 
 using namespace std;
 using namespace diag;
@@ -50,8 +51,10 @@ void Markov::JumpTodSdG() {
     real tauE = RandomPickTau();
     Site rE = RandomPickSite();
     spin spinE = RandomPickSpin();
-//    Complex gammaG = GammaG->Weight(vA->R, vB->R, rE, tauC, tauD, tauE, spinAC, spinDB, spinE);
-    Complex gammaGWeight = Complex(1.0, 0.0);
+    Site rC = vA->R;
+    Site rD = vB->R;
+    Complex gammaGWeight = GammaG->Weight(rC, rD, rE, tauC, tauD, tauE, spinAC, spinDB, spinE);
+//    Complex gammaGWeight = Complex(1.0, 0.0);
 
     Complex weightRatio = GACWeight * GDBWeight * gammaGWeight / (gAB->Weight);
 
