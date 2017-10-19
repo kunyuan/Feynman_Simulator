@@ -17,8 +17,8 @@ GammaGClass::GammaGClass(const Lattice &lat, real beta, uint MaxTauBin, real Nor
     _Beta = _Map.Beta;
     _Norm = Norm * (_Map.MaxTauBin / _Beta) / _Beta / Vol;
     uint SubVol=(uint)lat.SublatVol;
-    uint MeaShape[7]={2,2,SubVol,SubVol,(uint)Vol,MaxTauBin,MaxTauBin};
-    //Gspin, Uspin, Gsub, Usub, G_r1, Gtau1,dtau2
+    uint MeaShape[6]={2,SubVol,SubVol,(uint)Vol,MaxTauBin,MaxTauBin};
+    //Gspin, Gsub, Usub, G_r1, Gtau1,dtau2
     _WeightAccu.Allocate(MeaShape, SMOOTH);
     _WeightSize = _WeightAccu.GetSize();
     ClearStatistics();
@@ -86,3 +86,25 @@ Dictionary GammaGClass::ToDict()
     dict["WeightAccu"] = Python::ArrayObject(_WeightAccu.Data(), _WeightAccu.GetShape(), _WeightAccu.GetDim());
     return dict;
 }
+
+
+GammaWClass::GammaWClass(const Lattice &lat, real beta, uint MaxTauBin, real Norm)
+        : _Map(IndexMapSPIN4(beta, MaxTauBin, lat, TauSymmetric))
+{
+    int Vol = _Map.Lat.Vol;
+    _Beta = _Map.Beta;
+    _Norm = Norm * (_Map.MaxTauBin / _Beta) / _Beta / Vol;
+    uint SubVol=(uint)lat.SublatVol;
+    uint MeaShape[8]={6,SubVol,SubVol,(uint)Vol,(uint)Vol, MaxTauBin,MaxTauBin};
+    //Wspin12, Wsub1, Wsub2, Usub, W_r1, dW_r2, Wtau1,dtau2
+    _WeightAccu.Allocate(MeaShape, SMOOTH);
+    _WeightSize = _WeightAccu.GetSize();
+//    ClearStatistics();
+}
+
+Complex GammaWClass::Weight(const Site &Wr1, const Site &Wr2, const Site &Ur,
+                            real Wt1, real Wt2, real Ut, spin* Wspin1, spin* Wspin2, spin Uspin) const
+{
+    return Complex(1.0,0.0);
+}
+
