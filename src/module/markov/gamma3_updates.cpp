@@ -11,6 +11,7 @@
 #include "lattice/lattice.h"
 #include "module/weight/weight.h"
 #include "module/weight/component.h"
+#include "module/weight/gamma3.h"
 
 using namespace std;
 using namespace diag;
@@ -35,31 +36,23 @@ void Markov::JumpTodSdG() {
     vertex vA = gAB->NeighVer(IN);
     vertex vB = gAB->NeighVer(OUT);
 
-    real tauC = RandomPickTau(), tauD = RandomPickTau();
+    spin spinA = gAB->Spin();
+    spin spinB = gAB->Spin();
 
-    spin spinAC = gAB->Spin();
-    spin spinDB = gAB->Spin();
-    Complex GACWeight = G->Weight(vA->R, vA->R, vA->Tau, tauC,
-                                  spinAC, spinAC,
-                                  false); //IsMeasure
+    real tau_u = RandomPickTau();
+    Site r_u = RandomPickSite();
+    spin spinu_out = RandomPickSpin();
 
-    Complex GDBWeight = G->Weight(vB->R, vB->R, tauD, vB->Tau,
-                                  spinDB, spinDB,
-                                  false); //IsMeasure
+    Complex gammaGWeight = GammaG->Weight(vA->R, vB->R, r_u, vA->Tau, vB->Tau, tau_u, spinA, spinB, spinu_out);
+//    Complex gammaGWeight = Complex(1.0, 0.0);
 
-    real tauE = RandomPickTau();
-    Site rE = RandomPickSite();
-    spin spinE = RandomPickSpin();
-//    Complex gammaG = GammaG->Weight(vA->R, vB->R, rE, tauC, tauD, tauE, spinAC, spinDB, spinE);
-    Complex gammaGWeight = Complex(1.0, 0.0);
-
-    Complex weightRatio = GACWeight * GDBWeight * gammaGWeight / (gAB->Weight);
+    Complex weightRatio = gammaGWeight / (gAB->Weight);
 
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    prob *= ProbofCall[JUMP_FROM_DSDG_TO_SIGMA] * 2.0* Diag->Order / (ProbofCall[JUMP_TO_DSDG] *
-            ProbTau(tauC) * ProbTau(tauD) * ProbTau(tauE) * ProbSite(rE) * 0.5);
+    prob *= ProbofCall[JUMP_FROM_DSDG_TO_SIGMA] * 2.0* Diag->Order / (ProbofCall[JUMP_TO_DSDG]
+             * ProbTau(tau_u) * ProbSite(r_u) * 0.5);
 
     Proposed[JUMP_TO_DSDG][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
@@ -69,47 +62,13 @@ void Markov::JumpTodSdG() {
         Diag->Weight *= weightRatio;
         Diag->MeasuredSdG = true;
 
-        vertex vC = Diag->Ver.Add();
-        vertex vD = Diag->Ver.Add();
-        vertex vE = Diag->Ver.Add();
-        Diag->Vin = &vC;
-        Diag->Vout = &vD;
-        Diag->Vw = &vE;
+        vertex v_u = Diag->Ver.Add();
+        Diag->Vin = &vA;
+        Diag->Vout = &vB;
+        Diag->Vw = &v_u;
 
-        gLine GAC = Diag->G.Add();
-        gLine GDB = Diag->G.Add();
-
-        vC->nG[IN] = GAC;
-//        vC->nG[OUT] = ;
-//        vC->nW = WAB;
-        spin spinC[2] = {spinAC, spinAC};
-        vC->SetVertex(vA->R, tauC, spinC, IN);
-
-        vD->nG[OUT] = GDB;
-//        vC->nG[OUT] = ;
-//        vC->nW = WAB;
-        spin spinD[2] = {spinDB, spinDB};
-        vD->SetVertex(vB->R, tauD, spinD, OUT);
-
-        spin spinVE[2] = {spinE, spinE};
-        vE->SetVertex(rE, tauE, spinVE, OUT);
-
-        GAC->nVer[IN] = vA;
-        GAC->nVer[OUT] = vC;
-        GAC->SetGLine(gAB->K, GACWeight,
-                      false); //IsMeasure
-//        Diag->AddGHash(kIA);
-
-        GDB->nVer[IN] = vD;
-        GDB->nVer[OUT] = vB;
-        GDB->SetGLine(gAB->K, GDBWeight,
-                      false); //IsMeasure
-//        Diag->AddGHash(kMB);
-
-        vA->nG[OUT] = GAC;
-        vB->nG[IN] = GDB;
-
-        Diag->G.Remove(gAB);
+        spin spin_u[2] = {spinu_out, spinu_out};
+        v_u->SetVertex(r_u, tau_u, spin_u, OUT);
     }
 }
 
@@ -120,35 +79,30 @@ void Markov::JumpFromdSdGToSigma() {
     if (Diag->Order == 0 || Worm->Exist || !Diag->MeasureGLine || !Diag->MeasuredSdG)
         return;
 
-    vertex vC = *Diag->Vin;
-    vertex vD = *Diag->Vout;
-    vertex vE = *Diag->Vw;
+    vertex v_A = *Diag->Vin;
+    vertex v_B = *Diag->Vout;
+    vertex v_u = *Diag->Vw;
 
-    gLine gAC = vC->NeighG(IN);
-    gLine gDB = vD->NeighG(OUT);
+    gLine gAB = v_A->NeighG(OUT);
 
-    vertex vA = gAC->NeighVer(IN);
-    vertex vB = gDB->NeighVer(OUT);
-
-    if (vC->R != vD->R || vA->R != vB->R)
+    if (v_A->R != v_B->R)
         return;
 
-    Complex GABWeight = G->Weight(vA->R, vB->R, vA->Tau, vB->Tau,
-                                  gAC->Spin(), gDB->Spin(),
+    Complex GABWeight = G->Weight(v_A->R, v_B->R, v_A->Tau, v_B->Tau,
+                                  gAB->Spin(), gAB->Spin(),
                                   false); //IsMeasure
 
-//    Complex gammaG = GammaG->Weight(vA->R, vB->R, vE->R, vC->Tau, vD->Tau,
-//                                 vE->Tau, gAC->Spin(), gDB->Spin(), vE->NeighG(OUT)->Spin());
-    Complex gammaGWeight = Complex(1.0, 0.0);
+    Complex gammaGWeight = GammaG->Weight(v_A->R, v_B->R, v_u->R, v_A->Tau, v_B->Tau,
+                                 v_u->Tau, gAB->Spin(), gAB->Spin(), v_u->NeighG(OUT)->Spin());
+//    Complex gammaGWeight = Complex(1.0, 0.0);
 
-    Complex weightRatio = GABWeight/(gAC->Weight * gDB->Weight * gammaGWeight);
+    Complex weightRatio = GABWeight/gammaGWeight;
 
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    prob *= (ProbofCall[JUMP_TO_DSDG] * ProbTau(vC->Tau) * ProbTau(vD->Tau)
-             * ProbTau(vE->Tau) * ProbSite(vE->R) * 0.5)/ (ProbofCall[JUMP_FROM_DSDG_TO_SIGMA]
-                                * 2.0 * Diag->Order);
+    prob *= (ProbofCall[JUMP_TO_DSDG] * ProbTau(v_u->Tau) * ProbSite(v_u->R) * 0.5)
+                / (ProbofCall[JUMP_FROM_DSDG_TO_SIGMA] * 2.0 * Diag->Order);
 
     Proposed[JUMP_FROM_DSDG_TO_SIGMA][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
@@ -158,20 +112,8 @@ void Markov::JumpFromdSdGToSigma() {
         Diag->Weight *= weightRatio;
         Diag->MeasuredSdG = false;
 
-        gLine GAB = Diag->G.Add();
+        gAB->Weight = GABWeight;
 
-        GAB->nVer[IN] = vA;
-        GAB->nVer[OUT] = vB;
-        GAB->SetGLine(gAC->K, GABWeight,
-                      false); //IsMeasure
-
-        vA->nG[OUT] = GAB;
-        vB->nG[IN] = GAB;
-
-        Diag->Ver.Remove(vC);
-        Diag->Ver.Remove(vD);
-        Diag->Ver.Remove(vE);
-        Diag->G.Remove(gAC);
-        Diag->G.Remove(gDB);
+        Diag->Ver.Remove(v_u);
     }
 }
