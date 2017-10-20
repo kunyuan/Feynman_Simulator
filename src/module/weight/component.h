@@ -16,6 +16,13 @@
 
 namespace weight {
 
+class ExtPoint{
+  public:
+    real Tau;
+    Site R;
+    spin Spin;
+};
+
 class Worm {
   public:
     static real Weight(const Site &, const Site &, real, real)
@@ -45,8 +52,8 @@ class GClass{
     bool FromDict(const Dictionary &);
     Dictionary ToDict();
 
-    Complex Weight(const Site &, const Site &, real, real, spin, spin, bool) const;
-    Complex Weight(int, const Site &, const Site &, real, real, spin, spin, bool) const;
+    Complex Weight(const Site &, const Site &, real, real, spin, spin, bool, bool, ExtPoint * extPoint=nullptr) const;
+    Complex Weight(int, const Site &, const Site &, real, real, spin, spin, bool, bool, ExtPoint * extPoint=nullptr) const;
 
   private:
     SmoothTArray _SmoothTWeight;
@@ -67,8 +74,8 @@ class WClass {
     bool FromDict(const Dictionary &);
     Dictionary ToDict();
 
-    Complex Weight(const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool) const;
-    Complex Weight(int, const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool) const;
+    Complex Weight(const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool, bool, ExtPoint * extPoint=nullptr) const;
+    Complex Weight(int, const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool, bool, ExtPoint * extPoint=nullptr) const;
 
   protected:
     DeltaTArray _DeltaTWeight;

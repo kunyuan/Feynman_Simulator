@@ -11,8 +11,11 @@
 
 #include <iosfwd>
 #include "component_bundle.h"
+#include "../weight/component.h"
+
 #include "utility/rng.h"
 namespace weight {
+class ExtPoint;
 class GClass;
 class WClass;
 }
@@ -55,8 +58,10 @@ public:
     wLine WMeasure;
 
     ///extra features for gamma3
-    bool MeasuredSdG;
-    vertex* Vin, * Vout, * Vw;
+    int HasGammaGW; //0 no gammaG or gammaW, 1 gammaG, 2 gammaW
+    int MeasureGammaGW; //0 not measuring, 1 measure GammaG (with two external G), 2 measure GammaW (with two external W)
+    weight::ExtPoint V_Ext;
+    vertex * Vin, * Vout;
 
     //Diagram
     void ClearDiagram();

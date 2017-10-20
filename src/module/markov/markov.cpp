@@ -300,7 +300,7 @@ void Markov::CreateWorm()
     Complex wWeight = W->Weight(vin->R, vout->R, vin->Tau, vout->Tau,
                                 vin->Spin(), vout->Spin(),
                                 true, //IsWorm
-                                w->IsMeasure, w->IsDelta);
+                                w->IsMeasure, w->IsDelta, w->IsGammaW);
 
     Complex weightRatio = wWeight / w->Weight;
     real prob = mod(weightRatio);
@@ -350,7 +350,7 @@ void Markov::DeleteWorm()
     Complex wWeight = W->Weight(Ira->Dir, Ira->R, Masha->R, Ira->Tau, Masha->Tau,
                                 Ira->Spin(), Masha->Spin(),
                                 false, //IsWorm
-                                w->IsMeasure, w->IsDelta);
+                                w->IsMeasure, w->IsDelta, w->IsGammaW);
 
     Complex weightRatio = wWeight / w->Weight;
     real prob = mod(weightRatio);
@@ -406,7 +406,7 @@ void Markov::MoveWormOnG()
     spinV1[dir] = FLIP(spinV1[dir]);
 
     Complex w1Weight = W->Weight(Ira->Dir, Ira->R, vW1->R, Ira->Tau, vW1->Tau,
-                                 spinV1, vW1->Spin(), isWormW1, w1->IsMeasure, w1->IsDelta);
+                                 spinV1, vW1->Spin(), isWormW1, w1->IsMeasure, w1->IsDelta, w1->IsGammaW);
 
     wLine w2 = v2->NeighW();
     vertex vW2 = w2->NeighVer(INVERSE(v2->Dir));
@@ -417,10 +417,10 @@ void Markov::MoveWormOnG()
     Complex w2Weight = W->Weight(v2->Dir, v2->R, vW2->R, v2->Tau, vW2->Tau,
                                  spinV2, vW2->Spin(),
                                  true, //IsWorm
-                                 w2->IsMeasure, w2->IsDelta);
+                                 w2->IsMeasure, w2->IsDelta, w2->IsGammaW);
 
     Complex gWeight = G->Weight(INVERSE(dir), Ira->R, v2->R, Ira->Tau, v2->Tau,
-                                spinV1[dir], spinV2[INVERSE(dir)], g->IsMeasure);
+                                spinV1[dir], spinV2[INVERSE(dir)], g->IsMeasure, g->IsGammaG);
 
     Complex weightRatio = w1Weight * w2Weight * gWeight / (g->Weight * w1->Weight * w2->Weight);
     real prob = mod(weightRatio);
@@ -474,7 +474,7 @@ void Markov::MoveWormOnW()
         return;
 
     Complex wWeight = W->Weight(Ira->Dir, Ira->R, v2->R, Ira->Tau, v2->Tau, Ira->Spin(),
-                                v2->Spin(), w->IsWorm, w->IsMeasure, w->IsDelta);
+                                v2->Spin(), w->IsWorm, w->IsMeasure, w->IsDelta, w->IsGammaW);
 
     Complex weightRatio = wWeight / w->Weight;
     real prob = mod(weightRatio);
@@ -521,11 +521,11 @@ void Markov::Reconnect()
 
     vertex vA = GIA->NeighVer(dir);
     Complex GIAWeight = G->Weight(INVERSE(dir), Masha->R, vA->R, Masha->Tau, vA->Tau,
-                                  Masha->Spin(dir), vA->Spin(INVERSE(dir)), GIA->IsMeasure);
+                                  Masha->Spin(dir), vA->Spin(INVERSE(dir)), GIA->IsMeasure, GIA->IsGammaG);
 
     vertex vB = GMB->NeighVer(dir);
     Complex GMBWeight = G->Weight(INVERSE(dir), Ira->R, vB->R, Ira->Tau, vB->Tau,
-                                  Ira->Spin(dir), vB->Spin(INVERSE(dir)), GMB->IsMeasure);
+                                  Ira->Spin(dir), vB->Spin(INVERSE(dir)), GMB->IsMeasure, GMB->IsGammaG);
 
     Complex weightRatio = (-1) * GIAWeight * GMBWeight / (GIA->Weight * GMB->Weight);
     real prob = mod(weightRatio);
@@ -592,21 +592,22 @@ void Markov::AddInteraction()
     Complex wWeight = W->Weight(dirW, RA, RB, tauA, tauB, spinA, spinB,
                                 false,  //IsWorm
                                 false,  //IsMeasure
-                                false); //IsDelta
+                                false,  //IsDelta
+                                false); //IsGammaW
 
     Complex GIAWeight = G->Weight(INVERSE(dir), Ira->R, RA, Ira->Tau, tauA,
                                   Ira->Spin(dir), spinA[INVERSE(dir)],
-                                  false); //IsMeasure
+                                  false, false); //IsMeasure, IsGammaG
 
     Complex GMBWeight = G->Weight(INVERSE(dir), Masha->R, RB, Masha->Tau, tauB,
                                   Masha->Spin(dir), spinB[INVERSE(dir)],
-                                  false); //IsMeasure
+                                  false, false); //IsMeasure, IsGammaG
 
     Complex GACWeight = G->Weight(INVERSE(dir), RA, vC->R, tauA, vC->Tau,
-                                  spinA[dir], vC->Spin(INVERSE(dir)), GIC->IsMeasure);
+                                  spinA[dir], vC->Spin(INVERSE(dir)), GIC->IsMeasure, GIC->IsGammaG);
 
     Complex GBDWeight = G->Weight(INVERSE(dir), RB, vD->R, tauB, vD->Tau,
-                                  spinB[dir], vD->Spin(INVERSE(dir)), GMD->IsMeasure);
+                                  spinB[dir], vD->Spin(INVERSE(dir)), GMD->IsMeasure, GMD->IsGammaG);
 
     Complex weightRatio = (-1) * GIAWeight * GMBWeight * wWeight * GACWeight * GBDWeight / (GIC->Weight * GMD->Weight);
 
@@ -641,13 +642,13 @@ void Markov::AddInteraction()
         GIA->nVer[INVERSE(dir)] = Ira;
         GIA->nVer[dir] = vA;
         GIA->SetGLine(kIA, GIAWeight,
-                      false); //IsMeasure
+                      false, false); //IsMeasure, IsGammaG
         Diag->AddGHash(kIA);
 
         GMB->nVer[INVERSE(dir)] = Masha;
         GMB->nVer[dir] = vB;
         GMB->SetGLine(kMB, GMBWeight,
-                      false); //IsMeasure
+                      false, false); //IsMeasure, IsGammaG
         Diag->AddGHash(kMB);
 
         WAB->nVer[dirW] = vA;
@@ -655,7 +656,7 @@ void Markov::AddInteraction()
         WAB->SetWLine(kW, wWeight,
                       false,  //IsWorm
                       false,  //IsMeasure
-                      false); //IsDelta
+                      false, false); //IsDelta, IsGammaW
 
         Diag->AddWHash(kW);
 
@@ -686,9 +687,9 @@ void Markov::DeleteInteraction()
 
     int dir = RandomPickDir();
     gLine GIA = Ira->NeighG(dir), GMB = Masha->NeighG(dir);
-    if (GIA->IsMeasure)
+    if (GIA->IsMeasure || GIA->IsGammaG)
         return;
-    if (GMB->IsMeasure)
+    if (GMB->IsMeasure || GMB->IsGammaG)
         return;
 
     vertex vA = GIA->NeighVer(dir), vB = GMB->NeighVer(dir);
@@ -701,11 +702,7 @@ void Markov::DeleteInteraction()
         return;
 
     wLine wAB = vA->NeighW();
-    if (wAB->IsMeasure)
-        return;
-    if (wAB->IsWorm)
-        return;
-    if (wAB->IsDelta)
+    if (wAB->IsMeasure || wAB->IsWorm || wAB->IsDelta || wAB->IsGammaW)
         return;
 
     gLine GAC = vA->NeighG(dir), GBD = vB->NeighG(dir);
@@ -718,10 +715,10 @@ void Markov::DeleteInteraction()
     Momentum kWorm = Worm->K + SIGN(vA->Dir) * wAB->K;
 
     Complex GICWeight = G->Weight(INVERSE(dir), Ira->R, vC->R, Ira->Tau, vC->Tau,
-                                  Ira->Spin(dir), vC->Spin(INVERSE(dir)), GAC->IsMeasure);
+                                  Ira->Spin(dir), vC->Spin(INVERSE(dir)), GAC->IsMeasure, GAC->IsGammaG);
 
     Complex GMDWeight = G->Weight(INVERSE(dir), Masha->R, vD->R, Masha->Tau, vD->Tau,
-                                  Masha->Spin(dir), vD->Spin(INVERSE(dir)), GBD->IsMeasure);
+                                  Masha->Spin(dir), vD->Spin(INVERSE(dir)), GBD->IsMeasure, GBD->IsGammaG);
 
     Complex weightRatio = (-1) * GICWeight * GMDWeight / (GIA->Weight * GMB->Weight * GAC->Weight * GBD->Weight * wAB->Weight);
 
@@ -803,21 +800,22 @@ void Markov::AddDeltaInteraction()
     Complex wWeight = W->Weight(dirW, RA, RB, tauA, tauA, spinA, spinB,
                                 false, //IsWorm
                                 false, //IsMeasure
-                                true); //IsDelta
+                                true,  //IsDelta
+                                false); //IsGammaW
 
     Complex GIAWeight = G->Weight(INVERSE(dir), Ira->R, RA, Ira->Tau, tauA,
                                   Ira->Spin(dir), spinA[INVERSE(dir)],
-                                  false); //IsMeasure
+                                  false, false); //IsMeasure
 
     Complex GMBWeight = G->Weight(INVERSE(dir), Masha->R, RB, Masha->Tau, tauA,
                                   Masha->Spin(dir), spinB[INVERSE(dir)],
-                                  false); //IsMeasure
+                                  false, false); //IsMeasure
 
     Complex GACWeight = G->Weight(INVERSE(dir), RA, vC->R, tauA, vC->Tau,
-                                  spinA[dir], vC->Spin(INVERSE(dir)), GIC->IsMeasure);
+                                  spinA[dir], vC->Spin(INVERSE(dir)), GIC->IsMeasure, GIC->IsGammaG);
 
     Complex GBDWeight = G->Weight(INVERSE(dir), RB, vD->R, tauA, vD->Tau,
-                                  spinB[dir], vD->Spin(INVERSE(dir)), GMD->IsMeasure);
+                                  spinB[dir], vD->Spin(INVERSE(dir)), GMD->IsMeasure, GMD->IsGammaG);
 
     Complex weightRatio = (-1) * GIAWeight * GMBWeight * wWeight * GACWeight * GBDWeight / (GIC->Weight * GMD->Weight);
 
@@ -852,13 +850,13 @@ void Markov::AddDeltaInteraction()
         GIA->nVer[INVERSE(dir)] = Ira;
         GIA->nVer[dir] = vA;
         GIA->SetGLine(kIA, GIAWeight,
-                      false); //IsMeasure
+                      false, false); //IsMeasure
         Diag->AddGHash(kIA);
 
         GMB->nVer[INVERSE(dir)] = Masha;
         GMB->nVer[dir] = vB;
         GMB->SetGLine(kMB, GMBWeight,
-                      false); //IsMeasure
+                      false, false); //IsMeasure
         Diag->AddGHash(kMB);
 
         WAB->nVer[dirW] = vA;
@@ -866,7 +864,8 @@ void Markov::AddDeltaInteraction()
         WAB->SetWLine(kW, wWeight,
                       false, //IsWorm
                       false, //IsMeasure
-                      true); //IsDelta
+                      true, //IsDelta
+                      false); //IsGammaW
 
         Diag->AddWHash(kW);
 
@@ -897,9 +896,9 @@ void Markov::DeleteDeltaInteraction()
 
     int dir = RandomPickDir();
     gLine GIA = Ira->NeighG(dir), GMB = Masha->NeighG(dir);
-    if (GIA->IsMeasure)
+    if (GIA->IsMeasure || GIA->IsGammaG)
         return;
-    if (GMB->IsMeasure)
+    if (GMB->IsMeasure || GMB->IsGammaG)
         return;
 
     vertex vA = GIA->NeighVer(dir), vB = GMB->NeighVer(dir);
@@ -912,11 +911,7 @@ void Markov::DeleteDeltaInteraction()
         return;
 
     wLine wAB = vA->NeighW();
-    if (wAB->IsMeasure)
-        return;
-    if (wAB->IsWorm)
-        return;
-    if (!wAB->IsDelta)
+    if (wAB->IsMeasure || wAB->IsWorm || !wAB->IsDelta || wAB->IsGammaW)
         return;
 
     gLine GAC = vA->NeighG(dir), GBD = vB->NeighG(dir);
@@ -929,10 +924,10 @@ void Markov::DeleteDeltaInteraction()
     Momentum kWorm = Worm->K + SIGN(vA->Dir) * wAB->K;
 
     Complex GICWeight = G->Weight(INVERSE(dir), Ira->R, vC->R, Ira->Tau, vC->Tau,
-                                  Ira->Spin(dir), vC->Spin(INVERSE(dir)), GAC->IsMeasure);
+                                  Ira->Spin(dir), vC->Spin(INVERSE(dir)), GAC->IsMeasure, GAC->IsGammaG);
 
     Complex GMDWeight = G->Weight(INVERSE(dir), Masha->R, vD->R, Masha->Tau, vD->Tau,
-                                  Masha->Spin(dir), vD->Spin(INVERSE(dir)), GBD->IsMeasure);
+                                  Masha->Spin(dir), vD->Spin(INVERSE(dir)), GBD->IsMeasure, GBD->IsGammaG);
 
     Complex weightRatio = (-1) * GICWeight * GMDWeight / (GIA->Weight * GMB->Weight * GAC->Weight * GBD->Weight * wAB->Weight);
 
@@ -994,27 +989,27 @@ void Markov::ChangeTauOnVertex()
         ginWeight = G->Weight(gin->NeighVer(IN)->R, ver->R,
                               tau, tau,
                               gin->NeighVer(IN)->Spin(OUT), ver->Spin(IN),
-                              gin->IsMeasure);
+                              gin->IsMeasure, gin->IsGammaG);
     }
     else {
         ginWeight = G->Weight(gin->NeighVer(IN)->R, ver->R,
                               gin->NeighVer(IN)->Tau, tau,
                               gin->NeighVer(IN)->Spin(OUT), ver->Spin(IN),
-                              gin->IsMeasure);
+                              gin->IsMeasure, gin->IsGammaG);
         goutWeight = G->Weight(ver->R, gout->NeighVer(OUT)->R,
                                tau, gout->NeighVer(OUT)->Tau,
                                ver->Spin(OUT), gout->NeighVer(OUT)->Spin(IN),
-                               gout->IsMeasure);
+                               gout->IsMeasure, gout->IsGammaG);
     }
 
     vertex vW = w->NeighVer(INVERSE(ver->Dir));
     Complex wWeight;
     if (vW == ver)
         wWeight = W->Weight(ver->Dir, ver->R, vW->R, tau, tau, ver->Spin(), vW->Spin(),
-                            w->IsWorm, w->IsMeasure, w->IsDelta);
+                            w->IsWorm, w->IsMeasure, w->IsDelta, w->IsGammaW);
     else
         wWeight = W->Weight(ver->Dir, ver->R, vW->R, tau, vW->Tau, ver->Spin(), vW->Spin(),
-                            w->IsWorm, w->IsMeasure, w->IsDelta);
+                            w->IsWorm, w->IsMeasure, w->IsDelta, w->IsGammaW);
 
     Complex weightRatio = ginWeight * goutWeight * wWeight / (gin->Weight * gout->Weight * w->Weight);
 
@@ -1073,23 +1068,23 @@ void Markov::ChangeSpinOnVertex()
         w1Weight = W->Weight(v1->Dir, v1->R, w1->NeighVer(INVERSE(v1->Dir))->R,
                              v1->Tau, w1->NeighVer(INVERSE(v1->Dir))->Tau,
                              spinv, w1->NeighVer(INVERSE(v1->Dir))->Spin(),
-                             w1->IsWorm, w1->IsMeasure, w1->IsDelta);
+                             w1->IsWorm, w1->IsMeasure, w1->IsDelta, w1->IsGammaW);
         gWeight = G->Weight(dir, v2->R, v1->R, v2->Tau, v1->Tau,
-                            spinv[INVERSE(dir)], spinv[dir], g->IsMeasure);
+                            spinv[INVERSE(dir)], spinv[dir], g->IsMeasure, g->IsGammaG);
     }
     else {
         w1Weight = W->Weight(v1->Dir, v1->R, w1->NeighVer(INVERSE(v1->Dir))->R,
                              v1->Tau, w1->NeighVer(INVERSE(v1->Dir))->Tau,
                              spinv1, w1->NeighVer(INVERSE(v1->Dir))->Spin(),
-                             w1->IsWorm, w1->IsMeasure, w1->IsDelta);
+                             w1->IsWorm, w1->IsMeasure, w1->IsDelta, w1->IsGammaW);
 
         w2Weight = W->Weight(v2->Dir, v2->R, w2->NeighVer(INVERSE(v2->Dir))->R,
                              v2->Tau, w2->NeighVer(INVERSE(v2->Dir))->Tau,
                              spinv2, w2->NeighVer(INVERSE(v2->Dir))->Spin(),
-                             w2->IsWorm, w2->IsMeasure, w2->IsDelta);
+                             w2->IsWorm, w2->IsMeasure, w2->IsDelta, w2->IsGammaW);
 
         gWeight = G->Weight(dir, v2->R, v1->R, v2->Tau, v1->Tau,
-                            spinv2[INVERSE(dir)], spinv1[dir], g->IsMeasure);
+                            spinv2[INVERSE(dir)], spinv1[dir], g->IsMeasure, g->IsGammaG);
     }
 
     Complex weightRatio = gWeight * w1Weight * w2Weight / (g->Weight * w1->Weight * w2->Weight);
@@ -1135,17 +1130,17 @@ void Markov::ChangeROnVertex()
         ginWeight = G->Weight(site, site,
                               gin->NeighVer(IN)->Tau, ver->Tau,
                               gin->NeighVer(IN)->Spin(OUT), ver->Spin(IN),
-                              gin->IsMeasure);
+                              gin->IsMeasure, gin->IsGammaG);
     }
     else {
         ginWeight = G->Weight(gin->NeighVer(IN)->R, site,
                               gin->NeighVer(IN)->Tau, ver->Tau,
                               gin->NeighVer(IN)->Spin(OUT), ver->Spin(IN),
-                              gin->IsMeasure);
+                              gin->IsMeasure, gin->IsGammaG);
         goutWeight = G->Weight(site, gout->NeighVer(OUT)->R,
                                ver->Tau, gout->NeighVer(OUT)->Tau,
                                ver->Spin(OUT), gout->NeighVer(OUT)->Spin(IN),
-                               gout->IsMeasure);
+                               gout->IsMeasure, gout->IsGammaG);
     }
 
     wLine w = ver->NeighW();
@@ -1153,10 +1148,10 @@ void Markov::ChangeROnVertex()
 
     if (vW == ver)
         wWeight = W->Weight(ver->Dir, site, site, ver->Tau, vW->Tau, ver->Spin(), vW->Spin(),
-                            w->IsWorm, w->IsMeasure, w->IsDelta);
+                            w->IsWorm, w->IsMeasure, w->IsDelta, w->IsGammaW);
     else
         wWeight = W->Weight(ver->Dir, site, vW->R, ver->Tau, vW->Tau, ver->Spin(), vW->Spin(),
-                            w->IsWorm, w->IsMeasure, w->IsDelta);
+                            w->IsWorm, w->IsMeasure, w->IsDelta, w->IsGammaW);
 
     Complex weightRatio = ginWeight * goutWeight * wWeight / (gin->Weight * gout->Weight * w->Weight);
 
@@ -1225,7 +1220,7 @@ void Markov::ChangeRLoop()
     for (int i = 0; i < n; i++) {
         g = v[i]->NeighG(OUT);
         GWeight[i] = G->Weight(newR, newR, v[i]->Tau, g->NeighVer(OUT)->Tau,
-                               v[i]->Spin(OUT), g->NeighVer(OUT)->Spin(IN), g->IsMeasure);
+                               v[i]->Spin(OUT), g->NeighVer(OUT)->Spin(IN), g->IsMeasure, g->IsGammaG);
         newWeight *= GWeight[i];
         oldWeight *= g->Weight;
 
@@ -1234,7 +1229,7 @@ void Markov::ChangeRLoop()
             WWeight[i] = W->Weight(v[i]->Dir, newR, w->NeighVer(INVERSE(v[i]->Dir))->R,
                                    v[i]->Tau, w->NeighVer(INVERSE(v[i]->Dir))->Tau,
                                    v[i]->Spin(), w->NeighVer(INVERSE(v[i]->Dir))->Spin(),
-                                   w->IsWorm, w->IsMeasure, w->IsDelta);
+                                   w->IsWorm, w->IsMeasure, w->IsDelta, w->IsGammaW);
             newWeight *= WWeight[i];
             oldWeight *= w->Weight;
         }
@@ -1243,7 +1238,7 @@ void Markov::ChangeRLoop()
             WWeight[i] = W->Weight(v[i]->Dir, newR, newR,
                                    v[i]->Tau, w->NeighVer(INVERSE(v[i]->Dir))->Tau,
                                    v[i]->Spin(), w->NeighVer(INVERSE(v[i]->Dir))->Spin(),
-                                   w->IsWorm, w->IsMeasure, w->IsDelta);
+                                   w->IsWorm, w->IsMeasure, w->IsDelta, w->IsGammaW);
             newWeight *= WWeight[i];
             oldWeight *= w->Weight;
         }
@@ -1251,7 +1246,7 @@ void Markov::ChangeRLoop()
             WWeight[i] = W->Weight(v[i]->Dir, newR, newR,
                                    v[i]->Tau, w->NeighVer(INVERSE(v[i]->Dir))->Tau,
                                    v[i]->Spin(), w->NeighVer(INVERSE(v[i]->Dir))->Spin(),
-                                   w->IsWorm, w->IsMeasure, w->IsDelta);
+                                   w->IsWorm, w->IsMeasure, w->IsDelta, w->IsGammaW);
         }
     }
 
@@ -1282,6 +1277,8 @@ void Markov::ChangeMeasureFromGToW()
 {
     if (Diag->Order == 0 || Worm->Exist || !Diag->MeasureGLine)
         return;
+    if (Diag->HasGammaGW!= 0)
+        return;
 
     wLine w = Diag->W.RandomPick(*RNG);
     if (w->IsDelta)
@@ -1291,14 +1288,14 @@ void Markov::ChangeMeasureFromGToW()
     Complex gWeight = G->Weight(g->NeighVer(IN)->R, g->NeighVer(OUT)->R,
                                 g->NeighVer(IN)->Tau, g->NeighVer(OUT)->Tau,
                                 g->Spin(), g->Spin(),
-                                false); //IsMeasure
+                                false, false); //IsMeasure
 
     Complex wWeight = W->Weight(w->NeighVer(IN)->R, w->NeighVer(OUT)->R,
                                 w->NeighVer(IN)->Tau, w->NeighVer(OUT)->Tau,
                                 w->NeighVer(IN)->Spin(), w->NeighVer(OUT)->Spin(),
                                 w->IsWorm,
                                 true, //IsMeasure
-                                w->IsDelta);
+                                w->IsDelta, false);
 
     Complex weightRatio = gWeight * wWeight / (g->Weight * w->Weight);
     real prob = mod(weightRatio);
@@ -1332,6 +1329,8 @@ void Markov::ChangeMeasureFromWToG()
 {
     if (Diag->Order == 0 || Worm->Exist || Diag->MeasureGLine)
         return;
+    if (Diag->HasGammaGW != 0)
+        return;
 
     gLine g = Diag->G.RandomPick(*RNG);
 
@@ -1342,14 +1341,14 @@ void Markov::ChangeMeasureFromWToG()
     Complex gWeight = G->Weight(g->NeighVer(IN)->R, g->NeighVer(OUT)->R,
                                 g->NeighVer(IN)->Tau, g->NeighVer(OUT)->Tau,
                                 g->Spin(), g->Spin(),
-                                true); //IsMeasure
+                                true, false); //IsMeasure
 
     Complex wWeight = W->Weight(w->NeighVer(IN)->R, w->NeighVer(OUT)->R,
                                 w->NeighVer(IN)->Tau, w->NeighVer(OUT)->Tau,
                                 w->NeighVer(IN)->Spin(), w->NeighVer(OUT)->Spin(),
                                 w->IsWorm,
                                 false, //IsMeasure
-                                w->IsDelta);
+                                w->IsDelta, false);
 
     Complex weightRatio = gWeight * wWeight / (g->Weight * w->Weight);
     real prob = mod(weightRatio);
@@ -1390,26 +1389,26 @@ void Markov::ChangeDeltaToContinuous()
     real tau = RandomPickTau();
     Complex wWeight = W->Weight(vin->R, vout->R, vin->Tau, tau, vin->Spin(),
                                 vout->Spin(), w->IsWorm, w->IsMeasure,
-                                false); //IsDelta
+                                false, w->IsGammaW); //IsDelta
 
     Complex G1Weight, G2Weight, weightRatio;
     if (G1 == G2) {
         G1Weight = G->Weight(G1->NeighVer(IN)->R, vout->R,
                              tau, tau,
                              G1->NeighVer(IN)->Spin(OUT), vout->Spin(IN),
-                             G1->IsMeasure);
+                             G1->IsMeasure, G1->IsGammaG);
         weightRatio = G1Weight * wWeight / (G1->Weight * w->Weight);
     }
     else {
         G1Weight = G->Weight(G1->NeighVer(IN)->R, vout->R,
                              G1->NeighVer(IN)->Tau, tau,
                              G1->NeighVer(IN)->Spin(OUT), vout->Spin(IN),
-                             G1->IsMeasure);
+                             G1->IsMeasure, G1->IsGammaG);
 
         G2Weight = G->Weight(OUT, G2->NeighVer(OUT)->R, vout->R,
                              G2->NeighVer(OUT)->Tau, tau,
                              G2->NeighVer(OUT)->Spin(IN), vout->Spin(OUT),
-                             G2->IsMeasure);
+                             G2->IsMeasure, G2->IsGammaG);
         weightRatio = G1Weight * G2Weight * wWeight / (G1->Weight * G2->Weight * w->Weight);
     }
 
@@ -1451,25 +1450,25 @@ void Markov::ChangeContinuousToDelta()
 
     Complex wWeight = W->Weight(vin->R, vout->R, vin->Tau, vin->Tau, vin->Spin(),
                                 vout->Spin(), w->IsWorm, w->IsMeasure,
-                                true); //IsDelta
+                                true, w->IsGammaW); //IsDelta
 
     Complex G1Weight, G2Weight, weightRatio;
     if (G1 == G2) {
         G1Weight = G->Weight(G1->NeighVer(IN)->R, vout->R,
                              vin->Tau, vin->Tau,
                              G1->NeighVer(IN)->Spin(OUT), vout->Spin(IN),
-                             G1->IsMeasure);
+                             G1->IsMeasure, G1->IsGammaG);
         weightRatio = G1Weight * wWeight / (G1->Weight * w->Weight);
     }
     else {
         G1Weight = G->Weight(G1->NeighVer(IN)->R, vout->R,
                              G1->NeighVer(IN)->Tau, vin->Tau,
                              G1->NeighVer(IN)->Spin(OUT), vout->Spin(IN),
-                             G1->IsMeasure);
+                             G1->IsMeasure, G1->IsGammaG);
         G2Weight = G->Weight(OUT, G2->NeighVer(OUT)->R, vout->R,
                              G2->NeighVer(OUT)->Tau, vin->Tau,
                              G2->NeighVer(OUT)->Spin(IN), vout->Spin(OUT),
-                             G2->IsMeasure);
+                             G2->IsMeasure, G2->IsGammaG);
         weightRatio = G1Weight * G2Weight * wWeight / (G1->Weight * G2->Weight * w->Weight);
     }
 
@@ -1499,6 +1498,9 @@ void Markov::JumpToOrder0()
     if (Worm->Exist || Diag->Order != 1)
         return;
 
+    if (Diag->HasGammaGW != 0)
+        return;
+
     vertex Ver1 = &Diag->Ver[0];
     vertex Ver2 = &Diag->Ver[1];
     if (Ver1->R != Ver2->R)
@@ -1510,7 +1512,8 @@ void Markov::JumpToOrder0()
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    prob *= (ProbofCall[JUMP_BACK_TO_ORDER1] * ProbSite(Ver1->R) * ProbTau(Ver1->Tau) * ProbTau(Ver2->Tau) * 0.5 * 0.5 * OrderReWeight[0]) / (ProbofCall[JUMP_TO_ORDER0] * OrderReWeight[1]);
+    prob *= (ProbofCall[JUMP_BACK_TO_ORDER1] * ProbSite(Ver1->R) * ProbTau(Ver1->Tau) * ProbTau(Ver2->Tau)
+             * 0.5 * 0.5 * OrderReWeight[0]) / (ProbofCall[JUMP_TO_ORDER0] * OrderReWeight[1]);
 
     Proposed[JUMP_TO_ORDER0][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
@@ -1541,9 +1544,9 @@ void Markov::JumpBackToOrder1()
     spin SpinV1[2] = {SpinG2, SpinG1};
     spin SpinV2[2] = {SpinG1, SpinG2};
 
-    Complex weightG1 = G->Weight(R, R, Tau1, Tau2, SpinG1, SpinG1, G1->IsMeasure);
-    Complex weightG2 = G->Weight(R, R, Tau2, Tau1, SpinG2, SpinG2, G2->IsMeasure);
-    Complex weightW = W->Weight(Ver1->Dir, R, R, Tau1, Tau2, SpinV1, SpinV2, false, W1->IsMeasure, W1->IsDelta);
+    Complex weightG1 = G->Weight(R, R, Tau1, Tau2, SpinG1, SpinG1, G1->IsMeasure, false);
+    Complex weightG2 = G->Weight(R, R, Tau2, Tau1, SpinG2, SpinG2, G2->IsMeasure, false);
+    Complex weightW = W->Weight(Ver1->Dir, R, R, Tau1, Tau2, SpinV1, SpinV2, false, W1->IsMeasure, W1->IsDelta, false);
 
     Complex weightRatio = -1.0 * weightG1 * weightG2 * weightW / Diag->Weight;
     real prob = mod(weightRatio);

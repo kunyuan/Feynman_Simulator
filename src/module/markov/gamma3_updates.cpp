@@ -17,6 +17,7 @@ using namespace std;
 using namespace diag;
 using namespace para;
 using namespace mc;
+using namespace weight;
 
 #define SIGN(x) ((x) == IN ? 1 : -1)
 #define NAME(x) #x
@@ -25,7 +26,10 @@ using namespace mc;
  * Change the diagram from a Sigma to a dSigma/dG G^2 GammaG
  */
 void Markov::JumpTodSdG() {
-    if (Diag->Order == 0 || Worm->Exist || !Diag->MeasureGLine)
+    if (Diag->MeasureGammaGW != 0)
+        return;
+
+    if (Diag->Order == 0 || Worm->Exist || !Diag->MeasureGLine || Diag->HasGammaGW != 0)
         return;
 
     gLine gAB = Diag->G.RandomPick(*RNG);
@@ -43,7 +47,13 @@ void Markov::JumpTodSdG() {
     Site r_u = RandomPickSite();
     spin spinu_out = RandomPickSpin();
 
-    Complex gammaGWeight = GammaG->Weight(vA->R, vB->R, r_u, vA->Tau, vB->Tau, tau_u, spinA, spinB, spinu_out);
+    ExtPoint v_u = ExtPoint();
+    v_u.R = r_u;
+    v_u.Tau = tau_u;
+    v_u.Spin = spinu_out;
+
+
+    Complex gammaGWeight = G->Weight(vA->R, vB->R, vA->Tau, vB->Tau, spinA, spinB, false, true, &v_u);
 //    Complex gammaGWeight = Complex(1.0, 0.0);
 
     Complex weightRatio = gammaGWeight / (gAB->Weight);
@@ -60,15 +70,14 @@ void Markov::JumpTodSdG() {
 
         Diag->Phase *= sgn;
         Diag->Weight *= weightRatio;
-        Diag->MeasuredSdG = true;
+        Diag->HasGammaGW = 1;
 
-        vertex v_u = Diag->Ver.Add();
         Diag->Vin = &vA;
         Diag->Vout = &vB;
-        Diag->Vw = &v_u;
+        Diag->V_Ext = v_u;
 
-        spin spin_u[2] = {spinu_out, spinu_out};
-        v_u->SetVertex(r_u, tau_u, spin_u, OUT);
+        gAB->IsGammaG = true;
+        gAB->Weight = gammaGWeight;
     }
 }
 
@@ -76,12 +85,14 @@ void Markov::JumpTodSdG() {
  * Change the diagram from a dSigma/dG G^2 GammaG to a Sigma
  */
 void Markov::JumpFromdSdGToSigma() {
-    if (Diag->Order == 0 || Worm->Exist || !Diag->MeasureGLine || !Diag->MeasuredSdG)
+    if (Diag->MeasureGammaGW != 0)
+        return;
+    if (Diag->Order == 0 || Worm->Exist || !Diag->MeasureGLine || Diag->HasGammaGW!=1)
         return;
 
     vertex v_A = *Diag->Vin;
     vertex v_B = *Diag->Vout;
-    vertex v_u = *Diag->Vw;
+    ExtPoint v_u = Diag->V_Ext;
 
     gLine gAB = v_A->NeighG(OUT);
 
@@ -90,10 +101,10 @@ void Markov::JumpFromdSdGToSigma() {
 
     Complex GABWeight = G->Weight(v_A->R, v_B->R, v_A->Tau, v_B->Tau,
                                   gAB->Spin(), gAB->Spin(),
-                                  false); //IsMeasure
+                                  false, false);
 
-    Complex gammaGWeight = GammaG->Weight(v_A->R, v_B->R, v_u->R, v_A->Tau, v_B->Tau,
-                                 v_u->Tau, gAB->Spin(), gAB->Spin(), v_u->NeighG(OUT)->Spin());
+    Complex gammaGWeight = gAB->Weight;
+
 //    Complex gammaGWeight = Complex(1.0, 0.0);
 
     Complex weightRatio = GABWeight/gammaGWeight;
@@ -101,7 +112,7 @@ void Markov::JumpFromdSdGToSigma() {
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    prob *= (ProbofCall[JUMP_TO_DSDG] * ProbTau(v_u->Tau) * ProbSite(v_u->R) * 0.5)
+    prob *= (ProbofCall[JUMP_TO_DSDG] * ProbTau(v_u.Tau) * ProbSite(v_u.R) * 0.5)
                 / (ProbofCall[JUMP_FROM_DSDG_TO_SIGMA] * 2.0 * Diag->Order);
 
     Proposed[JUMP_FROM_DSDG_TO_SIGMA][Diag->Order] += 1.0;
@@ -110,10 +121,9 @@ void Markov::JumpFromdSdGToSigma() {
 
         Diag->Phase *= sgn;
         Diag->Weight *= weightRatio;
-        Diag->MeasuredSdG = false;
+        Diag->HasGammaGW = 0;
 
         gAB->Weight = GABWeight;
-
-        Diag->Ver.Remove(v_u);
+        gAB->IsGammaG = false;
     }
 }

@@ -13,16 +13,21 @@ using namespace std;
 
 const spin SPINUPUP[2] = { UP, UP };
 
-Complex GClass::Weight(const Site& rin, const Site& rout, real tin, real tout, spin SpinIn, spin SpinOut, bool IsMeasure) const
+Complex GClass::Weight(const Site& rin, const Site& rout, real tin, real tout, spin SpinIn, spin SpinOut,
+                       bool IsMeasure, bool IsGammaG, ExtPoint* ext) const
 {
     uint Index = _Map.GetIndex(SpinIn, SpinOut, rin, rout, tin, tout);
     if (IsMeasure)
         return _MeasureWeight(Index);
+    else if (IsGammaG)
+        //TODO add gamma3 pointer here
+        return Complex(1.0, 0.0);
     else
         return _Map.GetTauSymmetryFactor(tin, tout) * _SmoothTWeight(Index);
 }
 
-Complex GClass::Weight(int dir, const Site& r1, const Site& r2, real t1, real t2, spin Spin1, spin Spin2, bool IsMeasure) const
+Complex GClass::Weight(int dir, const Site& r1, const Site& r2, real t1, real t2, spin Spin1, spin Spin2,
+                       bool IsMeasure, bool IsGammaG, ExtPoint* ext) const
 {
     static uint Index;
     int symmetryfactor;
@@ -37,11 +42,15 @@ Complex GClass::Weight(int dir, const Site& r1, const Site& r2, real t1, real t2
 
     if (IsMeasure)
         return _MeasureWeight(Index);
+    else if (IsGammaG)
+        //TODO add gamma3 pointer here
+        return Complex(1.0, 0.0);
     else
         return symmetryfactor * _SmoothTWeight(Index);
 }
 
-Complex WClass::Weight(const Site& rin, const Site& rout, real tin, real tout, spin* SpinIn, spin* SpinOut, bool IsWorm, bool IsMeasure, bool IsDelta) const
+Complex WClass::Weight(const Site& rin, const Site& rout, real tin, real tout, spin* SpinIn, spin* SpinOut, bool IsWorm,
+                       bool IsMeasure, bool IsDelta, bool IsGammaW, ExtPoint* ext) const
 {
     static uint index;
     if (IsWorm) {
@@ -54,13 +63,18 @@ Complex WClass::Weight(const Site& rin, const Site& rout, real tin, real tout, s
         return _DeltaTWeight(index);
     }
     index = _Map.GetIndex(SpinIn, SpinOut, rin, rout, tin, tout);
+
     if (IsMeasure)
         return _MeasureWeight(index);
+    else if(IsGammaW)
+        //TODO: add GammaW pointer here
+        return Complex(1.0, 0.0);
     else
         return _SmoothTWeight(index);
 }
 
-Complex WClass::Weight(int dir, const Site& r1, const Site& r2, real t1, real t2, spin* Spin1, spin* Spin2, bool IsWorm, bool IsMeasure, bool IsDelta) const
+Complex WClass::Weight(int dir, const Site& r1, const Site& r2, real t1, real t2, spin* Spin1, spin* Spin2, bool IsWorm,
+                       bool IsMeasure, bool IsDelta, bool IsGammaW, ExtPoint* ext) const
 {
     static uint index;
     if (IsWorm) {
@@ -82,6 +96,9 @@ Complex WClass::Weight(int dir, const Site& r1, const Site& r2, real t1, real t2
         return _MeasureWeight(index);
     else if (IsDelta)
         return _DeltaTWeight(index);
+    else if(IsGammaW)
+        //TODO: add GammaW pointer here
+        return Complex(1.0, 0.0);
     else
         return _SmoothTWeight(index);
 }
