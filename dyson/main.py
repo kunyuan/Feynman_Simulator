@@ -54,11 +54,15 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     data={}
     data["Chi"]=Chi.ToDict()
     data["G"]=G.ToDict()
+    data["G"].update({"MaxTauBin": G.Map.MaxTauBin})
     data["W"]=W.ToDict()
     data["W"].update(W0.ToDict())
+    data["W"].update({"MaxTauBin": W.Map.MaxTauBin})
     data["SigmaDeltaT"]=SigmaDeltaT.ToDict()
     data["Sigma"]=Sigma.ToDict()
+    data["Sigma"].update({"MaxTauBin": Sigma.Map.MaxTauBin})
     data["Polar"]=Polar.ToDict()
+    data["Polar"].update({"MaxTauBin": Polar.Map.MaxTauBin})
     Observable.Measure(Chi, Determ, G, Factory.NearestNeighbor)
 
     with DelayedInterrupt():

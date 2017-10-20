@@ -48,7 +48,7 @@ bool weight::Weight::BuildNew(flag _flag, const ParaMC &para)
         ABORT("Order can not be zero!!!");
     //GW can only be loaded
     if (_flag & weight::SigmaPolar) {
-        _AllocateSigmaPolar(para);
+        _AllocateSigmaPolar(para, para.MaxTauBin, para.MaxTauBin);
         Sigma->BuildNew();
         Polar->BuildNew();
     }
@@ -69,12 +69,22 @@ bool weight::Weight::FromDict(const Dictionary &dict, flag _flag, const para::Pa
     Norm::NormFactor = para.Lat.Vol * para.Lat.SublatVol;
 
     if (_flag & weight::GW) {
-        _AllocateGW(para);
-        G->FromDict(dict.Get<Dictionary>("G"));
-        W->FromDict(dict.Get<Dictionary>("W"));
+        auto GDict=dict.Get<Dictionary>("G");
+        auto WDict=dict.Get<Dictionary>("W");
+        auto GMaxTauBin=GDict.Get<int>("MaxTauBin");
+        auto WMaxTauBin=WDict.Get<int>("MaxTauBin");
+//        auto GMaxTauBin=para.MaxTauBin;
+//        auto WMaxTauBin=para.MaxTauBin;
+        _AllocateGW(para, GMaxTauBin, WMaxTauBin);
+        G->FromDict(GDict);
+        W->FromDict(WDict);
     }
     if (_flag & weight::SigmaPolar) {
-        _AllocateSigmaPolar(para);
+        auto SigmaMaxTauBin=dict.Get<Dictionary>("Sigma").Get<int>("MaxTauBin");
+        auto PolarMaxTauBin=dict.Get<Dictionary>("Polar").Get<int>("MaxTauBin");
+//        auto SigmaMaxTauBin=para.MaxTauBin;
+//        auto PolarMaxTauBin=para.MaxTauBin;
+        _AllocateSigmaPolar(para, SigmaMaxTauBin, PolarMaxTauBin);
         Sigma->FromDict(dict.Get<Dictionary>("Sigma"));
         Polar->FromDict(dict.Get<Dictionary>("Polar"));
     }
@@ -96,35 +106,35 @@ Dictionary weight::Weight::ToDict(flag _flag)
 
 void weight::Weight::SetTest(const ParaMC &para)
 {
-    _AllocateGW(para);
-    _AllocateSigmaPolar(para);
+    _AllocateGW(para, para.MaxTauBin, para.MaxTauBin);
+    _AllocateSigmaPolar(para, para.MaxTauBin, para.MaxTauBin);
     G->BuildTest();
     W->BuildTest();
 }
 
 void weight::Weight::SetDiagCounter(const ParaMC &para)
 {
-    _AllocateGW(para);
-    _AllocateSigmaPolar(para);
+    _AllocateGW(para, para.MaxTauBin, para.MaxTauBin);
+    _AllocateSigmaPolar(para, para.MaxTauBin, para.MaxTauBin);
     G->BuildTest();
     W->BuildTest();
 }
 
-void weight::Weight::_AllocateGW(const ParaMC &para)
+void weight::Weight::_AllocateGW(const ParaMC &para, int GMaxTauBin, int WMaxTauBin)
 {
     //make sure old Sigma/Polar/G/W are released before assigning new memory
     delete G;
     auto symmetry = _IsAllSymmetric ? TauSymmetric : TauAntiSymmetric;
-    G = new weight::GClass(para.Lat, para.Beta, para.MaxTauBin, symmetry);
+    G = new weight::GClass(para.Lat, para.Beta, GMaxTauBin, symmetry);
     delete W;
-    W = new weight::WClass(para.Lat, para.Beta, para.MaxTauBin);
+    W = new weight::WClass(para.Lat, para.Beta, WMaxTauBin);
 }
 
-void weight::Weight::_AllocateSigmaPolar(const ParaMC &para)
+void weight::Weight::_AllocateSigmaPolar(const ParaMC &para, int SigmaMaxTauBin, int PolarMaxTauBin)
 {
     auto symmetry = _IsAllSymmetric ? TauSymmetric : TauAntiSymmetric;
     delete Sigma;
-    Sigma = new weight::SigmaClass(para.Lat, para.Beta, para.MaxTauBin, para.Order, symmetry);
+    Sigma = new weight::SigmaClass(para.Lat, para.Beta, SigmaMaxTauBin, para.Order, symmetry);
     delete Polar;
-    Polar = new weight::PolarClass(para.Lat, para.Beta, para.MaxTauBin, para.Order);
+    Polar = new weight::PolarClass(para.Lat, para.Beta, PolarMaxTauBin, para.Order);
 }

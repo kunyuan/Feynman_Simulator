@@ -50,7 +50,9 @@ bool GClass::FromDict(const Dictionary& dict)
 
 Dictionary GClass::ToDict()
 {
-    return _SmoothTWeight.ToDict();
+    auto dict=_SmoothTWeight.ToDict();
+    dict["MaxTauBin"]=_Map.MaxTauBin;
+    return dict;
 }
 
 WClass::WClass(const Lattice& lat, real Beta, uint MaxTauBin)
@@ -94,6 +96,7 @@ Dictionary WClass::ToDict()
 {
     auto dict = _SmoothTWeight.ToDict();
     dict.Update(_DeltaTWeight.ToDict());
+    dict["MaxTauBin"]=_Map.MaxTauBin;
     return dict;
 }
 
@@ -129,6 +132,7 @@ Dictionary SigmaClass::ToDict()
 {
     Dictionary dict;
     dict["Histogram"] = Dictionary("SmoothT", Estimator.ToDict());
+    dict["MaxTauBin"]=_Map.MaxTauBin;
     return dict;
 }
 
@@ -163,5 +167,6 @@ Dictionary PolarClass::ToDict()
 {
     Dictionary dict;
     dict["Histogram"] = Dictionary("SmoothT", Estimator.ToDict());
+    dict["MaxTauBin"]=_Map.MaxTauBin;
     return dict;
 }

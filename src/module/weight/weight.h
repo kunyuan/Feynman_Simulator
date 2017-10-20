@@ -47,8 +47,8 @@ public:
     void Anneal(const para::ParaMC&);
 
 private:
-    void _AllocateGW(const para::ParaMC&);
-    void _AllocateSigmaPolar(const para::ParaMC&);
+    void _AllocateGW(const para::ParaMC&, int GMaxTauBin, int WMaxTauBin);
+    void _AllocateSigmaPolar(const para::ParaMC&, int SigmaMaxTauBin, int PolarMaxTauBin);
 };
 }
 
