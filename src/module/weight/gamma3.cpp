@@ -39,16 +39,10 @@ void GammaGClass::Measure(const Site &Gr1, const Site &Gr2, const Site &Ur,
                           real Gt1, real Gt2, real Ut1, spin Gspin1, spin Gspin2, spin Uspin,
               const Complex &weight)
 {
-
+    //TODO: calculate the Index
+//    _WeightAccu[Index] += weight;
 }
 
-//void GammaGClass::Measure(uint WeightIndex, int Order, Complex weight)
-//{
-//    if (DEBUGMODE && Order < 1)
-//    LOG_ERROR("Too small order=" << Order);
-//    uint Index = (Order - 1) * _WeightSize + WeightIndex;
-//    _WeightAccu[Index] += weight;
-//}
 
 void GammaGClass::ClearStatistics()
 {
@@ -106,5 +100,52 @@ Complex GammaWClass::Weight(const Site &Wr1, const Site &Wr2, const Site &Ur,
                             real Wt1, real Wt2, real Ut, spin* Wspin1, spin* Wspin2, spin Uspin) const
 {
     return Complex(1.0,0.0);
+}
+
+void GammaWClass::Measure(const Site &Wr1, const Site &Wr2, const Site &Ur, real Wt1, real Wt2,
+                          real Ut, spin* Wspin1, spin* Wspin2, spin Uspin, const Complex &Weight)
+{
+    //TODO: calculate the Index
+//    _WeightAccu[Index] += weight;
+}
+
+void GammaWClass::MeasureNorm(real weight)
+{
+    _NormAccu += weight;
+}
+
+void GammaWClass::ClearStatistics()
+{
+    _NormAccu = 0.0;
+    _WeightAccu.Assign(0.0);
+}
+//TODO: you may have to replace int with size_t here
+
+void GammaWClass::SqueezeStatistics(real factor)
+{
+    ASSERT_ALLWAYS(factor > 0, "factor=" << factor << "<=0!");
+    _NormAccu /= factor;
+    _WeightAccu *= 1.0 / factor;
+}
+
+bool GammaWClass::FromDict(const Dictionary& dict)
+{
+    _Norm = dict.Get<real>("Norm");
+    _NormAccu = dict.Get<real>("NormAccu");
+    auto arr = dict.Get<Python::ArrayObject>("WeightAccu");
+    //assert estimator shape except order dimension
+    ASSERT_ALLWAYS(Equal(arr.Shape().data() + 1, _WeightAccu.GetShape() + 1, _WeightAccu.GetDim() - 1), "Shape should match!");
+    _WeightAccu.Assign(0.0);
+    _WeightAccu.Assign(arr.Data<Complex>(), arr.Size());
+    return true;
+}
+
+Dictionary GammaWClass::ToDict()
+{
+    Dictionary dict;
+    dict["Norm"] = _Norm;
+    dict["NormAccu"] = _NormAccu;
+    dict["WeightAccu"] = Python::ArrayObject(_WeightAccu.Data(), _WeightAccu.GetShape(), _WeightAccu.GetDim());
+    return dict;
 }
 
