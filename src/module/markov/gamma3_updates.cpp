@@ -25,7 +25,8 @@ using namespace weight;
 /**
  * Change the diagram from a Sigma to a dSigma/dG G^2 GammaG
  */
-void Markov::JumpTodSdG() {
+void Markov::JumpToGammaG() {
+    return;
     if (Diag->MeasureGammaGW != 0)
         return;
 
@@ -61,12 +62,12 @@ void Markov::JumpTodSdG() {
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    prob *= ProbofCall[JUMP_FROM_DSDG_TO_SIGMA] * 2.0* Diag->Order / (ProbofCall[JUMP_TO_DSDG]
+    prob *= ProbofCall[JUMP_FROM_GAMMAG_TO_G] * 2.0* Diag->Order / (ProbofCall[JUMP_TO_GAMMAG]
              * ProbTau(tau_u) * ProbSite(r_u) * 0.5);
 
-    Proposed[JUMP_TO_DSDG][Diag->Order] += 1.0;
+    Proposed[JUMP_TO_GAMMAG][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
-        Accepted[JUMP_TO_DSDG][Diag->Order] += 1.0;
+        Accepted[JUMP_TO_GAMMAG][Diag->Order] += 1.0;
 
         Diag->Phase *= sgn;
         Diag->Weight *= weightRatio;
@@ -84,7 +85,8 @@ void Markov::JumpTodSdG() {
 /**
  * Change the diagram from a dSigma/dG G^2 GammaG to a Sigma
  */
-void Markov::JumpFromdSdGToSigma() {
+void Markov::JumpFromGammaGToG()  {
+    return;
     if (Diag->MeasureGammaGW != 0)
         return;
     if (Diag->Order == 0 || Worm->Exist || !Diag->MeasureGLine || Diag->HasGammaGW!=1)
@@ -112,12 +114,12 @@ void Markov::JumpFromdSdGToSigma() {
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    prob *= (ProbofCall[JUMP_TO_DSDG] * ProbTau(v_u.Tau) * ProbSite(v_u.R) * 0.5)
-                / (ProbofCall[JUMP_FROM_DSDG_TO_SIGMA] * 2.0 * Diag->Order);
+    prob *= (ProbofCall[JUMP_TO_GAMMAG] * ProbTau(v_u.Tau) * ProbSite(v_u.R) * 0.5)
+                / (ProbofCall[JUMP_FROM_GAMMAG_TO_G] * 2.0 * Diag->Order);
 
-    Proposed[JUMP_FROM_DSDG_TO_SIGMA][Diag->Order] += 1.0;
+    Proposed[JUMP_FROM_GAMMAG_TO_G][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
-        Accepted[JUMP_FROM_DSDG_TO_SIGMA][Diag->Order] += 1.0;
+        Accepted[JUMP_FROM_GAMMAG_TO_G][Diag->Order] += 1.0;
 
         Diag->Phase *= sgn;
         Diag->Weight *= weightRatio;
@@ -126,4 +128,27 @@ void Markov::JumpFromdSdGToSigma() {
         gAB->Weight = GABWeight;
         gAB->IsGammaG = false;
     }
+}
+
+void Markov::JumpToGammaW() {
+    return;
+}
+
+void Markov::JumpFromGammaWToW() {
+}
+
+void Markov::AddTwoG() {
+
+}
+
+void Markov::DeleteTwoG() {
+
+}
+
+void Markov::AddTwoW() {
+
+}
+
+void Markov::DeleteTwoW() {
+
 }

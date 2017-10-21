@@ -65,8 +65,14 @@ bool Markov::BuildNew(ParaMC &para, Diagram &diag, weight::Weight &weight)
     OperationName[CHANGE_SPIN_VERTEX] = NAME(CHANGE_SPIN_VERTEX);
     OperationName[JUMP_TO_ORDER0] = NAME(JUMP_TO_ORDER0);
     OperationName[JUMP_BACK_TO_ORDER1] = NAME(JUMP_BACK_TO_ORDER1);
-    OperationName[JUMP_TO_DSDG] = NAME(JUMP_TO_DSDG);
-    OperationName[JUMP_FROM_DSDG_TO_SIGMA] = NAME(JUMP_FROM_DSDG_TO_SIGMA);
+    OperationName[JUMP_TO_GAMMAG] = NAME(JUMP_TO_GAMMAG);
+    OperationName[JUMP_FROM_GAMMAG_TO_G] = NAME(JUMP_FROM_GAMMAG_TO_G);
+    OperationName[JUMP_TO_GAMMAW] = NAME(JUMP_TO_GAMMAW);
+    OperationName[JUMP_FROM_GAMMAW_TO_W] = NAME(JUMP_FROM_GAMMAW_TO_W);
+    OperationName[ADD_TWO_G] = NAME(ADD_TWO_G);
+    OperationName[DELETE_TWO_G] = NAME(DELETE_TWO_G);
+    OperationName[ADD_TWO_W] = NAME(ADD_TWO_W);
+    OperationName[DELETE_TWO_W] = NAME(DELETE_TWO_W);
     return true;
 }
 
@@ -188,16 +194,26 @@ void Markov::PrintDetailBalanceInfo()
     Output += _DetailBalanceStr(CHANGE_SPIN_VERTEX);
     Output += _DetailBalanceStr(JUMP_TO_ORDER0);
     Output += _DetailBalanceStr(JUMP_BACK_TO_ORDER1);
-    Output += _DetailBalanceStr(JUMP_TO_DSDG);
-    Output += _DetailBalanceStr(JUMP_FROM_DSDG_TO_SIGMA);
+    Output += _DetailBalanceStr(JUMP_TO_GAMMAG);
+    Output += _DetailBalanceStr(JUMP_FROM_GAMMAG_TO_G);
+    Output += _DetailBalanceStr(JUMP_TO_GAMMAW);
+    Output += _DetailBalanceStr(JUMP_FROM_GAMMAW_TO_W);
+    Output += _DetailBalanceStr(ADD_TWO_G);
+    Output += _DetailBalanceStr(ADD_TWO_W);
+    Output += _DetailBalanceStr(DELETE_TWO_G);
+    Output += _DetailBalanceStr(DELETE_TWO_W);
     Output += string(60, '-') + "\n";
     //    Output += _CheckBalance(CREATE_WORM, DELETE_WORM);
     Output += _CheckBalance(ADD_INTERACTION, DEL_INTERACTION);
     Output += _CheckBalance(ADD_DELTA_INTERACTION, DEL_DELTA_INTERACTION);
     Output += _CheckBalance(CHANGE_MEASURE_G2W, CHANGE_MEASURE_W2G);
     Output += _CheckBalance(CHANGE_CONTINUS2DELTA, CHANGE_DELTA2CONTINUS);
+//    Output += _CheckBalance(JUMP_TO_ORDER0, JUMP_BACK_TO_ORDER1);
     //TODO: Add Extra Updates for Gamma3 to the check
-    //    Output += _CheckBalance(JUMP_TO_ORDER0, JUMP_BACK_TO_ORDER1);
+//    Output += _CheckBalance(JUMP_TO_GAMMAG, JUMP_FROM_GAMMAG_TO_G);
+//    Output += _CheckBalance(JUMP_TO_GAMMAW, JUMP_FROM_GAMMAW_TO_W);
+//    Output += _CheckBalance(ADD_TWO_G, DELETE_TWO_G);
+//    Output += _CheckBalance(ADD_TWO_W, DELETE_TWO_W);
     Output += string(60, '=') + "\n";
     LOG_INFO(Output);
 }
@@ -211,66 +227,83 @@ void Markov::Hop(int sweep)
 {
     for (int i = 0; i < sweep; i++) {
         double x = RNG->urn();
-        if (x < SumofProbofCall[CREATE_WORM])
-            CreateWorm();
-        //            ;
-        else if (x < SumofProbofCall[DELETE_WORM])
-            DeleteWorm();
-        //            ;
-        else if (x < SumofProbofCall[MOVE_WORM_G])
-            MoveWormOnG();
-        //            ;
-        else if (x < SumofProbofCall[MOVE_WORM_W])
-            MoveWormOnW();
-        //            ;
-        else if (x < SumofProbofCall[RECONNECT])
-            Reconnect();
-        //            ;
-        else if (x < SumofProbofCall[ADD_INTERACTION])
-            AddInteraction();
-        //            ;
-        else if (x < SumofProbofCall[DEL_INTERACTION])
-            DeleteInteraction();
-        //            ;
-        else if (x < SumofProbofCall[ADD_DELTA_INTERACTION])
-            AddDeltaInteraction();
-        //            ;
-        else if (x < SumofProbofCall[DEL_DELTA_INTERACTION])
-            DeleteDeltaInteraction();
-        //            ;
-        else if (x < SumofProbofCall[CHANGE_TAU_VERTEX])
-            ChangeTauOnVertex();
-        //            ;
-        else if (x < SumofProbofCall[CHANGE_R_VERTEX])
-            ;
-        //                    ChangeROnVertex();
-        else if (x < SumofProbofCall[CHANGE_R_LOOP])
-            ChangeRLoop();
-        //            ;
-        else if (x < SumofProbofCall[CHANGE_MEASURE_G2W])
-            ChangeMeasureFromGToW();
-        //            ;
-        else if (x < SumofProbofCall[CHANGE_MEASURE_W2G])
-            ChangeMeasureFromWToG();
-        //            ;
-        else if (x < SumofProbofCall[CHANGE_DELTA2CONTINUS])
-            ChangeDeltaToContinuous();
-        //            ;
-        else if (x < SumofProbofCall[CHANGE_CONTINUS2DELTA])
-            ChangeContinuousToDelta();
-        //            ;
-        else if (x < SumofProbofCall[CHANGE_SPIN_VERTEX])
-            ;
-        //            ChangeSpinOnVertex();
-        else if (x < SumofProbofCall[JUMP_TO_ORDER0])
-            JumpToOrder0();
-        //        ;
-        else if (x < SumofProbofCall[JUMP_BACK_TO_ORDER1])
-            JumpBackToOrder1();
-        else if (x < SumofProbofCall[JUMP_TO_DSDG])
-            JumpTodSdG();
-        else if (x < SumofProbofCall[JUMP_FROM_DSDG_TO_SIGMA])
-            JumpFromdSdGToSigma();
+        if (x < SumofProbofCall[ADD_TWO_W] && Diag->MeasureGammaGW == 0){
+
+            if (x < SumofProbofCall[CREATE_WORM])
+                CreateWorm();
+            //            ;
+            else if (x < SumofProbofCall[DELETE_WORM])
+                DeleteWorm();
+            //            ;
+            else if (x < SumofProbofCall[MOVE_WORM_G])
+                MoveWormOnG();
+            //            ;
+            else if (x < SumofProbofCall[MOVE_WORM_W])
+                MoveWormOnW();
+            //            ;
+            else if (x < SumofProbofCall[RECONNECT])
+                Reconnect();
+            //            ;
+            else if (x < SumofProbofCall[ADD_INTERACTION])
+                AddInteraction();
+            //            ;
+            else if (x < SumofProbofCall[DEL_INTERACTION])
+                DeleteInteraction();
+            //            ;
+            else if (x < SumofProbofCall[ADD_DELTA_INTERACTION])
+                AddDeltaInteraction();
+            //            ;
+            else if (x < SumofProbofCall[DEL_DELTA_INTERACTION])
+                DeleteDeltaInteraction();
+            //            ;
+            else if (x < SumofProbofCall[CHANGE_TAU_VERTEX])
+                ChangeTauOnVertex();
+            //            ;
+            else if (x < SumofProbofCall[CHANGE_R_VERTEX])
+                ;
+            //                    ChangeROnVertex();
+            else if (x < SumofProbofCall[CHANGE_R_LOOP])
+                ChangeRLoop();
+            //            ;
+            else if (x < SumofProbofCall[CHANGE_MEASURE_G2W])
+                ChangeMeasureFromGToW();
+            //            ;
+            else if (x < SumofProbofCall[CHANGE_MEASURE_W2G])
+                ChangeMeasureFromWToG();
+            //            ;
+            else if (x < SumofProbofCall[CHANGE_DELTA2CONTINUS])
+                ChangeDeltaToContinuous();
+            //            ;
+            else if (x < SumofProbofCall[CHANGE_CONTINUS2DELTA])
+                ChangeContinuousToDelta();
+            //            ;
+            else if (x < SumofProbofCall[CHANGE_SPIN_VERTEX])
+                ;
+            //            ChangeSpinOnVertex();
+            else if (x < SumofProbofCall[JUMP_TO_ORDER0])
+                JumpToOrder0();
+            //        ;
+            else if (x < SumofProbofCall[JUMP_BACK_TO_ORDER1])
+                JumpBackToOrder1();
+            else if (x < SumofProbofCall[JUMP_TO_GAMMAG])
+                JumpToGammaG();
+            else if (x < SumofProbofCall[JUMP_FROM_GAMMAG_TO_G])
+                JumpFromGammaGToG();
+            else if (x < SumofProbofCall[JUMP_TO_GAMMAW])
+                JumpToGammaW();
+            else if (x < SumofProbofCall[JUMP_FROM_GAMMAW_TO_W])
+                JumpFromGammaWToW();
+            else if (x < SumofProbofCall[ADD_TWO_G])
+                AddTwoG();
+            else if (x < SumofProbofCall[ADD_TWO_W])
+                AddTwoW();
+        }else if(x < SumofProbofCall[DELETE_TWO_G] && Diag->MeasureGammaGW==1){
+            //TODO measure GammaW: delete two G lines
+            DeleteTwoG();
+        }else if(x < SumofProbofCall[DELETE_TWO_W] && Diag->MeasureGammaGW==2) {
+            //TODO measure GammaW: delete two W lines
+            DeleteTwoW();
+        }
 
         (*Counter)++;
     }
@@ -1552,7 +1585,8 @@ void Markov::JumpBackToOrder1()
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    prob *= ProbofCall[JUMP_TO_ORDER0] * OrderReWeight[1] / (ProbofCall[JUMP_BACK_TO_ORDER1] * OrderReWeight[0] * ProbSite(R) * ProbTau(Tau1) * ProbTau(Tau2) * 0.5 * 0.5);
+    prob *= ProbofCall[JUMP_TO_ORDER0] * OrderReWeight[1] / (ProbofCall[JUMP_BACK_TO_ORDER1] * OrderReWeight[0]
+                                                             * ProbSite(R) * ProbTau(Tau1) * ProbTau(Tau2) * 0.5 * 0.5);
 
     Proposed[JUMP_BACK_TO_ORDER1][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {

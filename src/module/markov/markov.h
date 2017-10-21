@@ -34,7 +34,7 @@ class RandomFactory;
 class Momentum;
 
 namespace mc {
-const int NUpdates = 19+2;
+const int NUpdates = 19+8;
 class Markov {
 public:
     long long* Counter;
@@ -79,8 +79,14 @@ public:
     void ChangeSpinOnVertex();
 
     //Extra updates for Gamma3
-    void JumpTodSdG();
-    void JumpFromdSdGToSigma();
+    void JumpToGammaG();
+    void JumpFromGammaGToG();
+    void JumpToGammaW();
+    void JumpFromGammaWToW();
+    void AddTwoG();
+    void AddTwoW();
+    void DeleteTwoG();
+    void DeleteTwoW();
 
 private:
     real ProbofCall[NUpdates];
@@ -119,8 +125,14 @@ private:
         JUMP_TO_ORDER0,
         JUMP_BACK_TO_ORDER1,
         //Extra updates for Gamma3
-        JUMP_TO_DSDG,
-        JUMP_FROM_DSDG_TO_SIGMA,
+        JUMP_TO_GAMMAG,
+        JUMP_FROM_GAMMAG_TO_G,
+        JUMP_TO_GAMMAW,
+        JUMP_FROM_GAMMAW_TO_W,
+        ADD_TWO_G,
+        ADD_TWO_W,
+        DELETE_TWO_G,
+        DELETE_TWO_W,
         END
     };
     std::string _DetailBalanceStr(Operations op);

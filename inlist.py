@@ -25,7 +25,7 @@ Dyson={
 }
 
 Beta=0.5
-Order=4
+Order=3
 Common={
 "Tau": {"MaxTauBin" : 32, "Beta": Beta},
 "Lattice":  {
