@@ -17,7 +17,7 @@ GammaGClass::GammaGClass(const Lattice &lat, real beta, uint MaxTauBin)
     _Beta = _Map.Beta;
     _MaxTauBin=MaxTauBin;
     _dBetaInverse=_MaxTauBin/_Beta;
-    _Norm = (_Map.MaxTauBin / _Beta) / _Beta / Vol;
+    _Norm = (_Map.MaxTauBin / _Beta)**2.0 / _Beta / Vol;
 //    uint SubVol=(uint)lat.SublatVol;
     uint MeaShape[4]={2,(uint)Vol,MaxTauBin,MaxTauBin};
     //Gspin, Gsub, Usub, G_r1, Gtau1,dtau2
@@ -134,7 +134,7 @@ GammaWClass::GammaWClass(const Lattice &lat, real beta, uint MaxTauBin)
 {
     int Vol = _Map.Lat.Vol;
     _Beta = _Map.Beta;
-    _Norm = (_Map.MaxTauBin / _Beta) / _Beta / Vol;
+    _Norm = (_Map.MaxTauBin / _Beta)**2.0 / _Beta / Vol;
     _MaxTauBin=MaxTauBin;
     _dBetaInverse=_MaxTauBin/_Beta;
 //    uint SubVol=(uint)lat.SublatVol;
