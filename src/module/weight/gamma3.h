@@ -11,6 +11,7 @@
 #include "weight_array.h"
 #include "weight_estimator.h"
 #include "utility/complex.h"
+#include "component.h"
 
 namespace weight {
 //     r1,t1  ---\
@@ -19,14 +20,16 @@ namespace weight {
     class GammaGClass {
         //Only contains the smooth part of the GammaG object
     public:
-        GammaGClass(const Lattice &, real Beta, uint MaxTauBin, real Norm);
+        GammaGClass(const Lattice &, real Beta, uint MaxTauBin);
 
-        void BuildNew();
+//        void BuildNew(GClass *);
 //    void BuildTest();
 
-        bool FromDict(const Dictionary &);
+        bool StatisFromDict(const Dictionary &);
+        bool WeightFromDict(const Dictionary &);
 
-        Dictionary ToDict();
+        Dictionary StatisToDict();
+        Dictionary WeightToDict();
 
         Complex Weight(const Site &, const Site &, const Site &, real, real, real,
                        spin, spin, spin) const;
@@ -42,7 +45,8 @@ namespace weight {
     protected:
         IndexMapSPIN2 _Map;
 
-        WeightArray<6> _WeightAccu; //Gspin, Gsub, Usub, G_r1, Gtau1,dtau2
+        WeightArray<4> _WeightAccu; //Gspin, G_r1, Gtau1,dtau2
+        WeightArray<4> _Weight; //Gspin, G_r1, Gtau1,dtau2
         //don't forget to add template class in weight_array.cpp file
         real _Beta;
         real _Norm; //The normalization factor
@@ -52,14 +56,15 @@ namespace weight {
 
     class GammaWClass {
     public:
-        GammaWClass(const Lattice &, real Beta, uint MaxTauBin, real Norm);
+        GammaWClass(const Lattice &, real Beta, uint MaxTauBin);
 
-        void BuildNew();
+//        void BuildNew();
 //    void BuildTest();
 
-        bool FromDict(const Dictionary &);
-
-        Dictionary ToDict();
+        bool StatisFromDict(const Dictionary &);
+        bool WeightFromDict(const Dictionary &);
+        Dictionary StatisToDict();
+        Dictionary WeightToDict();
 
         Complex Weight(const Site &, const Site &, const Site &, real, real, real,
                        spin*, spin*, spin) const;
@@ -75,7 +80,8 @@ namespace weight {
 
     protected:
         IndexMapSPIN4 _Map;
-        WeightArray<8> _WeightAccu; //Wspin1, Wspin2, Wsub1, Wsub2, Usub, W_r1, dW_r2, Wtau1,dtau2
+        WeightArray<5> _Weight; //Wspin, W_r1, W_dr, Wtau1,Wtau2
+        WeightArray<5> _WeightAccu; //Wspin, W_r1, W_dr, Wtau1,dtau2
         //don't forget to add template class in weight_array.cpp file
         real _Beta;
         real _Norm; //The normalization factor

@@ -11,6 +11,7 @@
 #include "module/parameter/parameter.h"
 #include "module/weight/weight.h"
 #include "module/weight/component.h"
+#include "module/weight/gamma3.h"
 #include "utility/dictionary.h"
 
 using namespace std;
@@ -79,6 +80,8 @@ void MarkovMonitor::SqueezeStatistics(real factor)
 {
     Weight->Sigma->Estimator.SqueezeStatistics(factor);
     Weight->Polar->Estimator.SqueezeStatistics(factor);
+    Weight->GammaG->SqueezeStatistics(factor);
+    Weight->GammaW->SqueezeStatistics(factor);
     WormEstimator.SqueezeStatistics(factor);
     PhyEstimator.SqueezeStatistics(factor);
     SigmaEstimator.SqueezeStatistics(factor);

@@ -17,7 +17,7 @@ import plot, gc
 #start in pdb mode after Ctrl-C
 #signal.signal(signal.SIGINT, start_pdb)
 
-def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor):
+def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor, GammaG, GammaW):
     log.info("Measuring...")
     ChiTensor=calc.Add_ChiTensor_ZerothOrder(ChiTensor, G, Map)
     Chi = calc.Calculate_Chi(ChiTensor, Map)
@@ -59,6 +59,9 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     data["SigmaDeltaT"]=SigmaDeltaT.ToDict()
     data["Sigma"]=Sigma.ToDict()
     data["Polar"]=Polar.ToDict()
+    data["GammaG"]={"SmoothT": GammaG}
+    if GammaW is not None:
+        data["GammaW"]={"SmoothT": GammaW}
     Observable.Measure(Chi, Determ, G, Factory.NearestNeighbor)
 
     with DelayedInterrupt():
@@ -122,6 +125,12 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
             SigmaDeltaT.Merge(ratio, calc.SigmaDeltaT_FirstOrder(G, W0, Map))
             log.info("SigmaDeltaT is done")
 
+            GammaG=calc.GammaG_FirstOrder(G, Map)
+            GammaW=None
+            GammaW=np.zeros([6, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin])+0.0*1j
+            # print "Polar[UP,UP]=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
+            # print "GammaG[UP,UP]=\n", GammaG[UP,0,:,-1]
+
             if IsDysonOnly or IsNewCalculation:
                 log.info("accumulating Sigma/Polar statistics...")
                 Sigma.Merge(ratio, calc.SigmaSmoothT_FirstOrder(G, W, Map))
@@ -130,8 +139,8 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                 Polar.Merge(ratio, calc.Polar_FirstOrder(G, Map))
             else:
                 log.info("Collecting Sigma/Polar statistics...")
-                Statis=collect.CollectStatis(Map)
-                Sigma, Polar, ParaDyson["OrderAccepted"]=collect.UpdateWeight(Statis,
+                SigmaStatis, PolarStatis, GammaG, GammaW=collect.CollectStatis(Map)
+                Sigma, Polar, ParaDyson["OrderAccepted"]=collect.UpdateWeight([SigmaStatis, PolarStatis],
                         ParaDyson["ErrorThreshold"], ParaDyson["OrderAccepted"])
                 Sigma.Symmetric()
                 Polar.Symmetric()
@@ -186,7 +195,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
             #everything works prefectly 
 	    log.info("everything is going well!")
             Gold, Wold = G, W
-            Measure(para, Observable, Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor)
+            Measure(para, Observable, Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor, GammaG, GammaW)
             IsSuccessed=Factory.DecreaseField(ParaDyson["Annealing"])
             Factor=2.0 if IsSuccessed else 1.0
             parameter.BroadcastMessage(MessageFile, 
