@@ -37,11 +37,22 @@ bool Markov::BuildNew(ParaMC &para, Diagram &diag, weight::Weight &weight)
     InitialArray(ProbofCall, 0.0, NUpdates);
     InitialArray(SumofProbofCall, 0.0, NUpdates);
 
+    //For Test
     for (int i = 0; i < NUpdates; i++) {
-        ProbofCall[i] = 1.0 / real(NUpdates);
+        if (i < 19)
+            ProbofCall[i] = 1.0 / real(19.4);
+        else
+            ProbofCall[i] = 0.05 / real(19.4);
+
         for (int j = i; j < NUpdates; j++)
             SumofProbofCall[j] += ProbofCall[i];
     }
+
+//    for (int i = 0; i < NUpdates; i++) {
+//        ProbofCall[i] = 1.0 / real(NUpdates);
+//        for (int j = i; j < NUpdates; j++)
+//            SumofProbofCall[j] += ProbofCall[i];
+//    }
 
     InitialArray(&Accepted[0][0], 0.0, NUpdates * MAX_ORDER);
     InitialArray(&Proposed[0][0], 0.0, NUpdates * MAX_ORDER);
@@ -1559,6 +1570,9 @@ void Markov::JumpToOrder0()
 
 void Markov::JumpBackToOrder1()
 {
+    if (Diag->HasGammaGW != 0)
+        return;
+
     if (Worm->Exist || Diag->Order != 0)
         return;
 

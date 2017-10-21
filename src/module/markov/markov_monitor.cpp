@@ -130,35 +130,39 @@ void MarkovMonitor::Measure()
     if (Diag->Worm.Exist) {
         real WormWeight = 1.0 / OrderReWeight / Para->WormSpaceReweight;
         WormEstimator[Diag->Order].Measure(WormWeight);
-        if (Diag->MeasureGLine)
-            SigmaEstimator.Measure(WormWeight);
-        else
-            PolarEstimator.Measure(WormWeight);
+        if (Diag->HasGammaGW==0 ) {
+            if (Diag->MeasureGLine)
+                SigmaEstimator.Measure(WormWeight);
+            else if (!Diag->MeasureGLine)
+                PolarEstimator.Measure(WormWeight);
+        }
     }
     else {
         real OrderWeight = 1.0 / OrderReWeight;
         PhyEstimator[Diag->Order].Measure(OrderWeight);
-        if (Diag->MeasureGLine) {
-            SigmaEstimator.Measure(OrderWeight);
-            if (Diag->Order == 0) {
-                Weight->Sigma->Estimator.MeasureNorm(OrderWeight);
+        if (Diag->HasGammaGW==0 ){
+            if (Diag->MeasureGLine) {
+                SigmaEstimator.Measure(OrderWeight);
+                if (Diag->Order == 0) {
+                    Weight->Sigma->Estimator.MeasureNorm(OrderWeight);
+                }
+                else {
+                    gLine g = Diag->GMeasure;
+                    vertex vin = g->NeighVer(OUT);
+                    vertex vout = g->NeighVer(IN);
+                    Weight->Sigma->Measure(vin->R, vout->R, vin->Tau, vout->Tau, g->Spin(OUT), g->Spin(IN), Diag->Order, Diag->Phase * OrderWeight);
+                }
             }
             else {
-                gLine g = Diag->GMeasure;
-                vertex vin = g->NeighVer(OUT);
-                vertex vout = g->NeighVer(IN);
-                Weight->Sigma->Measure(vin->R, vout->R, vin->Tau, vout->Tau, g->Spin(OUT), g->Spin(IN), Diag->Order, Diag->Phase * OrderWeight);
-            }
-        }
-        else {
-            PolarEstimator.Measure(OrderWeight);
-            if (Diag->Order == 0)
-                Weight->Polar->Estimator.MeasureNorm(OrderWeight);
-            else {
-                wLine w = Diag->WMeasure;
-                vertex vin = w->NeighVer(OUT);
-                vertex vout = w->NeighVer(IN);
-                Weight->Polar->Measure(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin(), vout->Spin(), Diag->Order, -Diag->Phase * OrderWeight);
+                PolarEstimator.Measure(OrderWeight);
+                if (Diag->Order == 0)
+                    Weight->Polar->Estimator.MeasureNorm(OrderWeight);
+                else {
+                    wLine w = Diag->WMeasure;
+                    vertex vin = w->NeighVer(OUT);
+                    vertex vout = w->NeighVer(IN);
+                    Weight->Polar->Measure(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin(), vout->Spin(), Diag->Order, -Diag->Phase * OrderWeight);
+                }
             }
         }
     }

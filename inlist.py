@@ -25,7 +25,7 @@ Dyson={
 }
 
 Beta=0.5
-Order=3
+Order=1
 Common={
 "Tau": {"MaxTauBin" : 32, "Beta": Beta},
 "Lattice":  {
@@ -81,8 +81,8 @@ MonteCarlo["Markov"]={
     }
 
 Dyson["Dyson"]={
-    "SleepTime": 0,
-    #"SleepTime": 300,
+    #"SleepTime": 0,
+    "SleepTime": 300,
     "OrderAccepted": {"Sigma":1, "Polar":1},
     "ErrorThreshold": 0.2,
     "Annealing": {

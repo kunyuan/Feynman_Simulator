@@ -97,7 +97,9 @@ void MonteCarlo(const para::Job& Job)
 	    //}
 
             if (PrinterTimer.check(Para.PrinterTimer)) {
-                Env.Diag.CheckDiagram();
+                if (!Env.Diag.CheckDiagram()){
+                    ABORT("Diagram Check didn't pass!!!");
+                }
                 Markov.PrintDetailBalanceInfo();
             }
 

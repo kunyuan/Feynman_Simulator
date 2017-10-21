@@ -64,7 +64,11 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     with DelayedInterrupt():
         try:
             log.info("Save weights into {0} File".format(WeightFile))
-            IO.SaveBigDict(WeightFile, data)
+
+            #######TODO: NOT UPDATING WEIGHT FILE
+            #IO.SaveBigDict(WeightFile, data)
+            #####################################
+
             parameter.Save(ParaFile, para)  #Save Parameters
             Observable.Save(OutputFile)
 
