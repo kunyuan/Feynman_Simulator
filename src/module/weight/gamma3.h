@@ -47,11 +47,14 @@ namespace weight {
 
         WeightArray<4> _WeightAccu; //Gspin, G_r1, Gtau1,dtau2
         WeightArray<4> _Weight; //Gspin, G_r1, Gtau1,dtau2
+        uint _CacheIndex[4];
         //don't forget to add template class in weight_array.cpp file
         real _Beta;
         real _Norm; //The normalization factor
         real _NormAccu; //The normalization accumulation
         uint _WeightSize;
+        real _dBetaInverse;
+        uint _MaxTauBin;
     };
 
     class GammaWClass {
@@ -82,10 +85,14 @@ namespace weight {
         IndexMapSPIN4 _Map;
         WeightArray<5> _Weight; //Wspin, W_r1, W_dr, Wtau1,Wtau2
         WeightArray<5> _WeightAccu; //Wspin, W_r1, W_dr, Wtau1,dtau2
+        uint _CacheIndex[5];
         //don't forget to add template class in weight_array.cpp file
         real _Beta;
         real _Norm; //The normalization factor
         real _NormAccu; //The normalization accumulation
         uint _WeightSize;
+        real _dBetaInverse;
+        uint _MaxTauBin;
+        uint _SpinIndex(spin *, spin*) const;
     };
 };
