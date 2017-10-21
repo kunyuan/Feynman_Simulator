@@ -23,10 +23,14 @@ namespace weight {
 typedef const int flag;
 flag SigmaPolar = 1;
 flag GW = 2;
+flag GammaGW = 3;
+flag GammaGWStatis = 4;
 class SigmaClass;
 class PolarClass;
 class GClass;
 class WClass;
+class GammaGClass;
+class GammaWClass;
 
 class Weight {
 
@@ -38,6 +42,8 @@ public:
     PolarClass* Polar;
     GClass* G;
     WClass* W;
+    GammaGClass* GammaG;
+    GammaWClass* GammaW;
 
     void SetTest(const para::ParaMC&);
     void SetDiagCounter(const para::ParaMC&);
@@ -49,6 +55,7 @@ public:
 private:
     void _AllocateGW(const para::ParaMC&);
     void _AllocateSigmaPolar(const para::ParaMC&);
+    void _AllocateGammaGW(const para::ParaMC&);
 };
 }
 

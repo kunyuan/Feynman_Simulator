@@ -21,6 +21,7 @@ class Weight;
 class GClass;
 class WClass;
 class GammaGClass;
+class GammaWClass;
 class SigmaClass;
 class PolarClass;
 class Norm;
@@ -49,6 +50,7 @@ public:
     weight::SigmaClass* Sigma;
     weight::PolarClass* Polar;
     weight::GammaGClass* GammaG;
+    weight::GammaWClass* GammaW;
     weight::GClass* G;
     weight::WClass* W;
     RandomFactory* RNG;

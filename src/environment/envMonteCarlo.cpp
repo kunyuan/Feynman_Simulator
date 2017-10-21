@@ -36,6 +36,7 @@ bool EnvMonteCarlo::BuildNew()
     Dictionary GW_;
     GW_.BigLoad(Job.WeightFile);
     Weight.FromDict(GW_, weight::GW, Para);
+    Weight.FromDict(GW_, weight::GammaGW, Para);
 
     //    Weight.SetDiagCounter(Para);//Test for DiagCounter
     //    Weight.SetTest(Para);//Test for WeightTest
@@ -73,6 +74,8 @@ bool EnvMonteCarlo::Load()
     statis_.BigLoad(Job.StatisticsFile);
     Weight.FromDict(statis_, weight::GW, Para);
     Weight.FromDict(statis_, weight::SigmaPolar, Para);
+    Weight.FromDict(statis_, weight::GammaGW, Para);
+    Weight.FromDict(statis_, weight::GammaGWStatis, Para);
     LOG_INFO(DoesParaFileExit);
     if (DoesParaFileExit)
         Diag.FromDict(para_.Get<Dictionary>(ConfigKey), Para.Lat, *Weight.G, *Weight.W);
@@ -91,7 +94,7 @@ void EnvMonteCarlo::Save()
     para_[ConfigKey] = Diag.ToDict();
     para_["PID"] = Job.PID;
     para_.Save(Job.ParaFile, "w");
-    Dictionary statis_ = Weight.ToDict(weight::GW | weight::SigmaPolar);
+    Dictionary statis_ = Weight.ToDict(weight::GW | weight::SigmaPolar | weight::GammaGWStatis);
     statis_.Update(MarkovMonitor.ToDict());
     statis_.BigSave(Job.StatisticsFile);
     LOG_INFO("Saving data is done!");

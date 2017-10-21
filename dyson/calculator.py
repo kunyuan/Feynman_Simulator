@@ -7,6 +7,31 @@ import weight, plot
 from logger import *
 print "calculator"
 
+def GammaG_FirstOrder(G, map):
+    GammaG=np.zeros([2, map.Vol, map.MaxTauBin, map.MaxTauBin])+0.0*1j
+    G.FFT("R", "T")
+    Uspin=UP
+    Gspin=UP
+    # for spin in range(2):
+    sub=0
+    r=0
+    for t1 in range(map.MaxTauBin):
+        #tau1=t1*Dt
+        #G(tau1-0^+)=G[(t1-0.5)*Dt]=G[t1-1]
+        G1=G.Data[Uspin,sub,Gspin,sub,r,t1]
+        for dt in range(map.MaxTauBin):
+            #dtau=(dt+0.5)*Dt
+            #dtau2=(t1+dt+0.5)*Dt
+            #G(-tau2-0^+)=G(-(t1+dt+0.5)*Dt)=G[-t1-dt-1]
+            tg2=dt-t1-1
+            sign2=1
+            if tg2<0:
+                tg2+=map.MaxTauBin
+                sign2=-sign2
+            G2=sign2*G.Data[Gspin,sub,Uspin,sub,r,tg2]
+            GammaG[Gspin, r, t1, dt]=G1*G2 
+    return GammaG
+
 def SigmaSmoothT_FirstOrder(G, W, map):
     '''Fock diagram, assume Spin Conservation'''
     OrderSign=-1

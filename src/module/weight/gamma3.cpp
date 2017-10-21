@@ -10,15 +10,16 @@ using namespace weight;
 using namespace std;
 
 
-GammaGClass::GammaGClass(const Lattice &lat, real beta, uint MaxTauBin, real Norm)
+GammaGClass::GammaGClass(const Lattice &lat, real beta, uint MaxTauBin)
     : _Map(IndexMapSPIN2(beta, MaxTauBin, lat, TauAntiSymmetric))
 {
     int Vol = _Map.Lat.Vol;
     _Beta = _Map.Beta;
-    _Norm = Norm * (_Map.MaxTauBin / _Beta) / _Beta / Vol;
-    uint SubVol=(uint)lat.SublatVol;
-    uint MeaShape[6]={2,SubVol,SubVol,(uint)Vol,MaxTauBin,MaxTauBin};
+    _Norm = (_Map.MaxTauBin / _Beta) / _Beta / Vol;
+//    uint SubVol=(uint)lat.SublatVol;
+    uint MeaShape[4]={2,(uint)Vol,MaxTauBin,MaxTauBin};
     //Gspin, Gsub, Usub, G_r1, Gtau1,dtau2
+    _Weight.Allocate(MeaShape, SMOOTH);
     _WeightAccu.Allocate(MeaShape, SMOOTH);
     _WeightSize = _WeightAccu.GetSize();
     ClearStatistics();
@@ -60,7 +61,12 @@ void GammaGClass::SqueezeStatistics(real factor)
 
 /**********************   Weight IO ****************************************/
 
-bool GammaGClass::FromDict(const Dictionary& dict)
+bool GammaGClass::WeightFromDict(const Dictionary& dict) {
+    _Weight.FromDict(dict);
+    return true;
+}
+
+bool GammaGClass::StatisFromDict(const Dictionary &dict)
 {
     _Norm = dict.Get<real>("Norm");
     _NormAccu = dict.Get<real>("NormAccu");
@@ -72,7 +78,7 @@ bool GammaGClass::FromDict(const Dictionary& dict)
     return true;
 }
 
-Dictionary GammaGClass::ToDict()
+Dictionary GammaGClass::StatisToDict()
 {
     Dictionary dict;
     dict["Norm"] = _Norm;
@@ -81,19 +87,25 @@ Dictionary GammaGClass::ToDict()
     return dict;
 }
 
+Dictionary GammaGClass::WeightToDict()
+{
+    return _Weight.ToDict();
+}
 
-GammaWClass::GammaWClass(const Lattice &lat, real beta, uint MaxTauBin, real Norm)
+
+GammaWClass::GammaWClass(const Lattice &lat, real beta, uint MaxTauBin)
         : _Map(IndexMapSPIN4(beta, MaxTauBin, lat, TauSymmetric))
 {
     int Vol = _Map.Lat.Vol;
     _Beta = _Map.Beta;
-    _Norm = Norm * (_Map.MaxTauBin / _Beta) / _Beta / Vol;
-    uint SubVol=(uint)lat.SublatVol;
-    uint MeaShape[8]={6,SubVol,SubVol,(uint)Vol,(uint)Vol, MaxTauBin,MaxTauBin};
-    //Wspin12, Wsub1, Wsub2, Usub, W_r1, dW_r2, Wtau1,dtau2
+    _Norm = (_Map.MaxTauBin / _Beta) / _Beta / Vol;
+//    uint SubVol=(uint)lat.SublatVol;
+    uint MeaShape[5]={6,(uint)Vol,(uint)Vol, MaxTauBin,MaxTauBin};
+    //Wspin12, W_r1, dW_r2, Wtau1,dtau2
+    _Weight.Allocate(MeaShape, SMOOTH);
     _WeightAccu.Allocate(MeaShape, SMOOTH);
     _WeightSize = _WeightAccu.GetSize();
-//    ClearStatistics();
+    ClearStatistics();
 }
 
 Complex GammaWClass::Weight(const Site &Wr1, const Site &Wr2, const Site &Ur,
@@ -128,7 +140,14 @@ void GammaWClass::SqueezeStatistics(real factor)
     _WeightAccu *= 1.0 / factor;
 }
 
-bool GammaWClass::FromDict(const Dictionary& dict)
+/**********************   Weight IO ****************************************/
+
+bool GammaWClass::WeightFromDict(const Dictionary& dict) {
+    _Weight.FromDict(dict);
+    return true;
+}
+
+bool GammaWClass::StatisFromDict(const Dictionary &dict)
 {
     _Norm = dict.Get<real>("Norm");
     _NormAccu = dict.Get<real>("NormAccu");
@@ -140,7 +159,7 @@ bool GammaWClass::FromDict(const Dictionary& dict)
     return true;
 }
 
-Dictionary GammaWClass::ToDict()
+Dictionary GammaWClass::StatisToDict()
 {
     Dictionary dict;
     dict["Norm"] = _Norm;
@@ -149,3 +168,7 @@ Dictionary GammaWClass::ToDict()
     return dict;
 }
 
+Dictionary GammaWClass::WeightToDict()
+{
+    return _Weight.ToDict();
+}
