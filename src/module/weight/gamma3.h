@@ -11,7 +11,7 @@
 #include "weight_array.h"
 #include "weight_estimator.h"
 #include "utility/complex.h"
-#include "component.h"
+//#include "component.h"
 
 namespace weight {
 //     r1,t1  ---\

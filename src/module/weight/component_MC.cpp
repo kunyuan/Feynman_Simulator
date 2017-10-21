@@ -20,8 +20,7 @@ Complex GClass::Weight(const Site& rin, const Site& rout, real tin, real tout, s
     if (IsMeasure)
         return _MeasureWeight(Index);
     else if (IsGammaG)
-        //TODO add gamma3 pointer here
-        return _MeasureWeight(Index);
+        return GammaGWeight->Weight(rin, rout, ext->R, tin, tout, ext->Tau, SpinIn, SpinOut, ext->Spin);
     else
         return _Map.GetTauSymmetryFactor(tin, tout) * _SmoothTWeight(Index);
 }
@@ -43,8 +42,11 @@ Complex GClass::Weight(int dir, const Site& r1, const Site& r2, real t1, real t2
     if (IsMeasure)
         return _MeasureWeight(Index);
     else if (IsGammaG)
-        //TODO add gamma3 pointer here
-        return _MeasureWeight(Index);
+        if (dir == IN) {
+            return GammaGWeight->Weight(r1, r2, ext->R, t1, t2, ext->Tau, Spin1, Spin2, ext->Spin);
+        }else{
+            return GammaGWeight->Weight(r2, r1, ext->R, t2, t1, ext->Tau, Spin2, Spin1, ext->Spin);
+        }
     else
         return symmetryfactor * _SmoothTWeight(Index);
 }
@@ -67,8 +69,7 @@ Complex WClass::Weight(const Site& rin, const Site& rout, real tin, real tout, s
     if (IsMeasure)
         return _MeasureWeight(index);
     else if(IsGammaW)
-        //TODO: add GammaW pointer here
-        return _MeasureWeight(index);
+        return GammaWWeight->Weight(rin, rout, ext->R, tin, tout, ext->Tau, SpinIn, SpinOut, ext->Spin);
     else
         return _SmoothTWeight(index);
 }
@@ -97,8 +98,10 @@ Complex WClass::Weight(int dir, const Site& r1, const Site& r2, real t1, real t2
     else if (IsDelta)
         return _DeltaTWeight(index);
     else if(IsGammaW)
-        //TODO: add GammaW pointer here
-        return _MeasureWeight(index);
+        if (dir == IN)
+            return GammaWWeight->Weight(r1, r2, ext->R, t1, t2, ext->Tau, Spin1, Spin2, ext->Spin);
+        else
+            return GammaWWeight->Weight(r2, r1, ext->R, t2, t1, ext->Tau, Spin2, Spin1, ext->Spin);
     else
         return _SmoothTWeight(index);
 }
