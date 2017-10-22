@@ -197,19 +197,6 @@ class Weight():
         else:
             self.Data=self.BackUpWeight.Data
     
-    def Symmetric(self):
-        self.Data = (self.Data[...,:]+self.Data[...,::-1])/2.0
-        for SpIn in range(self.NSpin):
-            for SpOut in range(self.NSpin):
-                self.Data[SpIn,:,SpOut,:,:,:] = (self.Data[SpIn, :, SpOut, :,:,:]+self.Data[SpOut,:,SpIn,:,:,:])/2.0
-                self.Data[SpOut,:,SpIn,:,:,:] = (self.Data[SpIn, :, SpOut, :,:,:]+self.Data[SpOut,:,SpIn,:,:,:])/2.0
-
-        for SubIn in range(self.NSublat):
-            for SubOut in range(self.NSublat):
-                self.Data[:,SubIn,:,SubOut,:,:] = (self.Data[:,SubIn,:,SubOut,:,:]+self.Data[:,SubOut,:,SubIn,:,:])/2.0
-                self.Data[:,SubOut,:,SubIn,:,:] = (self.Data[:,SubIn,:,SubOut,:,:]+self.Data[:,SubOut,:,SubIn,:,:])/2.0
-
-
     def FFT(self, *SpaceOrTime):
         if "R" in SpaceOrTime and self.SpaceDomain is "K":
             self.__fftSpace(-1)
