@@ -56,6 +56,11 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     # print "Chi=\n", Chi.Data[0,0,0,0,0,:]
     # print "Chi=\n", Chi.Data[0,0,0,0,1,:]
 
+    print "Polar[UP,UP]=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
+    print "GammaG[UP,UP]=\n", GammaG[UP,0,:,:].diagonal()
+    GGW=calc.GGW(GammaG, G, W, G.Map)
+    print "GGW[UP]=\n", GGW[UP,0,0,:]
+
     data={}
     data["Chi"]=Chi.ToDict()
     data["G"]=G.ToDict()
@@ -134,7 +139,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
             SigmaDeltaT.Merge(ratio, calc.SigmaDeltaT_FirstOrder(G, W0, Map))
             log.info("SigmaDeltaT is done")
 
-            GammaG=calc.GammaG_FirstOrder(G, Map)
+            GammaG=calc.GammaG_ZerothOrder(G, Map)
             GammaW=None
             #GammaW=np.zeros([6, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin])+0.0*1j
             # print "Polar[UP,UP]=\n", Polar.Data[spinUP,0,spinUP,0,0,:]

@@ -7,7 +7,7 @@ import weight, plot
 from logger import *
 print "calculator"
 
-def GammaG_FirstOrder(G, map):
+def GammaG_ZerothOrder(G, map):
     GammaG=np.zeros([2, map.Vol, map.MaxTauBin, map.MaxTauBin])+0.0*1j
     G.FFT("R", "T")
     Uspin=UP
@@ -18,19 +18,74 @@ def GammaG_FirstOrder(G, map):
     for t1 in range(map.MaxTauBin):
         #tau1=t1*Dt
         #G(tau1-0^+)=G[(t1-0.5)*Dt]=G[t1-1]
-        G1=G.Data[Uspin,sub,Gspin,sub,r,t1]
-        for dt in range(map.MaxTauBin):
+        tg1=t1
+        sign1=1
+        # if tg1<0:
+            # tg1+=map.MaxTauBin
+            # sign1=-sign1
+        G1=G.Data[Uspin,sub,Gspin,sub,r,tg1]*sign1
+        for t2 in range(map.MaxTauBin):
             #dtau=(dt+0.5)*Dt
             #dtau2=(t1+dt+0.5)*Dt
             #G(-tau2-0^+)=G(-(t1+dt+0.5)*Dt)=G[-t1-dt-1]
-            tg2=dt-t1-1
+            tg2=-t2-1
             sign2=1
             if tg2<0:
                 tg2+=map.MaxTauBin
                 sign2=-sign2
             G2=sign2*G.Data[Gspin,sub,Uspin,sub,r,tg2]
-            GammaG[Gspin, r, t1, dt]=G1*G2 
+            GammaG[Gspin, r, t1, t2]=G1*G2 
     return GammaG
+
+def GGW(GammaG, G,W,_map):
+    spinUP=_map.Spin2Index(UP,UP)
+    spinDOWN=_map.Spin2Index(DOWN,DOWN)
+    spinUPDOWN=_map.Spin2Index(UP,DOWN)
+    spinDOWNUP=_map.Spin2Index(DOWN,UP)
+    sub=0
+    r=0
+    GGW=np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
+    for t1 in range(_map.MaxTauBin):
+        for t2 in range(_map.MaxTauBin):
+            GGW[UP,r, t1,t2]=GammaG[UP,r,t1,t2]*W.Data[spinUP,sub,spinUP,sub,0,abs(t1-t2)]
+            GGW[DOWN,r, t1,t2]=GammaG[UP,r,t1,t2]*W.Data[spinDOWNUP,sub,spinUPDOWN,sub,0,abs(t1-t2)]
+    return GGW
+
+# def GammaG_FirstOrder(GammaG, GammaG0, W0, _map):
+    # GammaG=np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
+    # spinUP=Map.Spin2Index(UP,UP)
+    # spinDOWN=Map.Spin2Index(DOWN,DOWN)
+
+    # # print "GammaG[UP,UP]=\n", GammaG[UP,0,:,-1]
+    # W0.FFT("R", "T")
+    # Uspin=UP
+    # Gspin=UP
+    # # for spin in range(2):
+    # sub=0
+    # r=0
+    # for Gr in range(_map.Vol):
+        # for InnerR in range(_map.Vol):
+            # if W0.Data[spinUP,0,spinUP,0,
+            # for t1 in range(map.MaxTauBin):
+                # for dt in range(map.MaxTauBin):
+
+    # for t1 in range(map.MaxTauBin):
+        # #tau1=t1*Dt
+        # #G(tau1-0^+)=G[(t1-0.5)*Dt]=G[t1-1]
+        # G1=G.Data[Uspin,sub,Gspin,sub,r,t1]
+        # for dt in range(map.MaxTauBin):
+            # #dtau=(dt+0.5)*Dt
+            # #dtau2=(t1+dt+0.5)*Dt
+            # #G(-tau2-0^+)=G(-(t1+dt+0.5)*Dt)=G[-t1-dt-1]
+            # tg2=dt-t1-1
+            # sign2=1
+            # if tg2<0:
+                # tg2+=map.MaxTauBin
+                # sign2=-sign2
+            # G2=sign2*G.Data[Gspin,sub,Uspin,sub,r,tg2]
+            # GammaG[Gspin, r, t1, dt]=G1*G2 
+    # return GammaG
+
 
 def SigmaSmoothT_FirstOrder(G, W, map):
     '''Fock diagram, assume Spin Conservation'''
