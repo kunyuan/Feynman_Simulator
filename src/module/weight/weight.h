@@ -23,8 +23,8 @@ namespace weight {
 typedef const int flag;
 flag SigmaPolar = 1;
 flag GW = 2;
-flag GammaGW = 3;
-flag GammaGWStatis = 4;
+flag GammaGW = 4;
+flag GammaGWStatis = 8;
 class SigmaClass;
 class PolarClass;
 class GClass;

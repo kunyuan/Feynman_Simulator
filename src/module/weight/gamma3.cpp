@@ -2,7 +2,6 @@
 // Created by kun on 10/18/17.
 //
 
-#include "component.h"
 #include "gamma3.h"
 #include "utility/dictionary.h"
 

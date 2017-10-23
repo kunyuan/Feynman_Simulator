@@ -154,7 +154,7 @@ bool Diagram::_CheckWeight()
             vin = G(i)->NeighVer(IN);
             vout = G(i)->NeighVer(OUT);
             gWeight = GWeight->Weight(vin->R, vout->R, vin->Tau, vout->Tau,
-                                      vin->Spin(OUT), vout->Spin(IN), G(i)->IsMeasure, G(i)->IsGammaG);
+                                      vin->Spin(OUT), vout->Spin(IN), G(i)->IsMeasure, G(i)->IsGammaG, &UExt);
             if (!Equal(G(i)->Weight, gWeight))
                 return false;
             if (Equal(G(i)->Weight, Complex(0.0, 0.0)))
@@ -166,7 +166,7 @@ bool Diagram::_CheckWeight()
             vin = W(i)->NeighVer(IN);
             vout = W(i)->NeighVer(OUT);
             wWeight = WWeight->Weight(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin(),
-                                      vout->Spin(), W(i)->IsWorm, W(i)->IsMeasure, W(i)->IsDelta, W(i)->IsGammaW);
+                                      vout->Spin(), W(i)->IsWorm, W(i)->IsMeasure, W(i)->IsDelta, W(i)->IsGammaW, &UExt);
             if (!Equal(W(i)->Weight, wWeight))
                 return false;
             if (Equal(W(i)->Weight, Complex(0.0, 0.0)))

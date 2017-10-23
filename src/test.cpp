@@ -30,7 +30,7 @@ int RunTest()
     //TestArray();
     TEST(TestLattice);
     TEST(diag::TestDiagram);
-    TEST(mc::TestMarkov);
+//    TEST(mc::TestMarkov);
     //    TEST(mc::TestDiagCounter);
 
     TEST(TestEstimator);

@@ -20,6 +20,7 @@ namespace weight {
 class Weight;
 class GClass;
 class WClass;
+class ExtPoint;
 class GammaGClass;
 class GammaWClass;
 class SigmaClass;
@@ -47,6 +48,7 @@ public:
     real* PolarReweight;
     diag::Diagram* Diag;
     diag::WormClass* Worm;
+    weight::ExtPoint* UExt;
     weight::SigmaClass* Sigma;
     weight::PolarClass* Polar;
     weight::GammaGClass* GammaG;

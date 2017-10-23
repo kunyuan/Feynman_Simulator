@@ -74,7 +74,7 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
             log.info("Save weights into {0} File".format(WeightFile))
 
             #######TODO: NOT UPDATING WEIGHT FILE
-            #IO.SaveBigDict(WeightFile, data)
+            IO.SaveBigDict(WeightFile, data)
             #####################################
 
             parameter.Save(ParaFile, para)  #Save Parameters

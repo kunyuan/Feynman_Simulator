@@ -10,7 +10,7 @@
 #include "component.h"
 #include "utility/dictionary.h"
 #include "module/parameter/parameter.h"
-#include "gamma3.h"
+//#include "gamma3.h"
 
 using namespace std;
 using namespace para;
@@ -96,6 +96,8 @@ bool weight::Weight::FromDict(const Dictionary &dict, flag _flag, const para::Pa
             GammaW= nullptr;
         }
         GammaG->WeightFromDict(dict.Get<Dictionary>("GammaG"));
+        G->GammaGWeight = GammaG;
+        W->GammaWWeight = GammaW;
     }
     if (_flag & weight::GammaGWStatis) {
         ASSERT_ALLWAYS(GammaG!= nullptr&&GammaW!= nullptr, "GammaG and GammaW has to be initialized first!");

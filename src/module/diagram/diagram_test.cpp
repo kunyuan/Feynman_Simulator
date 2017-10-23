@@ -22,7 +22,7 @@ int diag::TestDiagram()
     sput_enter_suite("Test Underlying Diagram Data Structure");
     sput_run_test(Test_Diagram_Component);
     sput_run_test(Test_Diagram_Component_Bundle);
-    sput_run_test(Test_Diagram_IO);
+//    sput_run_test(Test_Diagram_IO);
     sput_finish_testing();
     return sput_get_return_value();
 }

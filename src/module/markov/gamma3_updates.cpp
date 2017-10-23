@@ -11,7 +11,6 @@
 #include "lattice/lattice.h"
 #include "module/weight/weight.h"
 #include "module/weight/component.h"
-#include "module/weight/gamma3.h"
 
 using namespace std;
 using namespace diag;
@@ -42,15 +41,13 @@ void Markov::JumpToGammaG() {
 
     real tau_u = RandomPickTau();
     Site r_u = RandomPickSite();
-    spin spinu_out = RandomPickSpin();
+    spin spin_u = UP;
 
-    ExtPoint v_u = ExtPoint();
-    v_u.R = r_u;
-    v_u.Tau = tau_u;
-    v_u.Spin = spinu_out;
+    UExt->R = r_u;
+    UExt->Tau = tau_u;
+    UExt->Spin = spin_u;
 
-
-    Complex gammaGWeight = G->Weight(vA->R, vB->R, vA->Tau, vB->Tau, spinA, spinB, false, true, &v_u);
+    Complex gammaGWeight = G->Weight(vA->R, vB->R, vA->Tau, vB->Tau, spinA, spinB, false, true, UExt);
 //    Complex gammaGWeight = Complex(1.0, 0.0);
 
     Complex weightRatio = gammaGWeight / (gAB->Weight);
@@ -58,8 +55,8 @@ void Markov::JumpToGammaG() {
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    prob *= ProbofCall[JUMP_FROM_GAMMAG_TO_G] * 2.0* Diag->Order / (ProbofCall[JUMP_TO_GAMMAG]
-             * ProbTau(tau_u) * ProbSite(r_u) * 0.5);
+    prob *= ProbofCall[JUMP_FROM_GAMMAG_TO_G] * 2.0* Diag->Order /
+            (ProbofCall[JUMP_TO_GAMMAG] * ProbTau(tau_u) * ProbSite(r_u));
 
     Proposed[JUMP_TO_GAMMAG][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
@@ -67,11 +64,11 @@ void Markov::JumpToGammaG() {
 
         Diag->Phase *= sgn;
         Diag->Weight *= weightRatio;
+
         Diag->HasGammaGW = 1;
 
         Diag->Vin = &gAB->nVer[IN];
         Diag->Vout = &gAB->nVer[OUT];
-        Diag->V_Ext = v_u;
 
         gAB->IsGammaG = true;
         gAB->Weight = gammaGWeight;
@@ -87,27 +84,28 @@ void Markov::JumpFromGammaGToG()  {
 
     vertex v_A = *Diag->Vin;
     vertex v_B = *Diag->Vout;
-    ExtPoint v_u = Diag->V_Ext;
+    ExtPoint * v_u = UExt;
 
     gLine gAB = v_A->NeighG(OUT);
 
     if (v_A->R != v_B->R)
         return;
 
+    if (v_u->Spin != UP)
+        return;
+
     Complex GABWeight = G->Weight(v_A->R, v_B->R, v_A->Tau, v_B->Tau,
                                   gAB->Spin(), gAB->Spin(),
-                                  false, false);
+                                  false, false, v_u);
 
     Complex gammaGWeight = gAB->Weight;
-
-//    Complex gammaGWeight = Complex(1.0, 0.0);
 
     Complex weightRatio = GABWeight/gammaGWeight;
 
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    prob *= (ProbofCall[JUMP_TO_GAMMAG] * ProbTau(v_u.Tau) * ProbSite(v_u.R) * 0.5)
+    prob *= (ProbofCall[JUMP_TO_GAMMAG] * ProbTau(v_u->Tau) * ProbSite(v_u->R))
                 / (ProbofCall[JUMP_FROM_GAMMAG_TO_G] * 2.0 * Diag->Order);
 
     Proposed[JUMP_FROM_GAMMAG_TO_G][Diag->Order] += 1.0;
@@ -150,9 +148,12 @@ void Markov::AddTwoG() {
     spin spin_meas = measureG->Spin();
     Site r_meas = vA->R;
 
-    Complex GACWeight = G->Weight(r_meas, r_meas, vA->Tau, tau_C, spin_meas, spin_meas, false, false);
-    Complex GDBWeight = G->Weight(r_meas, r_meas, tau_D, vB->Tau, spin_meas, spin_meas, false, false);
-    Complex measureGWeight = G->Weight(r_meas, r_meas, tau_C, tau_D, spin_meas, spin_meas, true, false);
+    Complex GACWeight = G->Weight(r_meas, r_meas, vA->Tau, tau_C, spin_meas, spin_meas,
+                                  false, false, UExt);
+    Complex GDBWeight = G->Weight(r_meas, r_meas, tau_D, vB->Tau, spin_meas, spin_meas,
+                                  false, false, UExt);
+    Complex measureGWeight = G->Weight(r_meas, r_meas, tau_C, tau_D, spin_meas, spin_meas,
+                                       true, false, UExt);
 
     Complex weightRatio = GACWeight * GDBWeight * measureGWeight/measureG->Weight;
 
@@ -227,11 +228,10 @@ void Markov::DeleteTwoG() {
     if (vC->R != vD->R || vC->R != vA->R || vD->R != vB->R)
         return;
 
-
     spin spin_meas = measureG->Spin();
     Site r_meas = vC->R;
 
-    Complex measureGWeight = G->Weight(r_meas, r_meas, vA->Tau, vB->Tau, spin_meas, spin_meas, true, false);
+    Complex measureGWeight = G->Weight(r_meas, r_meas, vA->Tau, vB->Tau, spin_meas, spin_meas, true, false, UExt);
 
     Complex weightRatio = measureGWeight/(measureG->Weight * GAC->Weight * GDB->Weight);
 

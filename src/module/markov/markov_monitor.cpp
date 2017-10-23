@@ -11,7 +11,6 @@
 #include "module/parameter/parameter.h"
 #include "module/weight/weight.h"
 #include "module/weight/component.h"
-#include "module/weight/gamma3.h"
 #include "utility/dictionary.h"
 
 using namespace std;

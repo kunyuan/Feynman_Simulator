@@ -13,6 +13,7 @@
 #include "weight_array.h"
 #include "weight_estimator.h"
 #include "utility/complex.h"
+#include "gamma3.h"
 
 namespace weight {
 
@@ -55,6 +56,8 @@ class GClass{
     Complex Weight(const Site &, const Site &, real, real, spin, spin, bool, bool, ExtPoint * extPoint=nullptr) const;
     Complex Weight(int, const Site &, const Site &, real, real, spin, spin, bool, bool, ExtPoint * extPoint=nullptr) const;
 
+    GammaGClass* GammaGWeight;
+
   private:
     SmoothTArray _SmoothTWeight;
     weight::SmoothTArray _MeasureWeight;
@@ -76,6 +79,8 @@ class WClass {
 
     Complex Weight(const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool, bool, ExtPoint * extPoint=nullptr) const;
     Complex Weight(int, const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool, bool, ExtPoint * extPoint=nullptr) const;
+
+    GammaWClass* GammaWWeight;
 
   protected:
     DeltaTArray _DeltaTWeight;
