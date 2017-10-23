@@ -38,6 +38,7 @@ def GammaG_ZerothOrder(G, map):
     return GammaG
 
 def GGW(GammaG, G,W,_map):
+    OrderSign = -1
     spinUP=_map.Spin2Index(UP,UP)
     spinDOWN=_map.Spin2Index(DOWN,DOWN)
     spinUPDOWN=_map.Spin2Index(UP,DOWN)
@@ -47,8 +48,8 @@ def GGW(GammaG, G,W,_map):
     GGW=np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
     for t1 in range(_map.MaxTauBin):
         for t2 in range(_map.MaxTauBin):
-            GGW[UP,r, t1,t2]=GammaG[UP,r,t1,t2]*W.Data[spinUP,sub,spinUP,sub,0,abs(t1-t2)]
-            GGW[DOWN,r, t1,t2]=GammaG[UP,r,t1,t2]*W.Data[spinDOWNUP,sub,spinUPDOWN,sub,0,abs(t1-t2)]
+            GGW[UP,r, t1,t2]=OrderSign*GammaG[UP,r,t1,t2]*W.Data[spinUP,sub,spinUP,sub,0,abs(t1-t2)]
+            GGW[DOWN,r, t1,t2]=OrderSign*GammaG[UP,r,t1,t2]*W.Data[spinDOWNUP,sub,spinUPDOWN,sub,0,abs(t1-t2)]
     return GGW
 
 # def GammaG_FirstOrder(GammaG, GammaG0, W0, _map):

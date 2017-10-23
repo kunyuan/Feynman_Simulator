@@ -62,7 +62,7 @@ Common={
 MonteCarlo["Markov"]={
     "Order": Order, "Sweep" : 10, "Toss" : 1000,
     #Start from order 0, so that OrderReWeight has Order+1 elements
-    "OrderReWeight" : [2.0, 0.5, 1.0, 0.1, 0.05, 0.05, 0.01, 0.005],
+    "OrderReWeight" : [0.1, 0.5, 1.0, 0.1, 0.05, 0.05, 0.01, 0.005],
     "WormSpaceReweight" : 0.05,
     "PolarReweight" : 2.0,
     "OrderTimeRatio" : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],

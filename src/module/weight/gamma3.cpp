@@ -17,7 +17,7 @@ GammaGClass::GammaGClass(const Lattice &lat, real beta, uint MaxTauBin, real Nor
     _MaxTauBin = MaxTauBin;
     _dBetaInverse = _MaxTauBin/_Beta;
 
-    _Norm = Norm * pow(_Map.MaxTauBin / _Beta, 1.0) / _Beta / Vol;
+    _Norm = Norm * pow(_Map.MaxTauBin / _Beta, 2.0) / _Beta / Vol;
 //    _Norm = pow(_Map.MaxTauBin / _Beta, 1.0) / _Beta / pow(Vol, 1.0)*Norm;
 
 //    uint SubVol=(uint)lat.SublatVol;

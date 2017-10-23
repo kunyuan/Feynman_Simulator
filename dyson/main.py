@@ -47,19 +47,23 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     # for i in range(Map.MaxTauBin):
         # n=Sigma.Data[UP,0,UP,0,0,i]
         # print '%05f %05f %05f' % (i*Map.Beta/Map.MaxTauBin, n.real, n.imag)
-    print "Sigma=\n", Sigma.Data[UP,0,UP,0,0,:]
-    print "GammaG=\n", np.sum(GammaG[UP, :, 0, :], axis=0)
-    print "GammaG=\n", GammaG[UP, 0, 0, :]
+    #print "Sigma=\n", Sigma.Data[UP,0,UP,0,0,:]
+    #print "GammaG=\n", np.sum(GammaG[UP, :, 0, :], axis=0)
     #print "GammaG=\n", GammaG[UP, 1, 0, :]
     #print "GammaG=\n", GammaG[UP, 2, 0, :]
     #print "GammaG=\n", GammaG[UP, 5, 0, :]
     # print "Chi=\n", Chi.Data[0,0,0,0,0,:]
     # print "Chi=\n", Chi.Data[0,0,0,0,1,:]
 
-    print "Polar[UP,UP]=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
-    print "GammaG[UP,UP]=\n", GammaG[UP,0,:,:].diagonal()
-    GGW=calc.GGW(GammaG, G, W, G.Map)
-    print "GGW[UP]=\n", GGW[UP,0,0,:]
+    #print "Polar[UP,UP]=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
+    #print "GammaG[UP,UP], diagonal, mc=\n", GammaG[UP,0,:,:].diagonal()
+
+    GammaG_dyson=calc.GammaG_ZerothOrder(G, G.Map)
+    GGW_dyson=calc.GGW(GammaG_dyson, G, W, G.Map)
+    print "GammaG[UP,UP], diagonal, dyson=\n", GammaG_dyson[UP,0,:,:].diagonal()
+    print "Polar[UP,UP], mc=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
+    print "GGW[UP], dyson=\n", GGW_dyson[UP, 0, 0, :]
+    print "GammaG, mc=\n", GammaG[UP, 0, 0, :]
 
     data={}
     data["Chi"]=Chi.ToDict()
@@ -79,7 +83,7 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
             log.info("Save weights into {0} File".format(WeightFile))
 
             #######TODO: NOT UPDATING WEIGHT FILE
-            IO.SaveBigDict(WeightFile, data)
+            #IO.SaveBigDict(WeightFile, data)
             #####################################
 
             parameter.Save(ParaFile, para)  #Save Parameters
