@@ -59,37 +59,23 @@ def GGWGG(GGW, G, W, _map):
     r=0
     GGWGG=np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
     for t in range(_map.MaxTauBin):
-        for t1 in range(_map.MaxTauBin):
-            tg1=t-t1
-            sign1=1
-            if tg1<0:
-                tg1+=_map.MaxTauBin
-                sign1*=-1
-            G1=sign1*G.Data[:,sub,:,sub,r,tg1]
-            tg1=t-t1-1
-            sign1=1
-            if tg1<0:
-                tg1+=_map.MaxTauBin
-                sign1*=-1
-            G1p=sign1*G.Data[:,sub,UP,sub,r,tg1]
-            G1=(G1+G1p)/2.0
-            for t2 in range(_map.MaxTauBin):
-                tg2=t2-t 
-                sign2=1
-                if tg2<0:
-                    tg2+=_map.MaxTauBin
-                    sign2*=-1
-                G2=sign2*G.Data[:,sub,:,sub,r,tg2]
-                tg2=t2-t-1
-                sign2=1
-                if tg2<0:
-                    tg2+=_map.MaxTauBin
-                    sign2*=-1
-                G2p=sign2*G.Data[:,sub,:,sub,r,tg2]
-                G2=(G2+G2p)/2.0
+        for tout in range(_map.MaxTauBin):
+            tgout=t-tout-1
+            signout=1
+            if tgout<0:
+                tgout+=_map.MaxTauBin
+                signout*=-1
+            Gout=signout*G.Data[:,sub,:,sub,r,tgout]
+            for tin in range(_map.MaxTauBin):
+                tgin=tin-t 
+                signin=1
+                if tgin<0:
+                    tgin+=_map.MaxTauBin
+                    signin*=-1
+                Gin=signin*G.Data[:,sub,:,sub,r,tgin]
 
-                GGWGG[UP, r, t, t]=G1[UP,UP]*GGW[UP,r,t1,t2]*G2[UP,UP]
-                GGWGG[DOWN, r, t, t]=G1[DOWN,DOWN]*GGW[DOWN,r,t1,t2]*G2[DOWN,DOWN]
+                GGWGG[UP, r, t, t]=Gout[UP,UP]*GGW[UP,r,tout,tin]*Gin[UP,UP]
+                GGWGG[DOWN, r, t, t]=Gout[DOWN,DOWN]*GGW[DOWN,r,tout,tin]*Gin[DOWN,DOWN]
     return GGWGG
 
 # def GammaG_FirstOrder(GammaG, GammaG0, W0, _map):
