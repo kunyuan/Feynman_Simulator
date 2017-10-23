@@ -74,7 +74,7 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
             plot.PlotTime("G0UPUP", G0, UP, 0, UP, 0, 0)
             plot.PlotTime("G0DOWNDOWN", G0, DOWN, 0, DOWN, 0, 0)
             plot.PlotTime("Sigma", Sigma, DOWN, 0, DOWN, 0, 0)
-            plot.PlotTime("Polar", Polar, UP, 0, UP, 0, 0)
+            plot.PlotTime("Polar", Polar, spinUP, 0, spinUP, 0, 0)
             plot.PlotSpatial(Chi, Lat, 0, 0) 
             plot.PlotChi_2D(Chi, Lat)
             plot.PlotWeightvsR("\chi", Chi,Lat,0,0)

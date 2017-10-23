@@ -2,9 +2,9 @@
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" :  1,
+    "__Duplicate" :  0,
     "__IsCluster" : False, 
-    "__AutoRun" : False,
+    "__AutoRun" : True,
     },
 "Job": {"Sample" : 100000000}  ##0.8 min for 1000000(*1000) Samples in MC
 }
@@ -53,7 +53,7 @@ Common={
     # "Name": "Kitaev",
     # "Name": "Heisenberg",
     #"Description": ["ImW",],
-    "Interaction": [1.0, 1.0, 1.0, 0.0],
+    "Interaction": [1.0, 1.0, 0.0, 0.0],
     "ExternalField": [ 0.0, 0.0, 0.0, 0.0]
     #ExternalField on Sublattice A and B
     },
