@@ -11,12 +11,14 @@
 #include "module/parameter/parameter.h"
 #include "module/weight/weight.h"
 #include "module/weight/component.h"
+#include "module/weight/gamma3.h"
 #include "utility/dictionary.h"
 
 using namespace std;
 using namespace diag;
 using namespace para;
 using namespace mc;
+using namespace weight;
 
 MarkovMonitor::MarkovMonitor()
 {
@@ -141,14 +143,23 @@ void MarkovMonitor::Measure()
     }
     else {
         real OrderWeight = 1.0 / OrderReWeight;
+
         PhyEstimator[Diag->Order].Measure(OrderWeight);
+
+        if (Diag->Order == 0){
+            if (Diag->MeasureGLine) {
+                Weight->Sigma->Estimator.MeasureNorm(OrderWeight);
+                Weight->GammaG->MeasureNorm(OrderWeight);
+            }else{
+                Weight->Polar->Estimator.MeasureNorm(OrderWeight);
+                Weight->GammaW->MeasureNorm(OrderWeight);
+            }
+        }
+
         if (Diag->HasGammaGW==0 ){
             if (Diag->MeasureGLine) {
                 SigmaEstimator.Measure(OrderWeight);
-                if (Diag->Order == 0) {
-                    Weight->Sigma->Estimator.MeasureNorm(OrderWeight);
-                }
-                else {
+                if (Diag->Order != 0) {
                     gLine g = Diag->GMeasure;
                     vertex vin = g->NeighVer(OUT);
                     vertex vout = g->NeighVer(IN);
@@ -157,14 +168,45 @@ void MarkovMonitor::Measure()
             }
             else {
                 PolarEstimator.Measure(OrderWeight);
-                if (Diag->Order == 0)
-                    Weight->Polar->Estimator.MeasureNorm(OrderWeight);
-                else {
+                if (Diag->Order != 0) {
                     wLine w = Diag->WMeasure;
                     vertex vin = w->NeighVer(OUT);
                     vertex vout = w->NeighVer(IN);
                     Weight->Polar->Measure(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin(), vout->Spin(), Diag->Order, -Diag->Phase * OrderWeight);
                 }
+            }
+//            if (Diag->MeasureGLine && Diag->Order != 0) {
+//                gLine g = Diag->GMeasure;
+//                vertex vin = g->NeighVer(OUT);
+//                vertex vout = g->NeighVer(IN);
+//                ExtPoint& Ext = Diag->UExt;
+//
+//                Weight->GammaG->Measure(vin->R, vout->R, vin->R, vin->Tau, vout->Tau, 0, g->Spin(OUT), g->Spin(IN), UP,
+//                                        Diag->Phase * OrderWeight);
+//
+////                Weight->GammaG->Measure(vin->R, vout->R, vin->R, vin->Tau, vout->Tau, 0, g->Spin(OUT), g->Spin(IN), UP,
+////                                        Diag->Phase * OrderWeight);
+//            }
+//        }else if(Diag->HasGammaGW==1 && Diag->MeasureGammaGW==1) {
+        }else if(Diag->HasGammaGW==1) {
+            if (Diag->Order != 0) {
+                gLine g = Diag->GMeasure;
+                vertex vin = g->NeighVer(OUT);
+                vertex vout = g->NeighVer(IN);
+                ExtPoint& Ext = Diag->UExt;
+                Weight->GammaG->Measure(vin->R, vout->R, vin->R, vin->Tau, vout->Tau, 0, g->Spin(OUT), g->Spin(IN), UP,
+                                        Diag->Phase * OrderWeight);
+//                Weight->GammaG->Measure(vin->R, vout->R, Ext.R, vin->Tau, vout->Tau, Ext.Tau, g->Spin(OUT), g->Spin(IN), Ext.Spin,
+//                                       Diag->Phase * OrderWeight);
+            }
+        } else if(Diag->HasGammaGW==2) {
+            if (Diag->Order != 0) {
+                wLine w = Diag->WMeasure;
+                vertex vin = w->NeighVer(OUT);
+                vertex vout = w->NeighVer(IN);
+                ExtPoint& Ext = Diag->UExt;
+                Weight->GammaW->Measure(vin->R, vout->R, Ext.R, vin->Tau, vout->Tau, Ext.Tau, vin->Spin(), vout->Spin(), Ext.Spin,
+                                        Diag->Phase * OrderWeight);
             }
         }
     }

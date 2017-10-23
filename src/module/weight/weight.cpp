@@ -10,7 +10,7 @@
 #include "component.h"
 #include "utility/dictionary.h"
 #include "module/parameter/parameter.h"
-//#include "gamma3.h"
+#include "gamma3.h"
 
 using namespace std;
 using namespace para;

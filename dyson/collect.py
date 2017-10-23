@@ -154,8 +154,8 @@ def CollectStatis(_map):
     Polar=weight.Weight("SmoothT", _map, "FourSpins", "Symmetric")
     PolarSmoothT=WeightEstimator(Polar)
 
-    GammaGAccu=np.zeros([2, map.Vol, map.MaxTauBin, map.MaxTauBin])+0.0*1j
-    GammaWAccu=np.zeros([3, map.Vol, map.Vol, map.MaxTauBin, map.MaxTauBin])+0.0*1j
+    GammaGAccu=np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
+    GammaWAccu=np.zeros([3, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
     GammaGNorm=None
     GammaWNorm=None
     GammaGNormAccu=1.e-8
@@ -220,8 +220,8 @@ def UpdateWeight(StatisCollected, ErrorThreshold, OrderAccepted, DoesSaveFigure=
 if __name__=="__main__":
     WeightPara={"NSublat": 1, "L":[4, 4],
                 "Beta": 0.5, "MaxTauBin":128}
-    map=weight.IndexMap(**WeightPara)
-    SigmaSmoothT, PolarSmoothT=CollectStatis(map)
+    _map=weight.IndexMap(**WeightPara)
+    SigmaSmoothT, PolarSmoothT=CollectStatis(_map)
 
     data ={}
     data["Sigma"] = {"Histogram": SigmaSmoothT.ToDict()}

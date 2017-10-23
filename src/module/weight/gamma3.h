@@ -11,16 +11,17 @@
 #include "weight_array.h"
 #include "weight_estimator.h"
 #include "utility/complex.h"
-//#include "component.h"
+#include "component.h"
 
 namespace weight {
+
 //     r1,t1  ---\
 //                --- 0,0,UP
 //  r1,t1+t2  ---/
     class GammaGClass {
         //Only contains the smooth part of the GammaG object
     public:
-        GammaGClass(const Lattice &, real Beta, uint MaxTauBin);
+        GammaGClass(const Lattice &, real Beta, uint MaxTauBin, real Norm = Norm::Weight());
 
 //        void BuildNew(GClass *);
 //    void BuildTest();
@@ -59,7 +60,7 @@ namespace weight {
 
     class GammaWClass {
     public:
-        GammaWClass(const Lattice &, real Beta, uint MaxTauBin);
+        GammaWClass(const Lattice &, real Beta, uint MaxTauBin, real Norm = Norm::Weight());
 
 //        void BuildNew();
 //    void BuildTest();

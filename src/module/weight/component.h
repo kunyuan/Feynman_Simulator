@@ -13,9 +13,10 @@
 #include "weight_array.h"
 #include "weight_estimator.h"
 #include "utility/complex.h"
-#include "gamma3.h"
 
 namespace weight {
+class GammaGClass;
+class GammaWClass;
 
 class ExtPoint{
   public:

@@ -7,6 +7,7 @@
 //
 
 #include "component.h"
+#include "gamma3.h"
 
 using namespace weight;
 using namespace std;
@@ -19,8 +20,13 @@ Complex GClass::Weight(const Site& rin, const Site& rout, real tin, real tout, s
     uint Index = _Map.GetIndex(SpinIn, SpinOut, rin, rout, tin, tout);
     if (IsMeasure)
         return _MeasureWeight(Index);
-    else if (IsGammaG)
+    else if (IsGammaG){
         return GammaGWeight->Weight(rin, rout, ext->R, tin, tout, ext->Tau, SpinIn, SpinOut, ext->Spin);
+//        if(ext->R == rin)
+//            return _Map.GetTauSymmetryFactor(tin, tout) * _SmoothTWeight(Index);
+//        else
+//            return Complex(0.0, 0.0);
+    }
     else
         return _Map.GetTauSymmetryFactor(tin, tout) * _SmoothTWeight(Index);
 }
@@ -42,6 +48,10 @@ Complex GClass::Weight(int dir, const Site& r1, const Site& r2, real t1, real t2
     if (IsMeasure)
         return _MeasureWeight(Index);
     else if (IsGammaG)
+//        if(ext->R == r1)
+//            return symmetryfactor * _SmoothTWeight(Index);
+//        else
+//            return Complex(0.0, 0.0);
         if (dir == IN) {
             return GammaGWeight->Weight(r1, r2, ext->R, t1, t2, ext->Tau, Spin1, Spin2, ext->Spin);
         }else{

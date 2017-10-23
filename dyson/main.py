@@ -47,7 +47,12 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     # for i in range(Map.MaxTauBin):
         # n=Sigma.Data[UP,0,UP,0,0,i]
         # print '%05f %05f %05f' % (i*Map.Beta/Map.MaxTauBin, n.real, n.imag)
-    # print "Sigma=\n", Sigma.Data[UP,0,UP,0,0,:]
+    print "Sigma=\n", Sigma.Data[UP,0,UP,0,0,:]
+    print "GammaG=\n", np.sum(GammaG[UP, :, 0, :], axis=0)
+    print "GammaG=\n", GammaG[UP, 0, 0, :]
+    #print "GammaG=\n", GammaG[UP, 1, 0, :]
+    #print "GammaG=\n", GammaG[UP, 2, 0, :]
+    #print "GammaG=\n", GammaG[UP, 5, 0, :]
     # print "Chi=\n", Chi.Data[0,0,0,0,0,:]
     # print "Chi=\n", Chi.Data[0,0,0,0,1,:]
 
@@ -131,7 +136,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
 
             GammaG=calc.GammaG_FirstOrder(G, Map)
             GammaW=None
-            GammaW=np.zeros([6, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin])+0.0*1j
+            #GammaW=np.zeros([6, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin])+0.0*1j
             # print "Polar[UP,UP]=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
             # print "GammaG[UP,UP]=\n", GammaG[UP,0,:,-1]
 
@@ -146,11 +151,11 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                 SigmaStatis, PolarStatis, GammaG, GammaW=collect.CollectStatis(Map)
                 Sigma, Polar, ParaDyson["OrderAccepted"]=collect.UpdateWeight([SigmaStatis, PolarStatis],
                         ParaDyson["ErrorThreshold"], ParaDyson["OrderAccepted"])
-                Sigma.Symmetric()
-                Polar.Symmetric()
                 #print Sigma.Data[0,0,0,0,0,0], Sigma.Data[0,0,0,0,0,-1]
                 log.info("calculating G...")
                 G = calc.G_Dyson(G0, SigmaDeltaT, Sigma, Map)
+                SigmaDyson = calc.SigmaSmoothT_FirstOrder(G, W, Map)
+                print "SigmaFromDyson=\n", SigmaDyson.Data[UP,0,UP,0,0,:]
 
             #######DYSON FOR W AND G###########################
             log.info("calculating W...")

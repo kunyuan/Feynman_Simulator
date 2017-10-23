@@ -38,7 +38,17 @@ bool Markov::BuildNew(ParaMC &para, Diagram &diag, weight::Weight &weight)
     InitialArray(SumofProbofCall, 0.0, NUpdates);
 
     for (int i = 0; i < NUpdates; i++) {
+
         ProbofCall[i] = 1.0 / real(NUpdates);
+
+//        if (i< 19){
+//            ProbofCall[i] = 1.0 / real(19.8);
+//        }else if (i<23){
+//            ProbofCall[i] = 0.1 / real(19.8);
+//        }else{
+//            ProbofCall[i] = 0.1 / real(19.8);
+//        }
+
         for (int j = i; j < NUpdates; j++)
             SumofProbofCall[j] += ProbofCall[i];
     }
@@ -294,16 +304,16 @@ void Markov::Hop(int sweep)
                 JumpToGammaW();
             else if (x < SumofProbofCall[JUMP_FROM_GAMMAW_TO_W])
                 JumpFromGammaWToW();
-            else if (x < SumofProbofCall[ADD_TWO_G])
-                AddTwoG();
-            else if (x < SumofProbofCall[ADD_TWO_W])
-                AddTwoW();
+//            else if (x < SumofProbofCall[ADD_TWO_G])
+//                AddTwoG();
+//            else if (x < SumofProbofCall[ADD_TWO_W])
+//                AddTwoW();
         }else if(x < SumofProbofCall[DELETE_TWO_G] && Diag->MeasureGammaGW==1){
             //TODO measure GammaW: delete two G lines
-            DeleteTwoG();
+//            DeleteTwoG();
         }else if(x < SumofProbofCall[DELETE_TWO_W] && Diag->MeasureGammaGW==2) {
             //TODO measure GammaW: delete two W lines
-            DeleteTwoW();
+//            DeleteTwoW();
         }
 
         (*Counter)++;
@@ -1660,7 +1670,6 @@ Site Markov::RandomPickSite()
 
 real Markov::ProbSite(const Site &site)
 {
-
     return 1.0 / (Lat->Vol * Lat->SublatVol);
 }
 

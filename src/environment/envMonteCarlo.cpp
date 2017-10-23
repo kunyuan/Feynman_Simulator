@@ -147,7 +147,10 @@ bool EnvMonteCarlo::ListenToMessage()
         return false;
     }
     Para.UpdateWithMessage(Message_);
+
     Weight.FromDict(weight_, weight::GW, Para);
+    Weight.FromDict(weight_, weight::GammaGW, Para);
+
     Weight.Anneal(Para);
     Diag.Reset(Para.Lat, *Weight.G, *Weight.W);
     Markov.Reset(Para, Diag, Weight);

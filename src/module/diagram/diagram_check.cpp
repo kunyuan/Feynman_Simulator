@@ -33,6 +33,9 @@ bool Diagram::CheckDiagram()
 ///*************************   Diagram check    *************************/
 bool Diagram::_CheckTopo()
 {
+    if(MeasureGammaGW!=0)
+        return true;
+
     if (Order == 0)
         return true;
     if (G.HowMany() != 2 * Order)
@@ -106,6 +109,8 @@ bool Diagram::_CheckStatus()
 
 bool Diagram::_CheckK()
 {
+    if(MeasureGammaGW!=0)
+        return true;
     if (Order == 0)
         return true;
     Momentum totalk;
