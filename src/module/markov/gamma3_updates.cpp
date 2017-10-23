@@ -155,38 +155,14 @@ void Markov::AddTwoG() {
     spin spin_meas = measureG->Spin();
     Site r_meas = vA->R;
 
-//    real tau_C = RandomPickTau();
-//    real tau_D = RandomPickTau();
-//
-//    Complex GACWeight = G->Weight(r_meas, r_meas, vA->Tau, tau_C, spin_meas, spin_meas,
-//                                  false, false, UExt);
-//
-//    Complex GDBWeight = G->Weight(r_meas, r_meas, tau_D, vB->Tau, spin_meas, spin_meas,
-//                                  false, false, UExt);
-//    Complex measureGWeight = G->Weight(r_meas, r_meas, tau_C, tau_D, spin_meas, spin_meas,
-//                                       true, false, UExt);
-//
-//    Complex weightRatio = GACWeight * GDBWeight * measureGWeight/measureG->Weight;
-//
-//    real prob = mod(weightRatio);
-//    Complex sgn = phase(weightRatio);
-//
-//    prob *= (ProbofCall[DELETE_TWO_G])
-//            / (ProbofCall[ADD_TWO_G] * ProbTau(tau_C) * ProbTau(tau_D));
+    real tau_C = RandomPickTau();
+    real tau_D = RandomPickTau();
 
-    real tau_C = vA->Tau;
-    real tau_D = vB->Tau;
+    Complex GACWeight = G->Weight(r_meas, r_meas, vA->Tau, tau_C, spin_meas, spin_meas,
+                                  false, false, UExt);
 
-    Complex GACWeight = Complex(1.0, 0.0);
-    Complex GDBWeight = Complex(1.0, 0.0);
-
-    ///Real G
-//    Complex GACWeight = G->Weight(r_meas, r_meas, vA->Tau, tau_C, spin_meas, spin_meas,
-//                                  false, false, UExt);
-//
-//    Complex GDBWeight = G->Weight(r_meas, r_meas, tau_D, vB->Tau, spin_meas, spin_meas,
-//                                  false, false, UExt);
-
+    Complex GDBWeight = G->Weight(r_meas, r_meas, tau_D, vB->Tau, spin_meas, spin_meas,
+                                  false, false, UExt);
     Complex measureGWeight = G->Weight(r_meas, r_meas, tau_C, tau_D, spin_meas, spin_meas,
                                        true, false, UExt);
 
@@ -195,7 +171,31 @@ void Markov::AddTwoG() {
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    prob *= (ProbofCall[DELETE_TWO_G]) / (ProbofCall[ADD_TWO_G]);
+    prob *= (ProbofCall[DELETE_TWO_G])
+            / (ProbofCall[ADD_TWO_G] * ProbTau(tau_C) * ProbTau(tau_D));
+
+//    real tau_C = vA->Tau;
+//    real tau_D = vB->Tau;
+//
+//    Complex GACWeight = Complex(1.0, 0.0);
+//    Complex GDBWeight = Complex(1.0, 0.0);
+
+    ///Real G
+//    Complex GACWeight = G->Weight(r_meas, r_meas, vA->Tau, tau_C, spin_meas, spin_meas,
+//                                  false, false, UExt);
+//
+//    Complex GDBWeight = G->Weight(r_meas, r_meas, tau_D, vB->Tau, spin_meas, spin_meas,
+//                                  false, false, UExt);
+
+//    Complex measureGWeight = G->Weight(r_meas, r_meas, tau_C, tau_D, spin_meas, spin_meas,
+//                                       true, false, UExt);
+//
+//    Complex weightRatio = GACWeight * GDBWeight * measureGWeight/measureG->Weight;
+//
+//    real prob = mod(weightRatio);
+//    Complex sgn = phase(weightRatio);
+//
+//    prob *= (ProbofCall[DELETE_TWO_G]) / (ProbofCall[ADD_TWO_G]);
 
     Proposed[ADD_TWO_G][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
@@ -265,18 +265,6 @@ void Markov::DeleteTwoG() {
     spin spin_meas = measureG->Spin();
     Site r_meas = vC->R;
 
-//    Complex measureGWeight = G->Weight(r_meas, r_meas, vA->Tau, vB->Tau, spin_meas, spin_meas, true, false, UExt);
-//
-//    Complex weightRatio = measureGWeight/(measureG->Weight * GAC->Weight * GDB->Weight);
-//
-//    real prob = mod(weightRatio);
-//    Complex sgn = phase(weightRatio);
-//
-//    prob *= (ProbofCall[ADD_TWO_G] * ProbTau(vC->Tau) * ProbTau(vD->Tau))/(ProbofCall[DELETE_TWO_G]);
-
-    if (vA->Tau != vC->Tau || vB->Tau != vD->Tau)
-        return;
-
     Complex measureGWeight = G->Weight(r_meas, r_meas, vA->Tau, vB->Tau, spin_meas, spin_meas, true, false, UExt);
 
     Complex weightRatio = measureGWeight/(measureG->Weight * GAC->Weight * GDB->Weight);
@@ -284,7 +272,19 @@ void Markov::DeleteTwoG() {
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    prob *= (ProbofCall[ADD_TWO_G] )/(ProbofCall[DELETE_TWO_G]);
+    prob *= (ProbofCall[ADD_TWO_G] * ProbTau(vC->Tau) * ProbTau(vD->Tau))/(ProbofCall[DELETE_TWO_G]);
+
+//    if (vA->Tau != vC->Tau || vB->Tau != vD->Tau)
+//        return;
+//
+//    Complex measureGWeight = G->Weight(r_meas, r_meas, vA->Tau, vB->Tau, spin_meas, spin_meas, true, false, UExt);
+//
+//    Complex weightRatio = measureGWeight/(measureG->Weight * GAC->Weight * GDB->Weight);
+//
+//    real prob = mod(weightRatio);
+//    Complex sgn = phase(weightRatio);
+//
+//    prob *= (ProbofCall[ADD_TWO_G] )/(ProbofCall[DELETE_TWO_G]);
 
     Proposed[DELETE_TWO_G][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {

@@ -63,7 +63,12 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     print "GammaG[UP,UP], diagonal, dyson=\n", GammaG_dyson[UP,0,:,:].diagonal()
     print "Polar[UP,UP], mc=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
     print "GGW[UP], dyson=\n", GGW_dyson[UP, 0, 0, :]
-    print "GammaG, mc=\n", GammaG[UP, 0, 0, :]
+    #print "GammaG, mc=\n", GammaG[UP, 0, 0, :]
+
+    GGWGG_dyson = calc.GGWGG(GGW_dyson, G, W, G.Map)
+    print "GGWGG[UP], dyson=\n", GGWGG_dyson[UP, 0, :, :].diagonal()
+    print "GammaG, mc=\n", GammaG[UP, 0, :, :].diagonal()
+
 
     data={}
     data["Chi"]=Chi.ToDict()
