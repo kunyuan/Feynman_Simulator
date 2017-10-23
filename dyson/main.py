@@ -55,6 +55,7 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     print "GammaG[UP,UP]=\n", GammaG[UP,0,:,:].diagonal()
     GGW=calc.GGW(GammaG, G, W, G.Map)
     print "GGW[UP]=\n", GGW[UP,0,0,:]
+    print "GGW[UP]=\n", GGW[DOWN,0,0,:]
 
     data={}
     data["Chi"]=Chi.ToDict()
