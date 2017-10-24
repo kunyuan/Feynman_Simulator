@@ -25,7 +25,7 @@ using namespace weight;
  * Change the diagram from a Sigma to a dSigma/dG G^2 GammaG
  */
 void Markov::JumpToGammaG() {
-    if (Diag->Order == 0 || Worm->Exist || !Diag->MeasureGLine || Diag->HasGammaGW != 0)
+    if (Diag->Order == 0 || Worm->Exist || Diag->HasGammaGW != 0)
         return;
 
     gLine gAB = Diag->G.RandomPick(*RNG);
@@ -83,7 +83,9 @@ void Markov::JumpToGammaG() {
  * Change the diagram from a dSigma/dG G^2 GammaG to a Sigma
  */
 void Markov::JumpFromGammaGToG()  {
-    if (Diag->Order == 0 || Worm->Exist || !Diag->MeasureGLine || Diag->HasGammaGW!=1)
+//    if (Diag->Order == 0 || Worm->Exist || !Diag->MeasureGLine || Diag->HasGammaGW!=1)
+//        return;
+    if (Diag->Order == 0 || Worm->Exist || Diag->HasGammaGW!=1)
         return;
 
     vertex v_A = *Diag->Vin;
@@ -149,8 +151,7 @@ void Markov::AddTwoG() {
     vertex vA = measureG->NeighVer(IN);
     vertex vB = measureG->NeighVer(OUT);
 
-    if (vA->R != vB->R)
-        return;
+    ASSERT_ALLWAYS(vA->R == vB->R, "Measuring G Line R doesn't match!");
 
     spin spin_meas = measureG->Spin();
     Site r_meas = vA->R;
@@ -262,7 +263,11 @@ void Markov::DeleteTwoG() {
     if (vC->R != vD->R || vC->R != vA->R || vD->R != vB->R)
         return;
 
+
     spin spin_meas = measureG->Spin();
+    ASSERT_ALLWAYS(vC->Spin()[IN]== spin_meas, "Spin doesn't match!");
+    ASSERT_ALLWAYS(vD->Spin()[OUT]== spin_meas, "Spin doesn't match!");
+
     Site r_meas = vC->R;
 
     Complex measureGWeight = G->Weight(r_meas, r_meas, vA->Tau, vB->Tau, spin_meas, spin_meas, true, false, UExt);

@@ -60,15 +60,19 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
 
     GammaG_dyson=calc.GammaG_ZerothOrder(G, G.Map)
     GGW_dyson=calc.GGW(GammaG_dyson, G, W, G.Map)
+
     print "GammaG[UP,UP], diagonal, dyson=\n", GammaG_dyson[UP,0,:,:].diagonal()
     print "Polar[UP,UP], mc=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
     print "GGW[UP], dyson=\n", GGW_dyson[UP, 0, 0, :]
-    #print "GammaG, mc=\n", GammaG[UP, 0, 0, :]
+    print "GammaG, mc=\n", GammaG[UP, 0, 0, :]
+
+    if GammaW is not None:
+        print "GammaW, type0, mc=\n", GammaW[0, 0, 0, :, :]
+        print "GammaW, type2, mc=\n", GammaW[2, 0, 0, :, :]
 
     GGWGG_dyson = calc.GGWGG(GGW_dyson, G, W, G.Map)
     print "GGWGG[UP], dyson=\n", GGWGG_dyson[UP, 0, :, :].diagonal()
     print "GammaG, mc=\n", GammaG[UP, 0, :, :].diagonal()
-
 
     data={}
     data["Chi"]=Chi.ToDict()
@@ -79,6 +83,7 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     data["Sigma"]=Sigma.ToDict()
     data["Polar"]=Polar.ToDict()
     data["GammaG"]={"SmoothT": GammaG}
+
     if GammaW is not None:
         data["GammaW"]={"SmoothT": GammaW}
     Observable.Measure(Chi, Determ, G, Factory.NearestNeighbor)
@@ -88,7 +93,7 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
             log.info("Save weights into {0} File".format(WeightFile))
 
             #######TODO: NOT UPDATING WEIGHT FILE
-            #IO.SaveBigDict(WeightFile, data)
+            IO.SaveBigDict(WeightFile, data)
             #####################################
 
             parameter.Save(ParaFile, para)  #Save Parameters
@@ -149,6 +154,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
             log.info("SigmaDeltaT is done")
 
             GammaG=calc.GammaG_ZerothOrder(G, Map)
+
             GammaW=None
             #GammaW=np.zeros([6, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin])+0.0*1j
             # print "Polar[UP,UP]=\n", Polar.Data[spinUP,0,spinUP,0,0,:]

@@ -161,9 +161,8 @@ GammaWClass::GammaWClass(const Lattice &lat, real beta, uint MaxTauBin, real Nor
 {
     int Vol = _Map.Lat.Vol;
     _Beta = _Map.Beta;
-    _Norm = Norm * pow(_Map.MaxTauBin / _Beta, 1.0) / _Beta / Vol;
+    _Norm = Norm * pow(_Map.MaxTauBin / _Beta, 2.0) / _Beta / Vol;
 
-//    _Norm = pow(_Map.MaxTauBin / _Beta, 2.0) / _Beta / Vol * Norm;
     _MaxTauBin = MaxTauBin;
     _dBetaInverse = _MaxTauBin/_Beta;
 //    uint SubVol=(uint)lat.SublatVol;
@@ -194,7 +193,8 @@ Complex GammaWClass::Weight(const Site &Wr_in, const Site &Wr_out, const Site &U
                             real Wt_in, real Wt_out, real Ut, spin* Wspin_in, spin* Wspin_out, spin Uspin) const
 {
     auto coord_r1 = _Map.Lat.CoordiIndex(Wr_out, Ur);
-    auto coord_dr = _Map.Lat.CoordiIndex(Wr_out, Wr_in);
+    auto coord_r2 = _Map.Lat.CoordiIndex(Wr_in,  Ur);
+
     auto t1 = Wt_out - Ut;
     if(t1<0){
         t1+=_Beta;
@@ -207,7 +207,7 @@ Complex GammaWClass::Weight(const Site &Wr_in, const Site &Wr_out, const Site &U
     int dtIndex=floor(dt*_dBetaInverse);
     auto SpinIndex=_SpinIndex(Wspin_out, Wspin_in);
     uint Index = SpinIndex * _CacheIndex[4] + coord_r1 * _CacheIndex[3]
-                 + coord_dr * _CacheIndex[2]+ t1Index * _CacheIndex[1] + dtIndex;
+                 + coord_r2 * _CacheIndex[2]+ t1Index * _CacheIndex[1] + dtIndex;
     return _Weight(Index);
 }
 
@@ -215,7 +215,8 @@ void GammaWClass::Measure(const Site &Wr_in, const Site &Wr_out, const Site &Ur,
                           real Ut, spin* Wspin_in, spin* Wspin_out, spin Uspin, const Complex &Weight)
 {
     auto coord_r1 = _Map.Lat.CoordiIndex(Wr_out, Ur);
-    auto coord_dr = _Map.Lat.CoordiIndex(Wr_out, Wr_in);
+    auto coord_r2 = _Map.Lat.CoordiIndex(Wr_in,  Ur);
+
     auto t1=Wt_out-Ut;
     if(t1<0){
         t1+=_Beta;
@@ -228,7 +229,7 @@ void GammaWClass::Measure(const Site &Wr_in, const Site &Wr_out, const Site &Ur,
     int dtIndex=floor(dt*_dBetaInverse);
     auto SpinIndex=_SpinIndex(Wspin_out, Wspin_in);
     uint Index = SpinIndex * _CacheIndex[4] + coord_r1 * _CacheIndex[3]
-                 +coord_dr*_CacheIndex[2]+ t1Index*_CacheIndex[1]+dtIndex;
+                 +coord_r2*_CacheIndex[2]+ t1Index*_CacheIndex[1]+dtIndex;
     _WeightAccu[Index]+=Weight;
 }
 
