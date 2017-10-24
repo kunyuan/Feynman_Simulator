@@ -52,12 +52,38 @@ def GGW(GammaG, G,W,_map):
             GGW[DOWN,r, t1,t2]=OrderSign*GammaG[UP,r,t1,t2]*W.Data[spinDOWNUP,sub,spinUPDOWN,sub,0,abs(t1-t2)]
     return GGW
 
-def GGWGG(GGW, G, W, _map):
+# def GGWGG(GGW, G, W, _map):
+    # spinUP=_map.Spin2Index(UP,UP)
+    # spinDOWN=_map.Spin2Index(DOWN,DOWN)
+    # sub=0
+    # r=0
+    # GGWGG=np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
+    # for t in range(_map.MaxTauBin):
+        # for tout in range(_map.MaxTauBin):
+            # tgout=t-tout-1
+            # signout=1
+            # if tgout<0:
+                # tgout+=_map.MaxTauBin
+                # signout*=-1
+            # Gout=signout*G.Data[:,sub,:,sub,r,tgout]
+            # for tin in range(_map.MaxTauBin):
+                # tgin=tin-t 
+                # signin=1
+                # if tgin<0:
+                    # tgin+=_map.MaxTauBin
+                    # signin*=-1
+                # Gin=signin*G.Data[:,sub,:,sub,r,tgin]
+
+                # GGWGG[UP, r, t, t]+=Gout[UP,UP]*GGW[UP,r,tout,tin]*Gin[UP,UP]
+                # GGWGG[DOWN, r, t, t]+=Gout[DOWN,DOWN]*GGW[DOWN,r,tout,tin]*Gin[DOWN,DOWN]
+    # return GGWGG*_map.Beta**2/_map.MaxTauBin**2
+
+def GGGammaG(GammaG, G, _map):
     spinUP=_map.Spin2Index(UP,UP)
     spinDOWN=_map.Spin2Index(DOWN,DOWN)
     sub=0
     r=0
-    GGWGG=np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
+    GGGammaG=np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
     for t in range(_map.MaxTauBin):
         for tout in range(_map.MaxTauBin):
             tgout=t-tout-1
@@ -67,51 +93,127 @@ def GGWGG(GGW, G, W, _map):
                 signout*=-1
             Gout=signout*G.Data[:,sub,:,sub,r,tgout]
             for tin in range(_map.MaxTauBin):
-                tgin=tin-t 
-                signin=1
-                if tgin<0:
-                    tgin+=_map.MaxTauBin
-                    signin*=-1
-                Gin=signin*G.Data[:,sub,:,sub,r,tgin]
+                GGGammaG[UP, r, t, tin]+=Gout[UP,UP]*GammaG[UP,r,tout,tin]
+                GGGammaG[DOWN, r, t, tin]+=Gout[DOWN,DOWN]*GammaG[DOWN,r,tout,tin]
+    GGGammaG2=np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
+    for t in range(_map.MaxTauBin):
+        for tin in range(_map.MaxTauBin):
+            tgin=tin-t 
+            signin=1
+            if tgin<0:
+                tgin+=_map.MaxTauBin
+                signin*=-1
+            Gin=signin*G.Data[:,sub,:,sub,r,tgin]
+            for tout in range(_map.MaxTauBin):
+                GGGammaG2[UP, r, tout, t]+=Gin[UP,UP]*GGGammaG[UP,r,tout,tin]
+                GGGammaG2[DOWN, r, tout, t]+=Gin[DOWN,DOWN]*GGGammaG[DOWN,r,tout,tin]
+    return GGGammaG2*_map.Beta**2/_map.MaxTauBin**2
 
-                GGWGG[UP, r, t, t]=Gout[UP,UP]*GGW[UP,r,tout,tin]*Gin[UP,UP]
-                GGWGG[DOWN, r, t, t]=Gout[DOWN,DOWN]*GGW[DOWN,r,tout,tin]*Gin[DOWN,DOWN]
-    return GGWGG
+#TODO: add WWGammaW
+# def WWGammaW(GammaW, W, _map):
 
-# def GammaG_FirstOrder(GammaG, GammaG0, W0, _map):
-    # GammaG=np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
-    # spinUP=Map.Spin2Index(UP,UP)
-    # spinDOWN=Map.Spin2Index(DOWN,DOWN)
+    # return 
 
-    # # print "GammaG[UP,UP]=\n", GammaG[UP,0,:,-1]
-    # W0.FFT("R", "T")
-    # Uspin=UP
-    # Gspin=UP
-    # # for spin in range(2):
-    # sub=0
-    # r=0
-    # for Gr in range(_map.Vol):
-        # for InnerR in range(_map.Vol):
-            # if W0.Data[spinUP,0,spinUP,0,
-            # for t1 in range(map.MaxTauBin):
-                # for dt in range(map.MaxTauBin):
+# def GammaGFFT(GammaG, _map, BackForth):
+    # Vol=_map.Vol
+    # Lshape=_map.L
+    # MaxTauBin=_map.MaxTauBin
+    # ShapeOld=[2,Vol,Vol,MaxTauBin, MaxTauBin]
+    # ShapeNew=[2,]+Lshape+Lshape+[MaxTauBin, MaxTauBin]
 
-    # for t1 in range(map.MaxTauBin):
-        # #tau1=t1*Dt
-        # #G(tau1-0^+)=G[(t1-0.5)*Dt]=G[t1-1]
-        # G1=G.Data[Uspin,sub,Gspin,sub,r,t1]
-        # for dt in range(map.MaxTauBin):
-            # #dtau=(dt+0.5)*Dt
-            # #dtau2=(t1+dt+0.5)*Dt
-            # #G(-tau2-0^+)=G(-(t1+dt+0.5)*Dt)=G[-t1-dt-1]
-            # tg2=dt-t1-1
-            # sign2=1
-            # if tg2<0:
-                # tg2+=map.MaxTauBin
-                # sign2=-sign2
-            # G2=sign2*G.Data[Gspin,sub,Uspin,sub,r,tg2]
-            # GammaG[Gspin, r, t1, dt]=G1*G2 
+    # #change symmetry
+    # tau=np.array([_map.IndexToTau(e) for e in range(MaxTauBin)])
+    # SymmetryFactor_out=np.exp(-1j*BackForth*np.pi*tau/_map.Beta)
+    # SymmetryFactor_in=np.exp(1j*BackForth*np.pi*tau/_map.Beta)
+
+    # #additional phase factor
+    # omega=np.array(range(0,MaxTauBin))
+    # PhaseFactor_out=np.exp(-1j*BackForth*np.pi*omega/MaxTauBin)
+    # PhaseFactor_in=np.exp(1j*BackForth*np.pi*omega/MaxTauBin)
+
+    # if BackForth==1:
+        # for i in range(MaxTauBin):
+            # for j in range(MaxTauBin):
+                # GammaG[:,:,i,j]*=SymmetryFactor_out[i]*SymmetryFactor_in[j]
+        # GammaG=GammaG.reshape(ShapeNew)
+        # GammaG=np.fft.fftn(GammaG, axes=[1,2,3,4,5])
+        # GammaG=np.fft.ifftn(GammaG, axes=[6])
+        # GammaG=GammaG.reshape(ShapeOld)
+        # for i in range(MaxTauBin):
+            # for j in range(MaxTauBin):
+                # GammaG[:,:,i,j]*=PhaseFactor_out[i]*PhaseFactor_in[j]
+    # if BackForth==-1:
+        # for i in range(MaxTauBin):
+            # for j in range(MaxTauBin):
+                # GammaG[:,:,i,j]*=PhaseFactor_out[i]*PhaseFactor_in[j]
+        # GammaG=GammaG.reshape(ShapeNew)
+        # GammaG=np.fft.ifftn(GammaG, axes=[1,2,3,4,5])
+        # GammaG=np.fft.fftn(GammaG, axes=[6])
+        # GammaG=GammaG.reshape(ShapeOld)
+        # for i in range(MaxTauBin):
+            # for j in range(MaxTauBin):
+                # GammaG[:,:,i,j]*=SymmetryFactor_out[i]*SymmetryFactor_in[j]
     # return GammaG
+
+# def GGGammaG(GammaG, G, _map):
+    # G.FFT("K","W")
+    # GammaGTemp=np.zeros([2, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
+    # for i in range(_map.Vol):
+        # GammaGTemp[:,i,i,:,:]=GammaG[:,i,:,:]
+    # # print "FFT test"
+    # # print GammaGTemp[UP,0,:,:].diagonal()
+    # GammaGTemp=GammaGFFT(GammaGTemp, _map, BackForth=1)
+    # # GammaGTemp=np.fft.fftn(GammaGTemp, axes=[3])
+    # # print GammaGTemp[UP,0,:,:].diagonal()
+    # # GammaGTemp=GammaGFFT(GammaGTemp, _map, BackForth=-1)
+    # # GammaGTemp=np.fft.ifftn(GammaGTemp, axes=[3])
+    # # print GammaGTemp[UP,0,:,:].diagonal()
+    # # print "FFT test done"
+    # sub=0
+    # GGGammaG=np.zeros([2, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
+    # for k_out in range(_map.Vol):
+        # for k_in in range(_map.Vol):
+            # for w_in in range(_map.MaxTauBin):
+                # for w_out in range(_map.MaxTauBin):
+                    # GGGammaG[UP, k_out, k_in, w_out, w_in]=G.Data[UP,sub,UP,sub,k_out,w_out]*G.Data[UP,sub,UP,sub,k_in,w_in]*GammaGTemp[UP,k_out,k_in,w_out,w_in]
+                    # GGGammaG[DOWN, k_out, k_in, w_out, w_in]=G.Data[DOWN,sub,DOWN,sub,k_out,w_out]*G.Data[DOWN,sub,DOWN,sub,k_in,w_in]*GammaGTemp[DOWN,k_out,k_in,w_out,w_in]
+    # GGGammaG=GammaGFFT(GGGammaG, _map, BackForth=-1)
+    # return GGGammaG
+
+# # def GammaG_FirstOrder(GammaG, GammaG0, W0, _map):
+    # # GammaG=np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
+    # # spinUP=Map.Spin2Index(UP,UP)
+    # # spinDOWN=Map.Spin2Index(DOWN,DOWN)
+
+    # # # print "GammaG[UP,UP]=\n", GammaG[UP,0,:,-1]
+    # # W0.FFT("R", "T")
+    # # Uspin=UP
+    # # Gspin=UP
+    # # # for spin in range(2):
+    # # sub=0
+    # # r=0
+    # # for Gr in range(_map.Vol):
+        # # for InnerR in range(_map.Vol):
+            # # if W0.Data[spinUP,0,spinUP,0,
+            # # for t1 in range(map.MaxTauBin):
+                # # for dt in range(map.MaxTauBin):
+
+    # # for t1 in range(map.MaxTauBin):
+        # # #tau1=t1*Dt
+        # # #G(tau1-0^+)=G[(t1-0.5)*Dt]=G[t1-1]
+        # # G1=G.Data[Uspin,sub,Gspin,sub,r,t1]
+        # # for dt in range(map.MaxTauBin):
+            # # #dtau=(dt+0.5)*Dt
+            # # #dtau2=(t1+dt+0.5)*Dt
+            # # #G(-tau2-0^+)=G(-(t1+dt+0.5)*Dt)=G[-t1-dt-1]
+            # # tg2=dt-t1-1
+            # # sign2=1
+            # # if tg2<0:
+                # # tg2+=map.MaxTauBin
+                # # sign2=-sign2
+            # # G2=sign2*G.Data[Gspin,sub,Uspin,sub,r,tg2]
+            # # GammaG[Gspin, r, t1, dt]=G1*G2 
+    # # return GammaG
 
 
 def SigmaSmoothT_FirstOrder(G, W, map):
