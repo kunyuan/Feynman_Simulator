@@ -38,7 +38,11 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     #print "Polar[UP,UP]=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
     #print "Polar[DOWN, DOWN]=\n", Polar.Data[spinDOWN,0,spinDOWN,0,0,:]
     #print "W0=\n", W0.Data[spinUP,0,spinUP,1,0]
-    #print "G0[UP,UP]=\n", G0.Data[UP,0,UP,0,0,:]
+    # print "G0[UP,UP]=\n", G0.Data[UP,0,UP,0,0,:]
+    # beta=0.5
+    # Nt=16
+    # t=np.array([(i+0.5)*beta/Nt for i in range(Nt)])
+    # print np.exp(np.pi/2.0/beta*t*1j)/(1+1j)
     #print "G0[DOWN,DOWN]=\n", G0.Data[DOWN,0,DOWN,0,0,:]
     #print "G[UP,UP]=\n", G.Data[UP,0,UP,0,0,:]
     #print "G[DOWN,DOWN]=\n", G.Data[DOWN,0,DOWN,0,0,:]
@@ -70,8 +74,12 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
         print "GammaW, type0, mc=\n", GammaW[0, 0, 0, :, :]
         print "GammaW, type2, mc=\n", GammaW[2, 0, 0, :, :]
 
-    GGWGG_dyson = calc.GGWGG(GGW_dyson, G, W, G.Map)
-    print "GGWGG[UP], dyson=\n", GGWGG_dyson[UP, 0, :, :].diagonal()
+    # GGWGG_dyson = calc.GGWGG(GGW_dyson, G, W, G.Map)
+    # print "GGWGG[UP], dyson=\n", GGWGG_dyson[UP, 0, :, :].diagonal()
+
+    GGGammaG_dyson=calc.GGGammaG(GGW_dyson, G, G.Map)
+    print "GGGammaG[UP], dyson=\n", GGGammaG_dyson[UP, 0, :, :].diagonal()
+
     print "GammaG, mc=\n", GammaG[UP, 0, :, :].diagonal()
 
     data={}
