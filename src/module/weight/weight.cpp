@@ -91,7 +91,7 @@ bool weight::Weight::FromDict(const Dictionary &dict, flag _flag, const para::Pa
                 //GammaW will be allocated with zeros
             }
         }else{
-            LOG_WARNING("There is no GammaG Weight to read");
+            LOG_WARNING("There is no GGGammaG Weight to read");
             GammaG= nullptr;
             GammaW= nullptr;
         }

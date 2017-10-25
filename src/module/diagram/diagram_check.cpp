@@ -18,6 +18,9 @@ bool Diagram::CheckDiagram()
     if (!DEBUGMODE)
         return true;
 
+    if (MeasureGammaGW!=0)
+        return true;
+
     if (!_CheckTopo())
         return false;
     if (!_CheckStatus())

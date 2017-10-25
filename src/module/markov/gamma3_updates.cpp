@@ -25,7 +25,7 @@ using namespace weight;
  * Change the diagram from a Sigma to a dSigma/dG G^2 GammaG
  */
 void Markov::JumpToGammaG() {
-    if (Diag->Order == 0 || Worm->Exist || !Diag->MeasureGLine || Diag->HasGammaGW != 0)
+    if (Diag->Order == 0 || Worm->Exist || Diag->HasGammaGW != 0)
         return;
 
     gLine gAB = Diag->G.RandomPick(*RNG);
@@ -83,7 +83,9 @@ void Markov::JumpToGammaG() {
  * Change the diagram from a dSigma/dG G^2 GammaG to a Sigma
  */
 void Markov::JumpFromGammaGToG()  {
-    if (Diag->Order == 0 || Worm->Exist || !Diag->MeasureGLine || Diag->HasGammaGW!=1)
+//    if (Diag->Order == 0 || Worm->Exist || !Diag->MeasureGLine || Diag->HasGammaGW!=1)
+//        return;
+    if (Diag->Order == 0 || Worm->Exist || Diag->HasGammaGW!=1)
         return;
 
     vertex v_A = *Diag->Vin;
@@ -139,7 +141,7 @@ void Markov::JumpFromGammaWToW() {
 }
 
 void Markov::AddTwoG() {
-    if (Diag->Order == 0 || Worm->Exist || !Diag->MeasureGLine || Diag->HasGammaGW != 1)
+    if (Diag->Order == 0 || Worm->Exist || !Diag->MeasureGLine || Diag->HasGammaGW == 0)
         return;
 
     if (Diag->MeasureGammaGW != 0)
@@ -149,8 +151,7 @@ void Markov::AddTwoG() {
     vertex vA = measureG->NeighVer(IN);
     vertex vB = measureG->NeighVer(OUT);
 
-    if (vA->R != vB->R)
-        return;
+    ASSERT_ALLWAYS(vA->R == vB->R, "Measuring G Line R doesn't match!");
 
     spin spin_meas = measureG->Spin();
     Site r_meas = vA->R;
@@ -173,29 +174,6 @@ void Markov::AddTwoG() {
 
     prob *= (ProbofCall[DELETE_TWO_G])
             / (ProbofCall[ADD_TWO_G] * ProbTau(tau_C) * ProbTau(tau_D));
-
-//    real tau_C = vA->Tau;
-//    real tau_D = vB->Tau;
-//
-//    Complex GACWeight = Complex(1.0, 0.0);
-//    Complex GDBWeight = Complex(1.0, 0.0);
-
-    ///Real G
-//    Complex GACWeight = G->Weight(r_meas, r_meas, vA->Tau, tau_C, spin_meas, spin_meas,
-//                                  false, false, UExt);
-//
-//    Complex GDBWeight = G->Weight(r_meas, r_meas, tau_D, vB->Tau, spin_meas, spin_meas,
-//                                  false, false, UExt);
-
-//    Complex measureGWeight = G->Weight(r_meas, r_meas, tau_C, tau_D, spin_meas, spin_meas,
-//                                       true, false, UExt);
-//
-//    Complex weightRatio = GACWeight * GDBWeight * measureGWeight/measureG->Weight;
-//
-//    real prob = mod(weightRatio);
-//    Complex sgn = phase(weightRatio);
-//
-//    prob *= (ProbofCall[DELETE_TWO_G]) / (ProbofCall[ADD_TWO_G]);
 
     Proposed[ADD_TWO_G][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
@@ -242,7 +220,7 @@ void Markov::AddTwoG() {
 }
 
 void Markov::DeleteTwoG() {
-    if (Diag->Order == 0 || Worm->Exist || !Diag->MeasureGLine || Diag->HasGammaGW != 1)
+    if (Diag->Order == 0 || Worm->Exist || !Diag->MeasureGLine || Diag->HasGammaGW == 0)
         return;
 
     if (Diag->MeasureGammaGW != 1)
@@ -262,7 +240,11 @@ void Markov::DeleteTwoG() {
     if (vC->R != vD->R || vC->R != vA->R || vD->R != vB->R)
         return;
 
+
     spin spin_meas = measureG->Spin();
+    ASSERT_ALLWAYS(vC->Spin()[IN]== spin_meas, "Spin doesn't match!");
+    ASSERT_ALLWAYS(vD->Spin()[OUT]== spin_meas, "Spin doesn't match!");
+
     Site r_meas = vC->R;
 
     Complex measureGWeight = G->Weight(r_meas, r_meas, vA->Tau, vB->Tau, spin_meas, spin_meas, true, false, UExt);
@@ -273,18 +255,6 @@ void Markov::DeleteTwoG() {
     Complex sgn = phase(weightRatio);
 
     prob *= (ProbofCall[ADD_TWO_G] * ProbTau(vC->Tau) * ProbTau(vD->Tau))/(ProbofCall[DELETE_TWO_G]);
-
-//    if (vA->Tau != vC->Tau || vB->Tau != vD->Tau)
-//        return;
-//
-//    Complex measureGWeight = G->Weight(r_meas, r_meas, vA->Tau, vB->Tau, spin_meas, spin_meas, true, false, UExt);
-//
-//    Complex weightRatio = measureGWeight/(measureG->Weight * GAC->Weight * GDB->Weight);
-//
-//    real prob = mod(weightRatio);
-//    Complex sgn = phase(weightRatio);
-//
-//    prob *= (ProbofCall[ADD_TWO_G] )/(ProbofCall[DELETE_TWO_G]);
 
     Proposed[DELETE_TWO_G][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
@@ -310,8 +280,177 @@ void Markov::DeleteTwoG() {
 
 void Markov::AddTwoW() {
 
+    if (Diag->Order == 0 || Worm->Exist || Diag->MeasureGLine || Diag->HasGammaGW == 0)
+        return;
+
+    if (Diag->MeasureGammaGW != 0)
+        return;
+
+    wLine measureW = Diag->WMeasure;
+    vertex vA = measureW->NeighVer(IN);
+    vertex vB = measureW->NeighVer(OUT);
+
+    bool flip_C = RandomPickBool();
+    bool flip_D = RandomPickBool();
+
+    spin spin_C[2], spin_D[2];
+
+    if(flip_C){
+        spin_C[IN] = FLIP(vA->Spin(IN));
+        spin_C[OUT] = FLIP(vA->Spin(OUT));
+    }else{
+        spin_C[IN] = vA->Spin(IN);
+        spin_C[OUT] = vA->Spin(OUT);
+    }
+
+    if(spin_C[IN]+vA->Spin(IN) != spin_C[OUT]+vA->Spin(OUT))
+        return;
+
+    if(flip_D){
+        spin_D[IN] = FLIP(vB->Spin(IN));
+        spin_D[OUT] = FLIP(vB->Spin(OUT));
+    }else{
+        spin_D[IN] = vB->Spin(IN);
+        spin_D[OUT] = vB->Spin(OUT);
+    }
+
+    if(spin_D[IN]+vB->Spin(IN) != spin_D[OUT]+vB->Spin(OUT))
+        return;
+
+    Site r_C = RandomPickSite();
+    Site r_D = RandomPickSite();
+
+    bool IsDelta_C = RandomPickBool();
+    bool IsDelta_D = RandomPickBool();
+
+    real tau_C, tau_D;
+    Complex WACWeight, WDBWeight;
+
+    if (IsDelta_C){
+        tau_C = vA->Tau;
+    }else{
+        tau_C = RandomPickTau();
+    }
+
+    if (IsDelta_D){
+        tau_D = vB->Tau;
+    }else{
+        tau_D = RandomPickTau();
+    }
+
+    WACWeight = W->Weight(vA->R, r_C, vA->Tau, tau_C, vA->Spin(), spin_C,
+                          false, false, IsDelta_C, false, UExt);
+
+    WDBWeight = W->Weight(r_D, vB->R, tau_D, vB->Tau, spin_D, vB->Spin(),
+                          false, false, false, false, UExt);
+
+    Complex measureWWeight = W->Weight(r_C, r_D, tau_C, tau_D, spin_C, spin_D,
+                                       false, true, false, false, UExt);
+
+    Complex weightRatio = WACWeight * WDBWeight * measureWWeight/measureW->Weight;
+
+    real prob = mod(weightRatio);
+    Complex sgn = phase(weightRatio);
+
+    prob *= (ProbofCall[DELETE_TWO_W])
+            / (ProbofCall[ADD_TWO_W] *0.5 * 0.5 *0.5 *0.5 * ProbSite(r_C) * ProbSite(r_D));
+
+    if (!IsDelta_C)
+        prob /= ProbTau(tau_C);
+    if (!IsDelta_D)
+        prob /= ProbTau(tau_D);
+
+    Proposed[ADD_TWO_W][Diag->Order] += 1.0;
+    if (prob >= 1.0 || RNG->urn() < prob) {
+        Accepted[ADD_TWO_W][Diag->Order] += 1.0;
+
+        Diag->Phase *= sgn;
+        Diag->Weight *= weightRatio;
+
+        Diag->MeasureGammaGW = 2;
+
+        vertex vC = Diag->Ver.Add();
+        vertex vD = Diag->Ver.Add();
+        wLine WAC = Diag->W.Add();
+        wLine WDB = Diag->W.Add();
+
+        vC->nW = WAC;
+        vC->SetVertex(r_C, tau_C, spin_C, IN);
+
+        vD->nW = WDB;
+        vD->SetVertex(r_D, tau_D, spin_D, OUT);
+
+        WAC->nVer[IN] = vA;
+        WAC->nVer[OUT] = vC;
+        WAC->SetWLine(measureW->K, WACWeight,
+                      false, false, IsDelta_C, false); //IsMeasure, IsGammaG
+
+        WDB->nVer[IN] = vD;
+        WDB->nVer[OUT] = vB;
+        WDB->SetWLine(measureW->K, WDBWeight,
+                      false, false, IsDelta_D, false); //IsMeasure, IsGammaG
+
+        vA->nW = WAC;
+        vB->nW = WDB;
+        measureW->nVer[IN] = vC;
+        measureW->nVer[OUT] = vD;
+        measureW->Weight = measureWWeight;
+
+    }
+
 }
 
 void Markov::DeleteTwoW() {
+    if (Diag->Order == 0 || Worm->Exist ||  Diag->MeasureGLine || Diag->HasGammaGW == 0)
+        return;
+
+    if (Diag->MeasureGammaGW != 2)
+        return;
+
+    wLine measureW = Diag->WMeasure;
+
+    vertex vC = measureW->NeighVer(IN);
+    vertex vD = measureW->NeighVer(OUT);
+
+    wLine WAC = vC->NeighW();
+    wLine WDB = vD->NeighW();
+
+    vertex vA = WAC->NeighVer(IN);
+    vertex vB = WDB->NeighVer(OUT);
+
+    Complex measureWWeight = W->Weight(vA->R, vB->R, vA->Tau, vB->Tau, vA->Spin(), vB->Spin(), false, true, false, false, UExt);
+
+    Complex weightRatio = measureWWeight/(measureW->Weight * WAC->Weight * WDB->Weight);
+
+    real prob = mod(weightRatio);
+    Complex sgn = phase(weightRatio);
+
+    prob *= (ProbofCall[ADD_TWO_W] * 0.5 *0.5 *0.5 *0.5 * ProbSite(vC->R) *ProbSite(vD->R))/(ProbofCall[DELETE_TWO_W]);
+
+    if (!WAC->IsDelta)
+        prob *= ProbTau(vC->Tau);
+    if (!WDB->IsDelta)
+        prob *= ProbTau(vD->Tau);
+
+    Proposed[DELETE_TWO_W][Diag->Order] += 1.0;
+    if (prob >= 1.0 || RNG->urn() < prob) {
+        Accepted[DELETE_TWO_W][Diag->Order] += 1.0;
+
+        Diag->Phase *= sgn;
+        Diag->Weight *= weightRatio;
+
+        Diag->MeasureGammaGW = 0;
+
+        Diag->Ver.Remove(vC);
+        Diag->Ver.Remove(vD);
+        Diag->W.Remove(WAC);
+        Diag->W.Remove(WDB);
+
+        vA->nW = measureW;
+        vB->nW = measureW;
+        measureW->nVer[IN] = vA;
+        measureW->nVer[OUT] = vB;
+        measureW->Weight = measureWWeight;
+    }
 
 }

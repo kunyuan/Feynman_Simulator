@@ -73,6 +73,15 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     print "Reducible GGGammaG [UP,UP], diagonal, dyson=\n", -GGGammaG_Reducible[UP,1,:,:].diagonal()
 
 
+    # GGWGG_dyson = calc.GGWGG(GGW_dyson, G, W, G.Map)
+    # print "GGWGG[UP], dyson=\n", GGWGG_dyson[UP, 0, :, :].diagonal()
+
+    if GammaW is not None:
+        print "GammaW, type0, mc=\n", GammaW[0, 0, 0, :, :].diagonal()
+        print "GammaW, type0, mc=\n", GammaW[0, 0, 1, :, :].diagonal()
+
+        #WWGammaW_dyson=calc.WWGammaW(GammaW, W, G.Map)
+        #print "WWGammaW[UP], dyson=\n", WWGammaW_dyson[UP, 0, 0, :, :].diagonal()
 
     data={}
     data["Chi"]=Chi.ToDict()
@@ -82,16 +91,16 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     data["SigmaDeltaT"]=SigmaDeltaT.ToDict()
     data["Sigma"]=Sigma.ToDict()
     data["Polar"]=Polar.ToDict()
-    data["GGGammaG"]={"SmoothT": GGGammaG}
+    data["GammaG"]={"SmoothT": GGGammaG}
     if GammaW is not None:
-        data["WWGammaW"]={"SmoothT": GammaW}
+        data["GammaW"]={"SmoothT": GammaW}
     Observable.Measure(Chi, Determ, G, Factory.NearestNeighbor)
 
     with DelayedInterrupt():
         try:
             log.info("Save weights into {0} File".format(WeightFile))
 
-            #######TODO: NOT UPDATING WEIGHT FILE
+            #####TODO: NOT UPDATING WEIGHT FILE
             #IO.SaveBigDict(WeightFile, data)
             #####################################
 
