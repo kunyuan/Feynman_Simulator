@@ -6,6 +6,7 @@ from weight import UP,DOWN,IN,OUT
 import weight, plot
 from logger import *
 import r_index 
+from scipy import weave
 print "calculator"
 
 def SimpleGG(G, map):
@@ -174,30 +175,30 @@ def GammaG_FirstOrder(GammaG, G, W0, _map):
                     Neighbors.append([i,j,W0.Data[:,sub,:,sub,k]])
                     # print W0.Data[spinUP,sub,spinUP,sub,k],W0.Data[spinUP,sub,spinDOWN,sub,k]
 
-    for tin in range(_map.MaxTauBin):
-        for tout in range(_map.MaxTauBin):
-            for t3 in range(_map.MaxTauBin):
-                dtin=t3-tin
-                sign=1
-                if dtin<0:
-                    dtin+=_map.MaxTauBin
-                    sign*=-1
-                G1=sign*G.Data[UP,sub,UP,sub,0,dtin]
+    for t3 in range(_map.MaxTauBin):
+        for tin in range(_map.MaxTauBin):
+            dtin=t3-tin
+            sign=1
+            if dtin<0:
+                dtin+=_map.MaxTauBin
+                sign*=-1
+            G1=sign*G.Data[UP,sub,UP,sub,0,dtin]
+
+            for tout in range(_map.MaxTauBin):
                 dtout=tout-t3-1
                 sign=1
                 if dtout<0:
                     dtout+=_map.MaxTauBin
                     sign*=-1
                 G2=sign*G.Data[UP,sub,UP,sub,0,dtout]
+                GG=G1*G2
+
                 for r1,r2,V in Neighbors:
-                    GammaGNew[UP,r1,tout,tin]+=G1*G2*V[spinUP,spinUP]*GammaG[UP,r2,t3,t3]
-                    GammaGNew[UP,r1,tout,tin]+=G1*G2*V[spinUP,spinDOWN]*GammaG[DOWN,r2,t3,t3]
-                    GammaGNew[DOWN,r1,tout,tin]+=G1*G2*V[spinDOWN,spinUP]*GammaG[UP,r2,t3,t3]
-                    GammaGNew[DOWN,r1,tout,tin]+=G1*G2*V[spinDOWN,spinDOWN]*GammaG[DOWN,r2,t3,t3]
+                    GammaGNew[UP,r1,tout,tin]+=GG*(V[spinUP,spinUP]*GammaG[UP,r2,t3,t3]+V[spinUP,spinDOWN]*GammaG[DOWN,r2,t3,t3])
+                    GammaGNew[DOWN,r1,tout,tin]+=GG*(V[spinDOWN,spinUP]*GammaG[UP,r2,t3,t3]+V[spinDOWN,spinDOWN]*GammaG[DOWN,r2,t3,t3])
 
     GammaGNew*=_map.Beta/_map.MaxTauBin
     return GammaGNew
-
 
 def SigmaSmoothT_FirstOrder(G, W, map):
     '''Fock diagram, assume Spin Conservation'''
