@@ -6,7 +6,7 @@ from weight import UP,DOWN,IN,OUT
 import weight, plot
 from logger import *
 import r_index 
-from scipy import weave
+# from scipy import weave
 print "calculator"
 
 def SimpleGG(G, map):

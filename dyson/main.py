@@ -101,7 +101,7 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
             log.info("Save weights into {0} File".format(WeightFile))
 
             #####TODO: NOT UPDATING WEIGHT FILE
-            #IO.SaveBigDict(WeightFile, data)
+            IO.SaveBigDict(WeightFile, data)
             #####################################
 
             parameter.Save(ParaFile, para)  #Save Parameters
@@ -134,13 +134,12 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
     Sigma=weight.Weight("SmoothT", Map, "TwoSpins", "AntiSymmetric","R","T")
     Polar=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
 
-    GammaG=calc.SimpleGG(G, Map)
-    GammaW=np.zeros([3, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin])+0.0*1j
-
     if IsNewCalculation:
         #not load WeightFile
         log.info("Start from bare G, W")
         G=G0.Copy()
+        GammaG=calc.SimpleGG(G, Map)
+        GammaW=np.zeros([3, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin])+0.0*1j
     else:
         #load WeightFile, load G,W
         log.info("Load G, W from {0}".format(WeightFile))
@@ -151,9 +150,16 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
         Sigma.FromDict(data["Sigma"])
         Polar.FromDict(data["Polar"])
         if data.has_key("GammaG"):
-            GammaG.FromDict(data["GammaG"])
+            GammaG=data["GammaG"]["SmoothT"]
+            print "Read existing GammaG"
+        else:
+            GammaG=calc.SimpleGG(G, Map)
+
         if data.has_key("GammaW"):
-            GammaW.FromDict(data["GammaW"])
+            GammaW=data["GammaW"]["SmoothT"]
+            print "Read existing GammaW"
+        else:
+            GammaW=np.zeros([3, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin])+0.0*1j
 
     Gold, Wold = G, W
 
