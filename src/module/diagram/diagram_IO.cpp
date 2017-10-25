@@ -178,12 +178,12 @@ void Diagram::BuildNew(Lattice& lat, weight::GClass& g, weight::WClass& w)
         "{'SignFermiLoop': 1.0,"
         "'Ver': "
         "[{'Name': 0, 'Sublat': 0, 'Coordi':" + coord + ", 'Tau': 0.0, 'SpinIn': 1, 'SpinOut' :1},"
-                                                        "{'Name': 1, 'Sublat': 0, 'Coordi':" + coord + ", 'Tau': 0.0, 'SpinIn': 1, 'SpinOut' :1}],"
-                                                                                                       "'G':"
-                                                                                                       "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsMeasure': True, 'IsGammaG': False},"
-                                                                                                       "{'IN': 1, 'OUT': 0, 'K': 2, 'IsMeasure': False, 'IsGammaG': False}],"
-                                                                                                       "'W':"
-                                                                                                       "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsDelta': False, 'IsMeasure': False, 'IsGammaW': False}]}");
+        "{'Name': 1, 'Sublat': 0, 'Coordi':" + coord + ", 'Tau': 0.0, 'SpinIn': 1, 'SpinOut' :1}],"
+        "'G':"
+        "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsMeasure': True, 'IsGammaG': False},"
+        "{'IN': 1, 'OUT': 0, 'K': 2, 'IsMeasure': False, 'IsGammaG': False}],"
+        "'W':"
+        "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsDelta': False, 'IsMeasure': False, 'IsGammaW': False}]}");
 
     if (!FromDict(Config))
         ABORT("Faile to construct diagram!");
@@ -204,12 +204,12 @@ void Diagram::SetTest(Lattice& lat, weight::GClass& g, weight::WClass& w)
         "{'SignFermiLoop': 1.0,"
         "'Ver': "
         "[{'Name': 0, 'Sublat': 0, 'Coordi':" + coord + ", 'Tau': 0.0, 'SpinIn': 1, 'SpinOut' :1},"
-                                                        "{'Name': 1, 'Sublat': 0, 'Coordi':" + coord + ", 'Tau': 0.0, 'SpinIn': 1, 'SpinOut' :1}],"
-                                                                                                       "'G':"
-                                                                                                       "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsMeasure': True, 'IsGammaG': False},"
-                                                                                                       "{'IN': 1, 'OUT': 0, 'K': 2, 'IsMeasure': False, 'IsGammaG': False}],"
-                                                                                                       "'W':"
-                                                                                                       "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsDelta': False, 'IsMeasure': False, 'IsGammaW': False}]}");
+        "{'Name': 1, 'Sublat': 0, 'Coordi':" + coord + ", 'Tau': 0.0, 'SpinIn': 1, 'SpinOut' :1}],"
+        "'G':"
+        "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsMeasure': True, 'IsGammaG': False},"
+        "{'IN': 1, 'OUT': 0, 'K': 2, 'IsMeasure': False, 'IsGammaG': False}],"
+        "'W':"
+        "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsDelta': False, 'IsMeasure': False, 'IsGammaW': False}]}");
     if (!FromDict(Config))
         ABORT("Faile to construct diagram!");
 }

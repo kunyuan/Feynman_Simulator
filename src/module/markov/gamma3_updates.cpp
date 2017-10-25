@@ -320,8 +320,12 @@ void Markov::AddTwoW() {
     Site r_C = RandomPickSite();
     Site r_D = RandomPickSite();
 
-    bool IsDelta_C = RandomPickBool();
-    bool IsDelta_D = RandomPickBool();
+//    bool IsDelta_C = RandomPickBool();
+//    bool IsDelta_D = RandomPickBool();
+
+    //TODO Only Delta W
+    bool IsDelta_C = true;
+    bool IsDelta_D = true;
 
     real tau_C, tau_D;
     Complex WACWeight, WDBWeight;
@@ -342,7 +346,7 @@ void Markov::AddTwoW() {
                           false, false, IsDelta_C, false, UExt);
 
     WDBWeight = W->Weight(r_D, vB->R, tau_D, vB->Tau, spin_D, vB->Spin(),
-                          false, false, false, false, UExt);
+                          false, false, IsDelta_D, false, UExt);
 
     Complex measureWWeight = W->Weight(r_C, r_D, tau_C, tau_D, spin_C, spin_D,
                                        false, true, false, false, UExt);
@@ -352,13 +356,17 @@ void Markov::AddTwoW() {
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    prob *= (ProbofCall[DELETE_TWO_W])
-            / (ProbofCall[ADD_TWO_W] *0.5 * 0.5 *0.5 *0.5 * ProbSite(r_C) * ProbSite(r_D));
+//    prob *= (ProbofCall[DELETE_TWO_W])
+//            / (ProbofCall[ADD_TWO_W] *0.5 * 0.5 *0.5 *0.5 * ProbSite(r_C) * ProbSite(r_D));
 
-    if (!IsDelta_C)
-        prob /= ProbTau(tau_C)/10.0;
-    if (!IsDelta_D)
-        prob /= ProbTau(tau_D)/10.0;
+    //TODO: only delta W
+    prob *= (ProbofCall[DELETE_TWO_W])
+            / (10.0*ProbofCall[ADD_TWO_W] *0.5 *0.5 * ProbSite(r_C) * ProbSite(r_D));
+
+//    if (!IsDelta_C)
+//        prob /= ProbTau(tau_C)/10.0;
+//    if (!IsDelta_D)
+//        prob /= ProbTau(tau_D)/10.0;
 
     Proposed[ADD_TWO_W][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
@@ -425,12 +433,15 @@ void Markov::DeleteTwoW() {
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    prob *= (ProbofCall[ADD_TWO_W] * 0.5 *0.5 *0.5 *0.5 * ProbSite(vC->R) *ProbSite(vD->R))/(ProbofCall[DELETE_TWO_W]);
+//    prob *= (ProbofCall[ADD_TWO_W] * 0.5 *0.5 *0.5 *0.5 * ProbSite(vC->R) *ProbSite(vD->R))/(ProbofCall[DELETE_TWO_W]);
 
-    if (!WAC->IsDelta)
-        prob *= ProbTau(vC->Tau)*10.0;
-    if (!WDB->IsDelta)
-        prob *= ProbTau(vD->Tau)*10.0;
+    //TODO only Delta W
+    prob *= (10.0* ProbofCall[ADD_TWO_W] *0.5 *0.5 * ProbSite(vC->R) *ProbSite(vD->R))/(ProbofCall[DELETE_TWO_W]);
+
+//    if (!WAC->IsDelta)
+//        prob *= ProbTau(vC->Tau)*10.0;
+//    if (!WDB->IsDelta)
+//        prob *= ProbTau(vD->Tau)*10.0;
 
     Proposed[DELETE_TWO_W][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {

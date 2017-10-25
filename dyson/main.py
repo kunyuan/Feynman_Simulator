@@ -52,22 +52,24 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
         # n=Sigma.Data[UP,0,UP,0,0,i]
         # print '%05f %05f %05f' % (i*Map.Beta/Map.MaxTauBin, n.real, n.imag)
 
-    GG_dyson=calc.SimpleGG(G, G.Map)
-    GGW_dyson=calc.GGW(GG_dyson, G, W, G.Map)
+    GG_dyson=calc.SimpleGG(G0, G.Map)
+    GGW_dyson=calc.GGW(GG_dyson, G0, W, G.Map)
+
     print "GG[UP,UP], diagonal, dyson=\n", GG_dyson[UP,0,:,:].diagonal()
     print "Polar[UP,UP], mc=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
 
     print "GGW[UP], dyson=\n", GGW_dyson[UP, 0, 0, :]
     print "GammaG, mc=\n", GammaG[UP, 0, :, :].diagonal()
 
-    GammaG_dyson=calc.AddTwoGToGammaG(GGW_dyson, G, G.Map)
+    GammaG_dyson=calc.AddTwoGToGammaG(GGW_dyson, G0, G.Map)
     print "GammaG_dyson[UP]=\n", GammaG_dyson[UP, 0, :, :].diagonal()
 
-    _,ChiTensor,_=calc.W_Dyson(W0, Polar, Polar.Map, Lat) 
-    ChiTensor.FFT("R","T")
-    print "ChiTensor=\n", ChiTensor.Data[spinUP,0,spinUP,0,1,:]
-    GammaG_Reducible=calc.GammaG_FirstOrder(GG_dyson, G, W0, G.Map)
-    print "Reducible GammaG [UP,UP], diagonal, dyson=\n", -GammaG_Reducible[UP,1,:,:].diagonal()
+    #_,ChiTensor,_=calc.W_Dyson(W0, Polar, Polar.Map, Lat) 
+    #ChiTensor.FFT("R","T")
+    #print "ChiTensor=\n", ChiTensor.Data[spinUP,0,spinUP,0,1,:]
+    #GammaG_Reducible=calc.GammaG_FirstOrder(GG_dyson, G, W0, G.Map)
+    #print "Reducible GammaG [UP,UP], diagonal, dyson=\n", -GammaG_Reducible[UP,1,:,:].diagonal()
+
     # GammaG_Reducible=calc.GammaG_FirstOrder(GammaG_Reducible, G, W0, G.Map)
     # print "Reducible GGGammaG [UP,UP], diagonal, dyson=\n", -GammaG_Reducible[UP,1,:,:].diagonal()
     # GammaG_Reducible=calc.GammaG_FirstOrder(GammaG_Reducible, G, W0, G.Map)
@@ -78,15 +80,20 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     # print "GGWGG[UP], dyson=\n", GGWGG_dyson[UP, 0, :, :].diagonal()
 
     if GammaW is not None:
-        print "GammaW, type0, mc=\n", GammaW[0, 0, 0, :, :].diagonal()
-        print "GammaW, type0, mc=\n", GammaW[0, 0, 1, :, :].diagonal()
+        print "WWGammaW, type0, diagonal, mc=\n", 10.0*GammaW[0, 1, 1, :, :].diagonal()
+        print "WWGammaW, type0, t1=0, mc=\n", 10.0*GammaW[0, 1, 1, 0, :]
+        print "WWGammaW, type2, diagonal, mc=\n", 10.0*GammaW[2, 1, 1, :, :].diagonal()
+        print "WWGammaW, type2, t1=0, mc=\n", 10.0*GammaW[2, 1, 1, 0, :]
 
         #WWGammaW_dyson=calc.WWGammaW(GammaW, W, G.Map)
-        #print "WWGammaW[UP], dyson=\n", WWGammaW_dyson[UP, 0, 0, :, :].diagonal()
+        #print "WWGammaW[UP], dyson=\n", WWGammaW_dyson[0, 0, 0, :, :].diagonal()
 
     data={}
     data["Chi"]=Chi.ToDict()
-    data["G"]=G.ToDict()
+
+    #data["G"]=G.ToDict()
+    data["G"]=G0.ToDict()
+
     data["W"]=W.ToDict()
     data["W"].update(W0.ToDict())
     data["SigmaDeltaT"]=SigmaDeltaT.ToDict()
@@ -162,7 +169,9 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
             SigmaDeltaT.Merge(ratio, calc.SigmaDeltaT_FirstOrder(G, W0, Map))
             log.info("SigmaDeltaT is done")
 
-            GammaG=calc.SimpleGG(G, Map)
+            ###TODO : G0
+            GammaG=calc.SimpleGG(G0, Map)
+
             GammaW=np.zeros([3, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin])+0.0*1j
             #GammaW=np.zeros([6, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin])+0.0*1j
             # print "Polar[UP,UP]=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
@@ -172,7 +181,10 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                 log.info("accumulating Sigma/Polar statistics...")
                 Sigma.Merge(ratio, calc.SigmaSmoothT_FirstOrder(G, W, Map))
                 log.info("calculating G...")
-                G = calc.G_Dyson(G0, SigmaDeltaT, Sigma, Map)
+
+                ###TODO: G0
+                #G = calc.G_Dyson(G0, SigmaDeltaT, Sigma, Map)
+
                 Polar.Merge(ratio, calc.Polar_FirstOrder(G, Map))
 
             else:
@@ -182,7 +194,8 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                         ParaDyson["ErrorThreshold"], ParaDyson["OrderAccepted"])
                 #print Sigma.Data[0,0,0,0,0,0], Sigma.Data[0,0,0,0,0,-1]
                 log.info("calculating G...")
-                G = calc.G_Dyson(G0, SigmaDeltaT, Sigma, Map)
+                ###TODO: G0
+                #G = calc.G_Dyson(G0, SigmaDeltaT, Sigma, Map)
                 SigmaDyson = calc.SigmaSmoothT_FirstOrder(G, W, Map)
                 print "SigmaFromDyson=\n", SigmaDyson.Data[UP,0,UP,0,0,:]
 
@@ -204,6 +217,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                     Chi.FFT("R","T")
                     print "Chi(r=0,t=0)", Chi.Data[0,0,0,0,0,0]
             W = Wtmp
+
 
         except calc.DenorminatorTouchZero as err:
             #failure due to denorminator touch zero

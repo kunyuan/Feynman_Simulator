@@ -311,12 +311,10 @@ void Markov::Hop(int sweep)
             }
         }else if(x < SumofProbofCall[DELETE_TWO_G]){
             if(Diag->MeasureGammaGW==1) {
-                //TODO measure GammaW: delete two G lines
                 DeleteTwoG();
             }
         }else if(x < SumofProbofCall[DELETE_TWO_W]){
             if( Diag->MeasureGammaGW==2) {
-                //TODO measure GammaW: delete two W lines
                 DeleteTwoW();
             }
         }

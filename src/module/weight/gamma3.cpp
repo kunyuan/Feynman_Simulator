@@ -4,6 +4,7 @@
 
 #include "gamma3.h"
 #include "utility/dictionary.h"
+#include "iostream"
 
 using namespace weight;
 using namespace std;
@@ -277,6 +278,7 @@ Dictionary GammaWClass::StatisToDict()
     dict["Norm"] = _Norm;
     dict["NormAccu"] = _NormAccu;
     dict["WeightAccu"] = Python::ArrayObject(_WeightAccu.Data(), _WeightAccu.GetShape(), _WeightAccu.GetDim());
+    cout << _NormAccu;
     return dict;
 }
 
