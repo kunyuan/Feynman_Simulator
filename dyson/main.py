@@ -51,6 +51,7 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     # for i in range(Map.MaxTauBin):
         # n=Sigma.Data[UP,0,UP,0,0,i]
         # print '%05f %05f %05f' % (i*Map.Beta/Map.MaxTauBin, n.real, n.imag)
+
     GG_dyson=calc.SimpleGG(G, G.Map)
     GGW_dyson=calc.GGW(GG_dyson, G, W, G.Map)
     print "GG[UP,UP], diagonal, dyson=\n", GG_dyson[UP,0,:,:].diagonal()

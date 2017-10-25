@@ -356,9 +356,9 @@ void Markov::AddTwoW() {
             / (ProbofCall[ADD_TWO_W] *0.5 * 0.5 *0.5 *0.5 * ProbSite(r_C) * ProbSite(r_D));
 
     if (!IsDelta_C)
-        prob /= ProbTau(tau_C);
+        prob /= ProbTau(tau_C)/10.0;
     if (!IsDelta_D)
-        prob /= ProbTau(tau_D);
+        prob /= ProbTau(tau_D)/10.0;
 
     Proposed[ADD_TWO_W][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
@@ -428,9 +428,9 @@ void Markov::DeleteTwoW() {
     prob *= (ProbofCall[ADD_TWO_W] * 0.5 *0.5 *0.5 *0.5 * ProbSite(vC->R) *ProbSite(vD->R))/(ProbofCall[DELETE_TWO_W]);
 
     if (!WAC->IsDelta)
-        prob *= ProbTau(vC->Tau);
+        prob *= ProbTau(vC->Tau)*10.0;
     if (!WDB->IsDelta)
-        prob *= ProbTau(vD->Tau);
+        prob *= ProbTau(vD->Tau)*10.0;
 
     Proposed[DELETE_TWO_W][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
