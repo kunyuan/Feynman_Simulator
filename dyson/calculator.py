@@ -5,6 +5,7 @@ import parameter as para
 from weight import UP,DOWN,IN,OUT
 import weight, plot
 from logger import *
+import r_index 
 print "calculator"
 
 def GammaG_ZerothOrder(G, map):
@@ -110,9 +111,56 @@ def GGGammaG(GammaG, G, _map):
     return GGGammaG2*_map.Beta**2/_map.MaxTauBin**2
 
 #TODO: add WWGammaW
-# def WWGammaW(GammaW, W, _map):
+def WWGammaW(GammaW, W, _map):
+    sub = 0
+    UPUP=_map.Spin2Index(UP,UP)
+    DOWNDOWN=_map.Spin2Index(DOWN,DOWN)
+    UPDOWN=_map.Spin2Index(UP,DOWN)
+    DOWNUP=_map.Spin2Index(DOWN,UP)
 
-    # return 
+    print "calculating WGammaW..."
+    WGammaW=np.zeros([3, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
+    for r in range(_map.Vol):
+        for rout in range(_map.Vol):
+            dr_out = int(r_index.CoordiIndex(r, rout, _map))
+            for t in range(_map.MaxTauBin):
+                for tout in range(_map.MaxTauBin):
+                    dt_out = t - tout -1
+                    if dt_out<0:
+                        dt_out+=_map.MaxTauBin
+                    Wout = W.Data[:,sub,:,sub,dr_out,dt_out]
+                    for rin in range(_map.Vol):
+                        for tin in range(_map.MaxTauBin):
+                            WGammaW[0, r, rin, t, tin] += Wout[UPUP, UPUP] * GammaW[0, rout, rin, tout, tin]
+                            WGammaW[0, r, rin, t, tin] += Wout[UPUP, DOWNDOWN] * GammaW[1, rout, rin, tout, tin]
+
+                            WGammaW[1, r, rin, t, tin] += Wout[UPUP, UPUP] * GammaW[1, rout, rin, tout, tin]
+                            WGammaW[1, r, rin, t, tin] += Wout[UPUP, DOWNDOWN] * GammaW[0, rout, rin, tout, tin]
+
+                            WGammaW[2, r, rin, t, tin] += Wout[UPDOWN, DOWNUP] * GammaW[2, rout, rin, tout, tin]
+
+    print "calculating WWGammaW..."
+    WWGammaW = np.zeros([3, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin]) + 0.0*1j
+    for r in range(_map.Vol):
+        for rin in range(_map.Vol):
+            dr_in = int(r_index.CoordiIndex(rin, r, _map))
+            for t in range(_map.MaxTauBin):
+                for tin in range(_map.MaxTauBin):
+                    dt_in = tin - t
+                    if dt_in < 0:
+                        dt_in +=_map.MaxTauBin
+                    Win = W.Data[:,sub,:,sub,dr_in,dt_in]
+                    for rout in range(_map.Vol):
+                        for tout in range(_map.MaxTauBin):
+                            WWGammaW[0, rout, r, tout, t] += Win[UPUP, UPUP] * WGammaW[0, rout, rin, tout, tin]
+                            WWGammaW[0, rout, r, tout, t] += Win[UPUP, DOWNDOWN] * WGammaW[1, rout, rin, tout, tin]
+
+                            WWGammaW[1, rout, r, tout, t] += Win[UPUP, UPUP] * WGammaW[1, rout, rin, tout, tin]
+                            WWGammaW[1, rout, r, tout, t] += Win[UPUP, DOWNDOWN] * WGammaW[0, rout, rin, tout, tin]
+
+                            WWGammaW[2, rout, r, tout, t] += Win[UPDOWN, DOWNUP] * WGammaW[2, rout, rin, tout, tin]
+
+    return WWGammaW*_map.Beta**2/_map.MaxTauBin**2
 
 # def GammaGFFT(GammaG, _map, BackForth):
     # Vol=_map.Vol

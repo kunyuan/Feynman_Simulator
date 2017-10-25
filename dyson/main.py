@@ -70,17 +70,20 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     print "GGW[UP], dyson=\n", GGW_dyson[UP, 0, 0, :]
     print "GammaG, mc=\n", GammaG[UP, 0, 0, :]
 
-    if GammaW is not None:
-        print "GammaW, type0, mc=\n", GammaW[0, 0, 0, :, :]
-        print "GammaW, type2, mc=\n", GammaW[2, 0, 0, :, :]
-
-    # GGWGG_dyson = calc.GGWGG(GGW_dyson, G, W, G.Map)
-    # print "GGWGG[UP], dyson=\n", GGWGG_dyson[UP, 0, :, :].diagonal()
-
     GGGammaG_dyson=calc.GGGammaG(GGW_dyson, G, G.Map)
     print "GGGammaG[UP], dyson=\n", GGGammaG_dyson[UP, 0, :, :].diagonal()
 
     print "GammaG, mc=\n", GammaG[UP, 0, :, :].diagonal()
+
+    # GGWGG_dyson = calc.GGWGG(GGW_dyson, G, W, G.Map)
+    # print "GGWGG[UP], dyson=\n", GGWGG_dyson[UP, 0, :, :].diagonal()
+
+    if GammaW is not None:
+        print "GammaW, type0, mc=\n", GammaW[0, 0, 0, :, :].diagonal()
+        print "GammaW, type0, mc=\n", GammaW[0, 0, 1, :, :].diagonal()
+
+        #WWGammaW_dyson=calc.WWGammaW(GammaW, W, G.Map)
+        #print "WWGammaW[UP], dyson=\n", WWGammaW_dyson[UP, 0, 0, :, :].diagonal()
 
     data={}
     data["Chi"]=Chi.ToDict()
@@ -100,8 +103,8 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
         try:
             log.info("Save weights into {0} File".format(WeightFile))
 
-            #######TODO: NOT UPDATING WEIGHT FILE
-            IO.SaveBigDict(WeightFile, data)
+            #####TODO: NOT UPDATING WEIGHT FILE
+            #IO.SaveBigDict(WeightFile, data)
             #####################################
 
             parameter.Save(ParaFile, para)  #Save Parameters
