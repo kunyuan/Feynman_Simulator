@@ -80,30 +80,26 @@ bool weight::Weight::FromDict(const Dictionary &dict, flag _flag, const para::Pa
         Polar->FromDict(dict.Get<Dictionary>("Polar"));
     }
     if (_flag & weight::GammaGW) {
+        _AllocateGammaGW(para);
         if(dict.HasKey("GammaG")) {
-            _AllocateGammaGW(para);
             GammaG->WeightFromDict(dict.Get<Dictionary>("GammaG"));
-            if(dict.HasKey("GammaW")) {
-                //for the first iteration, GammaG exists but GammaW does not!
-                GammaW->WeightFromDict(dict.Get<Dictionary>("GammaW"));
-            }else{
-                LOG_WARNING("There is no GammaW Weight to read");
-                //GammaW will be allocated with zeros
-            }
         }else{
-            LOG_WARNING("There is no GGGammaG Weight to read");
-            GammaG= nullptr;
-            GammaW= nullptr;
+            LOG_WARNING("There is no GammaG Weight to read!\n I will initialze them with zeros.");
         }
-        GammaG->WeightFromDict(dict.Get<Dictionary>("GammaG"));
+        if(dict.HasKey("GammaW")) {
+            GammaW->WeightFromDict(dict.Get<Dictionary>("GammaW"));
+        }else{
+            LOG_WARNING("There is no GammaW Weight to read!\n I will initialze them with zeros.");
+            //GammaW will be allocated with zeros
+        }
         G->GammaGWeight = GammaG;
         W->GammaWWeight = GammaW;
     }
     if (_flag & weight::GammaGWStatis) {
         ASSERT_ALLWAYS(GammaG!= nullptr&&GammaW!= nullptr, "GammaG and GammaW has to be initialized first!");
-        if(dict.HasKey("GammaG")&&dict.HasKey("GammaW")){
-            GammaG->StatisFromDict(dict.Get<Dictionary>("GammaG"));
-            GammaW->StatisFromDict(dict.Get<Dictionary>("GammaW"));
+        if(dict.HasKey("GammaGStatis")&&dict.HasKey("GammaWStatis")){
+            GammaG->StatisFromDict(dict.Get<Dictionary>("GammaGStatis"));
+            GammaW->StatisFromDict(dict.Get<Dictionary>("GammaWStatis"));
         }else{
             LOG_WARNING("There is no GammaG or GammaW statistics to read");
             GammaG->ClearStatistics();
@@ -131,9 +127,9 @@ Dictionary weight::Weight::ToDict(flag _flag)
     }
     if (_flag & weight::GammaGWStatis) {
         if(GammaG!= nullptr)
-            dict["GammaG"] = GammaG->StatisToDict();
+            dict["GammaGStatis"] = GammaG->StatisToDict();
         if(GammaW!= nullptr)
-            dict["GammaW"] = GammaW->StatisToDict();
+            dict["GammaWStatis"] = GammaW->StatisToDict();
     }
     return dict;
 }

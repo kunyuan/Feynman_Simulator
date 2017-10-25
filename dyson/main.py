@@ -109,7 +109,7 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
             log.info("Save weights into {0} File".format(WeightFile))
 
             #####TODO: NOT UPDATING WEIGHT FILE
-            #IO.SaveBigDict(WeightFile, data)
+            IO.SaveBigDict(WeightFile, data)
             #####################################
 
             parameter.Save(ParaFile, para)  #Save Parameters
@@ -141,10 +141,13 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
     SigmaDeltaT=weight.Weight("DeltaT", Map, "TwoSpins", "AntiSymmetric","R")
     Sigma=weight.Weight("SmoothT", Map, "TwoSpins", "AntiSymmetric","R","T")
     Polar=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
+
     if IsNewCalculation:
         #not load WeightFile
         log.info("Start from bare G, W")
         G=G0.Copy()
+        GammaG=calc.SimpleGG(G, Map)
+        GammaW=np.zeros([3, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin])+0.0*1j
     else:
         #load WeightFile, load G,W
         log.info("Load G, W from {0}".format(WeightFile))
@@ -154,6 +157,17 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
         SigmaDeltaT.FromDict(data["SigmaDeltaT"])
         Sigma.FromDict(data["Sigma"])
         Polar.FromDict(data["Polar"])
+        if data.has_key("GammaG"):
+            GammaG=data["GammaG"]["SmoothT"]
+            print "Read existing GammaG"
+        else:
+            GammaG=calc.SimpleGG(G, Map)
+
+        if data.has_key("GammaW"):
+            GammaW=data["GammaW"]["SmoothT"]
+            print "Read existing GammaW"
+        else:
+            GammaW=np.zeros([3, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin])+0.0*1j
 
     Gold, Wold = G, W
 
@@ -171,8 +185,8 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
 
             ###TODO : G0
             GammaG=calc.SimpleGG(G0, Map)
-
             GammaW=np.zeros([3, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin])+0.0*1j
+
             #GammaW=np.zeros([6, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin])+0.0*1j
             # print "Polar[UP,UP]=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
             # print "GammaG[UP,UP]=\n", GammaG[UP,0,:,-1]
@@ -189,7 +203,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
 
             else:
                 log.info("Collecting Sigma/Polar statistics...")
-                SigmaStatis, PolarStatis, GammaG, GammaW=collect.CollectStatis(Map)
+                SigmaStatis, PolarStatis, GammaG_MC, GammaW_MC=collect.CollectStatis(Map)
                 Sigma, Polar, ParaDyson["OrderAccepted"]=collect.UpdateWeight([SigmaStatis, PolarStatis],
                         ParaDyson["ErrorThreshold"], ParaDyson["OrderAccepted"])
                 #print Sigma.Data[0,0,0,0,0,0], Sigma.Data[0,0,0,0,0,-1]
@@ -198,6 +212,10 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                 #G = calc.G_Dyson(G0, SigmaDeltaT, Sigma, Map)
                 SigmaDyson = calc.SigmaSmoothT_FirstOrder(G, W, Map)
                 print "SigmaFromDyson=\n", SigmaDyson.Data[UP,0,UP,0,0,:]
+
+                #initialize new GammaG and GammaW
+                GammaW=GammaW_MC
+                GammaG=calc.SimpleGG(G, Map)+calc.GammaG_FirstOrder(GammaG, G, W0, Map)+GammaG_MC
 
             #######DYSON FOR W AND G###########################
             log.info("calculating W...")

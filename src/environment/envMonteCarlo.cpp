@@ -94,7 +94,7 @@ void EnvMonteCarlo::Save()
     para_[ConfigKey] = Diag.ToDict();
     para_["PID"] = Job.PID;
     para_.Save(Job.ParaFile, "w");
-    Dictionary statis_ = Weight.ToDict(weight::GW | weight::SigmaPolar | weight::GammaGWStatis);
+    Dictionary statis_ = Weight.ToDict(weight::GW | weight::SigmaPolar | weight:: GammaGW | weight::GammaGWStatis);
     statis_.Update(MarkovMonitor.ToDict());
     statis_.BigSave(Job.StatisticsFile);
     LOG_INFO("Saving data is done!");

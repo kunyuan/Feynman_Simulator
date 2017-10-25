@@ -174,7 +174,7 @@ def CollectStatis(_map):
             SigmaSmoothT.MergeFromDict(Dict['Sigma']['Histogram'])
             PolarSmoothT.MergeFromDict(Dict['Polar']['Histogram'])
 
-            dataG=Dict["GammaG"]
+            dataG=Dict["GammaGStatis"]
             if GammaGNorm is not None:
                 GammaGAccu+=dataG['WeightAccu']
                 GammaGNormAccu+=dataG['NormAccu']
@@ -184,7 +184,7 @@ def CollectStatis(_map):
                 GammaGNormAccu=dataG['NormAccu']
                 GammaGNorm=dataG['Norm']
 
-            dataW=Dict["GammaW"]
+            dataW=Dict["GammaWStatis"]
             if GammaWNorm is not None:
                 GammaWAccu+=dataW['WeightAccu']
                 GammaWNormAccu+=dataW['NormAccu']
