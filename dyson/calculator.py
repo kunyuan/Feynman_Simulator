@@ -45,7 +45,7 @@ def GGW(GammaG, G,W,_map):
             GGW[DOWN,r, t1,t2]=OrderSign*GammaG[UP,r,t1,t2]*W.Data[spinDOWNUP,sub,spinUPDOWN,sub,0,abs(t1-t2)]
     return GGW
 
-def GGGammaG(GammaG, G, _map):
+def AddTwoGToGammaG(GammaG, G, _map):
     #integer tin and tout
     spinUP=_map.Spin2Index(UP,UP)
     spinDOWN=_map.Spin2Index(DOWN,DOWN)
@@ -130,10 +130,10 @@ def WWGammaW(GammaW, W, _map):
 
     return WWGammaW*_map.Beta**2/_map.MaxTauBin**2
 
-def GGGammaG_FirstOrder(GGGammaG, G, W0, _map):
+def GammaG_FirstOrder(GammaG, G, W0, _map):
     #integer tin and tout
     GG=SimpleGG(G,_map)
-    GGGammaGNew=np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
+    GammaGNew=np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
     spinUP=_map.Spin2Index(UP,UP)
     spinDOWN=_map.Spin2Index(DOWN,DOWN)
 
@@ -190,13 +190,13 @@ def GGGammaG_FirstOrder(GGGammaG, G, W0, _map):
                     sign*=-1
                 G2=sign*G.Data[UP,sub,UP,sub,0,dtout]
                 for r1,r2,V in Neighbors:
-                    GGGammaGNew[UP,r1,tout,tin]+=G1*G2*V[spinUP,spinUP]*GGGammaG[UP,r2,t3,t3]
-                    GGGammaGNew[UP,r1,tout,tin]+=G1*G2*V[spinUP,spinDOWN]*GGGammaG[DOWN,r2,t3,t3]
-                    GGGammaGNew[DOWN,r1,tout,tin]+=G1*G2*V[spinDOWN,spinUP]*GGGammaG[UP,r2,t3,t3]
-                    GGGammaGNew[DOWN,r1,tout,tin]+=G1*G2*V[spinDOWN,spinDOWN]*GGGammaG[DOWN,r2,t3,t3]
+                    GammaGNew[UP,r1,tout,tin]+=G1*G2*V[spinUP,spinUP]*GammaG[UP,r2,t3,t3]
+                    GammaGNew[UP,r1,tout,tin]+=G1*G2*V[spinUP,spinDOWN]*GammaG[DOWN,r2,t3,t3]
+                    GammaGNew[DOWN,r1,tout,tin]+=G1*G2*V[spinDOWN,spinUP]*GammaG[UP,r2,t3,t3]
+                    GammaGNew[DOWN,r1,tout,tin]+=G1*G2*V[spinDOWN,spinDOWN]*GammaG[DOWN,r2,t3,t3]
 
-    GGGammaGNew*=_map.Beta/_map.MaxTauBin
-    return GGGammaGNew
+    GammaGNew*=_map.Beta/_map.MaxTauBin
+    return GammaGNew
 
 
 def SigmaSmoothT_FirstOrder(G, W, map):

@@ -17,7 +17,7 @@ import plot, gc
 #start in pdb mode after Ctrl-C
 #signal.signal(signal.SIGINT, start_pdb)
 
-def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor, GammaG, GammaW, GGGammaG, WWGammaW):
+def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor, GammaG, GammaW):
     log.info("Measuring...")
     ChiTensor=calc.Add_ChiTensor_ZerothOrder(ChiTensor, G, Map)
     Chi = calc.Calculate_Chi(ChiTensor, Map)
@@ -59,18 +59,18 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     print "GGW[UP], dyson=\n", GGW_dyson[UP, 0, 0, :]
     print "GammaG, mc=\n", GammaG[UP, 0, :, :].diagonal()
 
-    GGGammaG=calc.GGGammaG(GGW_dyson, G, G.Map)
-    print "GGGammaG[UP]=\n", GGGammaG[UP, 0, :, :].diagonal()
+    GammaG_dyson=calc.AddTwoGToGammaG(GGW_dyson, G, G.Map)
+    print "GammaG_dyson[UP]=\n", GammaG_dyson[UP, 0, :, :].diagonal()
 
     _,ChiTensor,_=calc.W_Dyson(W0, Polar, Polar.Map, Lat) 
     ChiTensor.FFT("R","T")
     print "ChiTensor=\n", ChiTensor.Data[spinUP,0,spinUP,0,1,:]
-    GGGammaG_Reducible=calc.GGGammaG_FirstOrder(GG_dyson, G, W0, G.Map)
-    print "Reducible GGGammaG [UP,UP], diagonal, dyson=\n", -GGGammaG_Reducible[UP,1,:,:].diagonal()
-    GGGammaG_Reducible=calc.GGGammaG_FirstOrder(GGGammaG_Reducible, G, W0, G.Map)
-    print "Reducible GGGammaG [UP,UP], diagonal, dyson=\n", -GGGammaG_Reducible[UP,1,:,:].diagonal()
-    GGGammaG_Reducible=calc.GGGammaG_FirstOrder(GGGammaG_Reducible, G, W0, G.Map)
-    print "Reducible GGGammaG [UP,UP], diagonal, dyson=\n", -GGGammaG_Reducible[UP,1,:,:].diagonal()
+    GammaG_Reducible=calc.GammaG_FirstOrder(GG_dyson, G, W0, G.Map)
+    print "Reducible GammaG [UP,UP], diagonal, dyson=\n", -GammaG_Reducible[UP,1,:,:].diagonal()
+    # GammaG_Reducible=calc.GammaG_FirstOrder(GammaG_Reducible, G, W0, G.Map)
+    # print "Reducible GGGammaG [UP,UP], diagonal, dyson=\n", -GammaG_Reducible[UP,1,:,:].diagonal()
+    # GammaG_Reducible=calc.GammaG_FirstOrder(GammaG_Reducible, G, W0, G.Map)
+    # print "Reducible GGGammaG [UP,UP], diagonal, dyson=\n", -GammaG_Reducible[UP,1,:,:].diagonal()
 
 
     # GGWGG_dyson = calc.GGWGG(GGW_dyson, G, W, G.Map)
@@ -91,7 +91,7 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     data["SigmaDeltaT"]=SigmaDeltaT.ToDict()
     data["Sigma"]=Sigma.ToDict()
     data["Polar"]=Polar.ToDict()
-    data["GammaG"]={"SmoothT": GGGammaG}
+    data["GammaG"]={"SmoothT": GammaG}
     if GammaW is not None:
         data["GammaW"]={"SmoothT": GammaW}
     Observable.Measure(Chi, Determ, G, Factory.NearestNeighbor)
@@ -161,8 +161,8 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
             SigmaDeltaT.Merge(ratio, calc.SigmaDeltaT_FirstOrder(G, W0, Map))
             log.info("SigmaDeltaT is done")
 
-            GGGammaG=calc.SimpleGG(G, Map)
-            WWGammaW=np.zeros([3, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin])+0.0*1j
+            GammaG=calc.SimpleGG(G, Map)
+            GammaW=np.zeros([3, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin])+0.0*1j
             #GammaW=np.zeros([6, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin])+0.0*1j
             # print "Polar[UP,UP]=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
             # print "GammaG[UP,UP]=\n", GammaG[UP,0,:,-1]
@@ -176,7 +176,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
 
             else:
                 log.info("Collecting Sigma/Polar statistics...")
-                SigmaStatis, PolarStatis, GGGammaG, WWGammaW=collect.CollectStatis(Map)
+                SigmaStatis, PolarStatis, GammaG, GammaW=collect.CollectStatis(Map)
                 Sigma, Polar, ParaDyson["OrderAccepted"]=collect.UpdateWeight([SigmaStatis, PolarStatis],
                         ParaDyson["ErrorThreshold"], ParaDyson["OrderAccepted"])
                 #print Sigma.Data[0,0,0,0,0,0], Sigma.Data[0,0,0,0,0,-1]
@@ -232,7 +232,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
             #everything works prefectly 
 	    log.info("everything is going well!")
             Gold, Wold = G, W
-            Measure(para, Observable, Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor, GammaG, GammaW, GGGammaG, WWGammaW)
+            Measure(para, Observable, Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor, GammaG, GammaW)
             IsSuccessed=Factory.DecreaseField(ParaDyson["Annealing"])
             Factor=2.0 if IsSuccessed else 1.0
             parameter.BroadcastMessage(MessageFile, 
