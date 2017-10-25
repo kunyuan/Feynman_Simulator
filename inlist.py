@@ -40,7 +40,7 @@ Common={
     # "Name": "Honeycomb", "NSublat": 2,
     #"Name": "Kagome", "NSublat": 3,
     #"Name": "Triangular", "NSublat": 1,
-    "L": [8,8]
+    "L": [4,4]
 
     #3D lattice
     #"Name": "Cubic", "NSublat": 1,
@@ -53,7 +53,7 @@ Common={
     # "Name": "Kitaev",
     # "Name": "Heisenberg",
     #"Description": ["ImW",],
-    "Interaction": [1.0, 1.0, 1.0, 0.0],
+    "Interaction": [1.0, 0.0, 0.0, 0.0],
     "ExternalField": [ 0.0, 0.0, 0.0, 0.0]
     #ExternalField on Sublattice A and B
     },
