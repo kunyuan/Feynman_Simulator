@@ -41,7 +41,6 @@ void Markov::JumpToGammaG() {
 
     real tau_u = RandomPickTau();
 
-//    Site r_u = RandomPickSite();
     Site r_u = vA->R;
 
     spin spin_u = UP;
@@ -59,8 +58,6 @@ void Markov::JumpToGammaG() {
 
     prob *= ProbofCall[JUMP_FROM_GAMMAG_TO_G] * 2.0* Diag->Order /
             (ProbofCall[JUMP_TO_GAMMAG] * ProbTau(tau_u));
-
-//    prob *= ProbofCall[JUMP_FROM_GAMMAG_TO_G] / ProbofCall[JUMP_TO_GAMMAG];
 
     Proposed[JUMP_TO_GAMMAG][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
@@ -83,8 +80,6 @@ void Markov::JumpToGammaG() {
  * Change the diagram from a dSigma/dG G^2 GammaG to a Sigma
  */
 void Markov::JumpFromGammaGToG()  {
-//    if (Diag->Order == 0 || Worm->Exist || !Diag->MeasureGLine || Diag->HasGammaGW!=1)
-//        return;
     if (Diag->Order == 0 || Worm->Exist || Diag->HasGammaGW!=1)
         return;
 
@@ -117,8 +112,6 @@ void Markov::JumpFromGammaGToG()  {
     prob *= (ProbofCall[JUMP_TO_GAMMAG] * ProbTau(v_u->Tau))
                 / (ProbofCall[JUMP_FROM_GAMMAG_TO_G] * 2.0 * Diag->Order);
 
-    prob *= (ProbofCall[JUMP_TO_GAMMAG] ) / (ProbofCall[JUMP_FROM_GAMMAG_TO_G] );
-
     Proposed[JUMP_FROM_GAMMAG_TO_G][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
         Accepted[JUMP_FROM_GAMMAG_TO_G][Diag->Order] += 1.0;
@@ -134,10 +127,94 @@ void Markov::JumpFromGammaGToG()  {
 }
 
 void Markov::JumpToGammaW() {
-    return;
+    if (Diag->Order == 0 || Worm->Exist || Diag->HasGammaGW != 0)
+        return;
+
+    wLine wAB = Diag->W.RandomPick(*RNG);
+
+    if(wAB->IsMeasure)
+        return;
+
+    if(wAB->IsDelta)
+        return;
+
+    vertex vA = wAB->NeighVer(IN);
+    vertex vB = wAB->NeighVer(OUT);
+
+    real tau_u = RandomPickTau();
+    Site r_u = RandomPickSite();
+    spin spin_u = UP;
+    UExt->R = r_u;
+    UExt->Tau = tau_u;
+    UExt->Spin = spin_u;
+
+    Complex gammaWWeight = W->Weight(vA->R, vB->R, vA->Tau, vB->Tau, vA->Spin(), vB->Spin(),
+                                     false, false, false, true, UExt);
+
+    Complex weightRatio = gammaWWeight / (wAB->Weight);
+
+    real prob = mod(weightRatio);
+    Complex sgn = phase(weightRatio);
+
+    prob *= ProbofCall[JUMP_FROM_GAMMAW_TO_W] * Diag->Order /
+            (ProbofCall[JUMP_TO_GAMMAW] * ProbTau(tau_u) * ProbSite(r_u));
+
+    Proposed[JUMP_TO_GAMMAW][Diag->Order] += 1.0;
+    if (prob >= 1.0 || RNG->urn() < prob) {
+        Accepted[JUMP_TO_GAMMAW][Diag->Order] += 1.0;
+
+        Diag->Phase *= sgn;
+        Diag->Weight *= weightRatio;
+
+        Diag->HasGammaGW = 2;
+
+        Diag->Vin = &wAB->nVer[IN];
+        Diag->Vout = &wAB->nVer[OUT];
+
+        wAB->IsGammaW = true;
+        wAB->Weight = gammaWWeight;
+    }
 }
 
 void Markov::JumpFromGammaWToW() {
+    if (Diag->Order == 0 || Worm->Exist || Diag->HasGammaGW!=2)
+        return;
+
+    vertex v_A = *Diag->Vin;
+    vertex v_B = *Diag->Vout;
+    ExtPoint * v_u = UExt;
+
+    wLine wAB = v_A->NeighW();
+
+    if (v_u->Spin != UP)
+        return;
+
+    Complex WABWeight = W->Weight(v_A->R, v_B->R, v_A->Tau, v_B->Tau,
+                                  v_A->Spin(), v_B->Spin(),
+                                  false, false, false, false, v_u);
+
+    Complex gammaWWeight = wAB->Weight;
+
+    Complex weightRatio = WABWeight/gammaWWeight;
+
+    real prob = mod(weightRatio);
+    Complex sgn = phase(weightRatio);
+
+    prob *= (ProbofCall[JUMP_TO_GAMMAW] * ProbTau(v_u->Tau) * ProbSite(v_u->R))
+            / (ProbofCall[JUMP_FROM_GAMMAW_TO_W] * Diag->Order);
+
+    Proposed[JUMP_FROM_GAMMAW_TO_W][Diag->Order] += 1.0;
+    if (prob >= 1.0 || RNG->urn() < prob) {
+        Accepted[JUMP_FROM_GAMMAW_TO_W][Diag->Order] += 1.0;
+
+        Diag->Phase *= sgn;
+        Diag->Weight *= weightRatio;
+
+        Diag->HasGammaGW = 0;
+
+        wAB->Weight = WABWeight;
+        wAB->IsGammaW = false;
+    }
 }
 
 void Markov::AddTwoG() {
@@ -320,12 +397,12 @@ void Markov::AddTwoW() {
     Site r_C = RandomPickSite();
     Site r_D = RandomPickSite();
 
-//    bool IsDelta_C = RandomPickBool();
-//    bool IsDelta_D = RandomPickBool();
+    bool IsDelta_C = RandomPickBool();
+    bool IsDelta_D = RandomPickBool();
 
     //TODO Only Delta W
-    bool IsDelta_C = true;
-    bool IsDelta_D = true;
+//    bool IsDelta_C = true;
+//    bool IsDelta_D = true;
 
     real tau_C, tau_D;
     Complex WACWeight, WDBWeight;
@@ -356,17 +433,17 @@ void Markov::AddTwoW() {
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-//    prob *= (ProbofCall[DELETE_TWO_W])
-//            / (ProbofCall[ADD_TWO_W] *0.5 * 0.5 *0.5 *0.5 * ProbSite(r_C) * ProbSite(r_D));
+    prob *= (ProbofCall[DELETE_TWO_W])
+            / (ProbofCall[ADD_TWO_W] *0.5 * 0.5 *0.5 *0.5 * ProbSite(r_C) * ProbSite(r_D));
 
     //TODO: only delta W
-    prob *= (ProbofCall[DELETE_TWO_W])
-            / (10.0*ProbofCall[ADD_TWO_W] *0.5 *0.5 * ProbSite(r_C) * ProbSite(r_D));
+//    prob *= (ProbofCall[DELETE_TWO_W])
+//            / (10.0*ProbofCall[ADD_TWO_W] *0.5 *0.5 * ProbSite(r_C) * ProbSite(r_D));
 
-//    if (!IsDelta_C)
-//        prob /= ProbTau(tau_C)/10.0;
-//    if (!IsDelta_D)
-//        prob /= ProbTau(tau_D)/10.0;
+    if (!IsDelta_C)
+        prob /= ProbTau(tau_C)/10.0;
+    if (!IsDelta_D)
+        prob /= ProbTau(tau_D)/10.0;
 
     Proposed[ADD_TWO_W][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
@@ -433,15 +510,15 @@ void Markov::DeleteTwoW() {
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-//    prob *= (ProbofCall[ADD_TWO_W] * 0.5 *0.5 *0.5 *0.5 * ProbSite(vC->R) *ProbSite(vD->R))/(ProbofCall[DELETE_TWO_W]);
+    prob *= (ProbofCall[ADD_TWO_W] * 0.5 *0.5 *0.5 *0.5 * ProbSite(vC->R) *ProbSite(vD->R))/(ProbofCall[DELETE_TWO_W]);
 
     //TODO only Delta W
-    prob *= (10.0* ProbofCall[ADD_TWO_W] *0.5 *0.5 * ProbSite(vC->R) *ProbSite(vD->R))/(ProbofCall[DELETE_TWO_W]);
+//    prob *= (10.0* ProbofCall[ADD_TWO_W] *0.5 *0.5 * ProbSite(vC->R) *ProbSite(vD->R))/(ProbofCall[DELETE_TWO_W]);
 
-//    if (!WAC->IsDelta)
-//        prob *= ProbTau(vC->Tau)*10.0;
-//    if (!WDB->IsDelta)
-//        prob *= ProbTau(vD->Tau)*10.0;
+    if (!WAC->IsDelta)
+        prob *= ProbTau(vC->Tau)*10.0;
+    if (!WDB->IsDelta)
+        prob *= ProbTau(vD->Tau)*10.0;
 
     Proposed[DELETE_TWO_W][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
@@ -463,5 +540,4 @@ void Markov::DeleteTwoW() {
         measureW->nVer[OUT] = vB;
         measureW->Weight = measureWWeight;
     }
-
 }

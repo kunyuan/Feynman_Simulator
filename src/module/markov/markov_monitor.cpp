@@ -172,7 +172,8 @@ void MarkovMonitor::Measure()
                     wLine w = Diag->WMeasure;
                     vertex vin = w->NeighVer(OUT);
                     vertex vout = w->NeighVer(IN);
-                    Weight->Polar->Measure(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin(), vout->Spin(), Diag->Order, -Diag->Phase * OrderWeight);
+                    Weight->Polar->Measure(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin(), vout->Spin(),
+                                           Diag->Order, -1.0* Diag->Phase * OrderWeight);
                 }
             }
 //            if (Diag->MeasureGLine && Diag->Order != 0) {
@@ -187,7 +188,7 @@ void MarkovMonitor::Measure()
 ////                Weight->GammaG->Measure(vin->R, vout->R, vin->R, vin->Tau, vout->Tau, 0, g->Spin(OUT), g->Spin(IN), UP,
 ////                                        Diag->Phase * OrderWeight);
 //            }
-        }else if(Diag->MeasureGLine && Diag->HasGammaGW==1 && Diag->MeasureGammaGW==1) {
+        }else if(Diag->MeasureGLine && Diag->MeasureGammaGW==1) {
 //        }else if(Diag->MeasureGLine && Diag->HasGammaGW==1) {
             if (Diag->Order != 0) {
                 gLine g = Diag->GMeasure;
@@ -197,7 +198,7 @@ void MarkovMonitor::Measure()
                 Weight->GammaG->Measure(vin->R, vout->R, Ext.R, vin->Tau, vout->Tau, Ext.Tau, g->Spin(OUT), g->Spin(IN), Ext.Spin,
                                        Diag->Phase * OrderWeight);
             }
-        }else if(!Diag->MeasureGLine&& Diag->HasGammaGW==1 && Diag->MeasureGammaGW==2) {
+        }else if(!Diag->MeasureGLine && Diag->MeasureGammaGW==2) {
 //        } else if(!Diag->MeasureGLine && Diag->HasGammaGW==1) {
             if (Diag->Order != 0) {
                 wLine w = Diag->WMeasure;
@@ -205,7 +206,7 @@ void MarkovMonitor::Measure()
                 vertex vout = w->NeighVer(IN);
                 ExtPoint& Ext = Diag->UExt;
                 Weight->GammaW->Measure(vin->R, vout->R, Ext.R, vin->Tau, vout->Tau, Ext.Tau, vin->Spin(), vout->Spin(), Ext.Spin,
-                                        Diag->Phase * OrderWeight);
+                                        -1.0* Diag->Phase * OrderWeight);
             }
         }
     }

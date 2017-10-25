@@ -201,14 +201,15 @@ Complex GammaWClass::Weight(const Site &Wr_in, const Site &Wr_out, const Site &U
         t1+=_Beta;
     }
     int t1Index=floor(t1*_dBetaInverse);
-    auto dt=Wt_out-Wt_in;
-    if(dt<0){
-        dt+=_Beta;
+
+    auto t2=Wt_in-Ut;
+    if(t2<0){
+        t2+=_Beta;
     }
-    int dtIndex=floor(dt*_dBetaInverse);
+    int t2Index=floor(t2*_dBetaInverse);
     auto SpinIndex=_SpinIndex(Wspin_out, Wspin_in);
     uint Index = SpinIndex * _CacheIndex[4] + coord_r1 * _CacheIndex[3]
-                 + coord_r2 * _CacheIndex[2]+ t1Index * _CacheIndex[1] + dtIndex;
+                 + coord_r2 * _CacheIndex[2]+ t1Index * _CacheIndex[1] + t2Index;
     return _Weight(Index);
 }
 
@@ -223,14 +224,15 @@ void GammaWClass::Measure(const Site &Wr_in, const Site &Wr_out, const Site &Ur,
         t1+=_Beta;
     }
     int t1Index=floor(t1*_dBetaInverse);
-    auto dt=Wt_out-Wt_in;
-    if(dt<0){
-        dt+=_Beta;
+
+    auto t2=Wt_in-Ut;
+    if(t2<0){
+        t2+=_Beta;
     }
-    int dtIndex=floor(dt*_dBetaInverse);
+    int t2Index=floor(t2*_dBetaInverse);
     auto SpinIndex=_SpinIndex(Wspin_out, Wspin_in);
     uint Index = SpinIndex * _CacheIndex[4] + coord_r1 * _CacheIndex[3]
-                 +coord_r2*_CacheIndex[2]+ t1Index*_CacheIndex[1]+dtIndex;
+                 +coord_r2*_CacheIndex[2]+ t1Index*_CacheIndex[1]+t2Index;
     _WeightAccu[Index]+=Weight;
 }
 

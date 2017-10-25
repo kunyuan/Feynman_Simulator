@@ -172,8 +172,8 @@ void weight::Weight::_AllocateSigmaPolar(const ParaMC &para)
 void weight::Weight::_AllocateGammaGW(const ParaMC &para)
 {
     //make sure old Gamma/G/W are released before assigning new memory
-    delete GammaG;
-    GammaG = new weight::GammaGClass(para.Lat, para.Beta, para.MaxTauBin);
-    delete GammaW;
-    GammaW = new weight::GammaWClass(para.Lat, para.Beta, para.MaxTauBin);
+    if(GammaG== nullptr)
+        GammaG = new weight::GammaGClass(para.Lat, para.Beta, para.MaxTauBin);
+    if(GammaW== nullptr)
+        GammaW = new weight::GammaWClass(para.Lat, para.Beta, para.MaxTauBin);
 }
