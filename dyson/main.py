@@ -79,18 +79,12 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     if GammaW is not None:
         print "WWGammaW, type0, avg, mc=\n", np.sum(GammaW[0, 0, 0, :, :])/GammaW.shape[3]/GammaW.shape[4]
         print "WWGammaW, type0, diagonal, mc=\n", GammaW[0, 0, 0, :, :].diagonal()
-        print "WWGammaW, type0, t1=0, mc=\n", GammaW[0, 0, 0, 0, :]
 
-        print "WWGammaW, type2, avg, mc=\n", np.sum(GammaW[2, 1, 1, :, :])/GammaW.shape[3]/GammaW.shape[4]
-        print "WWGammaW, type2, diagonal, mc=\n", GammaW[2, 1, 1, :, :].diagonal()
-        print "WWGammaW, type2, t1=0, mc=\n", GammaW[2, 1, 1, 0, :]
-
-        GammaG_simple = calc.SimpleGG(G0, G.Map)
-        GGammaG = calc.AddG_To_GammaG(GammaG_simple, G0, G.Map)
+        #GammaG_simple = calc.SimpleGG(G0, G.Map)
+        GGammaG = calc.AddG_To_GammaG(GammaG, G, G.Map)
         print "GGammaG, tout=0, = \n", GGammaG[0, 0, 0, 0, :]
 
-        WWGammaW_dyson=calc.WWGammaW(GGammaG, W, G.Map)
-        print "W[UP,UP]=\n", W.Data[spinUP,0,spinUP,0,0,:]
+        WWGammaW_dyson=calc.WWGammaW(GGammaG, W0, W, G.Map)
         print "WWGammaW[UP], dyson=\n", np.sum(WWGammaW_dyson[0, 0, 0, :, :])/WWGammaW_dyson.shape[3]/WWGammaW_dyson.shape[4]
         print "WWGammaW, dyson, diagonal=\n", WWGammaW_dyson[0, 0, 0, :, :].diagonal()
 
