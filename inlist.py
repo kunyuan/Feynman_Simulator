@@ -2,7 +2,7 @@
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" :  1,
+    "__Duplicate" :  3,
     "__IsCluster" : False, 
     "__AutoRun" : False,
     },
@@ -27,7 +27,7 @@ Dyson={
 Beta=0.5
 Order=1
 Common={
-"Tau": {"MaxTauBin" : 32, "Beta": Beta},
+"Tau": {"MaxTauBin" : 8, "Beta": Beta},
 "Lattice":  {
     #1D lattice
     # "Name": "Chain", "NSublat":1,
@@ -40,7 +40,7 @@ Common={
     # "Name": "Honeycomb", "NSublat": 2,
     #"Name": "Kagome", "NSublat": 3,
     #"Name": "Triangular", "NSublat": 1,
-    "L": [4,4]
+    "L": [2,2]
 
     #3D lattice
     #"Name": "Cubic", "NSublat": 1,
@@ -82,7 +82,7 @@ MonteCarlo["Markov"]={
 
 Dyson["Dyson"]={
     #"SleepTime": 0,
-    "SleepTime": 300,
+    "SleepTime": 30,
     "OrderAccepted": {"Sigma":1, "Polar":1},
     "ErrorThreshold": 0.2,
     "Annealing": {

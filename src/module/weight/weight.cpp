@@ -123,7 +123,7 @@ Dictionary weight::Weight::ToDict(flag _flag)
         if(GammaG!= nullptr)
             dict["GammaG"] = GammaG->WeightToDict();
         if(GammaW!= nullptr)
-            dict["GammaW"] = GammaG->WeightToDict();
+            dict["GammaW"] = GammaW->WeightToDict();
     }
     if (_flag & weight::GammaGWStatis) {
         if(GammaG!= nullptr)

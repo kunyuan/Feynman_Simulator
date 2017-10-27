@@ -9,29 +9,30 @@ import r_index
 # from scipy import weave
 print "calculator"
 
-def SimpleGG(G, map):
+def SimpleGG(G, _map):
     #half integer tin and tout
-    GammaG=np.zeros([2, map.Vol, map.MaxTauBin, map.MaxTauBin])+0.0*1j
+    GammaG=np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
     G.FFT("R", "T")
     Uspin=UP
     Gspin=UP
     sub=0
     r=0
-    for t1 in range(map.MaxTauBin):
+    for t1 in range(_map.MaxTauBin):
         tg1=t1
         sign1=1
         G1=G.Data[Uspin,sub,Gspin,sub,r,tg1]*sign1
-        for t2 in range(map.MaxTauBin):
+        for t2 in range(_map.MaxTauBin):
             tg2=-t2-1
             sign2=1
             if tg2<0:
-                tg2+=map.MaxTauBin
+                tg2+=_map.MaxTauBin
                 sign2=-sign2
             G2=sign2*G.Data[Gspin,sub,Uspin,sub,r,tg2]
             GammaG[Gspin, r, t1, t2]=G1*G2 
     return GammaG
 
-def GGW(GammaG, G,W,_map):
+def GGW(GammaG,W,_map):
+    #GammaG=SimpleGG(G,_map)
     OrderSign = -1
     spinUP=_map.Spin2Index(UP,UP)
     spinDOWN=_map.Spin2Index(DOWN,DOWN)
@@ -78,8 +79,34 @@ def AddTwoGToGammaG(GammaG, G, _map):
                 GGGammaGNew[DOWN, r, tout, t]+=Gin[DOWN,DOWN]*GGGammaG[DOWN,r,tout,tin]
     return GGGammaGNew*_map.Beta**2/_map.MaxTauBin**2
 
+def AddG_To_GammaG(GammaG, G, _map):
+    #integer tin and tout
+    spinUP=_map.Spin2Index(UP,UP)
+    spinDOWN=_map.Spin2Index(DOWN,DOWN)
+    sub=0
+    GGammaG = np.zeros([3, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
+    for r in range(_map.Vol):
+        for tout in range(_map.MaxTauBin):
+            for tin in range(_map.MaxTauBin):
+                tgout = tin - tout -1
+                sign=1
+                if tgout<0:
+                    tgout+=_map.MaxTauBin
+                    sign*=-1
+                Gout = 0.5*sign*G.Data[:,sub,:,sub,0,tgout]
 
-#TODO: add WWGammaW
+                tgout = tin - tout
+                sign=1
+                if tgout<0:
+                    tgout+=_map.MaxTauBin
+                    sign*=-1
+                Gout += 0.5*sign*G.Data[:,sub,:,sub,0,tgout]
+
+                GGammaG[0, r, r, tout, tin]+=Gout[UP,UP]*GammaG[UP,r,tout,tin]
+                GGammaG[1, r, r, tout, tin]+=Gout[DOWN,DOWN]*GammaG[DOWN,r,tout,tin]
+                GGammaG[2, r, r, tout, tin]+=Gout[DOWN,DOWN]*GammaG[UP,r,tout,tin]
+    return -1.0*GGammaG
+
 def WWGammaW(GammaW, W, _map):
     sub = 0
     UPUP=_map.Spin2Index(UP,UP)
@@ -94,9 +121,11 @@ def WWGammaW(GammaW, W, _map):
             dr_out = int(r_index.CoordiIndex(r, rout, _map))
             for t in range(_map.MaxTauBin):
                 for tout in range(_map.MaxTauBin):
+
                     dt_out = t - tout -1
                     if dt_out<0:
                         dt_out+=_map.MaxTauBin
+
                     Wout = W.Data[:,sub,:,sub,dr_out,dt_out]
                     for rin in range(_map.Vol):
                         for tin in range(_map.MaxTauBin):
@@ -119,17 +148,26 @@ def WWGammaW(GammaW, W, _map):
                     if dt_in < 0:
                         dt_in +=_map.MaxTauBin
                     Win = W.Data[:,sub,:,sub,dr_in,dt_in]
-                    for rout in range(_map.Vol):
-                        for tout in range(_map.MaxTauBin):
-                            WWGammaW[0, rout, r, tout, t] += Win[UPUP, UPUP] * WGammaW[0, rout, rin, tout, tin]
-                            WWGammaW[0, rout, r, tout, t] += Win[UPUP, DOWNDOWN] * WGammaW[1, rout, rin, tout, tin]
+                    #for rout in range(_map.Vol):
+                    rout = r
+                    for tout in range(_map.MaxTauBin):
+                        WWGammaW[0, rout, r, tout, t] += Win[UPUP, UPUP] * WGammaW[0, rout, rin, tout, tin]
+                        WWGammaW[0, rout, r, tout, t] += Win[UPUP, DOWNDOWN] * WGammaW[1, rout, rin, tout, tin]
 
-                            WWGammaW[1, rout, r, tout, t] += Win[UPUP, UPUP] * WGammaW[1, rout, rin, tout, tin]
-                            WWGammaW[1, rout, r, tout, t] += Win[UPUP, DOWNDOWN] * WGammaW[0, rout, rin, tout, tin]
+                        WWGammaW[1, rout, r, tout, t] += Win[UPUP, UPUP] * WGammaW[1, rout, rin, tout, tin]
+                        WWGammaW[1, rout, r, tout, t] += Win[UPUP, DOWNDOWN] * WGammaW[0, rout, rin, tout, tin]
 
-                            WWGammaW[2, rout, r, tout, t] += Win[UPDOWN, DOWNUP] * WGammaW[2, rout, rin, tout, tin]
+                        WWGammaW[2, rout, r, tout, t] += Win[UPDOWN, DOWNUP] * WGammaW[2, rout, rin, tout, tin]
 
     return WWGammaW*_map.Beta**2/_map.MaxTauBin**2
+
+
+def shift(r, L):
+    if r<0:
+        r+=L
+    elif r>=L:
+        r-=L
+    return r
 
 def GammaG_FirstOrder(GammaG, G, W0, _map):
     #integer tin and tout
@@ -140,34 +178,31 @@ def GammaG_FirstOrder(GammaG, G, W0, _map):
 
     # # # print "GammaG[UP,UP]=\n", GammaG[UP,0,:,-1]
     W0.FFT("R", "T")
-    Uspin=UP
-    Gspin=UP
-    # # # for spin in range(2):
     sub=0
     r=0
     Neighbors=[]
     Lx, Ly=_map.L
     for Gx in range(Lx):
         for dx in [-1,0,1]:
-            x=Gx+dx
-            if x<0:
-                x+=Lx
-            elif x>=Lx:
-                x-=Lx
+            x=shift(Gx+dx, Lx)
+            #if x<0:
+                #x+=Lx
+            #elif x>=Lx:
+                #x-=Lx
             for Gy in range(Ly):
                 for dy in [-1,0,1]:
-                    y=Gy+dy
-                    if y<0:
-                        y+=Ly
-                    elif y>=Ly:
-                        y-=Ly
+                    y=shift(Gy+dy, Ly)
+                    #if y<0:
+                        #y+=Ly
+                    #elif y>=Ly:
+                        #y-=Ly
 
-                    dx_shift=dx
-                    dy_shift=dy
-                    if dx<0:
-                        dx_shift+=Lx
-                    if dy<0:
-                        dy_shift+=Ly
+                    dx_shift=shift(dx, Lx)
+                    dy_shift=shift(dy, Ly)
+                    #if dx<0
+                        #dx_shift+=Lx
+                    #if dy<0:
+                        #dy_shift+=Ly
 
                     i=_map.CoordiIndex([Gx,Gy])
                     j=_map.CoordiIndex([x,y])
@@ -393,12 +428,12 @@ def Calculate_Chi(ChiTensor, map):
     SzSz[UU, DD]= SzSz[DD, UU]=-1
     Chi=weight.Weight("SmoothT", map, "NoSpin", "Symmetric", ChiTensor.SpaceDomain, ChiTensor.TimeDomain)
     Chi.Data=0.0
-    SS=[SxSx/4.0, SySy/4.0, SzSz/4.0]
+    #SS=[SxSx/4.0, SySy/4.0, SzSz/4.0]
     #for i in range(3):
         #temp=np.einsum("ik, kminvt->mnvt", SS[i], ChiTensor.Data)
         #Chi.Data+=temp.reshape([1, NSublat, 1, NSublat, map.Vol, map.MaxTauBin]) 
 
-    # SS=[SzSz/4.0]
+    SS=[SzSz/4.0]
     for i in range(len(SS)):
         temp=np.einsum("ik, kminvt->mnvt", SS[i], ChiTensor.Data)
         Chi.Data+=temp.reshape([1, NSublat, 1, NSublat, map.Vol, map.MaxTauBin]) 

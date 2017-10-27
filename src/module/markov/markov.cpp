@@ -302,8 +302,10 @@ void Markov::Hop(int sweep)
                     JumpFromGammaGToG();
                 else if (x < SumofProbofCall[JUMP_TO_GAMMAW])
                     JumpToGammaW();
+//                    ;
                 else if (x < SumofProbofCall[JUMP_FROM_GAMMAW_TO_W])
                     JumpFromGammaWToW();
+//                    ;
                 else if (x < SumofProbofCall[ADD_TWO_G])
                     AddTwoG();
                 else if (x < SumofProbofCall[ADD_TWO_W])
@@ -1430,7 +1432,7 @@ void Markov::ChangeDeltaToContinuous()
     if (Diag->Order < 2 || Worm->Exist)
         return;
     wLine w = Diag->W.RandomPick(*RNG);
-    if ((!w->IsDelta) || w->IsMeasure)
+    if ((!w->IsDelta) || w->IsMeasure || w->IsGammaW)
         return;
     vertex vin = w->NeighVer(IN), vout = w->NeighVer(OUT);
     gLine G1 = vout->NeighG(IN), G2 = vout->NeighG(OUT);
@@ -1490,7 +1492,7 @@ void Markov::ChangeContinuousToDelta()
         return;
 
     wLine w = Diag->W.RandomPick(*RNG);
-    if (w->IsDelta || w->IsMeasure)
+    if (w->IsDelta || w->IsMeasure || w->IsGammaW)
         return;
 
     vertex vin = w->NeighVer(IN), vout = w->NeighVer(OUT);
