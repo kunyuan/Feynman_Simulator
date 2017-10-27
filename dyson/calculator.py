@@ -84,7 +84,7 @@ def AddG_To_GammaG(GammaG, G, _map):
     spinUP=_map.Spin2Index(UP,UP)
     spinDOWN=_map.Spin2Index(DOWN,DOWN)
     sub=0
-    GGammaG = np.zeros([3, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
+    GGammaG = np.zeros([2, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
     for r in range(_map.Vol):
         for tout in range(_map.MaxTauBin):
             for tin in range(_map.MaxTauBin):
@@ -102,9 +102,8 @@ def AddG_To_GammaG(GammaG, G, _map):
                     sign*=-1
                 Gout += 0.5*sign*G.Data[:,sub,:,sub,0,tgout]
 
-                GGammaG[0, r, r, tout, tin]+=Gout[UP,UP]*GammaG[UP,r,tout,tin]
-                GGammaG[1, r, r, tout, tin]+=Gout[DOWN,DOWN]*GammaG[DOWN,r,tout,tin]
-                GGammaG[2, r, r, tout, tin]+=Gout[DOWN,DOWN]*GammaG[UP,r,tout,tin]
+                GGammaG[0, r, r, tout, tin] = Gout[UP,UP]*GammaG[UP,r,tout,tin]
+                GGammaG[1, r, r, tout, tin] = Gout[DOWN,DOWN]*GammaG[UP,r,tout,tin]
     return -1.0*GGammaG
 
 def WWGammaW(GammaW, W0, W, _map):
@@ -126,19 +125,19 @@ def WWGammaW(GammaW, W0, W, _map):
                     if dt_out<0:
                         dt_out+=_map.MaxTauBin
 
-                    Wout = W.Data[:,sub,:,sub,dr_out,dt_out]*(_map.Beta/_map.MaxTauBin)
-                    if t == tout:
-                        Wout += W0.Data[:,sub,:,sub,dr_out]
+                    #Wout = W.Data[:,sub,:,sub,dr_out,dt_out]*(_map.Beta/_map.MaxTauBin)
+                    #if t == tout:
+                        #Wout += W0.Data[:,sub,:,sub,dr_out]
+
+                    if t!= tout:
+                        continue
+                    else:
+                        Wout = W0.Data[:,sub,:,sub,dr_out]
 
                     for rin in range(_map.Vol):
                         for tin in range(_map.MaxTauBin):
                             WGammaW[0, r, rin, t, tin] += Wout[UPUP, UPUP] * GammaW[0, rout, rin, tout, tin]
-                            WGammaW[0, r, rin, t, tin] += Wout[UPUP, DOWNDOWN] * GammaW[1, rout, rin, tout, tin]
-
-                            WGammaW[1, r, rin, t, tin] += Wout[UPUP, UPUP] * GammaW[1, rout, rin, tout, tin]
-                            WGammaW[1, r, rin, t, tin] += Wout[UPUP, DOWNDOWN] * GammaW[0, rout, rin, tout, tin]
-
-                            WGammaW[2, r, rin, t, tin] += Wout[UPDOWN, DOWNUP] * GammaW[2, rout, rin, tout, tin]
+                            WGammaW[2, r, rin, t, tin] += Wout[UPDOWN, DOWNUP] * GammaW[1, rout, rin, tout, tin]
 
     print "calculating WWGammaW..."
     WWGammaW = np.zeros([3, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin]) + 0.0*1j
@@ -150,21 +149,21 @@ def WWGammaW(GammaW, W0, W, _map):
                     dt_in = tin - t
                     if dt_in < 0:
                         dt_in +=_map.MaxTauBin
-                    Win = W.Data[:,sub,:,sub,dr_in,dt_in]*(_map.Beta/_map.MaxTauBin)
-                    if t == tin:
-                        Win += W0.Data[:,sub,:,sub, dr_in]
+
+                    #Win = W.Data[:,sub,:,sub,dr_in,dt_in]*(_map.Beta/_map.MaxTauBin)
+                    #if t == tin:
+                        #Win += W0.Data[:,sub,:,sub, dr_in]
+
+                    if t!= tin:
+                        continue
+                    else:
+                        Win = W0.Data[:,sub,:,sub,dr_in]
 
                     #for rout in range(_map.Vol):
                     rout = r
                     for tout in range(_map.MaxTauBin):
                         WWGammaW[0, rout, r, tout, t] += Win[UPUP, UPUP] * WGammaW[0, rout, rin, tout, tin]
-                        WWGammaW[0, rout, r, tout, t] += Win[UPUP, DOWNDOWN] * WGammaW[1, rout, rin, tout, tin]
-
-                        WWGammaW[1, rout, r, tout, t] += Win[UPUP, UPUP] * WGammaW[1, rout, rin, tout, tin]
-                        WWGammaW[1, rout, r, tout, t] += Win[UPUP, DOWNDOWN] * WGammaW[0, rout, rin, tout, tin]
-
-                        WWGammaW[2, rout, r, tout, t] += Win[UPDOWN, DOWNUP] * WGammaW[2, rout, rin, tout, tin]
-
+                        WWGammaW[2, rout, r, tout, t] += Win[DOWNUP, UPDOWN] * WGammaW[2, rout, rin, tout, tin]
     return WWGammaW
 
 def shift(r, L):

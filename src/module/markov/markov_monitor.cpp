@@ -198,7 +198,7 @@ void MarkovMonitor::Measure()
                 Weight->GammaG->Measure(vin->R, vout->R, Ext.R, vin->Tau, vout->Tau, Ext.Tau, g->Spin(OUT), g->Spin(IN), Ext.Spin,
                                        Diag->Phase * OrderWeight);
             }
-        }else if(!Diag->MeasureGLine && Diag->MeasureGammaGW==2) {
+        }else if(!Diag->MeasureGLine && Diag->MeasureGammaGW==2 && Diag->HasGammaGW==1) {
             if (Diag->Order != 0) {
                 wLine w = Diag->WMeasure;
                 vertex vin = w->NeighVer(OUT);

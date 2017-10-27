@@ -401,12 +401,12 @@ void Markov::AddTwoW() {
 //    bool IsDelta_D = RandomPickBool();
 
     //TODO Only Delta W
-//    bool IsDelta_C = true;
-//    bool IsDelta_D = true;
+    bool IsDelta_C = true;
+    bool IsDelta_D = true;
 
     //TODO Only Continuous W
-    bool IsDelta_C = false;
-    bool IsDelta_D = false;
+//    bool IsDelta_C = false;
+//    bool IsDelta_D = false;
 
     real tau_C, tau_D;
     Complex WACWeight, WDBWeight;
@@ -440,7 +440,7 @@ void Markov::AddTwoW() {
 //    prob *= (ProbofCall[DELETE_TWO_W])
 //            / (ProbofCall[ADD_TWO_W] *0.5 * 0.5 *0.5 *0.5 * ProbSite(r_C) * ProbSite(r_D));
 
-    //TODO: only delta W
+    //TODO: only delta/continuous W
     prob *= (ProbofCall[DELETE_TWO_W])
             / (ProbofCall[ADD_TWO_W] *0.5 *0.5 * ProbSite(r_C) * ProbSite(r_D));
 
