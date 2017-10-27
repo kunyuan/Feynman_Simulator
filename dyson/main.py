@@ -80,13 +80,19 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
         print "WWGammaW, type0, avg, mc=\n", np.sum(GammaW[0, 0, 0, :, :])/GammaW.shape[3]/GammaW.shape[4]
         print "WWGammaW, type0, diagonal, mc=\n", GammaW[0, 0, 0, :, :].diagonal()
 
-        #GammaG_simple = calc.SimpleGG(G0, G.Map)
-        GGammaG = calc.AddG_To_GammaG(GammaG, G, G.Map)
+        GammaG_simple = calc.SimpleGG(G0, G.Map)
+        # GGammaG = calc.AddG_To_GammaG(GammaG, G, G.Map)
+        GGammaG = calc.AddG_To_GammaG(GammaG_simple, G, G.Map)
         print "GGammaG, tout=0, = \n", GGammaG[0, 0, 0, 0, :]
 
         WWGammaW_dyson=calc.WWGammaW(GGammaG, W0, W, G.Map)
         print "WWGammaW[UP], dyson=\n", np.sum(WWGammaW_dyson[0, 0, 0, :, :])/WWGammaW_dyson.shape[3]/WWGammaW_dyson.shape[4]
-        print "WWGammaW, dyson, diagonal=\n", WWGammaW_dyson[0, 0, 0, :, :].diagonal()
+        print "WWGammaW[0,0], dyson, diagonal=\n", WWGammaW_dyson[0, 0, 0, :, :].diagonal()
+        print "WWGammaW[1,1], dyson, diagonal=\n", WWGammaW_dyson[0, 1, 1, :, :].diagonal()
+
+        GammaG_dyson=calc.GammaWToGammaG(WWGammaW_dyson, G, G.Map)
+        # print "GammaG_dyson[UP], dyson=\n", np.sum(GammaG_dyson[0, :, :, :], axis=0).diagonal()
+        print "GammaG_dyson[UP], dyson=\n", GammaG_dyson[0, 1, :, :].diagonal()
 
     data={}
     data["Chi"]=Chi.ToDict()

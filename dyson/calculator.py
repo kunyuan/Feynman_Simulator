@@ -167,6 +167,36 @@ def WWGammaW(GammaW, W0, W, _map):
 
     return WWGammaW
 
+def GammaWToGammaG(GammaW, G, _map):
+    #integer tin and tout
+    spinUP=_map.Spin2Index(UP,UP)
+    spinDOWN=_map.Spin2Index(DOWN,DOWN)
+    sub=0
+    GGammaW = np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
+    for r in range(_map.Vol):
+        for tout in range(_map.MaxTauBin):
+            for tin in range(_map.MaxTauBin):
+                tgout = tout - tin -1
+                sign=1
+                if tgout<0:
+                    tgout+=_map.MaxTauBin
+                    sign*=-1
+                Gout = 0.5*sign*G.Data[:,sub,:,sub,0,tgout]
+
+                tgout = tout - tin
+                sign=1
+                if tgout<0:
+                    tgout+=_map.MaxTauBin
+                    sign*=-1
+                Gout += 0.5*sign*G.Data[:,sub,:,sub,0,tgout]
+
+                GGammaW[UP, r, tout, tin]+=Gout[UP,UP]*GammaW[0,r,r,tout,tin]
+                GGammaW[UP, r, tout, tin]+=Gout[UP,UP]*GammaW[2,r,r,tout,tin]
+                GGammaW[DOWN, r, tout, tin]+=Gout[DOWN,DOWN]*GammaW[1,r,r,tout,tin]
+                GGammaW[DOWN, r, tout, tin]+=Gout[DOWN,DOWN]*GammaW[2,r,r,tout,tin]
+    # GammaG=AddTwoGToGammaG(GGammaW, G, _map)
+    return GGammaW
+
 def shift(r, L):
     if r<0:
         r+=L
