@@ -181,13 +181,20 @@ GammaWClass::GammaWClass(const Lattice &lat, real beta, uint MaxTauBin, real Nor
 }
 
 uint GammaWClass::_SpinIndex(spin * L, spin * R) const {
-    if(L[0] == UP && L[1] == UP && R[0] == UP && R[1] == UP) return 0;
-    else if (L[0] == DOWN && L[1] == DOWN && R[0] == DOWN && R[1] == DOWN) return 0;
-    else if (L[0] == UP && L[1] == UP && R[0] == DOWN && R[1] ==DOWN) return 1;
-    else if (L[0] == DOWN && L[1] == DOWN && R[0] == UP && R[1] ==UP) return 1;
-    else if (L[0] == UP && L[1] == DOWN && R[0] == DOWN && R[1] ==UP) return 2;
-    else if (L[0] == DOWN && L[1] == UP && R[0] == UP && R[1] ==DOWN) return 2;
-    else return -1;
+    if(L[0] == UP && L[1] == UP && R[0] == UP && R[1] == UP)
+        return 0;
+    else if (L[0] == DOWN && L[1] == DOWN && R[0] == DOWN && R[1] == DOWN)
+        return 0;
+    else if (L[0] == UP && L[1] == UP && R[0] == DOWN && R[1] ==DOWN)
+        return 1;
+    else if (L[0] == DOWN && L[1] == DOWN && R[0] == UP && R[1] ==UP)
+        return 1;
+    else if (L[0] == UP && L[1] == DOWN && R[0] == DOWN && R[1] ==UP)
+        return 2;
+    else if (L[0] == DOWN && L[1] == UP && R[0] == UP && R[1] ==DOWN)
+        return 2;
+    else
+        return -1;
 }
 
 Complex GammaWClass::Weight(const Site &Wr_in, const Site &Wr_out, const Site &Ur,
