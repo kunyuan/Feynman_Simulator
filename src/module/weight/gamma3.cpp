@@ -167,7 +167,7 @@ GammaWClass::GammaWClass(const Lattice &lat, real beta, uint MaxTauBin, real Nor
     _MaxTauBin = MaxTauBin;
     _dBetaInverse = _MaxTauBin/_Beta;
 //    uint SubVol=(uint)lat.SublatVol;
-    uint MeaShape[5] = {3, (uint)Vol, (uint)Vol, MaxTauBin, MaxTauBin};
+    uint MeaShape[5] = {6, (uint)Vol, (uint)Vol, MaxTauBin, MaxTauBin};
     //Wspin12, W_r1, dW_r2, Wtau1,dtau2
     _Weight.Allocate(MeaShape, SMOOTH);
     _WeightAccu.Allocate(MeaShape, SMOOTH);
@@ -184,15 +184,15 @@ uint GammaWClass::_SpinIndex(spin * L, spin * R) const {
     if(L[0] == UP && L[1] == UP && R[0] == UP && R[1] == UP)
         return 0;
     else if (L[0] == DOWN && L[1] == DOWN && R[0] == DOWN && R[1] == DOWN)
-        return 0;
+        return 1;
     else if (L[0] == UP && L[1] == UP && R[0] == DOWN && R[1] ==DOWN)
-        return 1;
+        return 2;
     else if (L[0] == DOWN && L[1] == DOWN && R[0] == UP && R[1] ==UP)
-        return 1;
+        return 3;
     else if (L[0] == UP && L[1] == DOWN && R[0] == DOWN && R[1] ==UP)
-        return 2;
+        return 4;
     else if (L[0] == DOWN && L[1] == UP && R[0] == UP && R[1] ==DOWN)
-        return 2;
+        return 5;
     else
         return -1;
 }
