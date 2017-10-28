@@ -155,7 +155,7 @@ def CollectStatis(_map):
     PolarSmoothT=WeightEstimator(Polar)
 
     GammaGAccu=np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
-    GammaWAccu=np.zeros([3, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
+    GammaWAccu=np.zeros([6, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
     GammaGNorm=None
     GammaWNorm=None
     GammaGNormAccu=1.e-8

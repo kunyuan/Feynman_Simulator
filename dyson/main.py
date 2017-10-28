@@ -94,11 +94,11 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
         print "WWGammaW, type0, dyson=\n", np.sum(WWGammaW_dyson[0, 1, 1, :, :])/WWGammaW_dyson.shape[3]/WWGammaW_dyson.shape[4]
         print "WWGammaW, type0, dyson, diagonal=\n", WWGammaW_dyson[0, 1, 1, :, :].diagonal()
 
-        print "WWGammaW, type1, dyson=\n", np.sum(WWGammaW_dyson[1, 1, 1, :, :])/WWGammaW_dyson.shape[3]/WWGammaW_dyson.shape[4]
-        print "WWGammaW, type1, dyson, diagonal=\n", WWGammaW_dyson[1, 1, 1, :, :].diagonal()
+        print "WWGammaW, type4, dyson=\n", np.sum(WWGammaW_dyson[4, 1, 1, :, :])/WWGammaW_dyson.shape[3]/WWGammaW_dyson.shape[4]
+        print "WWGammaW, type4, dyson, diagonal=\n", WWGammaW_dyson[4, 1, 1, 0, :]
 
-        print "WWGammaW, type2, dyson=\n", np.sum(WWGammaW_dyson[2, 1, 1, :, :])/WWGammaW_dyson.shape[3]/WWGammaW_dyson.shape[4]
-        print "WWGammaW, type2, dyson, diagonal=\n", WWGammaW_dyson[2, 1, 1, :, :].diagonal()
+        print "WWGammaW, type5, dyson=\n", np.sum(WWGammaW_dyson[5, 1, 1, :, :])/WWGammaW_dyson.shape[3]/WWGammaW_dyson.shape[4]
+        print "WWGammaW, type5, dyson, diagonal=\n", WWGammaW_dyson[5, 1, 1, 0, :]
 
 
     data={}
@@ -162,7 +162,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
         log.info("Start from bare G, W")
         G=G0.Copy()
         GammaG=calc.SimpleGG(G, Map)
-        GammaW=np.zeros([3, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin])+0.0*1j
+        GammaW=np.zeros([6, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin])+0.0*1j
     else:
         #load WeightFile, load G,W
         log.info("Load G, W from {0}".format(WeightFile))
@@ -183,7 +183,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
             GammaW=data["GammaW"]["SmoothT"]
             print "Read existing GammaW"
         else:
-            GammaW=np.zeros([3, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin])+0.0*1j
+            GammaW=np.zeros([6, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin])+0.0*1j
 
     Gold, Wold = G, W
 
