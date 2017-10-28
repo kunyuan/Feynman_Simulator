@@ -86,6 +86,7 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
 
         GammaG_simple = calc.SimpleGG(G, G.Map)
         GGammaG = calc.AddG_To_GammaG(GammaG_simple, G, G.Map)
+        print "GGammaG, type0, dyson=\n", GGammaG[0, 0, 0, :, :].diagonal()
         WWGammaW_dyson=calc.WWGammaW(GGammaG, W0, W, G.Map)
         print "WWGammaW, type0, dyson=\n", np.sum(WWGammaW_dyson[0, 1, 1, :, :])/WWGammaW_dyson.shape[3]/WWGammaW_dyson.shape[4]
         print "WWGammaW, type0, dyson, diagonal=\n", WWGammaW_dyson[0, 1, 1, :, :].diagonal()
