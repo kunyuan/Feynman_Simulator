@@ -204,6 +204,7 @@ def shift(r, L):
     return r
 
 def GammaG_FirstOrder(GammaG, G, W0, _map):
+    #OrderSign=-1, FermiLoopSign=-1, therefore TotalSign=1
     #integer tin and tout
     GG=SimpleGG(G,_map)
     GammaGNew=np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
@@ -211,7 +212,7 @@ def GammaG_FirstOrder(GammaG, G, W0, _map):
     spinDOWN=_map.Spin2Index(DOWN,DOWN)
 
     # # # print "GammaG[UP,UP]=\n", GammaG[UP,0,:,-1]
-    W0.FFT("R", "T")
+    W0.FFT("R")
     sub=0
     r=0
     Neighbors=[]
@@ -242,7 +243,8 @@ def GammaG_FirstOrder(GammaG, G, W0, _map):
                     j=_map.CoordiIndex([x,y])
                     k=_map.CoordiIndex([dx_shift,dy_shift])
                     Neighbors.append([i,j,W0.Data[:,sub,:,sub,k]])
-                    # print W0.Data[spinUP,sub,spinUP,sub,k],W0.Data[spinUP,sub,spinDOWN,sub,k]
+                    # print W0.Data[spinUP,sub,spinUP,sub,k], dx, dy
+                    # print W0.Data[:,sub,:,sub,k], dx, dy
 
     for t3 in range(_map.MaxTauBin):
         for tin in range(_map.MaxTauBin):
@@ -261,7 +263,7 @@ def GammaG_FirstOrder(GammaG, G, W0, _map):
                     sign*=-1
                 G2=sign*G.Data[UP,sub,UP,sub,0,dtout]
                 GG=G1*G2
-
+                
                 for r1,r2,V in Neighbors:
                     GammaGNew[UP,r1,tout,tin]+=GG*(V[spinUP,spinUP]*GammaG[UP,r2,t3,t3]+V[spinUP,spinDOWN]*GammaG[DOWN,r2,t3,t3])
                     GammaGNew[DOWN,r1,tout,tin]+=GG*(V[spinDOWN,spinUP]*GammaG[UP,r2,t3,t3]+V[spinDOWN,spinDOWN]*GammaG[DOWN,r2,t3,t3])
