@@ -301,11 +301,11 @@ void Markov::Hop(int sweep)
                 else if (x < SumofProbofCall[JUMP_FROM_GAMMAG_TO_G])
                     JumpFromGammaGToG();
                 else if (x < SumofProbofCall[JUMP_TO_GAMMAW])
-//                    JumpToGammaW();
-                    ;
+                    JumpToGammaW();
+//                    ;
                 else if (x < SumofProbofCall[JUMP_FROM_GAMMAW_TO_W])
-//                    JumpFromGammaWToW();
-                    ;
+                    JumpFromGammaWToW();
+//                    ;
                 else if (x < SumofProbofCall[ADD_TWO_G])
                     AddTwoG();
                 else if (x < SumofProbofCall[ADD_TWO_W])
