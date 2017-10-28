@@ -444,6 +444,10 @@ void Markov::AddTwoW() {
     prob *= (ProbofCall[DELETE_TWO_W])
             / (ProbofCall[ADD_TWO_W] *0.5 *0.5 * ProbSite(r_C) * ProbSite(r_D));
 
+    //TODO: only delta W and flip spin
+//    prob *= (ProbofCall[DELETE_TWO_W])
+//            / (ProbofCall[ADD_TWO_W] * ProbSite(r_C) * ProbSite(r_D));
+
     if (!IsDelta_C)
         prob /= ProbTau(tau_C);
     if (!IsDelta_D)
