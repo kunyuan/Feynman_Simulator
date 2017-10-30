@@ -112,11 +112,11 @@ void MonteCarlo(const para::Job& Job)
                 Interrupt.Resume();
             }
 
-//            if (MessageTimer.check(Para.MessageTimer))
-//                Env.ListenToMessage();
-//
-//            if (ReweightTimer.check(Para.ReweightTimer))
-//                Env.AdjustOrderReWeight();
+            if (MessageTimer.check(Para.MessageTimer))
+                Env.ListenToMessage();
+
+            if (ReweightTimer.check(Para.ReweightTimer))
+                Env.AdjustOrderReWeight();
         }
     }
     LOG_INFO("Markov is ended!");

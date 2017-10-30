@@ -57,6 +57,7 @@ def AddTwoGToGammaG(GammaG, G, _map):
     spinDOWN=_map.Spin2Index(DOWN,DOWN)
     sub=0
     r=0
+
     GGGammaG=np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
     for t in range(_map.MaxTauBin):
         for tout in range(_map.MaxTauBin):
@@ -67,8 +68,9 @@ def AddTwoGToGammaG(GammaG, G, _map):
                 signout*=-1
             Gout=signout*G.Data[:,sub,:,sub,r,tgout]
             for tin in range(_map.MaxTauBin):
-                GGGammaG[UP, r, t, tin]+=Gout[UP,UP]*GammaG[UP,r,tout,tin]
-                GGGammaG[DOWN, r, t, tin]+=Gout[DOWN,DOWN]*GammaG[DOWN,r,tout,tin]
+                GGGammaG[UP, :, t, tin]+=Gout[UP,UP]*GammaG[UP,:,tout,tin]
+                GGGammaG[DOWN, :, t, tin]+=Gout[DOWN,DOWN]*GammaG[DOWN,:,tout,tin]
+
     GGGammaGNew=np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
     for t in range(_map.MaxTauBin):
         for tin in range(_map.MaxTauBin):
@@ -79,8 +81,8 @@ def AddTwoGToGammaG(GammaG, G, _map):
                 signin*=-1
             Gin=signin*G.Data[:,sub,:,sub,r,tgin]
             for tout in range(_map.MaxTauBin):
-                GGGammaGNew[UP, r, tout, t]+=Gin[UP,UP]*GGGammaG[UP,r,tout,tin]
-                GGGammaGNew[DOWN, r, tout, t]+=Gin[DOWN,DOWN]*GGGammaG[DOWN,r,tout,tin]
+                GGGammaGNew[UP, :, tout, t]+=Gin[UP,UP]*GGGammaG[UP,:,tout,tin]
+                GGGammaGNew[DOWN, :, tout, t]+=Gin[DOWN,DOWN]*GGGammaG[DOWN,:,tout,tin]
     return GGGammaGNew*_map.Beta**2/_map.MaxTauBin**2
 
 def AddG_To_GammaG(GammaG, G, _map):
@@ -233,6 +235,7 @@ def GammaWToGammaG(GammaW, G, _map):
     spinDOWN=_map.Spin2Index(DOWN,DOWN)
     sub=0
     GGammaW = np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
+
     for r in range(_map.Vol):
         for tout in range(_map.MaxTauBin):
             for tin in range(_map.MaxTauBin):
@@ -254,6 +257,7 @@ def GammaWToGammaG(GammaW, G, _map):
                 GGammaW[UP, r, tout, tin]+=Gout[DOWN,DOWN]*GammaW[5,r,r,tout,tin]
                 GGammaW[DOWN, r, tout, tin]+=Gout[DOWN,DOWN]*GammaW[1,r,r,tout,tin]
                 GGammaW[DOWN, r, tout, tin]+=Gout[UP,UP]*GammaW[4,r,r,tout,tin]
+
     GammaG=AddTwoGToGammaG(GGammaW, G, _map)
     return GammaG
 
