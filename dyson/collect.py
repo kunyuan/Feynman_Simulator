@@ -194,8 +194,6 @@ def CollectStatis(_map):
                 GammaWNormAccu=dataW['NormAccu']
                 GammaWNorm=dataW['Norm']
 
-            GammaGAccu*=1.0/GammaGNormAccu*GammaGNorm
-            GammaWAccu*=1.0/GammaWNormAccu*GammaWNorm
 
         except:
             log.info("Fails to merge\n {0}".format(traceback.format_exc()))
@@ -204,6 +202,10 @@ def CollectStatis(_map):
     log.info("{0}/{1} statistics files read!".format(int(Success), Total))
     if float(Success)/Total<AcceptRatio:
         raise CollectStatisFailure("More than {0}% statistics files fail to read!".format(100.0*AcceptRatio)) 
+
+    GammaGAccu*=1.0/GammaGNormAccu*GammaGNorm
+    GammaWAccu*=1.0/GammaWNormAccu*GammaWNorm
+
     return (SigmaSmoothT, PolarSmoothT, GammaGAccu, GammaWAccu)
 
 def UpdateWeight(StatisCollected, ErrorThreshold, OrderAccepted, DoesSaveFigure=True):
