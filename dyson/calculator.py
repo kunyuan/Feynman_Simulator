@@ -273,10 +273,10 @@ def GammaWToGammaG(GammaW, G, _map):
                     sign*=-1
                 Gout += 0.5*sign*G.Data[:,sub,:,sub,0,tgout]
 
-                GGammaW[UP, r, tout, tin]+=Gout[UP,UP]*GammaW[0,r,r,tout,tin]
-                GGammaW[UP, r, tout, tin]+=Gout[DOWN,DOWN]*GammaW[5,r,r,tout,tin]
-                GGammaW[DOWN, r, tout, tin]+=Gout[DOWN,DOWN]*GammaW[1,r,r,tout,tin]
-                GGammaW[DOWN, r, tout, tin]+=Gout[UP,UP]*GammaW[4,r,r,tout,tin]
+                GGammaW[UP, r, tout, tin] += Gout[UP,UP]*GammaW[0,r,r,tout,tin]
+                GGammaW[UP, r, tout, tin] += Gout[DOWN,DOWN]*GammaW[5,r,r,tout,tin]
+                GGammaW[DOWN, r, tout, tin] += Gout[DOWN,DOWN]*GammaW[1,r,r,tout,tin]
+                GGammaW[DOWN, r, tout, tin] += Gout[UP,UP]*GammaW[4,r,r,tout,tin]
 
     GammaG=AddTwoGToGammaG(GGammaW, G, _map)
     return GammaG

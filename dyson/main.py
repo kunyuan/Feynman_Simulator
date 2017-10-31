@@ -73,22 +73,29 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     print "WWGammaW, type0, diagonal, mc=\n", GammaW[0, 1, 1, :, :].diagonal()
 
     #print "WWGammaW, type4, avg, mc=\n", np.sum(GammaW[4, 1, 1, :, :])/GammaW.shape[3]/GammaW.shape[4]
+    print "WWGammaW, type2, t1=0, mc=\n", GammaW[2, 1, 1, 0, :]
+    print "WWGammaW, type3, t1=0, mc=\n", GammaW[3, 1, 1, 0, :]
     print "WWGammaW, type4, t1=0, mc=\n", GammaW[4, 1, 1, 0, :]
 
     #print "WWGammaW, type5, avg, mc=\n", np.sum(GammaW[5, 1, 1, :, :])/GammaW.shape[3]/GammaW.shape[4]
     print "WWGammaW, type5, t1=0, mc=\n", GammaW[5, 1, 1, 0, :]
 
-    # GammaG_simple = calc.SimpleGG(G0, G.Map)
-    # GGammaG = calc.AddG_To_GammaG(GammaG_simple, G0, G.Map)
-    # print "GGammaG, type0, dyson=\n", GGammaG[0, 0, 0, :, :].diagonal()
-    # WWGammaW_dyson=calc.WWGammaW(GGammaG, W0, W, G.Map)
-    # print "WWGammaW, type0, dyson, diagonal=\n", WWGammaW_dyson[0, 1, 1, :, :].diagonal()
-    # print "WWGammaW, type4, dyson, t1=0,=\n", WWGammaW_dyson[4, 1, 1, 0, :]
-    # print "WWGammaW, type5, dyson, t1=0,=\n", WWGammaW_dyson[5, 1, 1, 0, :]
+    GammaG_simple = calc.SimpleGG(G0, G.Map)
+    GGammaG = calc.AddG_To_GammaG(GammaG_simple, G0, G.Map)
+    print "GGammaG, type0, dyson=\n", GGammaG[0, 0, 0, :, :].diagonal()
+    WWGammaW_dyson=calc.WWGammaW(GGammaG, W0, W, G.Map)
+    print "WWGammaW, type0, dyson, diagonal=\n", WWGammaW_dyson[0, 1, 1, :, :].diagonal()
+    print "WWGammaW, type2, dyson, t1=0,=\n", WWGammaW_dyson[2, 1, 1, 0, :]
+    print "WWGammaW, type3, dyson, t1=0,=\n", WWGammaW_dyson[3, 1, 1, 0, :]
+    print "WWGammaW, type4, dyson, t1=0,=\n", WWGammaW_dyson[4, 1, 1, 0, :]
+    print "WWGammaW, type5, dyson, t1=0,=\n", WWGammaW_dyson[5, 1, 1, 0, :]
 
-    # GammaG_dyson = calc.GammaWToGammaG(WWGammaW_dyson, G0, G.Map)
-    # print "GammaG, last term, dyson=\n", -GammaG_dyson[UP, 1, :, :].diagonal()
-    # print "GammaG, mc=\n", GammaG[UP, 1, :, :].diagonal()
+    GammaG_dyson = calc.GammaWToGammaG(WWGammaW_dyson, G0, G.Map)
+    print "GammaG, last term, UP, dyson=\n", -GammaG_dyson[UP, 1, :, :].diagonal()
+    print "GammaG, UP, mc=\n", GammaG[UP, 1, :, :].diagonal()
+
+    print "GammaG, last term, DOWN, dyson=\n", -GammaG_dyson[DOWN, 1, :, :].diagonal()
+    print "GammaG, DOWN, mc=\n", GammaG[DOWN, 1, :, :].diagonal()
 
     # print "WWGammaW, type4, dyson=\n", np.sum(WWGammaW_dyson[4, 1, 1, :, :])/WWGammaW_dyson.shape[3]/WWGammaW_dyson.shape[4]
     # print "WWGammaW, type4, dyson, diagonal=\n", WWGammaW_dyson[4, 1, 1, 0, :]
@@ -98,15 +105,15 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
 
     data={}
     data["Chi"]=Chi.ToDict()
-    data["G"]=G.ToDict()
-    # data["G"]=G0.ToDict()
+    # data["G"]=G.ToDict()
+    data["G"]=G0.ToDict()
     data["W"]=W.ToDict()
     data["W"].update(W0.ToDict())
     data["SigmaDeltaT"]=SigmaDeltaT.ToDict()
     data["Sigma"]=Sigma.ToDict()
     data["Polar"]=Polar.ToDict()
-    # data["GammaG"]={"SmoothT": GammaG_simple}
-    data["GammaG"]={"SmoothT": GammaG}
+    data["GammaG"]={"SmoothT": GammaG_simple}
+    # data["GammaG"]={"SmoothT": GammaG}
     if GammaW is not None:
         data["GammaW"]={"SmoothT": GammaW}
     Observable.Measure(Chi, Determ, G, Factory.NearestNeighbor)
@@ -192,7 +199,6 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
             SigmaDeltaT.Merge(ratio, calc.SigmaDeltaT_FirstOrder(G, W0, Map))
             log.info("SigmaDeltaT is done")
 
-            #GammaW=np.zeros([6, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin])+0.0*1j
             # print "Polar[UP,UP]=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
             # print "GammaG[UP,UP]=\n", GammaG[UP,0,:,-1]
 
@@ -299,7 +305,8 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
             Gold, Wold = G, W
             Measure(para, Observable, Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor, GammaG, GammaW)
             IsSuccessed=Factory.DecreaseField(ParaDyson["Annealing"])
-            Factor=2.0 if IsSuccessed else 1.0
+            # Factor=2.0 if IsSuccessed else 1.0
+            Factor=1.5
             parameter.BroadcastMessage(MessageFile, 
                     {"Version": para["Version"], "Beta": Map.Beta, "SqueezeFactor": Factor})
             log.info("Version {0} is done!".format(para["Version"]))
