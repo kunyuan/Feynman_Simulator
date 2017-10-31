@@ -223,8 +223,6 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                 G = calc.G_Dyson(G0, SigmaDeltaT, Sigma, Map)
                 Polar.Merge(ratio, calc.Polar_FirstOrder(G, Map))
 
-                # GammaG = calc.SimpleGG(G, Map)
-
                 GGW=calc.GGW(GammaG, W, G.Map)
                 GGWGG=calc.AddTwoGToGammaG(GGW, G, G.Map)
 
@@ -258,15 +256,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                 print "SigmaFromDyson=\n", SigmaDyson.Data[UP,0,UP,0,0,:]
 
                 GammaW=GammaW_MC
-
-                ###TODO TEST
-                # GammaG = GammaG_MC
                 GammaG = calc.SimpleGG(G, Map)+ calc.GammaG_FirstOrder(GammaG, G, W0, Map)+GammaG_MC
-
-                # print "ChiMC, mc=\n",  (GammaG[UP, 0, :, :]).diagonal()
-                # print "ChiMC, mc=\n",  (GammaG[DOWN, 0, :, :]).diagonal()
-                # print "ChiMC, mc=\n",  0.5*(np.sum(GammaG[DOWN, :, :, :]-GammaG[UP, :, :, :], axis=0)).diagonal()
-                # #print "ChiTotal, mc=\n",  0.5*(np.sum(GammaG[DOWN, :, :, :]-GammaG[UP, :, :, :], axis=0)).diagonal()
 
             #######DYSON FOR W AND G###########################
             log.info("calculating W...")
