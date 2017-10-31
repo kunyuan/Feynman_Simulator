@@ -66,7 +66,13 @@ def AddTwoGToGammaG(GammaG, G, _map):
             if tgout<0:
                 tgout+=_map.MaxTauBin
                 signout*=-1
-            Gout=signout*G.Data[:,sub,:,sub,r,tgout]
+            Gout=0.5*signout*G.Data[:,sub,:,sub,r,tgout]
+            tgout=t-tout
+            signout=1
+            if tgout<0:
+                tgout+=_map.MaxTauBin
+                signout*=-1
+            Gout+=0.5*signout*G.Data[:,sub,:,sub,r,tgout]
             for tin in range(_map.MaxTauBin):
                 GGGammaG[UP, :, t, tin]+=Gout[UP,UP]*GammaG[UP,:,tout,tin]
                 GGGammaG[DOWN, :, t, tin]+=Gout[DOWN,DOWN]*GammaG[DOWN,:,tout,tin]
@@ -79,7 +85,13 @@ def AddTwoGToGammaG(GammaG, G, _map):
             if tgin<0:
                 tgin+=_map.MaxTauBin
                 signin*=-1
-            Gin=signin*G.Data[:,sub,:,sub,r,tgin]
+            Gin=0.5*signin*G.Data[:,sub,:,sub,r,tgin]
+            tgin=tin-t-1 
+            signin=1
+            if tgin<0:
+                tgin+=_map.MaxTauBin
+                signin*=-1
+            Gin+=0.5*signin*G.Data[:,sub,:,sub,r,tgin]
             for tout in range(_map.MaxTauBin):
                 GGGammaGNew[UP, :, tout, t]+=Gin[UP,UP]*GGGammaG[UP,:,tout,tin]
                 GGGammaGNew[DOWN, :, tout, t]+=Gin[DOWN,DOWN]*GGGammaG[DOWN,:,tout,tin]
@@ -140,8 +152,12 @@ def WWGammaW(GGammaG, W0, W, _map):
                     dt_out = t - tout -1
                     if dt_out<0:
                         dt_out+=_map.MaxTauBin
+                    Wout = 0.5*W.Data[:,sub,:,sub,dr_out,dt_out]*(_map.Beta/_map.MaxTauBin)
+                    dt_out = t - tout
+                    if dt_out<0:
+                        dt_out+=_map.MaxTauBin
+                    Wout += 0.5*W.Data[:,sub,:,sub,dr_out,dt_out]*(_map.Beta/_map.MaxTauBin)
 
-                    Wout = W.Data[:,sub,:,sub,dr_out,dt_out]*(_map.Beta/_map.MaxTauBin)
                     if t == tout:
                         Wout += W0.Data[:,sub,:,sub,dr_out]
 
@@ -181,8 +197,12 @@ def WWGammaW(GGammaG, W0, W, _map):
                     dt_in = tin - t
                     if dt_in < 0:
                         dt_in +=_map.MaxTauBin
+                    Win = 0.5*W.Data[:,sub,:,sub,dr_in,dt_in]*(_map.Beta/_map.MaxTauBin)
+                    dt_in = tin - t-1
+                    if dt_in < 0:
+                        dt_in +=_map.MaxTauBin
+                    Win += 0.5*W.Data[:,sub,:,sub,dr_in,dt_in]*(_map.Beta/_map.MaxTauBin)
 
-                    Win = W.Data[:,sub,:,sub,dr_in,dt_in]*(_map.Beta/_map.MaxTauBin)
                     if t == tin:
                         Win += W0.Data[:,sub,:,sub, dr_in]
 
@@ -318,7 +338,13 @@ def GammaG_FirstOrder(GammaG, G, W0, _map):
             if dtin<0:
                 dtin+=_map.MaxTauBin
                 sign*=-1
-            G1=sign*G.Data[UP,sub,UP,sub,0,dtin]
+            G1=0.5*sign*G.Data[UP,sub,UP,sub,0,dtin]
+            dtin=t3-tin-1
+            sign=1
+            if dtin<0:
+                dtin+=_map.MaxTauBin
+                sign*=-1
+            G1+=0.5*sign*G.Data[UP,sub,UP,sub,0,dtin]
 
             for tout in range(_map.MaxTauBin):
                 dtout=tout-t3-1
@@ -326,7 +352,13 @@ def GammaG_FirstOrder(GammaG, G, W0, _map):
                 if dtout<0:
                     dtout+=_map.MaxTauBin
                     sign*=-1
-                G2=sign*G.Data[UP,sub,UP,sub,0,dtout]
+                G2=0.5*sign*G.Data[UP,sub,UP,sub,0,dtout]
+                dtout=tout-t3
+                sign=1
+                if dtout<0:
+                    dtout+=_map.MaxTauBin
+                    sign*=-1
+                G2+=0.5*sign*G.Data[UP,sub,UP,sub,0,dtout]
                 GG=G1*G2
                 
                 for r1,r2,V in Neighbors:
