@@ -9,6 +9,7 @@
 #include "diagram.h"
 #include "utility/abort.h"
 #include "module/weight/component.h"
+#include <iostream>
 
 using namespace std;
 using namespace diag;
@@ -41,8 +42,10 @@ bool Diagram::_CheckTopo()
 
     if (Order == 0)
         return true;
-    if (G.HowMany() != 2 * Order)
+    if (G.HowMany() != 2 * Order){
+        WriteDiagram2gv("error_diagram.gv");
         ABORT("Number of G is wrong!");
+    }
     if (W.HowMany() != Order)
         ABORT("Number of W is wrong!");
     if (Ver.HowMany() != 2 * Order)
