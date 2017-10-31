@@ -132,7 +132,15 @@ void EnvMonteCarlo::AdjustOrderReWeight()
 */
 bool EnvMonteCarlo::ListenToMessage()
 {
+    int a=1;
+    LOG_WARNING("Even Beginning:");
+    LOG_WARNING(Diag.HasGammaGW);
+    LOG_WARNING(Diag.MeasureGammaGW);
     if(Diag.HasGammaGW==0 && Diag.MeasureGammaGW==0){
+        LOG_WARNING("Beginning:");
+        LOG_WARNING(Diag.HasGammaGW);
+        LOG_WARNING(Diag.MeasureGammaGW);
+
         LOG_INFO("Start Annealing...");
         Message Message_;
         if (!Message_.Load(Job.MessageFile))
@@ -155,6 +163,11 @@ bool EnvMonteCarlo::ListenToMessage()
         Weight.FromDict(weight_, weight::GammaGW, Para);
 
         Weight.Anneal(Para);
+        LOG_WARNING("Calling Diagram reset!");
+
+        LOG_WARNING("After:");
+        LOG_WARNING(Diag.HasGammaGW);
+        LOG_WARNING(Diag.MeasureGammaGW);
         Diag.Reset(Para.Lat, *Weight.G, *Weight.W);
         Markov.Reset(Para, Diag, Weight);
         MarkovMonitor.Reset(Para, Diag, Weight);

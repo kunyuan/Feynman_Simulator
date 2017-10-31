@@ -92,6 +92,7 @@ void Diagram::Reset(Lattice& lat, weight::GClass& g, weight::WClass& w)
     Lat = &lat;
     GWeight = &g;
     WWeight = &w;
+    LOG_WARNING("Calling fix diagram!");
     FixDiagram();
 }
 

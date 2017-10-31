@@ -2,9 +2,10 @@
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" :  3,
+    "__Duplicate" :  0,
+    # "__Duplicate" :  16,
     "__IsCluster" : False, 
-    "__AutoRun" : False,
+    "__AutoRun" : True,
     },
 "Job": {"Sample" : 100000000}  ##0.8 min for 1000000(*1000) Samples in MC
 }
@@ -13,8 +14,8 @@ Dyson={
     "__Execute" : ["python", "./dyson/main.py"],
     "__Duplicate" : 1,
     "__IsCluster" : MonteCarlo["Control"]["__IsCluster"],
-    "__AutoRun" : MonteCarlo["Control"]["__AutoRun"], 
-    #"__AutoRun" : False,
+    # "__AutoRun" : MonteCarlo["Control"]["__AutoRun"], 
+    "__AutoRun" : False,
     "__PBSCommand": "#PBS -l mem=5gb"
     },
 "Job": {
@@ -102,5 +103,5 @@ MonteCarlo.update(Common)
 TO_DO.append(job.JobMonteCarlo(MonteCarlo))
 Dyson.update(Common)
 TO_DO.append(job.JobDyson(Dyson))
-CPU = 4
+CPU = 16
 SLEEP = 1    #check job status for every SLEEP seconds
