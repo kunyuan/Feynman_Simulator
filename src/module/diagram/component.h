@@ -30,6 +30,7 @@ class GLine {
   public:
     name Name;
     bool IsMeasure;
+    bool IsGammaG;
     vertex nVer[2];
     Momentum K;
     Complex Weight;
@@ -40,7 +41,7 @@ class GLine {
     int Sublattice(int dir);
     vertex NeighVer(int dir);
     std::string PrettyString();
-    void SetGLine(Momentum, const Complex &, bool);
+    void SetGLine(Momentum, const Complex &, bool, bool);
 };
 
 class WLine {
@@ -49,6 +50,7 @@ class WLine {
     bool IsWorm;
     bool IsDelta;
     bool IsMeasure;
+    bool IsGammaW;
     vertex nVer[2];
     Momentum K;
     Complex Weight;
@@ -58,7 +60,7 @@ class WLine {
     int Sublattice(int dir);
     vertex NeighVer(int dir);
     std::string PrettyString();
-    void SetWLine(Momentum, const Complex &, bool, bool, bool);
+    void SetWLine(Momentum, const Complex &, bool, bool, bool, bool);
 };
 
 class Vertex {

@@ -2,7 +2,8 @@
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" :  0,
+    # "__Duplicate" :  0,
+    "__Duplicate" :  2,
     "__IsCluster" : False, 
     "__AutoRun" : True,
     },
@@ -13,8 +14,8 @@ Dyson={
     "__Execute" : ["python", "./dyson/main.py"],
     "__Duplicate" : 1,
     "__IsCluster" : MonteCarlo["Control"]["__IsCluster"],
-    "__AutoRun" : MonteCarlo["Control"]["__AutoRun"], 
-    #"__AutoRun" : False,
+    # "__AutoRun" : MonteCarlo["Control"]["__AutoRun"], 
+    "__AutoRun" : False,
     "__PBSCommand": "#PBS -l mem=5gb"
     },
 "Job": {
@@ -25,9 +26,9 @@ Dyson={
 }
 
 Beta=0.5
-Order=4
+Order=1
 Common={
-"Tau": {"MaxTauBin" : 32, "Beta": Beta},
+"Tau": {"MaxTauBin" : 8, "Beta": Beta},
 "Lattice":  {
     #1D lattice
     # "Name": "Chain", "NSublat":1,
@@ -40,7 +41,7 @@ Common={
     # "Name": "Honeycomb", "NSublat": 2,
     #"Name": "Kagome", "NSublat": 3,
     #"Name": "Triangular", "NSublat": 1,
-    "L": [8,8]
+    "L": [4,4]
 
     #3D lattice
     #"Name": "Cubic", "NSublat": 1,
@@ -53,7 +54,7 @@ Common={
     # "Name": "Kitaev",
     # "Name": "Heisenberg",
     #"Description": ["ImW",],
-    "Interaction": [1.0, 1.0, 0.0, 0.0],
+    "Interaction": [1.0, 0.0, 0.0, 0.0],
     "ExternalField": [ 0.0, 0.0, 0.0, 0.0]
     #ExternalField on Sublattice A and B
     },
@@ -62,7 +63,7 @@ Common={
 MonteCarlo["Markov"]={
     "Order": Order, "Sweep" : 10, "Toss" : 1000,
     #Start from order 0, so that OrderReWeight has Order+1 elements
-    "OrderReWeight" : [100.0, 0.5, 1.0, 0.1, 0.05, 0.05, 0.01, 0.005],
+    "OrderReWeight" : [0.1, 0.5, 1.0, 0.1, 0.05, 0.05, 0.01, 0.005],
     "WormSpaceReweight" : 0.05,
     "PolarReweight" : 2.0,
     "OrderTimeRatio" : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
@@ -81,8 +82,8 @@ MonteCarlo["Markov"]={
     }
 
 Dyson["Dyson"]={
-    "SleepTime": 0,
-    #"SleepTime": 300,
+    #"SleepTime": 0,
+    "SleepTime": 30,
     "OrderAccepted": {"Sigma":1, "Polar":1},
     "ErrorThreshold": 0.2,
     "Annealing": {
@@ -102,5 +103,5 @@ MonteCarlo.update(Common)
 TO_DO.append(job.JobMonteCarlo(MonteCarlo))
 Dyson.update(Common)
 TO_DO.append(job.JobDyson(Dyson))
-CPU = 4
+CPU = 16
 SLEEP = 1    #check job status for every SLEEP seconds

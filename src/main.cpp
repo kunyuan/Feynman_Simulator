@@ -83,6 +83,9 @@ void MonteCarlo(const para::Job& Job)
         Step++;
         Markov.Hop(Para.Sweep);
         MarkovMonitor.Measure();
+//        if (!Env.Diag.CheckDiagram()){
+//            ABORT("Diagram Check didn't pass!!!");
+//        }
         if (!Markov.Diag->Worm.Exist) {
             if (Markov.Diag->MeasureGLine)
                 sigma[Markov.Diag->Order]++;
@@ -97,7 +100,9 @@ void MonteCarlo(const para::Job& Job)
 	    //}
 
             if (PrinterTimer.check(Para.PrinterTimer)) {
-                Env.Diag.CheckDiagram();
+                if (!Env.Diag.CheckDiagram()){
+                    ABORT("Diagram Check didn't pass!!!");
+                }
                 Markov.PrintDetailBalanceInfo();
             }
 

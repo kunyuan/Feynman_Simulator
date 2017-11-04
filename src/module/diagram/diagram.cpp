@@ -31,6 +31,8 @@ Diagram::Diagram()
     , G("GLine")
     , W("WLine")
     , Ver("nVer")
+    , HasGammaGW(0)
+    , MeasureGammaGW(0)
 {
     Lat = nullptr;
 }
@@ -90,6 +92,7 @@ void Diagram::Reset(Lattice& lat, weight::GClass& g, weight::WClass& w)
     Lat = &lat;
     GWeight = &g;
     WWeight = &w;
+    LOG_WARNING("Calling fix diagram!");
     FixDiagram();
 }
 
@@ -129,8 +132,9 @@ bool Diagram::FixDiagram()
 
         vin->nG[OUT] = g;
         vout->nG[IN] = g;
+        g->IsGammaG = false;
 
-        g->Weight = GWeight->Weight(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin(OUT), vout->Spin(IN), g->IsMeasure);
+        g->Weight = GWeight->Weight(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin(OUT), vout->Spin(IN), g->IsMeasure, false);
         Weight *= g->Weight;
     }
 
@@ -146,8 +150,9 @@ bool Diagram::FixDiagram()
 
         vout->nW = w;
         vout->Dir = OUT;
+        w->IsGammaW = false;
 
-        w->Weight = WWeight->Weight(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin(), vout->Spin(), w->IsWorm, w->IsMeasure, w->IsDelta);
+        w->Weight = WWeight->Weight(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin(), vout->Spin(), w->IsWorm, w->IsMeasure, w->IsDelta, false);
         Weight *= w->Weight;
     }
 

@@ -11,12 +11,14 @@
 #include "module/parameter/parameter.h"
 #include "module/weight/weight.h"
 #include "module/weight/component.h"
+#include "module/weight/gamma3.h"
 #include "utility/dictionary.h"
 
 using namespace std;
 using namespace diag;
 using namespace para;
 using namespace mc;
+using namespace weight;
 
 MarkovMonitor::MarkovMonitor()
 {
@@ -79,6 +81,8 @@ void MarkovMonitor::SqueezeStatistics(real factor)
 {
     Weight->Sigma->Estimator.SqueezeStatistics(factor);
     Weight->Polar->Estimator.SqueezeStatistics(factor);
+    Weight->GammaG->SqueezeStatistics(factor);
+    Weight->GammaW->SqueezeStatistics(factor);
     WormEstimator.SqueezeStatistics(factor);
     PhyEstimator.SqueezeStatistics(factor);
     SigmaEstimator.SqueezeStatistics(factor);
@@ -130,35 +134,80 @@ void MarkovMonitor::Measure()
     if (Diag->Worm.Exist) {
         real WormWeight = 1.0 / OrderReWeight / Para->WormSpaceReweight;
         WormEstimator[Diag->Order].Measure(WormWeight);
-        if (Diag->MeasureGLine)
-            SigmaEstimator.Measure(WormWeight);
-        else
-            PolarEstimator.Measure(WormWeight);
+        if (Diag->HasGammaGW==0 ) {
+            if (Diag->MeasureGLine)
+                SigmaEstimator.Measure(WormWeight);
+            else if (!Diag->MeasureGLine)
+                PolarEstimator.Measure(WormWeight);
+        }
     }
     else {
         real OrderWeight = 1.0 / OrderReWeight;
+
         PhyEstimator[Diag->Order].Measure(OrderWeight);
-        if (Diag->MeasureGLine) {
-            SigmaEstimator.Measure(OrderWeight);
-            if (Diag->Order == 0) {
+
+        if (Diag->Order == 0){
+            if (Diag->MeasureGLine) {
                 Weight->Sigma->Estimator.MeasureNorm(OrderWeight);
+                Weight->GammaG->MeasureNorm(OrderWeight);
+            }else{
+                Weight->Polar->Estimator.MeasureNorm(OrderWeight);
+                Weight->GammaW->MeasureNorm(OrderWeight);
+            }
+        }
+
+        if (Diag->HasGammaGW==0 ){
+            if (Diag->MeasureGLine) {
+                SigmaEstimator.Measure(OrderWeight);
+                if (Diag->Order != 0) {
+                    gLine g = Diag->GMeasure;
+                    vertex vin = g->NeighVer(OUT);
+                    vertex vout = g->NeighVer(IN);
+                    Weight->Sigma->Measure(vin->R, vout->R, vin->Tau, vout->Tau, g->Spin(OUT), g->Spin(IN), Diag->Order, Diag->Phase * OrderWeight);
+                }
             }
             else {
+                PolarEstimator.Measure(OrderWeight);
+                if (Diag->Order != 0) {
+                    wLine w = Diag->WMeasure;
+                    vertex vin = w->NeighVer(OUT);
+                    vertex vout = w->NeighVer(IN);
+                    Weight->Polar->Measure(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin(), vout->Spin(),
+                                           Diag->Order, -1.0* Diag->Phase * OrderWeight);
+                }
+            }
+//            if (Diag->MeasureGLine && Diag->Order != 0) {
+//                gLine g = Diag->GMeasure;
+//                vertex vin = g->NeighVer(OUT);
+//                vertex vout = g->NeighVer(IN);
+//                ExtPoint& Ext = Diag->UExt;
+//
+//                Weight->GammaG->Measure(vin->R, vout->R, vin->R, vin->Tau, vout->Tau, 0, g->Spin(OUT), g->Spin(IN), UP,
+//                                        Diag->Phase * OrderWeight);
+//
+////                Weight->GammaG->Measure(vin->R, vout->R, vin->R, vin->Tau, vout->Tau, 0, g->Spin(OUT), g->Spin(IN), UP,
+////                                        Diag->Phase * OrderWeight);
+//            }
+        }else if(Diag->MeasureGLine && Diag->MeasureGammaGW==1) {
+        //}else if(Diag->MeasureGLine && Diag->MeasureGammaGW==1 && Diag->HasGammaGW== 1) {
+            if (Diag->Order != 0) {
                 gLine g = Diag->GMeasure;
                 vertex vin = g->NeighVer(OUT);
                 vertex vout = g->NeighVer(IN);
-                Weight->Sigma->Measure(vin->R, vout->R, vin->Tau, vout->Tau, g->Spin(OUT), g->Spin(IN), Diag->Order, Diag->Phase * OrderWeight);
+                ExtPoint& Ext = Diag->UExt;
+                Weight->GammaG->Measure(vin->R, vout->R, Ext.R, vin->Tau, vout->Tau, Ext.Tau, g->Spin(OUT), g->Spin(IN), Ext.Spin,
+                                       Diag->Phase * OrderWeight);
             }
-        }
-        else {
-            PolarEstimator.Measure(OrderWeight);
-            if (Diag->Order == 0)
-                Weight->Polar->Estimator.MeasureNorm(OrderWeight);
-            else {
+        }else if(!Diag->MeasureGLine && Diag->MeasureGammaGW==2) {
+        //}else if(!Diag->MeasureGLine && Diag->MeasureGammaGW==2 && Diag->HasGammaGW==1) {
+        //}else if(!Diag->MeasureGLine && Diag->MeasureGammaGW==0 && Diag->HasGammaGW==1) {
+            if (Diag->Order != 0) {
                 wLine w = Diag->WMeasure;
                 vertex vin = w->NeighVer(OUT);
                 vertex vout = w->NeighVer(IN);
-                Weight->Polar->Measure(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin(), vout->Spin(), Diag->Order, -Diag->Phase * OrderWeight);
+                ExtPoint& Ext = Diag->UExt;
+                Weight->GammaW->Measure(vin->R, vout->R, Ext.R, vin->Tau, vout->Tau, Ext.Tau, vin->Spin(), vout->Spin(), Ext.Spin,
+                                        -1.0* Diag->Phase * OrderWeight);
             }
         }
     }

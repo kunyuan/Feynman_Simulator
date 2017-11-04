@@ -86,7 +86,13 @@ Dictionary WeightArray<DIM>::ToDict()
     return dict;
 }
 
-template class WeightArray<DELTA_T_SIZE>;
-template class WeightArray<SMOOTH_T_SIZE>;
-template class WeightArray<SMOOTH_T_SIZE + 1>;
+//template class WeightArray<DELTA_T_SIZE>;
+//template class WeightArray<SMOOTH_T_SIZE>;
+//template class WeightArray<SMOOTH_T_SIZE + 1>;
+template class WeightArray<3>;
+template class WeightArray<4>;
+template class WeightArray<5>;
+template class WeightArray<6>;
+template class WeightArray<7>;
+template class WeightArray<8>;
 }

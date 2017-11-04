@@ -10,6 +10,7 @@
 #include "component.h"
 #include "utility/dictionary.h"
 #include "module/parameter/parameter.h"
+#include "gamma3.h"
 
 using namespace std;
 using namespace para;
@@ -78,6 +79,33 @@ bool weight::Weight::FromDict(const Dictionary &dict, flag _flag, const para::Pa
         Sigma->FromDict(dict.Get<Dictionary>("Sigma"));
         Polar->FromDict(dict.Get<Dictionary>("Polar"));
     }
+    if (_flag & weight::GammaGW) {
+        _AllocateGammaGW(para);
+        if(dict.HasKey("GammaG")) {
+            GammaG->WeightFromDict(dict.Get<Dictionary>("GammaG"));
+        }else{
+            LOG_WARNING("There is no GammaG Weight to read!\n I will initialze them with zeros.");
+        }
+        if(dict.HasKey("GammaW")) {
+            GammaW->WeightFromDict(dict.Get<Dictionary>("GammaW"));
+        }else{
+            LOG_WARNING("There is no GammaW Weight to read!\n I will initialze them with zeros.");
+            //GammaW will be allocated with zeros
+        }
+        G->GammaGWeight = GammaG;
+        W->GammaWWeight = GammaW;
+    }
+    if (_flag & weight::GammaGWStatis) {
+        ASSERT_ALLWAYS(GammaG!= nullptr&&GammaW!= nullptr, "GammaG and GammaW has to be initialized first!");
+        if(dict.HasKey("GammaGStatis")&&dict.HasKey("GammaWStatis")){
+            GammaG->StatisFromDict(dict.Get<Dictionary>("GammaGStatis"));
+            GammaW->StatisFromDict(dict.Get<Dictionary>("GammaWStatis"));
+        }else{
+            LOG_WARNING("There is no GammaG or GammaW statistics to read");
+            GammaG->ClearStatistics();
+            GammaW->ClearStatistics();
+        }
+    }
     return true;
 }
 Dictionary weight::Weight::ToDict(flag _flag)
@@ -90,6 +118,18 @@ Dictionary weight::Weight::ToDict(flag _flag)
     if (_flag & weight::SigmaPolar) {
         dict["Sigma"] = Sigma->ToDict();
         dict["Polar"] = Polar->ToDict();
+    }
+    if (_flag & weight::GammaGW) {
+        if(GammaG!= nullptr)
+            dict["GammaG"] = GammaG->WeightToDict();
+        if(GammaW!= nullptr)
+            dict["GammaW"] = GammaW->WeightToDict();
+    }
+    if (_flag & weight::GammaGWStatis) {
+        if(GammaG!= nullptr)
+            dict["GammaGStatis"] = GammaG->StatisToDict();
+        if(GammaW!= nullptr)
+            dict["GammaWStatis"] = GammaW->StatisToDict();
     }
     return dict;
 }
@@ -127,4 +167,13 @@ void weight::Weight::_AllocateSigmaPolar(const ParaMC &para)
     Sigma = new weight::SigmaClass(para.Lat, para.Beta, para.MaxTauBin, para.Order, symmetry);
     delete Polar;
     Polar = new weight::PolarClass(para.Lat, para.Beta, para.MaxTauBin, para.Order);
+}
+
+void weight::Weight::_AllocateGammaGW(const ParaMC &para)
+{
+    //make sure old Gamma/G/W are released before assigning new memory
+    if(GammaG== nullptr)
+        GammaG = new weight::GammaGClass(para.Lat, para.Beta, para.MaxTauBin);
+    if(GammaW== nullptr)
+        GammaW = new weight::GammaWClass(para.Lat, para.Beta, para.MaxTauBin);
 }

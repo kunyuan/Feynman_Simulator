@@ -153,6 +153,14 @@ def CollectStatis(_map):
     SigmaSmoothT=WeightEstimator(Sigma)
     Polar=weight.Weight("SmoothT", _map, "FourSpins", "Symmetric")
     PolarSmoothT=WeightEstimator(Polar)
+
+    GammaGAccu=np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
+    GammaWAccu=np.zeros([6, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
+    GammaGNorm=None
+    GammaWNorm=None
+    GammaGNormAccu=1.e-8
+    GammaWNormAccu=1.e-8
+
     _FileList=GetFileList()
     if len(_FileList)==0:
         raise CollectStatisFailure("No statistics files to read!") 
@@ -165,6 +173,28 @@ def CollectStatis(_map):
             Dict=IO.LoadBigDict(f)
             SigmaSmoothT.MergeFromDict(Dict['Sigma']['Histogram'])
             PolarSmoothT.MergeFromDict(Dict['Polar']['Histogram'])
+
+            dataG=Dict["GammaGStatis"]
+            if GammaGNorm is not None:
+                GammaGAccu+=dataG['WeightAccu']
+                GammaGNormAccu+=dataG['NormAccu']
+                Assert(GammaGNorm==dataG['Norm'], "Norm have to be the same to merge statistics")
+            else:
+                GammaGAccu=dataG['WeightAccu']
+                GammaGNormAccu=dataG['NormAccu']
+                GammaGNorm=dataG['Norm']
+
+            dataW=Dict["GammaWStatis"]
+            if GammaWNorm is not None:
+                GammaWAccu+=dataW['WeightAccu']
+                GammaWNormAccu+=dataW['NormAccu']
+                Assert(GammaWNorm==dataW['Norm'], "Norm have to be the same to merge statistics")
+            else:
+                GammaWAccu=dataW['WeightAccu']
+                GammaWNormAccu=dataW['NormAccu']
+                GammaWNorm=dataW['Norm']
+
+
         except:
             log.info("Fails to merge\n {0}".format(traceback.format_exc()))
         else:
@@ -172,7 +202,11 @@ def CollectStatis(_map):
     log.info("{0}/{1} statistics files read!".format(int(Success), Total))
     if float(Success)/Total<AcceptRatio:
         raise CollectStatisFailure("More than {0}% statistics files fail to read!".format(100.0*AcceptRatio)) 
-    return (SigmaSmoothT, PolarSmoothT)
+
+    GammaGAccu*=1.0/GammaGNormAccu*GammaGNorm
+    GammaWAccu*=1.0/GammaWNormAccu*GammaWNorm
+
+    return (SigmaSmoothT, PolarSmoothT, GammaGAccu, GammaWAccu)
 
 def UpdateWeight(StatisCollected, ErrorThreshold, OrderAccepted, DoesSaveFigure=True):
     SigmaSmoothT, PolarSmoothT=StatisCollected
@@ -188,8 +222,8 @@ def UpdateWeight(StatisCollected, ErrorThreshold, OrderAccepted, DoesSaveFigure=
 if __name__=="__main__":
     WeightPara={"NSublat": 1, "L":[4, 4],
                 "Beta": 0.5, "MaxTauBin":128}
-    map=weight.IndexMap(**WeightPara)
-    SigmaSmoothT, PolarSmoothT=CollectStatis(map)
+    _map=weight.IndexMap(**WeightPara)
+    SigmaSmoothT, PolarSmoothT=CollectStatis(_map)
 
     data ={}
     data["Sigma"] = {"Histogram": SigmaSmoothT.ToDict()}

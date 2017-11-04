@@ -36,6 +36,7 @@ bool EnvMonteCarlo::BuildNew()
     Dictionary GW_;
     GW_.BigLoad(Job.WeightFile);
     Weight.FromDict(GW_, weight::GW, Para);
+    Weight.FromDict(GW_, weight::GammaGW, Para);
 
     //    Weight.SetDiagCounter(Para);//Test for DiagCounter
     //    Weight.SetTest(Para);//Test for WeightTest
@@ -73,6 +74,8 @@ bool EnvMonteCarlo::Load()
     statis_.BigLoad(Job.StatisticsFile);
     Weight.FromDict(statis_, weight::GW, Para);
     Weight.FromDict(statis_, weight::SigmaPolar, Para);
+    Weight.FromDict(statis_, weight::GammaGW, Para);
+    Weight.FromDict(statis_, weight::GammaGWStatis, Para);
     LOG_INFO(DoesParaFileExit);
     if (DoesParaFileExit)
         Diag.FromDict(para_.Get<Dictionary>(ConfigKey), Para.Lat, *Weight.G, *Weight.W);
@@ -85,16 +88,18 @@ bool EnvMonteCarlo::Load()
 
 void EnvMonteCarlo::Save()
 {
-    LOG_INFO("Start saving data...");
-    Dictionary para_;
-    para_[ParaKey] = Para.ToDict();
-    para_[ConfigKey] = Diag.ToDict();
-    para_["PID"] = Job.PID;
-    para_.Save(Job.ParaFile, "w");
-    Dictionary statis_ = Weight.ToDict(weight::GW | weight::SigmaPolar);
-    statis_.Update(MarkovMonitor.ToDict());
-    statis_.BigSave(Job.StatisticsFile);
-    LOG_INFO("Saving data is done!");
+    if (Diag.HasGammaGW==0 && Diag.MeasureGammaGW==0) {
+        LOG_INFO("Start saving data...");
+        Dictionary para_;
+        para_[ParaKey] = Para.ToDict();
+        para_[ConfigKey] = Diag.ToDict();
+        para_["PID"] = Job.PID;
+        para_.Save(Job.ParaFile, "w");
+        Dictionary statis_ = Weight.ToDict(weight::GW | weight::SigmaPolar | weight::GammaGW | weight::GammaGWStatis);
+        statis_.Update(MarkovMonitor.ToDict());
+        statis_.BigSave(Job.StatisticsFile);
+        LOG_INFO("Saving data is done!");
+    }
 }
 
 void EnvMonteCarlo::DeleteSavedFiles()
@@ -127,30 +132,48 @@ void EnvMonteCarlo::AdjustOrderReWeight()
 */
 bool EnvMonteCarlo::ListenToMessage()
 {
-    LOG_INFO("Start Annealing...");
-    Message Message_;
-    if (!Message_.Load(Job.MessageFile))
-        return false;
-    if (Para.Version >= Message_.Version) {
-        LOG_INFO("Status has not been updated yet since the last annealing!");
-        return false;
+    int a=1;
+    LOG_WARNING("Even Beginning:");
+    LOG_WARNING(Diag.HasGammaGW);
+    LOG_WARNING(Diag.MeasureGammaGW);
+    if(Diag.HasGammaGW==0 && Diag.MeasureGammaGW==0){
+        LOG_WARNING("Beginning:");
+        LOG_WARNING(Diag.HasGammaGW);
+        LOG_WARNING(Diag.MeasureGammaGW);
+
+        LOG_INFO("Start Annealing...");
+        Message Message_;
+        if (!Message_.Load(Job.MessageFile))
+            return false;
+        if (Para.Version >= Message_.Version) {
+            LOG_INFO("Status has not been updated yet since the last annealing!");
+            return false;
+        }
+        Dictionary weight_;
+        try {
+            weight_.BigLoad(Job.WeightFile);
+        }
+        catch (IOInvalid e) {
+            LOG_WARNING("Annealing Failed!");
+            return false;
+        }
+        Para.UpdateWithMessage(Message_);
+
+        Weight.FromDict(weight_, weight::GW, Para);
+        Weight.FromDict(weight_, weight::GammaGW, Para);
+
+        Weight.Anneal(Para);
+        LOG_WARNING("Calling Diagram reset!");
+
+        LOG_WARNING("After:");
+        LOG_WARNING(Diag.HasGammaGW);
+        LOG_WARNING(Diag.MeasureGammaGW);
+        Diag.Reset(Para.Lat, *Weight.G, *Weight.W);
+        Markov.Reset(Para, Diag, Weight);
+        MarkovMonitor.Reset(Para, Diag, Weight);
+        MarkovMonitor.SqueezeStatistics(Message_.SqueezeFactor);
+        LOG_INFO("Annealled to " << Message_.PrettyString()
+                                 << "\nwith squeeze factor" << Message_.SqueezeFactor);
+        return true;
     }
-    Dictionary weight_;
-    try {
-        weight_.BigLoad(Job.WeightFile);
-    }
-    catch (IOInvalid e) {
-        LOG_WARNING("Annealing Failed!");
-        return false;
-    }
-    Para.UpdateWithMessage(Message_);
-    Weight.FromDict(weight_, weight::GW, Para);
-    Weight.Anneal(Para);
-    Diag.Reset(Para.Lat, *Weight.G, *Weight.W);
-    Markov.Reset(Para, Diag, Weight);
-    MarkovMonitor.Reset(Para, Diag, Weight);
-    MarkovMonitor.SqueezeStatistics(Message_.SqueezeFactor);
-    LOG_INFO("Annealled to " << Message_.PrettyString()
-                             << "\nwith squeeze factor" << Message_.SqueezeFactor);
-    return true;
 }
