@@ -81,10 +81,10 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     print "Chi, polar=\n", np.sum(Chi.Data[0,0,0,0,:,:], axis=0)
 
     print "WWGammaW, type0, diagonal, mc=\n", GammaW[0, 1, 1, :, :].diagonal()
-    # print "WWGammaW, type0, diagonal, dyson=\n", WWGammaW[0, 1, 1, :, :].diagonal()
+    print "WWGammaW, type0, diagonal, dyson=\n", WWGammaW[0, 1, 1, :, :].diagonal()
 
     print "WWGammaW, type4, diagonal, mc=\n", GammaW[4, 1, 1, :, :].diagonal()
-    # print "WWGammaW, type4, diagonal, dyson=\n", WWGammaW[4, 1, 1, :, :].diagonal()
+    print "WWGammaW, type4, diagonal, dyson=\n", WWGammaW[4, 1, 1, :, :].diagonal()
 
     # GammaG_Reducible=calc.GammaG_FirstOrder(calc.SimpleGG(G0,G.Map), G0, W0, G.Map)
     # print "Reducible GammaG [UP,UP], diagonal, dyson=\n", -GammaG_Reducible[UP,1,:,:].diagonal()
@@ -110,7 +110,7 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     # print "WWGammaW, type4, dyson, t1=0,=\n", WWGammaW_dyson[4, 1, 1, 0, :]
 
     # GammaG_dyson = calc.GammaWToGammaG(WWGammaW_dyson, G, G.Map)
-    # print "GammaG, UP, dyson=\n", GammaG_dyson[UP, 1, :, :].diagonal()
+    print "GammaG, UP, dyson=\n", GammaG_dyson[UP, 1, :, :].diagonal()
     print "GammaG, UP, mc=\n", GammaG[UP, 1, :, :].diagonal()
 
     # print "GammaG, last term, DOWN, dyson=\n", -GammaG_dyson[DOWN, 1, :, :].diagonal()

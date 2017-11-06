@@ -50,8 +50,8 @@ public:
     RandomFactory RNG;
     real WormSpaceReweight;
     real PolarReweight;
-//    real GammaGReweight;
-//    real GammaWReweight;
+    real GammaGReweight;
+    real GammaWReweight;
 //    real MeasureGammaGReweight;
 //    real MeasureGammaWReweight;
     std::vector<real> OrderReWeight;

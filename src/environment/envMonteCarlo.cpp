@@ -117,7 +117,10 @@ void EnvMonteCarlo::AdjustOrderReWeight()
         string str;
         for (int i = 0; i <= Para.Order; i++)
             str += ToString((Para.OrderReWeight[i])) + "  ";
-        LOG_INFO("Reweighted to:\n" + str + "\nWorm Reweighted to:\n" + ToString(Para.WormSpaceReweight) + "\nPolar Reweighted to:\n" + ToString(Para.PolarReweight));
+        LOG_INFO("Reweighted to:\n" + str + "\nWorm Reweighted to:\n" + ToString(Para.WormSpaceReweight)
+                 + "\nPolar Reweighted to:\n" + ToString(Para.PolarReweight)
+                 + "\nGammaG Reweighted to:\n" + ToString(Para.GammaGReweight)
+                 + "\nGammaW Reweighted to:\n" + ToString(Para.GammaWReweight));
     }
     else {
         string str;
@@ -132,7 +135,6 @@ void EnvMonteCarlo::AdjustOrderReWeight()
 */
 bool EnvMonteCarlo::ListenToMessage()
 {
-    int a=1;
     LOG_WARNING("Even Beginning:");
     LOG_WARNING(Diag.HasGammaGW);
     LOG_WARNING(Diag.MeasureGammaGW);

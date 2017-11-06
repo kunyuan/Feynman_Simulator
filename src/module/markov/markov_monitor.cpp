@@ -37,6 +37,8 @@ bool MarkovMonitor::BuildNew(ParaMC &para, Diagram &diag, weight::Weight &weight
     PhyEstimator.ClearStatistics();
     SigmaEstimator.ClearStatistics();
     PolarEstimator.ClearStatistics();
+    GammaGEstimator.ClearStatistics();
+    GammaWEstimator.ClearStatistics();
     return true;
 }
 
@@ -65,6 +67,8 @@ bool MarkovMonitor::FromDict(const Dictionary &dict, ParaMC &para, Diagram &diag
                                   );
     flag &= SigmaEstimator.FromDict(dict.Get<Dictionary>("SigmaEstimator"));
     flag &= PolarEstimator.FromDict(dict.Get<Dictionary>("PolarEstimator"));
+    flag &= GammaGEstimator.FromDict(dict.Get<Dictionary>("GammaGEstimator"));
+    flag &= GammaWEstimator.FromDict(dict.Get<Dictionary>("GammaWEstimator"));
     return flag;
 }
 Dictionary MarkovMonitor::ToDict()
@@ -74,6 +78,8 @@ Dictionary MarkovMonitor::ToDict()
     dict["PhyEstimator"] = PhyEstimator.ToDict();
     dict["SigmaEstimator"] = SigmaEstimator.ToDict();
     dict["PolarEstimator"] = PolarEstimator.ToDict();
+    dict["GammaGEstimator"] = SigmaEstimator.ToDict();
+    dict["GammaWEstimator"] = PolarEstimator.ToDict();
     return dict;
 }
 
@@ -87,6 +93,8 @@ void MarkovMonitor::SqueezeStatistics(real factor)
     PhyEstimator.SqueezeStatistics(factor);
     SigmaEstimator.SqueezeStatistics(factor);
     PolarEstimator.SqueezeStatistics(factor);
+    GammaGEstimator.SqueezeStatistics(factor);
+    GammaWEstimator.SqueezeStatistics(factor);
 }
 
 bool MarkovMonitor::AdjustOrderReWeight()
@@ -97,7 +105,13 @@ bool MarkovMonitor::AdjustOrderReWeight()
     }
     if (PolarEstimator.Norm() < 1000.0)
         return false;
+    if (GammaGEstimator.Norm() < 1000.0)
+        return false;
+    if (GammaWEstimator.Norm() < 1000.0)
+        return false;
     if (Zero(PolarEstimator.Value()) || Zero(SigmaEstimator.Value()))
+        return false;
+    if (Zero(GammaGEstimator.Value()) || Zero(GammaWEstimator.Value()))
         return false;
 
     real weight[Para->Order + 1];
@@ -124,7 +138,22 @@ bool MarkovMonitor::AdjustOrderReWeight()
     output << "Worm confs:" << wormweight << " Physics confs: " << phyweight << " => " << Para->WormSpaceReweight << endl;
     LOG_INFO(output.str());
 
-    Para->PolarReweight = SigmaEstimator.Value() / PolarEstimator.Value();
+    LOG_INFO("Number of confs in different Measuring sections => Reweight Ratio:");
+    stringstream output2;
+    real sigmaweight = SigmaEstimator.Value();
+    real polarweight = PolarEstimator.Value();
+    Para->PolarReweight = sigmaweight /polarweight;
+    output2 << "Sigma :" << sigmaweight << " Polar :" << polarweight << " => " << Para->PolarReweight << endl;
+
+    real gammagweight = GammaGEstimator.Value();
+    Para->GammaGReweight = sigmaweight/ gammagweight;
+    output2 << "Sigma :" << sigmaweight << " GammaG :" << gammagweight << " => " << Para->GammaGReweight << endl;
+
+    real gammawweight = GammaWEstimator.Value();
+    Para->GammaWReweight = polarweight/ gammawweight;
+    output2 << "Polar :" << polarweight << " GammaW :" << gammawweight << " => " << Para->GammaWReweight << endl;
+    LOG_INFO(output2.str());
+
     return true;
 }
 
@@ -156,9 +185,19 @@ void MarkovMonitor::Measure()
             }
         }
 
+        if (Diag->MeasureGammaGW==0){
+            if(Diag->MeasureGLine)
+                SigmaEstimator.Measure(OrderWeight);
+            else
+                PolarEstimator.Measure(OrderWeight);
+        }else if(Diag->MeasureGammaGW==1){
+            GammaGEstimator.Measure(OrderWeight);
+        }else if(Diag->MeasureGammaGW==2){
+            GammaWEstimator.Measure(OrderWeight);
+        }
+
         if (Diag->HasGammaGW==0 ){
             if (Diag->MeasureGLine) {
-                SigmaEstimator.Measure(OrderWeight);
                 if (Diag->Order != 0) {
                     gLine g = Diag->GMeasure;
                     vertex vin = g->NeighVer(OUT);
@@ -167,7 +206,6 @@ void MarkovMonitor::Measure()
                 }
             }
             else {
-                PolarEstimator.Measure(OrderWeight);
                 if (Diag->Order != 0) {
                     wLine w = Diag->WMeasure;
                     vertex vin = w->NeighVer(OUT);
@@ -189,7 +227,6 @@ void MarkovMonitor::Measure()
 ////                                        Diag->Phase * OrderWeight);
 //            }
         }else if(Diag->MeasureGLine && Diag->MeasureGammaGW==1) {
-        //}else if(Diag->MeasureGLine && Diag->MeasureGammaGW==1 && Diag->HasGammaGW== 1) {
             if (Diag->Order != 0) {
                 gLine g = Diag->GMeasure;
                 vertex vin = g->NeighVer(OUT);
@@ -199,8 +236,6 @@ void MarkovMonitor::Measure()
                                        Diag->Phase * OrderWeight);
             }
         }else if(!Diag->MeasureGLine && Diag->MeasureGammaGW==2) {
-        //}else if(!Diag->MeasureGLine && Diag->MeasureGammaGW==2 && Diag->HasGammaGW==1) {
-        //}else if(!Diag->MeasureGLine && Diag->MeasureGammaGW==0 && Diag->HasGammaGW==1) {
             if (Diag->Order != 0) {
                 wLine w = Diag->WMeasure;
                 vertex vin = w->NeighVer(OUT);

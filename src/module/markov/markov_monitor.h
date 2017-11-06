@@ -29,7 +29,7 @@ class MarkovMonitor {
 
     EstimatorBundle<real> WormEstimator;
     EstimatorBundle<real> PhyEstimator;
-    Estimator<real> SigmaEstimator, PolarEstimator;
+    Estimator<real> SigmaEstimator, PolarEstimator, GammaGEstimator, GammaWEstimator;
 
     bool BuildNew(para::ParaMC &, diag::Diagram &, weight::Weight &);
     bool FromDict(const Dictionary &, para::ParaMC &, diag::Diagram &, weight::Weight &);

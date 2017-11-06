@@ -83,6 +83,7 @@ bool Markov::BuildNew(ParaMC &para, Diagram &diag, weight::Weight &weight)
     OperationName[DELETE_TWO_G] = NAME(DELETE_TWO_G);
     OperationName[ADD_TWO_W] = NAME(ADD_TWO_W);
     OperationName[DELETE_TWO_W] = NAME(DELETE_TWO_W);
+    OperationName[CHANGE_TAU_IN_GAMMAW] = NAME(CHANGE_TAU_IN_GAMMAW);
     return true;
 }
 
@@ -95,6 +96,8 @@ void Markov::Reset(ParaMC &para, Diagram &diag, weight::Weight &weight)
     OrderReWeight = para.OrderReWeight.data();
     WormSpaceReweight = &para.WormSpaceReweight;
     PolarReweight = &para.PolarReweight;
+    GammaGReweight = &para.GammaGReweight;
+    GammaWReweight = &para.GammaWReweight;
     Diag = &diag;
     Worm = &diag.Worm;
     UExt = &diag.UExt;
@@ -213,6 +216,7 @@ void Markov::PrintDetailBalanceInfo()
     Output += _DetailBalanceStr(ADD_TWO_W);
     Output += _DetailBalanceStr(DELETE_TWO_G);
     Output += _DetailBalanceStr(DELETE_TWO_W);
+    Output += _DetailBalanceStr(CHANGE_TAU_IN_GAMMAW);
     Output += string(60, '-') + "\n";
     //    Output += _CheckBalance(CREATE_WORM, DELETE_WORM);
     Output += _CheckBalance(ADD_INTERACTION, DEL_INTERACTION);
@@ -318,6 +322,10 @@ void Markov::Hop(int sweep)
         }else if(x < SumofProbofCall[DELETE_TWO_W]){
             if( Diag->MeasureGammaGW==2) {
                 DeleteTwoW();
+            }
+        }else if(x < SumofProbofCall[CHANGE_TAU_IN_GAMMAW]){
+            if( Diag->MeasureGammaGW==2) {
+                ChangeTauInGammaW();
             }
         }
 

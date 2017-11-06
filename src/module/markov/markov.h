@@ -46,6 +46,8 @@ public:
     real* OrderReWeight;
     real* WormSpaceReweight;
     real* PolarReweight;
+    real* GammaGReweight;
+    real* GammaWReweight;
     diag::Diagram* Diag;
     diag::WormClass* Worm;
     weight::ExtPoint* UExt;
@@ -81,6 +83,7 @@ public:
     void ChangeDeltaToContinuous();
     void ChangeContinuousToDelta();
     void ChangeSpinOnVertex();
+    void ChangeTauInGammaW();
 
     //Extra updates for Gamma3
     void JumpToGammaG();
@@ -137,6 +140,7 @@ private:
         ADD_TWO_W,
         DELETE_TWO_G,
         DELETE_TWO_W,
+        CHANGE_TAU_IN_GAMMAW,
         END
     };
     std::string _DetailBalanceStr(Operations op);
