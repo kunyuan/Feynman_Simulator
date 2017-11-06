@@ -44,8 +44,8 @@ def GGW(GammaG,W,_map):
     GGW=np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
     for t1 in range(_map.MaxTauBin):
         for t2 in range(_map.MaxTauBin):
-            if t1==t2:
-                print W.Data[spinUP,sub,spinUP,sub,0,abs(t1-t2)]
+            # if t1==t2:
+                # print W.Data[spinUP,sub,spinUP,sub,0,abs(t1-t2)]
             GGW[UP,r, t1,t2]=OrderSign*GammaG[UP,r,t1,t2]*W.Data[spinUP,sub,spinUP,sub,0,abs(t1-t2)]
             GGW[DOWN,r, t1,t2]=OrderSign*GammaG[UP,r,t1,t2]*W.Data[spinDOWNUP,sub,spinUPDOWN,sub,0,abs(t1-t2)]
     return GGW

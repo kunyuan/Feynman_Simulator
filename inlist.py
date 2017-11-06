@@ -3,7 +3,7 @@ MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
     # "__Duplicate" :  0,
-    "__Duplicate" :  2,
+    "__Duplicate" :  12,
     "__IsCluster" : False, 
     "__AutoRun" : True,
     },
@@ -25,8 +25,8 @@ Dyson={
     }
 }
 
-Beta=0.5
-Order=1
+Beta=0.8
+Order=2
 Common={
 "Tau": {"MaxTauBin" : 8, "Beta": Beta},
 "Lattice":  {
