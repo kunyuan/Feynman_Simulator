@@ -59,20 +59,20 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     # GGWGG=calc.AddTwoGToGammaG(GGW, G, G.Map)
     # print "Chi, dyson=\n",  0.5*(np.sum(GGWGG[DOWN, :, :, :]-GGWGG[UP, :, :, :], axis=0)).diagonal()
 
-    # GGW=calc.GGW(GammaG, W, G.Map)
-    # GGWGG=calc.AddTwoGToGammaG(GGW, G, G.Map)
+    GGW=calc.GGW(GammaG, W, G.Map)
+    GGWGG=calc.AddTwoGToGammaG(GGW, G, G.Map)
 
-    # GGammaG = calc.AddG_To_GammaG(GammaG, G, G.Map)
-    # WWGammaW=calc.WWGammaW(GGammaG, W0, W, G.Map)
-    # GammaGFromGammaW=calc.GammaWToGammaG(WWGammaW, G, G.Map)
+    GGammaG = calc.AddG_To_GammaG(GammaG, G, G.Map)
+    WWGammaW=calc.WWGammaW(GGammaG, W0, W, G.Map)
+    GammaGFromGammaW=calc.GammaWToGammaG(WWGammaW, G, G.Map)
 
-    # GammaGFirstOrder=calc.GammaG_FirstOrder(GammaG, G, W0, Map)
-    # SimpleGammaG=calc.SimpleGG(G, Map)
+    GammaGFirstOrder=calc.GammaG_FirstOrder(GammaG, G, W0, Map)
+    SimpleGammaG=calc.SimpleGG(G, Map)
 
-    # GammaG_dyson =SimpleGammaG+GammaGFirstOrder
-    # GammaG_dyson += +GGWGG - GammaGFromGammaW
+    GammaG_dyson =SimpleGammaG+GammaGFirstOrder
+    GammaG_dyson += +GGWGG - GammaGFromGammaW
 
-    # print "Chi, dyson=\n",  0.5*(np.sum(GammaG_dyson[DOWN, :, :, :]-GammaG_dyson[UP, :, :, :], axis=0)).diagonal()
+    print "Chi, dyson=\n",  0.5*(np.sum(GammaG_dyson[DOWN, :, :, :]-GammaG_dyson[UP, :, :, :], axis=0)).diagonal()
 
     #_,ChiTensor,_=calc.W_Dyson(W0, Polar, Polar.Map, Lat) 
     #ChiTensor.FFT("R","T")
@@ -81,26 +81,10 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     print "Chi, polar=\n", np.sum(Chi.Data[0,0,0,0,:,:], axis=0)
 
     print "WWGammaW, type0, diagonal, mc=\n", GammaW[0, 1, 1, :, :].diagonal()
-    # print "WWGammaW, type0, diagonal, dyson=\n", WWGammaW[0, 1, 1, :, :].diagonal()
+    print "WWGammaW, type0, diagonal, dyson=\n", WWGammaW[0, 1, 1, :, :].diagonal()
 
     print "WWGammaW, type4, diagonal, mc=\n", GammaW[4, 1, 1, :, :].diagonal()
-    # print "WWGammaW, type4, diagonal, dyson=\n", WWGammaW[4, 1, 1, :, :].diagonal()
-
-    # GammaG_Reducible=calc.GammaG_FirstOrder(calc.SimpleGG(G0,G.Map), G0, W0, G.Map)
-    # print "Reducible GammaG [UP,UP], diagonal, dyson=\n", -GammaG_Reducible[UP,1,:,:].diagonal()
-    # print "Reducible GammaG [UP,UP], diagonal, dyson=\n", -GammaG_Reducible[DOWN,1,:,:].diagonal()
-
-    # GammaG_Reducible=calc.GammaG_FirstOrder(GammaG_Reducible, G, W0, G.Map)
-    # print "Reducible GGGammaG [UP,UP], diagonal, dyson=\n", -GammaG_Reducible[UP,1,:,:].diagonal()
-    # GammaG_Reducible=calc.GammaG_FirstOrder(GammaG_Reducible, G, W0, G.Map)
-    # print "Reducible GGGammaG [UP,UP], diagonal, dyson=\n", -GammaG_Reducible[UP,1,:,:].diagonal()
-
-    #print "WWGammaW, type0, avg, mc=\n", np.sum(GammaW[0, 1, 1, :, :])/GammaW.shape[3]/GammaW.shape[4]
-
-    # print "WWGammaW, type2, t1=0, mc=\n", GammaW[2, 1, 1, 0, :]
-    # print "WWGammaW, type3, t1=0, mc=\n", GammaW[3, 1, 1, 0, :]
-    # print "WWGammaW, type4, t1=0, mc=\n", GammaW[4, 1, 1, 0, :]
-    # print "WWGammaW, type5, t1=0, mc=\n", GammaW[5, 1, 1, 0, :]
+    print "WWGammaW, type4, diagonal, dyson=\n", WWGammaW[4, 1, 1, :, :].diagonal()
 
     # GammaG_simple = calc.SimpleGG(G, G.Map)
     # GGammaG = calc.AddG_To_GammaG(GammaG_simple, G, G.Map)
@@ -110,8 +94,8 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     # print "WWGammaW, type4, dyson, t1=0,=\n", WWGammaW_dyson[4, 1, 1, 0, :]
 
     # GammaG_dyson = calc.GammaWToGammaG(WWGammaW_dyson, G, G.Map)
-    # print "GammaG, UP, dyson=\n", GammaG_dyson[UP, 1, :, :].diagonal()
     print "GammaG, UP, mc=\n", GammaG[UP, 1, :, :].diagonal()
+    print "GammaG, UP, dyson=\n", GammaG_dyson[UP, 1, :, :].diagonal()
 
     # print "GammaG, last term, DOWN, dyson=\n", -GammaG_dyson[DOWN, 1, :, :].diagonal()
     # print "GammaG, DOWN, mc=\n", GammaG[DOWN, 1, :, :].diagonal()
@@ -238,7 +222,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                 SimpleGammaG=calc.SimpleGG(G, Map)
 
                 GammaG =SimpleGammaG+GammaGFirstOrder
-                # GammaG += +GGWGG - GammaGFromGammaW
+                GammaG += +GGWGG - GammaGFromGammaW
 
                 print "GammaGFirstOrder, mc=\n",  0.5*(np.sum(GammaGFirstOrder[DOWN, :, :, :]-GammaGFirstOrder[UP, :, :, :], axis=0)).diagonal()
                 # print "GGWGG, mc=\n",  0.5*(np.sum(GGWGG[DOWN, :, :, :]-GGWGG[UP, :, :, :], axis=0)).diagonal()
@@ -314,7 +298,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
             IsSuccessed=Factory.DecreaseField(ParaDyson["Annealing"])
             # Factor=2.0 if IsSuccessed else 1.0
             # Factor=2.0
-            Factor = 1.0+ 2.0/(1.0*para["Version"]+1.0)
+            Factor = 1.0 + 3.0/(1.0*para["Version"]+1.0)
             parameter.BroadcastMessage(MessageFile, 
                     {"Version": para["Version"], "Beta": Map.Beta, "SqueezeFactor": Factor})
             log.info("Version {0} is done!".format(para["Version"]))

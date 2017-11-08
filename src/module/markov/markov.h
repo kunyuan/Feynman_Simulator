@@ -36,7 +36,7 @@ class RandomFactory;
 class Momentum;
 
 namespace mc {
-const int NUpdates = 19+8;
+const int NUpdates = 19+10;
 class Markov {
 public:
     long long* Counter;
@@ -84,6 +84,7 @@ public:
     void ChangeContinuousToDelta();
     void ChangeSpinOnVertex();
     void ChangeTauInGammaW();
+    void ChangeRInGammaW();
 
     //Extra updates for Gamma3
     void JumpToGammaG();
@@ -141,6 +142,7 @@ private:
         DELETE_TWO_G,
         DELETE_TWO_W,
         CHANGE_TAU_IN_GAMMAW,
+        CHANGE_R_IN_GAMMAW,
         END
     };
     std::string _DetailBalanceStr(Operations op);

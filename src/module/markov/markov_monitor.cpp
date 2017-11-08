@@ -78,8 +78,8 @@ Dictionary MarkovMonitor::ToDict()
     dict["PhyEstimator"] = PhyEstimator.ToDict();
     dict["SigmaEstimator"] = SigmaEstimator.ToDict();
     dict["PolarEstimator"] = PolarEstimator.ToDict();
-    dict["GammaGEstimator"] = SigmaEstimator.ToDict();
-    dict["GammaWEstimator"] = PolarEstimator.ToDict();
+    dict["GammaGEstimator"] = GammaGEstimator.ToDict();
+    dict["GammaWEstimator"] = GammaWEstimator.ToDict();
     return dict;
 }
 
@@ -202,7 +202,8 @@ void MarkovMonitor::Measure()
                     gLine g = Diag->GMeasure;
                     vertex vin = g->NeighVer(OUT);
                     vertex vout = g->NeighVer(IN);
-                    Weight->Sigma->Measure(vin->R, vout->R, vin->Tau, vout->Tau, g->Spin(OUT), g->Spin(IN), Diag->Order, Diag->Phase * OrderWeight);
+                    Weight->Sigma->Measure(vin->R, vout->R, vin->Tau, vout->Tau, g->Spin(OUT), g->Spin(IN),
+                                           Diag->Order, Diag->Phase * OrderWeight);
                 }
             }
             else {
@@ -233,7 +234,7 @@ void MarkovMonitor::Measure()
                 vertex vout = g->NeighVer(IN);
                 ExtPoint& Ext = Diag->UExt;
                 Weight->GammaG->Measure(vin->R, vout->R, Ext.R, vin->Tau, vout->Tau, Ext.Tau, g->Spin(OUT), g->Spin(IN), Ext.Spin,
-                                       Diag->Phase * OrderWeight);
+                                       Diag->Phase * OrderWeight / Para->GammaGReweight);
             }
         }else if(!Diag->MeasureGLine && Diag->MeasureGammaGW==2) {
             if (Diag->Order != 0) {
@@ -242,7 +243,7 @@ void MarkovMonitor::Measure()
                 vertex vout = w->NeighVer(IN);
                 ExtPoint& Ext = Diag->UExt;
                 Weight->GammaW->Measure(vin->R, vout->R, Ext.R, vin->Tau, vout->Tau, Ext.Tau, vin->Spin(), vout->Spin(), Ext.Spin,
-                                        -1.0* Diag->Phase * OrderWeight);
+                                        -1.0* Diag->Phase * OrderWeight/ Para->GammaWReweight);
             }
         }
     }

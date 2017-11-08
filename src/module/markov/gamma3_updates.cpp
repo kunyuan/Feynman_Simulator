@@ -557,30 +557,57 @@ void Markov::ChangeTauInGammaW()
     if (Diag->MeasureGammaGW!=2)
         return;
 
-    int isIN = RandomPickBool();
+    int isMeasureIN = RandomPickBool();
     vertex ver;
-    if (isIN){
+    if (isMeasureIN){
         ver = Diag->WMeasure->nVer[IN];
     }else{
         ver = Diag->WMeasure->nVer[OUT];
     }
 
     wLine w = ver->NeighW();
-    if (w->IsDelta)
-        return;
 
     real tau = RandomPickTau();
 
-    vertex vW = w->NeighVer(INVERSE(ver->Dir));
-    Complex wWeight;
-    if (vW == ver)
-        wWeight = W->Weight(ver->Dir, ver->R, vW->R, tau, tau, ver->Spin(), vW->Spin(),
-                            w->IsWorm, w->IsMeasure, w->IsDelta, w->IsGammaW, UExt);
-    else
-        wWeight = W->Weight(ver->Dir, ver->R, vW->R, tau, vW->Tau, ver->Spin(), vW->Spin(),
+    vertex vW = w->NeighVer(ver->Dir);
+    gLine gin = vW->NeighG(IN), gout = vW->NeighG(OUT);
+    Complex ginWeight, goutWeight, wWeight, weightRatio;
+    if (w->IsDelta){
+//        return;
+        wWeight = W->Weight(INVERSE(ver->Dir), ver->R, vW->R, tau, tau, ver->Spin(), vW->Spin(),
                             w->IsWorm, w->IsMeasure, w->IsDelta, w->IsGammaW, UExt);
 
-    Complex weightRatio =  wWeight / ( w->Weight);
+        if (gin == gout) {
+            //TODO:change to G(-0)
+            ginWeight = G->Weight(gin->NeighVer(IN)->R, vW->R,
+                                  tau, tau,
+                                  gin->NeighVer(IN)->Spin(OUT), vW->Spin(IN),
+                                  gin->IsMeasure, gin->IsGammaG, UExt);
+        }
+        else {
+            ginWeight = G->Weight(gin->NeighVer(IN)->R, vW->R,
+                                  gin->NeighVer(IN)->Tau, tau,
+                                  gin->NeighVer(IN)->Spin(OUT), vW->Spin(IN),
+                                  gin->IsMeasure, gin->IsGammaG, UExt);
+
+            goutWeight = G->Weight(vW->R, gout->NeighVer(OUT)->R,
+                                   tau, gout->NeighVer(OUT)->Tau,
+                                   vW->Spin(OUT), gout->NeighVer(OUT)->Spin(IN),
+                                   gout->IsMeasure, gout->IsGammaG, UExt);
+        }
+        weightRatio = ginWeight * goutWeight * wWeight / (gin->Weight * gout->Weight * w->Weight);
+
+        if (gin == gout)
+            weightRatio = ginWeight * wWeight / (gin->Weight * w->Weight);
+
+    }else{
+
+        wWeight = W->Weight(INVERSE(ver->Dir), ver->R, vW->R, tau, vW->Tau, ver->Spin(), vW->Spin(),
+                            w->IsWorm, w->IsMeasure, w->IsDelta, w->IsGammaW, UExt);
+
+        weightRatio =  wWeight / ( w->Weight);
+
+    }
 
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
@@ -596,6 +623,62 @@ void Markov::ChangeTauInGammaW()
         Diag->Weight *= weightRatio;
 
         ver->Tau = tau;
+        w->Weight = wWeight;
+
+        if (w->IsDelta){
+            vW->Tau = tau;
+            gin->Weight = ginWeight;
+            if (gout != gin)
+                gout->Weight = goutWeight;
+        }
+    }
+}
+
+/**
+ *  change R in a vertex
+ */
+void Markov::ChangeRInGammaW()
+{
+    if (Diag->Order == 0 || Worm->Exist ||  Diag->MeasureGLine || Diag->HasGammaGW == 0)
+        return;
+    if (Diag->MeasureGammaGW!=2)
+        return;
+
+    int isMeasureIN = RandomPickBool();
+    vertex ver;
+    if (isMeasureIN){
+        ver = Diag->WMeasure->nVer[IN];
+    }else{
+        ver = Diag->WMeasure->nVer[OUT];
+    }
+
+    wLine w = ver->NeighW();
+    if (w->IsDelta)
+        return;
+
+    Site R = RandomPickSite();
+
+    vertex vW = w->NeighVer(ver->Dir);
+    Complex wWeight;
+    wWeight = W->Weight(INVERSE(ver->Dir), R, vW->R, ver->Tau, vW->Tau, ver->Spin(), vW->Spin(),
+                        w->IsWorm, w->IsMeasure, w->IsDelta, w->IsGammaW, UExt);
+
+    Complex weightRatio =  wWeight / ( w->Weight);
+
+    real prob = mod(weightRatio);
+    Complex sgn = phase(weightRatio);
+
+    prob *= ProbSite(ver->R) / ProbSite(R);
+
+    Proposed[CHANGE_R_IN_GAMMAW][Diag->Order] += 1.0;
+
+    if (prob >= 1.0 || RNG->urn() < prob) {
+        Accepted[CHANGE_R_IN_GAMMAW][Diag->Order] += 1.0;
+
+        Diag->Phase *= sgn;
+        Diag->Weight *= weightRatio;
+
+        ver->R = R;
         w->Weight = wWeight;
     }
 }
