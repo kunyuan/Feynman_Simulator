@@ -331,8 +331,8 @@ void Markov::Hop(int sweep)
             }
         }else if(x < SumofProbofCall[CHANGE_R_IN_GAMMAW]){
             if( Diag->MeasureGammaGW==2) {
-//                ChangeRInGammaW();
-                ;
+                ChangeRInGammaW();
+//                ;
             }
         }
 
@@ -1686,6 +1686,35 @@ Site Markov::RandomPickSite()
     for (int i = 0; i < D; i++)
         coord[i] = RNG->irn(0, Lat->Size[i] - 1);
     return (Site(RNG->irn(0, Lat->SublatVol - 1), coord));
+}
+
+Site Markov::RandomPickNeighborSite(const Site &site)
+{
+    Vec<int> coord;
+    for (int i = 0; i < D; i++){
+        int dr = RNG->irn(0, 2)-1;
+        coord[i] = site.Coordinate[i] + dr;
+        if (coord[i]<0)
+            coord[i] += Lat->Size[i];
+        else if(coord[i]>= Lat->Size[i])
+            coord[i] -= Lat->Size[i];
+    }
+    return (Site(RNG->irn(0, Lat->SublatVol - 1), coord));
+}
+
+bool Markov::isNeighbor(const Site &site1, const Site &site2)
+{
+    for (int i = 0; i < D; i++){
+        int dr = abs(site1.Coordinate[i] - site2.Coordinate[i]);
+        if (dr!=0 && dr!=1 && dr!= Lat->Size[i]-1)
+            return false;
+    }
+    return true;
+}
+
+real Markov::ProbNeighborSite(const Site &site)
+{
+    return 1.0 / (Lat->SublatVol * pow(3.0, D));
 }
 
 real Markov::ProbSite(const Site &site)

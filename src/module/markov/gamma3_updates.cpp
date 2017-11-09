@@ -394,8 +394,8 @@ void Markov::AddTwoW() {
     if(spin_D[IN]+vB->Spin(IN) != spin_D[OUT]+vB->Spin(OUT))
         return;
 
-    Site r_C = RandomPickSite();
-    Site r_D = RandomPickSite();
+    Site r_C = RandomPickNeighborSite(vA->R);
+    Site r_D = RandomPickNeighborSite(vB->R);
 
     bool IsDelta_C = RandomPickBool();
     bool IsDelta_D = RandomPickBool();
@@ -438,7 +438,7 @@ void Markov::AddTwoW() {
     Complex sgn = phase(weightRatio);
 
     prob *= (*GammaWReweight)* ProbofCall[DELETE_TWO_W]
-            / (ProbofCall[ADD_TWO_W] *0.5 * 0.5 *0.5 *0.5 * ProbSite(r_C) * ProbSite(r_D));
+            / (ProbofCall[ADD_TWO_W] *0.5 * 0.5 *0.5 *0.5 * ProbNeighborSite(r_C) * ProbNeighborSite(r_D));
 
     //TODO: only delta/continuous W
     //prob *= (ProbofCall[DELETE_TWO_W])
@@ -507,6 +507,12 @@ void Markov::DeleteTwoW() {
     vertex vA = WAC->NeighVer(IN);
     vertex vB = WDB->NeighVer(OUT);
 
+    if (!isNeighbor(vA->R, vC->R))
+        return;
+
+    if (!isNeighbor(vD->R, vB->R))
+        return;
+
     Complex measureWWeight = W->Weight(vA->R, vB->R, vA->Tau, vB->Tau, vA->Spin(), vB->Spin(), false, true, false, false, UExt);
 
     Complex weightRatio = measureWWeight/(measureW->Weight * WAC->Weight * WDB->Weight);
@@ -514,7 +520,7 @@ void Markov::DeleteTwoW() {
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    prob *= (ProbofCall[ADD_TWO_W] * 0.5 *0.5 *0.5 *0.5 * ProbSite(vC->R) *ProbSite(vD->R))
+    prob *= (ProbofCall[ADD_TWO_W] * 0.5 *0.5 *0.5 *0.5 * ProbNeighborSite(vC->R) *ProbNeighborSite(vD->R))
             /((*GammaWReweight) * ProbofCall[DELETE_TWO_W]);
 
     //TODO only Delta/Continuous W
@@ -656,7 +662,7 @@ void Markov::ChangeRInGammaW()
     if (w->IsDelta)
         return;
 
-    Site R = RandomPickSite();
+    Site R = RandomPickNeighborSite(ver->R);
 
     vertex vW = w->NeighVer(ver->Dir);
     Complex wWeight;
@@ -668,7 +674,7 @@ void Markov::ChangeRInGammaW()
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    prob *= ProbSite(ver->R) / ProbSite(R);
+    prob *= ProbSite(ver->R) / ProbNeighborSite(R);
 
     Proposed[CHANGE_R_IN_GAMMAW][Diag->Order] += 1.0;
 

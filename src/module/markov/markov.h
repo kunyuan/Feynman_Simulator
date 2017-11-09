@@ -110,7 +110,10 @@ private:
     real RandomPickTau();
     real ProbTau(real);
     Site RandomPickSite();
+    Site RandomPickNeighborSite(const Site&);
     real ProbSite(const Site&);
+    real ProbNeighborSite(const Site&);
+    bool isNeighbor(const Site&, const Site&);
     bool RandomPickBool();
     enum Operations {
         CREATE_WORM = 0,
