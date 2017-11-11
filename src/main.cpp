@@ -104,6 +104,7 @@ void MonteCarlo(const para::Job& Job)
                     ABORT("Diagram Check didn't pass!!!");
                 }
                 Markov.PrintDetailBalanceInfo();
+                MarkovMonitor.PrintOrderReWeight();
             }
 
             if (DiskWriterTimer.check(Para.DiskWriterTimer)) {

@@ -59,6 +59,12 @@ void Markov::JumpToGammaG() {
     prob *= ProbofCall[JUMP_FROM_GAMMAG_TO_G] * 2.0* Diag->Order /
             (ProbofCall[JUMP_TO_GAMMAG] * ProbTau(tau_u));
 
+    if(Diag->MeasureGLine)
+        prob *= (*NkGammaGReweight);
+    else
+        prob *= (*NkGammaWReweight);
+
+
     Proposed[JUMP_TO_GAMMAG][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
         Accepted[JUMP_TO_GAMMAG][Diag->Order] += 1.0;
@@ -112,6 +118,12 @@ void Markov::JumpFromGammaGToG()  {
     prob *= (ProbofCall[JUMP_TO_GAMMAG] * ProbTau(v_u->Tau))
                 / (ProbofCall[JUMP_FROM_GAMMAG_TO_G] * 2.0 * Diag->Order);
 
+    if(Diag->MeasureGLine)
+        prob /= (*NkGammaGReweight);
+    else
+        prob /= (*NkGammaWReweight);
+
+
     Proposed[JUMP_FROM_GAMMAG_TO_G][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
         Accepted[JUMP_FROM_GAMMAG_TO_G][Diag->Order] += 1.0;
@@ -159,6 +171,11 @@ void Markov::JumpToGammaW() {
     prob *= ProbofCall[JUMP_FROM_GAMMAW_TO_W] * Diag->Order /
             (ProbofCall[JUMP_TO_GAMMAW] * ProbTau(tau_u) * ProbSite(r_u));
 
+    if(Diag->MeasureGLine)
+        prob *= (*NkGammaGReweight);
+    else
+        prob *= (*NkGammaWReweight);
+
     Proposed[JUMP_TO_GAMMAW][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
         Accepted[JUMP_TO_GAMMAW][Diag->Order] += 1.0;
@@ -202,6 +219,11 @@ void Markov::JumpFromGammaWToW() {
 
     prob *= (ProbofCall[JUMP_TO_GAMMAW] * ProbTau(v_u->Tau) * ProbSite(v_u->R))
             / (ProbofCall[JUMP_FROM_GAMMAW_TO_W] * Diag->Order);
+
+    if(Diag->MeasureGLine)
+        prob /= (*NkGammaGReweight);
+    else
+        prob /= (*NkGammaWReweight);
 
     Proposed[JUMP_FROM_GAMMAW_TO_W][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {

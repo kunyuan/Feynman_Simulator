@@ -52,8 +52,8 @@ public:
     real PolarReweight;
     real GammaGReweight;
     real GammaWReweight;
-//    real MeasureGammaGReweight;
-//    real MeasureGammaWReweight;
+    real NkGammaGReweight;
+    real NkGammaWReweight;
     std::vector<real> OrderReWeight;
     std::vector<real> OrderTimeRatio;
 

@@ -48,6 +48,8 @@ public:
     real* PolarReweight;
     real* GammaGReweight;
     real* GammaWReweight;
+    real* NkGammaGReweight;
+    real* NkGammaWReweight;
     diag::Diagram* Diag;
     diag::WormClass* Worm;
     weight::ExtPoint* UExt;

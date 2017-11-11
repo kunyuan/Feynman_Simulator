@@ -97,6 +97,8 @@ void Markov::Reset(ParaMC &para, Diagram &diag, weight::Weight &weight)
     OrderReWeight = para.OrderReWeight.data();
     WormSpaceReweight = &para.WormSpaceReweight;
     PolarReweight = &para.PolarReweight;
+    NkGammaGReweight = &para.GammaGReweight;
+    NkGammaWReweight = &para.GammaWReweight;
     GammaGReweight = &para.GammaGReweight;
     GammaWReweight = &para.GammaWReweight;
     Diag = &diag;

@@ -30,6 +30,7 @@ class MarkovMonitor {
     EstimatorBundle<real> WormEstimator;
     EstimatorBundle<real> PhyEstimator;
     Estimator<real> SigmaEstimator, PolarEstimator, GammaGEstimator, GammaWEstimator;
+    Estimator<real> NkGammaGEstimator, NkGammaWEstimator;
 
     bool BuildNew(para::ParaMC &, diag::Diagram &, weight::Weight &);
     bool FromDict(const Dictionary &, para::ParaMC &, diag::Diagram &, weight::Weight &);
@@ -38,6 +39,7 @@ class MarkovMonitor {
     void Reset(para::ParaMC &, diag::Diagram &, weight::Weight &);
     void SqueezeStatistics(real factor);
     bool AdjustOrderReWeight();
+    void PrintOrderReWeight();
     void Measure();
     void AddStatistics();
 };

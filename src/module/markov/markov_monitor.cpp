@@ -39,6 +39,8 @@ bool MarkovMonitor::BuildNew(ParaMC &para, Diagram &diag, weight::Weight &weight
     PolarEstimator.ClearStatistics();
     GammaGEstimator.ClearStatistics();
     GammaWEstimator.ClearStatistics();
+    NkGammaGEstimator.ClearStatistics();
+    NkGammaWEstimator.ClearStatistics();
     return true;
 }
 
@@ -69,6 +71,8 @@ bool MarkovMonitor::FromDict(const Dictionary &dict, ParaMC &para, Diagram &diag
     flag &= PolarEstimator.FromDict(dict.Get<Dictionary>("PolarEstimator"));
     flag &= GammaGEstimator.FromDict(dict.Get<Dictionary>("GammaGEstimator"));
     flag &= GammaWEstimator.FromDict(dict.Get<Dictionary>("GammaWEstimator"));
+    flag &= NkGammaGEstimator.FromDict(dict.Get<Dictionary>("NkGammaGEstimator"));
+    flag &= NkGammaWEstimator.FromDict(dict.Get<Dictionary>("NkGammaWEstimator"));
     return flag;
 }
 Dictionary MarkovMonitor::ToDict()
@@ -80,6 +84,8 @@ Dictionary MarkovMonitor::ToDict()
     dict["PolarEstimator"] = PolarEstimator.ToDict();
     dict["GammaGEstimator"] = GammaGEstimator.ToDict();
     dict["GammaWEstimator"] = GammaWEstimator.ToDict();
+    dict["NkGammaGEstimator"] = NkGammaGEstimator.ToDict();
+    dict["NkGammaWEstimator"] = NkGammaWEstimator.ToDict();
     return dict;
 }
 
@@ -95,7 +101,51 @@ void MarkovMonitor::SqueezeStatistics(real factor)
     PolarEstimator.SqueezeStatistics(factor);
     GammaGEstimator.SqueezeStatistics(factor);
     GammaWEstimator.SqueezeStatistics(factor);
+    NkGammaGEstimator.SqueezeStatistics(factor);
+    NkGammaWEstimator.SqueezeStatistics(factor);
 }
+
+void MarkovMonitor::PrintOrderReWeight()
+{
+    real weight[Para->Order + 1];
+    real wormweight = 0.0, phyweight = 0.0;
+    weight[0] = WormEstimator[0].Value() + PhyEstimator[0].Value();
+
+    LOG_INFO("Number of confs in different Order:");
+    stringstream output;
+    for (int i = 1; i <= Para->Order; i++) {
+        weight[i] = WormEstimator[i].Value() + PhyEstimator[i].Value();
+        wormweight += WormEstimator[i].Value();
+        phyweight += PhyEstimator[i].Value();
+        if (Zero(weight[i]))
+            continue;
+        output << "Order0 :" << weight[0] << " Order" << i << " :" << weight[i] << endl;
+    }
+
+    Para->WormSpaceReweight = phyweight / wormweight;
+    output << "Worm confs:" << wormweight << " Physics confs: " << phyweight <<  endl;
+    LOG_INFO(output.str());
+
+    LOG_INFO("Number of confs in different Measuring sections:");
+    stringstream output2;
+    real sigmaweight = SigmaEstimator.Value();
+    real polarweight = PolarEstimator.Value();
+    output2 << "Sigma :" << sigmaweight << " Polar :" << polarweight << endl;
+
+    real naked_gammagweight = NkGammaGEstimator.Value();
+    output2 << "Sigma :" << sigmaweight << " Naked GammaG :" << naked_gammagweight << endl;
+
+    real naked_gammawweight = NkGammaWEstimator.Value();
+    output2 << "Polar :" << polarweight << " Naked GammaW :" << naked_gammawweight << endl;
+
+    real gammagweight = GammaGEstimator.Value();
+    output2 << "Naked GammaG :" << naked_gammagweight << " GammaG :" << gammagweight << endl;
+
+    real gammawweight = GammaWEstimator.Value();
+    output2 << "Naked GammaW :" << naked_gammawweight << " GammaW :" << gammawweight << endl;
+    LOG_INFO(output2.str());
+}
+
 
 bool MarkovMonitor::AdjustOrderReWeight()
 {
@@ -109,9 +159,15 @@ bool MarkovMonitor::AdjustOrderReWeight()
         return false;
     if (GammaWEstimator.Norm() < 1000.0)
         return false;
+    if (NkGammaGEstimator.Norm() < 1000.0)
+        return false;
+    if (NkGammaWEstimator.Norm() < 1000.0)
+        return false;
     if (Zero(PolarEstimator.Value()) || Zero(SigmaEstimator.Value()))
         return false;
     if (Zero(GammaGEstimator.Value()) || Zero(GammaWEstimator.Value()))
+        return false;
+    if (Zero(NkGammaGEstimator.Value()) || Zero(NkGammaWEstimator.Value()))
         return false;
 
     real weight[Para->Order + 1];
@@ -145,13 +201,22 @@ bool MarkovMonitor::AdjustOrderReWeight()
     Para->PolarReweight = sigmaweight /polarweight;
     output2 << "Sigma :" << sigmaweight << " Polar :" << polarweight << " => " << Para->PolarReweight << endl;
 
+    real naked_gammagweight = NkGammaGEstimator.Value();
+    Para->NkGammaGReweight = sigmaweight/ naked_gammagweight;
+    output2 << "Sigma :" << sigmaweight << " Naked GammaG :" << naked_gammagweight << " => " << Para->NkGammaGReweight << endl;
+
+    real naked_gammawweight = NkGammaWEstimator.Value();
+    Para->NkGammaWReweight = polarweight/ naked_gammawweight;
+    output2 << "Polar :" << polarweight << " Naked GammaW :" << naked_gammawweight << " => " << Para->NkGammaWReweight << endl;
+
     real gammagweight = GammaGEstimator.Value();
-    Para->GammaGReweight = sigmaweight/ gammagweight;
-    output2 << "Sigma :" << sigmaweight << " GammaG :" << gammagweight << " => " << Para->GammaGReweight << endl;
+    Para->GammaGReweight = naked_gammagweight/ gammagweight;
+    output2 << "Naked GammaG :" << naked_gammagweight << " GammaG :" << gammagweight << " => " << Para->GammaGReweight << endl;
 
     real gammawweight = GammaWEstimator.Value();
-    Para->GammaWReweight = polarweight/ gammawweight;
-    output2 << "Polar :" << polarweight << " GammaW :" << gammawweight << " => " << Para->GammaWReweight << endl;
+    Para->GammaWReweight = naked_gammawweight/ gammawweight;
+    output2 << "Naked GammaW :" << naked_gammawweight << " GammaW :" << gammawweight << " => " << Para->GammaWReweight << endl;
+
     LOG_INFO(output2.str());
 
     return true;
@@ -186,10 +251,18 @@ void MarkovMonitor::Measure()
         }
 
         if (Diag->MeasureGammaGW==0){
-            if(Diag->MeasureGLine)
-                SigmaEstimator.Measure(OrderWeight);
-            else
-                PolarEstimator.Measure(OrderWeight);
+            if(Diag->MeasureGLine){
+                if(Diag->HasGammaGW==0)
+                    SigmaEstimator.Measure(OrderWeight);
+                else
+                    NkGammaGEstimator.Measure(OrderWeight);
+            }
+            else{
+                if(Diag->HasGammaGW==0)
+                    PolarEstimator.Measure(OrderWeight);
+                else
+                    NkGammaWEstimator.Measure(OrderWeight);
+            }
         }else if(Diag->MeasureGammaGW==1){
             GammaGEstimator.Measure(OrderWeight);
         }else if(Diag->MeasureGammaGW==2){
@@ -215,18 +288,6 @@ void MarkovMonitor::Measure()
                                            Diag->Order, -1.0* Diag->Phase * OrderWeight);
                 }
             }
-//            if (Diag->MeasureGLine && Diag->Order != 0) {
-//                gLine g = Diag->GMeasure;
-//                vertex vin = g->NeighVer(OUT);
-//                vertex vout = g->NeighVer(IN);
-//                ExtPoint& Ext = Diag->UExt;
-//
-//                Weight->GammaG->Measure(vin->R, vout->R, vin->R, vin->Tau, vout->Tau, 0, g->Spin(OUT), g->Spin(IN), UP,
-//                                        Diag->Phase * OrderWeight);
-//
-////                Weight->GammaG->Measure(vin->R, vout->R, vin->R, vin->Tau, vout->Tau, 0, g->Spin(OUT), g->Spin(IN), UP,
-////                                        Diag->Phase * OrderWeight);
-//            }
         }else if(Diag->MeasureGLine && Diag->MeasureGammaGW==1) {
             if (Diag->Order != 0) {
                 gLine g = Diag->GMeasure;
@@ -234,16 +295,17 @@ void MarkovMonitor::Measure()
                 vertex vout = g->NeighVer(IN);
                 ExtPoint& Ext = Diag->UExt;
                 Weight->GammaG->Measure(vin->R, vout->R, Ext.R, vin->Tau, vout->Tau, Ext.Tau, g->Spin(OUT), g->Spin(IN), Ext.Spin,
-                                       Diag->Phase * OrderWeight / Para->GammaGReweight);
+                                       Diag->Phase * OrderWeight /Para->NkGammaGReweight /Para->GammaGReweight);
             }
         }else if(!Diag->MeasureGLine && Diag->MeasureGammaGW==2) {
+//        }else if(!Diag->MeasureGLine && Diag->MeasureGammaGW==0 && Diag->HasGammaGW!=0) {
             if (Diag->Order != 0) {
                 wLine w = Diag->WMeasure;
                 vertex vin = w->NeighVer(OUT);
                 vertex vout = w->NeighVer(IN);
                 ExtPoint& Ext = Diag->UExt;
                 Weight->GammaW->Measure(vin->R, vout->R, Ext.R, vin->Tau, vout->Tau, Ext.Tau, vin->Spin(), vout->Spin(), Ext.Spin,
-                                        -1.0* Diag->Phase * OrderWeight/ Para->GammaWReweight);
+                                        -1.0* Diag->Phase * OrderWeight/Para->NkGammaWReweight/ Para->GammaWReweight);
             }
         }
     }
