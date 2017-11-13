@@ -231,7 +231,6 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                 print "SimpleGammaG, dyson=\n",  0.5*(np.sum(SimpleGammaG[DOWN, :, :, :]-SimpleGammaG[UP, :, :, :], axis=0)).diagonal()
                 print "GammaG, dyson=\n",  0.5*(np.sum(GammaG[DOWN, :, :, :]-GammaG[UP, :, :, :], axis=0)).diagonal()
                 print "WWGammaW, type0, diagonal, dyson=\n", WWGammaW[0, 1, 1, 0, :]
-                print "WWGammaW, type0, diagonal, dyson=\n", WWGammaW[5, 1, 1, 0, :]
 
             else:
                 log.info("Collecting Sigma/Polar statistics...")

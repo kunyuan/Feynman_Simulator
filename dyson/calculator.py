@@ -104,7 +104,7 @@ def AddG_To_GammaG(GammaG, G, _map):
     spinUP=_map.Spin2Index(UP,UP)
     spinDOWN=_map.Spin2Index(DOWN,DOWN)
     sub=0
-    GGammaG = np.zeros([4, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
+    GGammaG = np.zeros([6, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
     for r in range(_map.Vol):
         for tout in range(_map.MaxTauBin):
             for tin in range(_map.MaxTauBin):
@@ -122,14 +122,44 @@ def AddG_To_GammaG(GammaG, G, _map):
                     sign*=-1
                 Gout += 0.5*sign*G.Data[:,sub,:,sub,0,tgout]
 
-                ## UPUPUP
+                ## UP UP UP UP
                 GGammaG[0, r, r, tout, tin] = Gout[UP,UP]*GammaG[UP,r,tout,tin]
-                ## UPDOWNUP
-                GGammaG[1, r, r, tout, tin] = Gout[DOWN,DOWN]*GammaG[UP,r,tout,tin]
-                ## DOWNUPDOWN
-                GGammaG[2, r, r, tout, tin] = Gout[UP,UP]*GammaG[DOWN,r,tout,tin]
-                ## DOWNDOWNDOWN
-                GGammaG[3, r, r, tout, tin] = Gout[DOWN,DOWN]*GammaG[DOWN,r,tout,tin]
+
+                ## DOWN DOWN DOWN DOWN
+                GGammaG[1, r, r, tout, tin] = Gout[DOWN,DOWN]*GammaG[DOWN,r,tout,tin]
+
+                ## in:UP DOWN out:DOWN UP
+                GGammaG[5, r, r, tout, tin] = Gout[UP, UP]*GammaG[DOWN,r,tout,tin]
+
+                ## in:DOWN UP out:UP DOWN 
+                GGammaG[4, r, r, tout, tin] = Gout[DOWN,DOWN]*GammaG[UP,r,tout,tin]
+
+                ### reverse
+                tgout = tout - tin -1
+                sign=1
+                if tgout<0:
+                    tgout+=_map.MaxTauBin
+                    sign*=-1
+                Gout = 0.5*sign*G.Data[:,sub,:,sub,0,tgout]
+
+                tgout = tout - tin
+                sign=1
+                if tgout<0:
+                    tgout+=_map.MaxTauBin
+                    sign*=-1
+                Gout += 0.5*sign*G.Data[:,sub,:,sub,0,tgout]
+
+                ## UP UP UP UP
+                GGammaG[0, r, r, tout, tin] += Gout[UP,UP]*GammaG[UP,r,tin,tout]
+
+                ## DOWN DOWN DOWN DOWN
+                GGammaG[1, r, r, tout, tin] += Gout[DOWN,DOWN]*GammaG[DOWN,r,tin,tout]
+
+                ## in:UP DOWN out:DOWN UP
+                GGammaG[5, r, r, tout, tin] += Gout[DOWN, DOWN]*GammaG[UP,r,tin,tout]
+
+                ## in:DOWN UP out:UP DOWN 
+                GGammaG[4, r, r, tout, tin] += Gout[UP,UP]*GammaG[DOWN,r,tin,tout]
     return FermiLoopSign*GGammaG
 
 def WWGammaW(GGammaG, W0, W, _map):
@@ -173,19 +203,19 @@ def WWGammaW(GGammaG, W0, W, _map):
                             WGammaW[0, r, rin, t, tin]  += Wout[UPUP, UPUP] * GGammaG[0, rout, rin, tout, tin]
 
                             # DOWNDOWN DOWNDOWN
-                            WGammaW[1, r, rin, t, tin]  += Wout[DOWNDOWN, DOWNDOWN] * GGammaG[3, rout, rin, tout, tin]
+                            WGammaW[1, r, rin, t, tin]  += Wout[DOWNDOWN, DOWNDOWN] * GGammaG[1, rout, rin, tout, tin]
 
-                            #UPUP DOWNDOWN 
-                            WGammaW[2, r, rin, t, tin]  += Wout[UPUP, DOWNDOWN] * GGammaG[3, rout, rin, tout, tin]
+                            # out:UPUP in:DOWNDOWN 
+                            WGammaW[2, r, rin, t, tin]  += Wout[UPUP, DOWNDOWN] * GGammaG[1, rout, rin, tout, tin]
 
-                            #DOWNDOWN UPUP
+                            # out:DOWNDOWN in:UPUP
                             WGammaW[3, r, rin, t, tin]  += Wout[DOWNDOWN, UPUP] * GGammaG[0, rout, rin, tout, tin]
 
-                            # UPDOWN DOWNUP
-                            WGammaW[4, r, rin, t, tin]  += Wout[UPDOWN, DOWNUP] * GGammaG[1, rout, rin, tout, tin]
+                            # out:UPDOWN in:DOWNUP
+                            WGammaW[4, r, rin, t, tin]  += Wout[UPDOWN, DOWNUP] * GGammaG[5, rout, rin, tout, tin]
 
-                            # DOWNUP UPDOWN
-                            WGammaW[5, r, rin, t, tin]  += Wout[DOWNUP, UPDOWN] * GGammaG[2, rout, rin, tout, tin]
+                            # out:DOWNUP in:UPDOWN
+                            WGammaW[5, r, rin, t, tin]  += Wout[DOWNUP, UPDOWN] * GGammaG[4, rout, rin, tout, tin]
 
     print "calculating WWGammaW..."
     WWGammaW = np.zeros([6, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin]) + 0.0*1j
@@ -215,37 +245,27 @@ def WWGammaW(GGammaG, W0, W, _map):
                     rout = r
                     for tout in range(_map.MaxTauBin):
 
-                        ## UPUP UPUP
+                        ## out:UPUP in:UPUP
                         WWGammaW[0, rout, r, tout, t] += Win[UPUP, UPUP] * WGammaW[0, rout, rin, tout, tin]
                         WWGammaW[0, rout, r, tout, t] += Win[UPUP, DOWNDOWN] * WGammaW[2, rout, rin, tout, tin]
-                        WWGammaW[0, r, rout, t, tout] += Win[UPUP, UPUP] * WGammaW[0, rout, rin, tout, tin]
-                        WWGammaW[0, r, rout, t, tout] += Win[UPUP, DOWNDOWN] * WGammaW[2, rout, rin, tout, tin]
 
-                        ## DOWNDOWN DOWNDOWN
+                        ## out:DOWNDOWN in:DOWNDOWN
                         WWGammaW[1, rout, r, tout, t] += Win[DOWNDOWN, UPUP] * WGammaW[3, rout, rin, tout, tin]
                         WWGammaW[1, rout, r, tout, t] += Win[DOWNDOWN, DOWNDOWN] * WGammaW[1, rout, rin, tout, tin]
-                        WWGammaW[1, r, rout, t, tout] += Win[DOWNDOWN, UPUP] * WGammaW[3, rout, rin, tout, tin]
-                        WWGammaW[1, r, rout, t, tout] += Win[DOWNDOWN, DOWNDOWN] * WGammaW[1, rout, rin, tout, tin]
 
-                        ## UPUP DOWNDOWN
+                        ## out:UPUP in:DOWNDOWN
                         WWGammaW[2, rout, r, tout, t] += Win[DOWNDOWN, UPUP] * WGammaW[0, rout, rin, tout, tin]
                         WWGammaW[2, rout, r, tout, t] += Win[DOWNDOWN, DOWNDOWN] * WGammaW[2, rout, rin, tout, tin]
-                        WWGammaW[2, r, rout, t, tout] += Win[UPUP, UPUP] * WGammaW[3, rout, rin, tout, tin]
-                        WWGammaW[2, r, rout, t, tout] += Win[UPUP, DOWNDOWN] * WGammaW[1, rout, rin, tout, tin]
 
-                        ## DOWNDOWN UPUP
+                        ## out:DOWNDOWN in:UPUP
                         WWGammaW[3, rout, r, tout, t] += Win[UPUP, UPUP] * WGammaW[3, rout, rin, tout, tin]
                         WWGammaW[3, rout, r, tout, t] += Win[UPUP, DOWNDOWN] * WGammaW[1, rout, rin, tout, tin]
-                        WWGammaW[3, r, rout, t, tout] += Win[DOWNDOWN, UPUP] * WGammaW[0, rout, rin, tout, tin]
-                        WWGammaW[3, r, rout, t, tout] += Win[DOWNDOWN, DOWNDOWN] * WGammaW[2, rout, rin, tout, tin]
 
-                        ## UPDOWN DOWNUP
-                        WWGammaW[4, rout, r, tout, t] += Win[UPDOWN, DOWNUP] * WGammaW[5, rout, rin, tout, tin]
-                        WWGammaW[4, r, rout, t, tout] += Win[DOWNUP, UPDOWN] * WGammaW[4, rout, rin, tout, tin]
+                        ## out:UPDOWN in:DOWNUP
+                        WWGammaW[4, rout, r, tout, t] += Win[UPDOWN, DOWNUP] * WGammaW[4, rout, rin, tout, tin]
 
-                        ## DOWNUP UPDOWN
-                        WWGammaW[5, rout, r, tout, t] += Win[DOWNUP, UPDOWN] * WGammaW[4, rout, rin, tout, tin]
-                        WWGammaW[5, r, rout, t, tout] += Win[UPDOWN, DOWNUP] * WGammaW[5, rout, rin, tout, tin]
+                        ## out:DOWNUP in:UPDOWN
+                        WWGammaW[5, rout, r, tout, t] += Win[DOWNUP, UPDOWN] * WGammaW[5, rout, rin, tout, tin]
     return -1.0*WWGammaW
 
 def GammaWToGammaG(GammaW, G, _map):
