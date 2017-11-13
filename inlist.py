@@ -68,7 +68,7 @@ MonteCarlo["Markov"]={
     "PolarReweight" : 2.0,
     "NkGammaGReweight" : 1.0,
     "NkGammaWReweight" : 1.0,
-    "GammaGReweight" : 2.0,
+    "GammaGReweight" : 1.0,
     "GammaWReweight" : 1.0,
     "OrderTimeRatio" : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
     #"Timer": {
@@ -81,7 +81,7 @@ MonteCarlo["Markov"]={
         "PrinterTimer": 30,
         "DiskWriterTimer": 30,
         "MessageTimer": 30,
-        "ReweightTimer":300
+        "ReweightTimer":300000
         },
     }
 
