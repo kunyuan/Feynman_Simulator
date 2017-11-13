@@ -299,15 +299,15 @@ void MarkovMonitor::Measure()
                 Weight->GammaG->Measure(vin->R, vout->R, Ext.R, vin->Tau, vout->Tau, Ext.Tau, g->Spin(OUT), g->Spin(IN), Ext.Spin,
                                        Diag->Phase * OrderWeight /Para->NkGammaGReweight /Para->GammaGReweight);
             }
-        }else if(!Diag->MeasureGLine && Diag->MeasureGammaGW==2) {
-//        }else if(!Diag->MeasureGLine && Diag->MeasureGammaGW==0 && Diag->HasGammaGW!=0) {
+        //}else if(!Diag->MeasureGLine && Diag->MeasureGammaGW==2) {
+        }else if(!Diag->MeasureGLine && Diag->MeasureGammaGW==0 && Diag->HasGammaGW!=0) {
             if (Diag->Order != 0) {
                 wLine w = Diag->WMeasure;
-                vertex vin = w->NeighVer(OUT);
-                vertex vout = w->NeighVer(IN);
+                vertex vin = w->NeighVer(IN);
+                vertex vout = w->NeighVer(OUT);
                 ExtPoint& Ext = Diag->UExt;
                 Weight->GammaW->Measure(vin->R, vout->R, Ext.R, vin->Tau, vout->Tau, Ext.Tau, vin->Spin(), vout->Spin(), Ext.Spin,
-                                        -1.0* Diag->Phase * OrderWeight/Para->NkGammaWReweight/ Para->GammaWReweight);
+                                        Diag->Phase * OrderWeight/Para->NkGammaWReweight/ Para->GammaWReweight);
             }
         }
 

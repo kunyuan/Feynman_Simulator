@@ -2,8 +2,8 @@
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" :  0,
-    # "__Duplicate" :  15,
+    # "__Duplicate" :  0,
+    "__Duplicate" :  15,
     "__IsCluster" : False, 
     "__AutoRun" : True,
     },
@@ -66,6 +66,8 @@ MonteCarlo["Markov"]={
     "OrderReWeight" : [0.1, 0.5, 1.0, 0.1, 0.05, 0.05, 0.01, 0.005],
     "WormSpaceReweight" : 0.05,
     "PolarReweight" : 2.0,
+    "NkGammaGReweight" : 1.0,
+    "NkGammaWReweight" : 1.0,
     "GammaGReweight" : 2.0,
     "GammaWReweight" : 1.0,
     "OrderTimeRatio" : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],

@@ -66,6 +66,17 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     # WWGammaW=calc.WWGammaW(GGammaG, W0, W, G.Map)
     # GammaGFromGammaW=calc.GammaWToGammaG(WWGammaW, G, G.Map)
 
+    WWGammaW=calc.WWGammaW(GammaW, W0, W, G.Map)
+    print "GammaW, type0, diagonal, mc=\n", GammaW[0, 0, 0, :, :].diagonal()
+    print "WWGammaW, type0, diagonal, dyson=\n", WWGammaW[0, 1, 1, :, :].diagonal()
+    print "WWGammaW, type0, tau1=0, dyson=\n", WWGammaW[0, 1, 1, 0, :]
+
+    print "GammaW, type4, diagonal, mc=\n", GammaW[4, 0, 0, :, :].diagonal()
+    print "WWGammaW, type4, diagonal, dyson=\n", WWGammaW[4, 1, 1, :, :].diagonal()
+    print "WWGammaW, type4, tau1=0, dyson=\n", WWGammaW[4, 1, 1, 0, :]
+
+    print "WWGammaW, type5, tau1=0, dyson=\n", WWGammaW[5, 1, 1, 0, :]
+
     # GammaGFirstOrder=calc.GammaG_FirstOrder(GammaG, G, W0, Map)
     # SimpleGammaG=calc.SimpleGG(G, Map)
 
@@ -116,7 +127,7 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     data["Polar"]=Polar.ToDict()
     data["GammaG"]={"SmoothT": GammaG}
     if GammaW is not None:
-        data["GammaW"]={"SmoothT": GammaW}
+        data["GammaW"]={"SmoothT": WWGammaW}
     Observable.Measure(Chi, Determ, G, Factory.NearestNeighbor)
 
     with DelayedInterrupt():
@@ -231,6 +242,8 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                 print "SimpleGammaG, dyson=\n",  0.5*(np.sum(SimpleGammaG[DOWN, :, :, :]-SimpleGammaG[UP, :, :, :], axis=0)).diagonal()
                 print "GammaG, dyson=\n",  0.5*(np.sum(GammaG[DOWN, :, :, :]-GammaG[UP, :, :, :], axis=0)).diagonal()
                 print "WWGammaW, type0, diagonal, dyson=\n", WWGammaW[0, 1, 1, 0, :]
+                print "WWGammaW, type4, diagonal, dyson=\n", WWGammaW[4, 1, 1, 0, :]
+                print "WWGammaW, type5, diagonal, dyson=\n", WWGammaW[5, 1, 1, 0, :]
 
             else:
                 log.info("Collecting Sigma/Polar statistics...")
@@ -246,6 +259,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
 
                 GammaW=GammaW_MC
                 GammaG = calc.SimpleGG(G, Map)+ calc.GammaG_FirstOrder(GammaG, G, W0, Map)+GammaG_MC
+                print "GammaG, dyson=\n",  0.5*(np.sum(GammaG_MC[DOWN, :, :, :]-GammaG_MC[UP, :, :, :], axis=0)).diagonal()
 
             #######DYSON FOR W AND G###########################
             log.info("calculating W...")

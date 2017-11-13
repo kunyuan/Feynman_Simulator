@@ -316,25 +316,30 @@ void Markov::Hop(int sweep)
 //                    ;
                 else if (x < SumofProbofCall[ADD_TWO_G])
                     AddTwoG();
+                    //;
                 else if (x < SumofProbofCall[ADD_TWO_W])
-                    AddTwoW();
+                    //AddTwoW();
+                    ;
             }
         }else if(x < SumofProbofCall[DELETE_TWO_G]){
             if(Diag->MeasureGammaGW==1) {
                 DeleteTwoG();
+                //;
             }
         }else if(x < SumofProbofCall[DELETE_TWO_W]){
             if( Diag->MeasureGammaGW==2) {
-                DeleteTwoW();
+                //DeleteTwoW();
+                ;
             }
         }else if(x < SumofProbofCall[CHANGE_TAU_IN_GAMMAW]){
             if( Diag->MeasureGammaGW==2) {
-                ChangeTauInGammaW();
+                //ChangeTauInGammaW();
+                ;
             }
         }else if(x < SumofProbofCall[CHANGE_R_IN_GAMMAW]){
             if( Diag->MeasureGammaGW==2) {
-                ChangeRInGammaW();
-//                ;
+                //ChangeRInGammaW();
+                ;
             }
         }
 
