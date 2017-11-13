@@ -315,16 +315,16 @@ void Markov::Hop(int sweep)
                     JumpFromGammaWToW();
 //                    ;
                 else if (x < SumofProbofCall[ADD_TWO_G])
-                    AddTwoG();
-                    //;
+                    //AddTwoG();
+                    ;
                 else if (x < SumofProbofCall[ADD_TWO_W])
                     //AddTwoW();
                     ;
             }
         }else if(x < SumofProbofCall[DELETE_TWO_G]){
             if(Diag->MeasureGammaGW==1) {
-                DeleteTwoG();
-                //;
+                //DeleteTwoG();
+                ;
             }
         }else if(x < SumofProbofCall[DELETE_TWO_W]){
             if( Diag->MeasureGammaGW==2) {

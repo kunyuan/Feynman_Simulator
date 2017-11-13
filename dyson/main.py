@@ -66,16 +66,14 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     # WWGammaW=calc.WWGammaW(GGammaG, W0, W, G.Map)
     # GammaGFromGammaW=calc.GammaWToGammaG(WWGammaW, G, G.Map)
 
-    WWGammaW=calc.WWGammaW(GammaW, W0, W, G.Map)
     print "GammaW, type0, diagonal, mc=\n", GammaW[0, 0, 0, :, :].diagonal()
-    print "WWGammaW, type0, diagonal, dyson=\n", WWGammaW[0, 1, 1, :, :].diagonal()
-    print "WWGammaW, type0, tau1=0, dyson=\n", WWGammaW[0, 1, 1, 0, :]
-
     print "GammaW, type4, diagonal, mc=\n", GammaW[4, 0, 0, :, :].diagonal()
-    print "WWGammaW, type4, diagonal, dyson=\n", WWGammaW[4, 1, 1, :, :].diagonal()
-    print "WWGammaW, type4, tau1=0, dyson=\n", WWGammaW[4, 1, 1, 0, :]
+    print "GammaW, type0, tau1=0,  mc=\n", WWGammaW[0, 1, 1, 0, :]
+    print "GammaW, type4, tau1=0,  mc=\n", WWGammaW[4, 1, 1, 0, :]
+    print "GammaW, type5, tau1=0,  mc=\n", WWGammaW[5, 1, 1, 0, :]
 
-    print "WWGammaW, type5, tau1=0, dyson=\n", WWGammaW[5, 1, 1, 0, :]
+    print "GammaG, UP, r=0, mc=\n", GammaG[UP, 0, :, :].diagonal()
+    print "GammaG, UP, r=1, mc=\n", GammaG[UP, 1, :, :].diagonal()
 
     # GammaGFirstOrder=calc.GammaG_FirstOrder(GammaG, G, W0, Map)
     # SimpleGammaG=calc.SimpleGG(G, Map)
@@ -105,7 +103,6 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     # print "WWGammaW, type4, dyson, t1=0,=\n", WWGammaW_dyson[4, 1, 1, 0, :]
 
     # GammaG_dyson = calc.GammaWToGammaG(WWGammaW_dyson, G, G.Map)
-    print "GammaG, UP, mc=\n", GammaG[UP, 1, :, :].diagonal()
     # print "GammaG, UP, dyson=\n", GammaG_dyson[UP, 1, :, :].diagonal()
 
     # print "GammaG, last term, DOWN, dyson=\n", -GammaG_dyson[DOWN, 1, :, :].diagonal()
@@ -127,7 +124,7 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     data["Polar"]=Polar.ToDict()
     data["GammaG"]={"SmoothT": GammaG}
     if GammaW is not None:
-        data["GammaW"]={"SmoothT": WWGammaW}
+        data["GammaW"]={"SmoothT": GammaW}
     Observable.Measure(Chi, Determ, G, Factory.NearestNeighbor)
 
     with DelayedInterrupt():
@@ -257,9 +254,8 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                 SigmaDyson = calc.SigmaSmoothT_FirstOrder(G, W, Map)
                 print "SigmaFromDyson=\n", SigmaDyson.Data[UP,0,UP,0,0,:]
 
-                GammaW=GammaW_MC
-                GammaG = calc.SimpleGG(G, Map)+ calc.GammaG_FirstOrder(GammaG, G, W0, Map)+GammaG_MC
-                print "GammaG, dyson=\n",  0.5*(np.sum(GammaG_MC[DOWN, :, :, :]-GammaG_MC[UP, :, :, :], axis=0)).diagonal()
+                GammaW=calc.WWGammaW(GammaW_MC, W0, W, G.Map)
+                GammaG = calc.SimpleGG(G, Map)+ calc.GammaG_FirstOrder(GammaG, G, W0, Map) + calc.AddTwoGToGammaG(GammaG_MC, G, G.Map)
 
             #######DYSON FOR W AND G###########################
             log.info("calculating W...")
