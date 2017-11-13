@@ -68,9 +68,9 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
 
     print "GammaW, type0, diagonal, mc=\n", GammaW[0, 0, 0, :, :].diagonal()
     print "GammaW, type4, diagonal, mc=\n", GammaW[4, 0, 0, :, :].diagonal()
-    print "GammaW, type0, tau1=0,  mc=\n", WWGammaW[0, 1, 1, 0, :]
-    print "GammaW, type4, tau1=0,  mc=\n", WWGammaW[4, 1, 1, 0, :]
-    print "GammaW, type5, tau1=0,  mc=\n", WWGammaW[5, 1, 1, 0, :]
+    print "GammaW, type0, tau1=0,  mc=\n",  GammaW[0, 1, 1, 0, :]
+    print "GammaW, type4, tau1=0,  mc=\n",  GammaW[4, 1, 1, 0, :]
+    print "GammaW, type5, tau1=0,  mc=\n",  GammaW[5, 1, 1, 0, :]
 
     print "GammaG, UP, r=0, mc=\n", GammaG[UP, 0, :, :].diagonal()
     print "GammaG, UP, r=1, mc=\n", GammaG[UP, 1, :, :].diagonal()
@@ -254,7 +254,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                 SigmaDyson = calc.SigmaSmoothT_FirstOrder(G, W, Map)
                 print "SigmaFromDyson=\n", SigmaDyson.Data[UP,0,UP,0,0,:]
 
-                GammaW=calc.WWGammaW(GammaW_MC, W0, W, G.Map)
+                GammaW = calc.WWGammaW(GammaW_MC, W0, W, G.Map)
                 GammaG = calc.SimpleGG(G, Map)+ calc.GammaG_FirstOrder(GammaG, G, W0, Map) + calc.AddTwoGToGammaG(GammaG_MC, G, G.Map)
 
             #######DYSON FOR W AND G###########################
