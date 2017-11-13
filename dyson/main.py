@@ -59,20 +59,20 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     # GGWGG=calc.AddTwoGToGammaG(GGW, G, G.Map)
     # print "Chi, dyson=\n",  0.5*(np.sum(GGWGG[DOWN, :, :, :]-GGWGG[UP, :, :, :], axis=0)).diagonal()
 
-    GGW=calc.GGW(GammaG, W, G.Map)
-    GGWGG=calc.AddTwoGToGammaG(GGW, G, G.Map)
+    # GGW=calc.GGW(GammaG, W, G.Map)
+    # GGWGG=calc.AddTwoGToGammaG(GGW, G, G.Map)
 
-    GGammaG = calc.AddG_To_GammaG(GammaG, G, G.Map)
-    WWGammaW=calc.WWGammaW(GGammaG, W0, W, G.Map)
-    GammaGFromGammaW=calc.GammaWToGammaG(WWGammaW, G, G.Map)
+    # GGammaG = calc.AddG_To_GammaG(GammaG, G, G.Map)
+    # WWGammaW=calc.WWGammaW(GGammaG, W0, W, G.Map)
+    # GammaGFromGammaW=calc.GammaWToGammaG(WWGammaW, G, G.Map)
 
-    GammaGFirstOrder=calc.GammaG_FirstOrder(GammaG, G, W0, Map)
-    SimpleGammaG=calc.SimpleGG(G, Map)
+    # GammaGFirstOrder=calc.GammaG_FirstOrder(GammaG, G, W0, Map)
+    # SimpleGammaG=calc.SimpleGG(G, Map)
 
-    GammaG_dyson =SimpleGammaG+GammaGFirstOrder
-    GammaG_dyson += +GGWGG - GammaGFromGammaW
+    # GammaG_dyson =SimpleGammaG+GammaGFirstOrder
+    # GammaG_dyson += +GGWGG - GammaGFromGammaW
 
-    print "Chi, dyson=\n",  0.5*(np.sum(GammaG_dyson[DOWN, :, :, :]-GammaG_dyson[UP, :, :, :], axis=0)).diagonal()
+    # print "Chi, dyson=\n",  0.5*(np.sum(GammaG_dyson[DOWN, :, :, :]-GammaG_dyson[UP, :, :, :], axis=0)).diagonal()
 
     #_,ChiTensor,_=calc.W_Dyson(W0, Polar, Polar.Map, Lat) 
     #ChiTensor.FFT("R","T")
@@ -80,11 +80,11 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     #print "ChiTensor=\n", np.sum(ChiTensor.Data[spinUP,0,spinDOWN,0,:,:], axis=0)
     print "Chi, polar=\n", np.sum(Chi.Data[0,0,0,0,:,:], axis=0)
 
-    print "WWGammaW, type0, diagonal, mc=\n", GammaW[0, 1, 1, :, :].diagonal()
-    print "WWGammaW, type0, diagonal, dyson=\n", WWGammaW[0, 1, 1, :, :].diagonal()
+    # print "WWGammaW, type0, diagonal, mc=\n", GammaW[0, 1, 1, :, :].diagonal()
+    # print "WWGammaW, type0, diagonal, dyson=\n", WWGammaW[0, 1, 1, :, :].diagonal()
 
-    print "WWGammaW, type4, diagonal, mc=\n", GammaW[4, 1, 1, :, :].diagonal()
-    print "WWGammaW, type4, diagonal, dyson=\n", WWGammaW[4, 1, 1, :, :].diagonal()
+    # print "WWGammaW, type4, diagonal, mc=\n", GammaW[4, 1, 1, :, :].diagonal()
+    # print "WWGammaW, type4, diagonal, dyson=\n", WWGammaW[4, 1, 1, :, :].diagonal()
 
     # GammaG_simple = calc.SimpleGG(G, G.Map)
     # GGammaG = calc.AddG_To_GammaG(GammaG_simple, G, G.Map)
@@ -95,7 +95,7 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
 
     # GammaG_dyson = calc.GammaWToGammaG(WWGammaW_dyson, G, G.Map)
     print "GammaG, UP, mc=\n", GammaG[UP, 1, :, :].diagonal()
-    print "GammaG, UP, dyson=\n", GammaG_dyson[UP, 1, :, :].diagonal()
+    # print "GammaG, UP, dyson=\n", GammaG_dyson[UP, 1, :, :].diagonal()
 
     # print "GammaG, last term, DOWN, dyson=\n", -GammaG_dyson[DOWN, 1, :, :].diagonal()
     # print "GammaG, DOWN, mc=\n", GammaG[DOWN, 1, :, :].diagonal()
@@ -224,12 +224,13 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                 GammaG =SimpleGammaG+GammaGFirstOrder
                 GammaG += +GGWGG - GammaGFromGammaW
 
-                print "GammaGFirstOrder, mc=\n",  0.5*(np.sum(GammaGFirstOrder[DOWN, :, :, :]-GammaGFirstOrder[UP, :, :, :], axis=0)).diagonal()
+                print "GammaGFirstOrder, dyson=\n",  0.5*(np.sum(GammaGFirstOrder[DOWN, :, :, :]-GammaGFirstOrder[UP, :, :, :], axis=0)).diagonal()
                 # print "GGWGG, mc=\n",  0.5*(np.sum(GGWGG[DOWN, :, :, :]-GGWGG[UP, :, :, :], axis=0)).diagonal()
                 #print "GGWGG, mc=\n",  GGWGG[UP, 0, :, :].diagonal()
                 # print "GammaGFromGammaW, mc=\n",  0.5*(np.sum(GammaGFromGammaW[DOWN, :, :, :]-GammaGFromGammaW[UP, :, :, :], axis=0)).diagonal()
-                print "SimpleGammaG, mc=\n",  0.5*(np.sum(SimpleGammaG[DOWN, :, :, :]-SimpleGammaG[UP, :, :, :], axis=0)).diagonal()
-                print "GammaG, mc=\n",  0.5*(np.sum(GammaG[DOWN, :, :, :]-GammaG[UP, :, :, :], axis=0)).diagonal()
+                print "SimpleGammaG, dyson=\n",  0.5*(np.sum(SimpleGammaG[DOWN, :, :, :]-SimpleGammaG[UP, :, :, :], axis=0)).diagonal()
+                print "GammaG, dyson=\n",  0.5*(np.sum(GammaG[DOWN, :, :, :]-GammaG[UP, :, :, :], axis=0)).diagonal()
+                print "WWGammaW, type0, diagonal, dyson=\n", WWGammaW[0, 1, 1, :, :].diagonal()
 
             else:
                 log.info("Collecting Sigma/Polar statistics...")
