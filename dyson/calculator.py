@@ -245,7 +245,7 @@ def WWGammaW(GGammaG, W0, W, _map):
 
                         ## DOWNUP UPDOWN
                         WWGammaW[5, rout, r, tout, t] += Win[DOWNUP, UPDOWN] * WGammaW[4, rout, rin, tout, tin]
-                        WWGammaW[5, rout, r, tout, t] += Win[UPDOWN, DOWNUP] * WGammaW[5, rout, rin, tout, tin]
+                        WWGammaW[5, r, rout, t, tout] += Win[UPDOWN, DOWNUP] * WGammaW[5, rout, rin, tout, tin]
     return -1.0*WWGammaW
 
 def GammaWToGammaG(GammaW, G, _map):
