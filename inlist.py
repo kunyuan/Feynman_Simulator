@@ -2,8 +2,8 @@
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    # "__Duplicate" :  0,
-    "__Duplicate" :  15,
+    "__Duplicate" :  0,
+    # "__Duplicate" :  15,
     "__IsCluster" : False, 
     "__AutoRun" : True,
     },
@@ -28,7 +28,7 @@ Dyson={
 Beta=0.5
 Order=1
 Common={
-"Tau": {"MaxTauBin" : 8, "Beta": Beta},
+"Tau": {"MaxTauBin" : 16, "Beta": Beta},
 "Lattice":  {
     #1D lattice
     # "Name": "Chain", "NSublat":1,
@@ -41,7 +41,7 @@ Common={
     # "Name": "Honeycomb", "NSublat": 2,
     #"Name": "Kagome", "NSublat": 3,
     #"Name": "Triangular", "NSublat": 1,
-    "L": [4,4]
+    "L": [8,8]
 
     #3D lattice
     #"Name": "Cubic", "NSublat": 1,

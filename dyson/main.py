@@ -4,6 +4,7 @@ import sys
 #log.info("Python Version: {0}".format(sys.version))
 import numpy as np
 import calculator as calc
+import gamma3_calc as gamma3
 import lattice as lat
 import collect
 from weight import UP,DOWN,IN,OUT
@@ -170,7 +171,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
         #not load WeightFile
         log.info("Start from bare G, W")
         G=G0.Copy()
-        GammaG=calc.SimpleGG(G, Map)
+        GammaG=gamma3.SimpleGG(G, Map)
         GammaW=np.zeros([6, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin])+0.0*1j
     else:
         #load WeightFile, load G,W
@@ -186,7 +187,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
             GammaG=data["GammaG"]["SmoothT"]
             print "Read existing GammaG"
         else:
-            GammaG=calc.SimpleGG(G, Map)
+            GammaG=gamma3.SimpleGG(G, Map)
 
         if data.has_key("GammaW"):
             GammaW=data["GammaW"]["SmoothT"]
@@ -220,20 +221,23 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                 G = calc.G_Dyson(G0, SigmaDeltaT, Sigma, Map)
                 Polar.Merge(ratio, calc.Polar_FirstOrder(G, Map))
 
-                GGW=calc.GGW(GammaG, W, G.Map)
-                GGWGG=calc.AddTwoGToGammaG(GGW, G, G.Map)
+                GGW=gamma3.GGW(GammaG, W, G.Map)
+                GGWGG=gamma3.AddTwoGToGammaG(GGW, G, G.Map)
 
-                GGammaG = calc.AddG_To_GammaG(GammaG, G, G.Map)
-                WWGammaW=calc.WWGammaW(GGammaG, W0, W, G.Map)
-                GammaGFromGammaW=calc.GammaWToGammaG(WWGammaW, G, G.Map)
+                GGammaG = gamma3.AddG_To_GammaG(GammaG, G, G.Map)
+                # WWGammaW1=gamma3.WWGammaW(GGammaG, W0, W, G.Map)
+                WWGammaW=gamma3.FastWWGammaW(GGammaG, W0, W, G.Map)
+                GammaGFromGammaW=gamma3.GammaWToGammaG(WWGammaW, G, G.Map)
 
-                GammaGFirstOrder=calc.GammaG_FirstOrder(GammaG, G, W0, Map)
-                SimpleGammaG=calc.SimpleGG(G, Map)
+                # GammaGFirstOrder=gamma3.GammaG_FirstOrder(GammaG, G, W0, Map)
+                GammaGFirstOrder=gamma3.FastGammaG_RPA(GammaG, G, W0, Map)
+                SimpleGammaG=gamma3.SimpleGG(G, Map)
 
                 GammaG =SimpleGammaG+GammaGFirstOrder
                 GammaG += +GGWGG - GammaGFromGammaW
 
                 print "GammaGFirstOrder, dyson=\n",  0.5*(np.sum(GammaGFirstOrder[DOWN, :, :, :]-GammaGFirstOrder[UP, :, :, :], axis=0)).diagonal()
+                # print "FastGammaGRPA, dyson=\n",  0.5*(np.sum(FastGammaGRPA[DOWN, :, :, :]-FastGammaGRPA[UP, :, :, :], axis=0)).diagonal()
                 # print "GGWGG, mc=\n",  0.5*(np.sum(GGWGG[DOWN, :, :, :]-GGWGG[UP, :, :, :], axis=0)).diagonal()
                 #print "GGWGG, mc=\n",  GGWGG[UP, 0, :, :].diagonal()
                 # print "GammaGFromGammaW, mc=\n",  0.5*(np.sum(GammaGFromGammaW[DOWN, :, :, :]-GammaGFromGammaW[UP, :, :, :], axis=0)).diagonal()
@@ -255,9 +259,9 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                 SigmaDyson = calc.SigmaSmoothT_FirstOrder(G, W, Map)
                 print "SigmaFromDyson=\n", SigmaDyson.Data[UP,0,UP,0,0,:]
 
-                GammaW = calc.WWGammaW(GammaW_MC, W0, W, G.Map)
-                GGGammaG_MC = calc.AddTwoGToGammaG(GammaG_MC, G, G.Map)
-                GammaG = calc.SimpleGG(G, Map)+ calc.GammaG_FirstOrder(GammaG, G, W0, Map) + GGGammaG_MC
+                GammaW = gamma3.WWGammaW(GammaW_MC, W0, W, G.Map)
+                GGGammaG_MC = gamma3.AddTwoGToGammaG(GammaG_MC, G, G.Map)
+                GammaG = gamma3.SimpleGG(G, Map)+ gamma3.GammaG_FirstOrder(GammaG, G, W0, Map) + GGGammaG_MC
                 print "GammaG, mc=\n",  0.5*(np.sum(GGGammaG_MC[DOWN, :, :, :]-GGGammaG_MC[UP, :, :, :], axis=0)).diagonal()
 
             #######DYSON FOR W AND G###########################
