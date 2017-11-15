@@ -176,6 +176,12 @@ bool EnvMonteCarlo::ListenToMessage()
         MarkovMonitor.SqueezeStatistics(Message_.SqueezeFactor);
         LOG_INFO("Annealled to " << Message_.PrettyString()
                                  << "\nwith squeeze factor" << Message_.SqueezeFactor);
+        if(Diag.CheckDiagram()){
+            LOG_INFO("Diagram Check pass.");
+        }else {
+            ABORT("Diagram Check didn't pass when annealing!");
+        }
+
         return true;
     }
 }

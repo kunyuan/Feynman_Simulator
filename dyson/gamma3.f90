@@ -11,15 +11,15 @@ subroutine fast_GammaG_RPA(GammaGNew, GammaG, G, W0, Beta, rIndex, SpinIndex, Sp
 !f2py intent(in) SpinIndex
   integer :: Spin2Index(0:4-1)
 !f2py intent(in) Spin2Index
-  Complex :: GammaG(0:2-1, 0:Vol-1, 0:MaxTauBin-1, 0:MaxTauBin-1)
+  Complex*16 :: GammaG(0:2-1, 0:Vol-1, 0:MaxTauBin-1, 0:MaxTauBin-1)
 !f2py intent(in) GammaG
-  Complex :: W0(0:4-1, 0:4-1, 0:Vol-1)
-  Complex :: G(0:2-1, 0:2-1, 0:MaxTauBin-1)
+  Complex*16 :: W0(0:4-1, 0:4-1, 0:Vol-1)
+  Complex*16 :: G(0:2-1, 0:2-1, 0:MaxTauBin-1)
 !f2py intent(in) G, W0
-  Complex :: GammaGNew(0:2-1, 0:Vol-1, 0:MaxTauBin-1, 0:MaxTauBin-1)
+  Complex*16 :: GammaGNew(0:2-1, 0:Vol-1, 0:MaxTauBin-1, 0:MaxTauBin-1)
 !f2py intent(in, out, copy) GammaGNew
   integer :: t3, tin, dtin, tout, dtout, r1, r2, dr, sign
-  Complex :: GG, G1, G2
+  Complex*16 :: GG, G1, G2
 
   UP=SpinIndex(0)
   DOWN=SpinIndex(1)
@@ -88,20 +88,20 @@ subroutine fast_WWGammaW(GammaW, W0, W, Beta, rIndex, SpinIndex, Spin2Index, Vol
 !f2py intent(in) Beta
   integer :: rIndex(0:Vol-1, 0:Vol-1)
 !f2py intent(in) rIndex
-  Complex :: GammaW(0:6-1, 0:Vol-1, 0:Vol-1, 0:MaxTauBin-1, 0:MaxTauBin-1)
+  Complex*16 :: GammaW(0:6-1, 0:Vol-1, 0:Vol-1, 0:MaxTauBin-1, 0:MaxTauBin-1)
 !f2py intent(in, out, copy) GammaW
   integer :: SpinIndex(0:2-1)
 !f2py intent(in) SpinIndex
   integer :: Spin2Index(0:4-1)
 !f2py intent(in) Spin2Index
-  Complex :: W0(0:4-1, 0:4-1, 0:Vol-1)
-  Complex :: W(0:4-1, 0:4-1, 0:Vol-1, 0:MaxTauBin-1)
+  Complex*16 :: W0(0:4-1, 0:4-1, 0:Vol-1)
+  Complex*16 :: W(0:4-1, 0:4-1, 0:Vol-1, 0:MaxTauBin-1)
 !f2py intent(in) W0, W
-  Complex :: WGammaW(0:6-1, 0:Vol-1, 0:Vol-1, 0:MaxTauBin-1, 0:MaxTauBin-1)
+  Complex*16 :: WGammaW(0:6-1, 0:Vol-1, 0:Vol-1, 0:MaxTauBin-1, 0:MaxTauBin-1)
   integer :: r, rout, t, tout, dt_out, rin, tin, dt_in, dr_out, dr_in
-  complex :: Wout(0:4-1, 0:4-1)
-  complex :: Win(0:4-1, 0:4-1)
-  complex :: Wuuuu, Wuudd, Wuddu
+  Complex*16 :: Wout(0:4-1, 0:4-1)
+  Complex*16 :: Win(0:4-1, 0:4-1)
+  Complex*16 :: Wuuuu, Wuudd, Wuddu
   double precision :: deltaT
 
   UP=SpinIndex(0)

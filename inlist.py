@@ -2,7 +2,7 @@
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" :  0,
+    "__Duplicate" :  1,
     # "__Duplicate" :  15,
     "__IsCluster" : False, 
     "__AutoRun" : True,
@@ -25,8 +25,8 @@ Dyson={
     }
 }
 
-Beta=0.5
-Order=1
+Beta=1.0
+Order=3
 Common={
 "Tau": {"MaxTauBin" : 16, "Beta": Beta},
 "Lattice":  {
@@ -63,9 +63,9 @@ Common={
 MonteCarlo["Markov"]={
     "Order": Order, "Sweep" : 10, "Toss" : 1000,
     #Start from order 0, so that OrderReWeight has Order+1 elements
-    "OrderReWeight" : [0.1, 0.5, 1.0, 0.1, 0.05, 0.05, 0.01, 0.005],
+    "OrderReWeight" : [1.0, 0.3, 1.0, 0.1, 0.05, 0.05, 0.01, 0.005],
     "WormSpaceReweight" : 0.05,
-    "PolarReweight" : 2.0,
+    "PolarReweight" : 1.0,
     "NkGammaGReweight" : 1.0,
     "NkGammaWReweight" : 1.0,
     "GammaGReweight" : 1.0,
@@ -81,7 +81,7 @@ MonteCarlo["Markov"]={
         "PrinterTimer": 30,
         "DiskWriterTimer": 30,
         "MessageTimer": 30,
-        "ReweightTimer":300000
+        "ReweightTimer":1000
         },
     }
 
