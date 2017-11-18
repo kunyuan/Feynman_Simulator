@@ -225,12 +225,15 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                 GGWGG=gamma3.AddTwoGToGammaG(GGW, G, G.Map)
 
                 GGammaG = gamma3.AddG_To_GammaG(GammaG, G, G.Map)
-                # WWGammaW1=gamma3.WWGammaW(GGammaG, W0, W, G.Map)
-                WWGammaW=gamma3.FastWWGammaW(GGammaG, W0, W, G.Map)
+
+                WWGammaW=gamma3.FastFourierWWGammaW(GGammaG, W0, W, G.Map)
+
+                # WWGammaW=gamma3.FastWWGammaW(GGammaG, W0, W, G.Map)
+                # WWGammaW=gamma3.WWGammaW(GGammaG, W0, W, G.Map)
                 GammaGFromGammaW=gamma3.GammaWToGammaG(WWGammaW, G, G.Map)
 
-                # GammaGFirstOrder=gamma3.GammaG_FirstOrder(GammaG, G, W0, Map)
-                GammaGFirstOrder=gamma3.FastGammaG_RPA(GammaG, G, W0, Map)
+                # GammaGFirstOrder=gamma3.FastGammaG_RPA(GammaG, G, W0, Map)
+                GammaGFirstOrder=gamma3.GammaG_FirstOrder(GammaG, G, W0, Map)
                 SimpleGammaG=gamma3.SimpleGG(G, Map)
 
                 GammaG =SimpleGammaG+GammaGFirstOrder

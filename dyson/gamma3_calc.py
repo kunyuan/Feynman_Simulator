@@ -188,6 +188,137 @@ def FastWWGammaW(GGammaG, W0, W, _map):
     # print "after", GGammaG[:,0,0,0,0]
     return WWGammaW
 
+def FFTGammaW(GammaW, _map, BackForth):
+    OldShape=GammaW.shape
+    NewShape=(6, _map.L[0], _map.L[1], _map.L[0], _map.L[1], _map.MaxTauBin, _map.MaxTauBin)
+    GammaW=GammaW.reshape(NewShape)
+    if BackForth==1:
+        GammaW=np.fft.fftn(GammaW, axes=[1,2,3,4,5,6]) 
+    elif BackForth==-1:
+        GammaW=np.fft.ifftn(GammaW, axes=[1,2,3,4,5,6]) 
+    GammaW=GammaW.reshape(OldShape)
+    return GammaW
+
+def FFTWshift(Wshift, _map, BackForth):
+    OldShape=Wshift.shape
+    NewShape=(4,4, _map.L[0], _map.L[1], _map.MaxTauBin)
+    Wshift=Wshift.reshape(NewShape)
+    if BackForth==1:
+        Wshift=np.fft.fftn(Wshift, axes=[2,3,4]) 
+    elif BackForth==-1:
+        Wshift=np.fft.ifftn(Wshift, axes=[2,3,4]) 
+    Wshift=Wshift.reshape(OldShape)
+    return Wshift
+
+def FourierWWGammaW(GGammaG, W0, W, _map):
+    # import gamma3
+    GGammaG=np.array(GGammaG)
+    sub = 0
+    UPUP=_map.Spin2Index(UP,UP)
+    DOWNDOWN=_map.Spin2Index(DOWN,DOWN)
+    UPDOWN=_map.Spin2Index(UP,DOWN)
+    DOWNUP=_map.Spin2Index(DOWN,UP)
+
+    spinindex, spin2index=GenerateSpinIndex(_map)
+
+    W.FFT("R","T")
+    W0.FFT("R", "T")
+    Wshift=weight.Weight("SmoothT", _map, "FourSpins", "Symmetric", "R","T")
+    for t in range(_map.MaxTauBin):
+        t1=t-1
+        if t1<0:
+            t1+=_map.MaxTauBin
+        Wshift.Data[:,:,:,:,:,t]=0.5*(W.Data[:,:,:,:,:,t1]+W.Data[:,:,:,:,:,t])
+    Wtot=np.array(Wshift.Data[:,0,:,0,:,:])*_map.Beta/_map.MaxTauBin
+    Wtot[:,:,:,0]+=W0.Data[:,0,:,0,:]
+    Wtot=FFTWshift(Wtot, _map, 1)
+
+    GGammaG=FFTGammaW(GGammaG, _map, 1)
+
+    WGammaW=np.zeros([6, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
+    Wout=Wtot
+    print "calculating WGammaW with fourier..."
+    for kout in range(_map.Vol):
+            for wout in range(_map.MaxTauBin):
+                    # UPUP UPUP
+                    WGammaW[0, kout, :, wout, :]  = Wout[UPUP, UPUP, kout, wout] * GGammaG[0, kout, :, wout, :]
+
+                    # DOWNDOWN DOWNDOWN
+                    WGammaW[1, kout, :, wout, :]  = Wout[DOWNDOWN, DOWNDOWN, kout, wout] * GGammaG[1, kout, :, wout, :]
+
+                    # out:UPUP in:DOWNDOWN 
+                    WGammaW[2, kout, :, wout, :]  = Wout[UPUP, DOWNDOWN, kout, wout] * GGammaG[1, kout, :, wout, :]
+
+                    # out:DOWNDOWN in:UPUP
+                    WGammaW[3, kout, :, wout, :]  = Wout[DOWNDOWN, UPUP, kout, wout] * GGammaG[0, kout, :, wout, :]
+
+                    # out:UPDOWN in:DOWNUP
+                    WGammaW[4, kout, :, wout, :]  = Wout[UPDOWN, DOWNUP, kout, wout] * GGammaG[5, kout, :, wout, :]
+
+                    # out:DOWNUP in:UPDOWN
+                    WGammaW[5, kout, :, wout, :]  = Wout[DOWNUP, UPDOWN, kout, wout] * GGammaG[4, kout, :, wout, :]
+
+    Win=Wtot
+    print "calculating WWGammaW with fourier..."
+
+    WWGammaW = np.zeros([6, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin]) + 0.0*1j
+    for kin in range(_map.Vol):
+            for win in range(_map.MaxTauBin):
+                    ## out:UPUP in:UPUP
+                    WWGammaW[0, :, kin, :, win] = Win[UPUP, UPUP, kin, win] * WGammaW[0, :, kin, :, win] + Win[UPUP, DOWNDOWN,kin, win] * WGammaW[2, :, kin, :, win]
+
+                    ## out:DOWNDOWN in:DOWNDOWN
+                    WWGammaW[1, :, kin, :, win] = Win[DOWNDOWN, UPUP,kin, win] * WGammaW[3, :, kin, :, win] + Win[DOWNDOWN, DOWNDOWN,kin, win] * WGammaW[1, :, kin, :, win]
+
+                    ## out:UPUP in:DOWNDOWN
+                    WWGammaW[2, :, kin, :, win] = Win[DOWNDOWN, UPUP,kin, win] * WGammaW[0, :, kin, :, win] + Win[DOWNDOWN, DOWNDOWN,kin, win] * WGammaW[2, :, kin, :, win]
+
+                    ## out:DOWNDOWN in:UPUP
+                    WWGammaW[3, :, kin, :, win] = Win[UPUP, UPUP,kin, win] * WGammaW[3, :, kin, :, win] + Win[UPUP, DOWNDOWN, kin, win] * WGammaW[1, :, kin, :, win]
+
+                    ## out:UPDOWN in:DOWNUP
+                    WWGammaW[4, :, kin, :, win] = Win[UPDOWN, DOWNUP, kin, win] * WGammaW[4, :, kin, :, win]
+
+                    ## out:DOWNUP in:UPDOWN
+                    WWGammaW[5, :, kin, :, win] = Win[DOWNUP, UPDOWN, kin, win] * WGammaW[5, :, kin, :, win]
+
+    WWGammaW=FFTGammaW(WWGammaW, _map, -1)
+    W0.FFT("R","T")
+    W.FFT("R","T")
+    return -1.0*WWGammaW
+
+def FastFourierWWGammaW(GGammaG, W0, W, _map):
+    import gamma3
+    # GGammaG=np.array(GGammaG)
+    sub = 0
+    UPUP=_map.Spin2Index(UP,UP)
+    DOWNDOWN=_map.Spin2Index(DOWN,DOWN)
+    UPDOWN=_map.Spin2Index(UP,DOWN)
+    DOWNUP=_map.Spin2Index(DOWN,UP)
+
+    spinindex, spin2index=GenerateSpinIndex(_map)
+
+    W.FFT("R","T")
+    W0.FFT("R", "T")
+    Wshift=weight.Weight("SmoothT", _map, "FourSpins", "Symmetric", "R","T")
+    for t in range(_map.MaxTauBin):
+        t1=t-1
+        if t1<0:
+            t1+=_map.MaxTauBin
+        Wshift.Data[:,:,:,:,:,t]=0.5*(W.Data[:,:,:,:,:,t1]+W.Data[:,:,:,:,:,t])
+    Wtot=np.array(Wshift.Data[:,0,:,0,:,:])*_map.Beta/_map.MaxTauBin
+    Wtot[:,:,:,0]+=W0.Data[:,0,:,0,:]
+    Wtot=FFTWshift(Wtot, _map, 1)
+
+    GGammaG=FFTGammaW(GGammaG, _map, 1)
+
+    WWGammaW=gamma3.fast_fourier_wwgammaw(GGammaG, W.Data[:,sub,:,sub,:,:], _map.Beta, rIndex, spinindex, spin2index, _map.Vol, _map.MaxTauBin)
+
+    WWGammaW=FFTGammaW(WWGammaW, _map, -1)
+    W0.FFT("R","T")
+    W.FFT("R","T")
+    return WWGammaW
+
 def WWGammaW(GGammaG, W0, W, _map):
     sub = 0
     W.FFT("R","T")
@@ -240,6 +371,12 @@ def WWGammaW(GGammaG, W0, W, _map):
 
                     # out:DOWNUP in:UPDOWN
                     WGammaW[5, r, :, t, :]  += Wout[DOWNUP, UPDOWN] * GGammaG[4, rout, :, tout, :]
+
+    # print "ConventionalWGammaW, type0, tau1=0, dyson=\n", WGammaW[0, 1, 1, 0, :]
+    # print "ConventionalWGammaW, type0, tau1=1, dyson=\n", WGammaW[0, 1, 1, 1, :]
+    # print "ConventionalWGammaW, type0, tau2=0, dyson=\n", WGammaW[0, 1, 1, :, 0]
+    # print "ConventionalWGammaW, type0, tau2=1, dyson=\n", WGammaW[0, 1, 1, :, 1]
+    # print "ConventionalWGammaW, type0, diagonal, dyson=\n", WGammaW[0, 1, 1, :, :].diagonal()
 
     print "calculating WWGammaW..."
     WWGammaW = np.zeros([6, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin]) + 0.0*1j

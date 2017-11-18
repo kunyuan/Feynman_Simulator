@@ -11,15 +11,15 @@ subroutine fast_GammaG_RPA(GammaGNew, GammaG, G, W0, Beta, rIndex, SpinIndex, Sp
 !f2py intent(in) SpinIndex
   integer :: Spin2Index(0:4-1)
 !f2py intent(in) Spin2Index
-  Complex :: GammaG(0:2-1, 0:Vol-1, 0:MaxTauBin-1, 0:MaxTauBin-1)
+  Complex*16 :: GammaG(0:2-1, 0:Vol-1, 0:MaxTauBin-1, 0:MaxTauBin-1)
 !f2py intent(in) GammaG
-  Complex :: W0(0:4-1, 0:4-1, 0:Vol-1)
-  Complex :: G(0:2-1, 0:2-1, 0:MaxTauBin-1)
+  Complex*16 :: W0(0:4-1, 0:4-1, 0:Vol-1)
+  Complex*16 :: G(0:2-1, 0:2-1, 0:MaxTauBin-1)
 !f2py intent(in) G, W0
-  Complex :: GammaGNew(0:2-1, 0:Vol-1, 0:MaxTauBin-1, 0:MaxTauBin-1)
+  Complex*16 :: GammaGNew(0:2-1, 0:Vol-1, 0:MaxTauBin-1, 0:MaxTauBin-1)
 !f2py intent(in, out, copy) GammaGNew
   integer :: t3, tin, dtin, tout, dtout, r1, r2, dr, sign
-  Complex :: GG, G1, G2
+  Complex*16 :: GG, G1, G2
 
   UP=SpinIndex(0)
   DOWN=SpinIndex(1)
@@ -88,20 +88,20 @@ subroutine fast_WWGammaW(GammaW, W0, W, Beta, rIndex, SpinIndex, Spin2Index, Vol
 !f2py intent(in) Beta
   integer :: rIndex(0:Vol-1, 0:Vol-1)
 !f2py intent(in) rIndex
-  Complex :: GammaW(0:6-1, 0:Vol-1, 0:Vol-1, 0:MaxTauBin-1, 0:MaxTauBin-1)
+  Complex*16 :: GammaW(0:6-1, 0:Vol-1, 0:Vol-1, 0:MaxTauBin-1, 0:MaxTauBin-1)
 !f2py intent(in, out, copy) GammaW
   integer :: SpinIndex(0:2-1)
 !f2py intent(in) SpinIndex
   integer :: Spin2Index(0:4-1)
 !f2py intent(in) Spin2Index
-  Complex :: W0(0:4-1, 0:4-1, 0:Vol-1)
-  Complex :: W(0:4-1, 0:4-1, 0:Vol-1, 0:MaxTauBin-1)
+  Complex*16 :: W0(0:4-1, 0:4-1, 0:Vol-1)
+  Complex*16 :: W(0:4-1, 0:4-1, 0:Vol-1, 0:MaxTauBin-1)
 !f2py intent(in) W0, W
   Complex :: WGammaW(0:6-1, 0:Vol-1, 0:Vol-1, 0:MaxTauBin-1, 0:MaxTauBin-1)
   integer :: r, rout, t, tout, dt_out, rin, tin, dt_in, dr_out, dr_in
-  complex :: Wout(0:4-1, 0:4-1)
-  complex :: Win(0:4-1, 0:4-1)
-  complex :: Wuuuu, Wuudd, Wuddu
+  !complex :: Wout(0:4-1, 0:4-1)
+  !complex :: Win(0:4-1, 0:4-1)
+  complex*16 :: Wuuuu, Wuudd, Wuddu
   double precision :: deltaT
 
   UP=SpinIndex(0)
@@ -209,6 +209,98 @@ subroutine fast_WWGammaW(GammaW, W0, W, Beta, rIndex, SpinIndex, Spin2Index, Vol
               GammaW(5, rout, r, tout, t)=GammaW(5, rout, r, tout, t)+Wuddu*WGammaW(5, rout, rin, tout, tin)
             enddo
           enddo
+        enddo
+      enddo
+    enddo
+  enddo
+
+  GammaW=-1.0*GammaW
+end subroutine
+
+subroutine fast_fouier_WWGammaW(GammaW, W, Beta, rIndex, SpinIndex, Spin2Index, Vol, MaxTauBin)
+! receive a GammaW object, multiple by two W, then return the same GammaW object
+! all objects are in Matsubara frequencies
+  implicit none
+  integer :: Vol, MaxTauBin, UP, DOWN, UPUP, DOWNDOWN, DOWNUP, UPDOWN
+!f2py intent(in) Vol, MaxTauBin
+  double precision :: Beta
+!f2py intent(in) Beta
+  integer :: rIndex(0:Vol-1, 0:Vol-1)
+!f2py intent(in) rIndex
+  Complex*16 :: GammaW(0:6-1, 0:Vol-1, 0:Vol-1, 0:MaxTauBin-1, 0:MaxTauBin-1)
+!f2py intent(in, out, copy) GammaW
+  integer :: SpinIndex(0:2-1)
+!f2py intent(in) SpinIndex
+  integer :: Spin2Index(0:4-1)
+!f2py intent(in) Spin2Index
+  Complex*16 :: W(0:4-1, 0:4-1, 0:Vol-1, 0:MaxTauBin-1)
+!f2py intent(in) W0, W
+  Complex*16 :: WGammaW(0:6-1, 0:Vol-1, 0:Vol-1, 0:MaxTauBin-1, 0:MaxTauBin-1)
+  double precision :: deltaT
+  integer :: kout, wout, kin, win
+
+  UP=SpinIndex(0)
+  DOWN=SpinIndex(1)
+  UPUP=Spin2Index(0)
+  DOWNDOWN=Spin2Index(1)
+  UPDOWN=Spin2Index(2)
+  DOWNUP=Spin2Index(3)
+  WGammaW=(0.0, 0.0)
+  deltaT=Beta/MaxTauBin
+
+  print *, "calculating WGammaW with fouier and f2py..."
+  do kout=0, Vol-1
+    do wout=0, Vol-1
+      do kin=0, Vol-1
+        do win=0, Vol-1
+          ! UPUP UPUP
+          WGammaW(0, kout, kin, wout, win)  = W(UPUP, UPUP, kout, wout) * GammaW(0, kout, kin, wout, win)
+
+          ! DOWNDOWN DOWNDOWN
+          WGammaW(1, kout, kin, wout, win)  = W(DOWNDOWN, DOWNDOWN, kout, wout) * GammaW(1, kout, kin, wout, win)
+
+          ! out:UPUP in:DOWNDOWN 
+          WGammaW(2, kout, kin, wout, win)  = W(UPUP, DOWNDOWN, kout, wout) * GammaW(1, kout, kin, wout, win)
+
+          ! out:DOWNDOWN in:UPUP
+          WGammaW(3, kout, kin, wout, win)  = W(DOWNDOWN, UPUP, kout, wout) * GammaW(0, kout, kin, wout, win)
+
+          ! out:UPDOWN in:DOWNUP
+          WGammaW(4, kout, kin, wout, win)  = W(UPDOWN, DOWNUP, kout, wout) * GammaW(5, kout, kin, wout, win)
+
+          ! out:DOWNUP in:UPDOWN
+          WGammaW(5, kout, kin, wout, win)  = W(DOWNUP, UPDOWN, kout, wout) * GammaW(4, kout, kin, wout, win)
+        enddo
+      enddo
+    enddo
+  enddo
+  
+  print *, "calculating WWGammaW with fouier and f2py..."
+  do kout=0, Vol-1
+    do wout=0, Vol-1
+      do kin=0, Vol-1
+        do win=0, Vol-1
+          ! out:UPUP in:UPUP
+          GammaW(0, kout, kin, wout, win)=W(UPUP, UPUP, kin, win)*WGammaW(0,kout,kin,wout,win) &
+            +W(UPUP,DOWNDOWN,kin, win)*WGammaW(2, kout, kin, wout, win)
+
+          ! out:DOWNDOWN in:DOWNDOWN
+          GammaW(1, kout, kin, wout, win)=W(DOWNDOWN, UPUP,kin, win)*WGammaW(3, kout, kin, wout, win) &
+            +W(DOWNDOWN, DOWNDOWN,kin,win)*WGammaW(1, kout, kin, wout, win)
+
+          ! out:UPUP in:DOWNDOWN
+          GammaW(2, kout, kin, wout, win) = W(DOWNDOWN, UPUP,kin, win) * WGammaW(0, kout, kin, wout, win) &
+            + W(DOWNDOWN,DOWNDOWN,kin, win)*WGammaW(2,kout, kin,wout, win)
+
+          ! out:DOWNDOWN in:UPUP
+          GammaW(3, kout, kin, wout, win) = W(UPUP, UPUP,kin, win) * WGammaW(3, kout, kin, wout, win) &
+            + W(UPUP, DOWNDOWN, kin, win)*WGammaW(1,kout, kin,wout, win)
+
+          ! out:UPDOWN in:DOWNUP
+          GammaW(4, kout, kin, wout, win) = W(UPDOWN, DOWNUP, kin, win) * WGammaW(4, kout, kin, wout, win)
+
+          ! out:DOWNUP in:UPDOWN
+          GammaW(5, kout, kin, wout, win) = W(DOWNUP, UPDOWN, kin, win) * WGammaW(5, kout, kin, wout, win)
         enddo
       enddo
     enddo
