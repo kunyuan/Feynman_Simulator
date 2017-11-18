@@ -114,6 +114,10 @@ void Diagram::ClearDiagram()
 }
 bool Diagram::FixDiagram()
 {
+
+    if(HasGammaGW!=0)
+        ABORT("Fix diagram when gammaG and GammaW exists!");
+
     ASSERT_ALLWAYS(Lat != nullptr, "Lattice is not defined yet!");
     ASSERT_ALLWAYS(GWeight != nullptr && WWeight != nullptr, "G and W have been initialized yet!");
 

@@ -97,7 +97,7 @@ subroutine fast_WWGammaW(GammaW, W0, W, Beta, rIndex, SpinIndex, Spin2Index, Vol
   Complex*16 :: W0(0:4-1, 0:4-1, 0:Vol-1)
   Complex*16 :: W(0:4-1, 0:4-1, 0:Vol-1, 0:MaxTauBin-1)
 !f2py intent(in) W0, W
-  Complex :: WGammaW(0:6-1, 0:Vol-1, 0:Vol-1, 0:MaxTauBin-1, 0:MaxTauBin-1)
+  Complex*16 :: WGammaW(0:6-1, 0:Vol-1, 0:Vol-1, 0:MaxTauBin-1, 0:MaxTauBin-1)
   integer :: r, rout, t, tout, dt_out, rin, tin, dt_in, dr_out, dr_in
   !complex :: Wout(0:4-1, 0:4-1)
   !complex :: Win(0:4-1, 0:4-1)

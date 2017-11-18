@@ -262,7 +262,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                 SigmaDyson = calc.SigmaSmoothT_FirstOrder(G, W, Map)
                 print "SigmaFromDyson=\n", SigmaDyson.Data[UP,0,UP,0,0,:]
 
-                GammaW = gamma3.WWGammaW(GammaW_MC, W0, W, G.Map)
+                GammaW = gamma3.FastWWGammaW(GammaW_MC, W0, W, G.Map)
                 GGGammaG_MC = gamma3.AddTwoGToGammaG(GammaG_MC, G, G.Map)
                 GammaG = gamma3.SimpleGG(G, Map)+ gamma3.GammaG_FirstOrder(GammaG, G, W0, Map) + GGGammaG_MC
                 print "GammaG, mc=\n",  0.5*(np.sum(GGGammaG_MC[DOWN, :, :, :]-GGGammaG_MC[UP, :, :, :], axis=0)).diagonal()
