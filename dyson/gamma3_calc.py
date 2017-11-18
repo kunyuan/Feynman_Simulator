@@ -312,7 +312,7 @@ def FastFourierWWGammaW(GGammaG, W0, W, _map):
 
     GGammaG=FFTGammaW(GGammaG, _map, 1)
 
-    WWGammaW=gamma3.fast_fourier_wwgammaw(GGammaG, W.Data[:,sub,:,sub,:,:], _map.Beta, rIndex, spinindex, spin2index, _map.Vol, _map.MaxTauBin)
+    WWGammaW=gamma3.fast_fourier_wwgammaw(GGammaG, Wtot, _map.Beta, spinindex, spin2index, _map.Vol, _map.MaxTauBin)
 
     WWGammaW=FFTGammaW(WWGammaW, _map, -1)
     W0.FFT("R","T")
@@ -535,13 +535,16 @@ def GammaG_FirstOrder(GammaG, G, W0, _map):
             if dtin<0:
                 dtin+=_map.MaxTauBin
                 sign*=-1
-            G1=0.5*sign*G.Data[UP,sub,UP,sub,0,dtin]
-            dtin=t3-tin-1
-            sign=1
-            if dtin<0:
-                dtin+=_map.MaxTauBin
-                sign*=-1
-            G1+=0.5*sign*G.Data[UP,sub,UP,sub,0,dtin]
+            # G1=0.5*sign*G.Data[UP,sub,UP,sub,0,dtin]
+
+            # dtin=t3-tin-1
+            # sign=1
+            # if dtin<0:
+                # dtin+=_map.MaxTauBin
+                # sign*=-1
+            # G1+=0.5*sign*G.Data[UP,sub,UP,sub,0,dtin]
+
+            G1=sign*G.Data[UP,sub,UP,sub,0,dtin]
 
             for tout in range(_map.MaxTauBin):
                 dtout=tout-t3-1
@@ -549,13 +552,17 @@ def GammaG_FirstOrder(GammaG, G, W0, _map):
                 if dtout<0:
                     dtout+=_map.MaxTauBin
                     sign*=-1
-                G2=0.5*sign*G.Data[UP,sub,UP,sub,0,dtout]
-                dtout=tout-t3
-                sign=1
-                if dtout<0:
-                    dtout+=_map.MaxTauBin
-                    sign*=-1
-                G2+=0.5*sign*G.Data[UP,sub,UP,sub,0,dtout]
+                # G2=0.5*sign*G.Data[UP,sub,UP,sub,0,dtout]
+
+                # dtout=tout-t3
+                # sign=1
+                # if dtout<0:
+                    # dtout+=_map.MaxTauBin
+                    # sign*=-1
+                # G2+=0.5*sign*G.Data[UP,sub,UP,sub,0,dtout]
+
+                G2=sign*G.Data[UP,sub,UP,sub,0,dtout]
+
                 GG=G1*G2
                 
                 for r1,r2,V in Neighbors:

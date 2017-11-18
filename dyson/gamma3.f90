@@ -217,7 +217,7 @@ subroutine fast_WWGammaW(GammaW, W0, W, Beta, rIndex, SpinIndex, Spin2Index, Vol
   GammaW=-1.0*GammaW
 end subroutine
 
-subroutine fast_fouier_WWGammaW(GammaW, W, Beta, rIndex, SpinIndex, Spin2Index, Vol, MaxTauBin)
+subroutine fast_fourier_WWGammaW(GammaW, W, Beta, SpinIndex, Spin2Index, Vol, MaxTauBin)
 ! receive a GammaW object, multiple by two W, then return the same GammaW object
 ! all objects are in Matsubara frequencies
   implicit none
@@ -225,8 +225,6 @@ subroutine fast_fouier_WWGammaW(GammaW, W, Beta, rIndex, SpinIndex, Spin2Index, 
 !f2py intent(in) Vol, MaxTauBin
   double precision :: Beta
 !f2py intent(in) Beta
-  integer :: rIndex(0:Vol-1, 0:Vol-1)
-!f2py intent(in) rIndex
   Complex*16 :: GammaW(0:6-1, 0:Vol-1, 0:Vol-1, 0:MaxTauBin-1, 0:MaxTauBin-1)
 !f2py intent(in, out, copy) GammaW
   integer :: SpinIndex(0:2-1)
@@ -234,7 +232,7 @@ subroutine fast_fouier_WWGammaW(GammaW, W, Beta, rIndex, SpinIndex, Spin2Index, 
   integer :: Spin2Index(0:4-1)
 !f2py intent(in) Spin2Index
   Complex*16 :: W(0:4-1, 0:4-1, 0:Vol-1, 0:MaxTauBin-1)
-!f2py intent(in) W0, W
+!f2py intent(in) W
   Complex*16 :: WGammaW(0:6-1, 0:Vol-1, 0:Vol-1, 0:MaxTauBin-1, 0:MaxTauBin-1)
   double precision :: deltaT
   integer :: kout, wout, kin, win
@@ -249,10 +247,10 @@ subroutine fast_fouier_WWGammaW(GammaW, W, Beta, rIndex, SpinIndex, Spin2Index, 
   deltaT=Beta/MaxTauBin
 
   print *, "calculating WGammaW with fouier and f2py..."
-  do kout=0, Vol-1
-    do wout=0, Vol-1
+  do win=0, MaxTauBin-1
+    do wout=0, MaxTauBin-1
       do kin=0, Vol-1
-        do win=0, Vol-1
+        do kout=0, Vol-1
           ! UPUP UPUP
           WGammaW(0, kout, kin, wout, win)  = W(UPUP, UPUP, kout, wout) * GammaW(0, kout, kin, wout, win)
 
@@ -276,10 +274,10 @@ subroutine fast_fouier_WWGammaW(GammaW, W, Beta, rIndex, SpinIndex, Spin2Index, 
   enddo
   
   print *, "calculating WWGammaW with fouier and f2py..."
-  do kout=0, Vol-1
-    do wout=0, Vol-1
+  do win=0, MaxTauBin-1
+    do wout=0, MaxTauBin-1
       do kin=0, Vol-1
-        do win=0, Vol-1
+        do kout=0, Vol-1
           ! out:UPUP in:UPUP
           GammaW(0, kout, kin, wout, win)=W(UPUP, UPUP, kin, win)*WGammaW(0,kout,kin,wout,win) &
             +W(UPUP,DOWNDOWN,kin, win)*WGammaW(2, kout, kin, wout, win)
