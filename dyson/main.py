@@ -67,13 +67,6 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     # WWGammaW=calc.WWGammaW(GGammaG, W0, W, G.Map)
     # GammaGFromGammaW=calc.GammaWToGammaG(WWGammaW, G, G.Map)
 
-    # print "GammaW, type0, diagonal, mc=\n", GammaW[0, 1, 1, :, :].diagonal()
-    # print "GammaW, type4, diagonal, mc=\n", GammaW[4, 1, 1, :, :].diagonal()
-
-    # print "GammaW, type0, tau1=0,  mc=\n",  GammaW[0, 1, 1, 0, :]
-    # print "GammaW, type4, tau1=0,  mc=\n",  GammaW[4, 1, 1, 0, :]
-    # print "GammaW, type5, tau1=0,  mc=\n",  GammaW[5, 1, 1, 0, :]
-
     print "GammaG, UP, r=0, mc=\n", GammaG[UP, 0, :, :].diagonal()
     print "GammaG, UP, r=1, mc=\n", GammaG[UP, 1, :, :].diagonal()
 
