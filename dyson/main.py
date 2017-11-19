@@ -67,12 +67,12 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     # WWGammaW=calc.WWGammaW(GGammaG, W0, W, G.Map)
     # GammaGFromGammaW=calc.GammaWToGammaG(WWGammaW, G, G.Map)
 
-    print "GammaW, type0, diagonal, mc=\n", GammaW[0, 1, 1, :, :].diagonal()
-    print "GammaW, type4, diagonal, mc=\n", GammaW[4, 1, 1, :, :].diagonal()
+    # print "GammaW, type0, diagonal, mc=\n", GammaW[0, 1, 1, :, :].diagonal()
+    # print "GammaW, type4, diagonal, mc=\n", GammaW[4, 1, 1, :, :].diagonal()
 
-    print "GammaW, type0, tau1=0,  mc=\n",  GammaW[0, 1, 1, 0, :]
-    print "GammaW, type4, tau1=0,  mc=\n",  GammaW[4, 1, 1, 0, :]
-    print "GammaW, type5, tau1=0,  mc=\n",  GammaW[5, 1, 1, 0, :]
+    # print "GammaW, type0, tau1=0,  mc=\n",  GammaW[0, 1, 1, 0, :]
+    # print "GammaW, type4, tau1=0,  mc=\n",  GammaW[4, 1, 1, 0, :]
+    # print "GammaW, type5, tau1=0,  mc=\n",  GammaW[5, 1, 1, 0, :]
 
     print "GammaG, UP, r=0, mc=\n", GammaG[UP, 0, :, :].diagonal()
     print "GammaG, UP, r=1, mc=\n", GammaG[UP, 1, :, :].diagonal()
@@ -226,20 +226,23 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
 
                 GGammaG = gamma3.AddG_To_GammaG(GammaG, G, G.Map)
 
-                WWGammaW=gamma3.FastFourierWWGammaW(GGammaG, W0, W, G.Map)
-
+                # WWGammaW=gamma3.FastFourierWWGammaW(GGammaG, W0, W, G.Map)
                 # WWGammaW=gamma3.FastWWGammaW(GGammaG, W0, W, G.Map)
                 # WWGammaW=gamma3.WWGammaW(GGammaG, W0, W, G.Map)
+                WWGammaW = gamma3.FourierWWGammaW(GGammaG, W0, W, G.Map)
+
                 GammaGFromGammaW=gamma3.GammaWToGammaG(WWGammaW, G, G.Map)
 
-                # GammaGFirstOrder=gamma3.FastGammaG_RPA(GammaG, G, W0, Map)
-                GammaGFirstOrder=gamma3.GammaG_FirstOrder(GammaG, G, W0, Map)
+                GammaGFirstOrder=gamma3.FastGammaG_RPA(GammaG, G, W0, Map)
+                # GammaGFirstOrder=gamma3.GammaG_FirstOrder(GammaG, G, W0, Map)
+
                 SimpleGammaG=gamma3.SimpleGG(G, Map)
 
                 GammaG =SimpleGammaG+GammaGFirstOrder
                 GammaG += +GGWGG - GammaGFromGammaW
 
                 print "GammaGFirstOrder, dyson=\n",  0.5*(np.sum(GammaGFirstOrder[DOWN, :, :, :]-GammaGFirstOrder[UP, :, :, :], axis=0)).diagonal()
+                # print "GammaGFirstOrder, RPA=\n",  0.5*(np.sum(GammaGFirstOrder_RPA[DOWN, :, :, :]-GammaGFirstOrder_RPA[UP, :, :, :], axis=0)).diagonal()
                 # print "FastGammaGRPA, dyson=\n",  0.5*(np.sum(FastGammaGRPA[DOWN, :, :, :]-FastGammaGRPA[UP, :, :, :], axis=0)).diagonal()
                 # print "GGWGG, mc=\n",  0.5*(np.sum(GGWGG[DOWN, :, :, :]-GGWGG[UP, :, :, :], axis=0)).diagonal()
                 #print "GGWGG, mc=\n",  GGWGG[UP, 0, :, :].diagonal()

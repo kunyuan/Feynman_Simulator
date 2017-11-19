@@ -32,36 +32,38 @@ subroutine fast_GammaG_RPA(GammaGNew, GammaG, G, W0, Beta, rIndex, SpinIndex, Sp
 
   do t3=0, MaxTauBin-1
     do tin=0, MaxTauBin-1
-      dtin=t3-tin
-      sign=1
-      if(dtin<0) then
-        dtin=dtin+MaxTauBin
-        sign=-sign
-      endif
-      G1=0.5*sign*G(UP,UP,dtin)
+      !dtin=t3-tin
+      !sign=1
+      !if(dtin<0) then
+        !dtin=dtin+MaxTauBin
+        !sign=-sign
+      !endif
+      !G1=0.5*sign*G(UP,UP,dtin)
+
       sign=1
       dtin=t3-tin-1
       if(dtin<0) then
         dtin=dtin+MaxTauBin
         sign=-sign
       endif
-      G1=G1+0.5*sign*G(UP,UP,dtin)
+      G1=sign*G(UP,UP,dtin)
 
       do tout=0, MaxTauBin-1
-        dtout=tout-t3-1
-        sign=1
-        if(dtout<0) then
-            dtout=dtout+MaxTauBin
-            sign=-sign
-        endif
-        G2=0.5*sign*G(UP,UP,dtout)
         dtout=tout-t3
         sign=1
         if(dtout<0) then
             dtout=dtout+MaxTauBin
             sign=-sign
         endif
-        G2=G2+0.5*sign*G(UP,UP,dtout)
+        G2=sign*G(UP,UP,dtout)
+        !G2=0.5*sign*G(UP,UP,dtout)
+        !dtout=tout-t3-1
+        !sign=1
+        !if(dtout<0) then
+            !dtout=dtout+MaxTauBin
+            !sign=-sign
+        !endif
+        !G2=G2+0.5*sign*G(UP,UP,dtout)
         GG=G1*G2
 
         do r1=0, Vol-1

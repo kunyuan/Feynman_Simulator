@@ -236,55 +236,104 @@ def FourierWWGammaW(GGammaG, W0, W, _map):
     GGammaG=FFTGammaW(GGammaG, _map, 1)
 
     WGammaW=np.zeros([6, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
-    Wout=Wtot
     print "calculating WGammaW with fourier..."
-    for kout in range(_map.Vol):
-            for wout in range(_map.MaxTauBin):
-                    # UPUP UPUP
-                    WGammaW[0, kout, :, wout, :]  = Wout[UPUP, UPUP, kout, wout] * GGammaG[0, kout, :, wout, :]
 
-                    # DOWNDOWN DOWNDOWN
-                    WGammaW[1, kout, :, wout, :]  = Wout[DOWNDOWN, DOWNDOWN, kout, wout] * GGammaG[1, kout, :, wout, :]
+    TempGammaW=np.array(GGammaG)
+    TempGammaW[0,:,:,:,:]=GGammaG[0,:,:,:,:]
+    TempGammaW[1,:,:,:,:]=GGammaG[1,:,:,:,:]
+    TempGammaW[2,:,:,:,:]=GGammaG[1,:,:,:,:]
+    TempGammaW[3,:,:,:,:]=GGammaG[0,:,:,:,:]
+    TempGammaW[4,:,:,:,:]=GGammaG[5,:,:,:,:]
+    TempGammaW[5,:,:,:,:]=GGammaG[4,:,:,:,:]
 
-                    # out:UPUP in:DOWNDOWN 
-                    WGammaW[2, kout, :, wout, :]  = Wout[UPUP, DOWNDOWN, kout, wout] * GGammaG[1, kout, :, wout, :]
+    Wout = np.zeros((6,Wtot.shape[2],1,Wtot.shape[3],1)) +0.0*1j
+    Wout[0,:,0,:,0] = Wtot[UPUP, UPUP, :, :]
+    Wout[1,:,0,:,0] = Wtot[DOWNDOWN, DOWNDOWN, :, :]
+    Wout[2,:,0,:,0] = Wtot[UPUP, DOWNDOWN, :, :]
+    Wout[3,:,0,:,0] = Wtot[DOWNDOWN, UPUP, :, :]
+    Wout[4,:,0,:,0] = Wtot[UPDOWN, DOWNUP, :, :]
+    Wout[5,:,0,:,0] = Wtot[DOWNUP, UPDOWN, :, :]
 
-                    # out:DOWNDOWN in:UPUP
-                    WGammaW[3, kout, :, wout, :]  = Wout[DOWNDOWN, UPUP, kout, wout] * GGammaG[0, kout, :, wout, :]
+    WGammaW = Wout * TempGammaW
 
-                    # out:UPDOWN in:DOWNUP
-                    WGammaW[4, kout, :, wout, :]  = Wout[UPDOWN, DOWNUP, kout, wout] * GGammaG[5, kout, :, wout, :]
+    # for kout in range(_map.Vol):
+        # for wout in range(_map.MaxTauBin):
+                
+                    # # UPUP UPUP
+                    # WGammaW[0, kout, :, wout, :]  = Wout[UPUP, UPUP, kout, wout] * GGammaG[0, kout, :, wout, :]
 
-                    # out:DOWNUP in:UPDOWN
-                    WGammaW[5, kout, :, wout, :]  = Wout[DOWNUP, UPDOWN, kout, wout] * GGammaG[4, kout, :, wout, :]
+                    # # DOWNDOWN DOWNDOWN
+                    # WGammaW[1, kout, :, wout, :]  = Wout[DOWNDOWN, DOWNDOWN, kout, wout] * GGammaG[1, kout, :, wout, :]
 
-    Win=Wtot
+                    # # out:UPUP in:DOWNDOWN 
+                    # WGammaW[2, kout, :, wout, :]  = Wout[UPUP, DOWNDOWN, kout, wout] * GGammaG[1, kout, :, wout, :]
+
+                    # # out:DOWNDOWN in:UPUP
+                    # WGammaW[3, kout, :, wout, :]  = Wout[DOWNDOWN, UPUP, kout, wout] * GGammaG[0, kout, :, wout, :]
+
+                    # # out:UPDOWN in:DOWNUP
+                    # WGammaW[4, kout, :, wout, :]  = Wout[UPDOWN, DOWNUP, kout, wout] * GGammaG[5, kout, :, wout, :]
+
+                    # # out:DOWNUP in:UPDOWN
+                    # WGammaW[5, kout, :, wout, :]  = Wout[DOWNUP, UPDOWN, kout, wout] * GGammaG[4, kout, :, wout, :]
+
     print "calculating WWGammaW with fourier..."
+    Win = np.zeros((6,1,Wtot.shape[2],1,Wtot.shape[3])) +0.0*1j
+    Win[0,0,:,0,:] = Wtot[UPUP, UPUP, :, :]
+    Win[1,0,:,0,:] = Wtot[DOWNDOWN, UPUP, :, :]
+    Win[2,0,:,0,:] = Wtot[DOWNDOWN, UPUP, :, :]
+    Win[3,0,:,0,:] = Wtot[UPUP, UPUP, :, :]
+    Win[4,0,:,0,:] = Wtot[UPDOWN, DOWNUP, :, :]
+    Win[5,0,:,0,:] = Wtot[DOWNUP, UPDOWN, :, :]
 
-    WWGammaW = np.zeros([6, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin]) + 0.0*1j
-    for kin in range(_map.Vol):
-            for win in range(_map.MaxTauBin):
-                    ## out:UPUP in:UPUP
-                    WWGammaW[0, :, kin, :, win] = Win[UPUP, UPUP, kin, win] * WGammaW[0, :, kin, :, win] + Win[UPUP, DOWNDOWN,kin, win] * WGammaW[2, :, kin, :, win]
+    TempGammaW[0,:,:,:,:] = WGammaW[0,:,:,:,:]
+    TempGammaW[1,:,:,:,:] = WGammaW[3,:,:,:,:]
+    TempGammaW[2,:,:,:,:] = WGammaW[0,:,:,:,:]
+    TempGammaW[3,:,:,:,:] = WGammaW[3,:,:,:,:]
+    TempGammaW[4,:,:,:,:] = WGammaW[4,:,:,:,:]
+    TempGammaW[5,:,:,:,:] = WGammaW[5,:,:,:,:]
+    
+    WWGammaW = Win * TempGammaW
 
-                    ## out:DOWNDOWN in:DOWNDOWN
-                    WWGammaW[1, :, kin, :, win] = Win[DOWNDOWN, UPUP,kin, win] * WGammaW[3, :, kin, :, win] + Win[DOWNDOWN, DOWNDOWN,kin, win] * WGammaW[1, :, kin, :, win]
+    Win[0,0,:,0,:] = Wtot[UPUP, DOWNDOWN, :, :]
+    Win[1,0,:,0,:] = Wtot[DOWNDOWN, DOWNDOWN, :, :]
+    Win[2,0,:,0,:] = Wtot[DOWNDOWN, DOWNDOWN, :, :]
+    Win[3,0,:,0,:] = Wtot[UPUP, DOWNDOWN, :, :]
 
-                    ## out:UPUP in:DOWNDOWN
-                    WWGammaW[2, :, kin, :, win] = Win[DOWNDOWN, UPUP,kin, win] * WGammaW[0, :, kin, :, win] + Win[DOWNDOWN, DOWNDOWN,kin, win] * WGammaW[2, :, kin, :, win]
+    TempGammaW[0,...] = WGammaW[2,...]
+    TempGammaW[1,...] = WGammaW[1,...]
+    TempGammaW[2,...] = WGammaW[2,...]
+    TempGammaW[3,...] = WGammaW[1,...]
 
-                    ## out:DOWNDOWN in:UPUP
-                    WWGammaW[3, :, kin, :, win] = Win[UPUP, UPUP,kin, win] * WGammaW[3, :, kin, :, win] + Win[UPUP, DOWNDOWN, kin, win] * WGammaW[1, :, kin, :, win]
+    WWGammaW[0:4,...] += Win[0:4,...] * TempGammaW[0:4,...]
 
-                    ## out:UPDOWN in:DOWNUP
-                    WWGammaW[4, :, kin, :, win] = Win[UPDOWN, DOWNUP, kin, win] * WGammaW[4, :, kin, :, win]
+    # WWGammaW = np.zeros([6, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin]) + 0.0*1j
 
-                    ## out:DOWNUP in:UPDOWN
-                    WWGammaW[5, :, kin, :, win] = Win[DOWNUP, UPDOWN, kin, win] * WGammaW[5, :, kin, :, win]
+    # for kin in range(_map.Vol):
+            # for win in range(_map.MaxTauBin):
+                    # ## out:UPUP in:UPUP
+                    # WWGammaW[0, :, kin, :, win] = Win[UPUP, UPUP, kin, win] * WGammaW[0, :, kin, :, win] + Win[UPUP, DOWNDOWN,kin, win] * WGammaW[2, :, kin, :, win]
+
+                    # ## out:DOWNDOWN in:DOWNDOWN
+                    # WWGammaW[1, :, kin, :, win] = Win[DOWNDOWN, UPUP,kin, win] * WGammaW[3, :, kin, :, win] + Win[DOWNDOWN, DOWNDOWN,kin, win] * WGammaW[1, :, kin, :, win]
+
+                    # ## out:UPUP in:DOWNDOWN
+                    # WWGammaW[2, :, kin, :, win] = Win[DOWNDOWN, UPUP,kin, win] * WGammaW[0, :, kin, :, win] + Win[DOWNDOWN, DOWNDOWN,kin, win] * WGammaW[2, :, kin, :, win]
+
+                    # ## out:DOWNDOWN in:UPUP
+                    # WWGammaW[3, :, kin, :, win] = Win[UPUP, UPUP,kin, win] * WGammaW[3, :, kin, :, win] + Win[UPUP, DOWNDOWN, kin, win] * WGammaW[1, :, kin, :, win]
+
+                    # ## out:UPDOWN in:DOWNUP
+                    # WWGammaW[4, :, kin, :, win] = Win[UPDOWN, DOWNUP, kin, win] * WGammaW[4, :, kin, :, win]
+
+                    # ## out:DOWNUP in:UPDOWN
+                    # WWGammaW[5, :, kin, :, win] = Win[DOWNUP, UPDOWN, kin, win] * WGammaW[5, :, kin, :, win]
 
     WWGammaW=FFTGammaW(WWGammaW, _map, -1)
     W0.FFT("R","T")
     W.FFT("R","T")
+
+    print "calculating WWGammaW with fourier done!"
     return -1.0*WWGammaW
 
 def FastFourierWWGammaW(GGammaG, W0, W, _map):
@@ -470,8 +519,9 @@ def FastGammaG_RPA(GammaG, G, W0, _map):
     import gamma3
     #OrderSign=-1, FermiLoopSign=-1, therefore TotalSign=1
     #integer tin and tout
-    W0.FFT("R")
-    G.FFT("R")
+    print "calculating FirstOrder GammaG using fortran fast RPA..."
+    W0.FFT("R", "T")
+    G.FFT("R", "T")
     spinindex, spin2index=GenerateSpinIndex(_map)
     rIndex=np.zeros([_map.Vol, _map.Vol])
     sub=0
@@ -481,8 +531,8 @@ def FastGammaG_RPA(GammaG, G, W0, _map):
             rIndex[r, rout] = int(r_index.CoordiIndex(r, rout, _map))
     GammaGNew=gamma3.fast_gammag_rpa(GammaGNew, GammaG, G.Data[:,sub,:,sub,0,:], W0.Data[:,sub,:,sub,:], _map.Beta, rIndex, spinindex, spin2index, _map.Vol, _map.MaxTauBin)
     # print GammaGNew
+    print "calculating FirstOrder GammaG done!"
     return GammaGNew
-
 
 def GammaG_FirstOrder(GammaG, G, W0, _map):
     #OrderSign=-1, FermiLoopSign=-1, therefore TotalSign=1
@@ -492,9 +542,10 @@ def GammaG_FirstOrder(GammaG, G, W0, _map):
     spinUP=_map.Spin2Index(UP,UP)
     spinDOWN=_map.Spin2Index(DOWN,DOWN)
 
+    print "calculating FirstOrder GammaG..."
     # # # print "GammaG[UP,UP]=\n", GammaG[UP,0,:,-1]
-    W0.FFT("R")
-    G.FFT("R")
+    W0.FFT("R", "T")
+    G.FFT("R", "T")
     sub=0
     r=0
     Neighbors=[]
@@ -530,35 +581,35 @@ def GammaG_FirstOrder(GammaG, G, W0, _map):
 
     for t3 in range(_map.MaxTauBin):
         for tin in range(_map.MaxTauBin):
-            dtin=t3-tin
-            sign=1
-            if dtin<0:
-                dtin+=_map.MaxTauBin
-                sign*=-1
-            # G1=0.5*sign*G.Data[UP,sub,UP,sub,0,dtin]
-
-            # dtin=t3-tin-1
+            # dtin=t3-tin
             # sign=1
             # if dtin<0:
                 # dtin+=_map.MaxTauBin
                 # sign*=-1
+            # G1=0.5*sign*G.Data[UP,sub,UP,sub,0,dtin]
+
+            dtin=t3-tin-1
+            sign=1
+            if dtin<0:
+                dtin+=_map.MaxTauBin
+                sign*=-1
             # G1+=0.5*sign*G.Data[UP,sub,UP,sub,0,dtin]
 
             G1=sign*G.Data[UP,sub,UP,sub,0,dtin]
 
             for tout in range(_map.MaxTauBin):
-                dtout=tout-t3-1
-                sign=1
-                if dtout<0:
-                    dtout+=_map.MaxTauBin
-                    sign*=-1
-                # G2=0.5*sign*G.Data[UP,sub,UP,sub,0,dtout]
-
-                # dtout=tout-t3
+                # dtout=tout-t3-1
                 # sign=1
                 # if dtout<0:
                     # dtout+=_map.MaxTauBin
                     # sign*=-1
+                # G2=0.5*sign*G.Data[UP,sub,UP,sub,0,dtout]
+
+                dtout=tout-t3
+                sign=1
+                if dtout<0:
+                    dtout+=_map.MaxTauBin
+                    sign*=-1
                 # G2+=0.5*sign*G.Data[UP,sub,UP,sub,0,dtout]
 
                 G2=sign*G.Data[UP,sub,UP,sub,0,dtout]
@@ -570,4 +621,5 @@ def GammaG_FirstOrder(GammaG, G, W0, _map):
                     GammaGNew[DOWN,r1,tout,tin]+=GG*(V[spinDOWN,spinUP]*GammaG[UP,r2,t3,t3]+V[spinDOWN,spinDOWN]*GammaG[DOWN,r2,t3,t3])
 
     GammaGNew*=_map.Beta/_map.MaxTauBin
+    print "calculating FirstOrder GammaG done!"
     return GammaGNew
