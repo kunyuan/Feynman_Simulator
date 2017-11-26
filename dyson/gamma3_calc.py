@@ -6,6 +6,7 @@ from weight import UP,DOWN,IN,OUT
 import weight, plot
 from logger import *
 import r_index 
+import calculator as calc
 
 def SimpleGG(G, _map):
     #half integer tin and tout
@@ -40,12 +41,27 @@ def GGW(GammaG,W,_map):
     sub=0
     r=0
     GGW=np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
-    for t1 in range(_map.MaxTauBin):
-        for t2 in range(_map.MaxTauBin):
-            # if t1==t2:
-                # print W.Data[spinUP,sub,spinUP,sub,0,abs(t1-t2)]
-            GGW[UP,r, t1,t2]=OrderSign*GammaG[UP,r,t1,t2]*W.Data[spinUP,sub,spinUP,sub,0,abs(t1-t2)]
-            GGW[DOWN,r, t1,t2]=OrderSign*GammaG[UP,r,t1,t2]*W.Data[spinDOWNUP,sub,spinUPDOWN,sub,0,abs(t1-t2)]
+    Wshift=weight.Weight("SmoothT", _map, "FourSpins", "Symmetric", "R","T")
+    for t in range(_map.MaxTauBin):
+        t1=t-1
+        if t1<0:
+            t1+=_map.MaxTauBin
+        Wshift.Data[:,:,:,:,:,t]=0.5*(W.Data[:,:,:,:,:,t1]+W.Data[:,:,:,:,:,t])
+
+    for r in range(_map.Vol):
+        for t1 in range(_map.MaxTauBin):
+            for t2 in range(_map.MaxTauBin):
+                # if t1==t2:
+                    # print W.Data[spinUP,sub,spinUP,sub,0,abs(t1-t2)]
+                dt = t1 - t2
+                if dt <0:
+                    dt = dt + _map.MaxTauBin
+
+                GGW[UP, r, t1,t2] = OrderSign*GammaG[UP,r,t1,t2]*Wshift.Data[spinUP,sub,spinUP,sub,0,dt]
+                GGW[UP, r, t1,t2] += OrderSign*GammaG[DOWN,r,t1,t2]*Wshift.Data[spinUPDOWN,sub,spinDOWNUP,sub,0,dt]
+
+                GGW[DOWN, r, t1,t2] = OrderSign*GammaG[UP,r,t1,t2]*Wshift.Data[spinDOWNUP,sub,spinUPDOWN,sub,0,dt]
+                GGW[DOWN, r, t1,t2] += OrderSign*GammaG[DOWN,r,t1,t2]*Wshift.Data[spinDOWN,sub,spinDOWN,sub,0,dt]
     return GGW
 
 def AddTwoGToGammaG(GammaG, G, _map):
@@ -505,8 +521,9 @@ def GammaWToGammaG(GammaW, G, _map):
                 GGammaW[DOWN, r, tout, tin] += Gout[DOWN,DOWN]*GammaW[1,r,r,tout,tin]
                 GGammaW[DOWN, r, tout, tin] += Gout[UP,UP]*GammaW[4,r,r,tout,tin]
 
-    GammaG=AddTwoGToGammaG(GGammaW, G, _map)
-    return GammaG
+    # GammaG=AddTwoGToGammaG(GGammaW, G, _map)
+    # return GammaG
+    return GGammaW
 
 def shift(r, L):
     if r<0:
@@ -533,6 +550,62 @@ def FastGammaG_RPA(GammaG, G, W0, _map):
     # print GammaGNew
     print "calculating FirstOrder GammaG done!"
     return GammaGNew
+
+def Calculate_RPA(Chi, Polar, W0, _map):
+    ChiNew=np.zeros([2, _map.Vol, _map.MaxTauBin])+0.0*1j
+    spinUP=_map.Spin2Index(UP,UP)
+    spinDOWN=_map.Spin2Index(DOWN,DOWN)
+    print "calculating RPA..."
+    # # # print "GammaG[UP,UP]=\n", GammaG[UP,0,:,-1]
+    W0.FFT("R", "T")
+    sub=0
+    r=0
+    Neighbors=[]
+    Lx, Ly=_map.L
+    for Gx in range(Lx):
+        for dx in [-1,0,1]:
+            x=shift(Gx+dx, Lx)
+            for Gy in range(Ly):
+                for dy in [-1,0,1]:
+                    y=shift(Gy+dy, Ly)
+
+                    dx_shift=shift(dx, Lx)
+                    dy_shift=shift(dy, Ly)
+
+                    i=_map.CoordiIndex([Gx,Gy])
+                    j=_map.CoordiIndex([x,y])
+                    k=_map.CoordiIndex([dx_shift,dy_shift])
+                    Neighbors.append([i,j,W0.Data[:,sub,:,sub,k]])
+                    # print W0.Data[spinUP,sub,spinUP,sub,k], dx, dy
+                    # print W0.Data[:,sub,:,sub,k], dx, dy
+
+    AvgPolar = np.zeros(Polar.shape)+0.0*1j
+    for t in range(_map.MaxTauBin):
+        t1 = t - 1
+        if t1 < 0:
+            t1 += _map.MaxTauBin
+        AvgPolar[:, :, t]=0.5*( Polar[:, :, t1] + Polar[:, :, t])
+
+    for t3 in range(_map.MaxTauBin):
+        for tout in range(_map.MaxTauBin):
+            dtout = tout-t3
+            if dtout<0:
+                dtout += _map.MaxTauBin
+            for r in range(_map.Vol):
+                for r1, r2, V in Neighbors:
+                    dr = int(r_index.CoordiIndex(r, r1, _map))
+
+                    ChiNew[UP,r,tout] += ( AvgPolar[UP,dr,dtout] * V[spinUP,spinUP] +  AvgPolar[DOWN,dr,dtout] * V[spinDOWN,spinUP])  * Chi[UP, r2, t3] 
+                    ChiNew[UP,r,tout] += ( AvgPolar[UP,dr,dtout] * V[spinUP,spinDOWN] +  AvgPolar[DOWN,dr,dtout] * V[spinDOWN,spinDOWN])  * Chi[DOWN, r2, t3] 
+
+                    ChiNew[DOWN,r,tout] += ( AvgPolar[DOWN,dr,dtout] * V[spinUP,spinUP] +  AvgPolar[UP,dr,dtout] * V[spinDOWN,spinUP])  * Chi[UP, r2, t3] 
+                    ChiNew[DOWN,r,tout] += ( AvgPolar[DOWN,dr,dtout] * V[spinUP,spinDOWN] +  AvgPolar[UP,dr,dtout] * V[spinDOWN,spinDOWN])  * Chi[DOWN, r2, t3] 
+
+    ChiNew*=_map.Beta/_map.MaxTauBin*(-1.0)
+    print "calculating RPA done!"
+    return ChiNew
+
+
 
 def GammaG_FirstOrder(GammaG, G, W0, _map):
     #OrderSign=-1, FermiLoopSign=-1, therefore TotalSign=1
@@ -580,6 +653,13 @@ def GammaG_FirstOrder(GammaG, G, W0, _map):
                     # print W0.Data[:,sub,:,sub,k], dx, dy
 
     for t3 in range(_map.MaxTauBin):
+        dt=t3
+        Polar=0.5*GammaG[:, :, dt, dt]
+        dt=t3-1
+        if dt<0:
+            dt+=_map.MaxTauBin
+        Polar+=0.5*GammaG[:, :, dt, dt]
+        
         for tin in range(_map.MaxTauBin):
             # dtin=t3-tin
             # sign=1
@@ -617,9 +697,81 @@ def GammaG_FirstOrder(GammaG, G, W0, _map):
                 GG=G1*G2
                 
                 for r1,r2,V in Neighbors:
-                    GammaGNew[UP,r1,tout,tin]+=GG*(V[spinUP,spinUP]*GammaG[UP,r2,t3,t3]+V[spinUP,spinDOWN]*GammaG[DOWN,r2,t3,t3])
-                    GammaGNew[DOWN,r1,tout,tin]+=GG*(V[spinDOWN,spinUP]*GammaG[UP,r2,t3,t3]+V[spinDOWN,spinDOWN]*GammaG[DOWN,r2,t3,t3])
+                    # GammaGNew[UP,r1,tout,tin]+=GG*(V[spinUP,spinUP]*GammaG[UP,r2,t3,t3]+V[spinUP,spinDOWN]*GammaG[DOWN,r2,t3,t3])
+                    # GammaGNew[DOWN,r1,tout,tin]+=GG*(V[spinDOWN,spinUP]*GammaG[UP,r2,t3,t3]+V[spinDOWN,spinDOWN]*GammaG[DOWN,r2,t3,t3])
+                    GammaGNew[UP,r1,tout,tin] += GG *(V[spinUP,spinUP] *Polar[UP,r2] + V[spinUP,spinDOWN] * Polar[DOWN,r2])
+                    GammaGNew[DOWN,r1,tout,tin] += GG *(V[spinDOWN,spinUP] *Polar[UP,r2] + V[spinDOWN,spinDOWN] * Polar[DOWN,r2])
 
     GammaGNew*=_map.Beta/_map.MaxTauBin
     print "calculating FirstOrder GammaG done!"
     return GammaGNew
+
+def FullGammaG(IrGammaG, W0, _map):
+    sub=0
+    BKPolar=weight.Weight("SmoothT", _map, "FourSpins", "Symmetric","R","T")
+
+    UPUP=_map.Spin2Index(UP,UP)
+    DOWNDOWN=_map.Spin2Index(DOWN,DOWN)
+    UPDOWN=_map.Spin2Index(UP,DOWN)
+    DOWNUP=_map.Spin2Index(DOWN,UP)
+
+    IrGammaGuu=np.zeros((_map.Vol, _map.MaxTauBin))+0.0*1j
+    IrGammaGdu=np.zeros((_map.Vol, _map.MaxTauBin))+0.0*1j
+    for i in range(_map.MaxTauBin):
+        IrGammaGuu[:, i]=IrGammaG[UP, :, i, i]
+        IrGammaGdu[:, i]=IrGammaG[DOWN, :, i, i]
+
+    BKPolar.Data[UPUP, sub, UPUP, sub, :,:]=IrGammaGuu 
+    BKPolar.Data[DOWNDOWN, sub, DOWNDOWN, sub, :,:]=IrGammaGuu 
+    BKPolar.Data[DOWNDOWN, sub, UPUP, sub, :,:]=IrGammaGdu 
+    BKPolar.Data[UPUP, sub, DOWNDOWN, sub, :,:]=IrGammaGdu 
+
+    # print "BKPolar[UP,UP]=\n", BKPolar.Data[UPUP,0,UPUP,0,0,:]
+
+    BKPolar.FFT("K", "W")
+    W0.FFT("K")
+
+    Denorm,JP=calc.Calculate_Denorminator(W0, BKPolar, _map)
+
+    # JPJ=np.einsum("ijklvt,klmnv->ijmnvt", JP, W0.Data)
+    BKChiTensor=weight.Weight("SmoothT", _map, "FourSpins", "Symmetric", "K","W")
+    lu_piv,Determ=weight.LUFactor(Denorm)
+    Check_Denorminator(Denorm, Determ, _map)
+    BKChiTensor.LUSolve(lu_piv, -BKPolar.Data)
+    return BKChiTensor, Determ
+
+
+def Calculate_Chi(ChiTensor, _map):
+    NSpin, NSublat=ChiTensor.NSpin, ChiTensor.NSublat
+    SxSx=np.zeros((NSpin,NSpin))
+    SySy=np.zeros((NSpin,NSpin))
+    SzSz=np.zeros((NSpin,NSpin))
+    UU=_map.Spin2Index(UP,UP) 
+    UD=_map.Spin2Index(UP,DOWN) 
+    DU=_map.Spin2Index(DOWN, UP) 
+    DD=_map.Spin2Index(DOWN, DOWN) 
+    SxSx[UD, UD]=SxSx[DU, DU]=1
+    SxSx[UD, DU]=SxSx[DU, UD]=1
+    SySy[UD, UD]= SySy[DU, DU]=-1
+    SySy[UD, DU]= SySy[DU, UD]=1
+    SzSz[UU, UU]= SzSz[DD, DD]=1
+    SzSz[UU, DD]= SzSz[DD, UU]=-1
+    Chi=weight.Weight("SmoothT", _map, "NoSpin", "Symmetric", ChiTensor.SpaceDomain, ChiTensor.TimeDomain)
+    Chi.Data=0.0
+
+    SS=[SzSz/4.0]
+    for i in range(len(SS)):
+        temp=np.einsum("ik, kminvt->mnvt", SS[i], ChiTensor.Data)
+        Chi.Data+=temp.reshape([1, NSublat, 1, NSublat, _map.Vol, _map.MaxTauBin]) 
+    return Chi
+
+def Check_Denorminator(Denorm, Determ, _map):
+    pos=np.where(Determ==Determ.min())
+    x,t=pos[0][0], pos[1][0]
+    log.info("Checking denorminator of GammaG")
+    log.info("The minmum {0} is at K={1} and Omega={2}".format(Determ.min(), _map.IndexToCoordi(x), t))
+    SpSub,Vol,Time=Denorm.shape[0]*Denorm.shape[1], Denorm.shape[-2], Denorm.shape[-1]
+    Denorm=Denorm.reshape([SpSub,SpSub,Vol,Time])
+    log.info("The 1/linalg.cond is {0}".format(1.0/np.linalg.cond(Denorm[...,x,t])))
+    if Determ.min().real<0.0 and Determ.min().imag<1.0e-4:
+        raise DenorminatorTouchZero(Determ.min(), _map.IndexToCoordi(x), t)

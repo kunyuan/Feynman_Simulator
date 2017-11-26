@@ -214,8 +214,8 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                 G = calc.G_Dyson(G0, SigmaDeltaT, Sigma, Map)
                 Polar.Merge(ratio, calc.Polar_FirstOrder(G, Map))
 
-                GGW=gamma3.GGW(GammaG, W, G.Map)
-                GGWGG=gamma3.AddTwoGToGammaG(GGW, G, G.Map)
+                WGammaG=gamma3.GGW(GammaG, W, G.Map)
+                GGWGG=gamma3.AddTwoGToGammaG(WGammaG, G, G.Map)
 
                 GGammaG = gamma3.AddG_To_GammaG(GammaG, G, G.Map)
 
@@ -225,14 +225,15 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                 WWGammaW = gamma3.FourierWWGammaW(GGammaG, W0, W, G.Map)
 
                 GammaGFromGammaW=gamma3.GammaWToGammaG(WWGammaW, G, G.Map)
+                GGGammaGFromGammaW=gamma3.AddTwoGToGammaG(GammaGFromGammaW, G, G.Map)
 
                 GammaGFirstOrder=gamma3.FastGammaG_RPA(GammaG, G, W0, Map)
                 # GammaGFirstOrder=gamma3.GammaG_FirstOrder(GammaG, G, W0, Map)
 
                 SimpleGammaG=gamma3.SimpleGG(G, Map)
 
-                GammaG =SimpleGammaG+GammaGFirstOrder
-                GammaG += +GGWGG - GammaGFromGammaW
+                GammaG =SimpleGammaG + GammaGFirstOrder
+                GammaG += +GGWGG - GGGammaGFromGammaW
 
                 print "GammaGFirstOrder, dyson=\n",  0.5*(np.sum(GammaGFirstOrder[DOWN, :, :, :]-GammaGFirstOrder[UP, :, :, :], axis=0)).diagonal()
                 # print "GammaGFirstOrder, RPA=\n",  0.5*(np.sum(GammaGFirstOrder_RPA[DOWN, :, :, :]-GammaGFirstOrder_RPA[UP, :, :, :], axis=0)).diagonal()
