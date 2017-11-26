@@ -3,8 +3,8 @@ A general purpose quantum simulator using Feynman diagram technique
 
 ## Import project to CLion
    To create a CLion project, you have to do the followings:
-   * _File | Setting | Build, Execution, Deployment | cmake, and set Generation path to ../build
    * _File | Import Project_, and choose __src__ folder, then in the dialog window, choose "Open Project"
+   * _File | Setting | Build, Execution, Deployment | cmake, and set Generation path to ../build
      instead of "Rewrite CMakeList".
    * The last step will make __src__ folder as the project root (By default, CLion expect a CMakeLists.txt file to be provided in the root
      directory of all project-related files). Use _Tools | CMake | Change Project Root_ to change the root
