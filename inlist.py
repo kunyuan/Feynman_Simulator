@@ -24,7 +24,7 @@ Dyson={
     }
 }
 
-Beta=0.5
+Beta=1.0
 Order=4
 Common={
 "Tau": {"MaxTauBin" : 32, "Beta": Beta},
@@ -34,13 +34,13 @@ Common={
     # "L": [2,]
 
     #2D lattice
-    "Name": "Square", "NSublat": 1,
+    # "Name": "Square", "NSublat": 1,
     # "Name": "Checkerboard", "NSublat": 2,
     #"Name": "ValenceBond", "NSublat": 2,
     # "Name": "Honeycomb", "NSublat": 2,
-    #"Name": "Kagome", "NSublat": 3,
+    "Name": "Kagome", "NSublat": 3,
     #"Name": "Triangular", "NSublat": 1,
-    "L": [8,8]
+    "L": [16,16]
 
     #3D lattice
     #"Name": "Cubic", "NSublat": 1,

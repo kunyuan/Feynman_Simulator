@@ -36,6 +36,12 @@ class BareFactory:
             self.NextNearestNeighbor.append([])
             for j in range(Lat.NSublat):
                 self.NextNearestNeighbor[i].append([])
+
+        self.NextNextNearestNeighbor=[]
+        for i in range(Lat.NSublat):
+            self.NextNextNearestNeighbor.append([])
+            for j in range(Lat.NSublat):
+                self.NextNextNearestNeighbor[i].append([])
         
 
     def Build(self):
@@ -267,10 +273,33 @@ class BareFactory:
             self.NearestNeighbor[B][C]=[(0, 0), (Lx-1, 0)]
             self.NearestNeighbor[C][A]=[(0, 0), (0, 1)]
             self.NearestNeighbor[C][B]=[(0, 0), (1, 0)]
+
+            self.NextNearestNeighbor[A][B]=[(1, 0), (0, Ly-1)]
+            self.NextNearestNeighbor[A][C]=[(1, Ly-1), (Lx-1, 0)]
+            self.NextNearestNeighbor[B][A]=[(0, 1), (Lx-1, 0)]
+            self.NextNearestNeighbor[B][C]=[(Lx-1, 1), (0, Ly-1)]
+            self.NextNearestNeighbor[C][A]=[(1, 0), (Lx-1, 1)]
+            self.NextNearestNeighbor[C][B]=[(0, 1), (1, Ly-1)]
+
+            self.NextNextNearestNeighbor[A][A]=[(1, 0), (Lx-1,0)]
+            self.NextNextNearestNeighbor[B][B]=[(0, 1), (0,Ly-1)]
+            self.NextNextNearestNeighbor[C][C]=[(Lx-1, 1), (1,Ly-1)]
+
             for i in range(3):
                 for j in range(3):
+                    #J1 interaction
                     for e in self.NearestNeighbor[i][j]:
                         self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SS;
+
+                    ##J2 interaction
+                    for e in self.NextNearestNeighbor[i][j]:
+                        self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J2*SS;
+                        # self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J2*SSxy;
+
+                    ##J3 interaction
+                    for e in self.NextNextNearestNeighbor[i][j]:
+                        self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J3*SS;
+                        # self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J2*SSxy;
 
         elif LatName=="Cubic":
         #NSublat: 1
