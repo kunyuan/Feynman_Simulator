@@ -39,7 +39,6 @@ def GGW(GammaG,W,_map):
     spinUPDOWN=_map.Spin2Index(UP,DOWN)
     spinDOWNUP=_map.Spin2Index(DOWN,UP)
     sub=0
-    r=0
     GGW=np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
     Wshift=weight.Weight("SmoothT", _map, "FourSpins", "Symmetric", "R","T")
     for t in range(_map.MaxTauBin):
@@ -48,21 +47,18 @@ def GGW(GammaG,W,_map):
             t1+=_map.MaxTauBin
         Wshift.Data[:,:,:,:,:,t]=0.5*(W.Data[:,:,:,:,:,t1]+W.Data[:,:,:,:,:,t])
 
-    for r in range(_map.Vol):
-        for t1 in range(_map.MaxTauBin):
-            for t2 in range(_map.MaxTauBin):
-                # if t1==t2:
-                    # print W.Data[spinUP,sub,spinUP,sub,0,abs(t1-t2)]
-                dt = t1 - t2
-                if dt <0:
-                    dt = dt + _map.MaxTauBin
+    for t1 in range(_map.MaxTauBin):
+        for t2 in range(_map.MaxTauBin):
+            dt = t1 - t2
+            if dt <0:
+                dt = dt + _map.MaxTauBin
 
-                GGW[UP, r, t1,t2] = OrderSign*GammaG[UP,r,t1,t2]*Wshift.Data[spinUP,sub,spinUP,sub,0,dt]
-                GGW[UP, r, t1,t2] += OrderSign*GammaG[DOWN,r,t1,t2]*Wshift.Data[spinUPDOWN,sub,spinDOWNUP,sub,0,dt]
+            GGW[UP, :, t1,t2] = GammaG[UP,:,t1,t2]*Wshift.Data[spinUP,sub,spinUP,sub,0,dt]
+            GGW[UP, :, t1,t2] += GammaG[DOWN,:,t1,t2]*Wshift.Data[spinUPDOWN,sub,spinDOWNUP,sub,0,dt]
 
-                GGW[DOWN, r, t1,t2] = OrderSign*GammaG[UP,r,t1,t2]*Wshift.Data[spinDOWNUP,sub,spinUPDOWN,sub,0,dt]
-                GGW[DOWN, r, t1,t2] += OrderSign*GammaG[DOWN,r,t1,t2]*Wshift.Data[spinDOWN,sub,spinDOWN,sub,0,dt]
-    return GGW
+            GGW[DOWN, :, t1,t2] = GammaG[UP,:,t1,t2]*Wshift.Data[spinDOWNUP,sub,spinUPDOWN,sub,0,dt]
+            GGW[DOWN, :, t1,t2] += GammaG[DOWN,:,t1,t2]*Wshift.Data[spinDOWN,sub,spinDOWN,sub,0,dt]
+    return GGW*OrderSign
 
 def AddTwoGToGammaG(GammaG, G, _map):
     #integer tin and tout
@@ -119,23 +115,23 @@ def AddG_To_GammaG(GammaG, G, _map):
     spinDOWN=_map.Spin2Index(DOWN,DOWN)
     sub=0
     GGammaG = np.zeros([6, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
-    for r in range(_map.Vol):
-        for tout in range(_map.MaxTauBin):
-            for tin in range(_map.MaxTauBin):
-                tgout = tin - tout -1
-                sign=1
-                if tgout<0:
-                    tgout+=_map.MaxTauBin
-                    sign*=-1
-                Gout = 0.5*sign*G.Data[:,sub,:,sub,0,tgout]
+    for tout in range(_map.MaxTauBin):
+        for tin in range(_map.MaxTauBin):
+            tgout = tin - tout -1
+            sign=1
+            if tgout<0:
+                tgout+=_map.MaxTauBin
+                sign*=-1
+            Gout = 0.5*sign*G.Data[:,sub,:,sub,0,tgout]
 
-                tgout = tin - tout
-                sign=1
-                if tgout<0:
-                    tgout+=_map.MaxTauBin
-                    sign*=-1
-                Gout += 0.5*sign*G.Data[:,sub,:,sub,0,tgout]
+            tgout = tin - tout
+            sign=1
+            if tgout<0:
+                tgout+=_map.MaxTauBin
+                sign*=-1
+            Gout += 0.5*sign*G.Data[:,sub,:,sub,0,tgout]
 
+            for r in range(_map.Vol):
                 ## UP UP UP UP
                 GGammaG[0, r, r, tout, tin] = Gout[UP,UP]*GammaG[UP,r,tout,tin]
 
@@ -148,21 +144,22 @@ def AddG_To_GammaG(GammaG, G, _map):
                 ## in:DOWN UP out:UP DOWN 
                 GGammaG[4, r, r, tout, tin] = Gout[DOWN,DOWN]*GammaG[UP,r,tout,tin]
 
-                ### reverse
-                tgout = tout - tin -1
-                sign=1
-                if tgout<0:
-                    tgout+=_map.MaxTauBin
-                    sign*=-1
-                Gout = 0.5*sign*G.Data[:,sub,:,sub,0,tgout]
+            ### reverse
+            tgout = tout - tin -1
+            sign=1
+            if tgout<0:
+                tgout+=_map.MaxTauBin
+                sign*=-1
+            Gout = 0.5*sign*G.Data[:,sub,:,sub,0,tgout]
 
-                tgout = tout - tin
-                sign=1
-                if tgout<0:
-                    tgout+=_map.MaxTauBin
-                    sign*=-1
-                Gout += 0.5*sign*G.Data[:,sub,:,sub,0,tgout]
+            tgout = tout - tin
+            sign=1
+            if tgout<0:
+                tgout+=_map.MaxTauBin
+                sign*=-1
+            Gout += 0.5*sign*G.Data[:,sub,:,sub,0,tgout]
 
+            for r in range(_map.Vol):
                 ## UP UP UP UP
                 GGammaG[0, r, r, tout, tin] += Gout[UP,UP]*GammaG[UP,r,tin,tout]
 
