@@ -21,10 +21,11 @@ Dyson={
     "DysonOnly": MonteCarlo["Control"]["__Duplicate"]==0,
     #"DysonOnly": False,
     "SumRule": False 
+    # "SumRule":  True
     }
 }
 
-Beta=1.0
+Beta=12.0
 Order=4
 Common={
 "Tau": {"MaxTauBin" : 32, "Beta": Beta},
@@ -34,12 +35,12 @@ Common={
     # "L": [2,]
 
     #2D lattice
-    # "Name": "Square", "NSublat": 1,
+    "Name": "Square", "NSublat": 1,
     # "Name": "Checkerboard", "NSublat": 2,
     #"Name": "ValenceBond", "NSublat": 2,
     # "Name": "Honeycomb", "NSublat": 2,
-    "Name": "Kagome", "NSublat": 3,
-    #"Name": "Triangular", "NSublat": 1,
+    # "Name": "Kagome", "NSublat": 3,
+    # "Name": "Triangular", "NSublat": 1,
     "L": [16,16]
 
     #3D lattice
@@ -53,7 +54,7 @@ Common={
     # "Name": "Kitaev",
     # "Name": "Heisenberg",
     #"Description": ["ImW",],
-    "Interaction": [1.0, 1.0, 0.0, 0.0],
+    "Interaction": [1.0, 0.5, 0.0, 0.0],
     "ExternalField": [ 0.0, 0.0, 0.0, 0.0]
     #ExternalField on Sublattice A and B
     },
