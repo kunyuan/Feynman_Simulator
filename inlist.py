@@ -20,25 +20,25 @@ Dyson={
 "Job": {
     "DysonOnly": MonteCarlo["Control"]["__Duplicate"]==0,
     #"DysonOnly": False,
-    "SumRule": False 
+    "SumRule": True 
     }
 }
 
-Beta=1.0
-Order=4
+Beta=0.5
+Order=1
 Common={
-"Tau": {"MaxTauBin" : 32, "Beta": Beta},
+"Tau": {"MaxTauBin" : 128, "Beta": Beta},
 "Lattice":  {
     #1D lattice
     # "Name": "Chain", "NSublat":1,
     # "L": [2,]
 
     #2D lattice
-    # "Name": "Square", "NSublat": 1,
+    "Name": "Square", "NSublat": 1,
     # "Name": "Checkerboard", "NSublat": 2,
     #"Name": "ValenceBond", "NSublat": 2,
     # "Name": "Honeycomb", "NSublat": 2,
-    "Name": "Kagome", "NSublat": 3,
+    # "Name": "Kagome", "NSublat": 3,
     #"Name": "Triangular", "NSublat": 1,
     "L": [16,16]
 
@@ -49,11 +49,11 @@ Common={
     #"L": [4,4,4]
     },
 "Model": {
-    "Name": "J1J2",
+    # "Name": "J1J2",
     # "Name": "Kitaev",
-    # "Name": "Heisenberg",
+    "Name": "Heisenberg",
     #"Description": ["ImW",],
-    "Interaction": [1.0, 1.0, 0.0, 0.0],
+    "Interaction": [1.0, 0.0, 0.0, 0.0],
     "ExternalField": [ 0.0, 0.0, 0.0, 0.0]
     #ExternalField on Sublattice A and B
     },
@@ -81,8 +81,8 @@ MonteCarlo["Markov"]={
     }
 
 Dyson["Dyson"]={
-    "SleepTime": 0,
-    #"SleepTime": 300,
+    # "SleepTime": 0,
+    "SleepTime": 60,
     "OrderAccepted": {"Sigma":1, "Polar":1},
     "ErrorThreshold": 0.2,
     "Annealing": {
