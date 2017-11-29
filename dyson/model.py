@@ -217,8 +217,8 @@ class BareFactory:
             Lx,Ly=self.__Map.L
             sub=0
 
-            self.NearestNeighbor[0][0]=[(0,1),(1,0),(Lx-1,0),(0,Ly-1)]
-            self.NextNearestNeighbor[0][0]=[(1,1),(Lx-1,1),(1,Ly-1),(Lx-1,Ly-1)]
+            self.NearestNeighbor[0][0]=[(0,1),(1,0),(1,Ly-1),(0,Ly-1), (Lx-1,0), (Lx-1, 1)]
+            self.NextNearestNeighbor[0][0]=[(1,1),(2,Ly-1),(1,Ly-2),(Lx-1,Ly-1),(Lx-2,1), (Lx-1,2)]
 
             #J1 interaction on nearest neighbors
             for i in self.NearestNeighbor[0][0]:
