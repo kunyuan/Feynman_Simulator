@@ -28,7 +28,7 @@ Dyson={
 Beta=12.0
 Order=4
 Common={
-"Tau": {"MaxTauBin" : 32, "Beta": Beta},
+"Tau": {"MaxTauBin" : 128, "Beta": Beta},
 "Lattice":  {
     #1D lattice
     # "Name": "Chain", "NSublat":1,
@@ -50,9 +50,9 @@ Common={
     #"L": [4,4,4]
     },
 "Model": {
-    "Name": "J1J2",
+    # "Name": "J1J2",
     # "Name": "Kitaev",
-    # "Name": "Heisenberg",
+    "Name": "Heisenberg",
     #"Description": ["ImW",],
     "Interaction": [1.0, 0.5, 0.0, 0.0],
     "ExternalField": [ 0.0, 0.0, 0.0, 0.0]
@@ -82,8 +82,8 @@ MonteCarlo["Markov"]={
     }
 
 Dyson["Dyson"]={
-    "SleepTime": 0,
-    #"SleepTime": 300,
+    # "SleepTime": 0,
+    "SleepTime": 60,
     "OrderAccepted": {"Sigma":1, "Polar":1},
     "ErrorThreshold": 0.2,
     "Annealing": {
