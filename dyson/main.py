@@ -115,8 +115,8 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
         para["Version"]+=1
         log.info(green("Start Version {0}...".format(para["Version"])))
         try:
-            ratio=None   #set this will not use accumulation!
-            #ratio = para["Version"]/(para["Version"]+10.0)
+            # ratio=None   #set this will not use accumulation!
+            ratio = para["Version"]/(para["Version"]+10.0)
             G0,W0=Factory.Build()
             log.info("calculating SigmaDeltaT..")
             SigmaDeltaT.Merge(ratio, calc.SigmaDeltaT_FirstOrder(G, W0, Map))
@@ -139,7 +139,9 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
 
             #######DYSON FOR W AND G###########################
             log.info("calculating W...")
+
             Wtmp, ChiTensor, Determ = calc.W_Dyson(W0, Polar, Map, Lat)
+
             if EnforceSumRule:
                 ChiTensor=calc.Add_ChiTensor_ZerothOrder(ChiTensor, G, Map)
                 Chi = calc.Calculate_Chi(ChiTensor, Map)
@@ -154,6 +156,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                     Chi = calc.Calculate_Chi(ChiTensor, Map)
                     Chi.FFT("R","T")
                     print "Chi(r=0,t=0)", Chi.Data[0,0,0,0,0,0]
+
             W = Wtmp
 
         except calc.DenorminatorTouchZero as err:
