@@ -147,7 +147,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                 Chi = calc.Calculate_Chi(ChiTensor, Map)
                 Chi.FFT("R","T")
 
-                while abs(Chi.Data[0,0,0,0,0,0]-0.75)>1.e-2:
+                while abs(Chi.Data[0,0,0,0,0,0]-0.75)>1.e-3:
                     SumRuleRatio = np.sqrt(0.75/Chi.Data[0,0,0,0,0,0])
                     PolarSumRule = Polar
                     PolarSumRule.Data = PolarSumRule.Data*SumRuleRatio

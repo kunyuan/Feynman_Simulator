@@ -2,7 +2,8 @@
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" :  3,
+    "__Duplicate" :  0,
+    # "__Duplicate" :  3,
     "__IsCluster" : False, 
     "__AutoRun" : True,
     },
@@ -13,8 +14,8 @@ Dyson={
     "__Execute" : ["python", "./dyson/main.py"],
     "__Duplicate" : 1,
     "__IsCluster" : MonteCarlo["Control"]["__IsCluster"],
-    "__AutoRun" : MonteCarlo["Control"]["__AutoRun"], 
-    #"__AutoRun" : False,
+    # "__AutoRun" : MonteCarlo["Control"]["__AutoRun"], 
+    "__AutoRun" : False,
     "__PBSCommand": "#PBS -l mem=5gb"
     },
 "Job": {
@@ -25,8 +26,8 @@ Dyson={
     }
 }
 
-Beta=1.25
-Order=3
+Beta=0.5
+Order=1
 Common={
 "Tau": {"MaxTauBin" : 128, "Beta": Beta},
 "Lattice":  {
@@ -35,12 +36,12 @@ Common={
     # "L": [2,]
 
     #2D lattice
-    "Name": "Square", "NSublat": 1,
+    # "Name": "Square", "NSublat": 1,
     # "Name": "Checkerboard", "NSublat": 2,
     #"Name": "ValenceBond", "NSublat": 2,
     # "Name": "Honeycomb", "NSublat": 2,
     # "Name": "Kagome", "NSublat": 3,
-    # "Name": "Triangular", "NSublat": 1,
+    "Name": "Triangular", "NSublat": 1,
     "L": [16,16]
 
     #3D lattice
@@ -54,7 +55,7 @@ Common={
     # "Name": "Kitaev",
     "Name": "Heisenberg",
     #"Description": ["ImW",],
-    "Interaction": [1.0, 0.5, 0.0, 0.0],
+    "Interaction": [1.0, 0.0, 0.0, 0.0],
     "ExternalField": [ 0.0, 0.0, 0.0, 0.0]
     #ExternalField on Sublattice A and B
     },
