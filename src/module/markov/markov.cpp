@@ -1277,7 +1277,8 @@ void Markov::ChangeRLoop()
         n++;
     }
 
-    Site newR = RandomPickSite();
+    //Site newR = RandomPickSite();
+    Site newR = RandomPickNeighborSite(oldR);
 
     gLine g = nullptr;
     wLine w = nullptr;
@@ -1326,7 +1327,7 @@ void Markov::ChangeRLoop()
     real prob = mod(weightRatio);
     Complex sgn = phase(weightRatio);
 
-    prob *= ProbSite(oldR) / ProbSite(newR);
+    prob *= ProbNeighborSite(newR) / ProbNeighborSite(oldR);
 
     Proposed[CHANGE_R_LOOP][Diag->Order] += 1.0;
     if (prob >= 1.0 || RNG->urn() < prob) {
