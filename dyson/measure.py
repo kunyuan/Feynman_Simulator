@@ -20,7 +20,7 @@ class Observable:
     def Measure(self, Chi, Determinate, G, NN):
         self.Append("1-JP", Determinate.min())
         Factor=self.__Map.Beta/self.__Map.MaxTauBin
-        if self.__Lat.Name in ["Chain", "Square", "Cubic", "Checkerboard", "3DCheckerboard", "ValenceBond"]:
+        if self.__Lat.Name in ["Chain", "Assymetric_Triangular", "Square", "Cubic", "Checkerboard", "3DCheckerboard", "ValenceBond"]:
             # Chi.FFT("R", "T")
             # print Chi.Data[0,0,0,0,:,0]
             Chi.FFT("R", "W")

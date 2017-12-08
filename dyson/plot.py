@@ -269,7 +269,7 @@ def PlotChi_2D(Chi, lat, DoesSave=True):
         ChiK=[e.real for e in ChiK]
         k=np.array(k)
         plt.figure()
-        plt.scatter(k[:, 0],k[:, 1],c=ChiK, s=6, edgecolor="black", linewidth=0)
+        plt.scatter(k[:, 0],k[:, 1],c=ChiK, s=5, edgecolor="black", linewidth=0)
         c = plt.colorbar(orientation='horizontal')
         c.set_label("magnitude")
         plt.axis('equal')

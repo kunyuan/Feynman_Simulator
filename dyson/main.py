@@ -69,7 +69,7 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
             Observable.Save(OutputFile)
 
             #plot what you are interested in
-            plot.PlotChiAlongPath(Chi, Lat)
+            # plot.PlotChiAlongPath(Chi, Lat)
             plot.PlotTime("G", G, UP, 0, UP, 0, 0)
             plot.PlotTime("G0UPUP", G0, UP, 0, UP, 0, 0)
             plot.PlotTime("G0DOWNDOWN", G0, DOWN, 0, DOWN, 0, 0)
@@ -115,8 +115,8 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
         para["Version"]+=1
         log.info(green("Start Version {0}...".format(para["Version"])))
         try:
-            ratio=None   #set this will not use accumulation!
-            #ratio = para["Version"]/(para["Version"]+10.0)
+            # ratio=None   #set this will not use accumulation!
+            ratio = para["Version"]/(para["Version"]+10.0)
             G0,W0=Factory.Build()
             log.info("calculating SigmaDeltaT..")
             SigmaDeltaT.Merge(ratio, calc.SigmaDeltaT_FirstOrder(G, W0, Map))
@@ -124,10 +124,9 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
 
             if IsDysonOnly or IsNewCalculation:
                 log.info("accumulating Sigma/Polar statistics...")
+                G = calc.G_Dyson(G0, SigmaDeltaT, Sigma, Map)
                 Sigma.Merge(ratio, calc.SigmaSmoothT_FirstOrder(G, W, Map))
                 log.info("calculating G...")
-                G = calc.G_Dyson(G0, SigmaDeltaT, Sigma, Map)
-                Polar.Merge(ratio, calc.Polar_FirstOrder(G, Map))
             else:
                 log.info("Collecting Sigma/Polar statistics...")
                 Statis=collect.CollectStatis(Map)
@@ -155,6 +154,8 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                     Chi.FFT("R","T")
                     print "Chi(r=0,t=0)", Chi.Data[0,0,0,0,0,0]
             W = Wtmp
+            if IsDysonOnly or IsNewCalculation:
+                Polar.Merge(ratio, calc.Polar_FirstOrder(G, Map))
 
         except calc.DenorminatorTouchZero as err:
             #failure due to denorminator touch zero

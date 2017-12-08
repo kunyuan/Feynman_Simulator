@@ -221,6 +221,24 @@ class BareFactory:
             for i in self.NextNearestNeighbor[0][0]:
                 self.BareW.Data[:,sub,:,sub,self.__Map.CoordiIndex(i)]+= J2*SS;
 
+        elif LatName=="Assymetric_Triangular":
+        #NSublat: 3
+            Lx,Ly=self.__Map.L
+
+            A,B,C=0,1,2
+
+            self.NearestNeighbor[A][B]=[(0, 0), (0, Ly-1), (Lx-1, 0)]
+            self.NearestNeighbor[A][C]=[(0, 0), (Lx-1, 1), (Lx-1, 0)]
+            self.NearestNeighbor[B][A]=[(0, 0), (0, 1), (1, 0)]
+            self.NearestNeighbor[B][C]=[(0, 0), (0, 1), (Lx-1, 1)]
+            self.NearestNeighbor[C][A]=[(0, 0), (1, 0), (1, Ly-1)]
+            self.NearestNeighbor[C][B]=[(0, 0), (1, Ly-1), (0, Ly-1)]
+
+            for i in range(3):
+                for j in range(3):
+                    for e in self.NearestNeighbor[i][j]:
+                        self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SS;
+
         elif LatName=="Honeycomb":
             #NSublat: 2
             Lx,Ly=self.__Map.L

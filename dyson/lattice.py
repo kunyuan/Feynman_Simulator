@@ -88,6 +88,21 @@ class Lattice:
         #self.PathName=["$\Gamma$\n$(0,0)$", "$X$\n$(\pi,0)$", "$M$\n$(\pi,\pi)$","$\Gamma$\n$(0,0)$"]
         #self.IndependtBZCenter=[(0,0)]
 
+    def __Assymetric_Triangular(self):
+        self.Dim=2
+        self.__AssertDim()
+        self.NSublat=3
+        self.__AssertNSublat()
+        root3=math.sqrt(3)
+        PI2=2.0*np.pi
+        self.LatVec=np.array([[1.0,0.0],
+                              [0.5,root3*0.5]])
+        self.SubLatVec=np.array([[0.0,0.0],
+                                 [0.5, 0.5/root3],
+                                 [0.5, -0.5/root3]])
+        self.ReciprocalLatVec =np.array([[PI2, -PI2/root3],
+                                         [0.0, 2*PI2/root3]])
+
     def __Honeycomb(self):
         self.Dim=2
         self.__AssertDim()
