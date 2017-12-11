@@ -18,13 +18,14 @@ import plot, gc
 #start in pdb mode after Ctrl-C
 #signal.signal(signal.SIGINT, start_pdb)
 
-def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor, GammaG, GammaW):
+def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor, GammaG=None, GammaW=None):
     log.info("Measuring...")
     ChiTensor=calc.Add_ChiTensor_ZerothOrder(ChiTensor, G, Map)
     Chi = calc.Calculate_Chi(ChiTensor, Map)
 
-    BKChiTensor, _ = gamma3.FullGammaG(GammaG, W0, Map)
-    BKChi = gamma3.Calculate_Chi(BKChiTensor, Map)
+    if para["Gamma3"]:
+        BKChiTensor, _ = gamma3.FullGammaG(GammaG, W0, Map)
+        BKChi = gamma3.Calculate_Chi(BKChiTensor, Map)
 
     ##########OUTPUT AND FILE SAVE ####################
     spinUP=Map.Spin2Index(UP,UP)
@@ -38,8 +39,13 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     SigmaDeltaT.FFT("R")
     Sigma.FFT("R","T")
     Chi.FFT("R","T")
-    BKChiTensor.FFT("R","T")
-    BKChi.FFT("R","T")
+
+    print "Chi=\n", np.sum(Chi.Data[0,0,0,0,:,:], axis=0)
+
+    if para["Gamma3"]:
+        BKChiTensor.FFT("R","T")
+        BKChi.FFT("R","T")
+        print "BKChi=\n", np.sum(BKChi.Data[0,0,0,0,:,:], axis=0)
 
     #print "Polar[UP,UP]=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
     #print "Polar[DOWN, DOWN]=\n", Polar.Data[spinDOWN,0,spinDOWN,0,0,:]
@@ -58,55 +64,28 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
         # n=Sigma.Data[UP,0,UP,0,0,i]
         # print '%05f %05f %05f' % (i*Map.Beta/Map.MaxTauBin, n.real, n.imag)
 
-    print "Chi=\n", np.sum(Chi.Data[0,0,0,0,:,:], axis=0)
-    print "BKChi=\n", np.sum(BKChi.Data[0,0,0,0,:,:], axis=0)
-
-    # print "WWGammaW, type0, diagonal, mc=\n", GammaW[0, 1, 1, :, :].diagonal()
-    # print "WWGammaW, type0, diagonal, dyson=\n", WWGammaW[0, 1, 1, :, :].diagonal()
-
-    # print "WWGammaW, type4, diagonal, mc=\n", GammaW[4, 1, 1, :, :].diagonal()
-    # print "WWGammaW, type4, diagonal, dyson=\n", WWGammaW[4, 1, 1, :, :].diagonal()
-
-    # GammaG_simple = calc.SimpleGG(G, G.Map)
-    # GGammaG = calc.AddG_To_GammaG(GammaG_simple, G, G.Map)
-    # print "GGammaG, type0, dyson=\n", GGammaG[0, 0, 0, :, :].diagonal()
-    # WWGammaW_dyson=calc.WWGammaW(GGammaG, W0, W, G.Map)
-    # print "WWGammaW, type0, dyson, diagonal=\n", WWGammaW_dyson[0, 1, 1, :, :].diagonal()
-    # print "WWGammaW, type4, dyson, t1=0,=\n", WWGammaW_dyson[4, 1, 1, 0, :]
-
-    # GammaG_dyson = calc.GammaWToGammaG(WWGammaW_dyson, G, G.Map)
-    # print "GammaG, UP, dyson=\n", GammaG_dyson[UP, 1, :, :].diagonal()
-
-    # print "GammaG, last term, DOWN, dyson=\n", -GammaG_dyson[DOWN, 1, :, :].diagonal()
-    # print "GammaG, DOWN, mc=\n", GammaG[DOWN, 1, :, :].diagonal()
-
-    # print "WWGammaW, type4, dyson=\n", np.sum(WWGammaW_dyson[4, 1, 1, :, :])/WWGammaW_dyson.shape[3]/WWGammaW_dyson.shape[4]
-    # print "WWGammaW, type4, dyson, diagonal=\n", WWGammaW_dyson[4, 1, 1, 0, :]
-
-    # print "WWGammaW, type5, dyson=\n", np.sum(WWGammaW_dyson[5, 1, 1, :, :])/WWGammaW_dyson.shape[3]/WWGammaW_dyson.shape[4]
-    # print "WWGammaW, type5, dyson, diagonal=\n", WWGammaW_dyson[5, 1, 1, 0, :]
 
     data={}
     data["Chi"]=Chi.ToDict()
-    data["BKChi"]=BKChi.ToDict()
     data["G"]=G.ToDict()
     data["W"]=W.ToDict()
     data["W"].update(W0.ToDict())
     data["SigmaDeltaT"]=SigmaDeltaT.ToDict()
     data["Sigma"]=Sigma.ToDict()
     data["Polar"]=Polar.ToDict()
-    data["GammaG"]={"SmoothT": GammaG}
-    if GammaW is not None:
-        data["GammaW"]={"SmoothT": GammaW}
+    if para["Gamma3"]:
+        data["BKChi"]=BKChi.ToDict()
+        data["GammaG"]={"SmoothT": GammaG}
+        if GammaW is not None:
+            data["GammaW"]={"SmoothT": GammaW}
+
     Observable.Measure(Chi, Determ, G, Factory.NearestNeighbor)
 
     with DelayedInterrupt():
         try:
             log.info("Save weights into {0} File".format(WeightFile))
 
-            #####TODO: NOT UPDATING WEIGHT FILE
             IO.SaveBigDict(WeightFile, data)
-            #####################################
 
             parameter.Save(ParaFile, para)  #Save Parameters
             Observable.Save(OutputFile)
@@ -142,8 +121,9 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
         #not load WeightFile
         log.info("Start from bare G, W")
         G=G0.Copy()
-        GammaG=gamma3.SimpleGG(G, Map)
-        GammaW=np.zeros([6, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin])+0.0*1j
+        if para["Gamma3"]:
+            GammaG=gamma3.SimpleGG(G, Map)
+            GammaW=np.zeros([6, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin])+0.0*1j
     else:
         #load WeightFile, load G,W
         log.info("Load G, W from {0}".format(WeightFile))
@@ -154,17 +134,18 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
         Sigma.FromDict(data["Sigma"])
         Polar.FromDict(data["Polar"])
 
-        if data.has_key("GammaG"):
-            GammaG=data["GammaG"]["SmoothT"]
-            print "Read existing GammaG"
-        else:
-            GammaG=gamma3.SimpleGG(G, Map)
+        if para["Gamma3"]:
+            if data.has_key("GammaG"):
+                GammaG=data["GammaG"]["SmoothT"]
+                print "Read existing GammaG"
+            else:
+                GammaG=gamma3.SimpleGG(G, Map)
 
-        if data.has_key("GammaW"):
-            GammaW=data["GammaW"]["SmoothT"]
-            print "Read existing GammaW"
-        else:
-            GammaW=np.zeros([6, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin])+0.0*1j
+            if data.has_key("GammaW"):
+                GammaW=data["GammaW"]["SmoothT"]
+                print "Read existing GammaW"
+            else:
+                GammaW=np.zeros([6, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin])+0.0*1j
 
     Gold, Wold = G, W
 
@@ -192,42 +173,25 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                 G = calc.G_Dyson(G0, SigmaDeltaT, Sigma, Map)
                 Polar.Merge(ratio, calc.Polar_FirstOrder(G, Map))
 
-                # print "GGW"
-                WGammaG=gamma3.GGW(GammaG, W, G.Map)
-                # print "GGWGG"
-                GGWGG=gamma3.AddTwoGToGammaG(WGammaG, G, G.Map)
+                if para["Gamma3"]:
+                    # irreducible GammaG = simpleGG + GammaG_2 + GammaG_3
 
-                # print "GGammaG"
-                GGammaG = gamma3.AddG_To_GammaG(GammaG, G, G.Map)
+                    # the second term GammaG: the term from dSigma/dG
+                    # GammaG_2 = G*(W*GammaG)*G
+                    WGammaG = gamma3.AddW_To_GammaG(GammaG, W, G.Map)
+                    GammaG_2 = gamma3.AddTwoGToGammaG(WGammaG, G, G.Map)
 
-                # WWGammaW=gamma3.FastFourierWWGammaW(GGammaG, W0, W, G.Map)
-                # WWGammaW=gamma3.FastWWGammaW(GGammaG, W0, W, G.Map)
-                # WWGammaW=gamma3.WWGammaW(GGammaG, W0, W, G.Map)
-                WWGammaW = gamma3.FourierWWGammaW(GGammaG, W0, W, G.Map)
+                    # the third term: the term from dSigma/dW
+                    # GammaG_3 = G*((W*(G*GammaG)*W)*G)*G
+                    GGammaG = gamma3.AddG_To_GammaG(GammaG, G, G.Map)
+                    WWGammaW = gamma3.AddTwoWToGammaW(GGammaG, W0, W, G.Map)
+                    GammaGFromGammaW=gamma3.GammaWToGammaG(WWGammaW, G, G.Map)
+                    GammaG_3 = gamma3.AddTwoGToGammaG(GammaGFromGammaW, G, G.Map)
 
-                GammaGFromGammaW=gamma3.GammaWToGammaG(WWGammaW, G, G.Map)
-                GGGammaGFromGammaW=gamma3.AddTwoGToGammaG(GammaGFromGammaW, G, G.Map)
+                    SimpleGammaG=gamma3.SimpleGG(G, Map)
 
-                # GammaGFirstOrder=gamma3.FastGammaG_RPA(GammaG, G, W0, Map)
-                # GammaGFirstOrder=gamma3.GammaG_FirstOrder(GammaG, G, W0, Map)
-
-                SimpleGammaG=gamma3.SimpleGG(G, Map)
-
-                GammaG = SimpleGammaG
-                # GammaG =SimpleGammaG + GammaGFirstOrder
-                GammaG += +GGWGG - GGGammaGFromGammaW
-
-                # print "GammaGFirstOrder, dyson=\n",  0.5*(np.sum(GammaGFirstOrder[DOWN, :, :, :]-GammaGFirstOrder[UP, :, :, :], axis=0)).diagonal()
-                # print "GammaGFirstOrder, RPA=\n",  0.5*(np.sum(GammaGFirstOrder_RPA[DOWN, :, :, :]-GammaGFirstOrder_RPA[UP, :, :, :], axis=0)).diagonal()
-                # print "FastGammaGRPA, dyson=\n",  0.5*(np.sum(FastGammaGRPA[DOWN, :, :, :]-FastGammaGRPA[UP, :, :, :], axis=0)).diagonal()
-                # print "GGWGG, mc=\n",  0.5*(np.sum(GGWGG[DOWN, :, :, :]-GGWGG[UP, :, :, :], axis=0)).diagonal()
-                #print "GGWGG, mc=\n",  GGWGG[UP, 0, :, :].diagonal()
-                # print "GammaGFromGammaW, mc=\n",  0.5*(np.sum(GammaGFromGammaW[DOWN, :, :, :]-GammaGFromGammaW[UP, :, :, :], axis=0)).diagonal()
-                # print "SimpleGammaG, dyson=\n",  0.5*(np.sum(SimpleGammaG[DOWN, :, :, :]-SimpleGammaG[UP, :, :, :], axis=0)).diagonal()
-                # print "GammaG, dyson=\n",  0.5*(np.sum(GammaG[DOWN, :, :, :]-GammaG[UP, :, :, :], axis=0)).diagonal()
-                # print "WWGammaW, type0, diagonal, dyson=\n", WWGammaW[0, 1, 1, 0, :]
-                # print "WWGammaW, type4, diagonal, dyson=\n", WWGammaW[4, 1, 1, 0, :]
-                # print "WWGammaW, type5, diagonal, dyson=\n", WWGammaW[5, 1, 1, 0, :]
+                    GammaG = SimpleGammaG
+                    GammaG += +GammaG_2 - GammaG_3
 
             else:
                 log.info("Collecting Sigma/Polar statistics...")
@@ -241,13 +205,12 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                 SigmaDyson = calc.SigmaSmoothT_FirstOrder(G, W, Map)
                 print "SigmaFromDyson=\n", SigmaDyson.Data[UP,0,UP,0,0,:]
 
-                GammaW = gamma3.FourierWWGammaW(GammaW_MC, W0, W, G.Map)
-                # GammaW = gamma3.FastFourierWWGammaW(GammaW_MC, W0, W, G.Map)
-                
-                GGGammaG_MC = gamma3.AddTwoGToGammaG(GammaG_MC, G, G.Map)
-                # GammaG = gamma3.SimpleGG(G, Map)+ gamma3.FastGammaG_RPA(GammaG, G, W0, Map) + GGGammaG_MC
-                GammaG = gamma3.SimpleGG(G, Map)+ GGGammaG_MC
-                # print "GammaG, mc=\n",  0.5*(np.sum(GGGammaG_MC[DOWN, :, :, :]-GGGammaG_MC[UP, :, :, :], axis=0)).diagonal()
+                if para["Gamma3"]:
+                    GammaW = gamma3.AddTwoWToGammaW(GammaW_MC, W0, W, G.Map)
+                    
+                    GGGammaG_MC = gamma3.AddTwoGToGammaG(GammaG_MC, G, G.Map)
+                    GammaG = gamma3.SimpleGG(G, Map)+ GGGammaG_MC
+                    # print "GammaG, mc=\n",  0.5*(np.sum(GGGammaG_MC[DOWN, :, :, :]-GGGammaG_MC[UP, :, :, :], axis=0)).diagonal()
 
             #######DYSON FOR W AND G###########################
             log.info("calculating W...")
@@ -297,7 +260,10 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
             #everything works prefectly 
 	    log.info("everything is going well!")
             Gold, Wold = G, W
-            Measure(para, Observable, Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor, GammaG, GammaW)
+            if para["Gamma3"]:
+                Measure(para, Observable, Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor, GammaG, GammaW)
+            else:
+                Measure(para, Observable, Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor)
             IsSuccessed=Factory.DecreaseField(ParaDyson["Annealing"])
             # Factor=2.0 if IsSuccessed else 1.0
             # Factor=2.0
