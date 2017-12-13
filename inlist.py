@@ -3,6 +3,7 @@ MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
     "__Duplicate" :  0,
+    # "__Duplicate" :  3,
     "__IsCluster" : False, 
     "__AutoRun" : True,
     },
@@ -13,21 +14,22 @@ Dyson={
     "__Execute" : ["python", "./dyson/main.py"],
     "__Duplicate" : 1,
     "__IsCluster" : MonteCarlo["Control"]["__IsCluster"],
-    "__AutoRun" : MonteCarlo["Control"]["__AutoRun"], 
-    #"__AutoRun" : False,
+    # "__AutoRun" : MonteCarlo["Control"]["__AutoRun"], 
+    "__AutoRun" : False,
     "__PBSCommand": "#PBS -l mem=5gb"
     },
 "Job": {
     "DysonOnly": MonteCarlo["Control"]["__Duplicate"]==0,
     #"DysonOnly": False,
     "SumRule": False 
+    # "SumRule":  True
     }
 }
 
 Beta=0.8
 Order=4
 Common={
-"Tau": {"MaxTauBin" : 32, "Beta": Beta},
+"Tau": {"MaxTauBin" : 128, "Beta": Beta},
 "Lattice":  {
     #1D lattice
     # "Name": "Chain", "NSublat":1,
@@ -39,9 +41,9 @@ Common={
     #"Name": "ValenceBond", "NSublat": 2,
     # "Name": "Honeycomb", "NSublat": 2,
     #"Name": "Kagome", "NSublat": 3,
-    #"Name": "Triangular", "NSublat": 1,
-    "Name": "Assymetric_Triangular", "NSublat": 3,
-    "L": [8,8]
+    "Name": "Triangular", "NSublat": 1,
+    # "Name": "Assymetric_Triangular", "NSublat": 3,
+    "L": [16,16]
 
     #3D lattice
     #"Name": "Cubic", "NSublat": 1,
@@ -50,12 +52,12 @@ Common={
     #"L": [4,4,4]
     },
 "Model": {
-    "Name": "J1J2",
+    # "Name": "J1J2",
     # "Name": "Kitaev",
-    # "Name": "Heisenberg",
+    "Name": "Heisenberg",
     #"Description": ["ImW",],
     "Interaction": [1.0, 0.0, 0.0, 0.0],
-    "ExternalField": [ 0.0, 0.5,  0.0]
+    "ExternalField": [ 0.0, 0.0, 0.0, 0.0]
     #ExternalField on Sublattice A and B
     },
 }
@@ -82,8 +84,8 @@ MonteCarlo["Markov"]={
     }
 
 Dyson["Dyson"]={
-    "SleepTime": 0,
-    #"SleepTime": 300,
+    # "SleepTime": 0,
+    "SleepTime": 60,
     "OrderAccepted": {"Sigma":1, "Polar":1},
     "ErrorThreshold": 0.2,
     "Annealing": {

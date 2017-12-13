@@ -44,7 +44,7 @@ class Observable:
             self.Append("UnifChi", ChiK[0])
             self.Append("Chi_X(4Pi,2Pi,0)", ChiK[1])
 
-        elif self.__Lat.Name in ["Kagome", "Honeycomb"]:
+        elif self.__Lat.Name in ["Kagome", "Honeycomb","Triangular"]:
             Chi.FFT("R", "W")
             KList=[(0.0,0.0),] #High symmetry point with strongest order
             _, ChiK=self.__Lat.FourierTransformation(Chi.Data[0,:,0,:,:,0]*Factor, KList,"Real")

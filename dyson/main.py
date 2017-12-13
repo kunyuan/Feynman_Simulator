@@ -138,13 +138,15 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
 
             #######DYSON FOR W AND G###########################
             log.info("calculating W...")
+
             Wtmp, ChiTensor, Determ = calc.W_Dyson(W0, Polar, Map, Lat)
+
             if EnforceSumRule:
                 ChiTensor=calc.Add_ChiTensor_ZerothOrder(ChiTensor, G, Map)
                 Chi = calc.Calculate_Chi(ChiTensor, Map)
                 Chi.FFT("R","T")
 
-                while abs(Chi.Data[0,0,0,0,0,0]-0.75)>1.e-2:
+                while abs(Chi.Data[0,0,0,0,0,0]-0.75)>1.e-3:
                     SumRuleRatio = np.sqrt(0.75/Chi.Data[0,0,0,0,0,0])
                     PolarSumRule = Polar
                     PolarSumRule.Data = PolarSumRule.Data*SumRuleRatio
@@ -153,6 +155,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                     Chi = calc.Calculate_Chi(ChiTensor, Map)
                     Chi.FFT("R","T")
                     print "Chi(r=0,t=0)", Chi.Data[0,0,0,0,0,0]
+
             W = Wtmp
             if IsDysonOnly or IsNewCalculation:
                 Polar.Merge(ratio, calc.Polar_FirstOrder(G, Map))
