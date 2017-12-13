@@ -9,6 +9,7 @@
 #include "diagram.h"
 #include "utility/abort.h"
 #include "module/weight/component.h"
+#include <iostream>
 
 using namespace std;
 using namespace diag;
@@ -35,8 +36,10 @@ bool Diagram::_CheckTopo()
 {
     if (Order == 0)
         return true;
-    if (G.HowMany() != 2 * Order)
+    if (G.HowMany() != 2 * Order){
+        WriteDiagram2gv("error_diagram.gv");
         ABORT("Number of G is wrong!");
+    }
     if (W.HowMany() != Order)
         ABORT("Number of W is wrong!");
     if (Ver.HowMany() != 2 * Order)
@@ -154,7 +157,7 @@ bool Diagram::_CheckWeight()
             vin = G(i)->NeighVer(IN);
             vout = G(i)->NeighVer(OUT);
             gWeight = GWeight->Weight(vin->R, vout->R, vin->Tau, vout->Tau,
-                                      vin->Spin(OUT), vout->Spin(IN), G(i)->IsMeasure);
+                                      vin->Spin(OUT), vout->Spin(IN), G(i)->IsMeasure, G(i)->IsGGGammaG, &UExt);
             if (!Equal(G(i)->Weight, gWeight))
                 return false;
             if (Equal(G(i)->Weight, Complex(0.0, 0.0)))
@@ -166,7 +169,7 @@ bool Diagram::_CheckWeight()
             vin = W(i)->NeighVer(IN);
             vout = W(i)->NeighVer(OUT);
             wWeight = WWeight->Weight(vin->R, vout->R, vin->Tau, vout->Tau, vin->Spin(),
-                                      vout->Spin(), W(i)->IsWorm, W(i)->IsMeasure, W(i)->IsDelta);
+                                      vout->Spin(), W(i)->IsWorm, W(i)->IsMeasure, W(i)->IsDelta, W(i)->IsWWGammaW, &UExt);
             if (!Equal(W(i)->Weight, wWeight))
                 return false;
             if (Equal(W(i)->Weight, Complex(0.0, 0.0)))

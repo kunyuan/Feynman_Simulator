@@ -50,6 +50,9 @@ public:
     RandomFactory RNG;
     real WormSpaceReweight;
     real PolarReweight;
+    bool runGamma3;
+    real GammaGReweight;
+    real GammaWReweight;
     std::vector<real> OrderReWeight;
     std::vector<real> OrderTimeRatio;
 

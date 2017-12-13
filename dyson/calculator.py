@@ -202,7 +202,6 @@ def Calculate_Chi(ChiTensor, map):
     Chi.Data=0.0
 
     SS=[SxSx/4.0, SySy/4.0, SzSz/4.0]
-
     # SS=[SzSz/4.0]
     for i in range(len(SS)):
         temp=np.einsum("ik, kminvt->mnvt", SS[i], ChiTensor.Data)

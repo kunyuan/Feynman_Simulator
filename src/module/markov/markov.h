@@ -20,6 +20,9 @@ namespace weight {
 class Weight;
 class GClass;
 class WClass;
+class ExtPoint;
+class GammaGClass;
+class GammaWClass;
 class SigmaClass;
 class PolarClass;
 class Norm;
@@ -33,20 +36,28 @@ class RandomFactory;
 class Momentum;
 
 namespace mc {
-const int NUpdates = 19;
+const int MCUpdates = 19;
+const int Gamma3Updates = 4;
+const int NUpdates = 23;
 class Markov {
 public:
     long long* Counter;
     real Beta;
     int Order;
     Lattice* Lat;
+    bool runGamma3;
     real* OrderReWeight;
     real* WormSpaceReweight;
     real* PolarReweight;
+    real* GammaGReweight;
+    real* GammaWReweight;
     diag::Diagram* Diag;
     diag::WormClass* Worm;
+    weight::ExtPoint* UExt;
     weight::SigmaClass* Sigma;
     weight::PolarClass* Polar;
+    weight::GammaGClass* GammaG;
+    weight::GammaWClass* GammaW;
     weight::GClass* G;
     weight::WClass* W;
     RandomFactory* RNG;
@@ -76,6 +87,12 @@ public:
     void ChangeContinuousToDelta();
     void ChangeSpinOnVertex();
 
+    //Extra updates for Gamma3
+    void JumpToGGGammaG();
+    void JumpFromGGGammaGToG();
+    void JumpToWWGammaW();
+    void JumpFromWWGammaWToW();
+
 private:
     real ProbofCall[NUpdates];
     real SumofProbofCall[NUpdates];
@@ -90,7 +107,10 @@ private:
     real RandomPickTau();
     real ProbTau(real);
     Site RandomPickSite();
+    Site RandomPickNeighborSite(const Site&);
     real ProbSite(const Site&);
+    real ProbNeighborSite(const Site&);
+    bool isNeighbor(const Site&, const Site&);
     bool RandomPickBool();
     enum Operations {
         CREATE_WORM = 0,
@@ -112,6 +132,11 @@ private:
         CHANGE_SPIN_VERTEX,
         JUMP_TO_ORDER0,
         JUMP_BACK_TO_ORDER1,
+        //Extra updates for Gamma3
+        JUMP_TO_GGGAMMAG,
+        JUMP_FROM_GGGAMMAG_TO_G,
+        JUMP_TO_WWGAMMAW,
+        JUMP_FROM_WWGAMMAW_TO_W,
         END
     };
     std::string _DetailBalanceStr(Operations op);

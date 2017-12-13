@@ -27,9 +27,11 @@ Dyson={
 }
 
 Beta=0.8
-Order=4
+Order=2
+Gamma3=False
 Common={
-"Tau": {"MaxTauBin" : 128, "Beta": Beta},
+"Gamma3": Gamma3,
+"Tau": {"MaxTauBin" : 32, "Beta": Beta},
 "Lattice":  {
     #1D lattice
     # "Name": "Chain", "NSublat":1,
@@ -38,7 +40,7 @@ Common={
     #2D lattice
     # "Name": "Square", "NSublat": 1,
     # "Name": "Checkerboard", "NSublat": 2,
-    #"Name": "ValenceBond", "NSublat": 2,
+    # "Name": "ValenceBond", "NSublat": 2,
     # "Name": "Honeycomb", "NSublat": 2,
     #"Name": "Kagome", "NSublat": 3,
     "Name": "Triangular", "NSublat": 1,
@@ -65,9 +67,14 @@ Common={
 MonteCarlo["Markov"]={
     "Order": Order, "Sweep" : 10, "Toss" : 1000,
     #Start from order 0, so that OrderReWeight has Order+1 elements
-    "OrderReWeight" : [100.0, 0.5, 1.0, 0.1, 0.05, 0.05, 0.01, 0.005],
+    "OrderReWeight" : [1.0, 0.3, 1.0, 0.1, 0.05, 0.05, 0.01, 0.005],
     "WormSpaceReweight" : 0.05,
-    "PolarReweight" : 2.0,
+    "PolarReweight" : 1.0,
+    "runGamma3": Gamma3,
+    "GammaGReweight" : 1.0,
+    "GammaWReweight" : 1.0,
+    # "GammaGReweight" : 1.0,
+    # "GammaWReweight" : 1.0,
     "OrderTimeRatio" : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
     #"Timer": {
         #"PrinterTimer": 300,
@@ -79,13 +86,14 @@ MonteCarlo["Markov"]={
         "PrinterTimer": 30,
         "DiskWriterTimer": 30,
         "MessageTimer": 30,
-        "ReweightTimer":36000
+        "ReweightTimer":1000
         },
     }
 
 Dyson["Dyson"]={
-    # "SleepTime": 0,
+    #"SleepTime": 0,
     "SleepTime": 60,
+    "Gamma3": Gamma3,
     "OrderAccepted": {"Sigma":1, "Polar":1},
     "ErrorThreshold": 0.2,
     "Annealing": {
@@ -105,5 +113,5 @@ MonteCarlo.update(Common)
 TO_DO.append(job.JobMonteCarlo(MonteCarlo))
 Dyson.update(Common)
 TO_DO.append(job.JobDyson(Dyson))
-CPU = 4
+CPU = 16
 SLEEP = 1    #check job status for every SLEEP seconds

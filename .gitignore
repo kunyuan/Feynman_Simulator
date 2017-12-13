@@ -71,4 +71,7 @@ _job_*
 src/cmake-build-debug/
 basis.*.txt
 
+*.hkl*
+*.dSYM
+
 

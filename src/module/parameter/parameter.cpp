@@ -75,6 +75,9 @@ bool ParaMC::FromDict(const Dictionary& Para)
     GET(_para, Sweep);
     GET(_para, WormSpaceReweight);
     GET(_para, PolarReweight);
+    GET(_para, runGamma3);
+    GET(_para, GammaGReweight);
+    GET(_para, GammaWReweight);
     GET(_para, OrderReWeight);
     GET(_para, OrderTimeRatio);
     GET(_para, Order);
@@ -101,6 +104,9 @@ Dictionary ParaMC::ToDict()
     SET(_para, Sweep);
     SET(_para, WormSpaceReweight);
     SET(_para, PolarReweight);
+    SET(_para, runGamma3);
+    SET(_para, GammaGReweight);
+    SET(_para, GammaWReweight);
     SET(_para, OrderReWeight);
     SET(_para, OrderTimeRatio);
     SET(_para, Counter);
@@ -133,6 +139,9 @@ void ParaMC::SetTest()
     Seed = 519180543;
     WormSpaceReweight = 0.1;
     PolarReweight = 1.0;
+    runGamma3=true;
+    GammaGReweight = 1.0;
+    GammaWReweight = 1.0;
     T = 1.0 / Beta;
     Counter = 0;
     MaxTauBin = 32;

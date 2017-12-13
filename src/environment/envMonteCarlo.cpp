@@ -36,6 +36,8 @@ bool EnvMonteCarlo::BuildNew()
     Dictionary GW_;
     GW_.BigLoad(Job.WeightFile);
     Weight.FromDict(GW_, weight::GW, Para);
+    if (Para.runGamma3)
+        Weight.FromDict(GW_, weight::GammaGW, Para);
 
     //    Weight.SetDiagCounter(Para);//Test for DiagCounter
     //    Weight.SetTest(Para);//Test for WeightTest
@@ -73,6 +75,9 @@ bool EnvMonteCarlo::Load()
     statis_.BigLoad(Job.StatisticsFile);
     Weight.FromDict(statis_, weight::GW, Para);
     Weight.FromDict(statis_, weight::SigmaPolar, Para);
+    if(Para.runGamma3)
+        Weight.FromDict(statis_, weight::GammaGW, Para);
+        Weight.FromDict(statis_, weight::GammaGWStatis, Para);
     LOG_INFO(DoesParaFileExit);
     if (DoesParaFileExit)
         Diag.FromDict(para_.Get<Dictionary>(ConfigKey), Para.Lat, *Weight.G, *Weight.W);
@@ -85,16 +90,22 @@ bool EnvMonteCarlo::Load()
 
 void EnvMonteCarlo::Save()
 {
-    LOG_INFO("Start saving data...");
-    Dictionary para_;
-    para_[ParaKey] = Para.ToDict();
-    para_[ConfigKey] = Diag.ToDict();
-    para_["PID"] = Job.PID;
-    para_.Save(Job.ParaFile, "w");
-    Dictionary statis_ = Weight.ToDict(weight::GW | weight::SigmaPolar);
-    statis_.Update(MarkovMonitor.ToDict());
-    statis_.BigSave(Job.StatisticsFile);
-    LOG_INFO("Saving data is done!");
+    if (Diag.HasGammaGW==0) {
+        LOG_INFO("Start saving data...");
+        Dictionary para_;
+        para_[ParaKey] = Para.ToDict();
+        para_[ConfigKey] = Diag.ToDict();
+        para_["PID"] = Job.PID;
+        para_.Save(Job.ParaFile, "w");
+        Dictionary statis_;
+        if (Para.runGamma3)
+            statis_ = Weight.ToDict(weight::GW | weight::SigmaPolar | weight::GammaGW | weight::GammaGWStatis);
+        else
+            statis_ = Weight.ToDict(weight::GW | weight::SigmaPolar);
+        statis_.Update(MarkovMonitor.ToDict());
+        statis_.BigSave(Job.StatisticsFile);
+        LOG_INFO("Saving data is done!");
+    }
 }
 
 void EnvMonteCarlo::DeleteSavedFiles()
@@ -112,7 +123,15 @@ void EnvMonteCarlo::AdjustOrderReWeight()
         string str;
         for (int i = 0; i <= Para.Order; i++)
             str += ToString((Para.OrderReWeight[i])) + "  ";
-        LOG_INFO("Reweighted to:\n" + str + "\nWorm Reweighted to:\n" + ToString(Para.WormSpaceReweight) + "\nPolar Reweighted to:\n" + ToString(Para.PolarReweight));
+        if(Para.runGamma3){
+            LOG_INFO("Reweighted to:\n" + str + "\nWorm Reweighted to:\n" + ToString(Para.WormSpaceReweight)
+                     + "\nPolar Reweighted to:\n" + ToString(Para.PolarReweight)
+                     + "\nGammaG Reweighted to:\n" + ToString(Para.GammaGReweight)
+                     + "\nGammaW Reweighted to:\n" + ToString(Para.GammaWReweight));
+        }else{
+            LOG_INFO("Reweighted to:\n" + str + "\nWorm Reweighted to:\n" + ToString(Para.WormSpaceReweight)
+                     + "\nPolar Reweighted to:\n" + ToString(Para.PolarReweight));
+        }
     }
     else {
         string str;
@@ -127,30 +146,56 @@ void EnvMonteCarlo::AdjustOrderReWeight()
 */
 bool EnvMonteCarlo::ListenToMessage()
 {
-    LOG_INFO("Start Annealing...");
-    Message Message_;
-    if (!Message_.Load(Job.MessageFile))
-        return false;
-    if (Para.Version >= Message_.Version) {
-        LOG_INFO("Status has not been updated yet since the last annealing!");
-        return false;
+    if(!Para.runGamma3 || Diag.HasGammaGW==0){
+        if (Para.runGamma3){
+            LOG_WARNING("Beginning:");
+            LOG_WARNING(Diag.HasGammaGW);
+        }
+
+        LOG_INFO("Start Annealing...");
+        Message Message_;
+        if (!Message_.Load(Job.MessageFile))
+            return false;
+        if (Para.Version >= Message_.Version) {
+            LOG_INFO("Status has not been updated yet since the last annealing!");
+            return false;
+        }
+        Dictionary weight_;
+        try {
+            weight_.BigLoad(Job.WeightFile);
+        }
+        catch (IOInvalid e) {
+            LOG_WARNING("Annealing Failed!");
+            return false;
+        }
+        Para.UpdateWithMessage(Message_);
+
+        Weight.FromDict(weight_, weight::GW, Para);
+
+        if (Para.runGamma3){
+            Weight.FromDict(weight_, weight::GammaGW, Para);
+        }
+
+        Weight.Anneal(Para);
+        LOG_WARNING("Calling Diagram reset!");
+
+        if (Para.runGamma3) {
+            LOG_WARNING("After:");
+            LOG_WARNING(Diag.HasGammaGW);
+        }
+
+        Diag.Reset(Para.Lat, *Weight.G, *Weight.W);
+        Markov.Reset(Para, Diag, Weight);
+        MarkovMonitor.Reset(Para, Diag, Weight);
+        MarkovMonitor.SqueezeStatistics(Message_.SqueezeFactor);
+        LOG_INFO("Annealled to " << Message_.PrettyString()
+                                 << "\nwith squeeze factor" << Message_.SqueezeFactor);
+        if(Diag.CheckDiagram()){
+            LOG_INFO("Diagram Check pass.");
+        }else {
+            ABORT("Diagram Check didn't pass when annealing!");
+        }
+
+        return true;
     }
-    Dictionary weight_;
-    try {
-        weight_.BigLoad(Job.WeightFile);
-    }
-    catch (IOInvalid e) {
-        LOG_WARNING("Annealing Failed!");
-        return false;
-    }
-    Para.UpdateWithMessage(Message_);
-    Weight.FromDict(weight_, weight::GW, Para);
-    Weight.Anneal(Para);
-    Diag.Reset(Para.Lat, *Weight.G, *Weight.W);
-    Markov.Reset(Para, Diag, Weight);
-    MarkovMonitor.Reset(Para, Diag, Weight);
-    MarkovMonitor.SqueezeStatistics(Message_.SqueezeFactor);
-    LOG_INFO("Annealled to " << Message_.PrettyString()
-                             << "\nwith squeeze factor" << Message_.SqueezeFactor);
-    return true;
 }
