@@ -172,13 +172,22 @@ class BareFactory:
         elif LatName=="ValenceBond":
             Lx,Ly=self.__Map.L
             A,B=0,1
-            self.NearestNeighbor[A][B]=[(0, 0),(0,Ly-1)]
-            self.NearestNeighbor[B][A]=[(0, 0),(0,   1)]
+            
+            self.NearestNeighbor[A][B]=[(0, 0)]
+            self.NearestNeighbor[B][A]=[(0, 0)]
             self.NearestNeighbor[A][A]=[(Lx-1, 0),(1,0)]
             self.NearestNeighbor[B][B]=[(Lx-1, 0),(1,0)]
 
-            self.NextNearestNeighbor[A][B]=[(1, 0),(1,   Ly-1),(Lx-1,0),(Lx-1,   Ly-1)]
-            self.NextNearestNeighbor[B][A]=[(1, 1),(1,   0),(Lx-1,1),(Lx-1,   0)]
+            self.NextNearestNeighbor[A][B]=[(0,   Ly-1)]
+            self.NextNearestNeighbor[B][A]=[(0,   1)]
+
+            # self.NearestNeighbor[A][B]=[(0, 0),(0,Ly-1)]
+            # self.NearestNeighbor[B][A]=[(0, 0),(0,   1)]
+            # self.NearestNeighbor[A][A]=[(Lx-1, 0),(1,0)]
+            # self.NearestNeighbor[B][B]=[(Lx-1, 0),(1,0)]
+
+            # self.NextNearestNeighbor[A][B]=[(1, 0),(1,   Ly-1),(Lx-1,0),(Lx-1,   Ly-1)]
+            # self.NextNearestNeighbor[B][A]=[(1, 1),(1,   0),(Lx-1,1),(Lx-1,   0)]
 
             for i in range(2):
                 for j in range(2):
