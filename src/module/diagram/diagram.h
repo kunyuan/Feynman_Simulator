@@ -59,7 +59,6 @@ public:
 
     ///extra features for gamma3
     int HasGammaGW; //0 no gammaG or gammaW, 1 gammaG, 2 gammaW
-    int MeasureGammaGW; //0 not measuring, 1 measure GammaG (with two external G), 2 measure GammaW (with two external W)
     weight::ExtPoint UExt;
     vertex * Vin, * Vout;
 

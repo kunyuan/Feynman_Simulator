@@ -10,7 +10,7 @@ import calculator as calc
 
 def SimpleGG(G, _map):
     #half integer tin and tout
-    GammaG=np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
+    GGGammaG=np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
     G.FFT("R", "T")
     Uspin=UP
     Gspin=UP
@@ -27,10 +27,10 @@ def SimpleGG(G, _map):
                 tg2+=_map.MaxTauBin
                 sign2=-sign2
             G2=sign2*G.Data[Gspin,sub,Uspin,sub,r,tg2]
-            GammaG[Gspin, r, t1, t2]=G1*G2 
-    return GammaG
+            GGGammaG[Gspin, r, t1, t2]=G1*G2 
+    return GGGammaG
 
-def AddW_To_GammaG(GammaG,W,_map):
+def AddW_To_GGGammaG(GGGammaG,W,_map):
     W.FFT("R","T")
     OrderSign = -1
     spinUP=_map.Spin2Index(UP,UP)
@@ -38,7 +38,7 @@ def AddW_To_GammaG(GammaG,W,_map):
     spinUPDOWN=_map.Spin2Index(UP,DOWN)
     spinDOWNUP=_map.Spin2Index(DOWN,UP)
     sub=0
-    GGW=np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
+    GammaG=np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
     Wshift=weight.Weight("SmoothT", _map, "FourSpins", "Symmetric", "R","T")
     for t in range(_map.MaxTauBin):
         t1=t-1
@@ -52,14 +52,14 @@ def AddW_To_GammaG(GammaG,W,_map):
             if dt <0:
                 dt = dt + _map.MaxTauBin
 
-            GGW[UP, :, t1,t2] = GammaG[UP,:,t1,t2]*Wshift.Data[spinUP,sub,spinUP,sub,0,dt]
-            GGW[UP, :, t1,t2] += GammaG[DOWN,:,t1,t2]*Wshift.Data[spinUPDOWN,sub,spinDOWNUP,sub,0,dt]
+            GammaG[UP, :, t1,t2] = GGGammaG[UP,:,t1,t2]*Wshift.Data[spinUP,sub,spinUP,sub,0,dt]
+            GammaG[UP, :, t1,t2] += GGGammaG[DOWN,:,t1,t2]*Wshift.Data[spinUPDOWN,sub,spinDOWNUP,sub,0,dt]
 
-            GGW[DOWN, :, t1,t2] = GammaG[UP,:,t1,t2]*Wshift.Data[spinDOWNUP,sub,spinUPDOWN,sub,0,dt]
-            GGW[DOWN, :, t1,t2] += GammaG[DOWN,:,t1,t2]*Wshift.Data[spinDOWN,sub,spinDOWN,sub,0,dt]
-    return GGW*OrderSign
+            GammaG[DOWN, :, t1,t2] = GGGammaG[UP,:,t1,t2]*Wshift.Data[spinDOWNUP,sub,spinUPDOWN,sub,0,dt]
+            GammaG[DOWN, :, t1,t2] += GGGammaG[DOWN,:,t1,t2]*Wshift.Data[spinDOWN,sub,spinDOWN,sub,0,dt]
+    return GammaG*OrderSign
 
-def AddTwoGToGammaG(GammaG, G, _map):
+def AddTwoG_To_GammaG(GammaG, G, _map):
     #integer tin and tout
     G.FFT("R","T")
     spinUP=_map.Spin2Index(UP,UP)
@@ -67,7 +67,7 @@ def AddTwoGToGammaG(GammaG, G, _map):
     sub=0
     r=0
 
-    GGGammaG=np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
+    GGammaG=np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
     for t in range(_map.MaxTauBin):
         for tout in range(_map.MaxTauBin):
             tgout=t-tout-1
@@ -83,10 +83,10 @@ def AddTwoGToGammaG(GammaG, G, _map):
                 signout*=-1
             Gout+=0.5*signout*G.Data[:,sub,:,sub,r,tgout]
             for tin in range(_map.MaxTauBin):
-                GGGammaG[UP, :, t, tin]+=Gout[UP,UP]*GammaG[UP,:,tout,tin]
-                GGGammaG[DOWN, :, t, tin]+=Gout[DOWN,DOWN]*GammaG[DOWN,:,tout,tin]
+                GGammaG[UP, :, t, tin]+=Gout[UP,UP]*GammaG[UP,:,tout,tin]
+                GGammaG[DOWN, :, t, tin]+=Gout[DOWN,DOWN]*GammaG[DOWN,:,tout,tin]
 
-    GGGammaGNew=np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
+    GGGammaG=np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
     for t in range(_map.MaxTauBin):
         for tin in range(_map.MaxTauBin):
             tgin=tin-t 
@@ -102,18 +102,18 @@ def AddTwoGToGammaG(GammaG, G, _map):
                 signin*=-1
             Gin+=0.5*signin*G.Data[:,sub,:,sub,r,tgin]
             for tout in range(_map.MaxTauBin):
-                GGGammaGNew[UP, :, tout, t]+=Gin[UP,UP]*GGGammaG[UP,:,tout,tin]
-                GGGammaGNew[DOWN, :, tout, t]+=Gin[DOWN,DOWN]*GGGammaG[DOWN,:,tout,tin]
-    return GGGammaGNew*_map.Beta**2/_map.MaxTauBin**2
+                GGGammaG[UP, :, tout, t]+=Gin[UP,UP]*GGammaG[UP,:,tout,tin]
+                GGGammaG[DOWN, :, tout, t]+=Gin[DOWN,DOWN]*GGammaG[DOWN,:,tout,tin]
+    return GGGammaG*_map.Beta**2/_map.MaxTauBin**2
 
-def AddG_To_GammaG(GammaG, G, _map):
+def AddG_To_GGGammaG(GGGammaG, G, _map):
     #integer tin and tout
     G.FFT("R","T")
     FermiLoopSign=-1
     spinUP=_map.Spin2Index(UP,UP)
     spinDOWN=_map.Spin2Index(DOWN,DOWN)
     sub=0
-    GGammaG = np.zeros([6, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
+    GammaW = np.zeros([6, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
     for tout in range(_map.MaxTauBin):
         for tin in range(_map.MaxTauBin):
             tgout = tin - tout -1
@@ -132,16 +132,16 @@ def AddG_To_GammaG(GammaG, G, _map):
 
             for r in range(_map.Vol):
                 ## UP UP UP UP
-                GGammaG[0, r, r, tout, tin] = Gout[UP,UP]*GammaG[UP,r,tout,tin]
+                GammaW[0, r, r, tout, tin] = Gout[UP,UP]*GGGammaG[UP,r,tout,tin]
 
                 ## DOWN DOWN DOWN DOWN
-                GGammaG[1, r, r, tout, tin] = Gout[DOWN,DOWN]*GammaG[DOWN,r,tout,tin]
+                GammaW[1, r, r, tout, tin] = Gout[DOWN,DOWN]*GGGammaG[DOWN,r,tout,tin]
 
                 ## in:UP DOWN out:DOWN UP
-                GGammaG[5, r, r, tout, tin] = Gout[UP, UP]*GammaG[DOWN,r,tout,tin]
+                GammaW[5, r, r, tout, tin] = Gout[UP, UP]*GGGammaG[DOWN,r,tout,tin]
 
                 ## in:DOWN UP out:UP DOWN 
-                GGammaG[4, r, r, tout, tin] = Gout[DOWN,DOWN]*GammaG[UP,r,tout,tin]
+                GammaW[4, r, r, tout, tin] = Gout[DOWN,DOWN]*GGGammaG[UP,r,tout,tin]
 
             ### reverse
             tgout = tout - tin -1
@@ -160,17 +160,17 @@ def AddG_To_GammaG(GammaG, G, _map):
 
             for r in range(_map.Vol):
                 ## UP UP UP UP
-                GGammaG[0, r, r, tout, tin] += Gout[UP,UP]*GammaG[UP,r,tin,tout]
+                GammaW[0, r, r, tout, tin] += Gout[UP,UP]*GGGammaG[UP,r,tin,tout]
 
                 ## DOWN DOWN DOWN DOWN
-                GGammaG[1, r, r, tout, tin] += Gout[DOWN,DOWN]*GammaG[DOWN,r,tin,tout]
+                GammaW[1, r, r, tout, tin] += Gout[DOWN,DOWN]*GGGammaG[DOWN,r,tin,tout]
 
                 ## in:UP DOWN out:DOWN UP
-                GGammaG[5, r, r, tout, tin] += Gout[DOWN, DOWN]*GammaG[UP,r,tin,tout]
+                GammaW[5, r, r, tout, tin] += Gout[DOWN, DOWN]*GGGammaG[UP,r,tin,tout]
 
                 ## in:DOWN UP out:UP DOWN 
-                GGammaG[4, r, r, tout, tin] += Gout[UP,UP]*GammaG[DOWN,r,tin,tout]
-    return FermiLoopSign*GGammaG
+                GammaW[4, r, r, tout, tin] += Gout[UP,UP]*GGGammaG[DOWN,r,tin,tout]
+    return FermiLoopSign*GammaW
 
 def GenerateSpinIndex(_map):
     UPUP=_map.Spin2Index(UP,UP)
@@ -204,7 +204,7 @@ def FFTWshift(Wshift, _map, BackForth):
     Wshift=Wshift.reshape(OldShape)
     return Wshift
 
-def AddTwoWToGammaW(GammaW, W0, W, _map):
+def AddTwoW_To_GammaW(GammaW, W0, W, _map):
     # import gamma3
     GammaW=np.array(GammaW)
     sub = 0
@@ -287,13 +287,13 @@ def AddTwoWToGammaW(GammaW, W0, W, _map):
     print "calculating WWGammaW with fourier done!"
     return -1.0*WWGammaW
 
-def GammaWToGammaG(GammaW, G, _map):
+def AddG_To_WWGammaW(WWGammaW, G, _map):
     #integer tin and tout
     G.FFT("R","T")
     spinUP=_map.Spin2Index(UP,UP)
     spinDOWN=_map.Spin2Index(DOWN,DOWN)
     sub=0
-    GGammaW = np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
+    GammaG = np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
 
     for r in range(_map.Vol):
         for tout in range(_map.MaxTauBin):
@@ -312,14 +312,11 @@ def GammaWToGammaG(GammaW, G, _map):
                     sign*=-1
                 Gout += 0.5*sign*G.Data[:,sub,:,sub,0,tgout]
 
-                GGammaW[UP, r, tout, tin] += Gout[UP,UP]*GammaW[0,r,r,tout,tin]
-                GGammaW[UP, r, tout, tin] += Gout[DOWN,DOWN]*GammaW[5,r,r,tout,tin]
-                GGammaW[DOWN, r, tout, tin] += Gout[DOWN,DOWN]*GammaW[1,r,r,tout,tin]
-                GGammaW[DOWN, r, tout, tin] += Gout[UP,UP]*GammaW[4,r,r,tout,tin]
-
-    # GammaG=AddTwoGToGammaG(GGammaW, G, _map)
-    # return GammaG
-    return GGammaW
+                GammaG[UP, r, tout, tin] += Gout[UP,UP]*WWGammaW[0,r,r,tout,tin]
+                GammaG[UP, r, tout, tin] += Gout[DOWN,DOWN]*WWGammaW[5,r,r,tout,tin]
+                GammaG[DOWN, r, tout, tin] += Gout[DOWN,DOWN]*WWGammaW[1,r,r,tout,tin]
+                GammaG[DOWN, r, tout, tin] += Gout[UP,UP]*WWGammaW[4,r,r,tout,tin]
+    return GammaG
 
 def shift(r, L):
     if r<0:
@@ -328,7 +325,7 @@ def shift(r, L):
         r-=L
     return r
 
-def FullGammaG(IrGammaG, W0, _map):
+def FullGGGammaG(IrGGGammaG, W0, _map):
     sub=0
     BKPolar=weight.Weight("SmoothT", _map, "FourSpins", "Symmetric","R","T")
 
@@ -337,16 +334,16 @@ def FullGammaG(IrGammaG, W0, _map):
     UPDOWN=_map.Spin2Index(UP,DOWN)
     DOWNUP=_map.Spin2Index(DOWN,UP)
 
-    IrGammaGuu=np.zeros((_map.Vol, _map.MaxTauBin))+0.0*1j
-    IrGammaGdu=np.zeros((_map.Vol, _map.MaxTauBin))+0.0*1j
+    IrGGGammaGuu=np.zeros((_map.Vol, _map.MaxTauBin))+0.0*1j
+    IrGGGammaGdu=np.zeros((_map.Vol, _map.MaxTauBin))+0.0*1j
     for i in range(_map.MaxTauBin):
-        IrGammaGuu[:, i]=IrGammaG[UP, :, i, i]
-        IrGammaGdu[:, i]=IrGammaG[DOWN, :, i, i]
+        IrGGGammaGuu[:, i]=IrGGGammaG[UP, :, i, i]
+        IrGGGammaGdu[:, i]=IrGGGammaG[DOWN, :, i, i]
 
-    BKPolar.Data[UPUP, sub, UPUP, sub, :,:]=IrGammaGuu 
-    BKPolar.Data[DOWNDOWN, sub, DOWNDOWN, sub, :,:]=IrGammaGuu 
-    BKPolar.Data[DOWNDOWN, sub, UPUP, sub, :,:]=IrGammaGdu 
-    BKPolar.Data[UPUP, sub, DOWNDOWN, sub, :,:]=IrGammaGdu 
+    BKPolar.Data[UPUP, sub, UPUP, sub, :,:]=IrGGGammaGuu 
+    BKPolar.Data[DOWNDOWN, sub, DOWNDOWN, sub, :,:]=IrGGGammaGuu 
+    BKPolar.Data[DOWNDOWN, sub, UPUP, sub, :,:]=IrGGGammaGdu 
+    BKPolar.Data[UPUP, sub, DOWNDOWN, sub, :,:]=IrGGGammaGdu 
 
     # print "BKPolar[UP,UP]=\n", BKPolar.Data[UPUP,0,UPUP,0,0,:]
 

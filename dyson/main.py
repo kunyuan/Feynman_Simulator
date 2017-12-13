@@ -18,13 +18,13 @@ import plot, gc
 #start in pdb mode after Ctrl-C
 #signal.signal(signal.SIGINT, start_pdb)
 
-def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor, GammaG=None, GammaW=None):
+def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor, GGGammaG=None, WWGammaW=None):
     log.info("Measuring...")
     ChiTensor=calc.Add_ChiTensor_ZerothOrder(ChiTensor, G, Map)
     Chi = calc.Calculate_Chi(ChiTensor, Map)
 
     if para["Gamma3"]:
-        BKChiTensor, _ = gamma3.FullGammaG(GammaG, W0, Map)
+        BKChiTensor, _ = gamma3.FullGGGammaG(GGGammaG, W0, Map)
         BKChi = gamma3.Calculate_Chi(BKChiTensor, Map)
 
     ##########OUTPUT AND FILE SAVE ####################
@@ -75,9 +75,9 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     data["Polar"]=Polar.ToDict()
     if para["Gamma3"]:
         data["BKChi"]=BKChi.ToDict()
-        data["GammaG"]={"SmoothT": GammaG}
-        if GammaW is not None:
-            data["GammaW"]={"SmoothT": GammaW}
+        data["GGGammaG"]={"SmoothT": GGGammaG}
+        if WWGammaW is not None:
+            data["WWGammaW"]={"SmoothT": WWGammaW}
 
     Observable.Measure(Chi, Determ, G, Factory.NearestNeighbor)
 
@@ -122,8 +122,8 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
         log.info("Start from bare G, W")
         G=G0.Copy()
         if para["Gamma3"]:
-            GammaG=gamma3.SimpleGG(G, Map)
-            GammaW=np.zeros([6, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin])+0.0*1j
+            GGGammaG=gamma3.SimpleGG(G, Map)
+            WWGammaW=np.zeros([6, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin])+0.0*1j
     else:
         #load WeightFile, load G,W
         log.info("Load G, W from {0}".format(WeightFile))
@@ -135,17 +135,17 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
         Polar.FromDict(data["Polar"])
 
         if para["Gamma3"]:
-            if data.has_key("GammaG"):
-                GammaG=data["GammaG"]["SmoothT"]
-                print "Read existing GammaG"
+            if data.has_key("GGGammaG"):
+                GGGammaG=data["GGGammaG"]["SmoothT"]
+                print "Read existing GGGammaG"
             else:
-                GammaG=gamma3.SimpleGG(G, Map)
+                GGGammaG=gamma3.SimpleGG(G, Map)
 
-            if data.has_key("GammaW"):
-                GammaW=data["GammaW"]["SmoothT"]
-                print "Read existing GammaW"
+            if data.has_key("WWGammaW"):
+                WWGammaW=data["WWGammaW"]["SmoothT"]
+                print "Read existing WWGammaW"
             else:
-                GammaW=np.zeros([6, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin])+0.0*1j
+                WWGammaW=np.zeros([6, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin])+0.0*1j
 
     Gold, Wold = G, W
 
@@ -174,28 +174,28 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                 Polar.Merge(ratio, calc.Polar_FirstOrder(G, Map))
 
                 if para["Gamma3"]:
-                    # irreducible GammaG = simpleGG + GammaG_2 + GammaG_3
+                    # irreducible GGGammaG = simpleGG + GGGammaG_2 + GGGammaG_3
 
                     # the second term GammaG: the term from dSigma/dG
-                    # GammaG_2 = G*(W*GammaG)*G
-                    WGammaG = gamma3.AddW_To_GammaG(GammaG, W, G.Map)
-                    GammaG_2 = gamma3.AddTwoGToGammaG(WGammaG, G, G.Map)
+                    # GGGammaG_2 = G*(W*GGGammaG)*G
+                    GammaG = gamma3.AddW_To_GGGammaG(GGGammaG, W, G.Map)
+                    GGGammaG_2 = gamma3.AddTwoG_To_GammaG(GammaG, G, G.Map)
 
                     # the third term: the term from dSigma/dW
-                    # GammaG_3 = G*((W*(G*GammaG)*W)*G)*G
-                    GGammaG = gamma3.AddG_To_GammaG(GammaG, G, G.Map)
-                    WWGammaW = gamma3.AddTwoWToGammaW(GGammaG, W0, W, G.Map)
-                    GammaGFromGammaW=gamma3.GammaWToGammaG(WWGammaW, G, G.Map)
-                    GammaG_3 = gamma3.AddTwoGToGammaG(GammaGFromGammaW, G, G.Map)
+                    # GGGammaG_3 = G*((W*(G*GGGammaG)*W)*G)*G
+                    GammaW = gamma3.AddG_To_GGGammaG(GGGammaG, G, G.Map)
+                    WWGammaW = gamma3.AddTwoW_To_GammaW(GammaW, W0, W, G.Map)
+                    GammaG_FromWWGammaW=gamma3.AddG_To_WWGammaW(WWGammaW, G, G.Map)
+                    GGGammaG_3 = gamma3.AddTwoG_To_GammaG(GammaG_FromWWGammaW, G, G.Map)
 
-                    SimpleGammaG=gamma3.SimpleGG(G, Map)
+                    SimpleGGGammaG=gamma3.SimpleGG(G, Map)
 
-                    GammaG = SimpleGammaG
-                    GammaG += +GammaG_2 - GammaG_3
+                    GGGammaG = SimpleGGGammaG
+                    GGGammaG += +GGGammaG_2 - GGGammaG_3
 
             else:
                 log.info("Collecting Sigma/Polar statistics...")
-                SigmaStatis, PolarStatis, GammaG_MC, GammaW_MC=collect.CollectStatis(Map)
+                SigmaStatis, PolarStatis, GammaG_MC, GammaW_MC =collect.CollectStatis(Map, para["Gamma3"])
                 Sigma, Polar, ParaDyson["OrderAccepted"]=collect.UpdateWeight([SigmaStatis, PolarStatis],
                         ParaDyson["ErrorThreshold"], ParaDyson["OrderAccepted"])
                 #print Sigma.Data[0,0,0,0,0,0], Sigma.Data[0,0,0,0,0,-1]
@@ -206,10 +206,10 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                 print "SigmaFromDyson=\n", SigmaDyson.Data[UP,0,UP,0,0,:]
 
                 if para["Gamma3"]:
-                    GammaW = gamma3.AddTwoWToGammaW(GammaW_MC, W0, W, G.Map)
+                    WWGammaW = gamma3.AddTwoW_To_GammaW(GammaW_MC, W0, W, G.Map)
                     
-                    GGGammaG_MC = gamma3.AddTwoGToGammaG(GammaG_MC, G, G.Map)
-                    GammaG = gamma3.SimpleGG(G, Map)+ GGGammaG_MC
+                    GGGammaG_MC = gamma3.AddTwoG_To_GammaG(GammaG_MC, G, G.Map)
+                    GGGammaG = gamma3.SimpleGG(G, Map)+ GGGammaG_MC
                     # print "GammaG, mc=\n",  0.5*(np.sum(GGGammaG_MC[DOWN, :, :, :]-GGGammaG_MC[UP, :, :, :], axis=0)).diagonal()
 
             #######DYSON FOR W AND G###########################
@@ -261,7 +261,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
 	    log.info("everything is going well!")
             Gold, Wold = G, W
             if para["Gamma3"]:
-                Measure(para, Observable, Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor, GammaG, GammaW)
+                Measure(para, Observable, Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor, GGGammaG, WWGammaW)
             else:
                 Measure(para, Observable, Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor)
             IsSuccessed=Factory.DecreaseField(ParaDyson["Annealing"])

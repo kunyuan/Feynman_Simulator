@@ -43,7 +43,7 @@ Dictionary Diagram::_ToDict(gLine g)
     GDict["OUT"] = g->nVer[OUT]->Name;
     GDict["K"] = g->K;
     GDict["IsMeasure"] = g->IsMeasure;
-    GDict["IsGammaG"] = g->IsGammaG;
+    GDict["IsGGGammaG"] = g->IsGGGammaG;
     return GDict;
 }
 void Diagram::_FromDict(const Dictionary& GDict, gLine g)
@@ -56,7 +56,7 @@ void Diagram::_FromDict(const Dictionary& GDict, gLine g)
     GDict.Get("K", g->K);
     AddGHash(g->K);
     GDict.Get("IsMeasure", g->IsMeasure);
-    GDict.Get("IsGammaG", g->IsGammaG);
+    GDict.Get("IsGGGammaG", g->IsGGGammaG);
 
     if (g->IsMeasure) {
         MeasureGLine = true;
@@ -73,7 +73,7 @@ Dictionary Diagram::_ToDict(wLine w)
     WDict["K"] = w->K;
     WDict["IsDelta"] = w->IsDelta;
     WDict["IsMeasure"] = w->IsMeasure;
-    WDict["IsGammaW"] = w->IsGammaW;
+    WDict["IsWWGammaW"] = w->IsWWGammaW;
     return WDict;
 }
 void Diagram::_FromDict(const Dictionary& WDict, wLine w)
@@ -88,7 +88,7 @@ void Diagram::_FromDict(const Dictionary& WDict, wLine w)
     WDict.Print();
     WDict.Get("IsDelta", w->IsDelta);
     WDict.Get("IsMeasure", w->IsMeasure);
-    WDict.Get("IsGammaW", w->IsGammaW);
+    WDict.Get("IsWWGammaW", w->IsWWGammaW);
     if (w->IsMeasure) {
         MeasureGLine = false;
         GMeasure = nullptr;
@@ -180,10 +180,10 @@ void Diagram::BuildNew(Lattice& lat, weight::GClass& g, weight::WClass& w)
         "[{'Name': 0, 'Sublat': 0, 'Coordi':" + coord + ", 'Tau': 0.0, 'SpinIn': 1, 'SpinOut' :1},"
         "{'Name': 1, 'Sublat': 0, 'Coordi':" + coord + ", 'Tau': 0.0, 'SpinIn': 1, 'SpinOut' :1}],"
         "'G':"
-        "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsMeasure': True, 'IsGammaG': False},"
-        "{'IN': 1, 'OUT': 0, 'K': 2, 'IsMeasure': False, 'IsGammaG': False}],"
+        "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsMeasure': True, 'IsGGGammaG': False},"
+        "{'IN': 1, 'OUT': 0, 'K': 2, 'IsMeasure': False, 'IsGGGammaG': False}],"
         "'W':"
-        "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsDelta': False, 'IsMeasure': False, 'IsGammaW': False}]}");
+        "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsDelta': False, 'IsMeasure': False, 'IsWWGammaW': False}]}");
 
     if (!FromDict(Config))
         ABORT("Faile to construct diagram!");
@@ -206,10 +206,10 @@ void Diagram::SetTest(Lattice& lat, weight::GClass& g, weight::WClass& w)
         "[{'Name': 0, 'Sublat': 0, 'Coordi':" + coord + ", 'Tau': 0.0, 'SpinIn': 1, 'SpinOut' :1},"
         "{'Name': 1, 'Sublat': 0, 'Coordi':" + coord + ", 'Tau': 0.0, 'SpinIn': 1, 'SpinOut' :1}],"
         "'G':"
-        "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsMeasure': True, 'IsGammaG': False},"
-        "{'IN': 1, 'OUT': 0, 'K': 2, 'IsMeasure': False, 'IsGammaG': False}],"
+        "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsMeasure': True, 'IsGGGammaG': False},"
+        "{'IN': 1, 'OUT': 0, 'K': 2, 'IsMeasure': False, 'IsGGGammaG': False}],"
         "'W':"
-        "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsDelta': False, 'IsMeasure': False, 'IsGammaW': False}]}");
+        "[{'IN': 0, 'OUT': 1, 'K': 1, 'IsDelta': False, 'IsMeasure': False, 'IsWWGammaW': False}]}");
     if (!FromDict(Config))
         ABORT("Faile to construct diagram!");
 }

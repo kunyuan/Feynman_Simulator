@@ -45,12 +45,12 @@ vertex GLine::NeighVer(int dir)
     return nVer[dir];
 }
 
-void GLine::SetGLine(Momentum k, const Complex &weight, bool ismeasure, bool isgammaG=false)
+void GLine::SetGLine(Momentum k, const Complex &weight, bool ismeasure, bool isGGGammaG=false)
 {
     K = k;
     Weight = weight;
     IsMeasure = ismeasure;
-    IsGammaG = isgammaG;
+    IsGGGammaG = isGGGammaG;
 }
 
 string GLine::PrettyString()
@@ -78,14 +78,14 @@ vertex WLine::NeighVer(int dir)
     return nVer[dir];
 }
 
-void WLine::SetWLine(Momentum k, const Complex &weight, bool isworm, bool ismeasure, bool isdelta, bool isgammaW=false)
+void WLine::SetWLine(Momentum k, const Complex &weight, bool isworm, bool ismeasure, bool isdelta, bool isWWGammaW=false)
 {
     K = k;
     Weight = weight;
     IsWorm = isworm;
     IsMeasure = ismeasure;
     IsDelta = isdelta;
-    IsGammaW = isgammaW;
+    IsWWGammaW = isWWGammaW;
 }
 
 string WLine::PrettyString()

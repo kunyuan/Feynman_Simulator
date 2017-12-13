@@ -57,7 +57,7 @@ class GClass{
     Complex Weight(const Site &, const Site &, real, real, spin, spin, bool, bool, ExtPoint * extPoint=nullptr) const;
     Complex Weight(int, const Site &, const Site &, real, real, spin, spin, bool, bool, ExtPoint * extPoint=nullptr) const;
 
-    GammaGClass* GammaGWeight;
+    GammaGClass* GGGammaGWeight;
 
   private:
     SmoothTArray _SmoothTWeight;
@@ -81,7 +81,7 @@ class WClass {
     Complex Weight(const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool, bool, ExtPoint * extPoint=nullptr) const;
     Complex Weight(int, const Site &, const Site &, real, real, spin *, spin *, bool, bool, bool, bool, ExtPoint * extPoint=nullptr) const;
 
-    GammaWClass* GammaWWeight;
+    GammaWClass* WWGammaWWeight;
 
   protected:
     DeltaTArray _DeltaTWeight;

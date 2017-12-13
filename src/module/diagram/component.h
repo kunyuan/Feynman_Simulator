@@ -30,7 +30,7 @@ class GLine {
   public:
     name Name;
     bool IsMeasure;
-    bool IsGammaG;
+    bool IsGGGammaG;
     vertex nVer[2];
     Momentum K;
     Complex Weight;
@@ -50,7 +50,7 @@ class WLine {
     bool IsWorm;
     bool IsDelta;
     bool IsMeasure;
-    bool IsGammaW;
+    bool IsWWGammaW;
     vertex nVer[2];
     Momentum K;
     Complex Weight;

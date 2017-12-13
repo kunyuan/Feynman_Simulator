@@ -36,20 +36,21 @@ class RandomFactory;
 class Momentum;
 
 namespace mc {
-const int NUpdates = 19+10;
+const int MCUpdates = 19;
+const int Gamma3Updates = 4;
+const int NUpdates = 23;
 class Markov {
 public:
     long long* Counter;
     real Beta;
     int Order;
     Lattice* Lat;
+    bool runGamma3;
     real* OrderReWeight;
     real* WormSpaceReweight;
     real* PolarReweight;
     real* GammaGReweight;
     real* GammaWReweight;
-    real* NkGammaGReweight;
-    real* NkGammaWReweight;
     diag::Diagram* Diag;
     diag::WormClass* Worm;
     weight::ExtPoint* UExt;
@@ -85,18 +86,12 @@ public:
     void ChangeDeltaToContinuous();
     void ChangeContinuousToDelta();
     void ChangeSpinOnVertex();
-    void ChangeTauInGammaW();
-    void ChangeRInGammaW();
 
     //Extra updates for Gamma3
-    void JumpToGammaG();
-    void JumpFromGammaGToG();
-    void JumpToGammaW();
-    void JumpFromGammaWToW();
-    void AddTwoG();
-    void AddTwoW();
-    void DeleteTwoG();
-    void DeleteTwoW();
+    void JumpToGGGammaG();
+    void JumpFromGGGammaGToG();
+    void JumpToWWGammaW();
+    void JumpFromWWGammaWToW();
 
 private:
     real ProbofCall[NUpdates];
@@ -138,16 +133,10 @@ private:
         JUMP_TO_ORDER0,
         JUMP_BACK_TO_ORDER1,
         //Extra updates for Gamma3
-        JUMP_TO_GAMMAG,
-        JUMP_FROM_GAMMAG_TO_G,
-        JUMP_TO_GAMMAW,
-        JUMP_FROM_GAMMAW_TO_W,
-        ADD_TWO_G,
-        ADD_TWO_W,
-        DELETE_TWO_G,
-        DELETE_TWO_W,
-        CHANGE_TAU_IN_GAMMAW,
-        CHANGE_R_IN_GAMMAW,
+        JUMP_TO_GGGAMMAG,
+        JUMP_FROM_GGGAMMAG_TO_G,
+        JUMP_TO_WWGAMMAW,
+        JUMP_FROM_WWGAMMAW_TO_W,
         END
     };
     std::string _DetailBalanceStr(Operations op);

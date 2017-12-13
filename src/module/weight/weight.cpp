@@ -81,19 +81,19 @@ bool weight::Weight::FromDict(const Dictionary &dict, flag _flag, const para::Pa
     }
     if (_flag & weight::GammaGW) {
         _AllocateGammaGW(para);
-        if(dict.HasKey("GammaG")) {
-            GammaG->WeightFromDict(dict.Get<Dictionary>("GammaG"));
+        if(dict.HasKey("GGGammaG")) {
+            GammaG->WeightFromDict(dict.Get<Dictionary>("GGGammaG"));
         }else{
             LOG_WARNING("There is no GammaG Weight to read!\n I will initialze them with zeros.");
         }
-        if(dict.HasKey("GammaW")) {
-            GammaW->WeightFromDict(dict.Get<Dictionary>("GammaW"));
+        if(dict.HasKey("WWGammaW")) {
+            GammaW->WeightFromDict(dict.Get<Dictionary>("WWGammaW"));
         }else{
             LOG_WARNING("There is no GammaW Weight to read!\n I will initialze them with zeros.");
             //GammaW will be allocated with zeros
         }
-        G->GammaGWeight = GammaG;
-        W->GammaWWeight = GammaW;
+        G->GGGammaGWeight = GammaG;
+        W->WWGammaWWeight = GammaW;
     }
     if (_flag & weight::GammaGWStatis) {
         ASSERT_ALLWAYS(GammaG!= nullptr&&GammaW!= nullptr, "GammaG and GammaW has to be initialized first!");
@@ -121,9 +121,9 @@ Dictionary weight::Weight::ToDict(flag _flag)
     }
     if (_flag & weight::GammaGW) {
         if(GammaG!= nullptr)
-            dict["GammaG"] = GammaG->WeightToDict();
+            dict["GGGammaG"] = GammaG->WeightToDict();
         if(GammaW!= nullptr)
-            dict["GammaW"] = GammaW->WeightToDict();
+            dict["WWGammaW"] = GammaW->WeightToDict();
     }
     if (_flag & weight::GammaGWStatis) {
         if(GammaG!= nullptr)

@@ -15,13 +15,13 @@ using namespace std;
 const spin SPINUPUP[2] = { UP, UP };
 
 Complex GClass::Weight(const Site& rin, const Site& rout, real tin, real tout, spin SpinIn, spin SpinOut,
-                       bool IsMeasure, bool IsGammaG, ExtPoint* ext) const
+                       bool IsMeasure, bool IsGGGammaG, ExtPoint* ext) const
 {
     uint Index = _Map.GetIndex(SpinIn, SpinOut, rin, rout, tin, tout);
     if (IsMeasure)
         return _MeasureWeight(Index);
-    else if (IsGammaG){
-        return GammaGWeight->Weight(rin, rout, ext->R, tin, tout, ext->Tau, SpinIn, SpinOut, ext->Spin);
+    else if (IsGGGammaG){
+        return GGGammaGWeight->Weight(rin, rout, ext->R, tin, tout, ext->Tau, SpinIn, SpinOut, ext->Spin);
 //        if(ext->R == rin)
 //            return _Map.GetTauSymmetryFactor(tin, tout) * _SmoothTWeight(Index);
 //        else
@@ -32,7 +32,7 @@ Complex GClass::Weight(const Site& rin, const Site& rout, real tin, real tout, s
 }
 
 Complex GClass::Weight(int dir, const Site& r1, const Site& r2, real t1, real t2, spin Spin1, spin Spin2,
-                       bool IsMeasure, bool IsGammaG, ExtPoint* ext) const
+                       bool IsMeasure, bool IsGGGammaG, ExtPoint* ext) const
 {
     static uint Index;
     int symmetryfactor;
@@ -47,22 +47,22 @@ Complex GClass::Weight(int dir, const Site& r1, const Site& r2, real t1, real t2
 
     if (IsMeasure)
         return _MeasureWeight(Index);
-    else if (IsGammaG)
+    else if (IsGGGammaG)
 //        if(ext->R == r1)
 //            return symmetryfactor * _SmoothTWeight(Index);
 //        else
 //            return Complex(0.0, 0.0);
         if (dir == IN) {
-            return GammaGWeight->Weight(r1, r2, ext->R, t1, t2, ext->Tau, Spin1, Spin2, ext->Spin);
+            return GGGammaGWeight->Weight(r1, r2, ext->R, t1, t2, ext->Tau, Spin1, Spin2, ext->Spin);
         }else{
-            return GammaGWeight->Weight(r2, r1, ext->R, t2, t1, ext->Tau, Spin2, Spin1, ext->Spin);
+            return GGGammaGWeight->Weight(r2, r1, ext->R, t2, t1, ext->Tau, Spin2, Spin1, ext->Spin);
         }
     else
         return symmetryfactor * _SmoothTWeight(Index);
 }
 
 Complex WClass::Weight(const Site& rin, const Site& rout, real tin, real tout, spin* SpinIn, spin* SpinOut, bool IsWorm,
-                       bool IsMeasure, bool IsDelta, bool IsGammaW, ExtPoint* ext) const
+                       bool IsMeasure, bool IsDelta, bool IsWWGammaW, ExtPoint* ext) const
 {
     static uint index;
     if (IsWorm) {
@@ -78,14 +78,14 @@ Complex WClass::Weight(const Site& rin, const Site& rout, real tin, real tout, s
 
     if (IsMeasure)
         return _MeasureWeight(index);
-    else if(IsGammaW)
-        return GammaWWeight->Weight(rin, rout, ext->R, tin, tout, ext->Tau, SpinIn, SpinOut, ext->Spin);
+    else if(IsWWGammaW)
+        return WWGammaWWeight->Weight(rin, rout, ext->R, tin, tout, ext->Tau, SpinIn, SpinOut, ext->Spin);
     else
         return _SmoothTWeight(index);
 }
 
 Complex WClass::Weight(int dir, const Site& r1, const Site& r2, real t1, real t2, spin* Spin1, spin* Spin2, bool IsWorm,
-                       bool IsMeasure, bool IsDelta, bool IsGammaW, ExtPoint* ext) const
+                       bool IsMeasure, bool IsDelta, bool IsWWGammaW, ExtPoint* ext) const
 {
     static uint index;
     if (IsWorm) {
@@ -107,11 +107,11 @@ Complex WClass::Weight(int dir, const Site& r1, const Site& r2, real t1, real t2
         return _MeasureWeight(index);
     else if (IsDelta)
         return _DeltaTWeight(index);
-    else if(IsGammaW)
+    else if(IsWWGammaW)
         if (dir == IN)
-            return GammaWWeight->Weight(r1, r2, ext->R, t1, t2, ext->Tau, Spin1, Spin2, ext->Spin);
+            return WWGammaWWeight->Weight(r1, r2, ext->R, t1, t2, ext->Tau, Spin1, Spin2, ext->Spin);
         else
-            return GammaWWeight->Weight(r2, r1, ext->R, t2, t1, ext->Tau, Spin2, Spin1, ext->Spin);
+            return WWGammaWWeight->Weight(r2, r1, ext->R, t2, t1, ext->Tau, Spin2, Spin1, ext->Spin);
     else
         return _SmoothTWeight(index);
 }

@@ -36,7 +36,8 @@ bool EnvMonteCarlo::BuildNew()
     Dictionary GW_;
     GW_.BigLoad(Job.WeightFile);
     Weight.FromDict(GW_, weight::GW, Para);
-    Weight.FromDict(GW_, weight::GammaGW, Para);
+    if (Para.runGamma3)
+        Weight.FromDict(GW_, weight::GammaGW, Para);
 
     //    Weight.SetDiagCounter(Para);//Test for DiagCounter
     //    Weight.SetTest(Para);//Test for WeightTest
@@ -74,8 +75,9 @@ bool EnvMonteCarlo::Load()
     statis_.BigLoad(Job.StatisticsFile);
     Weight.FromDict(statis_, weight::GW, Para);
     Weight.FromDict(statis_, weight::SigmaPolar, Para);
-    Weight.FromDict(statis_, weight::GammaGW, Para);
-    Weight.FromDict(statis_, weight::GammaGWStatis, Para);
+    if(Para.runGamma3)
+        Weight.FromDict(statis_, weight::GammaGW, Para);
+        Weight.FromDict(statis_, weight::GammaGWStatis, Para);
     LOG_INFO(DoesParaFileExit);
     if (DoesParaFileExit)
         Diag.FromDict(para_.Get<Dictionary>(ConfigKey), Para.Lat, *Weight.G, *Weight.W);
@@ -88,14 +90,18 @@ bool EnvMonteCarlo::Load()
 
 void EnvMonteCarlo::Save()
 {
-    if (Diag.HasGammaGW==0 && Diag.MeasureGammaGW==0) {
+    if (Diag.HasGammaGW==0) {
         LOG_INFO("Start saving data...");
         Dictionary para_;
         para_[ParaKey] = Para.ToDict();
         para_[ConfigKey] = Diag.ToDict();
         para_["PID"] = Job.PID;
         para_.Save(Job.ParaFile, "w");
-        Dictionary statis_ = Weight.ToDict(weight::GW | weight::SigmaPolar | weight::GammaGW | weight::GammaGWStatis);
+        Dictionary statis_;
+        if (Para.runGamma3)
+            statis_ = Weight.ToDict(weight::GW | weight::SigmaPolar | weight::GammaGW | weight::GammaGWStatis);
+        else
+            statis_ = Weight.ToDict(weight::GW | weight::SigmaPolar);
         statis_.Update(MarkovMonitor.ToDict());
         statis_.BigSave(Job.StatisticsFile);
         LOG_INFO("Saving data is done!");
@@ -117,10 +123,15 @@ void EnvMonteCarlo::AdjustOrderReWeight()
         string str;
         for (int i = 0; i <= Para.Order; i++)
             str += ToString((Para.OrderReWeight[i])) + "  ";
-        LOG_INFO("Reweighted to:\n" + str + "\nWorm Reweighted to:\n" + ToString(Para.WormSpaceReweight)
-                 + "\nPolar Reweighted to:\n" + ToString(Para.PolarReweight)
-                 + "\nGammaG Reweighted to:\n" + ToString(Para.GammaGReweight)
-                 + "\nGammaW Reweighted to:\n" + ToString(Para.GammaWReweight));
+        if(Para.runGamma3){
+            LOG_INFO("Reweighted to:\n" + str + "\nWorm Reweighted to:\n" + ToString(Para.WormSpaceReweight)
+                     + "\nPolar Reweighted to:\n" + ToString(Para.PolarReweight)
+                     + "\nGammaG Reweighted to:\n" + ToString(Para.GammaGReweight)
+                     + "\nGammaW Reweighted to:\n" + ToString(Para.GammaWReweight));
+        }else{
+            LOG_INFO("Reweighted to:\n" + str + "\nWorm Reweighted to:\n" + ToString(Para.WormSpaceReweight)
+                     + "\nPolar Reweighted to:\n" + ToString(Para.PolarReweight));
+        }
     }
     else {
         string str;
@@ -135,13 +146,11 @@ void EnvMonteCarlo::AdjustOrderReWeight()
 */
 bool EnvMonteCarlo::ListenToMessage()
 {
-    LOG_WARNING("Even Beginning:");
-    LOG_WARNING(Diag.HasGammaGW);
-    LOG_WARNING(Diag.MeasureGammaGW);
-    if(Diag.HasGammaGW==0 && Diag.MeasureGammaGW==0){
-        LOG_WARNING("Beginning:");
-        LOG_WARNING(Diag.HasGammaGW);
-        LOG_WARNING(Diag.MeasureGammaGW);
+    if(!Para.runGamma3 || Diag.HasGammaGW==0){
+        if (Para.runGamma3){
+            LOG_WARNING("Beginning:");
+            LOG_WARNING(Diag.HasGammaGW);
+        }
 
         LOG_INFO("Start Annealing...");
         Message Message_;
@@ -162,14 +171,19 @@ bool EnvMonteCarlo::ListenToMessage()
         Para.UpdateWithMessage(Message_);
 
         Weight.FromDict(weight_, weight::GW, Para);
-        Weight.FromDict(weight_, weight::GammaGW, Para);
+
+        if (Para.runGamma3){
+            Weight.FromDict(weight_, weight::GammaGW, Para);
+        }
 
         Weight.Anneal(Para);
         LOG_WARNING("Calling Diagram reset!");
 
-        LOG_WARNING("After:");
-        LOG_WARNING(Diag.HasGammaGW);
-        LOG_WARNING(Diag.MeasureGammaGW);
+        if (Para.runGamma3) {
+            LOG_WARNING("After:");
+            LOG_WARNING(Diag.HasGammaGW);
+        }
+
         Diag.Reset(Para.Lat, *Weight.G, *Weight.W);
         Markov.Reset(Para, Diag, Weight);
         MarkovMonitor.Reset(Para, Diag, Weight);
