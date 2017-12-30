@@ -6,10 +6,10 @@ import IO
 # import parameter as para
 
 class SVDBasis:
-    def __init__(self, MaxTauBin, beta):
+    def __init__(self, MaxTauBin, beta, bosefermi):
         self.__MaxTauBin=MaxTauBin
         self.__Beta=beta
-        self.__Basis={"Beta":beta,"MaxTauBin":MaxTauBin}
+        self.__Basis={"Beta":beta,"MaxTauBin":MaxTauBin, "BoseFermi":bosefermi}
 
     def FermiKernel(self, w, t, beta):
         x=beta*w/2
@@ -36,21 +36,27 @@ class SVDBasis:
         t=np.linspace(0, self.__Beta, Nt+1)
         t=np.array([e+1.0/Nt/2 for e in t[:-1]])
         kMatrix=np.zeros([Nw,Nt])
-        for i in range(len(w)):
-            kMatrix[i,:]=self.FermiKernel(w[i],t,self.__Beta)
+        if self.__Basis["BoseFermi"] == "Fermi":
+            for i in range(len(w)):
+                kMatrix[i,:]=self.FermiKernel(w[i],t,self.__Beta)
+        elif self.__Basis["BoseFermi"] == "Bose":
+            for i in range(len(w)):
+                kMatrix[i,:]=self.BoseKernel(w[i],t,self.__Beta)
 
         u,s,v=linalg.svd(kMatrix)
         v_inv=linalg.inv(v)
 
-        self.__Basis["BoseFermi"]="Fermi"
         self.__Basis["Number"]=N
         self.__Basis["Basis"]=v_inv[:,:N]
+    
+    def getBasis(self):
+        return self.__Basis
 
     def Save(self, filename, mode="w"):
         IO.SaveDict(filename, mode, self.__Basis)
 
 if __name__=="__main__":
-    svd=SVDBasis(2000,100)
+    svd=SVDBasis(2000,100, "Fermi")
     svd.GenerateBasis(30)
     svd.Save("basis.dat")
 

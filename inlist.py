@@ -26,9 +26,9 @@ Dyson={
     }
 }
 
-Beta=0.8
-Order=2
-Gamma3=False
+Beta=1.0
+Order=1
+Gamma3=True
 Common={
 "Gamma3": Gamma3,
 "Tau": {"MaxTauBin" : 32, "Beta": Beta},
@@ -45,7 +45,7 @@ Common={
     #"Name": "Kagome", "NSublat": 3,
     "Name": "Triangular", "NSublat": 1,
     # "Name": "Assymetric_Triangular", "NSublat": 3,
-    "L": [16,16]
+    "L": [8,8]
 
     #3D lattice
     #"Name": "Cubic", "NSublat": 1,
@@ -73,8 +73,6 @@ MonteCarlo["Markov"]={
     "runGamma3": Gamma3,
     "GammaGReweight" : 1.0,
     "GammaWReweight" : 1.0,
-    # "GammaGReweight" : 1.0,
-    # "GammaWReweight" : 1.0,
     "OrderTimeRatio" : [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
     #"Timer": {
         #"PrinterTimer": 300,
