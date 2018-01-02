@@ -42,6 +42,8 @@ weight::Weight::~Weight()
 
 bool weight::Weight::BuildNew(flag _flag, const ParaMC &para)
 {
+    _LoadBasis(para.Beta);
+
     //NormFactor only consider Vol, not beta, since beta can be changing during annealing
     Norm::NormFactor = para.Lat.Vol * para.Lat.SublatVol;
 
@@ -66,6 +68,7 @@ void weight::Weight::Anneal(const ParaMC &para)
 
 bool weight::Weight::FromDict(const Dictionary &dict, flag _flag, const para::ParaMC &para)
 {
+    _LoadBasis(para.Beta);
     //NormFactor only consider Vol, not beta, since beta can be changing during annealing
     Norm::NormFactor = para.Lat.Vol * para.Lat.SublatVol;
 
@@ -175,5 +178,26 @@ void weight::Weight::_AllocateGammaGW(const ParaMC &para)
     if(GammaG== nullptr)
         GammaG = new weight::GammaGClass(para.Lat, para.Beta, para.MaxTauBin);
     if(GammaW== nullptr)
-        GammaW = new weight::GammaWClass(para.Lat, para.Beta, para.MaxTauBin);
+        GammaW = new weight::GammaWClass(para.Lat, para.Beta, para.MaxTauBin, _BoseBasis);
 }
+
+bool weight::Weight::_LoadBasis(real Beta)
+{
+    Dictionary _Basis;
+    _Basis.Load("./FermiBasis.dat");
+    auto _beta=_Basis.Get<real>("Beta");
+    ASSERT_ALLWAYS(abs(_beta-Beta)<1e-10, "The beta of the basis is different from that in the MC!");
+    auto _MaxTauBin=_Basis.Get<real>("MaxTauBin");
+    auto _Number=_Basis.Get<real>("Number");
+    auto _basis=_Basis.Get<vector<basis>>("Basis");
+    _FermiBasis.swap(_basis);
+
+    _Basis.Load("./BoseBasis.dat");
+    _beta=_Basis.Get<real>("Beta");
+    ASSERT_ALLWAYS(abs(_beta-Beta)<1e-10, "The beta of the basis is different from that in the MC!");
+    _MaxTauBin=_Basis.Get<real>("MaxTauBin");
+    _Number=_Basis.Get<real>("Number");
+    _basis=_Basis.Get<vector<basis>>("Basis");
+    _BoseBasis.swap(_basis);
+}
+

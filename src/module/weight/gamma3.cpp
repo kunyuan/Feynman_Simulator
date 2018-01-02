@@ -157,7 +157,7 @@ Dictionary GammaGClass::WeightToDict()
 }
 
 
-GammaWClass::GammaWClass(const Lattice &lat, real beta, uint MaxTauBin, real Norm)
+GammaWClass::GammaWClass(const Lattice &lat, real beta, uint MaxTauBin,  std::vector<basis> & BoseBasis, real Norm)
         : _Map(IndexMapSPIN4(beta, MaxTauBin, lat, TauSymmetric))
 {
     int Vol = _Map.Lat.Vol;
@@ -165,18 +165,25 @@ GammaWClass::GammaWClass(const Lattice &lat, real beta, uint MaxTauBin, real Nor
     _Norm = Norm * pow(_Map.MaxTauBin / _Beta, 2.0) / _Beta / Vol;
 
     _MaxTauBin = MaxTauBin;
-    _dBetaInverse = _MaxTauBin/_Beta;
 //    uint SubVol=(uint)lat.SublatVol;
     uint MeaShape[5] = {6, (uint)Vol, (uint)Vol, MaxTauBin, MaxTauBin};
     //Wspin12, W_r1, dW_r2, Wtau1,dtau2
     _Weight.Allocate(MeaShape, SMOOTH);
     _WeightAccu.Allocate(MeaShape, SMOOTH);
     _WeightSize = _WeightAccu.GetSize();
+
+    _BasisVec.swap(BoseBasis);
+    _BasisNum=_BasisVec.size();
+    _BasisMaxTauBin=_BasisVec[0].size();
+    _dBetaInverse = _BasisMaxTauBin/_Beta;
+
+    _BasisNum=16;
+
     _CacheIndex[0] = 1;
-    _CacheIndex[1] = MaxTauBin;
-    _CacheIndex[2] = MaxTauBin*MaxTauBin;
-    _CacheIndex[3] = MaxTauBin*MaxTauBin*Vol;
-    _CacheIndex[4] = MaxTauBin*MaxTauBin*Vol*Vol;
+    _CacheIndex[1] = _BasisNum;
+    _CacheIndex[2] = _BasisNum*_BasisNum;
+    _CacheIndex[3] = _BasisNum*_BasisNum*Vol;
+    _CacheIndex[4] = _BasisNum*_BasisNum*Vol*Vol;
     ClearStatistics();
 }
 
@@ -238,8 +245,12 @@ void GammaWClass::Measure(const Site &Wr_in, const Site &Wr_out, const Site &Ur,
     }
     int t2Index=floor(t2*_dBetaInverse);
     auto SpinIndex=_SpinIndex(Wspin_out, Wspin_in);
+//    uint Index = SpinIndex * _CacheIndex[4] + coord_r1 * _CacheIndex[3]
+//                 +coord_r2*_CacheIndex[2]+ t1Index*_CacheIndex[1]+t2Index;
     uint Index = SpinIndex * _CacheIndex[4] + coord_r1 * _CacheIndex[3]
-                 +coord_r2*_CacheIndex[2]+ t1Index*_CacheIndex[1]+t2Index;
+                 +coord_r2*_CacheIndex[2];
+    
+
     _WeightAccu[Index]+=Weight;
 }
 

@@ -47,7 +47,9 @@ class SVDBasis:
         v_inv=linalg.inv(v)
 
         self.__Basis["Number"]=N
-        self.__Basis["Basis"]=v_inv[:,:N]
+        self.__Basis["Basis"]=[]
+        for i in range(N):
+            self.__Basis["Basis"].append(list(v_inv[:,i]))
     
     def getBasis(self):
         return self.__Basis
@@ -56,9 +58,14 @@ class SVDBasis:
         IO.SaveDict(filename, mode, self.__Basis)
 
 if __name__=="__main__":
-    svd=SVDBasis(2000,100, "Fermi")
+    beta=1.0
+    MaxTauBin=128
+    svd=SVDBasis(MaxTauBin,beta, "Fermi")
     svd.GenerateBasis(30)
-    svd.Save("basis.dat")
+    svd.Save("FermiBasis.dat")
+    svd=SVDBasis(MaxTauBin,beta, "Bose")
+    svd.GenerateBasis(30)
+    svd.Save("BoseBasis.dat")
 
 
 

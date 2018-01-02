@@ -12,9 +12,11 @@
 #include "weight_estimator.h"
 #include "utility/complex.h"
 #include "component.h"
+#include <vector>
 
 namespace weight {
 
+    typedef std::vector<real> basis;
 //     r1,t1  ---\
 //                --- 0,0,UP
 //  r1,t1+t2  ---/
@@ -60,7 +62,7 @@ namespace weight {
 
     class GammaWClass {
     public:
-        GammaWClass(const Lattice &, real Beta, uint MaxTauBin, real Norm = Norm::Weight());
+        GammaWClass(const Lattice &, real Beta, uint MaxTauBin, std::vector<basis> &, real Norm = Norm::Weight());
 
 //        void BuildNew();
 //    void BuildTest();
@@ -95,5 +97,8 @@ namespace weight {
         real _dBetaInverse;
         uint _MaxTauBin;
         uint _SpinIndex(spin *, spin*) const;
+        std::vector<basis> _BasisVec;
+        uint _BasisNum;
+        uint _BasisMaxTauBin;
     };
 };

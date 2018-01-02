@@ -2,10 +2,10 @@
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" :  0,
+    "__Duplicate" :  1,
     # "__Duplicate" :  3,
     "__IsCluster" : False, 
-    "__AutoRun" : True,
+    "__AutoRun" : False,
     },
 "Job": {"Sample" : 100000000}  ##0.8 min for 1000000(*1000) Samples in MC
 }
@@ -14,8 +14,8 @@ Dyson={
     "__Execute" : ["python", "./dyson/main.py"],
     "__Duplicate" : 1,
     "__IsCluster" : MonteCarlo["Control"]["__IsCluster"],
-    # "__AutoRun" : MonteCarlo["Control"]["__AutoRun"], 
-    "__AutoRun" : False,
+    "__AutoRun" : MonteCarlo["Control"]["__AutoRun"], 
+    # "__AutoRun" : False,
     "__PBSCommand": "#PBS -l mem=5gb"
     },
 "Job": {
@@ -26,12 +26,12 @@ Dyson={
     }
 }
 
-Beta=1.0
+Beta=0.5
 Order=1
 Gamma3=True
 Common={
 "Gamma3": Gamma3,
-"Tau": {"MaxTauBin" : 32, "Beta": Beta},
+"Tau": {"MaxTauBin" : 16, "Beta": Beta},
 "Lattice":  {
     #1D lattice
     # "Name": "Chain", "NSublat":1,
@@ -45,7 +45,7 @@ Common={
     #"Name": "Kagome", "NSublat": 3,
     "Name": "Triangular", "NSublat": 1,
     # "Name": "Assymetric_Triangular", "NSublat": 3,
-    "L": [8,8]
+    "L": [16,16]
 
     #3D lattice
     #"Name": "Cubic", "NSublat": 1,

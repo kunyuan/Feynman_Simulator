@@ -11,6 +11,7 @@
 
 //#include "weight_inherit.h"
 #include <string>
+#include <vector>
 #include "utility/convention.h"
 
 class Dictionary;
@@ -20,7 +21,9 @@ class ParaMC;
 
 namespace weight {
 
+typedef std::vector<real> basis;
 typedef const int flag;
+
 flag SigmaPolar = 1;
 flag GW = 2;
 flag GammaGW = 4;
@@ -56,6 +59,9 @@ private:
     void _AllocateGW(const para::ParaMC&);
     void _AllocateSigmaPolar(const para::ParaMC&);
     void _AllocateGammaGW(const para::ParaMC&);
+    std::vector<basis> _BoseBasis;
+    std::vector<basis> _FermiBasis;
+    bool _LoadBasis(real Beta);
 };
 }
 
