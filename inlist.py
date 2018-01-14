@@ -26,7 +26,7 @@ Dyson={
     }
 }
 
-Beta=1.0
+Beta=0.8
 Order=1
 Gamma3=True
 Common={

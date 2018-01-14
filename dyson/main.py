@@ -42,11 +42,6 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
 
     print "Chi=\n", np.sum(Chi.Data[0,0,0,0,:,:], axis=0)
 
-    if para["Gamma3"]:
-        BKChiTensor.FFT("R","T")
-        BKChi.FFT("R","T")
-        print "BKChi=\n", np.sum(BKChi.Data[0,0,0,0,:,:], axis=0)
-
     #print "Polar[UP,UP]=\n", Polar.Data[spinUP,0,spinUP,0,0,:]
     #print "Polar[DOWN, DOWN]=\n", Polar.Data[spinDOWN,0,spinDOWN,0,0,:]
     #print "W0=\n", W0.Data[spinUP,0,spinUP,0,1]
@@ -74,6 +69,10 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     data["Sigma"]=Sigma.ToDict()
     data["Polar"]=Polar.ToDict()
     if para["Gamma3"]:
+        BKChiTensor.FFT("R","T")
+        BKChi.FFT("R","T")
+        print "BKChi=\n", np.sum(BKChi.Data[0,0,0,0,:,:], axis=0)
+
         data["BKChi"]=BKChi.ToDict()
         data["GGGammaG"]={"SmoothT": GGGammaG}
         if WWGammaW is not None:
@@ -123,7 +122,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
         G=G0.Copy()
         if para["Gamma3"]:
             GGGammaG=gamma3.SimpleGG(G, Map)
-            WWGammaW=np.zeros([6, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin])+0.0*1j
+            WWGammaW=np.zeros([2, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin], dtype=np.complex64)
     else:
         #load WeightFile, load G,W
         log.info("Load G, W from {0}".format(WeightFile))
@@ -145,7 +144,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                 WWGammaW=data["WWGammaW"]["SmoothT"]
                 print "Read existing WWGammaW"
             else:
-                WWGammaW=np.zeros([6, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin])+0.0*1j
+                WWGammaW=np.zeros([2, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin], dtype=np.complex64)
 
     Gold, Wold = G, W
 
