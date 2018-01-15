@@ -2,8 +2,8 @@
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" :  0,
-    # "__Duplicate" :  3,
+    # "__Duplicate" :  0,
+    "__Duplicate" :  10,
     "__IsCluster" : False, 
     "__AutoRun" : True,
     },
@@ -27,7 +27,7 @@ Dyson={
 }
 
 Beta=0.8
-Order=1
+Order=3
 Gamma3=True
 Common={
 "Gamma3": Gamma3,
@@ -90,7 +90,7 @@ MonteCarlo["Markov"]={
 
 Dyson["Dyson"]={
     #"SleepTime": 0,
-    "SleepTime": 60,
+    "SleepTime": 15,
     "Gamma3": Gamma3,
     "OrderAccepted": {"Sigma":1, "Polar":1},
     "ErrorThreshold": 0.2,

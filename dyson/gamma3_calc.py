@@ -114,7 +114,7 @@ def AddG_To_GGGammaG(GGGammaG, G, _map):
     spinUP=_map.Spin2Index(UP,UP)
     spinDOWN=_map.Spin2Index(DOWN,DOWN)
     sub=0
-    GammaW = np.zeros([2, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin], dtype=np.complex64)
+    GammaW = np.zeros([2, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin], dtype=np.complex)
     for tout in range(_map.MaxTauBin):
         for tin in range(_map.MaxTauBin):
             tgout = tin - tout -1
@@ -240,7 +240,7 @@ def AddTwoW_To_GammaW(GammaW, W0, W, _map):
     Wtot=FFTWshift(Wtot, _map, 1)
     #Wtot shape: spin1, spin2, dr, dt
 
-    WWGammaW=np.zeros([2, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin], dtype=np.complex64)
+    WWGammaW=np.zeros([2, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin], dtype=np.complex)
 
     Wout = np.zeros((Wtot.shape[2],1,Wtot.shape[3],1), dtype=np.complex64)
     Wout[:,0,:,0] = Wtot[UPUP, UPUP, :, :] # r1, r2=0, t1, t2=0

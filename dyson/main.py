@@ -59,6 +59,8 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
         # n=Sigma.Data[UP,0,UP,0,0,i]
         # print '%05f %05f %05f' % (i*Map.Beta/Map.MaxTauBin, n.real, n.imag)
 
+    print WWGammaW[0,1,0,0,:]
+    print WWGammaW[1,1,0,0,:]
 
     data={}
     data["Chi"]=Chi.ToDict()
@@ -122,7 +124,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
         G=G0.Copy()
         if para["Gamma3"]:
             GGGammaG=gamma3.SimpleGG(G, Map)
-            WWGammaW=np.zeros([2, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin], dtype=np.complex64)
+            WWGammaW=np.zeros([2, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin], dtype=np.complex)
     else:
         #load WeightFile, load G,W
         log.info("Load G, W from {0}".format(WeightFile))
@@ -144,7 +146,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                 WWGammaW=data["WWGammaW"]["SmoothT"]
                 print "Read existing WWGammaW"
             else:
-                WWGammaW=np.zeros([2, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin], dtype=np.complex64)
+                WWGammaW=np.zeros([2, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin], dtype=np.complex)
 
     Gold, Wold = G, W
 
@@ -206,6 +208,8 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                 print "SigmaFromDyson=\n", SigmaDyson.Data[UP,0,UP,0,0,:]
 
                 if para["Gamma3"]:
+                    print GammaW_MC[0,0,0,0,:]
+                    print GammaW_MC[1,0,0,0,:]
                     WWGammaW = gamma3.AddTwoW_To_GammaW(GammaW_MC, W0, W, G.Map)
                     
                     GGGammaG_MC = gamma3.AddTwoG_To_GammaG(GammaG_MC, G, G.Map)
