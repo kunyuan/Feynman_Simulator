@@ -20,6 +20,7 @@ import plot, gc
 
 def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, Determ, ChiTensor, GGGammaG=None, WWGammaW=None):
     log.info("Measuring...")
+    Map=G0.Map
     ChiTensor=calc.Add_ChiTensor_ZerothOrder(ChiTensor, G, Map)
     Chi = calc.Calculate_Chi(ChiTensor, Map)
 
@@ -59,8 +60,9 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
         # n=Sigma.Data[UP,0,UP,0,0,i]
         # print '%05f %05f %05f' % (i*Map.Beta/Map.MaxTauBin, n.real, n.imag)
 
-    print WWGammaW[0,1,0,0,:]
-    print WWGammaW[1,1,0,0,:]
+    # TempWWGammaW=gamma3.RestoreGammaW(WWGammaW, Map)
+    # print TempWWGammaW[0,1,0,0,:]
+    # print TempWWGammaW[1,1,0,0,:]
 
     data={}
     data["Chi"]=Chi.ToDict()
@@ -124,7 +126,8 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
         G=G0.Copy()
         if para["Gamma3"]:
             GGGammaG=gamma3.SimpleGG(G, Map)
-            WWGammaW=np.zeros([2, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin], dtype=np.complex)
+            # WWGammaW=np.zeros([2, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin], dtype=np.complex)
+            WWGammaW=np.zeros([2, Map.Vol, Map.Vol, Map.BasisNum, Map.BasisNum], dtype=np.complex)
     else:
         #load WeightFile, load G,W
         log.info("Load G, W from {0}".format(WeightFile))
@@ -146,7 +149,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                 WWGammaW=data["WWGammaW"]["SmoothT"]
                 print "Read existing WWGammaW"
             else:
-                WWGammaW=np.zeros([2, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin], dtype=np.complex)
+                WWGammaW=np.zeros([2, Map.Vol, Map.Vol, Map.BasisNum, Map.BasisNum], dtype=np.complex)
 
     Gold, Wold = G, W
 
@@ -180,14 +183,20 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
 
                     # the second term GammaG: the term from dSigma/dG
                     # GGGammaG_2 = G*(W*GGGammaG)*G
+                    print "Attach W to GGGammaG"
                     GammaG = gamma3.AddW_To_GGGammaG(GGGammaG, W, G.Map)
+                    print "Calculate GammaG contribution to GGGammaG"
                     GGGammaG_2 = gamma3.AddTwoG_To_GammaG(GammaG, G, G.Map)
 
                     # the third term: the term from dSigma/dW
                     # GGGammaG_3 = G*((W*(G*GGGammaG)*W)*G)*G
+                    print "Calculate GammaW"
                     GammaW = gamma3.AddG_To_GGGammaG(GGGammaG, G, G.Map)
+                    print "Calculate WWGammaW"
                     WWGammaW = gamma3.AddTwoW_To_GammaW(GammaW, W0, W, G.Map)
+                    print "Calculate GammaG from WWGammaW"
                     GammaG_FromWWGammaW=gamma3.AddG_To_WWGammaW(WWGammaW, G, G.Map)
+                    print "Calculate WWGammaW contribution to GGGammaG"
                     GGGammaG_3 = gamma3.AddTwoG_To_GammaG(GammaG_FromWWGammaW, G, G.Map)
 
                     SimpleGGGammaG=gamma3.SimpleGG(G, Map)

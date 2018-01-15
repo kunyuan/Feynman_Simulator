@@ -83,9 +83,8 @@ def AddTwoG_To_GammaG(GammaG, G, _map):
                 tgout+=_map.MaxTauBin
                 signout*=-1
             Gout+=0.5*signout*G.Data[:,sub,:,sub,r,tgout]
-            for tin in range(_map.MaxTauBin):
-                GGammaG[UP, :, t, tin]+=Gout[UP,UP]*GammaG[UP,:,tout,tin]
-                GGammaG[DOWN, :, t, tin]+=Gout[DOWN,DOWN]*GammaG[DOWN,:,tout,tin]
+            GGammaG[UP, :, t, :]+=Gout[UP,UP]*GammaG[UP,:,tout,:]
+            GGammaG[DOWN, :, t, :]+=Gout[DOWN,DOWN]*GammaG[DOWN,:,tout,:]
 
     GGGammaG=np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
     for t in range(_map.MaxTauBin):
@@ -102,9 +101,8 @@ def AddTwoG_To_GammaG(GammaG, G, _map):
                 tgin+=_map.MaxTauBin
                 signin*=-1
             Gin+=0.5*signin*G.Data[:,sub,:,sub,r,tgin]
-            for tout in range(_map.MaxTauBin):
-                GGGammaG[UP, :, tout, t]+=Gin[UP,UP]*GGammaG[UP,:,tout,tin]
-                GGGammaG[DOWN, :, tout, t]+=Gin[DOWN,DOWN]*GGammaG[DOWN,:,tout,tin]
+            GGGammaG[UP, :, :, t]+=Gin[UP,UP]*GGammaG[UP,:,:,tin]
+            GGGammaG[DOWN, :, :, t]+=Gin[DOWN,DOWN]*GGammaG[DOWN,:,:,tin]
     return GGGammaG*_map.Beta**2/_map.MaxTauBin**2
 
 def AddG_To_GGGammaG(GGGammaG, G, _map):
@@ -114,7 +112,8 @@ def AddG_To_GGGammaG(GGGammaG, G, _map):
     spinUP=_map.Spin2Index(UP,UP)
     spinDOWN=_map.Spin2Index(DOWN,DOWN)
     sub=0
-    GammaW = np.zeros([2, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin], dtype=np.complex)
+    #only GammaW(r,r) has non-zero values, so that we only keep one r for now
+    GammaW = np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin], dtype=np.complex)
     for tout in range(_map.MaxTauBin):
         for tin in range(_map.MaxTauBin):
             tgout = tin - tout -1
@@ -131,24 +130,23 @@ def AddG_To_GGGammaG(GGGammaG, G, _map):
                 sign*=-1
             Gout += 0.5*sign*G.Data[:,sub,:,sub,0,tgout]
 
-            for r in range(_map.Vol):
-                ## UP UP UP UP
-                #GammaW[0, r, r, tout, tin] = Gout[UP,UP]*GGGammaG[UP,r,tout,tin]
+            ## UP UP UP UP
+            #GammaW[0, r, r, tout, tin] = Gout[UP,UP]*GGGammaG[UP,r,tout,tin]
 
-                ## DOWN DOWN DOWN DOWN
-                #GammaW[1, r, r, tout, tin] = Gout[DOWN,DOWN]*GGGammaG[DOWN,r,tout,tin]
+            ## DOWN DOWN DOWN DOWN
+            #GammaW[1, r, r, tout, tin] = Gout[DOWN,DOWN]*GGGammaG[DOWN,r,tout,tin]
 
-                ## in:UP DOWN out:DOWN UP
-                #GammaW[5, r, r, tout, tin] = Gout[UP, UP]*GGGammaG[DOWN,r,tout,tin]
+            ## in:UP DOWN out:DOWN UP
+            #GammaW[5, r, r, tout, tin] = Gout[UP, UP]*GGGammaG[DOWN,r,tout,tin]
 
-                ## in:DOWN UP out:UP DOWN 
-                #GammaW[4, r, r, tout, tin] = Gout[DOWN,DOWN]*GGGammaG[UP,r,tout,tin]
+            ## in:DOWN UP out:UP DOWN 
+            #GammaW[4, r, r, tout, tin] = Gout[DOWN,DOWN]*GGGammaG[UP,r,tout,tin]
 
-                # UP UP UP UP+ DOWN DOWN DOWN DOWN
-                GammaW[0, r, r, tout, tin] = Gout[UP,UP]*GGGammaG[UP,r,tout,tin]+Gout[DOWN,DOWN]*GGGammaG[DOWN,r,tout,tin]
+            # UP UP UP UP+ DOWN DOWN DOWN DOWN
+            GammaW[0, :, tout, tin] = Gout[UP,UP]*GGGammaG[UP,:,tout,tin]+Gout[DOWN,DOWN]*GGGammaG[DOWN,:,tout,tin]
 
-                # in:DOWN UP out:UP DOWN 
-                GammaW[1, r, r, tout, tin] = Gout[DOWN,DOWN]*GGGammaG[UP,r,tout,tin]
+            # in:DOWN UP out:UP DOWN 
+            GammaW[1, :, tout, tin] = Gout[DOWN,DOWN]*GGGammaG[UP,:,tout,tin]
 
             ### reverse
             tgout = tout - tin -1
@@ -165,24 +163,29 @@ def AddG_To_GGGammaG(GGGammaG, G, _map):
                 sign*=-1
             Gout += 0.5*sign*G.Data[:,sub,:,sub,0,tgout]
 
-            for r in range(_map.Vol):
-                ## UP UP UP UP
-                #GammaW[0, r, r, tout, tin] += Gout[UP,UP]*GGGammaG[UP,r,tin,tout]
+            ## UP UP UP UP
+            #GammaW[0, r, r, tout, tin] += Gout[UP,UP]*GGGammaG[UP,r,tin,tout]
 
-                ## DOWN DOWN DOWN DOWN
-                #GammaW[1, r, r, tout, tin] += Gout[DOWN,DOWN]*GGGammaG[DOWN,r,tin,tout]
+            ## DOWN DOWN DOWN DOWN
+            #GammaW[1, r, r, tout, tin] += Gout[DOWN,DOWN]*GGGammaG[DOWN,r,tin,tout]
 
-                ## in:UP DOWN out:DOWN UP
-                #GammaW[5, r, r, tout, tin] += Gout[DOWN, DOWN]*GGGammaG[UP,r,tin,tout]
+            ## in:UP DOWN out:DOWN UP
+            #GammaW[5, r, r, tout, tin] += Gout[DOWN, DOWN]*GGGammaG[UP,r,tin,tout]
 
-                ## in:DOWN UP out:UP DOWN 
-                #GammaW[4, r, r, tout, tin] += Gout[UP,UP]*GGGammaG[DOWN,r,tin,tout]
+            ## in:DOWN UP out:UP DOWN 
+            #GammaW[4, r, r, tout, tin] += Gout[UP,UP]*GGGammaG[DOWN,r,tin,tout]
 
-                ## UP UP UP UP + DOWN DOWN DOWN DOWN
-                GammaW[0, r, r, tout, tin] += Gout[UP,UP]*GGGammaG[UP,r,tin,tout]+Gout[DOWN,DOWN]*GGGammaG[DOWN,r,tin,tout]
+            ## UP UP UP UP + DOWN DOWN DOWN DOWN
+            GammaW[0, :, tout, tin] += Gout[UP,UP]*GGGammaG[UP,:,tin,tout]+Gout[DOWN,DOWN]*GGGammaG[DOWN,:,tin,tout]
 
-                ## in:DOWN UP out:UP DOWN 
-                GammaW[1, r, r, tout, tin] += Gout[UP,UP]*GGGammaG[DOWN,r,tin,tout]
+            ## in:DOWN UP out:UP DOWN 
+            GammaW[1, :, tout, tin] += Gout[UP,UP]*GGGammaG[DOWN,:,tin,tout]
+
+    GammaWDiagonal=FitGammaW_diagonal(GammaW, _map)
+    GammaW = np.zeros([2, _map.Vol, _map.Vol, _map.BasisNum, _map.BasisNum], dtype=np.complex)
+    for r in range(_map.Vol):
+        GammaW[:, r, r, :, :]=GammaWDiagonal[:,r,:,:]
+
     return FermiLoopSign*GammaW
 
 def GenerateSpinIndex(_map):
@@ -217,7 +220,82 @@ def FFTWshift(Wshift, _map, BackForth):
     Wshift=Wshift.reshape(OldShape)
     return Wshift
 
+def FFTGammaW_Space(GammaW, _map, BackForth):
+    OldShape=GammaW.shape
+    NewShape=(_map.L[0], _map.L[1], _map.L[0], _map.L[1], _map.BasisNum, _map.BasisNum)
+    GammaW=GammaW.reshape(NewShape)
+    if BackForth==1:
+        GammaW=np.fft.fftn(GammaW, axes=[0,1,2,3]) 
+    elif BackForth==-1:
+        GammaW=np.fft.ifftn(GammaW, axes=[0,1,2,3]) 
+    GammaW=GammaW.reshape(OldShape)
+    return GammaW
+
+def FFTWshift_Space(Wshift, _map, BackForth):
+    OldShape=Wshift.shape
+    NewShape=(_map.L[0], _map.L[1], _map.MaxTauBin, _map.MaxTauBin)
+    Wshift=Wshift.reshape(NewShape)
+    if BackForth==1:
+        Wshift=np.fft.fftn(Wshift, axes=[0,1]) 
+    elif BackForth==-1:
+        Wshift=np.fft.ifftn(Wshift, axes=[0,1]) 
+    Wshift=Wshift.reshape(OldShape)
+    return Wshift
+
+
 def AddTwoW_To_GammaW(GammaW, W0, W, _map):
+    # import gamma3
+    sub = 0
+    UPUP=_map.Spin2Index(UP,UP)
+    DOWNDOWN=_map.Spin2Index(DOWN,DOWN)
+    UPDOWN=_map.Spin2Index(UP,DOWN)
+    DOWNUP=_map.Spin2Index(DOWN,UP)
+
+    spinindex, spin2index=GenerateSpinIndex(_map)
+
+    W.FFT("R","T")
+    W0.FFT("R", "T")
+    Wshift=weight.Weight("SmoothT", _map, "FourSpins", "Symmetric", "R","T")
+    for t in range(_map.MaxTauBin):
+        t1=t-1
+        if t1<0:
+            t1+=_map.MaxTauBin
+        Wshift.Data[:,:,:,:,:,t]=0.5*(W.Data[:,:,:,:,:,t1]+W.Data[:,:,:,:,:,t])
+    Wshift=np.array(Wshift.Data[:,0,:,0,:,:])*_map.Beta/_map.MaxTauBin
+    Wtot=np.zeros([_map.Vol, _map.MaxTauBin, _map.MaxTauBin], dtype=np.complex)
+    Wshift[:,:,:,0]+=W0.Data[:,0,:,0,:]
+    for t1 in range(_map.MaxTauBin):
+        for t2 in range(_map.MaxTauBin):
+            dt=t1-t2
+            if dt<0:
+                dt+=_map.MaxTauBin
+            Wtot[:, t1, t2]=Wshift[0,0,:,dt]
+    Wtot=FFTWshift_Space(Wtot, _map, 1)
+    Wtot=FitW(Wtot, _map)
+
+    WWGammaW=np.zeros([2, _map.Vol, _map.Vol, _map.BasisNum, _map.BasisNum], dtype=np.complex)
+
+    # FittedGammaW=FitGammaW(GammaW, _map)
+    for s in range(2):
+        TempGammaW=FFTGammaW_Space(GammaW[s,...], _map, 1)
+        TempGammaW=np.einsum("ijkl, imk->ijml", TempGammaW, Wtot)
+        TempGammaW=np.einsum("ijml, jnl->ijmn", TempGammaW, Wtot)
+        TempGammaW=FFTGammaW_Space(TempGammaW, _map, -1)
+        if s==1:
+            TempGammaW*=4.0
+        WWGammaW[s,...]=TempGammaW
+
+    # WWGammaW=RestoreGammaW(WWGammaW, _map)
+
+    log.info(green("Memory Usage before collecting: {0} MB".format(memory_usage())))
+    gc.collect()
+    log.info(green("Memory Usage : {0} MB".format(memory_usage())))
+    W0.FFT("R","T")
+    W.FFT("R","T")
+
+    return -1.0*WWGammaW
+
+def AddTwoW_To_GammaW_bare(GammaW, W0, W, _map):
     # import gamma3
     sub = 0
     UPUP=_map.Spin2Index(UP,UP)
@@ -269,7 +347,7 @@ def AddTwoW_To_GammaW(GammaW, W0, W, _map):
     # for r1 in range(_map.Vol):
         # for t in range(_map.MaxTauBin):
             # print "1", r1,t, np.amax(np.abs(GammaW[1,r1,0,t,:]-GammaW2[1,r1,0,t,:]))
-    GammaW=GammaW2
+    # GammaW=GammaW2
 
     #Type 0 and 1
     for s in range(2):
@@ -305,33 +383,35 @@ def AddG_To_WWGammaW(WWGammaW, G, _map):
     spinDOWN=_map.Spin2Index(DOWN,DOWN)
     sub=0
     GammaG = np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
+    #only GammaW(r,r) is needed!
+    WWGammaW=np.einsum("siikl->sikl", WWGammaW)
+    WWGammaW=RestoreGammaW_diagonal(WWGammaW, _map)
 
-    for r in range(_map.Vol):
-        for tout in range(_map.MaxTauBin):
-            for tin in range(_map.MaxTauBin):
-                tgout = tout - tin -1
-                sign=1
-                if tgout<0:
-                    tgout+=_map.MaxTauBin
-                    sign*=-1
-                Gout = 0.5*sign*G.Data[:,sub,:,sub,0,tgout]
+    for tout in range(_map.MaxTauBin):
+        for tin in range(_map.MaxTauBin):
+            tgout = tout - tin -1
+            sign=1
+            if tgout<0:
+                tgout+=_map.MaxTauBin
+                sign*=-1
+            Gout = 0.5*sign*G.Data[:,sub,:,sub,0,tgout]
 
-                tgout = tout - tin
-                sign=1
-                if tgout<0:
-                    tgout+=_map.MaxTauBin
-                    sign*=-1
-                Gout += 0.5*sign*G.Data[:,sub,:,sub,0,tgout]
+            tgout = tout - tin
+            sign=1
+            if tgout<0:
+                tgout+=_map.MaxTauBin
+                sign*=-1
+            Gout += 0.5*sign*G.Data[:,sub,:,sub,0,tgout]
 
-                # GammaG[UP, r, tout, tin] += Gout[UP,UP]*WWGammaW[0,r,r,tout,tin]
-                # GammaG[UP, r, tout, tin] += Gout[DOWN,DOWN]*WWGammaW[5,r,r,tout,tin]
-                # GammaG[DOWN, r, tout, tin] += Gout[DOWN,DOWN]*WWGammaW[1,r,r,tout,tin]
-                # GammaG[DOWN, r, tout, tin] += Gout[UP,UP]*WWGammaW[4,r,r,tout,tin]
+            # GammaG[UP, r, tout, tin] += Gout[UP,UP]*WWGammaW[0,r,r,tout,tin]
+            # GammaG[UP, r, tout, tin] += Gout[DOWN,DOWN]*WWGammaW[5,r,r,tout,tin]
+            # GammaG[DOWN, r, tout, tin] += Gout[DOWN,DOWN]*WWGammaW[1,r,r,tout,tin]
+            # GammaG[DOWN, r, tout, tin] += Gout[UP,UP]*WWGammaW[4,r,r,tout,tin]
 
-                GammaG[UP, r, tout, tin] += Gout[UP,UP]*WWGammaW[0,r,r,tout,tin]
-                GammaG[UP, r, tout, tin] += Gout[DOWN,DOWN]*WWGammaW[1,r,r,tout,tin]
-                GammaG[DOWN, r, tout, tin] += Gout[DOWN,DOWN]*(-np.conj(WWGammaW[0,r,r,tout,tin]))
-                GammaG[DOWN, r, tout, tin] += Gout[UP,UP]*(-np.conj(WWGammaW[1,r,r,tout,tin]))
+            GammaG[UP, :, tout, tin] += Gout[UP,UP]*WWGammaW[0,:,tout,tin]
+            GammaG[UP, :, tout, tin] += Gout[DOWN,DOWN]*WWGammaW[1,:,tout,tin]
+            GammaG[DOWN, :, tout, tin] += Gout[DOWN,DOWN]*(-np.conj(WWGammaW[0,:,tout,tin]))
+            GammaG[DOWN, :, tout, tin] += Gout[UP,UP]*(-np.conj(WWGammaW[1,:,tout,tin]))
     return GammaG
 
 def shift(r, L):
@@ -411,28 +491,42 @@ def Check_Denorminator(Denorm, Determ, _map):
     if Determ.min().real<0.0 and Determ.min().imag<1.0e-4:
         raise DenorminatorTouchZero(Determ.min(), _map.IndexToCoordi(x), t)
 
-def FitGammaW(GammaW, _map):
-    BasisNum=32
+def GetBoseBasis(_map):
     TauBin=_map.MaxTauBin
     svd=basis.SVDBasis(TauBin, _map.Beta, "Bose")
-    svd.GenerateBasis(BasisNum)
+    svd.GenerateBasis(_map.BasisNum)
     Basis=svd.GetBasis()["Basis"]
     # for e in range(BasisNum):
         # Basis[e]=Basis[e][::4]
     BasisVec=np.array(Basis)  #BasisNum, MaxTauBin
+    return BasisVec
+
+def FitW(Wshift, _map):
+    BasisVec=GetBoseBasis(_map)
+    NewWshift=np.einsum("imn,km->ikn", Wshift, BasisVec) 
+    NewWshift=np.einsum("ikn,ln->ikl", NewWshift, BasisVec) 
+    return NewWshift
+
+def FitGammaW_diagonal(GammaW, _map):
+    BasisVec=GetBoseBasis(_map)
+    NewGammaW=np.einsum("srmn,km->srkn", GammaW, BasisVec) 
+    NewGammaW=np.einsum("srkn,ln->srkl", NewGammaW, BasisVec) 
+    return NewGammaW
+
+def FitGammaW(GammaW, _map):
+    BasisVec=GetBoseBasis(_map)
     NewGammaW=np.einsum("sijmn,km->sijkn", GammaW, BasisVec) 
     NewGammaW=np.einsum("sijkn,ln->sijkl", NewGammaW, BasisVec) 
     return NewGammaW
 
+def RestoreGammaW_diagonal(GammaW, _map):
+    BasisVec=GetBoseBasis(_map)
+    NewGammaW=np.einsum("srkl,km->srml", GammaW, BasisVec) 
+    NewGammaW=np.einsum("srml,ln->srmn", NewGammaW, BasisVec) 
+    return NewGammaW
+
 def RestoreGammaW(GammaW, _map):
-    BasisNum=32
-    TauBin=_map.MaxTauBin
-    svd=basis.SVDBasis(TauBin, _map.Beta, "Bose")
-    svd.GenerateBasis(BasisNum)
-    Basis=svd.GetBasis()["Basis"]
-    # for e in range(BasisNum):
-        # Basis[e]=Basis[e][::4]
-    BasisVec=np.array(Basis)  #BasisNum, MaxTauBin
+    BasisVec=GetBoseBasis(_map)
     NewGammaW=np.einsum("sijkl,km->sijml", GammaW, BasisVec) 
     NewGammaW=np.einsum("sijml,ln->sijmn", NewGammaW, BasisVec) 
     return NewGammaW
