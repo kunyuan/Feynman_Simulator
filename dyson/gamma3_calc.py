@@ -248,6 +248,29 @@ def AddTwoW_To_GammaW(GammaW, W0, W, _map):
     Win = np.zeros((1,Wtot.shape[2],1,Wtot.shape[3]), dtype=np.complex64)
     Win[0,:,0,:] = Wtot[UPUP, UPUP, :, :] # r1=0, r2, t1=0, t2
 
+    GammaW1=FitGammaW(GammaW, _map)
+    GammaW2=RestoreGammaW(GammaW1, _map)
+    # if np.allclose(GammaW, GammaW2, rtol=1e-3, atol=1e-5):
+        # print "Basis works well!"
+    # else:
+        # print "Basis fails to work!"
+    # print np.amax(np.abs(GammaW-GammaW2))
+    # print (GammaW[1,0,0,:,:]).diagonal()
+    # print (GammaW2[1,0,0,:,:]).diagonal()
+    # print (GammaW[1,0,0,:,:]-GammaW2[1,0,0,:,:]).diagonal()
+
+    print (GammaW[1,0,0,15,:])
+    print (GammaW2[1,0,0,15,:])
+    print (GammaW[1,0,0,15,:]-GammaW2[1,0,0,15,:])
+    for r1 in range(8):
+        print "0", r1, np.amax(np.abs(GammaW[0,r1,:,:]-GammaW2[0,r1,:,:]))
+    for r1 in range(8):
+        print "1", r1,t, np.amax(np.abs(GammaW[1,r1,0,:,:]-GammaW2[1,r1,0,:,:]))
+    # for r1 in range(_map.Vol):
+        # for t in range(_map.MaxTauBin):
+            # print "1", r1,t, np.amax(np.abs(GammaW[1,r1,0,t,:]-GammaW2[1,r1,0,t,:]))
+    GammaW=GammaW2
+
     #Type 0 and 1
     for s in range(2):
         print "Calculate GammaW {0}".format(s)
@@ -387,3 +410,30 @@ def Check_Denorminator(Denorm, Determ, _map):
     log.info("The 1/linalg.cond is {0}".format(1.0/np.linalg.cond(Denorm[...,x,t])))
     if Determ.min().real<0.0 and Determ.min().imag<1.0e-4:
         raise DenorminatorTouchZero(Determ.min(), _map.IndexToCoordi(x), t)
+
+def FitGammaW(GammaW, _map):
+    BasisNum=32
+    TauBin=_map.MaxTauBin
+    svd=basis.SVDBasis(TauBin, _map.Beta, "Bose")
+    svd.GenerateBasis(BasisNum)
+    Basis=svd.GetBasis()["Basis"]
+    # for e in range(BasisNum):
+        # Basis[e]=Basis[e][::4]
+    BasisVec=np.array(Basis)  #BasisNum, MaxTauBin
+    NewGammaW=np.einsum("sijmn,km->sijkn", GammaW, BasisVec) 
+    NewGammaW=np.einsum("sijkn,ln->sijkl", NewGammaW, BasisVec) 
+    return NewGammaW
+
+def RestoreGammaW(GammaW, _map):
+    BasisNum=32
+    TauBin=_map.MaxTauBin
+    svd=basis.SVDBasis(TauBin, _map.Beta, "Bose")
+    svd.GenerateBasis(BasisNum)
+    Basis=svd.GetBasis()["Basis"]
+    # for e in range(BasisNum):
+        # Basis[e]=Basis[e][::4]
+    BasisVec=np.array(Basis)  #BasisNum, MaxTauBin
+    NewGammaW=np.einsum("sijkl,km->sijml", GammaW, BasisVec) 
+    NewGammaW=np.einsum("sijml,ln->sijmn", NewGammaW, BasisVec) 
+    return NewGammaW
+

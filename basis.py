@@ -51,7 +51,7 @@ class SVDBasis:
         for i in range(N):
             self.__Basis["Basis"].append(list(v_inv[:,i]))
     
-    def getBasis(self):
+    def GetBasis(self):
         return self.__Basis
 
     def Save(self, filename, mode="w"):

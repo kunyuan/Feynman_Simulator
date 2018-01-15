@@ -3,7 +3,7 @@ MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
     # "__Duplicate" :  0,
-    "__Duplicate" :  10,
+    "__Duplicate" :  3,
     "__IsCluster" : False, 
     "__AutoRun" : True,
     },
@@ -27,7 +27,7 @@ Dyson={
 }
 
 Beta=0.8
-MaxTauBin=32
+MaxTauBin=64
 Order=1
 Gamma3=True
 Common={

@@ -55,6 +55,15 @@ Complex GammaGClass::Weight(const Site &Gr_in, const Site &Gr_out, const Site &U
     }
     int t2Index = floor(t2*_dBetaInverse);
 
+    //if(t1Index==t2Index){
+        //if(t1>=t2) 
+            //t1Index++;
+        //else
+            //t2Index++;
+        //if(t1Index==_MaxTauBin) t1Index=0;
+        //if(t2Index==_MaxTauBin) t2Index=0;
+    //}
+
     uint Index = Gspin_in * _CacheIndex[3] + coord * _CacheIndex[2] + t1Index*_CacheIndex[1] + t2Index;
     return _Weight(Index) * sign;
 }
