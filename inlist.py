@@ -5,7 +5,7 @@ MonteCarlo={
     # "__Duplicate" :  0,
     "__Duplicate" :  10,
     "__IsCluster" : False, 
-    "__AutoRun" : False,
+    "__AutoRun" : True,
     },
 "Job": {"Sample" : 100000000}  ##0.8 min for 1000000(*1000) Samples in MC
 }
@@ -14,8 +14,8 @@ Dyson={
     "__Execute" : ["python", "./dyson/main.py"],
     "__Duplicate" : 1,
     "__IsCluster" : MonteCarlo["Control"]["__IsCluster"],
-    "__AutoRun" : MonteCarlo["Control"]["__AutoRun"], 
-    # "__AutoRun" : False,
+    # "__AutoRun" : MonteCarlo["Control"]["__AutoRun"], 
+    "__AutoRun" : False,
     "__PBSCommand": "#PBS -l mem=5gb"
     },
 "Job": {
@@ -27,11 +27,12 @@ Dyson={
 }
 
 Beta=0.8
+MaxTauBin=32
 Order=1
 Gamma3=True
 Common={
 "Gamma3": Gamma3,
-"Tau": {"MaxTauBin" : 16, "Beta": Beta},
+"Tau": {"MaxTauBin" : MaxTauBin, "Beta": Beta},
 "Lattice":  {
     #1D lattice
     # "Name": "Chain", "NSublat":1,
@@ -45,7 +46,7 @@ Common={
     #"Name": "Kagome", "NSublat": 3,
     "Name": "Triangular", "NSublat": 1,
     # "Name": "Assymetric_Triangular", "NSublat": 3,
-    "L": [16,16]
+    "L": [8,8]
 
     #3D lattice
     #"Name": "Cubic", "NSublat": 1,
@@ -113,3 +114,11 @@ Dyson.update(Common)
 TO_DO.append(job.JobDyson(Dyson))
 CPU = 16
 SLEEP = 1    #check job status for every SLEEP seconds
+
+import basis
+svd=basis.SVDBasis(MaxTauBin,Beta, "Fermi")
+svd.GenerateBasis(30)
+svd.Save("FermiBasis.dat")
+svd=basis.SVDBasis(MaxTauBin,Beta, "Bose")
+svd.GenerateBasis(30)
+svd.Save("BoseBasis.dat")

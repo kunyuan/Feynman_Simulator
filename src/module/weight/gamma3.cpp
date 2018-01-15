@@ -166,6 +166,7 @@ GammaWClass::GammaWClass(const Lattice &lat, real beta, uint MaxTauBin,  std::ve
     _Norm = Norm * pow(_Map.MaxTauBin / _Beta, 2.0) / _Beta / Vol;
 
     _MaxTauBin = MaxTauBin;
+    _dBetaInverse = _MaxTauBin/_Beta;
 //    uint SubVol=(uint)lat.SublatVol;
     uint MeaShape[5] = {2, (uint)Vol, (uint)Vol, MaxTauBin, MaxTauBin};
     //Wspin12, W_r1, dW_r2, Wtau1,dtau2
@@ -180,11 +181,16 @@ GammaWClass::GammaWClass(const Lattice &lat, real beta, uint MaxTauBin,  std::ve
 
     _BasisNum=16;
 
+    //_CacheIndex[0] = 1;
+    //_CacheIndex[1] = _BasisNum;
+    //_CacheIndex[2] = _BasisNum*_BasisNum;
+    //_CacheIndex[3] = _BasisNum*_BasisNum*Vol;
+    //_CacheIndex[4] = _BasisNum*_BasisNum*Vol*Vol;
     _CacheIndex[0] = 1;
-    _CacheIndex[1] = _BasisNum;
-    _CacheIndex[2] = _BasisNum*_BasisNum;
-    _CacheIndex[3] = _BasisNum*_BasisNum*Vol;
-    _CacheIndex[4] = _BasisNum*_BasisNum*Vol*Vol;
+    _CacheIndex[1] = MaxTauBin;
+    _CacheIndex[2] = MaxTauBin*MaxTauBin;
+    _CacheIndex[3] = MaxTauBin*MaxTauBin*Vol;
+    _CacheIndex[4] = MaxTauBin*MaxTauBin*Vol*Vol;
     ClearStatistics();
 }
 

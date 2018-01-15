@@ -58,7 +58,7 @@ class SVDBasis:
         IO.SaveDict(filename, mode, self.__Basis)
 
 if __name__=="__main__":
-    beta=1.0
+    beta=0.8
     MaxTauBin=128
     svd=SVDBasis(MaxTauBin,beta, "Fermi")
     svd.GenerateBasis(30)
