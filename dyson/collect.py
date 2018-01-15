@@ -159,7 +159,7 @@ def CollectStatis(_map, runGamma3=False):
 
     if runGamma3:
         GammaGAccu=np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
-        GammaWAccu=np.zeros([6, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
+        GammaWAccu=np.zeros([2, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin], dtype=np.complex)
         GammaGNorm=None
         GammaWNorm=None
         GammaGNormAccu=1.e-8

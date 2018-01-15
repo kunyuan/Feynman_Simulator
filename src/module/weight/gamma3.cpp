@@ -4,6 +4,7 @@
 
 #include "gamma3.h"
 #include "utility/dictionary.h"
+#include "utility/complex.h"
 #include "iostream"
 
 using namespace weight;
@@ -166,7 +167,7 @@ GammaWClass::GammaWClass(const Lattice &lat, real beta, uint MaxTauBin,  std::ve
 
     _MaxTauBin = MaxTauBin;
 //    uint SubVol=(uint)lat.SublatVol;
-    uint MeaShape[5] = {6, (uint)Vol, (uint)Vol, MaxTauBin, MaxTauBin};
+    uint MeaShape[5] = {2, (uint)Vol, (uint)Vol, MaxTauBin, MaxTauBin};
     //Wspin12, W_r1, dW_r2, Wtau1,dtau2
     _Weight.Allocate(MeaShape, SMOOTH);
     _WeightAccu.Allocate(MeaShape, SMOOTH);
@@ -222,9 +223,19 @@ Complex GammaWClass::Weight(const Site &Wr_in, const Site &Wr_out, const Site &U
     }
     int t2Index=floor(t2*_dBetaInverse);
     auto SpinIndex=_SpinIndex(Wspin_out, Wspin_in);
-    uint Index = SpinIndex * _CacheIndex[4] + coord_r1 * _CacheIndex[3]
-                 + coord_r2 * _CacheIndex[2]+ t1Index * _CacheIndex[1] + t2Index;
-    return _Weight(Index);
+    uint Index = coord_r1 * _CacheIndex[3] + coord_r2 * _CacheIndex[2]+ t1Index * _CacheIndex[1] + t2Index;
+    if(SpinIndex==0||SpinIndex==1)
+        return _Weight(Index);
+    else if(SpinIndex==2||SpinIndex==3)
+        return -_Weight(Index);
+    else if(SpinIndex==4){
+        Index+= _CacheIndex[4];
+        return -conjugate(_Weight(Index));
+    }else{
+        //SpinIndex==5
+        Index+= _CacheIndex[4];
+        return _Weight(Index);
+    }
 }
 
 void GammaWClass::Measure(const Site &Wr_in, const Site &Wr_out, const Site &Ur, real Wt_in, real Wt_out,
@@ -245,13 +256,19 @@ void GammaWClass::Measure(const Site &Wr_in, const Site &Wr_out, const Site &Ur,
     }
     int t2Index=floor(t2*_dBetaInverse);
     auto SpinIndex=_SpinIndex(Wspin_out, Wspin_in);
-//    uint Index = SpinIndex * _CacheIndex[4] + coord_r1 * _CacheIndex[3]
-//                 +coord_r2*_CacheIndex[2]+ t1Index*_CacheIndex[1]+t2Index;
-    uint Index = SpinIndex * _CacheIndex[4] + coord_r1 * _CacheIndex[3]
-                 +coord_r2*_CacheIndex[2];
-    
-
-    _WeightAccu[Index]+=Weight;
+    uint Index = coord_r1 * _CacheIndex[3] +coord_r2*_CacheIndex[2]+ t1Index*_CacheIndex[1]+t2Index;
+    if(SpinIndex==0||SpinIndex==1)
+        _WeightAccu[Index]+=Weight;
+    else if(SpinIndex==2||SpinIndex==3)
+        _WeightAccu[Index]+=-Weight;
+    else if(SpinIndex==4){
+        Index+= _CacheIndex[4];
+        _WeightAccu[Index]+=Weight/2.0;
+    }
+    else if(SpinIndex==5){
+        Index+= _CacheIndex[4];
+        _WeightAccu[Index]+=-conjugate(Weight)/2.0;
+    }
 }
 
 void GammaWClass::MeasureNorm(real weight)

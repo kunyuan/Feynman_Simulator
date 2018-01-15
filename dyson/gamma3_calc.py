@@ -7,6 +7,7 @@ import weight, plot
 from logger import *
 import r_index 
 import calculator as calc
+import gc
 
 def SimpleGG(G, _map):
     #half integer tin and tout
@@ -113,7 +114,7 @@ def AddG_To_GGGammaG(GGGammaG, G, _map):
     spinUP=_map.Spin2Index(UP,UP)
     spinDOWN=_map.Spin2Index(DOWN,DOWN)
     sub=0
-    GammaW = np.zeros([6, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
+    GammaW = np.zeros([2, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin], dtype=np.complex)
     for tout in range(_map.MaxTauBin):
         for tin in range(_map.MaxTauBin):
             tgout = tin - tout -1
@@ -132,16 +133,22 @@ def AddG_To_GGGammaG(GGGammaG, G, _map):
 
             for r in range(_map.Vol):
                 ## UP UP UP UP
-                GammaW[0, r, r, tout, tin] = Gout[UP,UP]*GGGammaG[UP,r,tout,tin]
+                #GammaW[0, r, r, tout, tin] = Gout[UP,UP]*GGGammaG[UP,r,tout,tin]
 
                 ## DOWN DOWN DOWN DOWN
-                GammaW[1, r, r, tout, tin] = Gout[DOWN,DOWN]*GGGammaG[DOWN,r,tout,tin]
+                #GammaW[1, r, r, tout, tin] = Gout[DOWN,DOWN]*GGGammaG[DOWN,r,tout,tin]
 
                 ## in:UP DOWN out:DOWN UP
-                GammaW[5, r, r, tout, tin] = Gout[UP, UP]*GGGammaG[DOWN,r,tout,tin]
+                #GammaW[5, r, r, tout, tin] = Gout[UP, UP]*GGGammaG[DOWN,r,tout,tin]
 
                 ## in:DOWN UP out:UP DOWN 
-                GammaW[4, r, r, tout, tin] = Gout[DOWN,DOWN]*GGGammaG[UP,r,tout,tin]
+                #GammaW[4, r, r, tout, tin] = Gout[DOWN,DOWN]*GGGammaG[UP,r,tout,tin]
+
+                # UP UP UP UP+ DOWN DOWN DOWN DOWN
+                GammaW[0, r, r, tout, tin] = Gout[UP,UP]*GGGammaG[UP,r,tout,tin]+Gout[DOWN,DOWN]*GGGammaG[DOWN,r,tout,tin]
+
+                # in:DOWN UP out:UP DOWN 
+                GammaW[1, r, r, tout, tin] = Gout[DOWN,DOWN]*GGGammaG[UP,r,tout,tin]
 
             ### reverse
             tgout = tout - tin -1
@@ -160,16 +167,22 @@ def AddG_To_GGGammaG(GGGammaG, G, _map):
 
             for r in range(_map.Vol):
                 ## UP UP UP UP
-                GammaW[0, r, r, tout, tin] += Gout[UP,UP]*GGGammaG[UP,r,tin,tout]
+                #GammaW[0, r, r, tout, tin] += Gout[UP,UP]*GGGammaG[UP,r,tin,tout]
 
                 ## DOWN DOWN DOWN DOWN
-                GammaW[1, r, r, tout, tin] += Gout[DOWN,DOWN]*GGGammaG[DOWN,r,tin,tout]
+                #GammaW[1, r, r, tout, tin] += Gout[DOWN,DOWN]*GGGammaG[DOWN,r,tin,tout]
 
                 ## in:UP DOWN out:DOWN UP
-                GammaW[5, r, r, tout, tin] += Gout[DOWN, DOWN]*GGGammaG[UP,r,tin,tout]
+                #GammaW[5, r, r, tout, tin] += Gout[DOWN, DOWN]*GGGammaG[UP,r,tin,tout]
 
                 ## in:DOWN UP out:UP DOWN 
-                GammaW[4, r, r, tout, tin] += Gout[UP,UP]*GGGammaG[DOWN,r,tin,tout]
+                #GammaW[4, r, r, tout, tin] += Gout[UP,UP]*GGGammaG[DOWN,r,tin,tout]
+
+                ## UP UP UP UP + DOWN DOWN DOWN DOWN
+                GammaW[0, r, r, tout, tin] += Gout[UP,UP]*GGGammaG[UP,r,tin,tout]+Gout[DOWN,DOWN]*GGGammaG[DOWN,r,tin,tout]
+
+                ## in:DOWN UP out:UP DOWN 
+                GammaW[1, r, r, tout, tin] += Gout[UP,UP]*GGGammaG[DOWN,r,tin,tout]
     return FermiLoopSign*GammaW
 
 def GenerateSpinIndex(_map):
@@ -184,12 +197,12 @@ def GenerateSpinIndex(_map):
 
 def FFTGammaW(GammaW, _map, BackForth):
     OldShape=GammaW.shape
-    NewShape=(6, _map.L[0], _map.L[1], _map.L[0], _map.L[1], _map.MaxTauBin, _map.MaxTauBin)
+    NewShape=(_map.L[0], _map.L[1], _map.L[0], _map.L[1], _map.MaxTauBin, _map.MaxTauBin)
     GammaW=GammaW.reshape(NewShape)
     if BackForth==1:
-        GammaW=np.fft.fftn(GammaW, axes=[1,2,3,4,5,6]) 
+        GammaW=np.fft.fftn(GammaW, axes=[0,1,2,3,4,5]) 
     elif BackForth==-1:
-        GammaW=np.fft.ifftn(GammaW, axes=[1,2,3,4,5,6]) 
+        GammaW=np.fft.ifftn(GammaW, axes=[0,1,2,3,4,5]) 
     GammaW=GammaW.reshape(OldShape)
     return GammaW
 
@@ -206,7 +219,6 @@ def FFTWshift(Wshift, _map, BackForth):
 
 def AddTwoW_To_GammaW(GammaW, W0, W, _map):
     # import gamma3
-    GammaW=np.array(GammaW)
     sub = 0
     UPUP=_map.Spin2Index(UP,UP)
     DOWNDOWN=_map.Spin2Index(DOWN,DOWN)
@@ -226,61 +238,37 @@ def AddTwoW_To_GammaW(GammaW, W0, W, _map):
     Wtot=np.array(Wshift.Data[:,0,:,0,:,:])*_map.Beta/_map.MaxTauBin
     Wtot[:,:,:,0]+=W0.Data[:,0,:,0,:]
     Wtot=FFTWshift(Wtot, _map, 1)
+    #Wtot shape: spin1, spin2, dr, dt
 
-    GammaW=FFTGammaW(GammaW, _map, 1)
+    WWGammaW=np.zeros([2, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin], dtype=np.complex)
 
-    WGammaW=np.zeros([6, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
-    print "calculating WGammaW with fourier..."
+    Wout = np.zeros((Wtot.shape[2],1,Wtot.shape[3],1), dtype=np.complex64)
+    Wout[:,0,:,0] = Wtot[UPUP, UPUP, :, :] # r1, r2=0, t1, t2=0
 
-    TempGammaW=np.array(GammaW)
-    TempGammaW[0,]=GammaW[0,]
-    TempGammaW[1,]=GammaW[1,]
-    TempGammaW[2,]=GammaW[1,]
-    TempGammaW[3,]=GammaW[0,]
-    TempGammaW[4,]=GammaW[5,]
-    TempGammaW[5,]=GammaW[4,]
+    Win = np.zeros((1,Wtot.shape[2],1,Wtot.shape[3]), dtype=np.complex64)
+    Win[0,:,0,:] = Wtot[UPUP, UPUP, :, :] # r1=0, r2, t1=0, t2
 
-    Wout = np.zeros((6,Wtot.shape[2],1,Wtot.shape[3],1)) +0.0*1j
-    Wout[0,:,0,:,0] = Wtot[UPUP, UPUP, :, :]
-    Wout[1,:,0,:,0] = Wtot[DOWNDOWN, DOWNDOWN, :, :]
-    Wout[2,:,0,:,0] = Wtot[UPUP, DOWNDOWN, :, :]
-    Wout[3,:,0,:,0] = Wtot[DOWNDOWN, UPUP, :, :]
-    Wout[4,:,0,:,0] = Wtot[UPDOWN, DOWNUP, :, :]
-    Wout[5,:,0,:,0] = Wtot[DOWNUP, UPDOWN, :, :]
+    #Type 0 and 1
+    for s in range(2):
+        print "Calculate GammaW {0}".format(s)
+        TempGammaW=FFTGammaW(GammaW[s,...], _map, 1)
+        print "Calculate GammaW FFT done"
+        # WWGammaW=Wout*WWGammaW*Win
+        if s==0:
+            TempGammaW*=Wout
+            TempGammaW*=Win
+        else:
+            #s==1
+            TempGammaW*=Wout*2
+            TempGammaW*=Win*2
 
-    WGammaW = Wout * TempGammaW
-
-    print "calculating WWGammaW with fourier..."
-    Win = np.zeros((6,1,Wtot.shape[2],1,Wtot.shape[3])) +0.0*1j
-    Win[0,0,:,0,:] = Wtot[UPUP, UPUP, :, :]
-    Win[1,0,:,0,:] = Wtot[DOWNDOWN, UPUP, :, :]
-    Win[2,0,:,0,:] = Wtot[DOWNDOWN, UPUP, :, :]
-    Win[3,0,:,0,:] = Wtot[UPUP, UPUP, :, :]
-    Win[4,0,:,0,:] = Wtot[UPDOWN, DOWNUP, :, :]
-    Win[5,0,:,0,:] = Wtot[DOWNUP, UPDOWN, :, :]
-
-    TempGammaW[0,:,:,:,:] = WGammaW[0,:,:,:,:]
-    TempGammaW[1,:,:,:,:] = WGammaW[3,:,:,:,:]
-    TempGammaW[2,:,:,:,:] = WGammaW[0,:,:,:,:]
-    TempGammaW[3,:,:,:,:] = WGammaW[3,:,:,:,:]
-    TempGammaW[4,:,:,:,:] = WGammaW[4,:,:,:,:]
-    TempGammaW[5,:,:,:,:] = WGammaW[5,:,:,:,:]
-    
-    WWGammaW = Win * TempGammaW
-
-    Win[0,0,:,0,:] = Wtot[UPUP, DOWNDOWN, :, :]
-    Win[1,0,:,0,:] = Wtot[DOWNDOWN, DOWNDOWN, :, :]
-    Win[2,0,:,0,:] = Wtot[DOWNDOWN, DOWNDOWN, :, :]
-    Win[3,0,:,0,:] = Wtot[UPUP, DOWNDOWN, :, :]
-
-    TempGammaW[0,...] = WGammaW[2,...]
-    TempGammaW[1,...] = WGammaW[1,...]
-    TempGammaW[2,...] = WGammaW[2,...]
-    TempGammaW[3,...] = WGammaW[1,...]
-
-    WWGammaW[0:4,...] += Win[0:4,...] * TempGammaW[0:4,...]
-
-    WWGammaW=FFTGammaW(WWGammaW, _map, -1)
+        # TempGammaW=Wout*TempGammaW*Win
+        print "Calculate GammaW FFT back"
+        WWGammaW[s,...]=FFTGammaW(TempGammaW, _map, -1)
+        print "Calculate GammaW done"
+        log.info(green("Memory Usage before collecting: {0} MB".format(memory_usage())))
+        gc.collect()
+        log.info(green("Memory Usage : {0} MB".format(memory_usage())))
     W0.FFT("R","T")
     W.FFT("R","T")
 
@@ -312,10 +300,15 @@ def AddG_To_WWGammaW(WWGammaW, G, _map):
                     sign*=-1
                 Gout += 0.5*sign*G.Data[:,sub,:,sub,0,tgout]
 
+                # GammaG[UP, r, tout, tin] += Gout[UP,UP]*WWGammaW[0,r,r,tout,tin]
+                # GammaG[UP, r, tout, tin] += Gout[DOWN,DOWN]*WWGammaW[5,r,r,tout,tin]
+                # GammaG[DOWN, r, tout, tin] += Gout[DOWN,DOWN]*WWGammaW[1,r,r,tout,tin]
+                # GammaG[DOWN, r, tout, tin] += Gout[UP,UP]*WWGammaW[4,r,r,tout,tin]
+
                 GammaG[UP, r, tout, tin] += Gout[UP,UP]*WWGammaW[0,r,r,tout,tin]
-                GammaG[UP, r, tout, tin] += Gout[DOWN,DOWN]*WWGammaW[5,r,r,tout,tin]
-                GammaG[DOWN, r, tout, tin] += Gout[DOWN,DOWN]*WWGammaW[1,r,r,tout,tin]
-                GammaG[DOWN, r, tout, tin] += Gout[UP,UP]*WWGammaW[4,r,r,tout,tin]
+                GammaG[UP, r, tout, tin] += Gout[DOWN,DOWN]*WWGammaW[1,r,r,tout,tin]
+                GammaG[DOWN, r, tout, tin] += Gout[DOWN,DOWN]*(-np.conj(WWGammaW[0,r,r,tout,tin]))
+                GammaG[DOWN, r, tout, tin] += Gout[UP,UP]*(-np.conj(WWGammaW[1,r,r,tout,tin]))
     return GammaG
 
 def shift(r, L):

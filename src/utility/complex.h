@@ -78,6 +78,11 @@ Complex operator*(real, const Complex&);
 Complex operator*(const Complex&, real);
 Complex operator/(const Complex&, real);
 // Complex library
+//
+inline Complex conjugate(const Complex& c)
+{
+    return Complex(c.Re, -c.Im);
+}
 
 // mod2 = Re*Re + Im*Im
 inline real mod2(const Complex& c)
