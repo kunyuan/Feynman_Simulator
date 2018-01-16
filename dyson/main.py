@@ -60,7 +60,8 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
         # n=Sigma.Data[UP,0,UP,0,0,i]
         # print '%05f %05f %05f' % (i*Map.Beta/Map.MaxTauBin, n.real, n.imag)
 
-    RestoredWWGammaW=gamma3.RestoreGammaW(WWGammaW, Map, TauBin=32)
+    # RestoredWWGammaW=gamma3.RestoreGammaW(WWGammaW, Map, TauBin=32)
+    RestoredWWGammaW=WWGammaW
     print RestoredWWGammaW[0,1,0,0,:]
     print RestoredWWGammaW[1,1,0,0,:]
     print WWGammaW.shape

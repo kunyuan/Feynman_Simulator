@@ -113,7 +113,7 @@ def AddG_To_GGGammaG(GGGammaG, G, _map):
     spinDOWN=_map.Spin2Index(DOWN,DOWN)
     sub=0
     #only GammaW(r,r) has non-zero values, so that we only keep one r for now
-    GammaW = np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin], dtype=np.complex)
+    LocalGammaW = np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin], dtype=np.complex)
     for tout in range(_map.MaxTauBin):
         for tin in range(_map.MaxTauBin):
             tgout = tin - tout -1
@@ -143,10 +143,10 @@ def AddG_To_GGGammaG(GGGammaG, G, _map):
             #GammaW[4, r, r, tout, tin] = Gout[DOWN,DOWN]*GGGammaG[UP,r,tout,tin]
 
             # UP UP UP UP+ DOWN DOWN DOWN DOWN
-            GammaW[0, :, tout, tin] = Gout[UP,UP]*GGGammaG[UP,:,tout,tin]+Gout[DOWN,DOWN]*GGGammaG[DOWN,:,tout,tin]
+            LocalGammaW[0, :, tout, tin] = Gout[UP,UP]*GGGammaG[UP,:,tout,tin]+Gout[DOWN,DOWN]*GGGammaG[DOWN,:,tout,tin]
 
             # in:DOWN UP out:UP DOWN 
-            GammaW[1, :, tout, tin] = Gout[DOWN,DOWN]*GGGammaG[UP,:,tout,tin]
+            LocalGammaW[1, :, tout, tin] = Gout[DOWN,DOWN]*GGGammaG[UP,:,tout,tin]
 
             ### reverse
             tgout = tout - tin -1
@@ -176,15 +176,19 @@ def AddG_To_GGGammaG(GGGammaG, G, _map):
             #GammaW[4, r, r, tout, tin] += Gout[UP,UP]*GGGammaG[DOWN,r,tin,tout]
 
             ## UP UP UP UP + DOWN DOWN DOWN DOWN
-            GammaW[0, :, tout, tin] += Gout[UP,UP]*GGGammaG[UP,:,tin,tout]+Gout[DOWN,DOWN]*GGGammaG[DOWN,:,tin,tout]
+            LocalGammaW[0, :, tout, tin] += Gout[UP,UP]*GGGammaG[UP,:,tin,tout]+Gout[DOWN,DOWN]*GGGammaG[DOWN,:,tin,tout]
 
             ## in:DOWN UP out:UP DOWN 
-            GammaW[1, :, tout, tin] += Gout[UP,UP]*GGGammaG[DOWN,:,tin,tout]
+            LocalGammaW[1, :, tout, tin] += Gout[UP,UP]*GGGammaG[DOWN,:,tin,tout]
 
-    GammaWDiagonal=FitGammaW_diagonal(GammaW, _map)
-    GammaW = np.zeros([2, _map.Vol, _map.Vol, _map.BasisNum, _map.BasisNum], dtype=np.complex)
+    GammaW = np.zeros([2, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin], dtype=np.complex)
     for r in range(_map.Vol):
-        GammaW[:, r, r, :, :]=GammaWDiagonal[:,r,:,:]
+        GammaW[:, r, r, :, :]=LocalGammaW[:,r,:,:]
+
+    # GammaWDiagonal=FitGammaW_diagonal(GammaW, _map)
+    # GammaW = np.zeros([2, _map.Vol, _map.Vol, _map.BasisNum, _map.BasisNum], dtype=np.complex)
+    # for r in range(_map.Vol):
+        # GammaW[:, r, r, :, :]=GammaWDiagonal[:,r,:,:]
 
     return FermiLoopSign*GammaW
 
@@ -243,7 +247,7 @@ def FFTWshift_Space(Wshift, _map, BackForth):
     return Wshift
 
 
-def AddTwoW_To_GammaW(GammaW, W0, W, _map):
+def AddTwoW_To_GammaW_basis(GammaW, W0, W, _map):
     # import gamma3
     sub = 0
     UPUP=_map.Spin2Index(UP,UP)
@@ -300,7 +304,7 @@ def AddTwoW_To_GammaW(GammaW, W0, W, _map):
 
     return -1.0*WWGammaW
 
-def AddTwoW_To_GammaW_bare(GammaW, W0, W, _map):
+def AddTwoW_To_GammaW(GammaW, W0, W, _map):
     # import gamma3
     sub = 0
     UPUP=_map.Spin2Index(UP,UP)
@@ -325,12 +329,13 @@ def AddTwoW_To_GammaW_bare(GammaW, W0, W, _map):
 
     WWGammaW=np.zeros([2, _map.Vol, _map.Vol, _map.MaxTauBin, _map.MaxTauBin], dtype=np.complex)
 
-    Wout = np.zeros((Wtot.shape[2],1,Wtot.shape[3],1), dtype=np.complex64)
+    Wout = np.zeros((Wtot.shape[2],1,Wtot.shape[3],1), dtype=np.complex)
     Wout[:,0,:,0] = Wtot[UPUP, UPUP, :, :] # r1, r2=0, t1, t2=0
 
-    Win = np.zeros((1,Wtot.shape[2],1,Wtot.shape[3]), dtype=np.complex64)
+    Win = np.zeros((1,Wtot.shape[2],1,Wtot.shape[3]), dtype=np.complex)
     Win[0,:,0,:] = Wtot[UPUP, UPUP, :, :] # r1=0, r2, t1=0, t2
 
+    print "GammaW"
     GammaW1=FitGammaW(GammaW, _map)
     GammaW2=RestoreGammaW(GammaW1, _map)
     # if np.allclose(GammaW, GammaW2, rtol=1e-3, atol=1e-5):
@@ -342,9 +347,9 @@ def AddTwoW_To_GammaW_bare(GammaW, W0, W, _map):
     # print (GammaW2[1,0,0,:,:]).diagonal()
     # print (GammaW[1,0,0,:,:]-GammaW2[1,0,0,:,:]).diagonal()
 
-    print (GammaW[1,0,0,15,:])
-    print (GammaW2[1,0,0,15,:])
-    print (GammaW[1,0,0,15,:]-GammaW2[1,0,0,15,:])
+    print (GammaW[1,0,0,0,:])
+    print (GammaW2[1,0,0,0,:])
+    print (GammaW[1,0,0,0,:]-GammaW2[1,0,0,0,:])
     for r1 in range(8):
         print "0", r1, np.amax(np.abs(GammaW[0,r1,:,:]-GammaW2[0,r1,:,:]))
     for r1 in range(8):
@@ -378,6 +383,26 @@ def AddTwoW_To_GammaW_bare(GammaW, W0, W, _map):
     W0.FFT("R","T")
     W.FFT("R","T")
 
+    print "WWGammaW"
+    WWGammaW1=FitGammaW(WWGammaW, _map)
+    WWGammaW2=RestoreGammaW(WWGammaW1, _map)
+    # if np.allclose(GammaW, GammaW2, rtol=1e-3, atol=1e-5):
+        # print "Basis works well!"
+    # else:
+        # print "Basis fails to work!"
+    # print np.amax(np.abs(GammaW-GammaW2))
+    # print (GammaW[1,0,0,:,:]).diagonal()
+    # print (GammaW2[1,0,0,:,:]).diagonal()
+    # print (GammaW[1,0,0,:,:]-GammaW2[1,0,0,:,:]).diagonal()
+
+    print (WWGammaW[1,0,0,15,:])
+    print (WWGammaW2[1,0,0,15,:])
+    print (WWGammaW[1,0,0,15,:]-WWGammaW2[1,0,0,15,:])
+    for r1 in range(8):
+        print "0", r1, np.amax(np.abs(WWGammaW[0,r1,:,:]-WWGammaW2[0,r1,:,:]))
+    for r1 in range(8):
+        print "1", r1,t, np.amax(np.abs(WWGammaW[1,r1,0,:,:]-WWGammaW2[1,r1,0,:,:]))
+
     print "calculating WWGammaW with fourier done!"
     return -1.0*WWGammaW
 
@@ -389,8 +414,9 @@ def AddG_To_WWGammaW(WWGammaW, G, _map):
     sub=0
     GammaG = np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
     #only GammaW(r,r) is needed!
+
     WWGammaW=np.einsum("siikl->sikl", WWGammaW)
-    WWGammaW=RestoreGammaW_diagonal(WWGammaW, _map)
+    # WWGammaW=RestoreGammaW_diagonal(WWGammaW, _map)
 
     for tout in range(_map.MaxTauBin):
         for tin in range(_map.MaxTauBin):

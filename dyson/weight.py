@@ -16,7 +16,7 @@ DOWN,UP=0,1
 class IndexMap:
     def __init__(self, Beta, L, NSublat, MaxTauBin):
         self.MaxTauBin=MaxTauBin
-        self.BasisNum=32
+        self.BasisNum=8
         if self.BasisNum>MaxTauBin:
             self.BasisNum=MaxTauBin
         self.Beta=Beta
