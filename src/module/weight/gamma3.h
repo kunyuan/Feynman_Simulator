@@ -89,6 +89,7 @@ namespace weight {
         WeightArray<5> _Weight; //Wspin, W_r1, W_dr, Wtau1,Wtau2
         WeightArray<5> _WeightAccu; //Wspin, W_r1, W_dr, Wtau1,dtau2
         uint _CacheIndex[5];
+        uint _CacheIndexBasis[5];
         //don't forget to add template class in weight_array.cpp file
         real _Beta;
         real _Norm; //The normalization factor

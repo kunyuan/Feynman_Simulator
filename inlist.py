@@ -3,7 +3,7 @@ MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
     "__Duplicate" :  0,
-    # "__Duplicate" :  3,
+    # "__Duplicate" :  12,
     "__IsCluster" : False, 
     "__AutoRun" : True,
     },
@@ -27,7 +27,7 @@ Dyson={
 }
 
 Beta=0.8
-MaxTauBin=64
+MaxTauBin=32
 Order=1
 Gamma3=True
 Common={
@@ -117,8 +117,8 @@ SLEEP = 1    #check job status for every SLEEP seconds
 
 import basis
 svd=basis.SVDBasis(MaxTauBin,Beta, "Fermi")
-svd.GenerateBasis(30)
+svd.GenerateBasis(32)
 svd.Save("FermiBasis.dat")
 svd=basis.SVDBasis(MaxTauBin,Beta, "Bose")
-svd.GenerateBasis(30)
+svd.GenerateBasis(32)
 svd.Save("BoseBasis.dat")

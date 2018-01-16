@@ -273,6 +273,11 @@ def AddTwoW_To_GammaW(GammaW, W0, W, _map):
     Wtot=FFTWshift_Space(Wtot, _map, 1)
     Wtot=FitW(Wtot, _map)
 
+    GammaW1=RestoreGammaW(GammaW, _map)
+    print "GammaW"
+    print GammaW1[0,0,0,0,:]
+    print GammaW1[1,0,0,15,:]
+
     WWGammaW=np.zeros([2, _map.Vol, _map.Vol, _map.BasisNum, _map.BasisNum], dtype=np.complex)
 
     # FittedGammaW=FitGammaW(GammaW, _map)
@@ -525,9 +530,15 @@ def RestoreGammaW_diagonal(GammaW, _map):
     NewGammaW=np.einsum("srml,ln->srmn", NewGammaW, BasisVec) 
     return NewGammaW
 
-def RestoreGammaW(GammaW, _map):
+def RestoreGammaW(GammaW, _map, TauBin=None):
+    if TauBin==None:
+        TauBin=_map.MaxTauBin
+    Interval=int(_map.MaxTauBin/TauBin)
     BasisVec=GetBoseBasis(_map)
-    NewGammaW=np.einsum("sijkl,km->sijml", GammaW, BasisVec) 
-    NewGammaW=np.einsum("sijml,ln->sijmn", NewGammaW, BasisVec) 
+    ReducedBasisVec=np.zeros([_map.BasisNum, TauBin], dtype=BasisVec.dtype)
+    for e in range(_map.BasisNum):
+        ReducedBasisVec[e]=BasisVec[e][::Interval]
+    NewGammaW=np.einsum("sijkl,km->sijml", GammaW, ReducedBasisVec) 
+    NewGammaW=np.einsum("sijml,ln->sijmn", NewGammaW, ReducedBasisVec) 
     return NewGammaW
 

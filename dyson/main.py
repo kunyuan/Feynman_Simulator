@@ -60,9 +60,10 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
         # n=Sigma.Data[UP,0,UP,0,0,i]
         # print '%05f %05f %05f' % (i*Map.Beta/Map.MaxTauBin, n.real, n.imag)
 
-    # TempWWGammaW=gamma3.RestoreGammaW(WWGammaW, Map)
-    # print TempWWGammaW[0,1,0,0,:]
-    # print TempWWGammaW[1,1,0,0,:]
+    RestoredWWGammaW=gamma3.RestoreGammaW(WWGammaW, Map, TauBin=32)
+    print RestoredWWGammaW[0,1,0,0,:]
+    print RestoredWWGammaW[1,1,0,0,:]
+    print WWGammaW.shape
 
     data={}
     data["Chi"]=Chi.ToDict()
@@ -80,7 +81,7 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
         data["BKChi"]=BKChi.ToDict()
         data["GGGammaG"]={"SmoothT": GGGammaG}
         if WWGammaW is not None:
-            data["WWGammaW"]={"SmoothT": WWGammaW}
+            data["WWGammaW"]={"SmoothT": RestoredWWGammaW}
 
     Observable.Measure(Chi, Determ, G, Factory.NearestNeighbor)
 
@@ -126,8 +127,6 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
         G=G0.Copy()
         if para["Gamma3"]:
             GGGammaG=gamma3.SimpleGG(G, Map)
-            # WWGammaW=np.zeros([2, Map.Vol, Map.Vol, Map.MaxTauBin, Map.MaxTauBin], dtype=np.complex)
-            WWGammaW=np.zeros([2, Map.Vol, Map.Vol, Map.BasisNum, Map.BasisNum], dtype=np.complex)
     else:
         #load WeightFile, load G,W
         log.info("Load G, W from {0}".format(WeightFile))
@@ -145,11 +144,11 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
             else:
                 GGGammaG=gamma3.SimpleGG(G, Map)
 
-            if data.has_key("WWGammaW"):
-                WWGammaW=data["WWGammaW"]["SmoothT"]
-                print "Read existing WWGammaW"
-            else:
-                WWGammaW=np.zeros([2, Map.Vol, Map.Vol, Map.BasisNum, Map.BasisNum], dtype=np.complex)
+            # if data.has_key("WWGammaW"):
+                # WWGammaW=data["WWGammaW"]["SmoothT"]
+                # print "Read existing WWGammaW"
+            # else:
+                # WWGammaW=np.zeros([2, Map.Vol, Map.Vol, Map.BasisNum, Map.BasisNum], dtype=np.complex)
 
     Gold, Wold = G, W
 
