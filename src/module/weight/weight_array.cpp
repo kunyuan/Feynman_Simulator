@@ -89,6 +89,7 @@ Dictionary WeightArray<DIM>::ToDict()
 //template class WeightArray<DELTA_T_SIZE>;
 //template class WeightArray<SMOOTH_T_SIZE>;
 //template class WeightArray<SMOOTH_T_SIZE + 1>;
+template class WeightArray<2>;
 template class WeightArray<3>;
 template class WeightArray<4>;
 template class WeightArray<5>;

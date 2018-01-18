@@ -316,14 +316,21 @@ def AddTwoW_To_GammaW(GammaW, W0, W, _map):
 
     W.FFT("R","T")
     W0.FFT("R", "T")
+
+    # W.Data=(W.Data+W.Data[:,:,:,:,:,::-1])/2
+    #when necessary, one may need to symmetrize W
+
     Wshift=weight.Weight("SmoothT", _map, "FourSpins", "Symmetric", "R","T")
     for t in range(_map.MaxTauBin):
         t1=t-1
         if t1<0:
             t1+=_map.MaxTauBin
         Wshift.Data[:,:,:,:,:,t]=0.5*(W.Data[:,:,:,:,:,t1]+W.Data[:,:,:,:,:,t])
+
     Wtot=np.array(Wshift.Data[:,0,:,0,:,:])*_map.Beta/_map.MaxTauBin
     Wtot[:,:,:,0]+=W0.Data[:,0,:,0,:]
+
+
     Wtot=FFTWshift(Wtot, _map, 1)
     #Wtot shape: spin1, spin2, dr, dt
 
@@ -335,29 +342,37 @@ def AddTwoW_To_GammaW(GammaW, W0, W, _map):
     Win = np.zeros((1,Wtot.shape[2],1,Wtot.shape[3]), dtype=np.complex)
     Win[0,:,0,:] = Wtot[UPUP, UPUP, :, :] # r1=0, r2, t1=0, t2
 
-    print "GammaW"
-    GammaW1=FitGammaW(GammaW, _map)
-    GammaW2=RestoreGammaW(GammaW1, _map)
-    # if np.allclose(GammaW, GammaW2, rtol=1e-3, atol=1e-5):
-        # print "Basis works well!"
-    # else:
-        # print "Basis fails to work!"
-    # print np.amax(np.abs(GammaW-GammaW2))
-    # print (GammaW[1,0,0,:,:]).diagonal()
-    # print (GammaW2[1,0,0,:,:]).diagonal()
-    # print (GammaW[1,0,0,:,:]-GammaW2[1,0,0,:,:]).diagonal()
+    GammaW=UnCompressGammaW(GammaW, _map)
 
-    print (GammaW[1,0,0,0,:])
-    print (GammaW2[1,0,0,0,:])
-    print (GammaW[1,0,0,0,:]-GammaW2[1,0,0,0,:])
-    for r1 in range(8):
-        print "0", r1, np.amax(np.abs(GammaW[0,r1,:,:]-GammaW2[0,r1,:,:]))
-    for r1 in range(8):
-        print "1", r1,t, np.amax(np.abs(GammaW[1,r1,0,:,:]-GammaW2[1,r1,0,:,:]))
+    # print "GammaW"
+    # # GammaW1=FitGammaW(GammaW, _map)
+    # # GammaW2=RestoreGammaW(GammaW1, _map)
+    # GammaW1=CompressGammaW(GammaW, _map)
+    # GammaW2=UnCompressGammaW(GammaW1, _map)
+    # # if np.allclose(GammaW, GammaW2, rtol=1e-3, atol=1e-5):
+        # # print "Basis works well!"
+    # # else:
+        # # print "Basis fails to work!"
+    # # print np.amax(np.abs(GammaW-GammaW2))
+    # # print (GammaW[1,0,0,:,:]).diagonal()
+    # # print (GammaW2[1,0,0,:,:]).diagonal()
+    # # print (GammaW[1,0,0,:,:]-GammaW2[1,0,0,:,:]).diagonal()
+
+    # print "1,7"
+    # print (GammaW[0,0,0,0,:])
+    # print (GammaW2[0,0,0,0,:])
+    # # print (GammaW[0,1,7,0,:])
+    # # print (GammaW2[0,1,7,0,:])
+    # print (GammaW[0,0,0,0,:]-GammaW2[0,0,0,0,:])
+
+    # for r1 in range(8):
+        # # for r2 in range(8):
+        # print "0", r1, np.amax(np.abs(GammaW[0,r1,:,:,:]-GammaW2[0,r1,:,:,:]))
+    # for r1 in range(8):
+        # print "1", r1,t, np.amax(np.abs(GammaW[1,r1,:,:,:]-GammaW2[1,r1,:,:,:]))
     # for r1 in range(_map.Vol):
         # for t in range(_map.MaxTauBin):
             # print "1", r1,t, np.amax(np.abs(GammaW[1,r1,0,t,:]-GammaW2[1,r1,0,t,:]))
-    # GammaW=GammaW2
 
     #Type 0 and 1
     for s in range(2):
@@ -383,27 +398,30 @@ def AddTwoW_To_GammaW(GammaW, W0, W, _map):
     W0.FFT("R","T")
     W.FFT("R","T")
 
-    print "WWGammaW"
-    WWGammaW1=FitGammaW(WWGammaW, _map)
-    WWGammaW2=RestoreGammaW(WWGammaW1, _map)
-    # if np.allclose(GammaW, GammaW2, rtol=1e-3, atol=1e-5):
-        # print "Basis works well!"
-    # else:
-        # print "Basis fails to work!"
-    # print np.amax(np.abs(GammaW-GammaW2))
-    # print (GammaW[1,0,0,:,:]).diagonal()
-    # print (GammaW2[1,0,0,:,:]).diagonal()
-    # print (GammaW[1,0,0,:,:]-GammaW2[1,0,0,:,:]).diagonal()
+    # print "WWGammaW"
+    # # WWGammaW1=FitGammaW(WWGammaW, _map)
+    # # WWGammaW2=RestoreGammaW(WWGammaW1, _map)
+    # WWGammaW1=CompressGammaW(WWGammaW, _map)
+    # WWGammaW2=UnCompressGammaW(WWGammaW1, _map)
+    # # if np.allclose(GammaW, GammaW2, rtol=1e-3, atol=1e-5):
+        # # print "Basis works well!"
+    # # else:
+        # # print "Basis fails to work!"
+    # # print np.amax(np.abs(GammaW-GammaW2))
+    # # print (GammaW[1,0,0,:,:]).diagonal()
+    # # print (GammaW2[1,0,0,:,:]).diagonal()
+    # # print (GammaW[1,0,0,:,:]-GammaW2[1,0,0,:,:]).diagonal()
 
-    print (WWGammaW[1,0,0,15,:])
-    print (WWGammaW2[1,0,0,15,:])
-    print (WWGammaW[1,0,0,15,:]-WWGammaW2[1,0,0,15,:])
-    for r1 in range(8):
-        print "0", r1, np.amax(np.abs(WWGammaW[0,r1,:,:]-WWGammaW2[0,r1,:,:]))
-    for r1 in range(8):
-        print "1", r1,t, np.amax(np.abs(WWGammaW[1,r1,0,:,:]-WWGammaW2[1,r1,0,:,:]))
+    # print (WWGammaW[1,0,1,:,:]).diagonal()
+    # print (WWGammaW[1,1,0,:,:]).diagonal()
+    # print (WWGammaW[1,1,0,15,15])
+    # print (WWGammaW2[1,0,1,15,15])
+    # print (WWGammaW[1,0,1,15,15]-WWGammaW2[1,0,1,15,15])
+    # for r1 in range(8):
+        # print "0", r1, np.amax(np.abs(WWGammaW[0,r1,:,:]-WWGammaW2[0,r1,:,:]))
+    # for r1 in range(8):
+        # print "1", r1,t, np.amax(np.abs(WWGammaW[1,r1,:,:,:]-WWGammaW2[1,r1,:,:,:]))
 
-    print "calculating WWGammaW with fourier done!"
     return -1.0*WWGammaW
 
 def AddG_To_WWGammaW(WWGammaW, G, _map):
@@ -522,10 +540,12 @@ def Check_Denorminator(Denorm, Determ, _map):
     if Determ.min().real<0.0 and Determ.min().imag<1.0e-4:
         raise DenorminatorTouchZero(Determ.min(), _map.IndexToCoordi(x), t)
 
-def GetBoseBasis(_map):
+def GetBoseBasis(_map, BasisNum=None):
     TauBin=_map.MaxTauBin
     svd=basis.SVDBasis(TauBin, _map.Beta, "Bose")
-    svd.GenerateBasis(_map.BasisNum)
+    if BasisNum==None:
+        BasisNum=_map.BasisNum
+    svd.GenerateBasis(BasisNum)
     Basis=svd.GetBasis()["Basis"]
     # for e in range(BasisNum):
         # Basis[e]=Basis[e][::4]
@@ -567,4 +587,114 @@ def RestoreGammaW(GammaW, _map, TauBin=None):
     NewGammaW=np.einsum("sijkl,km->sijml", GammaW, ReducedBasisVec) 
     NewGammaW=np.einsum("sijml,ln->sijmn", NewGammaW, ReducedBasisVec) 
     return NewGammaW
+
+def CompressGammaW(GammaW, _map):
+    if len(GammaW.shape)==2:
+        #do not need to compress
+        return GammaW
+    N=_map.Vol*_map.MaxTauBin
+    CompactGammaW=np.zeros((2, N*(N+1)/2) , dtype=complex)
+    GammaW=GammaW.swapaxes(2,3)
+    GammaW=GammaW.reshape([2, N, N])
+    GammaW[0,:]+=-np.conj(GammaW[0,:].T)
+    GammaW[1,:]+=-np.conj(GammaW[1,:].T)
+    GammaW/=2.0
+    Index=np.triu_indices(N)
+    CompactGammaW[0,:]=GammaW[0,:][Index]
+    CompactGammaW[1,:]=GammaW[1,:][Index]
+    return CompactGammaW
+
+def UnCompressGammaW(CompactGammaW, _map):
+    if len(CompactGammaW.shape)==5:
+        #do not need to uncompress
+        return CompactGammaW
+    N=_map.Vol*_map.MaxTauBin
+    GammaW=np.zeros((2, N, N), dtype=complex)
+    uIndex=np.triu_indices(N) #-1 is used to avoid the diagonal elements
+    GammaW[0,:][uIndex]=CompactGammaW[0, :]
+    GammaW[1,:][uIndex]=CompactGammaW[1, :]
+
+    diag=np.array(np.diag(GammaW[0,:]))
+    GammaW[0,:]+=-np.conj(GammaW[0,:].T)
+    np.fill_diagonal(GammaW[0,:], diag)
+    diag=np.array(np.diag(GammaW[1,:]))
+    GammaW[1,:]+=-np.conj(GammaW[1,:].T)
+    np.fill_diagonal(GammaW[1,:], diag)
+
+    GammaW=GammaW.reshape([2, _map.Vol, _map.MaxTauBin, _map.Vol, _map.MaxTauBin])
+    GammaW=GammaW.swapaxes(2,3)
+    return GammaW
+
+
+# def CompressGammaW(GammaW, _map):
+    # Interval=int(_map.MaxTauBin/_map.MaxTauBinTiny)
+    # GammaW=GammaW[:,:,:,::Interval,::Interval]
+    # return GammaW
+
+# def UnCompressLocalGammaW(GammaW, _map):
+    # BasisNum=32
+    # GammaW=np.einsum("siikl->sikl", GammaW)
+    # BasisVec=GetBoseBasis(_map, BasisNum)
+    # Interval=int(_map.MaxTauBin/_map.MaxTauBinTiny)
+    # ReducedBasisVec=np.zeros([BasisNum, _map.MaxTauBinTiny], dtype=BasisVec.dtype)
+    # for e in range(BasisNum):
+        # ReducedBasisVec[e]=BasisVec[e][::Interval]
+    # NewGammaW=np.einsum("srmn,km->srkn", GammaW, ReducedBasisVec) 
+    # NewGammaW=np.einsum("srkn,ln->srkl", NewGammaW, ReducedBasisVec) 
+    # NewGammaW*=Interval**2
+
+    # NewGammaW=np.einsum("sikl,km->siml", NewGammaW, BasisVec) 
+    # NewGammaW=np.einsum("siml,ln->simn", NewGammaW, BasisVec) 
+    # return NewGammaW
+
+# def MirrorMapping(_map):
+    # Lx, Ly=_map.L[0], _map.L[1]
+    # RestoreMap=np.zeros((Lx/2+1)*(Ly/2+1), dtype=int)
+    # MirrorMap=np.zeros(Lx*Ly, dtype=int)
+    # for x in range(Lx):
+        # for y in range(Ly):
+            # xp,yp=x,y
+            # if x>Lx/2:
+                # xp=Lx-xp
+            # if y>Ly/2:
+                # yp=Ly-yp
+            # MirrorMap[_map.CoordiIndex([x,y])]=xp*(Ly/2+1)+yp
+
+    # for xp in range(Lx/2+1):
+        # for yp in range(Ly/2+1):
+            # x,y=xp,yp
+            # RestoreMap[xp*(Ly/2+1)+yp]=_map.CoordiIndex([x,y])
+    # print MirrorMap, RestoreMap
+
+    # return (MirrorMap, RestoreMap)
+
+# def CompressGammaW_MirrorSymmetry(GammaW, _map):
+    # Lx, Ly=_map.L[0], _map.L[1]
+    # SmallVol=(Lx/2+1)*(Ly/2+1)
+    # TauBin=GammaW.shape[-1]
+    # NewGammaW=np.zeros([2, SmallVol, SmallVol, TauBin, TauBin], dtype=np.complex)
+    # MirrorMap, RestoreMap=MirrorMapping(_map)
+    # for r1p in range(SmallVol):
+        # for r2p in range(SmallVol):
+            # r1=RestoreMap[r1p]
+            # r2=RestoreMap[r2p]
+            # # print (r1p,r2p, r1, r2)
+            # NewGammaW[:,r1p,r2p,:,:]=GammaW[:,r1,r2,:,:]
+    # return NewGammaW
+
+# def UnCompressGammaW_MirrorSymmetry(GammaW, _map):
+    # Lx, Ly=_map.L[0], _map.L[1]
+    # SmallVol=(Lx/2+1)*(Ly/2+1)
+    # TauBin=GammaW.shape[-1]
+    # NewGammaW=np.zeros([2, _map.Vol, _map.Vol, TauBin, TauBin], dtype=np.complex)
+    # MirrorMap, RestoreMap=MirrorMapping(_map)
+    # for r1 in range(_map.Vol):
+        # for r2 in range(_map.Vol):
+            # r1p=MirrorMap[r1]
+            # r2p=MirrorMap[r2]
+            # NewGammaW[:,r1,r2,:,:]=GammaW[:,r1p,r2p,:,:]
+    # return NewGammaW
+
+
+
 

@@ -166,7 +166,7 @@ def CollectStatis(_map, runGamma3=False):
         GammaWNorm=None
         GammaGNormAccu=1.e-8
         GammaWNormAccu=1.e-8
-        GammaWFluc=[]
+        # GammaWFluc=[]
 
     _FileList=GetFileList()
     if len(_FileList)==0:
@@ -197,12 +197,12 @@ def CollectStatis(_map, runGamma3=False):
                     GammaWAccu+=dataW['WeightAccu']
                     GammaWNormAccu+=dataW['NormAccu']
                     Assert(GammaWNorm==dataW['Norm'], "Norm have to be the same to merge statistics")
-                    GammaWFluc.append(dataW['WeightAccu'][0,0,0,0,:]/dataW['NormAccu']*dataW['Norm'])
+                    # GammaWFluc.append(dataW['WeightAccu'][0,0,0,0,:]/dataW['NormAccu']*dataW['Norm'])
                 else:
                     GammaWAccu=dataW['WeightAccu']
                     GammaWNormAccu=dataW['NormAccu']
                     GammaWNorm=dataW['Norm']
-                    GammaWFluc.append(dataW['WeightAccu'][0,0,0,0,:]/dataW['NormAccu']*dataW['Norm'])
+                    # GammaWFluc.append(dataW['WeightAccu'][0,0,0,0,:]/dataW['NormAccu']*dataW['Norm'])
         except:
             log.info("Fails to merge\n {0}".format(traceback.format_exc()))
         else:
@@ -213,9 +213,9 @@ def CollectStatis(_map, runGamma3=False):
     if runGamma3:
         GammaGAccu*=1.0/GammaGNormAccu*GammaGNorm
         GammaWAccu*=1.0/GammaWNormAccu*GammaWNorm
-        GammaWFluc=np.array(GammaWFluc)
-        print np.std(GammaWFluc, axis=0)
-        print np.mean(GammaWFluc, axis=0)
+        # GammaWFluc=np.array(GammaWFluc)
+        # print np.std(GammaWFluc, axis=0)
+        # print np.mean(GammaWFluc, axis=0)
         
 
     return (SigmaSmoothT, PolarSmoothT, GammaGAccu, GammaWAccu)

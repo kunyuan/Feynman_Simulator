@@ -171,13 +171,17 @@ GammaWClass::GammaWClass(const Lattice &lat, real beta, uint MaxTauBin,  std::ve
         : _Map(IndexMapSPIN4(beta, MaxTauBin, lat, TauSymmetric))
 {
     int Vol = _Map.Lat.Vol;
+    _Vol=Vol;
     _Beta = _Map.Beta;
     _Norm = Norm * pow(_Map.MaxTauBin / _Beta, 2.0) / _Beta / Vol;
 
     _MaxTauBin = MaxTauBin;
     _dBetaInverse = _MaxTauBin/_Beta;
 //    uint SubVol=(uint)lat.SublatVol;
-    uint WeightShape[5] = {2, (uint)Vol, (uint)Vol, MaxTauBin, MaxTauBin};
+    _SpaceTimeSize=(MaxTauBin*Vol+1)*(MaxTauBin*Vol)/2;
+
+//    uint WeightShape[5] = {2, (uint)Vol, (uint)Vol, MaxTauBin, MaxTauBin};
+    uint WeightShape[5] = {2, _SpaceTimeSize};
     //Wspin12, W_r1, dW_r2, Wtau1,dtau2
     _Weight.Allocate(WeightShape, SMOOTH);
 
@@ -186,8 +190,9 @@ GammaWClass::GammaWClass(const Lattice &lat, real beta, uint MaxTauBin,  std::ve
     _BasisMaxTauBin=_BasisVec[0].size();
     _dBetaInverse = _BasisMaxTauBin/_Beta;
 
-    uint MeaShape[5] = {2, (uint)Vol, (uint)Vol, _BasisNum, _BasisNum};
-    _WeightAccu.Allocate(MeaShape, SMOOTH);
+//    uint MeaShape[5] = {2, (uint)Vol, (uint)Vol, _MaxTauBin, _MaxTauBin};
+//    uint MeaShape[5] = {2, _SpaceTimeSize};
+    _WeightAccu.Allocate(WeightShape, SMOOTH);
     _WeightSize = _WeightAccu.GetSize();
 
     _CacheIndex[0] = 1;
@@ -201,6 +206,8 @@ GammaWClass::GammaWClass(const Lattice &lat, real beta, uint MaxTauBin,  std::ve
     _CacheIndexBasis[2] = _BasisNum*_BasisNum;
     _CacheIndexBasis[3] = _BasisNum*_BasisNum*Vol;
     _CacheIndexBasis[4] = _BasisNum*_BasisNum*Vol*Vol;
+
+
     ClearStatistics();
 }
 
@@ -221,71 +228,138 @@ uint GammaWClass::_SpinIndex(spin * L, spin * R) const {
         return -1;
 }
 
-Complex GammaWClass::Weight(const Site &Wr_in, const Site &Wr_out, const Site &Ur,
-                            real Wt_in, real Wt_out, real Ut, spin* Wspin_in, spin* Wspin_out, spin Uspin) const
-{
-    auto coord_r1 = _Map.Lat.CoordiIndex(Wr_out, Ur);
-    auto coord_r2 = _Map.Lat.CoordiIndex(Wr_in,  Ur);
-
-    auto t1 = Wt_out - Ut;
+uint GammaWClass::_GetIndex(int r1, int r2, real t1, real t2, int& SymmetryFactor, bool& DoesMirrored) const {
     if(t1<0){
         t1+=_Beta;
     }
     int t1Index=floor(t1*_dBetaInverse);
 
-    auto t2=Wt_in-Ut;
     if(t2<0){
         t2+=_Beta;
     }
     int t2Index=floor(t2*_dBetaInverse);
-    auto SpinIndex=_SpinIndex(Wspin_out, Wspin_in);
-    uint Index = coord_r1 * _CacheIndex[3] + coord_r2 * _CacheIndex[2]+ t1Index * _CacheIndex[1] + t2Index;
-    if(SpinIndex==0||SpinIndex==1)
-        return _Weight(Index);
-    else if(SpinIndex==2||SpinIndex==3)
-        return -_Weight(Index);
-    else if(SpinIndex==4){
-        Index+= _CacheIndex[4];
-        return -conjugate(_Weight(Index));
-    }else{
-        //SpinIndex==5
-        Index+= _CacheIndex[4];
-        return _Weight(Index);
+
+    auto Row=r1*_MaxTauBin+t1Index;
+    auto Col=r2*_MaxTauBin+t2Index;
+
+    if(Row>Col){
+        auto temp=Row;
+        Row=Col;
+        Col=temp;
+        DoesMirrored=true;
+    } else{
+        DoesMirrored=false;
     }
+    if(Row==Col)
+        SymmetryFactor=1.0;
+    else
+        SymmetryFactor=2.0;
+//    uint Index = coord_r1 * _CacheIndex[3] + coord_r2 * _CacheIndex[2]+ t1Index * _CacheIndex[1] + t2Index;
+    uint Index=(_MaxTauBin*_Vol*Row)+Col-(Row*(Row+1))/2;
+    return Index;
 }
-//void GammaWClass::Measure(const Site &Wr_in, const Site &Wr_out, const Site &Ur, real Wt_in, real Wt_out,
-                          //real Ut, spin* Wspin_in, spin* Wspin_out, spin Uspin, const Complex &Weight)
+
+//Complex GammaWClass::Weight(const Site &Wr_in, const Site &Wr_out, const Site &Ur,
+//                            real Wt_in, real Wt_out, real Ut, spin* Wspin_in, spin* Wspin_out, spin Uspin) const
 //{
-    //auto coord_r1 = _Map.Lat.CoordiIndex(Wr_out, Ur);
-    //auto coord_r2 = _Map.Lat.CoordiIndex(Wr_in,  Ur);
-
-    //auto t1=Wt_out-Ut;
-    //if(t1<0){
-        //t1+=_Beta;
-    //}
-    //int t1Index=floor(t1*_dBetaInverse);
-
-    //auto t2=Wt_in-Ut;
-    //if(t2<0){
-        //t2+=_Beta;
-    //}
-    //int t2Index=floor(t2*_dBetaInverse);
-    //auto SpinIndex=_SpinIndex(Wspin_out, Wspin_in);
-    //uint Index = coord_r1 * _CacheIndex[3] +coord_r2*_CacheIndex[2]+ t1Index*_CacheIndex[1]+t2Index;
-    //if(SpinIndex==0||SpinIndex==1)
-        //_WeightAccu[Index]+=Weight;
-    //else if(SpinIndex==2||SpinIndex==3)
-        //_WeightAccu[Index]+=-Weight;
-    //else if(SpinIndex==4){
-        //Index+= _CacheIndex[4];
-        //_WeightAccu[Index]+=Weight/2.0;
-    //}
-    //else if(SpinIndex==5){
-        //Index+= _CacheIndex[4];
-        //_WeightAccu[Index]+=-conjugate(Weight)/2.0;
-    //}
+//    auto coord_r1 = _Map.Lat.CoordiIndex(Wr_out, Ur);
+//    auto coord_r2 = _Map.Lat.CoordiIndex(Wr_in,  Ur);
+//
+//    auto t1 = Wt_out - Ut;
+//    if(t1<0){
+//        t1+=_Beta;
+//    }
+//    int t1Index=floor(t1*_dBetaInverse);
+//
+//    auto t2=Wt_in-Ut;
+//    if(t2<0){
+//        t2+=_Beta;
+//    }
+//    int t2Index=floor(t2*_dBetaInverse);
+//    auto SpinIndex=_SpinIndex(Wspin_out, Wspin_in);
+//    uint Index = coord_r1 * _CacheIndex[3] + coord_r2 * _CacheIndex[2]+ t1Index * _CacheIndex[1] + t2Index;
+//    if(SpinIndex==0||SpinIndex==1)
+//        return _Weight(Index);
+//    else if(SpinIndex==2||SpinIndex==3)
+//        return -_Weight(Index);
+//    else if(SpinIndex==4){
+//        Index+= _CacheIndex[4];
+//        return -conjugate(_Weight(Index));
+//    }else{
+//        //SpinIndex==5
+//        Index+= _CacheIndex[4];
+//        return _Weight(Index);
+//    }
 //}
 
+Complex GammaWClass::Weight(const Site &Wr_in, const Site &Wr_out, const Site &Ur,
+                            real Wt_in, real Wt_out, real Ut, spin* Wspin_in, spin* Wspin_out, spin Uspin) const
+{
+    int coord_r1 = _Map.Lat.CoordiIndex(Wr_out, Ur);
+    int coord_r2 = _Map.Lat.CoordiIndex(Wr_in,  Ur);
+
+    auto t1 = Wt_out - Ut;
+    auto t2=Wt_in-Ut;
+    auto SpinIndex=_SpinIndex(Wspin_out, Wspin_in);
+
+    int SymmetryFactor;
+    bool DoesMirrored;
+    uint Index=_GetIndex(coord_r1, coord_r2, t1, t2, SymmetryFactor, DoesMirrored);
+    if(SpinIndex>=4)
+        Index+= _SpaceTimeSize;
+    auto NewWeight=_Weight(Index);
+    if(DoesMirrored)
+        NewWeight=-conjugate(NewWeight);
+
+    if(SpinIndex==0||SpinIndex==1) {
+        return NewWeight;
+    }
+    else if(SpinIndex==2||SpinIndex==3) {
+        return -NewWeight;
+    }
+    else if(SpinIndex==4){
+        return -conjugate(NewWeight);
+    }else{
+        //SpinIndex==5
+        return NewWeight;
+
+    }
+}
+
+//void GammaWClass::Measure(const Site &Wr_in, const Site &Wr_out, const Site &Ur, real Wt_in, real Wt_out,
+//                          real Ut, spin* Wspin_in, spin* Wspin_out, spin Uspin, const Complex &Weight)
+//{
+//    auto coord_r1 = _Map.Lat.CoordiIndex(Wr_out, Ur);
+//    auto coord_r2 = _Map.Lat.CoordiIndex(Wr_in,  Ur);
+//
+//    auto t1=Wt_out-Ut;
+//    if(t1<0){
+//        t1+=_Beta;
+//    }
+//    int t1Index=floor(t1*_dBetaInverse);
+//
+//    auto t2=Wt_in-Ut;
+//    if(t2<0){
+//        t2+=_Beta;
+//    }
+//    int t2Index=floor(t2*_dBetaInverse);
+//    auto SpinIndex=_SpinIndex(Wspin_out, Wspin_in);
+//    uint Index = coord_r1 * _CacheIndex[3] +coord_r2*_CacheIndex[2]+ t1Index*_CacheIndex[1]+t2Index;
+////    uint Index=_GetIndex(coord_r1, coord_r2, t1, t2, SymmetryFactor);
+//    if(SpinIndex==0||SpinIndex==1)
+//        _WeightAccu[Index]+=Weight;
+//    else if(SpinIndex==2||SpinIndex==3)
+//        _WeightAccu[Index]+=-Weight;
+//    else if(SpinIndex==4){
+//        Index+= _CacheIndex[4];
+//        _WeightAccu[Index]+=Weight/2.0;
+//    }
+//    else if(SpinIndex==5){
+//        Index+= _CacheIndex[4];
+//        _WeightAccu[Index]+=-conjugate(Weight)/2.0;
+//    }
+//}
+//
 void GammaWClass::Measure(const Site &Wr_in, const Site &Wr_out, const Site &Ur, real Wt_in, real Wt_out,
                           real Ut, spin* Wspin_in, spin* Wspin_out, spin Uspin, const Complex &Weight)
 {
@@ -293,37 +367,69 @@ void GammaWClass::Measure(const Site &Wr_in, const Site &Wr_out, const Site &Ur,
     auto coord_r2 = _Map.Lat.CoordiIndex(Wr_in,  Ur);
 
     auto t1=Wt_out-Ut;
-    if(t1<0){
-        t1+=_Beta;
-    }
-    int t1Index=floor(t1*_dBetaInverse);
-
     auto t2=Wt_in-Ut;
-    if(t2<0){
-        t2+=_Beta;
-    }
-    int t2Index=floor(t2*_dBetaInverse);
     auto SpinIndex=_SpinIndex(Wspin_out, Wspin_in);
-    uint Index0 = coord_r1 * _CacheIndex[3] +coord_r2*_CacheIndex[2];
-    for(int b1=0;b1<_BasisNum/2;b1++){
-        for(int b2=0;b2<_BasisNum/2;b2++){
-            uint Index = Index0 + b1*_CacheIndex[1]+b2;
-            auto Factor=_BasisVec[b1][t1Index]*_BasisVec[b2][t2Index];
-            if(SpinIndex==0||SpinIndex==1)
-                _WeightAccu[Index]+=Weight*Factor;
-            else if(SpinIndex==2||SpinIndex==3)
-                _WeightAccu[Index]+=-Weight*Factor;
-            else if(SpinIndex==4){
-                Index+= _CacheIndex[4];
-                _WeightAccu[Index]+=Weight*Factor/2.0;
-            }
-            else if(SpinIndex==5){
-                Index+= _CacheIndex[4];
-                _WeightAccu[Index]+=-conjugate(Weight*Factor)/2.0;
-            }
-        }
+//    uint Index = coord_r1 * _CacheIndex[3] +coord_r2*_CacheIndex[2]+ t1Index*_CacheIndex[1]+t2Index;
+    int SymmetryFactor;
+    bool DoesMirrored;
+    uint Index=_GetIndex(coord_r1, coord_r2, t1, t2, SymmetryFactor, DoesMirrored);
+    auto NewWeight=Weight/SymmetryFactor;
+    if(DoesMirrored)
+        NewWeight=-conjugate(NewWeight);
+    if(SpinIndex==0||SpinIndex==1)
+        _WeightAccu[Index]+=NewWeight;
+    else if(SpinIndex==2||SpinIndex==3)
+        _WeightAccu[Index]+=-NewWeight;
+    else if(SpinIndex==4){
+//        Index+= _CacheIndex[4];
+        Index+=_SpaceTimeSize;
+        _WeightAccu[Index]+=NewWeight/2.0;
+    }
+    else if(SpinIndex==5){
+//        Index+= _CacheIndex[4];
+        Index+=_SpaceTimeSize;
+        _WeightAccu[Index]+=-conjugate(NewWeight)/2.0;
     }
 }
+
+//void GammaWClass::Measure(const Site &Wr_in, const Site &Wr_out, const Site &Ur, real Wt_in, real Wt_out,
+//                          real Ut, spin* Wspin_in, spin* Wspin_out, spin Uspin, const Complex &Weight)
+//{
+//    auto coord_r1 = _Map.Lat.CoordiIndex(Wr_out, Ur);
+//    auto coord_r2 = _Map.Lat.CoordiIndex(Wr_in,  Ur);
+//
+//    auto t1=Wt_out-Ut;
+//    if(t1<0){
+//        t1+=_Beta;
+//    }
+//    int t1Index=floor(t1*_dBetaInverse);
+//
+//    auto t2=Wt_in-Ut;
+//    if(t2<0){
+//        t2+=_Beta;
+//    }
+//    int t2Index=floor(t2*_dBetaInverse);
+//    auto SpinIndex=_SpinIndex(Wspin_out, Wspin_in);
+//    uint Index0 = coord_r1 * _CacheIndex[3] +coord_r2*_CacheIndex[2];
+//    for(int b1=0;b1<_BasisNum/2;b1++){
+//        for(int b2=0;b2<_BasisNum/2;b2++){
+//            uint Index = Index0 + b1*_CacheIndex[1]+b2;
+//            auto Factor=_BasisVec[b1][t1Index]*_BasisVec[b2][t2Index];
+//            if(SpinIndex==0||SpinIndex==1)
+//                _WeightAccu[Index]+=Weight*Factor;
+//            else if(SpinIndex==2||SpinIndex==3)
+//                _WeightAccu[Index]+=-Weight*Factor;
+//            else if(SpinIndex==4){
+//                Index+= _CacheIndex[4];
+//                _WeightAccu[Index]+=Weight*Factor/2.0;
+//            }
+//            else if(SpinIndex==5){
+//                Index+= _CacheIndex[4];
+//                _WeightAccu[Index]+=-conjugate(Weight*Factor)/2.0;
+//            }
+//        }
+//    }
+//}
 
 void GammaWClass::MeasureNorm(real weight)
 {

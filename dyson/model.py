@@ -7,9 +7,9 @@ import traceback
 from logger import *
 
 class BareFactory:
-    def __init__(self, map, Lat, Hamiltonian, Anneal):
+    def __init__(self, _map, Lat, Hamiltonian, Anneal):
         self.Lat=Lat
-        self.__Map=map
+        self.__Map=_map
         self.__Model=Hamiltonian["Name"]
         self.__Interaction=np.array(Hamiltonian["Interaction"])
         self.__ExternalField=np.array(Hamiltonian["ExternalField"])

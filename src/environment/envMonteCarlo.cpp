@@ -71,12 +71,14 @@ bool EnvMonteCarlo::Load()
         DoesParaFileExit = false;
     }
     Para.FromDict(para_.Get<Dictionary>(ParaKey));
+    Dictionary GW_;
+    GW_.BigLoad(Job.WeightFile);
     Dictionary statis_;
     statis_.BigLoad(Job.StatisticsFile);
-    Weight.FromDict(statis_, weight::GW, Para);
+    Weight.FromDict(GW_, weight::GW, Para);
     Weight.FromDict(statis_, weight::SigmaPolar, Para);
     if(Para.runGamma3)
-        Weight.FromDict(statis_, weight::GammaGW, Para);
+        Weight.FromDict(GW_, weight::GammaGW, Para);
         Weight.FromDict(statis_, weight::GammaGWStatis, Para);
     LOG_INFO(DoesParaFileExit);
     if (DoesParaFileExit)
@@ -99,9 +101,9 @@ void EnvMonteCarlo::Save()
         para_.Save(Job.ParaFile, "w");
         Dictionary statis_;
         if (Para.runGamma3)
-            statis_ = Weight.ToDict(weight::GW | weight::SigmaPolar | weight::GammaGW | weight::GammaGWStatis);
+            statis_ = Weight.ToDict(weight::SigmaPolar | weight::GammaGWStatis);
         else
-            statis_ = Weight.ToDict(weight::GW | weight::SigmaPolar);
+            statis_ = Weight.ToDict(weight::SigmaPolar);
         statis_.Update(MarkovMonitor.ToDict());
         statis_.BigSave(Job.StatisticsFile);
         LOG_INFO("Saving data is done!");

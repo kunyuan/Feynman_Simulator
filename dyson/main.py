@@ -27,6 +27,8 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     if para["Gamma3"]:
         BKChiTensor, _ = gamma3.FullGGGammaG(GGGammaG, W0, Map)
         BKChi = gamma3.Calculate_Chi(BKChiTensor, Map)
+    else:
+        BKChi=Chi
 
     ##########OUTPUT AND FILE SAVE ####################
     spinUP=Map.Spin2Index(UP,UP)
@@ -61,10 +63,13 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
         # print '%05f %05f %05f' % (i*Map.Beta/Map.MaxTauBin, n.real, n.imag)
 
     # RestoredWWGammaW=gamma3.RestoreGammaW(WWGammaW, Map, TauBin=32)
-    RestoredWWGammaW=WWGammaW
-    print RestoredWWGammaW[0,1,0,0,:]
-    print RestoredWWGammaW[1,1,0,0,:]
-    print WWGammaW.shape
+    # RestoredWWGammaW=WWGammaW
+    # print "WWGammaW space symmetry"
+    # print RestoredWWGammaW[0,1,0,0,:]
+    # print RestoredWWGammaW[1,1,0,0,:]
+    # print RestoredWWGammaW[0,0,0,0,:]
+    # print RestoredWWGammaW[0,0,1,0,:]
+    # print WWGammaW.shape
 
     data={}
     data["Chi"]=Chi.ToDict()
@@ -82,9 +87,10 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
         data["BKChi"]=BKChi.ToDict()
         data["GGGammaG"]={"SmoothT": GGGammaG}
         if WWGammaW is not None:
-            data["WWGammaW"]={"SmoothT": RestoredWWGammaW}
+            data["WWGammaW"]={"SmoothT": gamma3.CompressGammaW(WWGammaW, Map)}
+            # data["WWGammaW"]={"SmoothT": WWGammaW}
 
-    Observable.Measure(Chi, Determ, G, Factory.NearestNeighbor)
+    Observable.Measure(Chi, BKChi, Determ, G, Factory.NearestNeighbor)
 
     with DelayedInterrupt():
         try:
@@ -145,12 +151,6 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
             else:
                 GGGammaG=gamma3.SimpleGG(G, Map)
 
-            # if data.has_key("WWGammaW"):
-                # WWGammaW=data["WWGammaW"]["SmoothT"]
-                # print "Read existing WWGammaW"
-            # else:
-                # WWGammaW=np.zeros([2, Map.Vol, Map.Vol, Map.BasisNum, Map.BasisNum], dtype=np.complex)
-
     Gold, Wold = G, W
 
     #while para["Version"]==0:
@@ -207,7 +207,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
             else:
                 log.info("Collecting Sigma/Polar statistics...")
                 SigmaStatis, PolarStatis, GammaG_MC, GammaW_MC =collect.CollectStatis(Map, para["Gamma3"])
-                Sigma, Polar, ParaDyson["OrderAccepted"]=collect.UpdateWeight([SigmaStatis, PolarStatis],
+                Sigma, Polar_MC, ParaDyson["OrderAccepted"]=collect.UpdateWeight([SigmaStatis, PolarStatis],
                         ParaDyson["ErrorThreshold"], ParaDyson["OrderAccepted"])
                 #print Sigma.Data[0,0,0,0,0,0], Sigma.Data[0,0,0,0,0,-1]
                 log.info("calculating G...")
@@ -216,9 +216,9 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                 SigmaDyson = calc.SigmaSmoothT_FirstOrder(G, W, Map)
                 print "SigmaFromDyson=\n", SigmaDyson.Data[UP,0,UP,0,0,:]
 
+                Polar.Merge(ratio, Polar_MC)
+
                 if para["Gamma3"]:
-                    print GammaW_MC[0,0,0,0,:]
-                    print GammaW_MC[1,0,0,0,:]
                     WWGammaW = gamma3.AddTwoW_To_GammaW(GammaW_MC, W0, W, G.Map)
                     
                     GGGammaG_MC = gamma3.AddTwoG_To_GammaG(GammaG_MC, G, G.Map)
@@ -246,8 +246,6 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                     print "Chi(r=0,t=0)", Chi.Data[0,0,0,0,0,0]
 
             W = Wtmp
-            if IsDysonOnly or IsNewCalculation:
-                Polar.Merge(ratio, calc.Polar_FirstOrder(G, Map))
 
 
         except calc.DenorminatorTouchZero as err:
@@ -334,7 +332,8 @@ if __name__=="__main__":
             parameter.Save(ParaFile, para)  #Save Parameters
 
     WeightPara={"NSublat": para["Lattice"]["NSublat"], "L":para["Lattice"]["L"],
-                "Beta": float(para["Tau"]["Beta"]), "MaxTauBin": para["Tau"]["MaxTauBin"]}
+            "Beta": float(para["Tau"]["Beta"]), "MaxTauBin": para["Tau"]["MaxTauBin"],
+            "MaxTauBinTiny": para["Tau"]["MaxTauBinTiny"], "BasisNum": para["Tau"]["BasisNum"], "Symmetry": para["Model"]["Symmetry"]}
     Map=weight.IndexMap(**WeightPara)
     Lat=lat.Lattice(para["Lattice"]["Name"], Map)
 

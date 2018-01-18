@@ -14,9 +14,10 @@ IN,OUT=0,1
 DOWN,UP=0,1
 
 class IndexMap:
-    def __init__(self, Beta, L, NSublat, MaxTauBin):
+    def __init__(self, Beta, L, NSublat, MaxTauBin, MaxTauBinTiny, BasisNum, Symmetry):
         self.MaxTauBin=MaxTauBin
-        self.BasisNum=8
+        self.MaxTauBinTiny=MaxTauBinTiny
+        self.BasisNum=BasisNum
         if self.BasisNum>MaxTauBin:
             self.BasisNum=MaxTauBin
         self.Beta=Beta
@@ -28,6 +29,8 @@ class IndexMap:
         self.NSublat=NSublat
         self.__dBeta=Beta/self.MaxTauBin
         self.__dBetaInverse=1.0/self.__dBeta
+        self.__Symmetry=Symmetry
+
     def GetPara(self):
         return {"L":self.L, "NSublat":self.NSublat, \
                 "Beta":self.Beta, "MaxTauBin": self.MaxTauBin}
@@ -164,7 +167,7 @@ class Weight():
         Assert(TimeDomain in ['T', 'W'], "TimeDomain is either T or W")
         self.SpaceDomain=SpaceDomain
         self.TimeDomain=TimeDomain
-        
+
     def Copy(self):
         """return a deep copy of Weight instance"""
         import copy

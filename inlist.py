@@ -3,7 +3,7 @@ MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
     "__Duplicate" :  0,
-    # "__Duplicate" :  12,
+    # "__Duplicate" :  14,
     "__IsCluster" : False, 
     "__AutoRun" : True,
     },
@@ -26,13 +26,15 @@ Dyson={
     }
 }
 
-Beta=0.8
-MaxTauBin=32
-Order=1
+Beta=1.0
+MaxTauBin=64
+MaxTauBinTiny=32
+BasisNum=16
+Order=6
 Gamma3=True
 Common={
 "Gamma3": Gamma3,
-"Tau": {"MaxTauBin" : MaxTauBin, "Beta": Beta},
+"Tau": {"MaxTauBin" : MaxTauBin, "Beta": Beta, "MaxTauBinTiny": MaxTauBinTiny, "BasisNum": BasisNum},
 "Lattice":  {
     #1D lattice
     # "Name": "Chain", "NSublat":1,
@@ -60,9 +62,10 @@ Common={
     "Name": "Heisenberg",
     #"Description": ["ImW",],
     "Interaction": [1.0, 0.0, 0.0, 0.0],
-    "ExternalField": [ 0.0, 0.0, 0.0, 0.0]
+    "ExternalField": [ 0.0, 0.0, 0.0, 0.0],
     #ExternalField on Sublattice A and B
-    },
+    "Symmetry": ["SU2", "ParticleHole"],
+    }
 }
 
 MonteCarlo["Markov"]={
@@ -91,7 +94,7 @@ MonteCarlo["Markov"]={
 
 Dyson["Dyson"]={
     #"SleepTime": 0,
-    "SleepTime": 15,
+    "SleepTime": 60,
     "Gamma3": Gamma3,
     "OrderAccepted": {"Sigma":1, "Polar":1},
     "ErrorThreshold": 0.2,
@@ -117,8 +120,8 @@ SLEEP = 1    #check job status for every SLEEP seconds
 
 import basis
 svd=basis.SVDBasis(MaxTauBin,Beta, "Fermi")
-svd.GenerateBasis(32)
+svd.GenerateBasis(BasisNum)
 svd.Save("FermiBasis.dat")
 svd=basis.SVDBasis(MaxTauBin,Beta, "Bose")
-svd.GenerateBasis(32)
+svd.GenerateBasis(BasisNum)
 svd.Save("BoseBasis.dat")

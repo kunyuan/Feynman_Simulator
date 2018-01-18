@@ -86,8 +86,8 @@ namespace weight {
 
     protected:
         IndexMapSPIN4 _Map;
-        WeightArray<5> _Weight; //Wspin, W_r1, W_dr, Wtau1,Wtau2
-        WeightArray<5> _WeightAccu; //Wspin, W_r1, W_dr, Wtau1,dtau2
+        WeightArray<2> _Weight; //Wspin, W_r1, W_dr, Wtau1,Wtau2
+        WeightArray<2> _WeightAccu; //Wspin, W_r1, W_dr, Wtau1,dtau2
         uint _CacheIndex[5];
         uint _CacheIndexBasis[5];
         //don't forget to add template class in weight_array.cpp file
@@ -97,9 +97,12 @@ namespace weight {
         uint _WeightSize;
         real _dBetaInverse;
         uint _MaxTauBin;
+        uint _Vol;
         uint _SpinIndex(spin *, spin*) const;
         std::vector<basis> _BasisVec;
         uint _BasisNum;
         uint _BasisMaxTauBin;
+        uint _SpaceTimeSize;
+        uint _GetIndex(int, int, real, real, int& SymmetryFactor, bool& DoesMirrored) const;
     };
 };
