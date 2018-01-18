@@ -304,6 +304,40 @@ def AddTwoW_To_GammaW_basis(GammaW, W0, W, _map):
 
     return -1.0*WWGammaW
 
+def AddTwoW_To_LocalGammaW(LocalGammaW, W0, W, _map):
+    sub = 0
+    UPUP=_map.Spin2Index(UP,UP)
+    DOWNDOWN=_map.Spin2Index(DOWN,DOWN)
+    UPDOWN=_map.Spin2Index(UP,DOWN)
+    DOWNUP=_map.Spin2Index(DOWN,UP)
+
+    spinindex, spin2index=GenerateSpinIndex(_map)
+
+    W.FFT("R","T")
+    W0.FFT("R", "T")
+    Wshift=weight.Weight("SmoothT", _map, "FourSpins", "Symmetric", "R","T")
+    for t in range(_map.MaxTauBin):
+        t1=t-1
+        if t1<0:
+            t1+=_map.MaxTauBin
+        Wshift.Data[:,:,:,:,:,t]=0.5*(W.Data[:,:,:,:,:,t1]+W.Data[:,:,:,:,:,t])
+    Wshift=np.array(Wshift.Data[:,0,:,0,:,:])*_map.Beta/_map.MaxTauBin
+    Wtot=np.zeros([_map.Vol, _map.MaxTauBin, _map.MaxTauBin], dtype=np.complex)
+    Wshift[:,:,:,0]+=W0.Data[:,0,:,0,:]
+    for t1 in range(_map.MaxTauBin):
+        for t2 in range(_map.MaxTauBin):
+            dt=t1-t2
+            if dt<0:
+                dt+=_map.MaxTauBin
+            Wtot[:, t1, t2]=Wshift[0,0,:,dt]
+    Wtot=FFTWshift_Space(Wtot, _map, 1)
+
+    BasisVec=GetBoseBasis(_map)
+    Wtot=np.einsum("imn,km->ikn", Wtot, BasisVec) 
+
+    Wtot=FitW(Wtot, _map)
+    return -1.0*WWGammaW
+
 def AddTwoW_To_GammaW(GammaW, W0, W, _map):
     # import gamma3
     sub = 0

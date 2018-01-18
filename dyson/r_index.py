@@ -32,7 +32,7 @@ def Shift(vec, _map):
             vec[i] -= _map.L[i]
     return vec
         
-def CoordiIndex(index_out, index_in, _map):
+def TwoIndexDiff(index_out, index_in, _map):
     vec_out = Index2Vec(index_out, _map)
     vec_in = Index2Vec(index_in, _map)
     vec = vec_out - vec_in
