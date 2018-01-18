@@ -304,39 +304,69 @@ def AddTwoW_To_GammaW_basis(GammaW, W0, W, _map):
 
     return -1.0*WWGammaW
 
-def AddTwoW_To_LocalGammaW(LocalGammaW, W0, W, _map):
-    sub = 0
-    UPUP=_map.Spin2Index(UP,UP)
-    DOWNDOWN=_map.Spin2Index(DOWN,DOWN)
-    UPDOWN=_map.Spin2Index(UP,DOWN)
-    DOWNUP=_map.Spin2Index(DOWN,UP)
+# def AddTwoW_To_LocalGammaW(LocalGammaW, W0, W, _map):
+    # LocalGammaW=np.einsum("siikl->sikl", LocalGammaW)
+    # sub = 0
+    # UPUP=_map.Spin2Index(UP,UP)
+    # DOWNDOWN=_map.Spin2Index(DOWN,DOWN)
+    # UPDOWN=_map.Spin2Index(UP,DOWN)
+    # DOWNUP=_map.Spin2Index(DOWN,UP)
 
-    spinindex, spin2index=GenerateSpinIndex(_map)
+    # spinindex, spin2index=GenerateSpinIndex(_map)
 
-    W.FFT("R","T")
-    W0.FFT("R", "T")
-    Wshift=weight.Weight("SmoothT", _map, "FourSpins", "Symmetric", "R","T")
-    for t in range(_map.MaxTauBin):
-        t1=t-1
-        if t1<0:
-            t1+=_map.MaxTauBin
-        Wshift.Data[:,:,:,:,:,t]=0.5*(W.Data[:,:,:,:,:,t1]+W.Data[:,:,:,:,:,t])
-    Wshift=np.array(Wshift.Data[:,0,:,0,:,:])*_map.Beta/_map.MaxTauBin
-    Wtot=np.zeros([_map.Vol, _map.MaxTauBin, _map.MaxTauBin], dtype=np.complex)
-    Wshift[:,:,:,0]+=W0.Data[:,0,:,0,:]
-    for t1 in range(_map.MaxTauBin):
-        for t2 in range(_map.MaxTauBin):
-            dt=t1-t2
-            if dt<0:
-                dt+=_map.MaxTauBin
-            Wtot[:, t1, t2]=Wshift[0,0,:,dt]
-    Wtot=FFTWshift_Space(Wtot, _map, 1)
+    # W.FFT("R","T")
+    # W0.FFT("R", "T")
+    # Wshift=weight.Weight("SmoothT", _map, "FourSpins", "Symmetric", "R","T")
+    # for t in range(_map.MaxTauBin):
+        # t1=t-1
+        # if t1<0:
+            # t1+=_map.MaxTauBin
+        # Wshift.Data[:,:,:,:,:,t]=0.5*(W.Data[:,:,:,:,:,t1]+W.Data[:,:,:,:,:,t])
+    # Wshift=np.array(Wshift.Data[:,0,:,0,:,:])*_map.Beta/_map.MaxTauBin
+    # Wtot=np.zeros([_map.Vol, _map.MaxTauBin, _map.MaxTauBin], dtype=np.complex)
+    # Wshift[:,:,:,0]+=W0.Data[:,0,:,0,:]
+    # for t1 in range(_map.MaxTauBin):
+        # for t2 in range(_map.MaxTauBin):
+            # dt=t1-t2
+            # if dt<0:
+                # dt+=_map.MaxTauBin
+            # Wtot[:, t1, t2]=Wshift[0,0,:,dt]
 
-    BasisVec=GetBoseBasis(_map)
-    Wtot=np.einsum("imn,km->ikn", Wtot, BasisVec) 
+    # BasisVec=GetBoseBasis(_map)
+    # Wtot=np.einsum("imn,km->ikn", Wtot, BasisVec) #fit Wtot with basis
+    # Wbig=np.zeros([_map.Vol, _map.BasisNum, _map.Vol, _map.MaxTauBin], dtype=np.complex)
+    # for r1 in range(_map.Vol):
+        # for r2 in range(_map.Vol):
+            # dr=r_index.TwoIndexDiff(r1, r2, _map)
+            # Wbig[r1,:,r2,:]=Wtot[dr,:,:]
 
-    Wtot=FitW(Wtot, _map)
-    return -1.0*WWGammaW
+    # print "Wbig shape", Wbig.shape
+    # #a,b,c: r1, r2, r3;  k,l: tau with basis; m,n: tau 
+    # WGammaW=np.einsum("akbm, sbmn->sakbn", Wbig, LocalGammaW)
+    # print "WGammaW shape", WGammaW.shape
+
+    # Wtot=np.zeros([_map.Vol, _map.MaxTauBin, _map.MaxTauBin], dtype=np.complex)
+    # for t1 in range(_map.MaxTauBin):
+        # for t2 in range(_map.MaxTauBin):
+            # dt=t1-t2
+            # if dt<0:
+                # dt+=_map.MaxTauBin
+            # Wtot[:, t1, t2]=Wshift[0,0,:,dt]
+    # Wtot=np.einsum("imn,kn->imk", Wtot, BasisVec) #fit Wtot with basis
+    # Wbig=np.zeros([_map.Vol, _map.MaxTauBin, _map.Vol, _map.BasisNum], dtype=np.complex)
+    # for r1 in range(_map.Vol):
+        # for r2 in range(_map.Vol):
+            # dr=r_index.TwoIndexDiff(r1, r2, _map)
+            # Wbig[r1,:,r2,:]=Wtot[dr,:,:]
+    # # Wbig=np.array(Wbig.swapaxes(1,3))
+    # print "Wbig shape", Wbig.shape
+    # Wbig=Wbig.reshape((_map.Vol*_map.MaxTauBin, _map.Vol, _map.BasisNum)) 
+    # WGammaW=WGammaW.reshape((2, _map.Vol, _map.BasisNum, _map.Vol*_map.MaxTauBin))
+    # # WWGammaW=np.einsum("sakbn,bncl->sakcl", WGammaW, Wbig)
+    # WWGammaW=np.einsum("saki,icl->sakcl", WGammaW, Wbig)
+    # print "WWGammaW shape", WWGammaW.shape
+    # WWGammaW=WWGammaW.swapaxes(2,3)
+    # return -1.0*WWGammaW
 
 def AddTwoW_To_GammaW(GammaW, W0, W, _map):
     # import gamma3
@@ -364,6 +394,7 @@ def AddTwoW_To_GammaW(GammaW, W0, W, _map):
     Wtot=np.array(Wshift.Data[:,0,:,0,:,:])*_map.Beta/_map.MaxTauBin
     Wtot[:,:,:,0]+=W0.Data[:,0,:,0,:]
 
+    GammaW=UnCompressGammaW(GammaW, _map)
 
     Wtot=FFTWshift(Wtot, _map, 1)
     #Wtot shape: spin1, spin2, dr, dt
@@ -375,8 +406,6 @@ def AddTwoW_To_GammaW(GammaW, W0, W, _map):
 
     Win = np.zeros((1,Wtot.shape[2],1,Wtot.shape[3]), dtype=np.complex)
     Win[0,:,0,:] = Wtot[UPUP, UPUP, :, :] # r1=0, r2, t1=0, t2
-
-    GammaW=UnCompressGammaW(GammaW, _map)
 
     # print "GammaW"
     # # GammaW1=FitGammaW(GammaW, _map)
@@ -465,9 +494,10 @@ def AddG_To_WWGammaW(WWGammaW, G, _map):
     spinDOWN=_map.Spin2Index(DOWN,DOWN)
     sub=0
     GammaG = np.zeros([2, _map.Vol, _map.MaxTauBin, _map.MaxTauBin])+0.0*1j
-    #only GammaW(r,r) is needed!
 
+    #only GammaW(r,r) is needed!
     WWGammaW=np.einsum("siikl->sikl", WWGammaW)
+
     # WWGammaW=RestoreGammaW_diagonal(WWGammaW, _map)
 
     for tout in range(_map.MaxTauBin):
@@ -574,6 +604,14 @@ def Check_Denorminator(Denorm, Determ, _map):
     if Determ.min().real<0.0 and Determ.min().imag<1.0e-4:
         raise DenorminatorTouchZero(Determ.min(), _map.IndexToCoordi(x), t)
 
+class DenorminatorTouchZero(Exception):
+    def __init__(self, value, pos, freq):
+       self.value = value
+       self.position=pos
+       self.frequency=freq
+    def __str__(self):
+        return "Denorminator touch zero, minmum {0} is at K={1} and Omega={2}".format(self.value, self.position, self.frequency)
+
 def GetBoseBasis(_map, BasisNum=None):
     TauBin=_map.MaxTauBin
     svd=basis.SVDBasis(TauBin, _map.Beta, "Bose")
@@ -626,7 +664,8 @@ def CompressGammaW(GammaW, _map):
     if len(GammaW.shape)==2:
         #do not need to compress
         return GammaW
-    N=_map.Vol*_map.MaxTauBin
+    TauBin=GammaW.shape[-1]
+    N=_map.Vol*TauBin
     CompactGammaW=np.zeros((2, N*(N+1)/2) , dtype=complex)
     GammaW=GammaW.swapaxes(2,3)
     GammaW=GammaW.reshape([2, N, N])
@@ -642,7 +681,8 @@ def UnCompressGammaW(CompactGammaW, _map):
     if len(CompactGammaW.shape)==5:
         #do not need to uncompress
         return CompactGammaW
-    N=_map.Vol*_map.MaxTauBin
+    TauBin=CompactGammaW.shape[-1]
+    N=_map.Vol*TauBin
     GammaW=np.zeros((2, N, N), dtype=complex)
     uIndex=np.triu_indices(N) #-1 is used to avoid the diagonal elements
     GammaW[0,:][uIndex]=CompactGammaW[0, :]

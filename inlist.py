@@ -26,8 +26,8 @@ Dyson={
     }
 }
 
-Beta=1.0
-MaxTauBin=64
+Beta=0.8
+MaxTauBin=32
 MaxTauBinTiny=32
 BasisNum=16
 Order=6

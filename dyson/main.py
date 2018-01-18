@@ -194,6 +194,7 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                     GammaW = gamma3.AddG_To_GGGammaG(GGGammaG, G, G.Map)
                     print "Calculate WWGammaW"
                     WWGammaW = gamma3.AddTwoW_To_GammaW(GammaW, W0, W, G.Map)
+                    # WWGammaW = gamma3.AddTwoW_To_LocalGammaW(LocalGammaW, W0, W, G.Map)
                     print "Calculate GammaG from WWGammaW"
                     GammaG_FromWWGammaW=gamma3.AddG_To_WWGammaW(WWGammaW, G, G.Map)
                     print "Calculate WWGammaW contribution to GGGammaG"
