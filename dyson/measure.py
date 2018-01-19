@@ -42,10 +42,10 @@ class Observable:
                 for l in NN[i][j]:
                     energy+=Chi.Data[0,i,0,j,self.__Map.CoordiIndex(l),0]/self.__Lat.NSublat
                     BK_energy+=BKChi.Data[0,i,0,j,self.__Map.CoordiIndex(l),0]/self.__Lat.NSublat
-        self.Append("Energy", energy/self.__Map.MaxTauBin)
+        self.Append("Energy", energy)
         self.Append("SumRule", Chi.Data[0,0,0,0,0,0])
 
-        self.Append("BK_Energy", BK_energy/self.__Map.MaxTauBin)
+        self.Append("BK_Energy", BK_energy)
         self.Append("BK_SumRule", BKChi.Data[0,0,0,0,0,0])
 
 

@@ -247,7 +247,6 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
 
             W = Wtmp
 
-
         except calc.DenorminatorTouchZero as err:
             #failure due to denorminator touch zero
             log.info(green("Version {0} fails due to:\n{1}".format(para["Version"],err)))
