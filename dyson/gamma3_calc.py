@@ -395,14 +395,26 @@ def AddTwoW_To_GammaW(GammaW, W0, W, _map):
         log.info(green("Memory Usage before collecting: {0} MB".format(memory_usage())))
         gc.collect()
         log.info(green("Memory Usage : {0} MB".format(memory_usage())))
+
     W0.FFT("R","T")
     W.FFT("R","T")
 
-    # print "WWGammaW"
+    print "WWGammaW Compress"
+    WWGammaW1=CompressGammaW(WWGammaW, _map)
+    WWGammaW2=UnCompressGammaW(WWGammaW1, _map)
+    for r1 in range(8):
+        print "0", r1, np.amax(np.abs(WWGammaW[0,r1,:,:]-WWGammaW2[0,r1,:,:]))
+    for r1 in range(8):
+        print "1", r1,t, np.amax(np.abs(WWGammaW[1,r1,:,:,:]-WWGammaW2[1,r1,:,:,:]))
+    WWGammaW=WWGammaW2
     # # WWGammaW1=FitGammaW(WWGammaW, _map)
     # # WWGammaW2=RestoreGammaW(WWGammaW1, _map)
-    # WWGammaW1=CompressGammaW(WWGammaW, _map)
-    # WWGammaW2=UnCompressGammaW(WWGammaW1, _map)
+    WWGammaW1=CompressGammaW1(WWGammaW, _map)
+    print WWGammaW1.shape
+    print "WWGammaW UnCompress"
+    WWGammaW2=UnCompressGammaW1(WWGammaW1, _map)
+    print "WWGammaW restored"
+    print WWGammaW2.shape
     # # if np.allclose(GammaW, GammaW2, rtol=1e-3, atol=1e-5):
         # # print "Basis works well!"
     # # else:
@@ -417,10 +429,10 @@ def AddTwoW_To_GammaW(GammaW, W0, W, _map):
     # print (WWGammaW[1,1,0,15,15])
     # print (WWGammaW2[1,0,1,15,15])
     # print (WWGammaW[1,0,1,15,15]-WWGammaW2[1,0,1,15,15])
-    # for r1 in range(8):
-        # print "0", r1, np.amax(np.abs(WWGammaW[0,r1,:,:]-WWGammaW2[0,r1,:,:]))
-    # for r1 in range(8):
-        # print "1", r1,t, np.amax(np.abs(WWGammaW[1,r1,:,:,:]-WWGammaW2[1,r1,:,:,:]))
+    for r1 in range(8):
+        print "0", r1, np.amax(np.abs(WWGammaW[0,r1,:,:]-WWGammaW2[0,r1,:,:]))
+    for r1 in range(8):
+        print "1", r1,t, np.amax(np.abs(WWGammaW[1,r1,:,:,:]-WWGammaW2[1,r1,:,:,:]))
 
     return -1.0*WWGammaW
 
@@ -623,6 +635,54 @@ def UnCompressGammaW(CompactGammaW, _map):
 
     GammaW=GammaW.reshape([2, _map.Vol, _map.MaxTauBin, _map.Vol, _map.MaxTauBin])
     GammaW=GammaW.swapaxes(2,3)
+    return GammaW
+
+def SymmetryMapping(_map, LatName):
+    # if LatName=="Triangular":
+    Lx, Ly=_map.L[0], _map.L[1]
+    Vol=_map.Vol
+    TauBin=_map.MaxTauBin
+    Squeeze=np.arange(Vol**2*TauBin**2, dtype=int).reshape([Vol, Vol, TauBin, TauBin])
+    Restore=[]
+    Flag=np.zeros([Vol, Vol, TauBin, TauBin], dtype=bool)
+    # Restore=np.zeros([Vol, Vol, TauBin, TauBin], dtype=int)
+    Index=0
+    for r1 in range(Vol):
+        for r2 in range(Vol):
+            for t1 in range(TauBin):
+                for t2 in range(t1, TauBin):
+                    Squeeze[r1,r2,t1,t2]=Index
+                    Squeeze[r1,r2,t2,t1]=Index
+                    Flag[r1,r2,t2,t1]=True
+                    Restore.append(r1*Vol*TauBin**2+r2*TauBin**2+t1*TauBin+t2)
+                    Index+=1
+    print "Index", Index
+    return Squeeze, Restore, Flag
+
+def CompressGammaW1(GammaW, _map):
+    if len(GammaW.shape)==2:
+        #do not need to compress
+        return GammaW
+    Squeeze, Restore, Flag=SymmetryMapping(_map, "Triangular")
+    CompactGammaW=np.zeros([2, len(Restore)], dtype=complex)
+    for s in range(2):
+        CompactGammaW[s, :]=GammaW[s,...].flat[Restore]
+    return CompactGammaW
+
+def UnCompressGammaW1(CompactGammaW, _map):
+    import numpy.ma as npma
+    if len(CompactGammaW.shape)==5:
+        #do not need to uncompress
+        return CompactGammaW
+    Lx, Ly=_map.L[0], _map.L[1]
+    Vol=_map.Vol
+    TauBin=_map.MaxTauBin
+    Squeeze, Restore, Flag=SymmetryMapping(_map, "Triangular")
+    GammaW=np.zeros((2, Vol,Vol, TauBin, TauBin), dtype=complex)
+    for s in range(2):
+        GammaW[s,...]=CompactGammaW[s,...].flat[Squeeze]
+        npma.conjugate(GammaW[s,...], out=GammaW[s,...], where=Flag)
+        GammaW[s,...][Flag]*=-1
     return GammaW
 
 
