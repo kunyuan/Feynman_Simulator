@@ -406,7 +406,7 @@ def AddTwoW_To_GammaW(GammaW, W0, W, _map):
         print "0", r1, np.amax(np.abs(WWGammaW[0,r1,:,:]-WWGammaW2[0,r1,:,:]))
     for r1 in range(8):
         print "1", r1,t, np.amax(np.abs(WWGammaW[1,r1,:,:,:]-WWGammaW2[1,r1,:,:,:]))
-    # WWGammaW=WWGammaW2
+    WWGammaW=WWGammaW2
     # # WWGammaW1=FitGammaW(WWGammaW, _map)
     # # WWGammaW2=RestoreGammaW(WWGammaW1, _map)
     WWGammaW1=CompressGammaW1(WWGammaW, _map)
@@ -428,14 +428,14 @@ def AddTwoW_To_GammaW(GammaW, W0, W, _map):
     print WWGammaW[1,1,0,32-3,32-8]
 
     print "WWGammaW"
-    print (WWGammaW[1,0,1,1,:])
-    print (WWGammaW[1,0,1,:,1])
+    print (WWGammaW[1,0,1,2,:])
+    # print (WWGammaW[1,0,1,:,1])
     # print (WWGammaW[1,1,0,15,15])
-    print "WWGammaW2"
-    print (WWGammaW2[1,0,1,1,:])
-    print (WWGammaW2[1,0,1,:,1])
+    # print "WWGammaW2"
+    print (WWGammaW2[1,0,1,2,:])
+    # print (WWGammaW2[1,0,1,:,1])
 
-    print (WWGammaW[1,0,1,1,:]-WWGammaW2[1,0,1,1,:])
+    print (WWGammaW[1,0,1,2,:]-WWGammaW2[1,0,1,2,:])
     for r1 in range(8):
         print "0", r1, np.amax(np.abs(WWGammaW[0,r1,:,:]-WWGammaW2[0,r1,:,:]))
     # for r1 in range(8):
@@ -670,6 +670,16 @@ def UnCompressGammaW(CompactGammaW, _map):
     # print "Index", Index
     # return Squeeze, Restore, Flag
 
+# def MirrorR(vec, _map, LatName):
+    # x,y=vec
+    # Lx,Ly=_map.L[0], _map.L[1]
+    # if LatName=="Triangular":
+        # newX=2*Lx-x-y
+        # if newX>=Lx:
+            # newX-=Lx
+        # newY=Ly-y
+    # return newX,newY
+
 def SymmetryMapping(_map, LatName):
     # if LatName=="Triangular":
     Lx, Ly=_map.L[0], _map.L[1]
@@ -678,22 +688,37 @@ def SymmetryMapping(_map, LatName):
     TauSqueeze=np.zeros([TauBin, TauBin], dtype=int)
     TauFlag=np.zeros([TauBin, TauBin], dtype=int)
     Index=0
+    TauRestore=[]
     for t1 in range(TauBin):
         for t2 in range(t1, TauBin):
             TauSqueeze[t1,t2]=Index
             if t1 is not t2:
                 TauSqueeze[t2,t1]=Index
-                Flag[t2,t1]=True
+                TauFlag[t2,t1]=True
+            TauRestore.append((t1, t2))
+            Index+=1
+
+    # RSqueeze=np.zeros([Vol, Vol], dtype=int)
+    # RRstore=[]
+    # for r1 in range(Vol):
+        # for r2 in range(Vol):
+            # RSqueeze[r1,r2]=MirrorR
+    return TauSqueeze, TauRestore, TauFlag
 
 
 def CompressGammaW1(GammaW, _map):
     if len(GammaW.shape)==2:
         #do not need to compress
         return GammaW
-    Squeeze, Restore, Flag=SymmetryMapping(_map, "Triangular")
-    CompactGammaW=np.zeros([2, len(Restore)], dtype=complex)
-    for s in range(2):
-        CompactGammaW[s, :]=GammaW[s,...].flat[Restore]
+    Lx, Ly=_map.L[0], _map.L[1]
+    Vol=_map.Vol
+    TauBin=_map.MaxTauBin
+    TauSqueeze, TauRestore, TauFlag=SymmetryMapping(_map, "Triangular")
+    CompactGammaW=np.zeros([2, _map.Vol, _map.Vol, len(TauRestore)], dtype=complex)
+    # for s in range(2):
+    for t1 in range(TauBin):
+        for t2 in range(t1, TauBin):
+            CompactGammaW[:,:,:,TauSqueeze[t1,t2]]=GammaW[:,:,:,t1,t2]
     return CompactGammaW
 
 def UnCompressGammaW1(CompactGammaW, _map):
@@ -704,12 +729,16 @@ def UnCompressGammaW1(CompactGammaW, _map):
     Lx, Ly=_map.L[0], _map.L[1]
     Vol=_map.Vol
     TauBin=_map.MaxTauBin
-    Squeeze, Restore, Flag=SymmetryMapping(_map, "Triangular")
+    TauSqueeze, TauRestore, TauFlag=SymmetryMapping(_map, "Triangular")
     GammaW=np.zeros((2, Vol,Vol, TauBin, TauBin), dtype=complex)
-    for s in range(2):
-        GammaW[s,...]=CompactGammaW[s,...].flat[Squeeze]
-        npma.conjugate(GammaW[s,...], out=GammaW[s,...], where=Flag)
-        GammaW[s,...][Flag]*=-1
+    GammaW1=np.zeros((2, Vol,Vol, TauBin, TauBin), dtype=complex)
+    for t1 in range(TauBin):
+        for t2 in range(0, t1):
+            GammaW[:,:,:,t1,t2]=-np.conj(CompactGammaW[:,:,:,TauSqueeze[t1,t2]])
+    GammaW=GammaW.swapaxes(1,2)
+    for t1 in range(TauBin):
+        for t2 in range(t1, TauBin):
+            GammaW[:,:,:,t1,t2]=CompactGammaW[:,:,:,TauSqueeze[t1,t2]]
     return GammaW
 
 
