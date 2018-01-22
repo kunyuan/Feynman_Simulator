@@ -406,7 +406,7 @@ def AddTwoW_To_GammaW(GammaW, W0, W, _map):
         print "0", r1, np.amax(np.abs(WWGammaW[0,r1,:,:]-WWGammaW2[0,r1,:,:]))
     for r1 in range(8):
         print "1", r1,t, np.amax(np.abs(WWGammaW[1,r1,:,:,:]-WWGammaW2[1,r1,:,:,:]))
-    WWGammaW=WWGammaW2
+    # WWGammaW=WWGammaW2
     # # WWGammaW1=FitGammaW(WWGammaW, _map)
     # # WWGammaW2=RestoreGammaW(WWGammaW1, _map)
     WWGammaW1=CompressGammaW1(WWGammaW, _map)
@@ -424,15 +424,25 @@ def AddTwoW_To_GammaW(GammaW, W0, W, _map):
     # # print (GammaW2[1,0,0,:,:]).diagonal()
     # # print (GammaW[1,0,0,:,:]-GammaW2[1,0,0,:,:]).diagonal()
 
-    # print (WWGammaW[1,0,1,:,:]).diagonal()
-    # print (WWGammaW[1,1,0,:,:]).diagonal()
+    print WWGammaW[1,1,0,3,8]
+    print WWGammaW[1,1,0,32-3,32-8]
+
+    print "WWGammaW"
+    print (WWGammaW[1,0,1,1,:])
+    print (WWGammaW[1,0,1,:,1])
     # print (WWGammaW[1,1,0,15,15])
-    # print (WWGammaW2[1,0,1,15,15])
-    # print (WWGammaW[1,0,1,15,15]-WWGammaW2[1,0,1,15,15])
+    print "WWGammaW2"
+    print (WWGammaW2[1,0,1,1,:])
+    print (WWGammaW2[1,0,1,:,1])
+
+    print (WWGammaW[1,0,1,1,:]-WWGammaW2[1,0,1,1,:])
     for r1 in range(8):
         print "0", r1, np.amax(np.abs(WWGammaW[0,r1,:,:]-WWGammaW2[0,r1,:,:]))
-    for r1 in range(8):
-        print "1", r1,t, np.amax(np.abs(WWGammaW[1,r1,:,:,:]-WWGammaW2[1,r1,:,:,:]))
+    # for r1 in range(8):
+        # for r2 in range(8):
+    r1,r2=0,1
+    for t in range(_map.MaxTauBin):
+        print "1", r1, r2, t, np.amax(np.abs(WWGammaW[1,r1,r2,t,:]-WWGammaW2[1,r1,r2,t,:]))
 
     return -1.0*WWGammaW
 
@@ -637,27 +647,44 @@ def UnCompressGammaW(CompactGammaW, _map):
     GammaW=GammaW.swapaxes(2,3)
     return GammaW
 
+# def SymmetryMapping(_map, LatName):
+    # # if LatName=="Triangular":
+    # Lx, Ly=_map.L[0], _map.L[1]
+    # Vol=_map.Vol
+    # TauBin=_map.MaxTauBin
+    # Squeeze=np.arange(Vol**2*TauBin**2, dtype=int).reshape([Vol, Vol, TauBin, TauBin])
+    # Restore=[]
+    # Flag=np.zeros([Vol, Vol, TauBin, TauBin], dtype=bool)
+    # # Restore=np.zeros([Vol, Vol, TauBin, TauBin], dtype=int)
+    # Index=0
+    # for r1 in range(Vol):
+        # for r2 in range(Vol):
+            # for t1 in range(TauBin):
+                # for t2 in range(t1, TauBin):
+                    # Squeeze[r1,r2,t1,t2]=Index
+                    # Restore.append(r1*Vol*TauBin**2+r2*TauBin**2+t1*TauBin+t2)
+                    # if t1 is not t2:
+                        # Squeeze[r1,r2,t2,t1]=Index
+                        # Flag[r1,r2,t2,t1]=True
+                    # Index+=1
+    # print "Index", Index
+    # return Squeeze, Restore, Flag
+
 def SymmetryMapping(_map, LatName):
     # if LatName=="Triangular":
     Lx, Ly=_map.L[0], _map.L[1]
     Vol=_map.Vol
     TauBin=_map.MaxTauBin
-    Squeeze=np.arange(Vol**2*TauBin**2, dtype=int).reshape([Vol, Vol, TauBin, TauBin])
-    Restore=[]
-    Flag=np.zeros([Vol, Vol, TauBin, TauBin], dtype=bool)
-    # Restore=np.zeros([Vol, Vol, TauBin, TauBin], dtype=int)
+    TauSqueeze=np.zeros([TauBin, TauBin], dtype=int)
+    TauFlag=np.zeros([TauBin, TauBin], dtype=int)
     Index=0
-    for r1 in range(Vol):
-        for r2 in range(Vol):
-            for t1 in range(TauBin):
-                for t2 in range(t1, TauBin):
-                    Squeeze[r1,r2,t1,t2]=Index
-                    Squeeze[r1,r2,t2,t1]=Index
-                    Flag[r1,r2,t2,t1]=True
-                    Restore.append(r1*Vol*TauBin**2+r2*TauBin**2+t1*TauBin+t2)
-                    Index+=1
-    print "Index", Index
-    return Squeeze, Restore, Flag
+    for t1 in range(TauBin):
+        for t2 in range(t1, TauBin):
+            TauSqueeze[t1,t2]=Index
+            if t1 is not t2:
+                TauSqueeze[t2,t1]=Index
+                Flag[t2,t1]=True
+
 
 def CompressGammaW1(GammaW, _map):
     if len(GammaW.shape)==2:
