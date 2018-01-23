@@ -442,7 +442,7 @@ def AddTwoW_To_GammaW(GammaW, W0, W, _map):
         # for r2 in range(8):
     r1,r2=0,1
     for t in range(_map.MaxTauBin):
-        print "1", r1, r2, t, np.amax(np.abs(WWGammaW[1,r1,r2,t,:]-WWGammaW2[1,r1,r2,t,:]))
+        print "1", r1, r2, t, np.amax(np.abs(WWGammaW[1,:,:,t,:]-WWGammaW2[1,:,:,t,:]))
 
     return -1.0*WWGammaW
 
@@ -670,18 +670,37 @@ def UnCompressGammaW(CompactGammaW, _map):
     # print "Index", Index
     # return Squeeze, Restore, Flag
 
-# def MirrorR(vec, _map, LatName):
-    # x,y=vec
-    # Lx,Ly=_map.L[0], _map.L[1]
-    # if LatName=="Triangular":
-        # newX=2*Lx-x-y
-        # if newX>=Lx:
-            # newX-=Lx
-        # newY=Ly-y
-    # return newX,newY
+def GetR(r, L):
+    if r<0:
+        r+=L
+    if r<0:
+        r+=L
+    if r>=L:
+        r-=L
+    if r>=L:
+        r-=L
+    return r
+
+def MirrorR(vec, _map, LatName):
+    x1, y1, x2, y2=vec
+    Lx,Ly=_map.L[0], _map.L[1]
+    Rlist=[vec,]
+    
+    if LatName=="Triangular":
+        Rlist.append((GetR(-x1-y1, Lx), y1, GetR(-x2-y2, Lx), y2)) 
+        Rlist.append((GetR(-x1, Lx), GetR(-y1, Ly), GetR(-x2, Lx), GetR(-y2, Ly))) 
+        Rlist.append((GetR(x1+y1, Lx), GetR(-y1, Ly), GetR(x2+y2, Lx), GetR(-y2, Ly))) 
+    elif LatName=="Square":
+        Rlist.append((GetR(-x1, Lx), y1, GetR(-x2, Lx), y2)) 
+        Rlist.append((GetR(-x1, Lx), GetR(-y1, Ly), GetR(-x2, Lx), GetR(-y2, Ly))) 
+        Rlist.append((GetR(x1, Lx), GetR(-y1, Ly), GetR(x2, Lx), GetR(-y2, Ly))) 
+    return set(Rlist)
 
 def SymmetryMapping(_map, LatName):
     # if LatName=="Triangular":
+    print "test:", MirrorR((1,0,0,1), _map, "Triangular")
+    print "test:", MirrorR((1,0,7,2), _map, "Triangular")
+    print "test:", MirrorR((1,0,1,1), _map, "Triangular")
     Lx, Ly=_map.L[0], _map.L[1]
     Vol=_map.Vol
     TauBin=_map.MaxTauBin
@@ -698,12 +717,37 @@ def SymmetryMapping(_map, LatName):
             TauRestore.append((t1, t2))
             Index+=1
 
-    # RSqueeze=np.zeros([Vol, Vol], dtype=int)
-    # RRstore=[]
+    RSqueeze=np.zeros([Vol, Vol], dtype=int)
+    RRestore=[]
     # for r1 in range(Vol):
         # for r2 in range(Vol):
-            # RSqueeze[r1,r2]=MirrorR
-    return TauSqueeze, TauRestore, TauFlag
+    Points=[]
+    Index=0
+    for x1 in range(Lx):
+        for y1 in range(Ly):
+            for x2 in range(Lx):
+                for y2 in range(Ly):
+                    vec=(x1,y1,x2,y2)
+                    if vec in Points:
+                        continue
+                    Rlist=MirrorR(vec, _map, LatName)
+                    # Rlist=MirrorR(vec, _map, "Square")
+                    # for e in Rlist:
+                        # if e in Points:
+                            # print "error:", e
+                    # print len(Rlist)
+                    for e in Rlist:
+                        Points.append(e)
+                        r1=_map.CoordiIndex((e[0],e[1]))
+                        r2=_map.CoordiIndex((e[2],e[3]))
+                        RSqueeze[r1,r2]=Index
+                    Index+=1
+                    e=list(Rlist)[0]
+                    r1=_map.CoordiIndex((e[0],e[1]))
+                    r2=_map.CoordiIndex((e[2],e[3]))
+                    RRestore.append((r1,r2))
+    RSize=Index
+    return TauSqueeze, TauRestore, TauFlag, RSqueeze, RRestore
 
 
 def CompressGammaW1(GammaW, _map):
@@ -713,13 +757,20 @@ def CompressGammaW1(GammaW, _map):
     Lx, Ly=_map.L[0], _map.L[1]
     Vol=_map.Vol
     TauBin=_map.MaxTauBin
-    TauSqueeze, TauRestore, TauFlag=SymmetryMapping(_map, "Triangular")
+    TauSqueeze, TauRestore, TauFlag, RSqueeze, RRestore=SymmetryMapping(_map, "Triangular")
     CompactGammaW=np.zeros([2, _map.Vol, _map.Vol, len(TauRestore)], dtype=complex)
     # for s in range(2):
     for t1 in range(TauBin):
         for t2 in range(t1, TauBin):
             CompactGammaW[:,:,:,TauSqueeze[t1,t2]]=GammaW[:,:,:,t1,t2]
-    return CompactGammaW
+
+    RCompactGammaW=np.zeros([2, len(RRestore), len(TauRestore)], dtype=complex)
+    # print RRestore
+    for i in range(len(RRestore)):
+        r1,r2=RRestore[i]
+        # print i, r1, r2
+        RCompactGammaW[:,i,:]=CompactGammaW[:,r1,r2,:]
+    return RCompactGammaW
 
 def UnCompressGammaW1(CompactGammaW, _map):
     import numpy.ma as npma
@@ -729,16 +780,21 @@ def UnCompressGammaW1(CompactGammaW, _map):
     Lx, Ly=_map.L[0], _map.L[1]
     Vol=_map.Vol
     TauBin=_map.MaxTauBin
-    TauSqueeze, TauRestore, TauFlag=SymmetryMapping(_map, "Triangular")
-    GammaW=np.zeros((2, Vol,Vol, TauBin, TauBin), dtype=complex)
-    GammaW1=np.zeros((2, Vol,Vol, TauBin, TauBin), dtype=complex)
+    TauSqueeze, TauRestore, TauFlag, RSqueeze, RRestore=SymmetryMapping(_map, "Triangular")
+
+    TauGammaW=np.zeros((2, Vol, Vol, len(TauRestore)), dtype=complex)
+    for r1 in range(Vol):
+        for r2 in range(Vol):
+            TauGammaW[:,r1,r2,:]=CompactGammaW[:,RSqueeze[r1,r2],:]
+
+    GammaW=np.zeros((2, Vol, Vol, TauBin, TauBin), dtype=complex)
     for t1 in range(TauBin):
         for t2 in range(0, t1):
-            GammaW[:,:,:,t1,t2]=-np.conj(CompactGammaW[:,:,:,TauSqueeze[t1,t2]])
+            GammaW[:,:,:,t1,t2]=-np.conj(TauGammaW[:,:,:,TauSqueeze[t1,t2]])
     GammaW=GammaW.swapaxes(1,2)
     for t1 in range(TauBin):
         for t2 in range(t1, TauBin):
-            GammaW[:,:,:,t1,t2]=CompactGammaW[:,:,:,TauSqueeze[t1,t2]]
+            GammaW[:,:,:,t1,t2]=TauGammaW[:,:,:,TauSqueeze[t1,t2]]
     return GammaW
 
 
