@@ -551,6 +551,14 @@ def Calculate_Chi(ChiTensor, _map):
         Chi.Data+=temp.reshape([1, NSublat, 1, NSublat, _map.Vol, _map.MaxTauBin]) 
     return Chi
 
+class DenorminatorTouchZero(Exception):
+    def __init__(self, value, pos, freq):
+       self.value = value
+       self.position=pos
+       self.frequency=freq
+    def __str__(self):
+        return "BKChi Denorminator touch zero, minmum {0} is at K={1} and Omega={2}".format(self.value, self.position, self.frequency)
+
 def Check_Denorminator(Denorm, Determ, _map):
     pos=np.where(Determ==Determ.min())
     x,t=pos[0][0], pos[1][0]
@@ -647,29 +655,6 @@ def UnCompressGammaW(CompactGammaW, _map):
     GammaW=GammaW.swapaxes(2,3)
     return GammaW
 
-# def SymmetryMapping(_map, LatName):
-    # # if LatName=="Triangular":
-    # Lx, Ly=_map.L[0], _map.L[1]
-    # Vol=_map.Vol
-    # TauBin=_map.MaxTauBin
-    # Squeeze=np.arange(Vol**2*TauBin**2, dtype=int).reshape([Vol, Vol, TauBin, TauBin])
-    # Restore=[]
-    # Flag=np.zeros([Vol, Vol, TauBin, TauBin], dtype=bool)
-    # # Restore=np.zeros([Vol, Vol, TauBin, TauBin], dtype=int)
-    # Index=0
-    # for r1 in range(Vol):
-        # for r2 in range(Vol):
-            # for t1 in range(TauBin):
-                # for t2 in range(t1, TauBin):
-                    # Squeeze[r1,r2,t1,t2]=Index
-                    # Restore.append(r1*Vol*TauBin**2+r2*TauBin**2+t1*TauBin+t2)
-                    # if t1 is not t2:
-                        # Squeeze[r1,r2,t2,t1]=Index
-                        # Flag[r1,r2,t2,t1]=True
-                    # Index+=1
-    # print "Index", Index
-    # return Squeeze, Restore, Flag
-
 def GetR(r, L):
     if r<0:
         r+=L
@@ -697,30 +682,31 @@ def MirrorR(vec, _map, LatName):
     return set(Rlist)
 
 def SymmetryMapping(_map, LatName):
-    # if LatName=="Triangular":
-    print "test:", MirrorR((1,0,0,1), _map, "Triangular")
-    print "test:", MirrorR((1,0,7,2), _map, "Triangular")
-    print "test:", MirrorR((1,0,1,1), _map, "Triangular")
+    # print "test:", MirrorR((1,0,0,1), _map, "Triangular")
+    # print "test:", MirrorR((1,0,7,2), _map, "Triangular")
+    # print "test:", MirrorR((1,0,1,1), _map, "Triangular")
     Lx, Ly=_map.L[0], _map.L[1]
     Vol=_map.Vol
     TauBin=_map.MaxTauBin
     TauSqueeze=np.zeros([TauBin, TauBin], dtype=int)
-    TauFlag=np.zeros([TauBin, TauBin], dtype=int)
+    TauSymFactor=np.zeros([TauBin, TauBin], dtype=int)
     Index=0
     TauRestore=[]
     for t1 in range(TauBin):
         for t2 in range(t1, TauBin):
             TauSqueeze[t1,t2]=Index
+            TauSymFactor[t1,t2]=2
             if t1 is not t2:
                 TauSqueeze[t2,t1]=Index
-                TauFlag[t2,t1]=True
+                TauSymFactor[t2,t1]=2
+            if t1 is t2:
+                TauSymFactor[t1,t1]=1
             TauRestore.append((t1, t2))
             Index+=1
 
     RSqueeze=np.zeros([Vol, Vol], dtype=int)
+    RSymFactor=np.zeros([Vol, Vol], dtype=int)
     RRestore=[]
-    # for r1 in range(Vol):
-        # for r2 in range(Vol):
     Points=[]
     Index=0
     for x1 in range(Lx):
@@ -746,8 +732,10 @@ def SymmetryMapping(_map, LatName):
                     r1=_map.CoordiIndex((e[0],e[1]))
                     r2=_map.CoordiIndex((e[2],e[3]))
                     RRestore.append((r1,r2))
+                    RSymFactor[r1,r2]=len(Rlist)
     RSize=Index
-    return TauSqueeze, TauRestore, TauFlag, RSqueeze, RRestore
+    # print "sum",sum(sum(RSymFactor))
+    return TauSqueeze, TauRestore, TauSymFactor, RSqueeze, RRestore, RSymFactor
 
 
 def CompressGammaW1(GammaW, _map):
@@ -757,7 +745,7 @@ def CompressGammaW1(GammaW, _map):
     Lx, Ly=_map.L[0], _map.L[1]
     Vol=_map.Vol
     TauBin=_map.MaxTauBin
-    TauSqueeze, TauRestore, TauFlag, RSqueeze, RRestore=SymmetryMapping(_map, "Triangular")
+    TauSqueeze, TauRestore, TauSymFactor, RSqueeze, RRestore, RSymFactor=SymmetryMapping(_map, "Triangular")
     CompactGammaW=np.zeros([2, _map.Vol, _map.Vol, len(TauRestore)], dtype=complex)
     # for s in range(2):
     for t1 in range(TauBin):
@@ -773,14 +761,14 @@ def CompressGammaW1(GammaW, _map):
     return RCompactGammaW
 
 def UnCompressGammaW1(CompactGammaW, _map):
-    import numpy.ma as npma
+    # import numpy.ma as npma
     if len(CompactGammaW.shape)==5:
         #do not need to uncompress
         return CompactGammaW
     Lx, Ly=_map.L[0], _map.L[1]
     Vol=_map.Vol
     TauBin=_map.MaxTauBin
-    TauSqueeze, TauRestore, TauFlag, RSqueeze, RRestore=SymmetryMapping(_map, "Triangular")
+    TauSqueeze, TauRestore, TauSymFactor, RSqueeze, RRestore, RSymFactor=SymmetryMapping(_map, "Triangular")
 
     TauGammaW=np.zeros((2, Vol, Vol, len(TauRestore)), dtype=complex)
     for r1 in range(Vol):
