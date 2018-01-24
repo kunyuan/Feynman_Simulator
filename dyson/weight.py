@@ -29,7 +29,7 @@ class IndexMap:
         self.NSublat=NSublat
         self.__dBeta=Beta/self.MaxTauBin
         self.__dBetaInverse=1.0/self.__dBeta
-        self.__Symmetry=Symmetry
+        self.Symmetry=Symmetry
 
     def GetPara(self):
         return {"L":self.L, "NSublat":self.NSublat, \

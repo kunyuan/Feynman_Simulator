@@ -331,6 +331,7 @@ if __name__=="__main__":
             log.warning(red("Previous DYSHON_para file does not exist, use _in_DYSON_ file as para instead"))
             parameter.Save(ParaFile, para)  #Save Parameters
 
+    para["Model"]["Symmetry"].append(para["Lattice"]["Name"])
     WeightPara={"NSublat": para["Lattice"]["NSublat"], "L":para["Lattice"]["L"],
             "Beta": float(para["Tau"]["Beta"]), "MaxTauBin": para["Tau"]["MaxTauBin"],
             "MaxTauBinTiny": para["Tau"]["MaxTauBinTiny"], "BasisNum": para["Tau"]["BasisNum"], "Symmetry": para["Model"]["Symmetry"]}
