@@ -87,8 +87,8 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
         data["BKChi"]=BKChi.ToDict()
         data["GGGammaG"]={"SmoothT": GGGammaG}
         if WWGammaW is not None:
-            # TauSqueeze, TauRestore, TauSymFactor, RSqueeze, RRestore, RSymFactor=SymmetryMapping(Map, "Triangular")
-            data["WWGammaW"]={"SmoothT": gamma3.CompressGammaW(WWGammaW, Map)}
+            TauSqueeze, TauRestore, TauSymFactor, RSqueeze, RRestore, RSymFactor=gamma3.SymmetryMapping(Map)
+            data["WWGammaW"]={"SmoothT": gamma3.CompressGammaW(WWGammaW, Map), "TauSqueeze": TauSqueeze, "TauSymFactor": TauSymFactor, "RSqueeze": RSqueeze, "RSymFactor": RSymFactor}
             # data["WWGammaW"]={"SmoothT": WWGammaW}
 
     Observable.Measure(Chi, BKChi, Determ, G, Factory.NearestNeighbor)

@@ -48,7 +48,7 @@ Common={
     #"Name": "Kagome", "NSublat": 3,
     "Name": "Triangular", "NSublat": 1,
     # "Name": "Assymetric_Triangular", "NSublat": 3,
-    "L": [8,8]
+    "L": [16,16]
 
     #3D lattice
     #"Name": "Cubic", "NSublat": 1,
