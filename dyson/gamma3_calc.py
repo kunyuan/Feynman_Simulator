@@ -320,7 +320,8 @@ def AddTwoW_To_GammaW(GammaW, W0, W, _map):
     DOWNDOWN=_map.Spin2Index(DOWN,DOWN)
     UPDOWN=_map.Spin2Index(UP,DOWN)
     DOWNUP=_map.Spin2Index(DOWN,UP)
-    TauBin=_map.MaxTauBin
+
+    TauBin=_map.MaxTauBinTiny
 
     spinindex, spin2index=GenerateSpinIndex(_map)
 
@@ -669,6 +670,7 @@ def SymmetryMapping(_map):
     Points=set()
     Index=0
     SiteList=[]
+    GroupList=set()
     for x1 in range(Lx):
         for y1 in range(Ly):
             for x2 in range(Lx):
@@ -684,15 +686,16 @@ def SymmetryMapping(_map):
             RSqueeze[r1,r2]=Index
             Points.add((x1,y1,x2,y2))
         Index+=1
-        Factor=len(Rlist)
-        (x1,y1,x2,y2)=Rlist.pop()
+        (x1,y1,x2,y2)=sorted(Rlist)[0]
+        GroupList.add(tuple((x1,y1,x2,y2)))
         r1=_map.CoordiIndex((x1,y1))
         r2=_map.CoordiIndex((x2,y2))
         RRestore.append((r1,r2))
-        RSymFactor[r1,r2]=Factor  #one element already pops
+        RSymFactor[r1,r2]=len(Rlist)  #one element already pops
     RSize=Index
-    print RSize
-    print "sum",sum(sum(RSymFactor))
+    # print RSize
+    # print "sum",sum(sum(RSymFactor))
+    # print sorted(list(GroupList))
     return TauSqueeze, TauRestore, TauSymFactor, RSqueeze, RRestore, RSymFactor
 
 
@@ -727,7 +730,7 @@ def UnCompressGammaW(CompactGammaW, _map):
         return CompactGammaW
     Lx, Ly=_map.L[0], _map.L[1]
     Vol=_map.Vol
-    TauBin=_map.MaxTauBin
+    TauBin=_map.MaxTauBinTiny
     TauSqueeze, TauRestore, TauSymFactor, RSqueeze, RRestore, RSymFactor=SymmetryMapping(_map)
 
     TauGammaW=np.zeros((2, Vol, Vol, len(TauRestore)), dtype=np.complex64)

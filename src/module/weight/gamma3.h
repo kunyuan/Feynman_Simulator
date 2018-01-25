@@ -62,7 +62,7 @@ namespace weight {
 
     class GammaWClass {
     public:
-        GammaWClass(const Lattice &, real Beta, uint MaxTauBin, std::vector<basis> &, real Norm = Norm::Weight());
+        GammaWClass(const Lattice &, real Beta, uint MaxTauBinTiny, std::vector<basis> &, real Norm = Norm::Weight());
 
 //        void BuildNew();
 //    void BuildTest();
@@ -86,8 +86,8 @@ namespace weight {
 
     protected:
         IndexMapSPIN4 _Map;
-        WeightArray<2> _Weight; //Wspin, W_r1, W_dr, Wtau1,Wtau2
-        WeightArray<2> _WeightAccu; //Wspin, W_r1, W_dr, Wtau1,dtau2
+        WeightArray<3> _Weight; //Wspin, W_r1, W_dr, Wtau1,Wtau2
+        WeightArray<3> _WeightAccu; //Wspin, W_r1, W_dr, Wtau1,dtau2
         uint _CacheIndex[5];
         uint _CacheIndexBasis[5];
         //don't forget to add template class in weight_array.cpp file
@@ -96,7 +96,7 @@ namespace weight {
         real _NormAccu; //The normalization accumulation
         uint _WeightSize;
         real _dBetaInverse;
-        uint _MaxTauBin;
+        uint _MaxTauBinTiny;
         uint _Vol;
         uint _SpinIndex(spin *, spin*) const;
         std::vector<basis> _BasisVec;
@@ -104,5 +104,11 @@ namespace weight {
         uint _BasisMaxTauBin;
         uint _SpaceTimeSize;
         uint _GetIndex(int, int, real, real, int& SymmetryFactor, bool& DoesMirrored) const;
+        std::vector<std::vector<int>> _TauSqueeze;
+        std::vector<std::vector<int>> _RSqueeze;
+        std::vector<std::vector<int>> _TauSymFactor;
+        std::vector<std::vector<int>> _RSymFactor;
+        uint _RSize;
+        uint _TauSize;
     };
 };

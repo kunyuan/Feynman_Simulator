@@ -27,11 +27,14 @@ Dyson={
 }
 
 Beta=0.8
-MaxTauBin=32
-MaxTauBinTiny=32
-BasisNum=16
 Order=6
+MaxTauBin=32
+L=8
+
 Gamma3=True
+MaxTauBinTiny=MaxTauBin #the tau bin for large object like GammaW
+BasisNum=16 #the number of basis
+
 Common={
 "Gamma3": Gamma3,
 "Tau": {"MaxTauBin" : MaxTauBin, "Beta": Beta, "MaxTauBinTiny": MaxTauBinTiny, "BasisNum": BasisNum},
@@ -48,13 +51,13 @@ Common={
     #"Name": "Kagome", "NSublat": 3,
     "Name": "Triangular", "NSublat": 1,
     # "Name": "Assymetric_Triangular", "NSublat": 3,
-    "L": [16,16]
+    "L": [L,L]
 
     #3D lattice
     #"Name": "Cubic", "NSublat": 1,
     #"Name": "3DCheckerboard", "NSublat": 2,
     #"Name": "Pyrochlore", "NSublat": 4,
-    #"L": [4,4,4]
+    #"L": [L,L,L]
     },
 "Model": {
     # "Name": "J1J2",

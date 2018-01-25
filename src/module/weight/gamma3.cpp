@@ -167,18 +167,18 @@ Dictionary GammaGClass::WeightToDict()
 }
 
 
-GammaWClass::GammaWClass(const Lattice &lat, real beta, uint MaxTauBin,  std::vector<basis> & BoseBasis, real Norm)
-        : _Map(IndexMapSPIN4(beta, MaxTauBin, lat, TauSymmetric))
+GammaWClass::GammaWClass(const Lattice &lat, real beta, uint MaxTauBinTiny,  std::vector<basis> & BoseBasis, real Norm)
+        : _Map(IndexMapSPIN4(beta, MaxTauBinTiny, lat, TauSymmetric))
 {
     int Vol = _Map.Lat.Vol;
     _Vol=Vol;
     _Beta = _Map.Beta;
     _Norm = Norm * pow(_Map.MaxTauBin / _Beta, 2.0) / _Beta / Vol;
 
-    _MaxTauBin = MaxTauBin;
-    _dBetaInverse = _MaxTauBin/_Beta;
+    _MaxTauBinTiny = MaxTauBinTiny;
+    _dBetaInverse = _MaxTauBinTiny/_Beta;
 //    uint SubVol=(uint)lat.SublatVol;
-    _SpaceTimeSize=(MaxTauBin*Vol+1)*(MaxTauBin*Vol)/2;
+    _SpaceTimeSize=(MaxTauBinTiny*Vol+1)*(MaxTauBinTiny*Vol)/2;
 
 //    uint WeightShape[5] = {2, (uint)Vol, (uint)Vol, MaxTauBin, MaxTauBin};
     uint WeightShape[5] = {2, _SpaceTimeSize};
@@ -196,10 +196,10 @@ GammaWClass::GammaWClass(const Lattice &lat, real beta, uint MaxTauBin,  std::ve
     _WeightSize = _WeightAccu.GetSize();
 
     _CacheIndex[0] = 1;
-    _CacheIndex[1] = MaxTauBin;
-    _CacheIndex[2] = MaxTauBin*MaxTauBin;
-    _CacheIndex[3] = MaxTauBin*MaxTauBin*Vol;
-    _CacheIndex[4] = MaxTauBin*MaxTauBin*Vol*Vol;
+    _CacheIndex[1] = MaxTauBinTiny;
+    _CacheIndex[2] = MaxTauBinTiny*MaxTauBinTiny;
+    _CacheIndex[3] = MaxTauBinTiny*MaxTauBinTiny*Vol;
+    _CacheIndex[4] = MaxTauBinTiny*MaxTauBinTiny*Vol*Vol;
 
     _CacheIndexBasis[0] = 1;
     _CacheIndexBasis[1] = _BasisNum;
@@ -239,8 +239,8 @@ uint GammaWClass::_GetIndex(int r1, int r2, real t1, real t2, int& SymmetryFacto
     }
     int t2Index=floor(t2*_dBetaInverse);
 
-    auto Row=r1*_MaxTauBin+t1Index;
-    auto Col=r2*_MaxTauBin+t2Index;
+    auto Row=r1*_MaxTauBinTiny+t1Index;
+    auto Col=r2*_MaxTauBinTiny+t2Index;
 
     if(Row>Col){
         auto temp=Row;
@@ -255,7 +255,7 @@ uint GammaWClass::_GetIndex(int r1, int r2, real t1, real t2, int& SymmetryFacto
     else
         SymmetryFactor=2.0;
 //    uint Index = coord_r1 * _CacheIndex[3] + coord_r2 * _CacheIndex[2]+ t1Index * _CacheIndex[1] + t2Index;
-    uint Index=(_MaxTauBin*_Vol*Row)+Col-(Row*(Row+1))/2;
+    uint Index=(_MaxTauBinTiny*_Vol*Row)+Col-(Row*(Row+1))/2;
     return Index;
 }
 
@@ -453,6 +453,13 @@ void GammaWClass::SqueezeStatistics(real factor)
 /**********************   Weight IO ****************************************/
 
 bool GammaWClass::WeightFromDict(const Dictionary& dict) {
+    auto _RSqueeze=dict.Get<vector<vector<int>>("RSqueeze");
+    auto _TauSqueeze=dict.Get<vector<vector<int>>("TauSqueeze");
+    auto _RSymFactor=dict.Get<vector<vector<int>>("RSymFactor");
+    auto _TauSymFactor=dict.Get<vector<vector<int>>("TauSymFactor");
+    auto _RSize=dict.Get<uint>("RSize")
+    auto _TauSize=dict.Get<uint>("TauSize")
+
     _Weight.FromDict(dict);
     return true;
 }

@@ -24,6 +24,7 @@ public:
     int Version;
     real Beta;
     uint MaxTauBin;
+    uint MaxTauBinTiny;
     int Order;
     int NSublat;
 

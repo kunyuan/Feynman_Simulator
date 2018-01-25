@@ -178,7 +178,7 @@ void weight::Weight::_AllocateGammaGW(const ParaMC &para)
     if(GammaG== nullptr)
         GammaG = new weight::GammaGClass(para.Lat, para.Beta, para.MaxTauBin);
     if(GammaW== nullptr)
-        GammaW = new weight::GammaWClass(para.Lat, para.Beta, para.MaxTauBin, _BoseBasis);
+        GammaW = new weight::GammaWClass(para.Lat, para.Beta, para.MaxTauBinTiny, _BoseBasis);
 }
 
 bool weight::Weight::_LoadBasis(real Beta)

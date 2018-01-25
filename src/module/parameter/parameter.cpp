@@ -33,6 +33,7 @@ bool Parameter::_FromDict(const Dictionary& Para)
     auto _para = Para.Get<Dictionary>("Tau");
     GET(_para, Beta);
     GET(_para, MaxTauBin);
+    GET(_para, MaxTauBinTiny);
     _para = Para.Get<Dictionary>("Lattice");
     GET(_para, NSublat);
     GET(_para, L);
@@ -54,6 +55,7 @@ Dictionary Parameter::_ToDict()
     _para.Clear();
     SET(_para, Beta);
     SET(_para, MaxTauBin);
+    SET(_para, MaxTauBinTiny);
     Para["Tau"] = _para;
     SET(Para, Version);
     return Para;
@@ -145,4 +147,5 @@ void ParaMC::SetTest()
     T = 1.0 / Beta;
     Counter = 0;
     MaxTauBin = 32;
+    MaxTauBinTiny = 32;
 }
