@@ -181,9 +181,9 @@ GammaWClass::GammaWClass(const Lattice &lat, real beta, uint MaxTauBinTiny,  std
     _SpaceTimeSize=(MaxTauBinTiny*Vol+1)*(MaxTauBinTiny*Vol)/2;
 
 //    uint WeightShape[5] = {2, (uint)Vol, (uint)Vol, MaxTauBin, MaxTauBin};
-    uint WeightShape[5] = {2, _SpaceTimeSize};
+    //uint WeightShape[5] = {2, _SpaceTimeSize};
     //Wspin12, W_r1, dW_r2, Wtau1,dtau2
-    _Weight.Allocate(WeightShape, SMOOTH);
+    //_Weight.Allocate(WeightShape, SMOOTH);
 
     _BasisVec.swap(BoseBasis);
     _BasisNum=_BasisVec.size();
@@ -192,8 +192,8 @@ GammaWClass::GammaWClass(const Lattice &lat, real beta, uint MaxTauBinTiny,  std
 
 //    uint MeaShape[5] = {2, (uint)Vol, (uint)Vol, _MaxTauBin, _MaxTauBin};
 //    uint MeaShape[5] = {2, _SpaceTimeSize};
-    _WeightAccu.Allocate(WeightShape, SMOOTH);
-    _WeightSize = _WeightAccu.GetSize();
+    //_WeightAccu.Allocate(WeightShape, SMOOTH);
+    //_WeightSize = _WeightAccu.GetSize();
 
     _CacheIndex[0] = 1;
     _CacheIndex[1] = MaxTauBinTiny;
@@ -453,12 +453,20 @@ void GammaWClass::SqueezeStatistics(real factor)
 /**********************   Weight IO ****************************************/
 
 bool GammaWClass::WeightFromDict(const Dictionary& dict) {
-    auto _RSqueeze=dict.Get<vector<vector<int>>("RSqueeze");
-    auto _TauSqueeze=dict.Get<vector<vector<int>>("TauSqueeze");
-    auto _RSymFactor=dict.Get<vector<vector<int>>("RSymFactor");
-    auto _TauSymFactor=dict.Get<vector<vector<int>>("TauSymFactor");
-    auto _RSize=dict.Get<uint>("RSize")
-    auto _TauSize=dict.Get<uint>("TauSize")
+    _RSqueeze=dict.Get<vector<vector<int>>>("RSqueeze");
+    _TauSqueeze=dict.Get<vector<vector<int>>>("TauSqueeze");
+    _RSymFactor=dict.Get<vector<vector<int>>>("RSymFactor");
+    _TauSymFactor=dict.Get<vector<vector<int>>>("TauSymFactor");
+    _RSize=dict.Get<uint>("RSize");
+    _TauSize=dict.Get<uint>("TauSize");
+
+    uint WeightShape[5] = {2, _RSize, _TauSize};
+    //Wspin12, W_r1, dW_r2, Wtau1,dtau2
+    _Weight.Allocate(WeightShape, SMOOTH);
+//    uint MeaShape[5] = {2, (uint)Vol, (uint)Vol, _MaxTauBin, _MaxTauBin};
+//    uint MeaShape[5] = {2, _SpaceTimeSize};
+    _WeightAccu.Allocate(WeightShape, SMOOTH);
+    _WeightSize = _WeightAccu.GetSize();
 
     _Weight.FromDict(dict);
     return true;
