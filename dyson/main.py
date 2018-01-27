@@ -62,14 +62,14 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
         # n=Sigma.Data[UP,0,UP,0,0,i]
         # print '%05f %05f %05f' % (i*Map.Beta/Map.MaxTauBin, n.real, n.imag)
 
-    # RestoredWWGammaW=gamma3.RestoreGammaW(WWGammaW, Map, TauBin=32)
-    # RestoredWWGammaW=WWGammaW
-    # print "WWGammaW space symmetry"
-    # print RestoredWWGammaW[0,1,0,0,:]
-    # print RestoredWWGammaW[1,1,0,0,:]
-    # print RestoredWWGammaW[0,0,0,0,:]
-    # print RestoredWWGammaW[0,0,1,0,:]
-    # print WWGammaW.shape
+    # if WWGammaW is not None:
+        # RestoredWWGammaW=gamma3.UnCompressGammaW(WWGammaW, Map)
+        # # RestoredWWGammaW=WWGammaW
+        # print RestoredWWGammaW[0,1,0,0,:]
+        # print RestoredWWGammaW[1,1,0,0,:]
+        # print RestoredWWGammaW[0,0,0,0,:]
+        # print RestoredWWGammaW[0,0,1,0,:]
+        # print WWGammaW.shape
 
     data={}
     data["Chi"]=Chi.ToDict()
@@ -86,13 +86,13 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
 
         data["BKChi"]=BKChi.ToDict()
         data["GGGammaG"]={"SmoothT": GGGammaG}
+        TauSqueeze, TauRestore, TauSymFactor, TauFlag, RSqueeze, RRestore, RSymFactor=gamma3.SymmetryMapping(Map)
+        data["WWGammaW"]={"TauSqueeze": TauSqueeze.flatten().tolist(), "TauSymFactor": TauSymFactor.flatten().tolist(),
+                "TauFlag": TauFlag.flatten().tolist(),
+                "RSqueeze": RSqueeze.flatten().tolist(), "RSymFactor": RSymFactor.flatten().tolist(),
+                "RSize": len(RRestore), "TauSize": len(TauRestore)}
         if WWGammaW is not None:
-            TauSqueeze, TauRestore, TauSymFactor, RSqueeze, RRestore, RSymFactor=gamma3.SymmetryMapping(Map)
-            data["WWGammaW"]={"SmoothT": gamma3.CompressGammaW(WWGammaW, Map),
-                    "TauSqueeze": TauSqueeze, "TauSymFactor": TauSymFactor,
-                    "RSqueeze": RSqueeze, "RSymFactor": RSymFactor,
-                    "RSize": len(RRestore), "TauSize": len(TauRestore)}
-            # data["WWGammaW"]={"SmoothT": WWGammaW}
+            data["WWGammaW"]["SmoothT"]=gamma3.CompressGammaW(WWGammaW, Map)
 
     Observable.Measure(Chi, BKChi, Determ, G, Factory.NearestNeighbor)
 
@@ -192,16 +192,20 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                     print "Calculate GammaG contribution to GGGammaG"
                     GGGammaG_2 = gamma3.AddTwoG_To_GammaG(GammaG, G, G.Map)
 
-                    # the third term: the term from dSigma/dW
-                    # GGGammaG_3 = G*((W*(G*GGGammaG)*W)*G)*G
-                    print "Calculate GammaW"
-                    GammaW = gamma3.AddG_To_GGGammaG(GGGammaG, G, G.Map)
-                    print "Calculate WWGammaW"
-                    WWGammaW = gamma3.AddTwoW_To_GammaW(GammaW, W0, W, G.Map)
-                    print "Calculate GammaG from WWGammaW"
-                    GammaG_FromWWGammaW=gamma3.AddG_To_WWGammaW(WWGammaW, G, G.Map)
-                    print "Calculate WWGammaW contribution to GGGammaG"
-                    GGGammaG_3 = gamma3.AddTwoG_To_GammaG(GammaG_FromWWGammaW, G, G.Map)
+                    if Map.MaxTauBin==Map.MaxTauBinTiny:
+                        # the third term: the term from dSigma/dW
+                        # GGGammaG_3 = G*((W*(G*GGGammaG)*W)*G)*G
+                        print "Calculate GammaW"
+                        GammaW = gamma3.AddG_To_GGGammaG(GGGammaG, G, G.Map)
+                        print "Calculate WWGammaW"
+                        WWGammaW = gamma3.AddTwoW_To_GammaW(GammaW, W0, W, G.Map)
+                        print "Calculate GammaG from WWGammaW"
+                        GammaG_FromWWGammaW=gamma3.AddG_To_WWGammaW(WWGammaW, G, G.Map)
+                        print "Calculate WWGammaW contribution to GGGammaG"
+                        GGGammaG_3 = gamma3.AddTwoG_To_GammaG(GammaG_FromWWGammaW, G, G.Map)
+                    else:
+                        WWGammaW=None
+                        GGGammaG_3=0.0
 
                     SimpleGGGammaG=gamma3.SimpleGG(G, Map)
 

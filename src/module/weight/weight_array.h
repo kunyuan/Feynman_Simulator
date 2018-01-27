@@ -27,7 +27,7 @@ template <uint DIM>
 class WeightArray {
 public:
     WeightArray()
-        : _Data(nullptr){};
+        : _Data(nullptr),IsAllocated(false){};
     //copy sematics everywhere
     WeightArray(const WeightArray& source) = delete;
     WeightArray& operator=(const WeightArray& c) = delete;
@@ -45,6 +45,7 @@ public:
     Complex& operator[](uint Index) { return _Data[Index]; }
     const Complex& operator()(uint Index) const { return _Data[Index]; }
     Complex* Data() { return _Data; }
+    bool IsAllocate() { return IsAllocated; }
 
     bool FromDict(const Dictionary&);
     Dictionary ToDict();

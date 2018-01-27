@@ -354,6 +354,8 @@ def AddTwoW_To_GammaW(GammaW, W0, W, _map):
     Win[0,:,0,:] = Wtot[UPUP, UPUP, :, :] # r1=0, r2, t1=0, t2
 
     GammaW=UnCompressGammaW(GammaW, _map)
+    print GammaW.shape
+    print Wout.shape
 
     # print "Compressing GammaW"
     # GammaW1=CompressGammaW(GammaW, _map)
@@ -647,9 +649,10 @@ def SymmetryMapping(_map):
     # print "test:", MirrorR((1,0,1,1), _map, "Triangular")
     Lx, Ly=_map.L[0], _map.L[1]
     Vol=_map.Vol
-    TauBin=_map.MaxTauBin
+    TauBin=_map.MaxTauBinTiny
     TauSqueeze=np.zeros([TauBin, TauBin], dtype=int)
     TauSymFactor=np.zeros([TauBin, TauBin], dtype=int)
+    TauFlag=np.zeros([TauBin, TauBin], dtype=int)
     Index=0
     TauRestore=[]
     for t1 in range(TauBin):
@@ -659,6 +662,7 @@ def SymmetryMapping(_map):
             if t1 is not t2:
                 TauSqueeze[t2,t1]=Index
                 TauSymFactor[t2,t1]=2
+                TauFlag[t2,t1]=1
             if t1 is t2:
                 TauSymFactor[t1,t1]=1
             TauRestore.append((t1, t2))
@@ -680,33 +684,34 @@ def SymmetryMapping(_map):
         if vec in Points:
             continue
         Rlist=MirrorR(vec, _map)
+        RSize=len(Rlist)
         for (x1,y1,x2,y2) in Rlist:
             r1=_map.CoordiIndex((x1,y1))
             r2=_map.CoordiIndex((x2,y2))
             RSqueeze[r1,r2]=Index
             Points.add((x1,y1,x2,y2))
+            RSymFactor[r1,r2]=RSize  #one element already pops
         Index+=1
         (x1,y1,x2,y2)=sorted(Rlist)[0]
         GroupList.add(tuple((x1,y1,x2,y2)))
         r1=_map.CoordiIndex((x1,y1))
         r2=_map.CoordiIndex((x2,y2))
         RRestore.append((r1,r2))
-        RSymFactor[r1,r2]=len(Rlist)  #one element already pops
     RSize=Index
     # print RSize
     # print "sum",sum(sum(RSymFactor))
     # print sorted(list(GroupList))
-    return TauSqueeze, TauRestore, TauSymFactor, RSqueeze, RRestore, RSymFactor
+    return TauSqueeze, TauRestore, TauSymFactor, TauFlag, RSqueeze, RRestore, RSymFactor
 
 
 def CompressGammaW(GammaW, _map):
-    if len(GammaW.shape)==2:
+    if len(GammaW.shape)==3:
         #do not need to compress
         return GammaW
     Lx, Ly=_map.L[0], _map.L[1]
     Vol=_map.Vol
     TauBin=GammaW.shape[-1]
-    TauSqueeze, TauRestore, TauSymFactor, RSqueeze, RRestore, RSymFactor=SymmetryMapping(_map)
+    TauSqueeze, TauRestore, TauSymFactor, TauFlag, RSqueeze, RRestore, RSymFactor=SymmetryMapping(_map)
     CompactGammaW=np.zeros([2, _map.Vol, _map.Vol, len(TauRestore)], dtype=np.complex64)
     # for s in range(2):
     # print "Compress tau"
@@ -731,7 +736,7 @@ def UnCompressGammaW(CompactGammaW, _map):
     Lx, Ly=_map.L[0], _map.L[1]
     Vol=_map.Vol
     TauBin=_map.MaxTauBinTiny
-    TauSqueeze, TauRestore, TauSymFactor, RSqueeze, RRestore, RSymFactor=SymmetryMapping(_map)
+    TauSqueeze, TauRestore, TauSymFactor, TauFlag, RSqueeze, RRestore, RSymFactor=SymmetryMapping(_map)
 
     TauGammaW=np.zeros((2, Vol, Vol, len(TauRestore)), dtype=np.complex64)
     for r1 in range(Vol):

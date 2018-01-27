@@ -188,7 +188,7 @@ GammaWClass::GammaWClass(const Lattice &lat, real beta, uint MaxTauBinTiny,  std
     _BasisVec.swap(BoseBasis);
     _BasisNum=_BasisVec.size();
     _BasisMaxTauBin=_BasisVec[0].size();
-    _dBetaInverse = _BasisMaxTauBin/_Beta;
+//    _dBetaInverse = _BasisMaxTauBin/_Beta;
 
 //    uint MeaShape[5] = {2, (uint)Vol, (uint)Vol, _MaxTauBin, _MaxTauBin};
 //    uint MeaShape[5] = {2, _SpaceTimeSize};
@@ -199,7 +199,7 @@ GammaWClass::GammaWClass(const Lattice &lat, real beta, uint MaxTauBinTiny,  std
     _CacheIndex[1] = MaxTauBinTiny;
     _CacheIndex[2] = MaxTauBinTiny*MaxTauBinTiny;
     _CacheIndex[3] = MaxTauBinTiny*MaxTauBinTiny*Vol;
-    _CacheIndex[4] = MaxTauBinTiny*MaxTauBinTiny*Vol*Vol;
+    _CacheIndex[4] = MaxTauBinTiny*MaxTauBinTiny*Vol;
 
     _CacheIndexBasis[0] = 1;
     _CacheIndexBasis[1] = _BasisNum;
@@ -208,7 +208,7 @@ GammaWClass::GammaWClass(const Lattice &lat, real beta, uint MaxTauBinTiny,  std
     _CacheIndexBasis[4] = _BasisNum*_BasisNum*Vol*Vol;
 
 
-    ClearStatistics();
+//    ClearStatistics();
 }
 
 uint GammaWClass::_SpinIndex(spin * L, spin * R) const {
@@ -297,20 +297,35 @@ Complex GammaWClass::Weight(const Site &Wr_in, const Site &Wr_out, const Site &U
 {
     int coord_r1 = _Map.Lat.CoordiIndex(Wr_out, Ur);
     int coord_r2 = _Map.Lat.CoordiIndex(Wr_in,  Ur);
+    auto coordiIndex=coord_r1*_Vol+coord_r2;
 
     auto t1 = Wt_out - Ut;
     auto t2=Wt_in-Ut;
+
+    if(t1<0){
+        t1+=_Beta;
+    }
+    int t1Index=floor(t1*_dBetaInverse);
+
+    if(t2<0){
+        t2+=_Beta;
+    }
+    int t2Index=floor(t2*_dBetaInverse);
+
+    auto tIndex=t1Index*_MaxTauBinTiny+t2Index;
+
+    auto Index=_RSqueeze[coordiIndex]*_TauSize+_TauSqueeze[tIndex];
+
     auto SpinIndex=_SpinIndex(Wspin_out, Wspin_in);
 
-    int SymmetryFactor;
-    bool DoesMirrored;
-    uint Index=_GetIndex(coord_r1, coord_r2, t1, t2, SymmetryFactor, DoesMirrored);
     if(SpinIndex>=4)
-        Index+= _SpaceTimeSize;
+        Index+=_RSize*_TauSize;
     auto NewWeight=_Weight(Index);
-    if(DoesMirrored)
+    if(_TauFlag[tIndex]!=0)
         NewWeight=-conjugate(NewWeight);
 
+    //redefine NewGammaW[0]=GammaW[0]+GammaW[1]-GammaW[2]-GammaW[3]
+    //redefine NewGammaW[1]=GammaW[4]=-GammaW[5]^*
     if(SpinIndex==0||SpinIndex==1) {
         return NewWeight;
     }
@@ -363,31 +378,46 @@ Complex GammaWClass::Weight(const Site &Wr_in, const Site &Wr_out, const Site &U
 void GammaWClass::Measure(const Site &Wr_in, const Site &Wr_out, const Site &Ur, real Wt_in, real Wt_out,
                           real Ut, spin* Wspin_in, spin* Wspin_out, spin Uspin, const Complex &Weight)
 {
-    auto coord_r1 = _Map.Lat.CoordiIndex(Wr_out, Ur);
-    auto coord_r2 = _Map.Lat.CoordiIndex(Wr_in,  Ur);
+    int coord_r1 = _Map.Lat.CoordiIndex(Wr_out, Ur);
+    int coord_r2 = _Map.Lat.CoordiIndex(Wr_in,  Ur);
+    auto coordiIndex=coord_r1*_Vol+coord_r2;
 
-    auto t1=Wt_out-Ut;
+    auto t1 = Wt_out - Ut;
     auto t2=Wt_in-Ut;
+
+    if(t1<0){
+        t1+=_Beta;
+    }
+    int t1Index=floor(t1*_dBetaInverse);
+
+    if(t2<0){
+        t2+=_Beta;
+    }
+    int t2Index=floor(t2*_dBetaInverse);
+
+    auto tauIndex=t1Index*_MaxTauBinTiny+t2Index;
+
+    auto Index=_RSqueeze[coordiIndex]*_TauSize+_TauSqueeze[tauIndex];
     auto SpinIndex=_SpinIndex(Wspin_out, Wspin_in);
-//    uint Index = coord_r1 * _CacheIndex[3] +coord_r2*_CacheIndex[2]+ t1Index*_CacheIndex[1]+t2Index;
-    int SymmetryFactor;
-    bool DoesMirrored;
-    uint Index=_GetIndex(coord_r1, coord_r2, t1, t2, SymmetryFactor, DoesMirrored);
+
+    if(SpinIndex>=4)
+        Index+=_RSize*_TauSize;
+
+    int SymmetryFactor=_RSymFactor[coordiIndex]*_TauSymFactor[tauIndex];
     auto NewWeight=Weight/SymmetryFactor;
-    if(DoesMirrored)
+    if(_TauFlag[tauIndex]!=0)
         NewWeight=-conjugate(NewWeight);
+
+    //redefine NewGammaW[0]=GammaW[0]+GammaW[1]-GammaW[2]-GammaW[3]
+    //redefine NewGammaW[1]=GammaW[4]=-GammaW[5]^*
     if(SpinIndex==0||SpinIndex==1)
         _WeightAccu[Index]+=NewWeight;
     else if(SpinIndex==2||SpinIndex==3)
         _WeightAccu[Index]+=-NewWeight;
     else if(SpinIndex==4){
-//        Index+= _CacheIndex[4];
-        Index+=_SpaceTimeSize;
         _WeightAccu[Index]+=NewWeight/2.0;
     }
     else if(SpinIndex==5){
-//        Index+= _CacheIndex[4];
-        Index+=_SpaceTimeSize;
         _WeightAccu[Index]+=-conjugate(NewWeight)/2.0;
     }
 }
@@ -453,22 +483,36 @@ void GammaWClass::SqueezeStatistics(real factor)
 /**********************   Weight IO ****************************************/
 
 bool GammaWClass::WeightFromDict(const Dictionary& dict) {
-    _RSqueeze=dict.Get<vector<vector<int>>>("RSqueeze");
-    _TauSqueeze=dict.Get<vector<vector<int>>>("TauSqueeze");
-    _RSymFactor=dict.Get<vector<vector<int>>>("RSymFactor");
-    _TauSymFactor=dict.Get<vector<vector<int>>>("TauSymFactor");
+
+    _RSqueeze=dict.Get<vector<int>>("RSqueeze");
+    ASSERT_ALLWAYS(_RSqueeze.size()==_Vol*_Vol, "RSqueeze size does not match!");
+    _RSymFactor=dict.Get<vector<int>>("RSymFactor");
+    ASSERT_ALLWAYS(_RSymFactor.size()==_Vol*_Vol, "RSymFactor size does not match!");
+    _TauSqueeze=dict.Get<vector<int>>("TauSqueeze");
+    ASSERT_ALLWAYS(_TauSqueeze.size()==_MaxTauBinTiny*_MaxTauBinTiny, "TauSqueeze size does not match!");
+    _TauSymFactor=dict.Get<vector<int>>("TauSymFactor");
+    ASSERT_ALLWAYS(_TauSymFactor.size()==_MaxTauBinTiny*_MaxTauBinTiny, "TauSymFactor size does not match!");
+    _TauFlag=dict.Get<vector<int>>("TauFlag");
+    ASSERT_ALLWAYS(_TauFlag.size()==_MaxTauBinTiny*_MaxTauBinTiny, "TauSymFactor size does not match!");
+
     _RSize=dict.Get<uint>("RSize");
     _TauSize=dict.Get<uint>("TauSize");
 
-    uint WeightShape[5] = {2, _RSize, _TauSize};
+    uint WeightShape[3] = {2, _RSize, _TauSize};
     //Wspin12, W_r1, dW_r2, Wtau1,dtau2
-    _Weight.Allocate(WeightShape, SMOOTH);
+    if(!_Weight.IsAllocate()) {
+        _Weight.Allocate(WeightShape, SMOOTH);
+    }
 //    uint MeaShape[5] = {2, (uint)Vol, (uint)Vol, _MaxTauBin, _MaxTauBin};
 //    uint MeaShape[5] = {2, _SpaceTimeSize};
-    _WeightAccu.Allocate(WeightShape, SMOOTH);
-    _WeightSize = _WeightAccu.GetSize();
+    if(!_WeightAccu.IsAllocate()) {
+        _WeightAccu.Allocate(WeightShape, SMOOTH);
+        _WeightSize = _WeightAccu.GetSize();
+    }
 
-    _Weight.FromDict(dict);
+    if(dict.HasKey("SmoothT")) {
+        _Weight.FromDict(dict);
+    }
     return true;
 }
 

@@ -112,6 +112,12 @@ real* ArrayObject::Data<real>()
     ASSERT_ALLWAYS(_PyPtr != nullptr, "ArrayObject is still empty!");
     return reinterpret_cast<real*>(PyArray_DATA(_PyPtr));
 }
+template <>
+int* ArrayObject::Data<int>()
+{
+    ASSERT_ALLWAYS(_PyPtr != nullptr, "ArrayObject is still empty!");
+    return reinterpret_cast<int*>(PyArray_DATA(_PyPtr));
+}
 
 std::vector<uint> ArrayObject::Shape()
 {

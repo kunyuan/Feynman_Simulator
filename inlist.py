@@ -2,7 +2,7 @@
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" :  0,
+    "__Duplicate" :  1,
     # "__Duplicate" :  14,
     "__IsCluster" : False, 
     "__AutoRun" : True,
@@ -27,12 +27,13 @@ Dyson={
 }
 
 Beta=0.8
-Order=6
-MaxTauBin=32
-L=8
+Order=3
+MaxTauBin=64
+L=16
 
 Gamma3=True
-MaxTauBinTiny=MaxTauBin #the tau bin for large object like GammaW
+# MaxTauBinTiny=MaxTauBin #the tau bin for large object like GammaW
+MaxTauBinTiny=MaxTauBin/2 #the tau bin for large object like GammaW
 BasisNum=16 #the number of basis
 
 Common={

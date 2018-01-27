@@ -64,6 +64,7 @@ void WeightArray<DIM>::Free()
 {
     if (IsAllocated) {
         delete[] _Data;
+        _Data= nullptr;
         IsAllocated = false;
     }
 }

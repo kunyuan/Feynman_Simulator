@@ -87,13 +87,12 @@ bool weight::Weight::FromDict(const Dictionary &dict, flag _flag, const para::Pa
         if(dict.HasKey("GGGammaG")) {
             GammaG->WeightFromDict(dict.Get<Dictionary>("GGGammaG"));
         }else{
-            LOG_WARNING("There is no GammaG Weight to read!\n I will initialze them with zeros.");
+            ABORT("There is no GGGammaG Weight to read!\n I will initialze them with zeros.");
         }
         if(dict.HasKey("WWGammaW")) {
             GammaW->WeightFromDict(dict.Get<Dictionary>("WWGammaW"));
         }else{
-            LOG_WARNING("There is no GammaW Weight to read!\n I will initialze them with zeros.");
-            //GammaW will be allocated with zeros
+            ABORT("There is no WWGammaW Weight to read!\n I will initialze them with zeros.");
         }
         G->GGGammaGWeight = GammaG;
         W->WWGammaWWeight = GammaW;

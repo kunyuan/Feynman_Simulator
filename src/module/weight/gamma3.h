@@ -104,10 +104,11 @@ namespace weight {
         uint _BasisMaxTauBin;
         uint _SpaceTimeSize;
         uint _GetIndex(int, int, real, real, int& SymmetryFactor, bool& DoesMirrored) const;
-        std::vector<std::vector<int>> _TauSqueeze;
-        std::vector<std::vector<int>> _RSqueeze;
-        std::vector<std::vector<int>> _TauSymFactor;
-        std::vector<std::vector<int>> _RSymFactor;
+        std::vector<int> _TauFlag;
+        std::vector<int> _TauSqueeze;
+        std::vector<int> _RSqueeze;
+        std::vector<int> _TauSymFactor;
+        std::vector<int> _RSymFactor;
         uint _RSize;
         uint _TauSize;
     };

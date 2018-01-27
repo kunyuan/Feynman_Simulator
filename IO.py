@@ -29,4 +29,9 @@ def SaveBigDict(filename, root):
 def LoadBigDict(filename):
     if filename[-4:]!=".hkl":
         filename+=".hkl"
-    return hkl.load(filename)
+    data=hkl.load(filename)
+    if "WWGammaW" in data.keys():
+        gammaw=data["WWGammaW"]
+        if "SmoothT" in gammaw.keys():
+            gammaw["SmoothT"]=array(gammaw["SmoothT"], dtype=complex)
+    return data
