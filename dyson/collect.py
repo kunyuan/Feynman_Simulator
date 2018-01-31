@@ -211,6 +211,7 @@ def CollectStatis(_map, runGamma3=False):
     if runGamma3:
         GammaGAccu*=1.0/GammaGNormAccu*GammaGNorm
         GammaWAccu*=1.0/GammaWNormAccu*GammaWNorm
+        GammaWAccu=np.array(GammaWAccu, dtype=np.complex64)
         # GammaWFluc=np.array(GammaWFluc)
         # print np.std(GammaWFluc, axis=0)
         # print np.mean(GammaWFluc, axis=0)

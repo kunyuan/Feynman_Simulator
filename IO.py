@@ -23,6 +23,9 @@ def LoadDict(filename):
 def SaveBigDict(filename, root):
     if filename[-4:]!=".hkl":
         filename+=".hkl"
+    if "GammaWStatis" in root.keys():
+        gammaw=root["GammaWStatis"]
+        gammaw["WeightAccu"]=array(gammaw["WeightAccu"], dtype=complex64)
     hkl.dump(root, "_"+filename, mode='w', compression='gzip')
     os.rename("_"+filename, filename)
 

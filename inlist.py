@@ -29,11 +29,11 @@ Dyson={
 Beta=0.8
 Order=3
 MaxTauBin=64
-L=16
+L=8
 
 Gamma3=True
-# MaxTauBinTiny=MaxTauBin #the tau bin for large object like GammaW
-MaxTauBinTiny=MaxTauBin/2 #the tau bin for large object like GammaW
+MaxTauBinTiny=MaxTauBin #the tau bin for large object like GammaW
+# MaxTauBinTiny=MaxTauBin/2 #the tau bin for large object like GammaW
 BasisNum=16 #the number of basis
 
 Common={
