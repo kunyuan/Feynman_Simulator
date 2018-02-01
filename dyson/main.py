@@ -79,6 +79,11 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     data["SigmaDeltaT"]=SigmaDeltaT.ToDict()
     data["Sigma"]=Sigma.ToDict()
     data["Polar"]=Polar.ToDict()
+    TauSqueeze, TauRestore, TauSymFactor, TauFlag, RSqueeze, RRestore, RSymFactor=gamma3.SymmetryMapping(Map)
+    data["WWGammaW"]={"TauSqueeze": TauSqueeze.flatten().tolist(), "TauSymFactor": TauSymFactor.flatten().tolist(),
+            "TauFlag": TauFlag.flatten().tolist(),
+            "RSqueeze": RSqueeze.flatten().tolist(), "RSymFactor": RSymFactor.flatten().tolist(),
+            "RSize": len(RRestore), "TauSize": len(TauRestore)}
     if para["Gamma3"]:
         BKChiTensor.FFT("R","T")
         BKChi.FFT("R","T")
@@ -86,11 +91,6 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
 
         data["BKChi"]=BKChi.ToDict()
         data["GGGammaG"]={"SmoothT": GGGammaG}
-        TauSqueeze, TauRestore, TauSymFactor, TauFlag, RSqueeze, RRestore, RSymFactor=gamma3.SymmetryMapping(Map)
-        data["WWGammaW"]={"TauSqueeze": TauSqueeze.flatten().tolist(), "TauSymFactor": TauSymFactor.flatten().tolist(),
-                "TauFlag": TauFlag.flatten().tolist(),
-                "RSqueeze": RSqueeze.flatten().tolist(), "RSymFactor": RSymFactor.flatten().tolist(),
-                "RSize": len(RRestore), "TauSize": len(TauRestore)}
         if WWGammaW is not None:
             data["WWGammaW"]["SmoothT"]=gamma3.CompressGammaW(WWGammaW, Map)
 
@@ -227,9 +227,12 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
                 Polar.Merge(ratio, Polar_MC)
 
                 if para["Gamma3"]:
+                    print "Calculate WWGammaW contribution to GGGammaG"
                     WWGammaW = gamma3.AddTwoW_To_GammaW(GammaW_MC, W0, W, G.Map)
                     
+                    print "Calculate GGGammaW contribution to GGGammaG"
                     GGGammaG_MC = gamma3.AddTwoG_To_GammaG(GammaG_MC, G, G.Map)
+                    print "Add Simple GG contribution to GGGammaG"
                     GGGammaG = gamma3.SimpleGG(G, Map)+ GGGammaG_MC
                     # print "GammaG, mc=\n",  0.5*(np.sum(GGGammaG_MC[DOWN, :, :, :]-GGGammaG_MC[UP, :, :, :], axis=0)).diagonal()
 

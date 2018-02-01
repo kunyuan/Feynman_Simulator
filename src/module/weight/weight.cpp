@@ -87,7 +87,7 @@ bool weight::Weight::FromDict(const Dictionary &dict, flag _flag, const para::Pa
         if(dict.HasKey("GGGammaG")) {
             GammaG->WeightFromDict(dict.Get<Dictionary>("GGGammaG"));
         }else{
-            ABORT("There is no GGGammaG Weight to read!\n I will initialze them with zeros.");
+            LOG_WARNING("There is no GGGammaG Weight to read!\n I will initialze them with zeros.");
         }
         if(dict.HasKey("WWGammaW")) {
             GammaW->WeightFromDict(dict.Get<Dictionary>("WWGammaW"));

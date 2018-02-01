@@ -78,8 +78,10 @@ bool EnvMonteCarlo::Load()
     Weight.FromDict(GW_, weight::GW, Para);
     Weight.FromDict(statis_, weight::SigmaPolar, Para);
     if(Para.runGamma3)
+    {
         Weight.FromDict(GW_, weight::GammaGW, Para);
         Weight.FromDict(statis_, weight::GammaGWStatis, Para);
+    }
     LOG_INFO(DoesParaFileExit);
     if (DoesParaFileExit)
         Diag.FromDict(para_.Get<Dictionary>(ConfigKey), Para.Lat, *Weight.G, *Weight.W);

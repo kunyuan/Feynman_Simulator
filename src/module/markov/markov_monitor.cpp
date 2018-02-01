@@ -70,8 +70,10 @@ bool MarkovMonitor::FromDict(const Dictionary &dict, ParaMC &para, Diagram &diag
     flag &= SigmaEstimator.FromDict(dict.Get<Dictionary>("SigmaEstimator"));
     flag &= PolarEstimator.FromDict(dict.Get<Dictionary>("PolarEstimator"));
     if(Para->runGamma3){
-        flag &= GammaGEstimator.FromDict(dict.Get<Dictionary>("GammaGEstimator"));
-        flag &= GammaWEstimator.FromDict(dict.Get<Dictionary>("GammaWEstimator"));
+        if(dict.HasKey("GammaGEstimator"))
+            flag &= GammaGEstimator.FromDict(dict.Get<Dictionary>("GammaGEstimator"));
+        if(dict.HasKey("GammaWEstimator"))
+            flag &= GammaWEstimator.FromDict(dict.Get<Dictionary>("GammaWEstimator"));
     }
     return flag;
 }
