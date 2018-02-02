@@ -96,6 +96,7 @@ def submit_job(job_atom):
             fjob.write("#!/bin/sh\n"+"#PBS -N "+jobname+"\n")
             if hasattr(job_atom, "pbs_command"):
                 fjob.write(job_atom.pbs_command+"\n")
+            fjob.write("#PBS -l walltime=200:00:00\n")
             fjob.write("#PBS -o "+homedir+"/Output\n")
             fjob.write("#PBS -e "+homedir+"/Error\n")
             fjob.write("echo $PBS_JOBID >>"+homedir+"/id_job.log\n")

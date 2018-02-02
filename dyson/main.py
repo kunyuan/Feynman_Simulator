@@ -79,11 +79,12 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     data["SigmaDeltaT"]=SigmaDeltaT.ToDict()
     data["Sigma"]=Sigma.ToDict()
     data["Polar"]=Polar.ToDict()
-    TauSqueeze, TauRestore, TauSymFactor, TauFlag, RSqueeze, RRestore, RSymFactor=gamma3.SymmetryMapping(Map)
-    data["WWGammaW"]={"TauSqueeze": TauSqueeze.flatten().tolist(), "TauSymFactor": TauSymFactor.flatten().tolist(),
-            "TauFlag": TauFlag.flatten().tolist(),
-            "RSqueeze": RSqueeze.flatten().tolist(), "RSymFactor": RSymFactor.flatten().tolist(),
-            "RSize": len(RRestore), "TauSize": len(TauRestore)}
+    if Map.Dim==2:
+        TauSqueeze, TauRestore, TauSymFactor, TauFlag, RSqueeze, RRestore, RSymFactor=gamma3.SymmetryMapping(Map)
+        data["WWGammaW"]={"TauSqueeze": TauSqueeze.flatten().tolist(), "TauSymFactor": TauSymFactor.flatten().tolist(),
+                "TauFlag": TauFlag.flatten().tolist(),
+                "RSqueeze": RSqueeze.flatten().tolist(), "RSymFactor": RSymFactor.flatten().tolist(),
+                "RSize": len(RRestore), "TauSize": len(TauRestore)}
     if para["Gamma3"]:
         BKChiTensor.FFT("R","T")
         BKChi.FFT("R","T")

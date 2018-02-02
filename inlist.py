@@ -2,7 +2,7 @@
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" :  1,
+    "__Duplicate" :  0,
     # "__Duplicate" :  14,
     "__IsCluster" : False, 
     "__AutoRun" : True,
@@ -26,12 +26,12 @@ Dyson={
     }
 }
 
-Beta=0.8
+Beta=1.0
 Order=3
 MaxTauBin=64
-L=16
+L=8
 
-Gamma3=True
+Gamma3=False
 # MaxTauBinTiny=MaxTauBin #the tau bin for large object like GammaW
 MaxTauBinTiny=MaxTauBin/2 #the tau bin for large object like GammaW
 BasisNum=16 #the number of basis
@@ -50,20 +50,20 @@ Common={
     # "Name": "ValenceBond", "NSublat": 2,
     # "Name": "Honeycomb", "NSublat": 2,
     #"Name": "Kagome", "NSublat": 3,
-    "Name": "Triangular", "NSublat": 1,
+    # "Name": "Triangular", "NSublat": 1,
     # "Name": "Assymetric_Triangular", "NSublat": 3,
-    "L": [L,L]
+    # "L": [L,L]
 
     #3D lattice
     #"Name": "Cubic", "NSublat": 1,
     #"Name": "3DCheckerboard", "NSublat": 2,
-    #"Name": "Pyrochlore", "NSublat": 4,
-    #"L": [L,L,L]
+    "Name": "Pyrochlore", "NSublat": 4,
+    "L": [L,L,L]
     },
 "Model": {
-    # "Name": "J1J2",
+    "Name": "J1J2",
     # "Name": "Kitaev",
-    "Name": "Heisenberg",
+    # "Name": "Heisenberg",
     #"Description": ["ImW",],
     "Interaction": [1.0, 0.0, 0.0, 0.0],
     "ExternalField": [ 0.0, 0.0, 0.0, 0.0],
