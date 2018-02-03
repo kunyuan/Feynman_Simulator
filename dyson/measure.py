@@ -65,6 +65,27 @@ class Observable:
             #self.Append("Mag^2 density", ChiK[0]/self.__Map.Vol/self.__Map.NSublat)
             #self.Append("StagMag^2 density", ChiK[1]/self.__Map.Vol/self.__Map.NSublat)
 
+        elif self.__Lat.Name in ["Triangular"]:
+            Chi.FFT("R", "W")
+            BKChi.FFT("R", "W")
+            offset=0
+            x=[]
+            KList=[]
+            BZcenter=(0,0)
+            start, end=np.array(self.__Lat.Path[0]),np.array(self.__Lat.Path[1])
+            for k in self.__Lat.GetKVecAlongPath(start, end, BZcenter):
+                pos=offset+np.linalg.norm(k-np.array(BZcenter)-start)
+                x.append(pos)
+                KList.append(k)
+            offset+=np.linalg.norm(end-start)
+            StagK=KList[-1]
+            _, ChiK=self.__Lat.FourierTransformation(Chi.Data[0,:,0,:,:,0]*Factor, [StagK,],"Real")
+            _, BKChiK=self.__Lat.FourierTransformation(BKChi.Data[0,:,0,:,:,0]*Factor, [StagK,],"Real")
+            self.Append("StagChi", ChiK[0])
+            self.Append("BKStagChi", BKChiK[0])
+            self.Append("StagMag^2 density", ChiK[0]/self.__Map.Vol/self.__Map.NSublat/self.__Map.Beta)
+            self.Append("BK StagMag^2 density", BKChiK[0]/self.__Map.Vol/self.__Map.NSublat/self.__Map.Beta)
+
         elif self.__Lat.Name in ["Pyrochlore"]:
             Chi.FFT("R", "W")
             KList=[(0.0,0.0,0.0), (4*PI, 2*PI ,0)] #High symmetry point with strongest order

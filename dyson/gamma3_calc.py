@@ -512,13 +512,6 @@ def Calculate_Chi(ChiTensor, _map):
         Chi.Data+=temp.reshape([1, NSublat, 1, NSublat, _map.Vol, _map.MaxTauBin]) 
     return Chi
 
-class DenorminatorTouchZero(Exception):
-    def __init__(self, value, pos, freq):
-       self.value = value
-       self.position=pos
-       self.frequency=freq
-    def __str__(self):
-        return "BKChi Denorminator touch zero, minmum {0} is at K={1} and Omega={2}".format(self.value, self.position, self.frequency)
 
 def Check_Denorminator(Denorm, Determ, _map):
     pos=np.where(Determ==Determ.min())
@@ -529,7 +522,7 @@ def Check_Denorminator(Denorm, Determ, _map):
     Denorm=Denorm.reshape([SpSub,SpSub,Vol,Time])
     log.info("The 1/linalg.cond is {0}".format(1.0/np.linalg.cond(Denorm[...,x,t])))
     if Determ.min().real<0.0 and Determ.min().imag<1.0e-4:
-        raise DenorminatorTouchZero(Determ.min(), _map.IndexToCoordi(x), t)
+        log.info("BKChi Denorminator touch zero, minmum {0} is at K={1} and Omega={2}".format(Determ.min(), _map.IndexToCoordi(x), t))
 
 def GetBoseBasis(_map, BasisNum=None):
     TauBin=_map.MaxTauBin

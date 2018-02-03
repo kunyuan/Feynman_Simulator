@@ -26,14 +26,14 @@ Dyson={
     }
 }
 
-Beta=1.0
+Beta=0.5
 Order=3
 MaxTauBin=64
 L=8
 
 Gamma3=False
-# MaxTauBinTiny=MaxTauBin #the tau bin for large object like GammaW
-MaxTauBinTiny=MaxTauBin/2 #the tau bin for large object like GammaW
+MaxTauBinTiny=MaxTauBin #the tau bin for large object like GammaW
+# MaxTauBinTiny=MaxTauBin/2 #the tau bin for large object like GammaW
 BasisNum=16 #the number of basis
 
 Common={
@@ -50,15 +50,15 @@ Common={
     # "Name": "ValenceBond", "NSublat": 2,
     # "Name": "Honeycomb", "NSublat": 2,
     #"Name": "Kagome", "NSublat": 3,
-    # "Name": "Triangular", "NSublat": 1,
+    "Name": "Triangular", "NSublat": 1,
     # "Name": "Assymetric_Triangular", "NSublat": 3,
-    # "L": [L,L]
+    "L": [L,L]
 
     #3D lattice
     #"Name": "Cubic", "NSublat": 1,
     #"Name": "3DCheckerboard", "NSublat": 2,
-    "Name": "Pyrochlore", "NSublat": 4,
-    "L": [L,L,L]
+    # "Name": "Pyrochlore", "NSublat": 4,
+    # "L": [L,L,L]
     },
 "Model": {
     "Name": "J1J2",
