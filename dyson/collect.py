@@ -66,7 +66,8 @@ class WeightEstimator():
                     average=np.average(abs(smooth))
                     #if relative>RelativeError:
                     if average>Average:
-                        relative=abs(sigma)/average
+                        # relative=abs(sigma)/average
+                        relative=abs(sigma)
                         RelativeError=relative
                         Average=average
                         error=sigma

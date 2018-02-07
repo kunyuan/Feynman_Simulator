@@ -101,7 +101,7 @@ Dyson["Dyson"]={
     "SleepTime": 60,
     "Gamma3": Gamma3,
     "OrderAccepted": {"Sigma":1, "Polar":1},
-    "ErrorThreshold": 0.2,
+    "ErrorThreshold": 0.05,
     "Annealing": {
         #"DeltaField": [-0.5,  -0.5, 0.0, 0.0],
         #"Interval": [0.05, 0.05, -0.0, -0.0]
