@@ -18,8 +18,9 @@ make -j
 make install
 cd -
 
-cd ./dyson/
-f2py -c -m gamma3 gamma3.f90
+#cd ./dyson/
+#f2py -c -m gamma3 gamma3.f90
+#cd -
 
 cd ./dyson/solver
 #compile fast lu solver

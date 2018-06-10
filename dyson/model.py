@@ -372,6 +372,12 @@ class BareFactory:
             self.NextNearestNeighbor[D][B]=[(0,0,1),(0,Ly-1,1),(Lx-1,0,0),(Lx-1,1,0)]
             self.NextNearestNeighbor[D][C]=[(0,0,1),(Lx-1,0,1),(0,Ly-1,0),(1,Ly-1,0),]
 
+            ########J3, only connected####################
+            self.NextNextNearestNeighbor[A][A]=[(1,0,0),(0,1,0),(0,0,1),(Lx-1,0,0),(0,Ly-1,0),(0,0,Lz-1)]
+            self.NextNextNearestNeighbor[B][B]=[(Lx-1,0,0),(Lx-1,1,0),(Lx-1,0,1),(1,0,0),(1,Ly-1,0),(1,0,Lz-1)]
+            self.NextNextNearestNeighbor[C][C]=[(0,Ly-1,0),(1,Ly-1,0),(0,Ly-1,1),(0,1,0),(Lx-1,1,0),(0,1,Lz-1)]
+            self.NextNextNearestNeighbor[D][D]=[(0,0,Lz-1),(1,0,Lz-1),(0,1,Lz-1),(0,0,1),(Lx-1,0,1),(0,Ly-1,1)]
+
             for i in range(4):
                 for j in range(4):
                     for e in self.NearestNeighbor[i][j]:
@@ -380,6 +386,9 @@ class BareFactory:
                     for e in self.NextNearestNeighbor[i][j]:
                         #self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SzSz;
                         self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J2*SS;
+                    for e in self.NextNextNearestNeighbor[i][j]:
+                        #self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SzSz;
+                        self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J3*SS;
             #S111S111=np.outer(Sx+Sy+Sz,Sx+Sy+Sz)
             #for i in range(4):
                 #self.BareW.Data[:,i,:,i,0]+ = -10.0*J1*S111S111;

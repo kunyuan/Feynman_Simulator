@@ -81,11 +81,11 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     data["Polar"]=Polar.ToDict()
     if Map.Dim==2:
         TauSqueeze, TauRestore, TauSymFactor, TauFlag, RSqueeze, RRestore, RSymFactor=gamma3.SymmetryMapping(Map)
+    if para["Gamma3"]:
         data["WWGammaW"]={"TauSqueeze": TauSqueeze.flatten().tolist(), "TauSymFactor": TauSymFactor.flatten().tolist(),
                 "TauFlag": TauFlag.flatten().tolist(),
                 "RSqueeze": RSqueeze.flatten().tolist(), "RSymFactor": RSymFactor.flatten().tolist(),
                 "RSize": len(RRestore), "TauSize": len(TauRestore)}
-    if para["Gamma3"]:
         BKChiTensor.FFT("R","T")
         BKChi.FFT("R","T")
         print "BKChi=\n", np.sum(BKChi.Data[0,0,0,0,:,:], axis=0)

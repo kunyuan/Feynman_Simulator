@@ -14,8 +14,8 @@ Dyson={
     "__Execute" : ["python", "./dyson/main.py"],
     "__Duplicate" : 1,
     "__IsCluster" : MonteCarlo["Control"]["__IsCluster"],
-    # "__AutoRun" : MonteCarlo["Control"]["__AutoRun"], 
-    "__AutoRun" : False,
+    "__AutoRun" : MonteCarlo["Control"]["__AutoRun"], 
+    # "__AutoRun" : False,
     "__PBSCommand": "#PBS -l mem=5gb"
     },
 "Job": {
@@ -50,22 +50,22 @@ Common={
     # "Name": "ValenceBond", "NSublat": 2,
     # "Name": "Honeycomb", "NSublat": 2,
     #"Name": "Kagome", "NSublat": 3,
-    "Name": "Triangular", "NSublat": 1,
+    # "Name": "Triangular", "NSublat": 1,
     # "Name": "Assymetric_Triangular", "NSublat": 3,
-    "L": [L,L]
+    # "L": [L,L]
 
     #3D lattice
     #"Name": "Cubic", "NSublat": 1,
     #"Name": "3DCheckerboard", "NSublat": 2,
-    # "Name": "Pyrochlore", "NSublat": 4,
-    # "L": [L,L,L]
+    "Name": "Pyrochlore", "NSublat": 4,
+    "L": [L,L,L]
     },
 "Model": {
     "Name": "J1J2",
     # "Name": "Kitaev",
     # "Name": "Heisenberg",
     #"Description": ["ImW",],
-    "Interaction": [1.0, 0.0, 0.0, 0.0],
+    "Interaction": [1.0, 0.0, 0.5, 0.0],
     "ExternalField": [ 0.0, 0.0, 0.0, 0.0],
     #ExternalField on Sublattice A and B
     "Symmetry": ["SU2", "ParticleHole"],
