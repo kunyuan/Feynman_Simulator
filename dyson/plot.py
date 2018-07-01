@@ -7,6 +7,8 @@ if "DISPLAY" not in os.environ:
     log.info("no DISPLAY detected, switch to Agg backend!")
     matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+# from mpl_toolkits.mplot3d import Axes3D
+
 from scipy.optimize import curve_fit
 
 def PlotArray(array, Beta, Name, DoesSave=True):
@@ -15,6 +17,28 @@ def PlotArray(array, Beta, Name, DoesSave=True):
     plt.plot(x,array,'-')
     if DoesSave:
         plt.savefig("{0}.jpg".format(Name))
+    else:
+        plt.show()
+    plt.close()
+
+def PlotTimeForList(Name, weight, SpinIn, SubIn, SpinOut, SubOut, VolList, DoesSave=True):
+    x=np.linspace(0, weight.Map.Beta, weight.Map.MaxTauBin)
+    plt.figure(1)
+    plt.suptitle("{0}, Spin ({1},{2}), Sublat ({3},{4}), Coordinates: {5}:{6}".format(Name,
+        SpinIn, SpinOut, SubIn, SubOut, weight.Map.IndexToCoordi(VolList[0]), weight.Map.IndexToCoordi(VolList[1])))
+    ax1=plt.subplot(121)
+    for v in VolList:
+        print v
+        ax1.plot(x,weight.Data[SpinIn, SubIn, SpinOut, SubOut, v,:].real,'-')
+    ax1.set_xlabel("$\\tau$")
+    ax1.set_ylabel("{0}.real".format(Name))
+    ax2=plt.subplot(122)
+    for v in VolList:
+        ax2.plot(x,weight.Data[SpinIn, SubIn, SpinOut, SubOut, v,:].imag,'-')
+    ax2.set_xlabel("$\\tau$")
+    ax2.set_ylabel("{0}.imag".format(Name))
+    if DoesSave:
+        plt.savefig("{0}.pdf".format(Name))
     else:
         plt.show()
     plt.close()
@@ -273,9 +297,9 @@ def PlotChi_2D(Chi, lat, DoesSave=True):
         c = plt.colorbar(orientation='horizontal')
         c.set_label("magnitude")
         plt.axis('equal')
-        Ktemp=[(-3,0),(3,0),(0,3),(0,-3)]
-        k, ChiK=lat.FourierTransformation(Chi.Data[0,:,0,:,:,omega]*map.Beta/map.MaxTauBin,
-                Ktemp, "Integer")
+        # Ktemp=[(-3,0),(3,0),(0,3),(0,-3)]
+        # k, ChiK=lat.FourierTransformation(Chi.Data[0,:,0,:,:,omega]*map.Beta/map.MaxTauBin,
+                # Ktemp, "Integer")
     else:
         log.warn("Lattice PlotChi_2D not implemented yet!")
 
@@ -286,6 +310,48 @@ def PlotChi_2D(Chi, lat, DoesSave=True):
     plt.close()
     log.info("Plotting done!")
 
+def PlotBand(G, lat, DoesSave=True):
+    omega=0
+    spin=0
+    Map=G.Map
+    G.FFT("K", "W")
+    G0=G.Copy()
+    G0.Inverse()
+    for p in range(Map.Vol):
+        Ek,Uk=np.linalg.eig(G0.Data[spin,:,spin,:,p,omega])
+        G0.Data[spin,:,spin,:,p,omega]=Ek
+
+    G0.FFT("R", "W")
+
+    if lat.Dim==2:
+        KList=[]
+
+        for i in range(-2*lat.L[0], 2*lat.L[0]+1):
+            for j in range(-2*lat.L[1], 2*lat.L[1]+1):
+                KList.append((i,j))
+        k, BandK=lat.FourierTransformation(G0.Data[spin,:,spin,:,:,omega]*Map.Beta/Map.MaxTauBin,
+                KList, "Integer", bound=[[-20,20], [-20,20]])
+        BandK=[e.real for e in BandK]
+        k=np.array(k)
+        plt.figure()
+        plt.scatter(k[:, 0],k[:, 1],c=BandK, s=6, edgecolor="black", linewidth=0)
+        c = plt.colorbar(orientation='horizontal')
+        c.set_label("magnitude")
+        plt.axis('equal')
+
+        # fig = plt.figure()  
+        # ax = fig.gca(projection='3d')                
+        # X, Y = np.meshgrid(k[:,0], k[:,1])   
+        # ax.plot_surface(X, Y, BandK, rstride=1, cstride=1,  
+            # linewidth=0, antialiased=False)  
+
+
+    if DoesSave:
+        plt.savefig("BandK_{0}.pdf".format(lat.Name))
+    else:
+        plt.show()
+    plt.close()
+    log.info("Plot band structure done!")
 
 if __name__=="__main__":
     import weight

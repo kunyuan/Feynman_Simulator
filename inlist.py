@@ -29,7 +29,7 @@ Dyson={
 Beta=0.5
 Order=3
 MaxTauBin=64
-L=8
+L=16
 
 Gamma3=False
 MaxTauBinTiny=MaxTauBin #the tau bin for large object like GammaW
@@ -39,36 +39,47 @@ BasisNum=16 #the number of basis
 Common={
 "Gamma3": Gamma3,
 "Tau": {"MaxTauBin" : MaxTauBin, "Beta": Beta, "MaxTauBinTiny": MaxTauBinTiny, "BasisNum": BasisNum},
+
 "Lattice":  {
     #1D lattice
     # "Name": "Chain", "NSublat":1,
     # "L": [2,]
 
     #2D lattice
-    # "Name": "Square", "NSublat": 1,
+    "Name": "Square", "NSublat": 1,
     # "Name": "Checkerboard", "NSublat": 2,
     # "Name": "ValenceBond", "NSublat": 2,
     # "Name": "Honeycomb", "NSublat": 2,
     #"Name": "Kagome", "NSublat": 3,
     # "Name": "Triangular", "NSublat": 1,
     # "Name": "Assymetric_Triangular", "NSublat": 3,
-    # "L": [L,L]
+    "L": [L,L]
 
     #3D lattice
     #"Name": "Cubic", "NSublat": 1,
     #"Name": "3DCheckerboard", "NSublat": 2,
-    "Name": "Pyrochlore", "NSublat": 4,
-    "L": [L,L,L]
+    # "Name": "Pyrochlore", "NSublat": 4,
+    # "L": [L,L,L]
     },
 "Model": {
     "Name": "J1J2",
     # "Name": "Kitaev",
     # "Name": "Heisenberg",
+    # "Name": "Hubbard",
+    # "Name": "Haldane",
     #"Description": ["ImW",],
-    "Interaction": [1.0, 0.0, 0.5, 0.0],
+    "Interaction": [1.0, 0.0, 0.0, 0.0],
     "ExternalField": [ 0.0, 0.0, 0.0, 0.0],
     #ExternalField on Sublattice A and B
     "Symmetry": ["SU2", "ParticleHole"],
+
+    ##### For real fermions only  ###############
+    "Hopping": [1.0,0.0,0.0,0.0],
+    "Phase": [0.0,0.0,0.0,0.0],
+    "HubbardInteraction": 1.0,  #on-site Hubbard type interaction
+    "ShortRangeInteraction": [1.0, 0.0, 0.0, 0.0],  #short range interaction (say nearest neighbor interaction)
+    "LongRangeInteraction": [0.0, 0.0, 0.0, 0.0],
+    "ChemicalPotential": [ -3.8, 0.0, 0.0, 0.0], #ChemicalPotential will be automatically set to \pi*T/2 for all spin models!
     }
 }
 

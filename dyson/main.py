@@ -115,9 +115,10 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
             plot.PlotTime("Polar", Polar, spinUP, 0, spinUP, 0, 0)
             plot.PlotSpatial(Chi, Lat, 0, 0) 
             plot.PlotChi_2D(Chi, Lat)
-            plot.PlotWeightvsR("\chi", Chi,Lat,0,0)
+            # plot.PlotWeightvsR("\chi", Chi,Lat,0,0)
+            plot.PlotBand(G0, Lat)
         except:
-            log.info(blue("Output fails due to\n {0}".format(traceback.format_exc())))
+            log.warning(blue("Output fails due to\n {0}".format(traceback.format_exc())))
 
 def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
     ParaDyson=para["Dyson"]
@@ -126,6 +127,36 @@ def Dyson(IsDysonOnly, IsNewCalculation, EnforceSumRule, para, Map, Lat):
     ########## Calulation INITIALIZATION ##########################
     Factory=model.BareFactory(Map, Lat,  para["Model"], ParaDyson["Annealing"])
     G0,W0=Factory.Build()
+    # G0.FFT("K","W")
+    # print G0.Data[UP,0,UP,0,0,:]
+    # print "Comparison 1"
+    # for n in range(Map.MaxTauBin):
+        # wn=1j*(2*n+1)*np.pi/Map.Beta
+        # print 1.0/(wn-4.0), G0.Data[UP,0,UP,0,0,n]*Map.Beta/Map.MaxTauBin
+
+    # print "Comparison 2"
+    # G0.FFT("K","T")
+    # for t in range(Map.MaxTauBin):
+        # tau=Map.IndexToTau(t)
+        # G0w=-np.exp(4*tau)*(1.0-1.0/(1.0+np.exp(-Map.Beta*4)))
+        # print G0.Data[UP,0,UP,0,0,t], G0w
+
+    # print "Comparison 3"
+    # for n in range(Map.MaxTauBin):
+        # Gw=0.0
+        # wn=(2*n+1)*np.pi/Map.Beta
+        # for t in range(Map.MaxTauBin):
+            # tau=Map.IndexToTau(t)
+            # G0w=-np.exp(4*tau)*(1.0-1.0/(1.0+np.exp(-Map.Beta*4)))
+            # Gw+=G0w*np.exp(-1j*wn*tau)*Map.Beta/Map.MaxTauBin
+            # # Gw+=G0.Data[UP,0,UP,0,0,t]*np.exp(-1j*wn*tau)*Map.Beta/Map.MaxTauBin
+        # print 1.0/(1j*wn-4.0), Gw
+
+    G0.FFT("K","T")
+    print G0.Data[UP,0,UP,0,0,:]
+    plot.PlotTimeForList("G0UPUP_r", G0, UP, 0, UP, 0, range(Map.L[0]))
+    plot.PlotBand(G0, Lat)
+
     IO.SaveDict("Coordinates","w", Factory.ToDict())
     Observable=measure.Observable(Map, Lat)
     W=weight.Weight("SmoothT", Map, "FourSpins", "Symmetric","R","T")
