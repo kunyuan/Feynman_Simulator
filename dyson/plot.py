@@ -314,14 +314,15 @@ def PlotBand(G, lat, DoesSave=True):
     omega=0
     spin=0
     Map=G.Map
-    G.FFT("K", "W")
+    G.FFT("R", "T")
+    # G.FFT("K", "W")
     G0=G.Copy()
-    G0.Inverse()
-    for p in range(Map.Vol):
-        Ek,Uk=np.linalg.eig(G0.Data[spin,:,spin,:,p,omega])
-        G0.Data[spin,:,spin,:,p,omega]=Ek
+    # G0.Inverse()
+    # for p in range(Map.Vol):
+        # Ek,Uk=np.linalg.eig(G0.Data[spin,:,spin,:,p,omega])
+        # G0.Data[spin,:,spin,:,p,omega]=Ek
 
-    G0.FFT("R", "W")
+    # G0.FFT("R", "T")
 
     if lat.Dim==2:
         KList=[]
@@ -329,7 +330,7 @@ def PlotBand(G, lat, DoesSave=True):
         for i in range(-2*lat.L[0], 2*lat.L[0]+1):
             for j in range(-2*lat.L[1], 2*lat.L[1]+1):
                 KList.append((i,j))
-        k, BandK=lat.FourierTransformation(G0.Data[spin,:,spin,:,:,omega]*Map.Beta/Map.MaxTauBin,
+        k, BandK=lat.FourierTransformation(G0.Data[spin,:,spin,:,:,-1],
                 KList, "Integer", bound=[[-20,20], [-20,20]])
         BandK=[e.real for e in BandK]
         k=np.array(k)

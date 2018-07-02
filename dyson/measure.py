@@ -110,7 +110,11 @@ class Observable:
 
         G.FFT("R","T")
         for i in range(self.__Map.NSublat):
-            self.Append("<Sz_{0}>".format(i), 0.5*(1.5*G.Data[UP,i,UP,i,0,-1]-0.5*G.Data[UP,i,UP,i,0,-2]-1.5*G.Data[DOWN,i,DOWN,i,0,-1]+0.5*G.Data[DOWN,i,DOWN,i,0,-2]))
+            self.Append("<Sz_{0}>".format(i), -0.5*(1.5*G.Data[UP,i,UP,i,0,-1]-0.5*G.Data[UP,i,UP,i,0,-2]-1.5*G.Data[DOWN,i,DOWN,i,0,-1]+0.5*G.Data[DOWN,i,DOWN,i,0,-2]))
+
+        G.FFT("K","T")
+        for i in range(self.__Map.NSublat):
+            self.Append("<n_{0}>".format(i), np.sum(1.5*G.Data[UP,i,UP,i,:,-1]-0.5*G.Data[UP,i,UP,i,:,-2]+1.5*G.Data[DOWN,i,DOWN,i,:,-1]-0.5*G.Data[DOWN,i,DOWN,i,:,-2])/self.__Map.Vol)
 
         infostr="Latest measurement:\n"
         for key in sorted(self.__History.keys()):

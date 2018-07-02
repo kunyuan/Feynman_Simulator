@@ -172,8 +172,12 @@ class BareFactory:
             self.__LocalTerm.Data[UP,sub,UP,sub,origin]+= -ExternalField[sub];
             self.__LocalTerm.Data[DOWN,sub,DOWN,sub,origin]+= ExternalField[sub];
 
+        # print "Kinectic in R:", self.__KineticTerm.Data[0,0,0,0,:]
+
         self.__KineticTerm.FFT("K")
         self.__LocalTerm.FFT("K")
+
+        # print "Kinectic in K:", self.__KineticTerm.Data[0,0,0,0,:]
 
         self.__KineticTerm.Data+=self.__LocalTerm.Data
         Sp, Sub = self.__KineticTerm.NSpin, self.__KineticTerm.NSublat
@@ -189,9 +193,21 @@ class BareFactory:
                 Gk=np.zeros([Sp*Sub, Sp*Sub], dtype="complex")
                 for i in range(Sp*Sub):
                     # Gk[i,i]=-np.exp(-Ek[i]*TauGrid[t])*(1.0-1.0/(1.0+np.exp(Beta*Ek[i])))
-                    Gk[i,i]=-np.exp(-Ek[i]*TauGrid[t])/(1.0+np.exp(-Beta*Ek[i]))
+                    # Gk[i,i]=-np.exp(-Ek[i]*TauGrid[t])/(1.0+np.exp(-Beta*Ek[i]))
+                    Gk[i,i]=self.__FermiKernel(Ek[i], TauGrid[t], Beta)
                 Gk=np.dot(np.dot(Uk,Gk),Ukdag)
                 self.BareG.Data[:,:,:,:,k,t]=Gk.reshape([Sp, Sub, Sp, Sub])
+
+        # print "Gt:", self.BareG.Data[0,0,0,0,0,:]
+
+    def __FermiKernel(self, w, t, beta):
+        x=beta*w/2
+        y=2*t/beta-1
+        if x>100:
+            return np.exp(-x*(y+1.))
+        if x<-100:
+            return np.exp(x*(1.0-y))
+        return np.exp(-x*y)/(2*np.cosh(x))
 
     def __BuildHubbardInteraction(self):
         HubbardU=self.__HubbardInteraction

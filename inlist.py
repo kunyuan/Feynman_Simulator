@@ -28,7 +28,7 @@ Dyson={
 
 Beta=0.5
 Order=3
-MaxTauBin=64
+MaxTauBin=128
 L=16
 
 Gamma3=False
@@ -74,12 +74,12 @@ Common={
     "Symmetry": ["SU2", "ParticleHole"],
 
     ##### For real fermions only  ###############
-    "Hopping": [1.0,0.0,0.0,0.0],
+    "Hopping": [1.0,0.0,0.0,0.0], #H_kin=-t (\sum_<i,j> c^\diag_i c_j+h.c.)
     "Phase": [0.0,0.0,0.0,0.0],
-    "HubbardInteraction": 1.0,  #on-site Hubbard type interaction
-    "ShortRangeInteraction": [1.0, 0.0, 0.0, 0.0],  #short range interaction (say nearest neighbor interaction)
+    "HubbardInteraction": 0.0,  #on-site Hubbard type interaction
+    "ShortRangeInteraction": [0.0, 0.0, 0.0, 0.0],  #short range interaction (say nearest neighbor interaction)
     "LongRangeInteraction": [0.0, 0.0, 0.0, 0.0],
-    "ChemicalPotential": [ -3.8, 0.0, 0.0, 0.0], #ChemicalPotential will be automatically set to \pi*T/2 for all spin models!
+    "ChemicalPotential": [ -0.0, 0.0, 0.0, 0.0], #ChemicalPotential will be automatically set to \pi*T/2 for all spin models!
     }
 }
 

@@ -54,8 +54,9 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
     # t=np.array([(i+0.5)*beta/Nt for i in range(Nt)])
     # print np.exp(np.pi/2.0/beta*t*1j)/(1+1j)
     #print "G0[DOWN,DOWN]=\n", G0.Data[DOWN,0,DOWN,0,0,:]
-    #print "G[UP,UP]=\n", G.Data[UP,0,UP,0,0,:]
-    #print "G[DOWN,DOWN]=\n", G.Data[DOWN,0,DOWN,0,0,:]
+    # G.FFT("K","T")
+    # print "G[UP,UP]=\n", G.Data[UP,0,UP,0,:,-1]
+    # print "G[DOWN,DOWN]=\n", G.Data[DOWN,0,DOWN,0,0,:]
     #print "SigmaDeltaT[UP,UP]=\n", SigmaDeltaT.Data[UP,0,UP,0,0]
     #print "SigmaDeltaT[DOWN,DOWN]=\n", SigmaDeltaT.Data[DOWN,0,DOWN,0,0]
     # for i in range(Map.MaxTauBin):
