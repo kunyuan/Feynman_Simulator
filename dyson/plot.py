@@ -180,7 +180,7 @@ def PlotChi_2D(Chi, lat, DoesSave=True):
     map=Chi.Map
     Chi.FFT("R", "W")
 
-    if lat.Name=="Pyrochlore":
+    if lat.Name=="Pyrochlore" or "DecoPyrochlore":
         #####Pyrochlore
         KList_hhl=[]
         KList_hl0=[]

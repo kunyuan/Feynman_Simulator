@@ -108,7 +108,7 @@ def Measure(para, Observable,Factory, G0, W0, G, W, SigmaDeltaT, Sigma, Polar, D
             Observable.Save(OutputFile)
 
             #plot what you are interested in
-            # plot.PlotChiAlongPath(Chi, Lat)
+            plot.PlotChiAlongPath(Chi, Lat)
             plot.PlotTime("G", G, UP, 0, UP, 0, 0)
             plot.PlotTime("G0UPUP", G0, UP, 0, UP, 0, 0)
             plot.PlotTime("G0DOWNDOWN", G0, DOWN, 0, DOWN, 0, 0)

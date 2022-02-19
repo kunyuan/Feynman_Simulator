@@ -216,6 +216,49 @@ class Lattice:
                 v[i]-=self.L[i]
         return v
 
+    def __DecoPyrochlore(self):
+        self.Dim=3
+        self.__AssertDim()
+        self.NSublat=6
+        self.__AssertNSublat()
+        self.LatVec=np.array([[0.0,0.5,0.5],
+                              [0.5,0.0,0.5],
+                              [0.5,0.5,0.0]])
+        self.SubLatVec=np.array([[0.25, 0.0, 0.0],
+                                 [0.0, 0.25, 0.0],
+                                 [0.0, 0.0, 0.25],
+                                 [0.25,0.25,0.25],
+                                 [0.125, 0.125, 0.125],
+                                  [0.375, 0.375, 0.375]
+                               ])
+        self.ReciprocalLatVec=np.array([[2*PI, -2*PI, 2*PI],
+                                        [2*PI, 2*PI, -2*PI],
+                                        [-2*PI, 2*PI, 2*PI]])
+        P={"G": (0,0,0), "X":(0,2*PI,0),  "W":(PI,2*PI,0), \
+           "K":(1.5*PI,1.5*PI,0),"L": (PI,PI,PI), "U": (PI/2,2*PI,PI/2)}
+        L={"G":"$\Gamma$\n$(0,0,0)$", "X":"$X$\n$(0,2\pi,0)$", "W": "$W$\n$(\pi,2\pi,0)$", \
+           "K": "$K$\n$(3\pi/2,3\pi/2,0)$", "L": "$L$\n$(\pi,\pi,\pi)$", "U":"$U$\n$(\pi/2,2\pi,0)$"}
+        self.Path=[P["G"], P["X"], P["W"], P["K"],
+                P["G"], P["L"], P["U"], P["W"], P["L"], P["K"], P["U"], P["X"]]
+        self.PathName=[L["G"], L["X"], L["W"], L["K"],
+                L["G"], L["L"], L["U"], L["W"], L["L"], L["K"], L["U"], L["X"]]
+        self.IndependtBZCenter=[(0,0,0),(2*PI,2*PI,-2*PI),(2*PI,2*PI,2*PI),(4*PI,0,0),(-4*PI, 4*PI, 4*PI),(0, 4*PI, 4*PI)]
+
+    def __AssertDim(self):
+        Assert(len(self.L)==self.Dim, "Dimension {0} is expected for {1} Lattice, not {2}" \
+                .format(self.Dim, self.Name, len(self.L)))
+    def __AssertNSublat(self):
+        Assert(self.NSublat==self.__Map.NSublat, "{0} is expected for {1} lattice, not {2}"
+                .format(self.NSublat, self.Name, self.__Map.NSublat))
+    def __Shift(self,Coordi):
+        v=list(Coordi) #make a copy of Vec
+        for i in range(len(Coordi)):
+            if v[i]<0.0:
+                v[i]+=self.L[i]
+            if v[i]>=self.L[i]:
+                v[i]-=self.L[i]
+        return v
+
     def FourierTransformation(self, Data, KCoordi, KType="Integer", bound=None):
         """Fourier Transformation in real lattice vector space:
            Data: numpy array with shape [SubLatIn, SubLatOut, VOL]

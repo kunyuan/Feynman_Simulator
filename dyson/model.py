@@ -594,6 +594,87 @@ class BareFactory:
             #for i in range(4):
                 #self.BareW.Data[:,i,:,i,0]+ = -10.0*J1*S111S111;
 
+        elif LatName=="DecoPyrochlore":
+        #NSublat: 6
+            Lx,Ly,Lz=self.__Map.L
+            A,B,C,D,E,F=0,1,2,3,4,5
+
+            # self.NearestNeighbor[A][B]=[(0,0,0),(Lx-1,0,0)]
+            # self.NearestNeighbor[A][C]=[(0,0,0),(0,Ly-1,0)]
+            # self.NearestNeighbor[A][D]=[(0,0,0),(0,0,Lz-1)]
+            # self.NearestNeighbor[B][A]=[(0,0,0),(1,0,0)]
+            # self.NearestNeighbor[B][C]=[(0,0,0),(1,Ly-1,0)]
+            # self.NearestNeighbor[B][D]=[(0,0,0),(1,0,Lz-1)]
+            # self.NearestNeighbor[C][A]=[(0,0,0),(0,1,0)]
+            # self.NearestNeighbor[C][B]=[(0,0,0),(Lx-1,1,0)]
+            # self.NearestNeighbor[C][D]=[(0,0,0),(0,1,Lz-1)]
+            # self.NearestNeighbor[D][A]=[(0,0,0),(0,0,1)]
+            # self.NearestNeighbor[D][B]=[(0,0,0),(Lx-1,0,1)]
+            # self.NearestNeighbor[D][C]=[(0,0,0),(0,Ly-1,1)]
+
+            self.NearestNeighbor[A][E]=[(0,0,0)]
+            self.NearestNeighbor[B][E]=[(0,0,0)]
+            self.NearestNeighbor[C][E]=[(0,0,0)]
+            self.NearestNeighbor[D][E]=[(0,0,0)]
+            self.NearestNeighbor[D][F]=[(0,0,0)]
+            self.NearestNeighbor[E][A]=[(0,0,0)]
+            self.NearestNeighbor[E][B]=[(0,0,0)]
+            self.NearestNeighbor[E][C]=[(0,0,0)]
+            self.NearestNeighbor[E][D]=[(0,0,0)]
+            self.NearestNeighbor[F][D]=[(0,0,0)]
+            self.NearestNeighbor[A][F]=[(Lx-1,0,0)]
+            self.NearestNeighbor[B][F]=[(0,Ly-1,0)]
+            self.NearestNeighbor[C][F]=[(0,0,Lz-1)]
+            self.NearestNeighbor[F][A]=[(1,0,0)]
+            self.NearestNeighbor[F][B]=[(0,1,0)]
+            self.NearestNeighbor[F][C]=[(0,0,1)]
+
+            self.NextNearestNeighbor[A][B]=[(0,0,0),(Lx-1,1,0)]
+            self.NextNearestNeighbor[A][C]=[(0,0,0),(Lx-1,0,1)]
+            self.NextNearestNeighbor[A][D]=[(0,0,0),(Lx-1,0,0)]
+            self.NextNearestNeighbor[B][A]=[(0,0,0),(1,Ly-1,0)]
+            self.NextNearestNeighbor[B][C]=[(0,0,0),(0,Ly-1,1)]
+            self.NextNearestNeighbor[B][D]=[(0,0,0),(0,Ly-1,0)]
+            self.NextNearestNeighbor[C][A]=[(0,0,0),(1,0,Lz-1)]
+            self.NextNearestNeighbor[C][B]=[(0,0,0),(0,1,Lz-1)]
+            self.NextNearestNeighbor[C][D]=[(0,0,0),(0,0,Lz-1)]
+            self.NextNearestNeighbor[D][A]=[(0,0,0),(1,0,0)]
+            self.NextNearestNeighbor[D][B]=[(0,0,0),(0,1,0)]
+            self.NextNearestNeighbor[D][C]=[(0,0,0),(0,0,1)]
+
+            # self.NextNearestNeighbor[A][B]=[(0,Ly-1,0),(0,0,Lz-1),(Lx-1,1,0),(Lx-1,0,1)]
+            # self.NextNearestNeighbor[A][C]=[(Lx-1,0,0),(0,0,Lz-1),(1,Ly-1,0),(0,Ly-1,1)]
+            # self.NextNearestNeighbor[A][D]=[(Lx-1,0,0),(0,Ly-1,0),(1,0,Lz-1),(0,1,Lz-1)]
+            # self.NextNearestNeighbor[B][A]=[(1,Ly-1,0),(1,0,Lz-1),(0,0,1),(0,1,0)]
+            # self.NextNearestNeighbor[B][C]=[(1,0,0),(1,0,Lz-1),(0,Ly-1,0),(0,Ly-1,1)]
+            # self.NextNearestNeighbor[B][D]=[(1,Ly-1,0),(1,0,0),(0,0,Lz-1),(0,1,Lz-1)]
+            # self.NextNearestNeighbor[C][A]=[(Lx-1,1,0),(0,1,Lz-1),(1,0,0),(0,0,1)]
+            # self.NextNearestNeighbor[C][B]=[(0,1,0),(0,1,Lz-1),(Lx-1,0,0),(Lx-1,0,1)]
+            # self.NextNearestNeighbor[C][D]=[(0,1,0),(Lx-1,1,0),(0,0,Lz-1),(1,0,Lz-1)]
+            # self.NextNearestNeighbor[D][A]=[(Lx-1,0,1),(0,Ly-1,1),(1,0,0),(0,1,0)]
+            # self.NextNearestNeighbor[D][B]=[(0,0,1),(0,Ly-1,1),(Lx-1,0,0),(Lx-1,1,0)]
+            # self.NextNearestNeighbor[D][C]=[(0,0,1),(Lx-1,0,1),(0,Ly-1,0),(1,Ly-1,0),]
+
+            # ########J3, only connected####################
+            # self.NextNextNearestNeighbor[A][A]=[(1,0,0),(0,1,0),(0,0,1),(Lx-1,0,0),(0,Ly-1,0),(0,0,Lz-1)]
+            # self.NextNextNearestNeighbor[B][B]=[(Lx-1,0,0),(Lx-1,1,0),(Lx-1,0,1),(1,0,0),(1,Ly-1,0),(1,0,Lz-1)]
+            # self.NextNextNearestNeighbor[C][C]=[(0,Ly-1,0),(1,Ly-1,0),(0,Ly-1,1),(0,1,0),(Lx-1,1,0),(0,1,Lz-1)]
+            # self.NextNextNearestNeighbor[D][D]=[(0,0,Lz-1),(1,0,Lz-1),(0,1,Lz-1),(0,0,1),(Lx-1,0,1),(0,Ly-1,1)]
+
+            for i in range(6):
+                for j in range(6):
+                    for e in self.NearestNeighbor[i][j]:
+                        #self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SzSz;
+                        self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SS;
+                    for e in self.NextNearestNeighbor[i][j]:
+                        #self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SzSz;
+                        self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J2*SS;
+                    # for e in self.NextNextNearestNeighbor[i][j]:
+                    #     #self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J1*SzSz;
+                    #     self.BareW.Data[:,i,:,j,self.__Map.CoordiIndex(e)]+= J3*SS;
+            #S111S111=np.outer(Sx+Sy+Sz,Sx+Sy+Sz)
+            #for i in range(4):
+            #self.BareW.Data[:,i,:,i,0]+ = -10.0*J1*S111S111;
 
         elif LatName=="3DCheckerboard":
         #NSublat: 2

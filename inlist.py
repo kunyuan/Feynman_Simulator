@@ -2,7 +2,7 @@
 MonteCarlo={
 "Control": {
     "__Execute" : "./simulator.exe",
-    "__Duplicate" :  0,
+    "__Duplicate" :  1,
     # "__Duplicate" :  14,
     "__IsCluster" : False, 
     "__AutoRun" : True,
@@ -26,10 +26,10 @@ Dyson={
     }
 }
 
-Beta=0.5
-Order=3
-MaxTauBin=128
-L=16
+Beta = 0.5
+Order= 3
+MaxTauBin=96
+L = 4
 
 Gamma3=False
 MaxTauBinTiny=MaxTauBin #the tau bin for large object like GammaW
@@ -46,20 +46,21 @@ Common={
     # "L": [2,]
 
     #2D lattice
-    "Name": "Square", "NSublat": 1,
+    #"Name": "Square", "NSublat": 1,
     # "Name": "Checkerboard", "NSublat": 2,
     # "Name": "ValenceBond", "NSublat": 2,
     # "Name": "Honeycomb", "NSublat": 2,
     #"Name": "Kagome", "NSublat": 3,
     # "Name": "Triangular", "NSublat": 1,
     # "Name": "Assymetric_Triangular", "NSublat": 3,
-    "L": [L,L]
+    #"L": [L,L]
 
     #3D lattice
     #"Name": "Cubic", "NSublat": 1,
     #"Name": "3DCheckerboard", "NSublat": 2,
-    # "Name": "Pyrochlore", "NSublat": 4,
-    # "L": [L,L,L]
+    #"Name": "Pyrochlore", "NSublat": 4,
+    "Name": "DecoPyrochlore", "NSublat": 6,
+    "L": [L,L,L]
     },
 "Model": {
     "Name": "J1J2",
@@ -68,8 +69,8 @@ Common={
     # "Name": "Hubbard",
     # "Name": "Haldane",
     #"Description": ["ImW",],
-    "Interaction": [1.0, 0.0, 0.0, 0.0],
-    "ExternalField": [ 0.0, 0.0, 0.0, 0.0],
+    "Interaction": [0.0, 1.0, 0.0, 0.0],
+    "ExternalField": [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
     #ExternalField on Sublattice A and B
     "Symmetry": ["SU2", "ParticleHole"],
 
@@ -116,7 +117,7 @@ Dyson["Dyson"]={
     "Annealing": {
         #"DeltaField": [-0.5,  -0.5, 0.0, 0.0],
         #"Interval": [0.05, 0.05, -0.0, -0.0]
-        "DeltaField": [-0.0,  -0.0, 0.0, 0.0],
+        "DeltaField": [-0.0,  -0.0, 0.0, 0.0, 0.0, 0.0],
         "Interval": [0.00, 0.00, -0.0, -0.0]
         }
     }

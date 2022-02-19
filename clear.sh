@@ -9,6 +9,10 @@ then
       rm _job*.sh
   fi
 fi
+# rm *.hkl
+# rm *.txt
+# rm statis_total.hkl
+# rm _job*.sh
 rm Message.txt
 rm *_statis.hkl
 rm *_MC_para.txt

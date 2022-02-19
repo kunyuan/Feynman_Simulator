@@ -75,7 +75,7 @@ def Plot(InputFile, HasCaption):
     colorTransferFunction.AddRGBPoint(2, 0.0, 1.0, 0.0)
     colorTransferFunction.AddRGBPoint(3, 1.0, 1.0, 0.0)
     colorTransferFunction.AddRGBPoint(4, 0.0, 1.0, 1.0)
-    colorTransferFunction.AddRGBPoint(5, 1.0, 1.0, 0.0)
+    colorTransferFunction.AddRGBPoint(5, 1.0, 0.5, 0.5)
 
     ballMapper = vtkPolyDataMapper()
     ballMapper.SetInputConnection(ballGlyph.GetOutputPort())
